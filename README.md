@@ -7,8 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
-implemented. Twelve original Skills—including the lifecycle probes through
-`check-model-routing` and the interaction probe—plus one canonical
+implemented. Thirteen original fixture Skills—including lifecycle, panel,
+interaction, and controlled stale-replay probes—plus one canonical
 `evidence-reader` role generate
 deterministic OMP, Codex, and Claude Code target packages. All packages pass
 static `D0` validation.
@@ -42,9 +42,16 @@ proven: OMP exposes a native `history://` resource, while Codex CLI requires an
 external read of its persisted session JSONL. A W3-targeted panel fixture now
 proves two independent parallel candidates, frozen candidate and review
 boundaries, and distinct reviewer and synthesizer sessions on both runtimes.
-It does not yet prove a race where a late stale payload is delivered, so
-runtime-wide achieved conformance remains W2. Codex lifecycle probes require
-persisted sessions;
+A controlled stale-replay fixture additionally passes on Codex CLI: generation
+1 sends a peer-ready signal, is cancelled while active, and later releases its
+retained old marker through one follow-up on the same session after generation
+2 has been accepted. The delivered stale marker is recorded but rejected, so
+Codex CLI now has passing evidence for every `W3` semantic family. This is a
+controlled replay rather than a naturally racing network response. The same
+OMP fixture did not pass in two fresh attempts because the generation-1
+provider turn never emitted an assistant or tool event; OMP therefore remains
+at `W2` coverage and peer messaging remains `unknown`, not `unsupported`.
+Codex lifecycle probes require persisted sessions;
 `--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
 
 The generated custom read-only role is discovered and applied natively by OMP.

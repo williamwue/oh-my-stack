@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-stale-replay",
+  "fixture": "check-stale-replay",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs enabled; cursor/default model with low thinking; only read, task, and hub tools enabled; extensions and rules disabled; two fresh attempts with six-minute and eight-minute limits.",
+    "permissionProfile": "Read-only stale-replay probe with no project-write tools"
+  },
+  "capabilities": [
+    "agents.cancel",
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "coordination.peer_messages",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-cancellation.json",
+    "evals/evidence/omp-18.2.6/check-follow-up.json",
+    "evals/evidence/omp-18.2.6/check-panel.json",
+    "evals/evidence/omp-18.2.6/check-writer-isolation.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "Both fresh attempts loaded the generated check-stale-replay Skill and the root marker." },
+    { "id": "generation-one-ready-message-received", "status": "fail", "evidence": "Neither attempt delivered GENERATION_1_READY=true before its outer deadline." },
+    { "id": "generation-one-active-at-ready", "status": "fail", "evidence": "The job was repeatedly reported running, but no ready message arrived, so active-at-ready could not be established." },
+    { "id": "generation-one-cancelled-while-active", "status": "fail", "evidence": "The protocol correctly refused to cancel before the missing ready signal." },
+    { "id": "cancellation-acknowledged", "status": "fail", "evidence": "No cancellation was issued because its required ready precondition was not met." },
+    { "id": "generation-two-started-after-cancellation", "status": "fail", "evidence": "Generation 2 was not started after the generation 1 precondition failed." },
+    { "id": "fresh-result-accepted", "status": "fail", "evidence": "No generation 2 result was produced or accepted." },
+    { "id": "cancelled-worker-session-resumed", "status": "fail", "evidence": "Generation 1 never reached the cancellation and follow-up stages." },
+    { "id": "late-stale-payload-delivered", "status": "fail", "evidence": "No retained stale marker was delivered." },
+    { "id": "stale-payload-not-accepted", "status": "fail", "evidence": "The safety assertion was not exercised because no stale payload arrived and no fresh result was accepted." },
+    { "id": "exactly-two-worker-sessions", "status": "fail", "evidence": "Each attempt created only the generation 1 child before timing out." },
+    { "id": "both-workers-terminal", "status": "fail", "evidence": "The full two-worker protocol never ran to a terminal workflow result." },
+    { "id": "root-marker-independently-verified", "status": "fail", "evidence": "The initial marker was read, but the workflow never reached the required final root read." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in either disposable probe repository." }
+  ],
+  "limitations": [
+    "Two fresh attempts reached the same boundary: generation 1 was reported running, but its session contained only the assignment and no assistant or tool event, even after the parent delivered a steering message.",
+    "The second root session ended with Provider stream stalled while waiting for the next event; the outer command then reached its eight-minute deadline. The first attempt reached its six-minute deadline with the same child-session shape.",
+    "This failure does not establish that OMP peer messaging is unsupported. It leaves coordination.peer_messages unknown because the child provider turn never progressed far enough to invoke the hub operation.",
+    "Other versioned evidence separately proves OMP cancellation, follow-up, result collection, and W2 workflows. This record only rejects the complete controlled stale-replay claim on the probed configuration.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

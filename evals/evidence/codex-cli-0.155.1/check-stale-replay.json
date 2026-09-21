@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-stale-replay",
+  "fixture": "check-stale-replay",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME directories; generated Skill under project .agents/skills; user configuration and project rules ignored; gpt-6-astra parent with two fork_turns=none children; controlled stale replay through interrupt_agent and one followup_task call.",
+    "permissionProfile": "Read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.cancel",
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "coordination.peer_messages",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-cancellation.json",
+    "evals/evidence/codex-cli-0.155.1/check-follow-up.json",
+    "evals/evidence/codex-cli-0.155.1/check-panel.json",
+    "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent received and read the generated check-stale-replay Skill before executing it." },
+    { "id": "generation-one-ready-message-received", "status": "pass", "evidence": "Generation 1 invoked send_message to /root after its stale-asset read; the parent wait woke immediately and recorded an attributable MESSAGE from that child." },
+    { "id": "generation-one-active-at-ready", "status": "pass", "evidence": "After the peer message arrived, a separate list_agents call reported generation_1 as running." },
+    { "id": "generation-one-cancelled-while-active", "status": "pass", "evidence": "The parent invoked interrupt_agent only after the ready delivery and independent running-state check; the child's 120-second sleep was aborted." },
+    { "id": "cancellation-acknowledged", "status": "pass", "evidence": "interrupt_agent returned previous_status=running." },
+    { "id": "generation-two-started-after-cancellation", "status": "pass", "evidence": "The persisted parent transcript places the generation_2 spawn after the successful generation_1 interrupt acknowledgement." },
+    { "id": "fresh-result-accepted", "status": "pass", "evidence": "Generation 2 read only fresh.txt and returned GENERATION=2 with FRESH_MARKER=fresh-ok before stale replay was requested; the parent retained that as the sole accepted result." },
+    { "id": "cancelled-worker-session-resumed", "status": "pass", "evidence": "One followup_task targeted generation_1, and its original child JSONL contains the initial read turn plus a second turn in the same thread." },
+    { "id": "late-stale-payload-delivered", "status": "pass", "evidence": "The resumed generation_1 thread returned GENERATION=1 and STALE_MARKER=late-generation-one-must-be-rejected without another file-read call." },
+    { "id": "stale-payload-not-accepted", "status": "pass", "evidence": "The final result records ACCEPTED_GENERATION=2, ACCEPTED_MARKER=fresh-ok, STALE_PAYLOAD_RECEIVED=true, and STALE_RESULT_ACCEPTED=false." },
+    { "id": "exactly-two-worker-sessions", "status": "pass", "evidence": "The isolated Codex state directory contains one parent and exactly two child session JSONL files." },
+    { "id": "both-workers-terminal", "status": "pass", "evidence": "The final list_agents result reports both generation_1 and generation_2 completed with separately attributable payloads." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent read stale-replay-root-ok before child creation and independently read the same Skill-relative asset after both workers were terminal." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in the disposable probe repository." }
+  ],
+  "limitations": [
+    "This is a controlled replay: a follow-up deliberately releases a value retained before cancellation. It proves generation gating against a delivered stale payload, not a naturally racing post-cancellation network response.",
+    "Codex encrypts child assignment and peer-message bodies in persisted JSONL. The exact ready body is supported by the selected Skill contract, the child's send_message call, the attributable parent MESSAGE wake-up, and the final report rather than externally readable plaintext.",
+    "The parent first tried an incorrect repository-relative root path, then resolved and read the correct Skill-relative asset before creating any worker.",
+    "This is one passing model-mediated run; a repetition threshold is not yet established.",
+    "Unrelated installed MCP providers emitted authentication warnings during shutdown; the fixture used no MCP provider and completed successfully.",
+    "This evidence applies to Codex CLI only; desktop and IDE profiles remain unknown."
+  ]
+}

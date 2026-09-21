@@ -50,7 +50,7 @@
   "limitations": [
     "Codex encrypts child assignment bodies in the persisted parent transcript. Frozen payload byte equality is therefore supported by lifecycle ordering, lack of child asset reads, separately attributable results, and consistent terminal outputs rather than an externally readable assignment string.",
     "A first reconnaissance run followed a conflicting probe prompt that omitted the initial root read and correctly reported that invariant as false; only the corrected fresh run is claimed as passing evidence.",
-    "This panel fixture passes its W3 semantic assertions, but runtime-wide conformance remains W2 until a delivered late stale-generation race is observed or an equivalent fallback is proven.",
+    "This panel fixture alone does not prove delivered stale-generation handling; that semantic family is covered by the separate check-stale-replay evidence record.",
     "Unrelated installed MCP providers attempted startup in the disposable state directory and emitted authentication warnings; the panel probe used no MCP provider and completed successfully.",
     "This evidence applies to Codex CLI only; desktop and IDE profiles remain unknown."
   ]

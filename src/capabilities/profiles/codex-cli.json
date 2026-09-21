@@ -7,7 +7,7 @@
     "surface": "cli",
     "runtimeVersion": "0.155.1",
     "platform": "macos-arm64",
-    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+external-jsonl-transcript+ignore-rules+project-agents-skill-copy+managed-worktree+spawn-model-reasoning-routing",
+    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+external-jsonl-transcript+ignore-rules+project-agents-skill-copy+managed-worktree+spawn-model-reasoning-routing+peer-message-stale-replay",
     "permissionProfile": "sandbox-read-only-lifecycle+workspace-write-isolation+approval-never",
     "installedProviders": []
   },
@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "native", "provider": "spawn_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "multiple spawned child threads", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
     "agents.wait": { "status": "native", "provider": "wait", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
+    "coordination.peer_messages": { "status": "native", "provider": "send_message child-to-parent delivery", "evidence": "evals/evidence/codex-cli-0.155.1/check-stale-replay.json" },
     "interaction.fixed_choice": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },
     "interaction.free_text": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },
     "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "assertions": [
+    "skill-loaded",
+    "generation-one-ready-message-received",
+    "generation-one-active-at-ready",
+    "generation-one-cancelled-while-active",
+    "cancellation-acknowledged",
+    "generation-two-started-after-cancellation",
+    "fresh-result-accepted",
+    "cancelled-worker-session-resumed",
+    "late-stale-payload-delivered",
+    "stale-payload-not-accepted",
+    "exactly-two-worker-sessions",
+    "both-workers-terminal",
+    "root-marker-independently-verified",
+    "no-project-writes"
+  ]
+}

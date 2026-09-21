@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "check-stale-replay",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.cancel",
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "coordination.peer_messages",
+    "resources.relative_paths"
+  ],
+  "fallbacks": {}
+}

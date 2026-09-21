@@ -58,8 +58,7 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   thread without rereading the first-turn asset.
 - Both runtimes pass active-worker cancellation and exclude the cancelled
   generation from accepted results. Neither probe delivered a late stale
-  payload, so cancellation-race coverage remains pending and achieved
-  conformance stays at W2.
+  payload during that original cancellation probe.
 - Both runtimes pass one-writer isolation. OMP uses an isolated task worktree
   with an unapplied retained patch; Codex CLI uses a managed top-level worktree
   shared by the writer child. Both leave the source checkout clean.
@@ -84,8 +83,21 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - A W3-targeted coordinated-panel fixture passes on both live CLI runtimes:
   two independent candidates start before waiting, their results freeze before
   a new reviewer, the review freezes before a distinct synthesizer, and the
-  root independently verifies afterward. Runtime-wide conformance remains W2
-  because a delivered late stale-generation race remains unobserved.
+  root independently verifies afterward.
+- A controlled stale-replay fixture passes on Codex CLI. Generation 1 sends a
+  peer-ready message, is confirmed active and cancelled, then releases its
+  retained old marker through one follow-up on the same child thread only
+  after generation 2 has been accepted. The parent receives but rejects the
+  stale payload. Together with the panel, follow-up, and writer-isolation
+  fixtures, this supplies passing evidence for every W3 semantic family on the
+  probed Codex CLI coordinate. It is a controlled replay, not a naturally
+  racing network response.
+- The same OMP stale-replay fixture failed twice before the ready boundary.
+  The generation-1 job remained reported as running, but its child transcript
+  contained no assistant or tool event before provider stall/deadline. This
+  leaves OMP peer messaging unknown and its overall W3 coverage incomplete;
+  it does not override the separately passing OMP cancellation and follow-up
+  evidence.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

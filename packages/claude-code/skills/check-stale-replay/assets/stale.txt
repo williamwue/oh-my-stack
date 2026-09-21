@@ -1,0 +1,1 @@
+STALE_MARKER=late-generation-one-must-be-rejected

@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads twelve portable Skills, one role, and three adapters", async () => {
+test("loads thirteen portable Skills, one role, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 12);
+  assert.equal(model.skills.length, 13);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "check-cancellation",
     "check-custom-role",
@@ -28,6 +28,7 @@ test("loads twelve portable Skills, one role, and three adapters", async () => {
     "check-panel",
     "check-parallel",
     "check-resources",
+    "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
     "prove-it-works",
@@ -55,6 +56,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["agents.wait"].status, "native");
   assert.equal(omp.capabilities["agents.read_result"].status, "native");
   assert.equal(omp.capabilities["agents.read_transcript"].status, "native");
+  assert.equal(omp.capabilities["coordination.peer_messages"].status, "unknown");
   assert.equal(omp.capabilities["interaction.fixed_choice"].status, "fallback");
   assert.equal(omp.capabilities["interaction.free_text"].status, "fallback");
   assert.equal(omp.capabilities["workspace.isolate"].status, "native");
@@ -73,6 +75,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.wait"].status, "native");
   assert.equal(codexCli.capabilities["agents.read_result"].status, "native");
   assert.equal(codexCli.capabilities["agents.read_transcript"].status, "external");
+  assert.equal(codexCli.capabilities["coordination.peer_messages"].status, "native");
   assert.equal(codexCli.capabilities["workspace.isolate"].status, "native");
   assert.equal(codexCli.capabilities["workspace.write"].status, "native");
   assert.equal(codexCli.capabilities["interaction.fixed_choice"].status, "fallback");

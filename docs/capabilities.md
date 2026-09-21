@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | The W3 panel fixture passes; runtime-wide conformance remains W2 pending a delivered late stale result; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | The W3 panel fixture passes; two controlled stale-replay attempts stopped before the peer-ready boundary, so W3-family coverage remains incomplete and peer messaging remains unknown; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 and the W3 panel fixture pass on 0.155.1; runtime-wide conformance remains W2 pending a delivered late stale result; custom roles remain unsupported on the probed spawn surface |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, child-to-parent peer messaging, controlled stale replay, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 passes on 0.155.1, with passing evidence across every W3 semantic family; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -136,7 +136,7 @@ The Codex baseline is derived from the official
 documentation. Repository documentation must retain the observation date;
 generated evidence must retain the exact runtime coordinates.
 
-The current W2 observations prove `agents.spawn`, `agents.spawn_parallel`,
+The current delegated observations prove `agents.spawn`, `agents.spawn_parallel`,
 `agents.follow_up`, `agents.cancel`, `agents.wait`, and `agents.read_result`
 for read-only workers. OMP additionally proves native asynchronous
 background-job waiting and idle-worker revival. Codex records both follow-up
@@ -155,8 +155,19 @@ new reviewer, freezes that result before creating a distinct synthesizer, and
 performs a final independent root read. OMP exposes the frozen task bodies and
 results in its session records. Codex persists the lifecycle order and child
 results but encrypts child assignment bodies, so exact frozen-payload equality
-is not externally readable there. Complete runtime-wide W3 remains unproven
-because neither cancellation probe delivered a late stale payload.
+is not externally readable there. Codex CLI's controlled stale-replay fixture
+then proves child-to-parent peer delivery, active cancellation, same-session
+follow-up after interruption, receipt of the retained generation-1 marker only
+after generation 2 was accepted, and rejection of that delivered stale value.
+The persisted message bodies are encrypted, but tool ordering, attributable
+message delivery, worker reads, session identity, terminal results, and the
+absence of a second generation-1 file read are independently visible. This is
+a controlled replay and does not claim a naturally racing network response.
+With this result, the probed Codex CLI coordinate has passing evidence for all
+W3 semantic families. OMP does not: two fresh stale-replay attempts stalled
+before the generation-1 peer-ready message, with no child assistant or tool
+event. That failure leaves `coordination.peer_messages` unknown instead of
+proving it unsupported.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
