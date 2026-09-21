@@ -8,8 +8,8 @@ import { repoRoot } from "../tools/generate.mjs";
 
 test("same-scenario conformance records are deterministic and semantically aligned", async () => {
   const result = await buildConformance({ check: true });
-  assert.deepEqual(result, { verifiedScenarios: 3, records: 6 });
-  for (const scenario of ["bug-fix", "feature-boundary", "behavior-preserving-refactor"]) {
+  assert.deepEqual(result, { verifiedScenarios: 4, records: 8 });
+  for (const scenario of ["bug-fix", "feature-boundary", "behavior-preserving-refactor", "architecture-candidates"]) {
     const omp = JSON.parse(await readFile(join(repoRoot, "conformance/results/omp-default", `${scenario}.json`), "utf8"));
     const codex = JSON.parse(await readFile(join(repoRoot, "conformance/results/codex-cli", `${scenario}.json`), "utf8"));
     assert.deepEqual(

@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-architecture-candidates",
+  "fixture": "architecture-candidates",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Final hardened fixture plus generated poteto-mode/interrogate Skills and reviewer/synthesizer TOML files committed in a disposable Git fixture; isolated CODEX_HOME; inline generated-role fallback; persisted root and child sessions.",
+    "permissionProfile": "workspace-write sandbox with read-only delegated contracts and automatic approval review"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/architecture-candidates-attempt-1.json", "evals/evidence/codex-cli-0.155.1/check-parallel.json", "evals/evidence/codex-cli-0.155.1/check-custom-role.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root loaded only repository-generated poteto-mode/interrogate Skills and role definitions; configured MCP startup warnings did not participate." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "The root explicitly loaded poteto-mode and selected interrogate for the bounded adversarial design review." },
+    { "id": "candidates-frozen-before-review", "status": "pass", "evidence": "The root read all three complete files and recorded their expected SHA-256 values before starting the reviewer sessions." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "Both reviewer start operations preceded the first wait; exactly two reviewer sessions were created." },
+    { "id": "identical-packets", "status": "pass", "evidence": "The root reports that both initial assignments contained the identical complete literal packet, and both independent child outputs assess every requirement and both candidates from that packet without later messages." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "Both reviewer sessions completed with two findings and selected durable-log; no follow-up, retry, or replacement tool call occurred." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both delegated contracts were read-only and root plus external Git inspection found no file changes." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "Exactly one synthesizer session was started after both reviewer completion events and received the frozen results." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The synthesizer preserved the two reviewer findings and their shared commitment-boundary concern; root reported all three session artifacts separately." },
+    { "id": "durable-log-selected", "status": "pass", "evidence": "Both reviewers, the synthesizer, and the root selected durable-log; root independently downgraded an unproven blocker to Consider rather than voting." },
+    { "id": "root-reverified-decision", "status": "pass", "evidence": "The root reread the three files, matched all hashes, ran node verify.mjs durable-log with exit 0, checked clean Git, and made the final decision itself." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "The custom-role selector was unavailable, so the root preserved generated reviewer and synthesizer contracts inline and disclosed that fallback in the final response." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Root and external verification found no diff and an empty porcelain Git status." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication occurred." }
+  ],
+  "limitations": [
+    "Codex persists initial subagent task bodies encrypted, so byte equality cannot be re-read externally; the root report, absence of follow-up operations, and both complete child outputs support the assertion.",
+    "Custom generated role selection was unavailable on this CLI spawn surface, so generated role contracts were supplied inline.",
+    "Independent model diversity was not verified.",
+    "The verifier proves the frozen textual decision and hashes, not crash recovery performance or 100-events-per-second throughput.",
+    "Unrelated Cloudflare MCP authentication warnings and macOS sandbox cache diagnostics did not participate in the workflow."
+  ]
+}

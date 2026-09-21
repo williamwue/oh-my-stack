@@ -100,7 +100,36 @@
         "semantic-trace-matches": ["refactoring-selected", "equivalence-proven-by-root"]
       }
     },
-    { "id": "architecture-candidates", "status": "pending" },
+    {
+      "id": "architecture-candidates",
+      "status": "verified",
+      "fixture": "architecture-candidates",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/architecture-candidates.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/architecture-candidates.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "router-selected-interrogate"],
+        ["packet_frozen", "root", "candidates-frozen-before-review"],
+        ["reviewers_started", "root", "two-reviewers-started-before-wait"],
+        ["reviewer_results_frozen", "reviewer", "reviewer-results-frozen"],
+        ["synthesizer_started", "root", "one-new-synthesizer-after-review"],
+        ["decision_synthesized", "synthesizer", "durable-log-selected"],
+        ["decision_reverified", "root", "root-reverified-decision"]
+      ],
+      "assertions": {
+        "playbook-selected": ["router-selected-interrogate"],
+        "expected-roles-spawned": ["two-reviewers-started-before-wait", "one-new-synthesizer-after-review"],
+        "candidates-frozen-before-review": ["candidates-frozen-before-review", "identical-packets", "reviewer-results-frozen"],
+        "reviewer-did-not-write": ["reviewers-read-only"],
+        "writers-bounded-or-isolated": [],
+        "root-independently-inspected": ["root-reverified-decision"],
+        "exact-verification-reported": ["root-reverified-decision"],
+        "child-report-not-accepted-alone": ["root-reverified-decision"],
+        "fallback-declared": ["fallback-declared"],
+        "semantic-trace-matches": ["router-selected-interrogate", "root-reverified-decision"]
+      }
+    },
     { "id": "mixed-review", "status": "pending" },
     { "id": "conflicting-writers", "status": "pending" }
   ]

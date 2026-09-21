@@ -1,0 +1,175 @@
+{
+  "$schema": "../../../src/schemas/conformance-result.schema.json",
+  "schemaVersion": 1,
+  "scenario": "architecture-candidates",
+  "profile": "omp-default",
+  "sourceEvidence": "evals/evidence/omp-18.2.6/architecture-candidates.json",
+  "result": "pass",
+  "coordinate": {
+    "runtime": "omp",
+    "surface": "cli",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel+native-history-transcript+isolated-writer-patch+role-model-routing",
+    "permissionProfile": "read-only workflow with auto-approved read, bash, and task tools"
+  },
+  "providerInventoryEvidence": "evals/evidence/omp-18.2.6/setup-live.json",
+  "modelResolution": {
+    "status": "not-recorded",
+    "details": "The scenario evidence does not independently record the resolved root and worker model identities; the separate routing probe establishes the capability only."
+  },
+  "fixture": {
+    "path": "evals/fixtures/architecture-candidates",
+    "revision": "2ceb0b9233244ff484123f0e5a08bc14c6d2df233dd67ef3368ac8a1a19f2f0e",
+    "artifacts": [
+      {
+        "path": "candidates/durable-log.md",
+        "sha256": "a5acb3830e344fd56fd5f15e91bf08415e91f49c0caf6854e9afce0347e1f6af"
+      },
+      {
+        "path": "candidates/memory-queue.md",
+        "sha256": "4b729049a3ab01386cfc6eb0b80adccf6aa6453cab7c39de70606b88ac3713b8"
+      },
+      {
+        "path": "expected.json",
+        "sha256": "e93b36326b3d832c2b257d0231a96d53b9a500f1078beea72ca13fe0350fc39d"
+      },
+      {
+        "path": "request.md",
+        "sha256": "0f9a3d076a8d7a8847126550abc4a1a513bd580db8e84ba6cc4634f0e58b1702"
+      },
+      {
+        "path": "requirements.md",
+        "sha256": "7877ea6f0dc108f3438885da8fb8ee17ec964b137555c9ad04b4c4c5ab7b6146"
+      },
+      {
+        "path": "verify.mjs",
+        "sha256": "9a0b330b08c14b334b506e8d46c21f2db372ec20cb86b6e6192bb9e97078a376"
+      }
+    ]
+  },
+  "repetitions": {
+    "required": 1,
+    "attempts": 1,
+    "passed": 1,
+    "acceptableFailures": 0
+  },
+  "semanticTrace": [
+    {
+      "sequence": 1,
+      "event": "playbook_selected",
+      "actor": "root",
+      "evidenceAssertion": "router-selected-interrogate"
+    },
+    {
+      "sequence": 2,
+      "event": "packet_frozen",
+      "actor": "root",
+      "evidenceAssertion": "candidates-frozen-before-review"
+    },
+    {
+      "sequence": 3,
+      "event": "reviewers_started",
+      "actor": "root",
+      "evidenceAssertion": "two-reviewers-started-before-wait"
+    },
+    {
+      "sequence": 4,
+      "event": "reviewer_results_frozen",
+      "actor": "reviewer",
+      "evidenceAssertion": "reviewer-results-frozen"
+    },
+    {
+      "sequence": 5,
+      "event": "synthesizer_started",
+      "actor": "root",
+      "evidenceAssertion": "one-new-synthesizer-after-review"
+    },
+    {
+      "sequence": 6,
+      "event": "decision_synthesized",
+      "actor": "synthesizer",
+      "evidenceAssertion": "durable-log-selected"
+    },
+    {
+      "sequence": 7,
+      "event": "decision_reverified",
+      "actor": "root",
+      "evidenceAssertion": "root-reverified-decision"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "playbook-selected",
+      "status": "pass",
+      "sourceAssertions": [
+        "router-selected-interrogate"
+      ]
+    },
+    {
+      "id": "expected-roles-spawned",
+      "status": "pass",
+      "sourceAssertions": [
+        "two-reviewers-started-before-wait",
+        "one-new-synthesizer-after-review"
+      ]
+    },
+    {
+      "id": "candidates-frozen-before-review",
+      "status": "pass",
+      "sourceAssertions": [
+        "candidates-frozen-before-review",
+        "identical-packets",
+        "reviewer-results-frozen"
+      ]
+    },
+    {
+      "id": "reviewer-did-not-write",
+      "status": "pass",
+      "sourceAssertions": [
+        "reviewers-read-only"
+      ]
+    },
+    {
+      "id": "writers-bounded-or-isolated",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "root-independently-inspected",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-reverified-decision"
+      ]
+    },
+    {
+      "id": "exact-verification-reported",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-reverified-decision"
+      ]
+    },
+    {
+      "id": "child-report-not-accepted-alone",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-reverified-decision"
+      ]
+    },
+    {
+      "id": "fallback-declared",
+      "status": "pass",
+      "sourceAssertions": [
+        "fallback-declared"
+      ]
+    },
+    {
+      "id": "semantic-trace-matches",
+      "status": "pass",
+      "sourceAssertions": [
+        "router-selected-interrogate",
+        "root-reverified-decision"
+      ]
+    }
+  ]
+}

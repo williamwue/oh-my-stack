@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-architecture-candidates",
+  "fixture": "architecture-candidates",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Final hardened fixture plus generated poteto-mode and interrogate Skills and reviewer/synthesizer roles in a disposable Git repository; cursor/default at low thinking; asynchronous tasks; root liveness waits; no extensions or rules.",
+    "permissionProfile": "read-only workflow with auto-approved read, bash, and task tools"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/architecture-candidates-attempt-1.json", "evals/evidence/omp-18.2.6/check-custom-role.json", "evals/evidence/omp-18.2.6/check-parallel.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root read only the disposable repository's generated poteto-mode/interrogate Skills, references, and OMP reviewer/synthesizer roles." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "The root loaded poteto-mode and selected interrogate for an adversarial review of a bounded design." },
+    { "id": "candidates-frozen-before-review", "status": "pass", "evidence": "The root read requirements.md and both candidates and recorded their three expected SHA-256 values before its first task call." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "One initial task call started exactly ReviewerA and ReviewerB before the root's first liveness wait or result read." },
+    { "id": "identical-packets", "status": "pass", "evidence": "External transcript inspection found the two initial task assignments byte-identical at 5,029 characters and confirmed that each embeds all three literal files, hashes, the decision question, and the output contract." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "ReviewerA and ReviewerB each yielded a complete separately attributable JSON artifact selecting durable-log; neither received follow-up, retry, or replacement." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both ran through the generated reviewer role with read-only tools, and external Git inspection found no changes." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "Only after both reviewer artifacts existed, a second and final task call started exactly Synthesizer1 with the frozen packet and attributable results." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The synthesizer agreement and disagreement maps preserve ReviewerA and ReviewerB attribution for every merged or distinct finding." },
+    { "id": "durable-log-selected", "status": "pass", "evidence": "Both reviewers, Synthesizer1, and the root independently selected durable-log; the synthesizer retained the handler/checkpoint window as Consider rather than a disproven requirement." },
+    { "id": "root-reverified-decision", "status": "pass", "evidence": "The root reread all three files, rechecked matching hashes, ran node verify.mjs durable-log with exit 0, inspected clean Git status, and made the final decision itself." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "Generated OMP custom roles were natively available; after a retained failed attempt exposed print-mode disposal, the rerun explicitly declared root-session liveness waits without messaging, retrying, or replacing children." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Root and external verification both found no diff and an empty short Git status." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication occurred." }
+  ],
+  "limitations": [
+    "Reviewer and synthesizer model metadata all resolved to cursor/default, so model diversity was not established.",
+    "OMP represents a terminal child yield with an aborted model stop reason while persisting the complete role artifact; the root and external audit verified all three complete artifacts.",
+    "The verifier proves the frozen textual decision and hashes, not crash recovery performance or 100-events-per-second throughput.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-architecture-candidates-attempt-1",
+  "fixture": "architecture-candidates",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Final hardened fixture plus generated poteto-mode and interrogate Skills and reviewer/synthesizer roles in a disposable Git repository; cursor/default; print mode; asynchronous task support; no extensions or rules.",
+    "permissionProfile": "read-only workflow with auto-approved read, bash, and task tools"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/architecture-candidates.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root read the generated repository Skills and OMP role files; no installed cache participated." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "The root loaded poteto-mode and selected interrogate for the bounded adversarial design review." },
+    { "id": "candidates-frozen-before-review", "status": "pass", "evidence": "The root read all three files and recorded the expected SHA-256 values before spawning reviewers." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "One task call started ReviewerA and ReviewerB before the root attempted to read either result." },
+    { "id": "identical-packets", "status": "pass", "evidence": "The persisted task call contains two byte-identical 5,029-character assignments with all three literal files, hashes, decision question, and output contract." },
+    { "id": "reviewer-results-frozen", "status": "fail", "evidence": "Print mode ended the root turn while both reviewers were still running, disposing both sessions with Request was aborted before either could yield a complete result." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both generated reviewer roles exposed only read, grep, glob, and yield; the fixture stayed clean." },
+    { "id": "one-new-synthesizer-after-review", "status": "fail", "evidence": "No synthesizer was started because neither reviewer produced a frozen result." },
+    { "id": "attribution-preserved", "status": "fail", "evidence": "ReviewerA and ReviewerB remained named, but no complete attributable review result was available to freeze." },
+    { "id": "durable-log-selected", "status": "fail", "evidence": "No complete two-reviewer synthesis or root decision was produced." },
+    { "id": "root-reverified-decision", "status": "fail", "evidence": "The root did not reach its required reread, hash comparison, verifier, and independent decision." },
+    { "id": "fallback-declared", "status": "fail", "evidence": "The run did not declare or apply a root-session liveness fallback for asynchronous task completion." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External inspection found the disposable repository clean and unchanged." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication occurred." }
+  ],
+  "limitations": [
+    "The failure isolated an OMP print-mode lifecycle boundary: a progress-only root final disposes still-running task sessions.",
+    "The passing rerun keeps the same fixture and complete initial assignments but explicitly keeps the root session alive while the asynchronous children finish.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -329,6 +329,20 @@ Codex state directory. Version 0.155.1 returned `no thread with id` when the
 same parallel probe ran with `--ephemeral`; delivery-only and root-only success
 must not be treated as evidence that ephemeral child threads work.
 
+The architecture-candidates conformance fixture passes on OMP 18.2.6 and Codex
+CLI 0.155.1. Both runtimes froze the same three inputs, started exactly two
+read-only reviewers before waiting, preserved their attributable results, then
+started one new synthesizer and made a separately verified root decision for
+`durable-log`. OMP uses generated native roles and an explicit root-liveness
+wait because an earlier print-mode attempt disposed unfinished children. Codex
+uses its declared inline-role fallback because this CLI surface exposes no
+custom role selector; an earlier attempt that referenced unavailable shared
+tool output is retained as a failure. Codex encrypts stored subagent task
+bodies, so exact packet byte equality is supported by the root report, absence
+of follow-up operations, and both complete child outputs rather than externally
+readable task plaintext. Neither run establishes model diversity or benchmarks
+the candidate's crash behavior and throughput.
+
 Phase 2 replaces each research or documented entry with a versioned observation. Separate profiles are created when platforms, permission modes, installed providers, or runtime versions change behavior.
 
 ## Fallback rules

@@ -17,6 +17,7 @@
     "attribution-preserved",
     "durable-log-selected",
     "root-reverified-decision",
+    "fallback-declared",
     "no-project-writes",
     "no-publication"
   ]

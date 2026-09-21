@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-architecture-candidates-attempt-1",
+  "fixture": "architecture-candidates",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode/interrogate Skills and reviewer/synthesizer TOML files committed in a disposable Git fixture; isolated CODEX_HOME; custom-role selector unavailable, so role contracts were supplied inline.",
+    "permissionProfile": "workspace-write sandbox with read-only delegated contracts and automatic approval review"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/architecture-candidates.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root loaded repository-generated Skills and role definitions; unrelated configured MCP startup failures did not participate." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "The root loaded poteto-mode and selected interrogate for the requested bounded architecture review." },
+    { "id": "candidates-frozen-before-review", "status": "pass", "evidence": "The root read and hashed all three files before delegation." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "Exactly two reviewer sessions were started before the first explicit wait." },
+    { "id": "identical-packets", "status": "fail", "evidence": "The initial assignments referred to a tool-output packet that the child sessions did not receive; reviewer 1 later received the packet directly while reviewer 2 remained incomplete." },
+    { "id": "reviewer-results-frozen", "status": "fail", "evidence": "Reviewer 2 produced an indeterminate incomplete review, and reviewer 1 was repaired with a later direct message, violating the initial-result boundary." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both reviewer sessions remained read-only and the disposable repository stayed clean." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "Exactly one synthesizer was started after the two imperfect reviewer results were frozen." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The synthesizer and final response distinguish reviewer 1's repaired complete result from reviewer 2's indeterminate result." },
+    { "id": "durable-log-selected", "status": "pass", "evidence": "The complete reviewer, synthesizer, and root selected durable-log without fabricating two-reviewer consensus." },
+    { "id": "root-reverified-decision", "status": "pass", "evidence": "The root reread, rehashed, ran node verify.mjs durable-log successfully, checked clean Git, and independently selected durable-log." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "The root disclosed the inline generated-role fallback and explicitly reported the failed packet transport rather than hiding it." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Root and external checks found no repository changes." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or publication occurred." }
+  ],
+  "limitations": [
+    "This failed run motivated the fixture rule requiring the complete literal packet in both initial spawn assignments and forbidding later repair.",
+    "Unrelated Cloudflare MCP authentication warnings and macOS sandbox cache diagnostics did not participate in the workflow."
+  ]
+}

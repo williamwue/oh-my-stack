@@ -349,18 +349,24 @@ Current progress:
 - `tools/build-conformance.mjs` deterministically compiles runtime evidence into
   normalized records and fails on source-evidence, fixture, assertion, or
   generated-output drift.
-- The bug-fix, feature-boundary, and behavior-preserving-refactor scenarios now
-  produce paired OMP and Codex records with identical logical event sequences.
+- The bug-fix, feature-boundary, behavior-preserving-refactor, and frozen
+  architecture-candidates scenarios now produce paired OMP and Codex records
+  with identical logical event sequences.
 - Every record includes its runtime surface and version, configuration
   fingerprint, permission profile, provider-inventory evidence, model-resolution
   observability, fixture revision, per-artifact SHA-256 hashes, repetition
   threshold, semantic trace, and protocol-assertion mapping.
-- The current three scenarios are deterministic and require one of one passing
+- The current four scenarios are deterministic and require one of one passing
   run with zero acceptable failures. Scenario model identities remain
   `not-recorded` where the original evidence did not independently expose them.
-- Architecture candidates, a deliberately mixed review, and conflicting
-  writers remain pending real same-scenario fixtures; generic capability probes
-  are not substituted for those semantic requirements.
+- The architecture scenario requires two byte-identical complete initial
+  packets, frozen attributable reviewer results, exactly one later synthesizer,
+  and an independent root decision. Retained failures record OMP print-mode
+  child disposal and Codex missing referenced-packet transport before the
+  hardened runs passed.
+- A deliberately mixed review and conflicting writers remain pending real
+  same-scenario fixtures; generic capability probes are not substituted for
+  those semantic requirements.
 
 ### Fixtures
 
