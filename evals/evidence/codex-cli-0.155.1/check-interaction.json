@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-interaction",
+  "fixture": "check-interaction",
+  "profile": "codex-cli-interactive",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; interactive TUI; gpt-6-astra; experimental default_mode_request_user_input enabled; persisted session in disposable HOME and CODEX_HOME directories.",
+    "permissionProfile": "Read-only sandbox with approval policy never and native interactive user input"
+  },
+  "capabilities": [
+    "interaction.fixed_choice",
+    "interaction.free_text",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json",
+    "evals/evidence/codex-cli-0.155.1/prove-it-works.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The interactive turn received the generated check-interaction Skill from the project .agents/skills inventory before execution." },
+    { "id": "native-interaction-invoked", "status": "pass", "evidence": "The persisted session contains exactly one request_user_input_async call with both probe questions." },
+    { "id": "fixed-choice-presented", "status": "pass", "evidence": "The queued native question card presented Amber (Recommended), Cobalt, and the host-provided Other choice." },
+    { "id": "nonrecommended-choice-received", "status": "pass", "evidence": "The native question card emitted a user message selecting Cobalt." },
+    { "id": "custom-input-presented", "status": "pass", "evidence": "The second native question card exposed Other in addition to Alpha and Beta and accepted editable text." },
+    { "id": "custom-user-text-received", "status": "pass", "evidence": "The native question card emitted a separate user message containing violet-42." },
+    { "id": "no-response-invented", "status": "pass", "evidence": "The first final INTERACTION_RESULT exactly matches the two native question-card user messages." },
+    { "id": "no-timeout-accepted", "status": "pass", "evidence": "The first final result reported timed_out=false and success=true only after both native answers were delivered." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in the disposable probe repository." }
+  ],
+  "limitations": [
+    "This result applies only to the interactive Codex CLI TUI with the experimental default_mode_request_user_input feature enabled; codex exec behavior is recorded separately as a fallback.",
+    "The asynchronous operation returned accepted=true immediately. Answers were queued in the TUI and delivered later as user messages; the active turn had to be interrupted before the queued card could be opened with Option-Up.",
+    "A reconnaissance codex queue message submitted before the native card was opened was delivered as a duplicate follow-up after the first successful result. The capability claim is based only on the earlier request_user_input_async call, two native question-card answers, and first final result.",
+    "Unrelated installed MCP providers attempted startup in the disposable state directory and emitted authentication warnings; the interaction probe used no MCP provider and completed successfully."
+  ]
+}

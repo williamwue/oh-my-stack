@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "assertions": [
+    "skill-loaded",
+    "native-interaction-invoked",
+    "fixed-choice-presented",
+    "nonrecommended-choice-received",
+    "custom-input-presented",
+    "custom-user-text-received",
+    "no-response-invented",
+    "no-timeout-accepted",
+    "no-project-writes"
+  ],
+  "fallbackAssertions": [
+    "interaction-unavailable-reported",
+    "both-questions-returned-pending",
+    "responses-null",
+    "no-default-selected",
+    "no-success-claimed"
+  ]
+}

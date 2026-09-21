@@ -4,7 +4,8 @@
   "target": "omp",
   "sourceVersion": "0.1.0-alpha.0",
   "profiles": [
-    "omp-default"
+    "omp-default",
+    "omp-interactive"
   ],
   "claims": {
     "delivery": "D0",

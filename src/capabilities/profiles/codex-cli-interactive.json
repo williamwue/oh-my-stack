@@ -1,14 +1,14 @@
 {
   "$schema": "../../schemas/capability-profile.schema.json",
   "schemaVersion": 1,
-  "id": "codex-desktop",
+  "id": "codex-cli-interactive",
   "target": {
     "runtime": "codex",
-    "surface": "desktop",
-    "runtimeVersion": null,
-    "platform": null,
-    "configurationFingerprint": null,
-    "permissionProfile": null,
+    "surface": "cli-interactive",
+    "runtimeVersion": "0.155.1",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "isolated-home+isolated-codex-home+project-agents-skill-copy+interactive-tui+gpt-6-astra+experimental-default-mode-user-input",
+    "permissionProfile": "sandbox-read-only+approval-never+interactive-user-input",
     "installedProviders": []
   },
   "capabilities": {
@@ -22,12 +22,12 @@
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
-    "interaction.fixed_choice": { "status": "unknown", "provider": null, "evidence": null },
-    "interaction.free_text": { "status": "unknown", "provider": null, "evidence": null },
-    "resources.relative_paths": { "status": "unknown", "provider": null, "evidence": null },
+    "interaction.fixed_choice": { "status": "native", "provider": "request_user_input_async queued TUI card", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
+    "interaction.free_text": { "status": "native", "provider": "request_user_input_async queued TUI card Other input", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
+    "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
-    "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
-    "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
+    "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
+    "skills.invoke.explicit": { "status": "native", "provider": "$skill-name", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null },
     "workspace.isolate": { "status": "unknown", "provider": null, "evidence": null },
     "workspace.write": { "status": "unknown", "provider": null, "evidence": null }

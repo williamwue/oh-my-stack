@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-interaction-fallback",
+  "fixture": "check-interaction-fallback",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; non-interactive print mode; cursor/default model with low thinking; explicit --skills check-interaction; read tool only; extensions and rules disabled.",
+    "permissionProfile": "Read-only non-interactive probe; native interaction and project-write tools unavailable"
+  },
+  "capabilities": [
+    "interaction.fixed_choice",
+    "interaction.free_text",
+    "resources.relative_paths",
+    "skills.invoke.explicit"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-interaction.json"
+  ],
+  "assertions": [
+    { "id": "interaction-unavailable-reported", "status": "pass", "evidence": "The print-mode run returned INTERACTION_REQUIRED instead of fabricating a native interaction." },
+    { "id": "both-questions-returned-pending", "status": "pass", "evidence": "The result preserved both the color and token questions, their fixed choices, the recommendation, and custom-input allowance." },
+    { "id": "responses-null", "status": "pass", "evidence": "The exact terminal result ended with responses: null." },
+    { "id": "no-default-selected", "status": "pass", "evidence": "Amber remained a recommendation only; the result contains no selected color or token." },
+    { "id": "no-success-claimed", "status": "pass", "evidence": "The result did not emit INTERACTION_RESULT or any success field." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status showed only probe session directories as untracked and no tracked project changes." }
+  ],
+  "limitations": [
+    "This proves the declared pause-and-return fallback for OMP print mode; it does not make print mode natively interactive.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

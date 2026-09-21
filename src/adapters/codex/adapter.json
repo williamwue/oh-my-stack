@@ -6,7 +6,7 @@
   "skillsDir": "skills",
   "manifestPath": ".codex-plugin/plugin.json",
   "portableManifestPath": "plugin.json",
-  "profiles": ["codex-desktop", "codex-cli", "codex-ide"],
+  "profiles": ["codex-desktop", "codex-cli", "codex-cli-interactive", "codex-ide"],
   "manifest": {
     "name": "oh-my-stack",
     "description": "Portable, verifiable engineering workflows for Codex.",

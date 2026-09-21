@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "check-interaction",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": [
+    "interaction.fixed_choice",
+    "interaction.free_text"
+  ],
+  "fallbacks": {
+    "interaction.fixed_choice": "pause_and_return_pending_questions",
+    "interaction.free_text": "pause_and_return_pending_questions"
+  }
+}

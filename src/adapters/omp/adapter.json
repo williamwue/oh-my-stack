@@ -5,7 +5,7 @@
   "packageDir": "packages/omp",
   "skillsDir": "skills",
   "manifestPath": "package.json",
-  "profiles": ["omp-default"],
+  "profiles": ["omp-default", "omp-interactive"],
   "manifest": {
     "name": "oh-my-stack",
     "description": "Portable, verifiable engineering workflows for OMP.",

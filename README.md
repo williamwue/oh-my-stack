@@ -6,9 +6,10 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Status
 
-Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Ten original Skills—including the lifecycle probes through
-`check-model-routing`—and one canonical `evidence-reader` role generate
+Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
+implemented. Eleven original Skills—including the lifecycle probes through
+`check-model-routing` and the interaction probe—plus one canonical
+`evidence-reader` role generate
 deterministic OMP, Codex, and Claude Code target packages. All packages pass
 static `D0` validation.
 
@@ -57,6 +58,17 @@ effort directly at spawn. Runtime session metadata—not worker self-report—
 confirms the resolved worker values. Concrete model identifiers remain outside
 the portable core and appear only in target-specific probe configuration and
 evidence.
+
+Native fixed-choice and free-text interaction passes on the interactive OMP
+and Codex CLI TUI surfaces. Non-interactive OMP print mode and Codex `exec`
+preserve the workflow invariant through an explicit `INTERACTION_REQUIRED`
+result with both questions pending and no fabricated responses. Codex CLI
+0.155.1 exposes interaction through the experimental
+`default_mode_request_user_input` feature as an asynchronous queued question
+card, so it has a separate profile from non-interactive `codex exec`. OMP's
+passing interactive result is bound to the observed `cursor/default` model
+because a separate reconnaissance model skipped the available native
+operation.
 
 No pstack workflow content has been imported yet.
 

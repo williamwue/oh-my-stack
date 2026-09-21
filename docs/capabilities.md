@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, and role-bound model/reasoning routing observed | Two W1 fixtures and eight delegated fixtures achieve W2; custom-role application, model/reasoning routing, cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | Interactive fixed-choice/custom input and non-interactive fallback pass; W1/W2 lifecycle fixtures pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, and direct per-worker model/reasoning routing observed; generated custom role cannot be selected | D3, two W1 fixtures, and seven delegated fixtures achieve W2 on 0.155.1; custom roles are unsupported on the probed spawn surface, while model/reasoning routing, cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 and W1/W2 fixtures pass on 0.155.1; interactive queued-card input and non-interactive fallback use separate profiles; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -150,6 +150,15 @@ persisted session JSONL as an external artifact; the task body is encrypted,
 but its attributable assignment envelope, read command, ordinary assistant
 marker, final result, and completion event remain independently visible.
 Panels remain unproven, so these results do not establish complete W3.
+
+Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
+accepts both a fixed selection and custom text, while print mode returns both
+questions as pending. Codex CLI 0.155.1 exposes an experimental
+`request_user_input_async` operation when
+`default_mode_request_user_input` is enabled. It queues a question card whose
+answers arrive as user messages; non-interactive `codex exec` exposes no such
+operation and follows the same explicit pending-question fallback. These
+observations do not imply interaction support in Codex desktop or IDE.
 
 The canonical `evidence-reader` role generates an OMP Markdown definition, a
 Codex TOML definition, and a Claude-compatible Markdown definition from one

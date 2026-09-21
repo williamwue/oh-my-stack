@@ -76,7 +76,11 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   OMP resolves a probe-only role alias and `thinkingLevel`; Codex CLI applies
   both values directly at spawn. Persisted runtime metadata independently
   confirms the resolved worker values.
-- Panels and interaction remain pending.
+- Native fixed-choice and custom-text interaction passes on the interactive
+  OMP and Codex CLI TUI profiles. Non-interactive OMP print mode and Codex
+  `exec` pass the declared pause-and-return fallback without inventing input.
+  Codex interaction is an experimental asynchronous queued-card surface;
+  OMP's observed success is model-bound. Panels remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

@@ -15,14 +15,15 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads ten portable Skills, one role, and three adapters", async () => {
+test("loads eleven portable Skills, one role, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 10);
+  assert.equal(model.skills.length, 11);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "check-cancellation",
     "check-custom-role",
     "check-delegation",
     "check-follow-up",
+    "check-interaction",
     "check-model-routing",
     "check-parallel",
     "check-resources",
@@ -32,7 +33,7 @@ test("loads ten portable Skills, one role, and three adapters", async () => {
   ]);
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
   assert.deepEqual(model.roles.map((role) => role.metadata.name), ["evidence-reader"]);
-  assert.equal(model.profiles.size, 5);
+  assert.equal(model.profiles.size, 7);
 });
 
 test("live profiles cite surface-specific evidence", async () => {
@@ -53,6 +54,8 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["agents.wait"].status, "native");
   assert.equal(omp.capabilities["agents.read_result"].status, "native");
   assert.equal(omp.capabilities["agents.read_transcript"].status, "native");
+  assert.equal(omp.capabilities["interaction.fixed_choice"].status, "fallback");
+  assert.equal(omp.capabilities["interaction.free_text"].status, "fallback");
   assert.equal(omp.capabilities["workspace.isolate"].status, "native");
   assert.equal(omp.capabilities["workspace.write"].status, "native");
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
@@ -71,6 +74,16 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.read_transcript"].status, "external");
   assert.equal(codexCli.capabilities["workspace.isolate"].status, "native");
   assert.equal(codexCli.capabilities["workspace.write"].status, "native");
+  assert.equal(codexCli.capabilities["interaction.fixed_choice"].status, "fallback");
+  assert.equal(codexCli.capabilities["interaction.free_text"].status, "fallback");
+  const ompInteractive = model.profiles.get("omp-interactive");
+  assert.equal(ompInteractive.target.surface, "cli-interactive");
+  assert.equal(ompInteractive.capabilities["interaction.fixed_choice"].status, "native");
+  assert.equal(ompInteractive.capabilities["interaction.free_text"].status, "native");
+  const codexCliInteractive = model.profiles.get("codex-cli-interactive");
+  assert.equal(codexCliInteractive.target.surface, "cli-interactive");
+  assert.equal(codexCliInteractive.capabilities["interaction.fixed_choice"].status, "native");
+  assert.equal(codexCliInteractive.capabilities["interaction.free_text"].status, "native");
   const codexDesktop = model.profiles.get("codex-desktop");
   assert.equal(codexDesktop.capabilities["workspace.isolate"].status, "unknown");
   assert.equal(codexDesktop.capabilities["workspace.write"].status, "unknown");

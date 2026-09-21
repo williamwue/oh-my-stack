@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-interaction",
+  "fixture": "check-interaction",
+  "profile": "omp-interactive",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; interactive TUI; cursor/default model with low thinking; explicit --skills check-interaction; read and ask tools only; extensions and rules disabled.",
+    "permissionProfile": "Read-only probe with native interactive user input; no project-write tools"
+  },
+  "capabilities": [
+    "interaction.fixed_choice",
+    "interaction.free_text",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-interaction-fallback.json",
+    "evals/evidence/omp-18.2.6/prove-it-works.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The saved session resolved skill://check-interaction to the generated project Skill and returned its complete instructions." },
+    { "id": "native-interaction-invoked", "status": "pass", "evidence": "The saved assistant message contains exactly one native ask tool call with both probe questions." },
+    { "id": "fixed-choice-presented", "status": "pass", "evidence": "The ask call and rendered TUI presented Amber and Cobalt for probe_color, with Amber marked recommended." },
+    { "id": "nonrecommended-choice-received", "status": "pass", "evidence": "The native ask result recorded selectedOptions=[Cobalt] for probe_color." },
+    { "id": "custom-input-presented", "status": "pass", "evidence": "The native TUI exposed its custom-answer path for probe_token in addition to Alpha and Beta." },
+    { "id": "custom-user-text-received", "status": "pass", "evidence": "The native ask result independently recorded customInput=violet-42 for probe_token." },
+    { "id": "no-response-invented", "status": "pass", "evidence": "Both reported values exactly match the native tool result produced after human TUI input." },
+    { "id": "no-timeout-accepted", "status": "pass", "evidence": "The tool completed normally and the final INTERACTION_RESULT reported timed_out=false and success=true." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status showed only the probe session directory as untracked and no tracked project changes." }
+  ],
+  "limitations": [
+    "This result applies to the interactive TUI, not print mode; print-mode behavior is recorded separately as a fallback.",
+    "The passing observation is bound to cursor/default. A separate cursor/gpt-5.6-luna reconnaissance run returned the fallback without invoking the available ask operation, so model behavior is part of the configuration fingerprint.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

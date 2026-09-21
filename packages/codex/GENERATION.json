@@ -6,6 +6,7 @@
   "profiles": [
     "codex-desktop",
     "codex-cli",
+    "codex-cli-interactive",
     "codex-ide"
   ],
   "claims": {

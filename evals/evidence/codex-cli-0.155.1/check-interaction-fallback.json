@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-interaction-fallback",
+  "fixture": "check-interaction-fallback",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; non-interactive codex exec; gpt-6-astra; user configuration and project rules ignored; persisted session in disposable HOME and CODEX_HOME directories.",
+    "permissionProfile": "Read-only non-interactive sandbox with approval policy never; native interaction unavailable"
+  },
+  "capabilities": [
+    "interaction.fixed_choice",
+    "interaction.free_text",
+    "resources.relative_paths",
+    "skills.invoke.explicit"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-interaction.json"
+  ],
+  "assertions": [
+    { "id": "interaction-unavailable-reported", "status": "pass", "evidence": "The codex exec run returned INTERACTION_REQUIRED instead of fabricating a native interaction." },
+    { "id": "both-questions-returned-pending", "status": "pass", "evidence": "The result preserved both questions, both fixed-choice lists, and the custom-value allowance." },
+    { "id": "responses-null", "status": "pass", "evidence": "The exact final JSON ended with responses set to null." },
+    { "id": "no-default-selected", "status": "pass", "evidence": "The result contains no selected color or token." },
+    { "id": "no-success-claimed", "status": "pass", "evidence": "The result did not emit INTERACTION_RESULT or a success field." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in the disposable probe repository." }
+  ],
+  "limitations": [
+    "This proves the declared pause-and-return fallback for non-interactive codex exec; it does not make that surface natively interactive.",
+    "Unrelated installed MCP providers attempted startup in the disposable state directory and emitted authentication warnings; the fallback probe used no MCP provider and completed successfully."
+  ]
+}
