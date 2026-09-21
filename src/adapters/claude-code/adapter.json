@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/adapter.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code",
+  "packageDir": "packages/claude-code",
+  "skillsDir": "skills",
+  "manifestPath": ".claude-plugin/plugin.json",
+  "profiles": ["claude-code-default"],
+  "manifest": {
+    "name": "oh-my-stack",
+    "description": "Portable, verifiable engineering workflows for Claude Code.",
+    "author": {
+      "name": "Oh My Stack contributors"
+    },
+    "license": "MIT"
+  }
+}

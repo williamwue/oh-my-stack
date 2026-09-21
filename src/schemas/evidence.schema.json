@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oh-my-stack.invalid/schemas/evidence.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "fixture", "profile", "observedAt", "result", "claims", "runtime", "capabilities", "assertions", "limitations"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "fixture": { "type": "string" },
+    "profile": { "type": "string" },
+    "observedAt": { "type": "string", "format": "date" },
+    "result": { "enum": ["pass", "fail"] },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deliveryTarget", "deliveryAchieved", "workflowAchieved", "observedDeliveryChecks"],
+      "properties": {
+        "deliveryTarget": { "enum": ["D0", "D1", "D2", "D3"] },
+        "deliveryAchieved": { "enum": ["D0", "D1", "D2", "D3"] },
+        "workflowAchieved": { "enum": ["W0", "W1", "W2", "W3", "W4"] },
+        "observedDeliveryChecks": {
+          "type": "array",
+          "items": { "enum": ["D0", "D1", "D2", "D3"] },
+          "uniqueItems": true
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "platform", "configuration", "permissionProfile"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "platform": { "type": "string" },
+        "configuration": { "type": "string" },
+        "permissionProfile": { "type": "string" }
+      }
+    },
+    "capabilities": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+    "assertions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "evidence"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "enum": ["pass", "fail"] },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}

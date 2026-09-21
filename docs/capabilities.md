@@ -16,6 +16,9 @@ Oh My Stack therefore records delivery maturity, workflow conformance, and indiv
 | `D3` | Explicit invocation resolves the Skill and all packaged resources |
 
 Delivery maturity belongs to a target package on one runtime surface. It does not prove that a workflow behaves correctly.
+The maturity value is cumulative: a direct observation of a later check is
+recorded, but it does not advance the overall level while an earlier gate is
+missing.
 
 ## Workflow conformance
 
@@ -120,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Research | Runtime package | Documented, schema-dependent | Pending |
+| OMP | Observed | Runtime package | Documented, schema-dependent | W1 pass on CLI 18.2.6; D2/D3 checks observed, overall D0 pending D1 |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Documented | Documented plugin browser | Documented | Pending |
+| Codex CLI | Observed | Documented plugin browser | Documented | W1 pass on 0.155.1; D2/D3 checks observed, overall D0 pending D1 |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Pending |
 
@@ -143,25 +146,20 @@ Phase 2 replaces each research or documented entry with a versioned observation.
 
 ## Evidence record
 
-```yaml
-schema_version: 1
-target:
-  runtime: codex
-  surface: cli
-  runtime_version: "..."
-  platform: macos
-  architecture: arm64
-  configuration_fingerprint: "sha256:..."
-capability: agents.follow_up
-status: native
-provider: codex
-permissions: []
-observed_at: "YYYY-MM-DD"
-fixture: evals/fixtures/follow-up
-command_or_prompt: "..."
-artifact: "evals/evidence/..."
-result: pass
-notes: "..."
+```json
+{
+  "profile": "codex-cli",
+  "fixture": "prove-it-works",
+  "observedAt": "YYYY-MM-DD",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "capabilities": ["skills.discover", "skills.invoke.explicit"]
+}
 ```
 
 Evidence expires when its runtime version, surface, provider set, permission state, fixture revision, or adapter contract changes.

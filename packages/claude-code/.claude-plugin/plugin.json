@@ -1,0 +1,9 @@
+{
+  "name": "oh-my-stack",
+  "description": "Portable, verifiable engineering workflows for Claude Code.",
+  "author": {
+    "name": "Oh My Stack contributors"
+  },
+  "license": "MIT",
+  "version": "0.1.0-alpha.0"
+}

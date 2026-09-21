@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "capabilities": [
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect"
+  ]
+}

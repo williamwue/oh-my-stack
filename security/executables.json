@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "path": "tools/generate.mjs",
+      "owner": "local-core",
+      "purpose": "Generate deterministic runtime target packages.",
+      "network": false,
+      "writes": ["packages/omp", "packages/codex", "packages/claude-code"],
+      "uninstallBehavior": "Not installed in target packages."
+    },
+    {
+      "path": "tools/validate.mjs",
+      "owner": "local-core",
+      "purpose": "Validate source contracts and generated packages.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Not installed in target packages."
+    }
+  ]
+}

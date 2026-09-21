@@ -1,0 +1,22 @@
+{
+  "name": "oh-my-stack",
+  "version": "0.1.0-alpha.0",
+  "description": "Portable, verifiable engineering workflows for agent runtimes.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "generate": "node tools/generate.mjs",
+    "generate:check": "node tools/generate.mjs --check",
+    "validate": "node tools/validate.mjs",
+    "lint:markdown": "markdownlint-cli2 '**/*.md'",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run generate:check && npm run validate && npm run lint:markdown && npm test"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.3"
+  }
+}

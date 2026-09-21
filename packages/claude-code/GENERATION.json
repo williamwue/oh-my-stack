@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/generate.mjs",
+  "target": "claude-code",
+  "sourceVersion": "0.1.0-alpha.0",
+  "profiles": [
+    "claude-code-default"
+  ],
+  "claims": {
+    "delivery": "D0",
+    "workflow": "W0"
+  }
+}

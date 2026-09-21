@@ -6,7 +6,34 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Status
 
-The repository currently contains the architecture and implementation plan. It does not yet ship runnable skills or plugins.
+Phase 1 and the Alpha 0 build slice are implemented. One original
+`prove-it-works` Skill generates deterministic OMP, Codex, and Claude Code
+target packages. All packages pass static `D0` validation.
+
+Live `W1` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS arm64.
+Those probes directly observed the `D2` discovery and `D3` explicit-invocation
+checks, but overall delivery remains `D0` because the prerequisite `D1` clean
+install/update/uninstall gate has not run. Codex desktop, Codex IDE, and Claude
+Code remain unprobed rather than inferred from CLI results.
+
+No pstack workflow content has been imported yet.
+
+## Development
+
+```bash
+npm install
+npm run generate
+npm run check
+```
+
+`npm run generate` replaces only the generator-owned target directories under
+`packages/`. `npm run check` verifies generated drift, schemas and invariants,
+local links, the executable inventory, and the test suite without network
+access.
+
+Runtime probe records live under `evals/evidence/`. The OMP probe overlay at
+`evals/configs/omp-probe.yml` clears machine-specific Skill allowlists so the
+fixture measures the generated package rather than a developer preference.
 
 ## Goals
 

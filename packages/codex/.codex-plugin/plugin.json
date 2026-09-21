@@ -1,0 +1,26 @@
+{
+  "name": "oh-my-stack",
+  "description": "Portable, verifiable engineering workflows for Codex.",
+  "author": {
+    "name": "Oh My Stack contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "engineering-workflows",
+    "verification"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Oh My Stack",
+    "shortDescription": "Portable engineering workflows for Codex.",
+    "longDescription": "Generate and verify portable engineering workflows with native Codex packaging.",
+    "developerName": "Oh My Stack contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Use $prove-it-works to verify this installation."
+    ]
+  },
+  "version": "0.1.0-alpha.0"
+}

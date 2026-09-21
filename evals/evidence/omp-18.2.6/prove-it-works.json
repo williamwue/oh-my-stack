@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-prove-it-works",
+  "fixture": "prove-it-works",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied to project .agents/skills; evals/configs/omp-probe.yml cleared the machine-specific includeSkills allowlist.",
+    "permissionProfile": "Fixture required read-only behavior; runtime exposed only read and bash tools; auto-approval was not enabled."
+  },
+  "capabilities": ["skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The runtime resolved and read skill://prove-it-works from the project .agents/skills directory." },
+    { "id": "workspace-path-reported", "status": "pass", "evidence": "The final response reported the temporary fixture workspace path using pwd evidence." },
+    { "id": "version-control-status-reported", "status": "pass", "evidence": "The runtime reported git rev-parse --is-inside-work-tree as true." },
+    { "id": "evidence-reported", "status": "pass", "evidence": "The final response associated each result with its observed command or Skill resource." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "The runtime reported only Skill reading, pwd, and git inspection; the fixture requested no writes." }
+  ],
+  "limitations": [
+    "This proves project-level native Skill discovery, explicit model invocation, and the W1 fixture only.",
+    "It does not prove plugin-manager installation because that path mutates persistent plugin state.",
+    "Overall delivery remains D0 until clean install, update, and uninstall establish the missing D1 gate.",
+    "The local machine had an includeSkills allowlist, so the probe used the committed empty-allowlist overlay."
+  ]
+}

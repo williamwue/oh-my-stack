@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schemas/adapter.schema.json",
+  "schemaVersion": 1,
+  "id": "omp",
+  "packageDir": "packages/omp",
+  "skillsDir": "skills",
+  "manifestPath": "package.json",
+  "profiles": ["omp-default"],
+  "manifest": {
+    "name": "oh-my-stack",
+    "description": "Portable, verifiable engineering workflows for OMP.",
+    "type": "module",
+    "license": "MIT",
+    "omp": {
+      "skills": ["./skills"]
+    }
+  }
+}

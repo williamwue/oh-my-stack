@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/capability-profile.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-default",
+  "target": {
+    "runtime": "omp",
+    "surface": "cli",
+    "runtimeVersion": "18.2.6",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlay-empty-includeSkills",
+    "permissionProfile": "fixture-read-only+tools-read-bash+no-auto-approve",
+    "installedProviders": []
+  },
+  "capabilities": {
+    "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
+    "skills.invoke.explicit": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
+    "workspace.inspect": { "status": "native", "provider": "read+bash", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" }
+  }
+}

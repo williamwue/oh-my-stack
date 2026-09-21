@@ -1,0 +1,12 @@
+{
+  "name": "oh-my-stack",
+  "description": "Portable, verifiable engineering workflows for OMP.",
+  "type": "module",
+  "license": "MIT",
+  "omp": {
+    "skills": [
+      "./skills"
+    ]
+  },
+  "version": "0.1.0-alpha.0"
+}

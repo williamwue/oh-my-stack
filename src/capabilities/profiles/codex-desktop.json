@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/capability-profile.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-desktop",
+  "target": {
+    "runtime": "codex",
+    "surface": "desktop",
+    "runtimeVersion": null,
+    "platform": null,
+    "configurationFingerprint": null,
+    "permissionProfile": null,
+    "installedProviders": []
+  },
+  "capabilities": {
+    "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
+    "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
+    "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null }
+  }
+}

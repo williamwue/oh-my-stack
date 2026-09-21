@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oh-my-stack.invalid/schemas/skill.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "deliveryTarget", "workflowTarget", "requires", "fallbacks"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "deliveryTarget": { "enum": ["D0", "D1", "D2", "D3"] },
+    "workflowTarget": { "enum": ["W0", "W1", "W2", "W3", "W4"] },
+    "requires": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "fallbacks": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}
