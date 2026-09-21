@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "capabilities": [
     "agents.cancel",
+    "agents.custom_roles",
     "agents.follow_up",
     "agents.read_result",
     "agents.read_transcript",

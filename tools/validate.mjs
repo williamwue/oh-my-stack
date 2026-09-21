@@ -119,7 +119,11 @@ async function validateRuntimeEvidence(root, model) {
       const evidence = evidenceByPath.get(record.evidence);
       assert(evidence, `${profile.id}.${capability}: missing evidence ${record.evidence}`);
       assert(evidence.profile === profile.id, `${profile.id}.${capability}: evidence belongs to ${evidence.profile}`);
-      assert(evidence.result === "pass", `${profile.id}.${capability}: capability cites non-passing evidence`);
+      if (record.status === "unsupported") {
+        assert(evidence.result === "fail", `${profile.id}.${capability}: unsupported capability must cite failing evidence`);
+      } else {
+        assert(evidence.result === "pass", `${profile.id}.${capability}: supported capability cites non-passing evidence`);
+      }
       assert(evidence.capabilities.includes(capability), `${profile.id}.${capability}: evidence omits capability`);
     }
   }

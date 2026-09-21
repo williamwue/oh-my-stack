@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oh-my-stack.invalid/schemas/role.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "description", "workload", "constraints", "writes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "description": { "type": "string", "minLength": 1 },
+    "workload": { "enum": ["fast", "balanced", "deep"] },
+    "constraints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "read_only",
+          "independent_session",
+          "reasoning_required",
+          "model_diversity_preferred"
+        ]
+      }
+    },
+    "writes": { "type": "boolean" }
+  }
+}

@@ -1,0 +1,2 @@
+ROOT_MARKER=custom-role-root-ok
+EXPECTED_ROLE_POLICY=bounded-evidence-only

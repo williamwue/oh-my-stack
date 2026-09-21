@@ -150,6 +150,31 @@ function validateSkillMetadata(skill, registry, path) {
   }
 }
 
+function validateRoleMetadata(role, path) {
+  assertKeys(
+    role,
+    new Set(["$schema", "schemaVersion", "name", "description", "workload", "constraints", "writes"]),
+    path,
+  );
+  assert(role.schemaVersion === 1, `${path}: schemaVersion must be 1`);
+  assert(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(role.name), `${path}: invalid role name`);
+  assert(role.description, `${path}: description is required`);
+  assert(["fast", "balanced", "deep"].includes(role.workload), `${path}: invalid workload`);
+  assert(Array.isArray(role.constraints), `${path}: constraints must be an array`);
+  assert(new Set(role.constraints).size === role.constraints.length, `${path}: duplicate constraint`);
+  const allowedConstraints = new Set([
+    "read_only",
+    "independent_session",
+    "reasoning_required",
+    "model_diversity_preferred",
+  ]);
+  for (const constraint of role.constraints) {
+    assert(allowedConstraints.has(constraint), `${path}: invalid constraint ${constraint}`);
+  }
+  assert(typeof role.writes === "boolean", `${path}: writes must be boolean`);
+  assert(role.writes || role.constraints.includes("read_only"), `${path}: non-writing role must be read_only`);
+}
+
 function validateProfile(profile, registry, path) {
   assert(profile.schemaVersion === 1, `${path}: schemaVersion must be 1`);
   assert(profile.id && profile.target && profile.capabilities, `${path}: incomplete profile`);
@@ -298,6 +323,24 @@ export async function loadModel(root = repoRoot) {
   }
   assert(skills.length > 0, "portable core has no skills");
 
+  const roles = [];
+  const roleRoot = join(root, "src", "core", "roles");
+  const roleEntries = await readdir(roleRoot, { withFileTypes: true });
+  roleEntries.sort((left, right) => left.name.localeCompare(right.name));
+  for (const entry of roleEntries) {
+    if (!entry.isDirectory()) continue;
+    const directory = join(roleRoot, entry.name);
+    const metadataPath = join(directory, "role.json");
+    const instructionsPath = join(directory, "instructions.md");
+    const metadata = await readJson(metadataPath);
+    const instructions = await readFile(instructionsPath, "utf8");
+    validateRoleMetadata(metadata, relative(root, metadataPath));
+    assert(entry.name === metadata.name, `${relative(root, directory)}: folder and metadata name differ`);
+    assert(instructions.trim().length > 0, `${relative(root, instructionsPath)}: instructions are empty`);
+    roles.push({ directory, metadata, instructions });
+  }
+  assert(roles.length > 0, "portable core has no roles");
+
   for (const path of await filesUnder(join(root, "src", "core"))) {
     if (!/\.(?:md|json)$/.test(path)) continue;
     validateCoreText(relative(root, path), await readFile(path, "utf8"));
@@ -309,7 +352,7 @@ export async function loadModel(root = repoRoot) {
     for (const skill of skills) validateRequirementSupport(skill, targetProfiles);
   }
 
-  return { root, project, registry, profiles, adapters, skills };
+  return { root, project, registry, profiles, adapters, skills, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -320,6 +363,56 @@ function codexSkillMetadata(skill) {
     `  default_prompt: "Use $${skill.metadata.name} to verify this installation without changing project files."`,
     "policy:",
     "  allow_implicit_invocation: true",
+    "",
+  ].join("\n");
+}
+
+function yamlQuoted(value) {
+  return JSON.stringify(value);
+}
+
+function tomlQuoted(value) {
+  return JSON.stringify(value);
+}
+
+function renderOmpRole(role) {
+  return [
+    "---",
+    `name: ${role.metadata.name}`,
+    `description: ${yamlQuoted(role.metadata.description)}`,
+    "tools:",
+    "  - read",
+    "  - grep",
+    "  - glob",
+    "  - yield",
+    "---",
+    "",
+    role.instructions.trim(),
+    "",
+  ].join("\n");
+}
+
+function renderCodexRole(role) {
+  return [
+    `name = ${tomlQuoted(role.metadata.name.replaceAll("-", "_"))}`,
+    `description = ${tomlQuoted(role.metadata.description)}`,
+    'sandbox_mode = "read-only"',
+    'developer_instructions = """',
+    role.instructions.trim(),
+    '"""',
+    "",
+  ].join("\n");
+}
+
+function renderClaudeRole(role) {
+  return [
+    "---",
+    `name: ${role.metadata.name}`,
+    `description: ${yamlQuoted(role.metadata.description)}`,
+    "tools: Read, Grep, Glob",
+    "---",
+    "",
+    role.instructions.trim(),
     "",
   ].join("\n");
 }
@@ -342,6 +435,16 @@ export async function renderTarget(stageRoot, model, adapter) {
     if (adapter.id === "codex") {
       await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
     }
+  }
+
+  for (const role of model.roles) {
+    const extension = adapter.id === "codex" ? "toml" : "md";
+    const renderer = adapter.id === "omp"
+      ? renderOmpRole
+      : adapter.id === "codex"
+        ? renderCodexRole
+        : renderClaudeRole;
+    await writeText(join(target, "agents", `${role.metadata.name}.${extension}`), renderer(role));
   }
 
   await writeJson(join(target, "GENERATION.json"), {
@@ -385,6 +488,13 @@ export async function validateRenderedTarget(target, adapter, model) {
     if (adapter.id === "codex") {
       assert(await exists(join(dirname(skillPath), "agents", "openai.yaml")), "codex: missing Skill UI metadata");
     }
+  }
+  for (const role of model.roles) {
+    const extension = adapter.id === "codex" ? "toml" : "md";
+    assert(
+      await exists(join(target, "agents", `${role.metadata.name}.${extension}`)),
+      `${adapter.id}: missing generated role ${role.metadata.name}`,
+    );
   }
 }
 

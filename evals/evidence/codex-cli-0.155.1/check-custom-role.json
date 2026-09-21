@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-custom-role",
+  "fixture": "check-custom-role",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME; generated Skill under .agents/skills and generated evidence_reader definition under .codex/agents; repeated with and without --ignore-user-config.",
+    "permissionProfile": "Read-only sandbox with approval policy never"
+  },
+  "capabilities": ["agents.custom_roles"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-delegation.json",
+    "evals/evidence/codex-cli-0.155.1/check-transcript.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent loaded the generated check-custom-role Skill in both runs." },
+    { "id": "generated-role-definition-present", "status": "pass", "evidence": "The parent located and read .codex/agents/evidence-reader.toml, including its name, sandbox, and developer instructions." },
+    { "id": "role-selector-exposed", "status": "fail", "evidence": "The available spawn_agent tool schema had no role or agent-type selector, so the parent could not select evidence_reader." },
+    { "id": "one-role-worker-started", "status": "fail", "evidence": "No worker was started because the Skill forbids substituting a general-purpose worker for the generated role." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Both external post-run git status checks were clean." }
+  ],
+  "limitations": [
+    "This is a surface- and version-specific negative observation. Official documentation describes custom agents, but Codex CLI 0.155.1 did not expose a role selector in the actual spawn tool used by codex exec.",
+    "The probe was repeated without --ignore-user-config to rule out that flag as the cause.",
+    "A later runtime version or another Codex surface may expose the documented custom-agent selection mechanism and requires a separate probe."
+  ]
+}

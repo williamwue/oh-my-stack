@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "assertions": [
+    "skill-loaded",
+    "generated-role-discovered",
+    "one-role-worker-started",
+    "role-worker-result-collected",
+    "asset-marker-found",
+    "role-policy-found",
+    "generated-role-identity-verified",
+    "root-did-not-read-role-asset",
+    "root-marker-independently-verified",
+    "no-project-writes"
+  ]
+}

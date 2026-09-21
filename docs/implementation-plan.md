@@ -67,6 +67,11 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   `history://` resource; Codex CLI requires an external read of the persisted
   session JSONL and keeps the assignment body encrypted while retaining an
   attributable task envelope.
+- One canonical read-only role now generates native definitions for all three
+  targets. OMP discovers and applies the generated role. Codex CLI 0.155.1
+  reads its project definition but exposes no role selector on `spawn_agent`,
+  so that exact surface is recorded as unsupported rather than normalized to
+  the newer documented behavior.
 - Panels, model override, and interaction remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.

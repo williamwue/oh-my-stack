@@ -71,6 +71,13 @@ The initial role vocabulary is:
 
 Runtime agent names are mappings, not part of this vocabulary.
 
+Canonical role metadata and instructions are stored once under
+`src/core/roles/`. The generator renders host-native definitions rather than
+copying one runtime's role format into another: Markdown frontmatter for OMP,
+standalone TOML for Codex, and plugin agent Markdown for Claude Code. Concrete
+model identifiers remain outside the canonical role and are resolved by a
+runtime-aware setup layer.
+
 ### Canonical lifecycle protocols
 
 The portable core initially recognizes four protocols:

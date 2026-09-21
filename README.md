@@ -7,11 +7,10 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Eight original Skills—`prove-it-works`, `check-resources`,
-`check-delegation`, `check-parallel`, `check-follow-up`, `check-cancellation`,
-`check-transcript`, and `check-writer-isolation`—generate deterministic OMP,
-Codex, and Claude Code target packages. All packages pass static `D0`
-validation.
+implemented. Nine original Skills—including the lifecycle probes through
+`check-custom-role`—and one canonical `evidence-reader` role generate
+deterministic OMP, Codex, and Claude Code target packages. All packages pass
+static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -44,6 +43,13 @@ where a late stale payload is delivered or coordinated panels, so achieved
 conformance remains W2. Codex lifecycle probes require persisted sessions;
 `--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
 
+The generated custom read-only role is discovered and applied natively by OMP.
+Codex CLI 0.155.1 finds the generated project role definition, but the
+`spawn_agent` surface exposed to `codex exec` has no role selector. That exact
+surface is therefore recorded as `unsupported`, despite newer official Codex
+documentation describing custom-agent configuration; desktop and IDE remain
+separate, unprobed surfaces.
+
 No pstack workflow content has been imported yet.
 
 ## Development
@@ -58,6 +64,11 @@ npm run check
 `packages/`. `npm run check` verifies generated drift, schemas and invariants,
 local links, the executable inventory, and the test suite without network
 access.
+
+Canonical roles live beside the portable Skills. The generator emits native
+role definitions under each target package's `agents/` directory; runtime
+setup or installation places those definitions in the host's discovered role
+location.
 
 Runtime probe records live under `evals/evidence/`. The OMP probe overlay at
 `evals/configs/omp-probe.yml` clears machine-specific Skill allowlists so the

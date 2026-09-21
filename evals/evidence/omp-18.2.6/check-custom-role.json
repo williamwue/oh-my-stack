@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-custom-role",
+  "fixture": "check-custom-role",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills and generated evidence-reader role copied under project .omp/agents; includeSkills cleared; one role-backed worker.",
+    "permissionProfile": "Read-only probe with one generated role and no project writes"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-delegation.json",
+    "evals/evidence/omp-18.2.6/check-transcript.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-custom-role Skill." },
+    { "id": "generated-role-discovered", "status": "pass", "evidence": "OMP task discovery exposed the generated evidence-reader role from .omp/agents." },
+    { "id": "one-role-worker-started", "status": "pass", "evidence": "Exactly one RoleEvidenceWorker was started with agent=evidence-reader." },
+    { "id": "role-worker-result-collected", "status": "pass", "evidence": "The root collected the role-backed worker's structured result." },
+    { "id": "asset-marker-found", "status": "pass", "evidence": "The worker returned ROLE_MARKER=custom-role-ok from the assigned asset." },
+    { "id": "role-policy-found", "status": "pass", "evidence": "The worker returned ROLE_POLICY=bounded-evidence-only, a value present only in the generated role instructions and root-only expectation file, not its assignment." },
+    { "id": "generated-role-identity-verified", "status": "pass", "evidence": "Task metadata and history://RoleEvidenceWorker identify agent=evidence-reader rather than only the task name." },
+    { "id": "root-did-not-read-role-asset", "status": "pass", "evidence": "The root did not read role.txt; the worker transcript attributes that read to RoleEvidenceWorker." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before and after delegation and observed custom-role-root-ok." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Git status and diff were empty after the run." }
+  ],
+  "limitations": [
+    "The probe validates one read-only generated role, not the full canonical role vocabulary or workload-to-model resolution.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

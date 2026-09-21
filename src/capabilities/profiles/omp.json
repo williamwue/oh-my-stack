@@ -13,6 +13,7 @@
   },
   "capabilities": {
     "agents.cancel": { "status": "native", "provider": "hub cancel background job", "evidence": "evals/evidence/omp-18.2.6/check-cancellation.json" },
+    "agents.custom_roles": { "status": "native", "provider": ".omp/agents role discovery and task agent selection", "evidence": "evals/evidence/omp-18.2.6/check-custom-role.json" },
     "agents.follow_up": { "status": "native", "provider": "hub send to idle worker", "evidence": "evals/evidence/omp-18.2.6/check-follow-up.json" },
     "agents.read_result": { "status": "native", "provider": "background task result payloads", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
     "agents.read_transcript": { "status": "native", "provider": "history:// completed worker resource", "evidence": "evals/evidence/omp-18.2.6/check-transcript.json" },

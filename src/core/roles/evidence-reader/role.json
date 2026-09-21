@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "evidence-reader",
+  "description": "Read-only worker for inspecting one bounded source and returning attributable evidence.",
+  "workload": "fast",
+  "constraints": ["read_only", "independent_session"],
+  "writes": false
+}
