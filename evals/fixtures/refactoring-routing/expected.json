@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "selectedRoute": "refactoring",
+  "verification": "node --test test/labels.test.mjs",
+  "allowedChanges": ["project/lib/labels.mjs"],
+  "pinnedContract": [
+    "task open and done labels",
+    "project open and done labels",
+    "name trimming and exact output text"
+  ],
+  "targetShape": "one private renderLabel(kind, name, closed) helper with two public adapters",
+  "assertions": [
+    "router-loaded",
+    "generated-resources-only",
+    "refactoring-selected",
+    "refactoring-and-how-loaded",
+    "callers-and-contract-inspected",
+    "baseline-behavior-pinned-by-root",
+    "reader-load-problem-named",
+    "target-shape-named",
+    "exactly-one-writer",
+    "writer-ownership-bounded",
+    "writer-isolated-or-serialized",
+    "root-diff-inspected",
+    "duplicate-branches-removed",
+    "equivalence-proven-by-root",
+    "reader-load-reduction-explained",
+    "no-unexpected-changes",
+    "no-publication"
+  ]
+}
