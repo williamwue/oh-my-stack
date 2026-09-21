@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-package-install-lifecycle",
+  "fixture": "install-lifecycle",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D1",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "omp-package",
+    "version": "0.1.0-alpha.0",
+    "platform": "portable-node-test",
+    "configuration": "Local generated package installed, reinstalled with force, and uninstalled through npm in a temporary prefix.",
+    "permissionProfile": "Writes restricted to a disposable temporary prefix."
+  },
+  "capabilities": [],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"],
+  "assertions": [
+    { "id": "clean-install", "status": "pass", "evidence": "npm installed the generated OMP package and its omp.skills manifest into a new temporary prefix." },
+    { "id": "clean-update", "status": "pass", "evidence": "Forced reinstall completed and preserved a user-owned sibling sentinel." },
+    { "id": "clean-uninstall", "status": "pass", "evidence": "npm uninstall removed the package while preserving the user-owned sibling sentinel." }
+  ],
+  "limitations": [
+    "This validates only the package artifact lifecycle used beneath OMP package installation and therefore does not satisfy D1.",
+    "The OMP plugin-manager dry-run probe failed its no-write invariant.",
+    "Live OMP discovery and invocation are covered by the related prove-it-works evidence."
+  ]
+}

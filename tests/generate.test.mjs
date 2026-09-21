@@ -31,7 +31,9 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.match(omp.capabilities["skills.discover"].evidence, /omp-18\.2\.6/);
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
   assert.match(codexCli.capabilities["skills.invoke.explicit"].evidence, /codex-cli-0\.155\.1/);
-  assert.equal(model.profiles.get("claude-code-default").capabilities["skills.discover"].status, "unknown");
+  const claude = model.profiles.get("claude-code-default");
+  assert.equal(claude.capabilities["skills.discover"].status, "unknown");
+  assert.equal(claude.verification.status, "pending");
 });
 
 test("portable core rejects runtime bindings", () => {

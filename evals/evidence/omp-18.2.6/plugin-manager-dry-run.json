@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-plugin-manager-dry-run",
+  "fixture": "install-lifecycle",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D1",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "omp plugin link against the generated package with --local, --dry-run, and JSON output from a disposable Git repository.",
+    "permissionProfile": "The command was expected to be read-only because --dry-run was set."
+  },
+  "capabilities": [],
+  "assertions": [
+    { "id": "dry-run-no-write", "status": "fail", "evidence": "The command created a user-level plugin symlink and lock entry despite --dry-run." },
+    { "id": "state-restored", "status": "pass", "evidence": "The plugin was immediately uninstalled; follow-up checks found neither the symlink nor registry references." }
+  ],
+  "limitations": [
+    "No persistent Oh My Stack plugin state remains after cleanup.",
+    "D1 must not pass until an isolated or corrected OMP plugin-manager lifecycle preserves the no-write dry-run invariant."
+  ]
+}

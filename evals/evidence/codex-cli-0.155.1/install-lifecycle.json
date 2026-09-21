@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-repo-marketplace-lifecycle",
+  "fixture": "install-lifecycle",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D1",
+    "deliveryAchieved": "D1",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D0", "D1"]
+  },
+  "runtime": {
+    "name": "codex-repository-marketplace",
+    "version": "0.155.1",
+    "platform": "portable-node-test",
+    "configuration": "Official repository-marketplace copy layout exercised in a disposable temporary repository root.",
+    "permissionProfile": "Writes restricted to a disposable temporary marketplace root."
+  },
+  "capabilities": [],
+  "assertions": [
+    { "id": "clean-install", "status": "pass", "evidence": "The generated package and marketplace entry were created in a new temporary repository layout." },
+    { "id": "clean-update", "status": "pass", "evidence": "Atomic replacement removed a stale plugin-owned file and preserved a user-owned sibling sentinel." },
+    { "id": "clean-uninstall", "status": "pass", "evidence": "Removal deleted only the plugin and its catalog entry while preserving the user-owned sentinel." },
+    { "id": "manifest-compatibility", "status": "pass", "evidence": "Both root portable plugin.json and .codex-plugin/plugin.json compatibility manifests were present and named oh-my-stack." }
+  ],
+  "limitations": [
+    "This validates the official repository-marketplace filesystem lifecycle without changing the user's configured marketplaces or plugin cache.",
+    "Live Codex discovery and invocation are covered by the related prove-it-works evidence."
+  ]
+}

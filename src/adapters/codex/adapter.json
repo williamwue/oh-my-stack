@@ -5,6 +5,7 @@
   "packageDir": "packages/codex",
   "skillsDir": "skills",
   "manifestPath": ".codex-plugin/plugin.json",
+  "portableManifestPath": "plugin.json",
   "profiles": ["codex-desktop", "codex-cli", "codex-ide"],
   "manifest": {
     "name": "oh-my-stack",
@@ -29,6 +30,15 @@
       "defaultPrompt": [
         "Use $prove-it-works to verify this installation."
       ]
+    }
+  },
+  "portableManifest": {
+    "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    "name": "oh-my-stack",
+    "description": "Portable, verifiable engineering workflows for Codex.",
+    "license": "MIT",
+    "author": {
+      "name": "Oh My Stack contributors"
     }
   }
 }

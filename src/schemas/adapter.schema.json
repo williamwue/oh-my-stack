@@ -11,12 +11,14 @@
     "packageDir": { "type": "string", "pattern": "^packages/[a-z-]+$" },
     "skillsDir": { "const": "skills" },
     "manifestPath": { "type": "string", "minLength": 1 },
+    "portableManifestPath": { "type": "string", "minLength": 1 },
     "profiles": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": { "type": "string" }
     },
-    "manifest": { "type": "object" }
+    "manifest": { "type": "object" },
+    "portableManifest": { "type": "object" }
   }
 }

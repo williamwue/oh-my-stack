@@ -91,7 +91,7 @@ async function validateRuntimeEvidence(root, model) {
     assert(/^W[0-4]$/.test(document.claims?.workflowAchieved), `${key}: invalid workflow claim`);
     assert(Array.isArray(document.claims?.observedDeliveryChecks), `${key}: observed delivery checks are required`);
     assert(model.profiles.has(document.profile), `${key}: unknown profile ${document.profile}`);
-    assert(Array.isArray(document.capabilities) && document.capabilities.length > 0, `${key}: capabilities are required`);
+    assert(Array.isArray(document.capabilities), `${key}: capabilities are required`);
     for (const capability of document.capabilities) {
       assert(model.registry.has(capability), `${key}: unknown capability ${capability}`);
     }
@@ -100,6 +100,12 @@ async function validateRuntimeEvidence(root, model) {
       assert(document.assertions.every((entry) => entry.status === "pass"), `${key}: passing evidence has a failed assertion`);
     }
     evidenceByPath.set(key, document);
+  }
+
+  for (const [key, document] of evidenceByPath) {
+    for (const related of document.relatedEvidence ?? []) {
+      assert(evidenceByPath.has(related), `${key}: missing related evidence ${related}`);
+    }
   }
 
   for (const profile of model.profiles.values()) {

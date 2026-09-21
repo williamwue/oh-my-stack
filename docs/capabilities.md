@@ -123,11 +123,11 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed | Runtime package | Documented, schema-dependent | W1 pass on CLI 18.2.6; D2/D3 checks observed, overall D0 pending D1 |
+| OMP | Observed | Runtime package | Documented, schema-dependent | W1 passes and D2/D3 checks are observed; overall D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed | Documented plugin browser | Documented | W1 pass on 0.155.1; D2/D3 checks observed, overall D0 pending D1 |
+| Codex CLI | Observed | Documented plugin browser | Documented | D3 and W1 pass on 0.155.1 |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
-| Claude Code | Documented | Documented | Documented | Pending |
+| Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
 The Codex baseline is derived from the official [Skills and Plugins](https://developers.openai.com/codex/skills-and-plugins), [Plugins](https://developers.openai.com/codex/plugins), and [Subagents](https://developers.openai.com/codex/subagents) documentation. Repository documentation must retain the observation date; generated evidence must retain the exact runtime coordinates.
 
@@ -154,7 +154,7 @@ Phase 2 replaces each research or documented entry with a versioned observation.
   "result": "pass",
   "claims": {
     "deliveryTarget": "D3",
-    "deliveryAchieved": "D0",
+    "deliveryAchieved": "D3",
     "workflowAchieved": "W1",
     "observedDeliveryChecks": ["D2", "D3"]
   },

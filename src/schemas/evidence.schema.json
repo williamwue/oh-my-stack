@@ -39,7 +39,8 @@
         "permissionProfile": { "type": "string" }
       }
     },
-    "capabilities": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+    "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "relatedEvidence": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
     "assertions": {
       "type": "array",
       "minItems": 1,

@@ -8,7 +8,7 @@
   "result": "pass",
   "claims": {
     "deliveryTarget": "D3",
-    "deliveryAchieved": "D0",
+    "deliveryAchieved": "D3",
     "workflowAchieved": "W1",
     "observedDeliveryChecks": ["D2", "D3"]
   },
@@ -20,6 +20,7 @@
     "permissionProfile": "read-only sandbox with approval policy never"
   },
   "capabilities": ["skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/install-lifecycle.json"],
   "assertions": [
     { "id": "skill-loaded", "status": "pass", "evidence": "The runtime acknowledged $prove-it-works and read the generated SKILL.md." },
     { "id": "workspace-path-reported", "status": "pass", "evidence": "The final response reported the temporary fixture workspace from pwd -P." },
@@ -29,7 +30,7 @@
   ],
   "limitations": [
     "This proves Codex CLI only; Codex desktop and IDE surfaces remain separate profiles.",
-    "Overall delivery remains D0 until clean install, update, and uninstall establish the missing D1 gate.",
+    "D1 comes from the separate isolated repository-marketplace lifecycle record.",
     "This proves the W1 fixture only and does not establish higher workflow conformance."
   ]
 }

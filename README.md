@@ -11,10 +11,13 @@ Phase 1 and the Alpha 0 build slice are implemented. One original
 target packages. All packages pass static `D0` validation.
 
 Live `W1` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS arm64.
-Those probes directly observed the `D2` discovery and `D3` explicit-invocation
-checks, but overall delivery remains `D0` because the prerequisite `D1` clean
-install/update/uninstall gate has not run. Codex desktop, Codex IDE, and Claude
-Code remain unprobed rather than inferred from CLI results.
+The official Codex repository-marketplace lifecycle fixture establishes `D1`,
+so Codex CLI reaches cumulative `D3` after its observed discovery and
+explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
+remains overall `D0`: its 18.2.6 plugin manager unexpectedly writes during a
+`--dry-run`, so the real D1 safety gate is unresolved. Codex desktop and Codex
+IDE remain unprobed. Claude Code verification is explicitly deferred until a
+local account and authenticated runtime are available.
 
 No pstack workflow content has been imported yet.
 
@@ -34,6 +37,8 @@ access.
 Runtime probe records live under `evals/evidence/`. The OMP probe overlay at
 `evals/configs/omp-probe.yml` clears machine-specific Skill allowlists so the
 fixture measures the generated package rather than a developer preference.
+Codex output contains the preferred portable root `plugin.json` plus the
+supported `.codex-plugin/plugin.json` compatibility manifest.
 
 ## Goals
 

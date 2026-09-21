@@ -21,6 +21,15 @@
         "installedProviders": { "type": "array", "items": { "type": "string" } }
       }
     },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "enum": ["active", "pending"] },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
     "capabilities": {
       "type": "object",
       "additionalProperties": {

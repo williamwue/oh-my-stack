@@ -162,6 +162,10 @@ function validateProfile(profile, registry, path) {
   ];
   for (const key of requiredTargetKeys) assert(key in profile.target, `${path}: target.${key} is required`);
   assert(Array.isArray(profile.target.installedProviders), `${path}: installedProviders must be an array`);
+  if (profile.verification) {
+    assert(["active", "pending"].includes(profile.verification.status), `${path}: invalid verification status`);
+    assert(profile.verification.reason, `${path}: verification reason is required`);
+  }
   for (const [capability, record] of Object.entries(profile.capabilities)) {
     assert(registry.has(capability), `${path}: unknown capability ${capability}`);
     assert(capabilityStatuses.has(record.status), `${path}: invalid status for ${capability}`);
@@ -175,7 +179,18 @@ function validateProfile(profile, registry, path) {
 function validateAdapter(adapter, project, profiles, path) {
   assertKeys(
     adapter,
-    new Set(["$schema", "schemaVersion", "id", "packageDir", "skillsDir", "manifestPath", "profiles", "manifest"]),
+    new Set([
+      "$schema",
+      "schemaVersion",
+      "id",
+      "packageDir",
+      "skillsDir",
+      "manifestPath",
+      "portableManifestPath",
+      "profiles",
+      "manifest",
+      "portableManifest",
+    ]),
     path,
   );
   assert(adapter.schemaVersion === 1, `${path}: schemaVersion must be 1`);
@@ -187,6 +202,12 @@ function validateAdapter(adapter, project, profiles, path) {
   for (const id of adapter.profiles) assert(profiles.has(id), `${path}: missing profile ${id}`);
   if (adapter.id === "codex") {
     assert(adapter.manifestPath === ".codex-plugin/plugin.json", `${path}: invalid Codex manifest path`);
+    assert(adapter.portableManifestPath === "plugin.json", `${path}: invalid portable Codex manifest path`);
+    assert(
+      adapter.portableManifest?.$schema === "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+      `${path}: portable Codex schema is required`,
+    );
+    assert(adapter.portableManifest.name === project.name, `${path}: portable manifest name must match project name`);
     assert(adapter.manifest.interface, `${path}: Codex interface metadata is required`);
     assert(!("hooks" in adapter.manifest), `${path}: unsupported Codex manifest field hooks`);
   }
@@ -304,6 +325,12 @@ export async function renderTarget(stageRoot, model, adapter) {
   const target = join(stageRoot, adapter.packageDir);
   const manifest = { ...adapter.manifest, version: model.project.version };
   await writeJson(join(target, adapter.manifestPath), manifest);
+  if (adapter.portableManifestPath) {
+    await writeJson(join(target, adapter.portableManifestPath), {
+      ...adapter.portableManifest,
+      version: model.project.version,
+    });
+  }
 
   for (const skill of model.skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
@@ -336,6 +363,11 @@ export async function validateRenderedTarget(target, adapter, model) {
   assert(manifest.name === model.project.name, `${adapter.id}: generated manifest name drift`);
   assert(manifest.version === model.project.version, `${adapter.id}: generated manifest version drift`);
   assert(semver(manifest.version), `${adapter.id}: generated version is not strict semver`);
+  if (adapter.portableManifestPath) {
+    const portableManifest = await readJson(join(target, adapter.portableManifestPath));
+    assert(portableManifest.name === model.project.name, `${adapter.id}: portable manifest name drift`);
+    assert(portableManifest.version === model.project.version, `${adapter.id}: portable manifest version drift`);
+  }
 
   const generation = await readJson(join(target, "GENERATION.json"));
   assert(generation.claims.delivery === "D0", `${adapter.id}: unprobed package overclaims delivery maturity`);

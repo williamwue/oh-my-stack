@@ -11,6 +11,10 @@
     "permissionProfile": null,
     "installedProviders": []
   },
+  "verification": {
+    "status": "pending",
+    "reason": "Deferred by the user until a local Claude Code account and authenticated runtime are available."
+  },
   "capabilities": {
     "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
     "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },

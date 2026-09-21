@@ -20,6 +20,10 @@
     "permissionProfile": "Fixture required read-only behavior; runtime exposed only read and bash tools; auto-approval was not enabled."
   },
   "capabilities": ["skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/install-lifecycle.json",
+    "evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"
+  ],
   "assertions": [
     { "id": "skill-loaded", "status": "pass", "evidence": "The runtime resolved and read skill://prove-it-works from the project .agents/skills directory." },
     { "id": "workspace-path-reported", "status": "pass", "evidence": "The final response reported the temporary fixture workspace path using pwd evidence." },
@@ -29,8 +33,8 @@
   ],
   "limitations": [
     "This proves project-level native Skill discovery, explicit model invocation, and the W1 fixture only.",
-    "It does not prove plugin-manager installation because that path mutates persistent plugin state.",
-    "Overall delivery remains D0 until clean install, update, and uninstall establish the missing D1 gate.",
+    "The isolated npm artifact lifecycle passes, but it does not replace OMP plugin-manager D1 evidence.",
+    "OMP 18.2.6 dry-run unexpectedly mutated persistent plugin state; the entry was removed and verified absent.",
     "The local machine had an includeSkills allowlist, so the probe used the committed empty-allowlist overlay."
   ]
 }

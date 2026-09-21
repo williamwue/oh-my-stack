@@ -165,7 +165,7 @@ The OMP target will generate Agent Skills plus OMP-native agent and lifecycle co
 
 ### Codex
 
-The Codex target will generate Skills, current Codex-compatible plugin metadata, custom-agent TOML files, and Hook definitions only when a workflow requires them. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
+The Codex target generates Skills, a portable root `plugin.json`, and the supported `.codex-plugin/plugin.json` compatibility manifest. It will add custom-agent TOML files and Hook definitions only when a workflow requires them. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
 
 ### Claude Code
 
