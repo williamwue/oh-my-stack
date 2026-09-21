@@ -11,6 +11,7 @@
     "agents.spawn",
     "agents.spawn_parallel",
     "agents.wait",
+    "commands.run",
     "coordination.peer_messages",
     "interaction.fixed_choice",
     "interaction.free_text",

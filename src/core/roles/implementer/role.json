@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "implementer",
+  "description": "One bounded implementation unit with explicit file ownership and executable acceptance checks.",
+  "workload": "balanced",
+  "constraints": ["independent_session", "reasoning_required"],
+  "writes": true
+}

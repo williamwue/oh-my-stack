@@ -2,7 +2,7 @@
 
 ## Cursor pstack
 
-The `principle-*`, `tdd`, and `show-me-your-work` Skills under
+The `principle-*`, `tdd`, `show-me-your-work`, and `bug-fix` Skills under
 `src/core/skills/` contain modified material from the pstack plugin in the
 Cursor plugins repository:
 
@@ -19,9 +19,9 @@ the corresponding target-native policy. Per-file ownership and hashes are in
 [`upstream/ownership.yaml`](upstream/ownership.yaml) and
 [`upstream/patches/`](upstream/patches/).
 
-`show-me-your-work` is a reviewed semantic port rather than a mechanical
-frontmatter transformation. Its source snapshots, output ownership, hashes,
-and transformation rationale are recorded in
+`show-me-your-work` and `bug-fix` are reviewed semantic ports rather than
+mechanical frontmatter transformations. Their source snapshots, output
+ownership, hashes, and transformation rationale are recorded in
 [`upstream/semantic-derivations.json`](upstream/semantic-derivations.json).
 
 The other projects in [`upstream/sources.yaml`](upstream/sources.yaml) remain

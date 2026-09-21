@@ -2,6 +2,40 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "id": "bug-fix-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/bug-fix.md",
+          "sha256": "e2ca6e217c8414409d3b51c64bb2743afa2256d98f643e104f8c4b52a1951883"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/bug-fix/SKILL.md",
+          "owner": "derived",
+          "sha256": "40c1da11efb64c2ed78666c8ad6f1f0c31afda30591320b74979374d6a38b503"
+        },
+        {
+          "path": "src/core/skills/bug-fix/skill.json",
+          "owner": "local-core",
+          "sha256": "a8575d6f13d92d50adfd28780e1b2c54353d0e52ad1f9c62eb4bcc6e780d8b6d"
+        },
+        {
+          "path": "src/core/roles/implementer/role.json",
+          "owner": "local-core",
+          "sha256": "339ea3ac18115d99c5f9193bdf3b416cdf622096899e732eb561fb5cec1af2bb"
+        },
+        {
+          "path": "src/core/roles/implementer/instructions.md",
+          "owner": "local-core",
+          "sha256": "e2313054099f07b2afd8003b140156596675522de77c8ca2215dceba1d26fc49"
+        }
+      ],
+      "transformation": "The mandatory parallel fan-out, concrete model, host loop command, forced history shape, and unconditional change-request step were replaced by a bounded root-owned workflow with optional single-worker delegation, capability fallbacks, same-surface verification, and user-governed external mutations."
+    },
+    {
       "id": "show-me-your-work-port",
       "sourceId": "cursor-pstack",
       "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",

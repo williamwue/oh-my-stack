@@ -394,15 +394,15 @@ function tomlQuoted(value) {
 }
 
 function renderOmpRole(role) {
+  const tools = role.metadata.writes
+    ? ["read", "grep", "glob", "bash", "edit", "write", "yield"]
+    : ["read", "grep", "glob", "yield"];
   return [
     "---",
     `name: ${role.metadata.name}`,
     `description: ${yamlQuoted(role.metadata.description)}`,
     "tools:",
-    "  - read",
-    "  - grep",
-    "  - glob",
-    "  - yield",
+    ...tools.map((tool) => `  - ${tool}`),
     "---",
     "",
     role.instructions.trim(),
@@ -414,7 +414,7 @@ function renderCodexRole(role) {
   return [
     `name = ${tomlQuoted(role.metadata.name.replaceAll("-", "_"))}`,
     `description = ${tomlQuoted(role.metadata.description)}`,
-    'sandbox_mode = "read-only"',
+    `sandbox_mode = ${tomlQuoted(role.metadata.writes ? "workspace-write" : "read-only")}`,
     'developer_instructions = """',
     role.instructions.trim(),
     '"""',
@@ -423,11 +423,14 @@ function renderCodexRole(role) {
 }
 
 function renderClaudeRole(role) {
+  const tools = role.metadata.writes
+    ? "Read, Grep, Glob, Bash, Edit, Write"
+    : "Read, Grep, Glob";
   return [
     "---",
     `name: ${role.metadata.name}`,
     `description: ${yamlQuoted(role.metadata.description)}`,
-    "tools: Read, Grep, Glob",
+    `tools: ${tools}`,
     "---",
     "",
     role.instructions.trim(),

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "bug-fix",
+  "invocation": "automatic",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "requires": [
+    "agents.custom_roles",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.custom_roles": "inline_bounded_implementer_contract",
+    "agents.read_result": "root_executes_bounded_change_sequentially",
+    "agents.spawn": "root_executes_bounded_change_sequentially",
+    "agents.wait": "root_executes_bounded_change_sequentially",
+    "workspace.isolate": "enforce_one_writer_at_a_time"
+  }
+}

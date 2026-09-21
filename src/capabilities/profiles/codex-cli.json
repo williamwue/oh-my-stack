@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "native", "provider": "spawn_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "multiple spawned child threads", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
     "agents.wait": { "status": "native", "provider": "wait", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
+    "commands.run": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "native", "provider": "send_message child-to-parent delivery", "evidence": "evals/evidence/codex-cli-0.155.1/check-stale-replay.json" },
     "interaction.fixed_choice": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },
     "interaction.free_text": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },

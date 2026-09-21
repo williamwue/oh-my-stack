@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "native", "provider": "task", "evidence": "evals/evidence/omp-18.2.6/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "task batch", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
     "agents.wait": { "status": "native", "provider": "hub background-job wait", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
+    "commands.run": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },
     "interaction.fixed_choice": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/omp-18.2.6/check-interaction-fallback.json" },
     "interaction.free_text": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/omp-18.2.6/check-interaction-fallback.json" },

@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
+    "commands.run": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },
     "interaction.fixed_choice": { "status": "native", "provider": "request_user_input_async queued TUI card", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "interaction.free_text": { "status": "native", "provider": "request_user_input_async queued TUI card Other input", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },

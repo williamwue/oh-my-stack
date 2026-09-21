@@ -15,10 +15,11 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads thirty-eight portable Skills, two roles, and three adapters", async () => {
+test("loads thirty-nine portable Skills, three roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 38);
+  assert.equal(model.skills.length, 39);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+    "bug-fix",
     "check-cancellation",
     "check-custom-role",
     "check-delegation",
@@ -66,7 +67,7 @@ test("loads thirty-eight portable Skills, two roles, and three adapters", async 
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
-  assert.deepEqual(model.roles.map((role) => role.metadata.name), ["evidence-reader", "trail-reviewer"]);
+  assert.deepEqual(model.roles.map((role) => role.metadata.name), ["evidence-reader", "implementer", "trail-reviewer"]);
   assert.equal(model.profiles.size, 7);
 });
 
@@ -202,6 +203,28 @@ test("explicit invocation renders as target-native policy", async () => {
     assert.match(claudeSkill, /disable-model-invocation: true/);
     assert.doesNotMatch(codexSkill, /disable-model-invocation/);
     assert.match(codexPolicy, /allow_implicit_invocation: false/);
+  } finally {
+    await rm(stage, { recursive: true, force: true });
+  }
+});
+
+test("writable roles render native write permissions while read-only roles stay constrained", async () => {
+  const model = await loadModel();
+  const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-role-permissions-"));
+  try {
+    for (const adapter of model.adapters) await renderTarget(stage, model, adapter);
+    const ompWriter = await readFile(join(stage, "packages/omp/agents/implementer.md"), "utf8");
+    const ompReader = await readFile(join(stage, "packages/omp/agents/evidence-reader.md"), "utf8");
+    const codexWriter = await readFile(join(stage, "packages/codex/agents/implementer.toml"), "utf8");
+    const codexReader = await readFile(join(stage, "packages/codex/agents/evidence-reader.toml"), "utf8");
+    const claudeWriter = await readFile(join(stage, "packages/claude-code/agents/implementer.md"), "utf8");
+    const claudeReader = await readFile(join(stage, "packages/claude-code/agents/evidence-reader.md"), "utf8");
+    assert.match(ompWriter, /  - write\n/);
+    assert.doesNotMatch(ompReader, /  - write\n/);
+    assert.match(codexWriter, /sandbox_mode = "workspace-write"/);
+    assert.match(codexReader, /sandbox_mode = "read-only"/);
+    assert.match(claudeWriter, /tools: Read, Grep, Glob, Bash, Edit, Write/);
+    assert.match(claudeReader, /tools: Read, Grep, Glob\n/);
   } finally {
     await rm(stage, { recursive: true, force: true });
   }

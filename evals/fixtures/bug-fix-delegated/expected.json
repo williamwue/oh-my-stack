@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "mode": "one-delegated-implementer",
+  "reproduction": "node --test test/port.test.mjs",
+  "allowedChanges": ["project/lib/port.mjs"],
+  "assertions": [
+    "skill-loaded",
+    "failing-before-captured-by-root",
+    "root-cause-identified-by-root",
+    "one-worker-started",
+    "one-writer-only",
+    "worker-result-collected",
+    "root-diff-inspected",
+    "passing-after-captured-by-root",
+    "no-unexpected-changes"
+  ]
+}
