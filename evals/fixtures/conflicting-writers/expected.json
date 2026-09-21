@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "writerCount": 2,
+  "changedPaths": ["workspace/settings.mjs"],
+  "settings": { "maxBatch": 25, "delayMs": 250 },
+  "assertions": [
+    "generated-resources-only",
+    "router-selected-feature",
+    "checkpoint-recorded",
+    "baseline-frozen",
+    "strategy-declared-before-write",
+    "exactly-two-writers",
+    "writer-ownership-disjoint",
+    "writers-isolated-or-serialized",
+    "writer-results-frozen",
+    "root-inspected-each-diff",
+    "root-integrated-combined",
+    "combined-verification-passed",
+    "fallback-declared",
+    "only-owned-file-changed",
+    "no-publication"
+  ]
+}
