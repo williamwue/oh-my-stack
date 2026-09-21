@@ -28,6 +28,10 @@ root. The root—not a child—makes the final classification and reports the ex
 command and result. Do not modify files, start another child, publish anything,
 or claim model diversity without independent runtime metadata.
 
+Supplying a generated role contract inline because the runtime cannot select a
+native custom role is a fallback. Report that fallback as used; do not describe
+it as native role selection or as no fallback.
+
 Return the selected router workflow, frozen hashes, two separately attributable
 reviews, synthesis, root classifications, exact verification result, diversity
 boundary, fallback used or not used, and clean Git status.
