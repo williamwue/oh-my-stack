@@ -131,6 +131,28 @@ function validateProject(project) {
   assert(project.displayName && project.description, "project: displayName and description are required");
 }
 
+function validateSkillCatalog(catalog, skillNames) {
+  assertKeys(
+    catalog,
+    new Set(["$schema", "schemaVersion", "public", "probes"]),
+    "skill catalog",
+  );
+  assert(catalog.schemaVersion === 1, "skill catalog: schemaVersion must be 1");
+  assert(Array.isArray(catalog.public), "skill catalog: public must be an array");
+  assert(Array.isArray(catalog.probes), "skill catalog: probes must be an array");
+  const publicNames = new Set(catalog.public);
+  const probeNames = new Set(catalog.probes);
+  assert(publicNames.size === catalog.public.length, "skill catalog: duplicate public Skill");
+  assert(probeNames.size === catalog.probes.length, "skill catalog: duplicate probe Skill");
+  assert(catalog.public.every((name, index) => index === 0 || catalog.public[index - 1] < name), "skill catalog: public Skills must be sorted");
+  assert(catalog.probes.every((name, index) => index === 0 || catalog.probes[index - 1] < name), "skill catalog: probe Skills must be sorted");
+  for (const name of publicNames) assert(!probeNames.has(name), `skill catalog: ${name} has two audiences`);
+  const catalogNames = [...publicNames, ...probeNames].sort();
+  assert(JSON.stringify(catalogNames) === JSON.stringify([...skillNames].sort()), "skill catalog: must partition every portable Skill exactly once");
+  assert(catalog.probes.every((name) => name.startsWith("check-")), "skill catalog: probe Skills must use the check- prefix");
+  assert(catalog.public.every((name) => !name.startsWith("check-")), "skill catalog: check- Skills cannot be public");
+}
+
 function validateSkillMetadata(skill, registry, path) {
   assertKeys(
     skill,
@@ -329,6 +351,8 @@ export async function loadModel(root = repoRoot) {
     skills.push({ directory, metadata, text, frontmatter });
   }
   assert(skills.length > 0, "portable core has no skills");
+  const skillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
+  validateSkillCatalog(skillCatalog, skills.map((skill) => skill.metadata.name));
 
   const roles = [];
   const roleRoot = join(root, "src", "core", "roles");
@@ -359,7 +383,7 @@ export async function loadModel(root = repoRoot) {
     for (const skill of skills) validateRequirementSupport(skill, targetProfiles);
   }
 
-  return { root, project, resolutionPolicy, registry, profiles, adapters, skills, roles };
+  return { root, project, resolutionPolicy, registry, profiles, adapters, skills, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -465,6 +489,20 @@ export async function renderTarget(stageRoot, model, adapter) {
     }
   }
 
+  const audiences = new Map([
+    ...model.skillCatalog.public.map((name) => [name, "public"]),
+    ...model.skillCatalog.probes.map((name) => [name, "probe"]),
+  ]);
+  await writeJson(join(target, "SKILL_CATALOG.json"), {
+    schemaVersion: 1,
+    target: adapter.id,
+    skills: model.skills.map((skill) => ({
+      name: skill.metadata.name,
+      audience: audiences.get(skill.metadata.name),
+      invocation: skill.metadata.invocation,
+    })),
+  });
+
   for (const role of model.roles) {
     const extension = adapter.id === "codex" ? "toml" : "md";
     const renderer = adapter.id === "omp"
@@ -538,6 +576,11 @@ export async function validateRenderedTarget(target, adapter, model) {
       assert(await exists(join(dirname(skillPath), "agents", "openai.yaml")), "codex: missing Skill UI metadata");
     }
   }
+  const catalog = await readJson(join(target, "SKILL_CATALOG.json"));
+  assert(catalog.target === adapter.id, `${adapter.id}: generated Skill catalog target drift`);
+  assert(catalog.skills.length === model.skills.length, `${adapter.id}: generated Skill catalog length drift`);
+  assert(catalog.skills.filter((entry) => entry.audience === "public").length === model.skillCatalog.public.length, `${adapter.id}: generated public Skill catalog drift`);
+  assert(catalog.skills.filter((entry) => entry.audience === "probe").length === model.skillCatalog.probes.length, `${adapter.id}: generated probe Skill catalog drift`);
   for (const role of model.roles) {
     const extension = adapter.id === "codex" ? "toml" : "md";
     assert(

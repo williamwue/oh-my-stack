@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "skills": [
+    {
+      "name": "bug-fix",
+      "audience": "public",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-cancellation",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-custom-role",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-delegation",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-follow-up",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-interaction",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-model-routing",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-panel",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-parallel",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-resources",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-stale-replay",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-transcript",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "check-writer-isolation",
+      "audience": "probe",
+      "invocation": "automatic"
+    },
+    {
+      "name": "feature",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "how",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "interrogate",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "investigation",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "opening-a-pr",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "poteto-mode",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-attack-the-premise",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-boundary-discipline",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-build-the-lever",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-encode-lessons-in-structure",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-exhaust-the-design-space",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-experience-first",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-fix-root-causes",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-foundational-thinking",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-guard-the-context-window",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-laziness-protocol",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-make-operations-idempotent",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-migrate-callers-then-delete-legacy-apis",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-minimize-reader-load",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-model-the-domain",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-never-block-on-the-human",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-outcome-oriented-execution",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-prove-it-works",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-redesign-from-first-principles",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-separate-before-serializing-shared-state",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-sequence-verifiable-units",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-subtract-before-you-add",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-test-behavior-not-implementation",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-type-system-discipline",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "prototype",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "prove-it-works",
+      "audience": "public",
+      "invocation": "automatic"
+    },
+    {
+      "name": "refactoring",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "setup-oh-my-stack",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "show-me-your-work",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "tdd",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "technical-writing",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "unslop",
+      "audience": "public",
+      "invocation": "explicit"
+    }
+  ]
+}

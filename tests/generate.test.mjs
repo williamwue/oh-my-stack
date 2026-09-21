@@ -77,6 +77,13 @@ test("loads fifty portable Skills, seven roles, and three adapters", async () =>
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
+  assert.equal(model.skillCatalog.public.length, 38);
+  assert.equal(model.skillCatalog.probes.length, 12);
+  assert.deepEqual(model.skillCatalog.probes, model.skills
+    .map((skill) => skill.metadata.name)
+    .filter((name) => name.startsWith("check-")));
+  assert.equal(model.skillCatalog.public.includes("bug-fix"), true);
+  assert.equal(model.skillCatalog.public.includes("prove-it-works"), true);
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
   assert.deepEqual(model.roles.map((role) => role.metadata.name), [
     "evidence-reader",
