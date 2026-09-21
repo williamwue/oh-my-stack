@@ -283,6 +283,12 @@ async function validateSchemaReferences(root) {
 export async function loadModel(root = repoRoot) {
   const project = await readJson(join(root, "src", "core", "project.json"));
   validateProject(project);
+  const resolutionPolicy = await readJson(join(root, "src", "runtime-resolution", "policy.json"));
+  assert(resolutionPolicy.schemaVersion === 1, "runtime resolution policy schemaVersion must be 1");
+  assert(
+    JSON.stringify(Object.keys(resolutionPolicy.workloads).sort()) === JSON.stringify(["balanced", "deep", "fast"]),
+    "runtime resolution policy must define fast, balanced, and deep",
+  );
 
   const registryDocument = await readJson(join(root, "src", "capabilities", "registry.json"));
   const registry = new Set(registryDocument.capabilities);
@@ -353,7 +359,7 @@ export async function loadModel(root = repoRoot) {
     for (const skill of skills) validateRequirementSupport(skill, targetProfiles);
   }
 
-  return { root, project, registry, profiles, adapters, skills, roles };
+  return { root, project, resolutionPolicy, registry, profiles, adapters, skills, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -469,6 +475,26 @@ export async function renderTarget(stageRoot, model, adapter) {
     await writeText(join(target, "agents", `${role.metadata.name}.${extension}`), renderer(role));
   }
 
+  const resolutionAdapters = {
+    omp: { format: "yaml", modelField: "model", reasoningField: "thinkingLevel" },
+    codex: { format: "toml", modelField: "model", reasoningField: "model_reasoning_effort" },
+    "claude-code": { format: "yaml", modelField: "model", reasoningField: null },
+  };
+  await writeJson(join(target, "config", "runtime-resolution.json"), {
+    schemaVersion: 1,
+    target: adapter.id,
+    workloads: model.resolutionPolicy.workloads,
+    roles: model.roles.map((role) => ({
+      name: role.metadata.name,
+      workload: role.metadata.workload,
+      constraints: role.metadata.constraints,
+      writes: role.metadata.writes,
+    })),
+    adapter: resolutionAdapters[adapter.id],
+  });
+  await mkdir(join(target, "scripts"), { recursive: true });
+  await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
+
   await writeJson(join(target, "GENERATION.json"), {
     schemaVersion: 1,
     generatedBy: "tools/generate.mjs",
@@ -518,6 +544,10 @@ export async function validateRenderedTarget(target, adapter, model) {
       `${adapter.id}: missing generated role ${role.metadata.name}`,
     );
   }
+  const resolution = await readJson(join(target, "config", "runtime-resolution.json"));
+  assert(resolution.target === adapter.id, `${adapter.id}: runtime resolution target drift`);
+  assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
+  assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
 }
 
 export async function treeMap(directory) {

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "target": "omp",
+  "workloads": {
+    "fast": {
+      "reasoningPreference": "low"
+    },
+    "balanced": {
+      "reasoningPreference": "medium"
+    },
+    "deep": {
+      "reasoningPreference": "high"
+    }
+  },
+  "roles": [
+    {
+      "name": "evidence-reader",
+      "workload": "fast",
+      "constraints": [
+        "read_only",
+        "independent_session"
+      ],
+      "writes": false
+    },
+    {
+      "name": "explainer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": false
+    },
+    {
+      "name": "explorer",
+      "workload": "balanced",
+      "constraints": [
+        "read_only",
+        "independent_session"
+      ],
+      "writes": false
+    },
+    {
+      "name": "implementer",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
+      "name": "reviewer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required",
+        "model_diversity_preferred"
+      ],
+      "writes": false
+    },
+    {
+      "name": "synthesizer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": false
+    },
+    {
+      "name": "trail-reviewer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required",
+        "model_diversity_preferred"
+      ],
+      "writes": false
+    }
+  ],
+  "adapter": {
+    "format": "yaml",
+    "modelField": "model",
+    "reasoningField": "thinkingLevel"
+  }
+}

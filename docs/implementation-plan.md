@@ -233,6 +233,13 @@ Current progress:
   capability. It remains `unknown` on every profile until a disposable real
   forge fixture runs; the fallback produces an exact briefing without claiming
   publication.
+- Each package now includes a target-specific runtime-resolution descriptor and
+  a shared offline setup tool. The `setup-oh-my-stack` workflow requires a fresh,
+  source-attributed model inventory, validates every workload and role override
+  against it, previews before applying, and writes only a dedicated owned
+  configuration directory. Static tests cover all three output formats,
+  unobserved-model rejection, modified-owned-file refusal, and preservation of
+  unrelated files.
 - Live OMP and Codex workflow verification for `how` remains pending. Claude
   output is static-only until the deferred authenticated-runtime verification.
 

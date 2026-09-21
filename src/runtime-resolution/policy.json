@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "workloads": {
+    "fast": { "reasoningPreference": "low" },
+    "balanced": { "reasoningPreference": "medium" },
+    "deep": { "reasoningPreference": "high" }
+  }
+}

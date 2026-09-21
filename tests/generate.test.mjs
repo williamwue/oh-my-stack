@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads forty-nine portable Skills, seven roles, and three adapters", async () => {
+test("loads fifty portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 49);
+  assert.equal(model.skills.length, 50);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "bug-fix",
     "check-cancellation",
@@ -64,6 +64,7 @@ test("loads forty-nine portable Skills, seven roles, and three adapters", async 
     "prototype",
     "prove-it-works",
     "refactoring",
+    "setup-oh-my-stack",
     "show-me-your-work",
     "tdd",
     "technical-writing",
