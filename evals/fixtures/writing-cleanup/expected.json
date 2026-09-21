@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "verification": "node --test test/docs.test.mjs",
+  "allowedChanges": ["project/docs/run-locally.md"],
+  "documentMode": "how-to",
+  "assertions": [
+    "generated-resources-only",
+    "technical-writing-loaded",
+    "unslop-loaded-after-technical-writing",
+    "how-to-mode-selected",
+    "failing-before-captured-by-root",
+    "technical-meaning-preserved",
+    "slop-patterns-removed",
+    "root-diff-inspected",
+    "passing-after-captured-by-root",
+    "only-document-changed",
+    "no-delegation",
+    "no-publication"
+  ]
+}
