@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "selectionPolicy": "first observed model supporting low, medium, and high reasoning",
+  "assertions": [
+    "generated-resources-only",
+    "setup-skill-loaded",
+    "native-inventory-collected",
+    "inventory-source-and-time-recorded",
+    "selection-observed",
+    "invented-model-rejected-before-write",
+    "dry-run-before-apply",
+    "dry-run-created-no-output",
+    "seven-native-roles-applied",
+    "manifest-binds-inventory-hash",
+    "unrelated-file-preserved",
+    "owned-files-only",
+    "diversity-not-claimed",
+    "no-delegation",
+    "no-broader-runtime-config-write",
+    "no-publication"
+  ]
+}
