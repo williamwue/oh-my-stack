@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-writing-cleanup",
+  "fixture": "writing-cleanup",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated technical-writing and unslop Skills copied into a clarified disposable Git fixture; user configuration and project rules ignored; workspace-write with automatic approval review; runner events and output stored outside the repository.",
+    "permissionProfile": "workspace-write sandbox with automatic approval review"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/writing-cleanup-attempt-1.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Both Skill reads came from the disposable repository and no installed Skill cache participated." },
+    { "id": "technical-writing-loaded", "status": "pass", "evidence": "The top-level agent read the complete generated technical-writing Skill before editing." },
+    { "id": "unslop-loaded-after-technical-writing", "status": "pass", "evidence": "The top-level agent read the complete generated unslop Skill after technical-writing and before editing." },
+    { "id": "how-to-mode-selected", "status": "pass", "evidence": "The top-level agent selected action-plus-work how-to mode and produced one direct ordered procedure." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before writing, the top-level agent ran node --test test/docs.test.mjs from project and captured zero passes and one failure." },
+    { "id": "technical-meaning-preserved", "status": "pass", "evidence": "The result preserves Node.js before npm test, port 4100, both commands, the test count, both expected outputs, the health URL, Ctrl+C, and their operational order." },
+    { "id": "slop-patterns-removed", "status": "pass", "evidence": "The rewrite removes every fixture slop marker and uses direct numbered instructions." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The top-level agent inspected the complete document diff, ran diff check, and confirmed the changed-path list." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The same top-level agent reran the exact command and captured one pass and zero failures." },
+    { "id": "top-level-verification-without-privilege-change", "status": "pass", "evidence": "The clarified run contains no sudo command or operating-system user change." },
+    { "id": "only-document-changed", "status": "pass", "evidence": "Only project/docs/run-locally.md changed; the test hash matches the source fixture and diff check passes." },
+    { "id": "no-delegation", "status": "pass", "evidence": "No spawn operation or child thread occurred." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The fixture verifies the document contract and does not start a real service.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
+  ]
+}

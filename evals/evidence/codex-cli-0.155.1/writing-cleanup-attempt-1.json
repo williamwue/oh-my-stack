@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-writing-cleanup-attempt-1",
+  "fixture": "writing-cleanup",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated technical-writing and unslop Skills copied into a hardened disposable Git fixture; user configuration and project rules ignored; workspace-write with automatic approval review; original request used the ambiguous phrase 'as root'.",
+    "permissionProfile": "workspace-write sandbox with automatic approval review"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/writing-cleanup.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Both Skill reads came from the disposable repository." },
+    { "id": "technical-writing-loaded", "status": "pass", "evidence": "The top-level agent read the complete generated technical-writing Skill before editing." },
+    { "id": "unslop-loaded-after-technical-writing", "status": "pass", "evidence": "The top-level agent read the complete generated unslop Skill after technical-writing and before editing." },
+    { "id": "how-to-mode-selected", "status": "pass", "evidence": "The result selected and produced one concise how-to." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "The top-level agent captured zero passes and one failure before editing." },
+    { "id": "technical-meaning-preserved", "status": "pass", "evidence": "The rewrite preserves every hardened fixture fact and their order." },
+    { "id": "slop-patterns-removed", "status": "pass", "evidence": "The rewrite removes all asserted slop markers and uses direct numbered instructions." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The top-level agent inspected the complete one-file diff and ran diff check." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The top-level agent captured one pass and zero failures after editing." },
+    { "id": "top-level-verification-without-privilege-change", "status": "fail", "evidence": "The ambiguous phrase 'as root' caused an unnecessary sudo -n test attempt, which the sandbox rejected before the agent reran the test as the current user." },
+    { "id": "only-document-changed", "status": "pass", "evidence": "Only project/docs/run-locally.md changed and the test retained its baseline hash." },
+    { "id": "no-delegation", "status": "pass", "evidence": "No spawn operation or child thread occurred." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The workflow result was otherwise correct, but the fixture phrase 'as root' conflated root-agent ownership with the Unix root user.",
+    "The hardened request says top-level agent and explicitly forbids sudo or an operating-system user change.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
+  ]
+}

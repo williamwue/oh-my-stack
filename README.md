@@ -126,6 +126,18 @@ written inside the fixture repository. Hardened reruns externalize every
 runner artifact and leave strict Git status clean. This is passing W1 fallback
 evidence, not authenticated W4 publication or forge read-back.
 
+The standalone `technical-writing` then `unslop` fixture passes at W1 on both
+CLI runtimes. Each top-level agent captures the intentionally failing document
+test, reads both generated Skills in order, rewrites one file as a concise
+how-to, inspects the complete diff, and reruns the same command to one pass.
+The hardened contract preserves the Node.js prerequisite, commands, port,
+counts, outputs, URL, stop action, and operational order. OMP's first attempt
+is retained as a semantic failure because the original test allowed the
+Node.js prerequisite to disappear. Codex's first attempt is retained because
+the phrase `as root` triggered an unnecessary rejected `sudo` command; the
+current fixture names the top-level agent and forbids user changes. Passing
+runs modify only the document and use no delegation or publication.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact

@@ -282,6 +282,15 @@ Current progress:
   place all runner artifacts outside it and finish with strict Git status
   clean. This establishes the declared W1 briefing fallback only. Authenticated
   ready-PR creation and forge read-back remain separate W4 work.
+- The standalone `technical-writing` then `unslop` fixture passes at W1 on OMP
+  and Codex CLI. Both top-level agents capture the intended failure, load the
+  generated Skills in order, rewrite only one document as a how-to, inspect the
+  full diff, and rerun the same check to one pass. The hardened contract fixes
+  every technical fact and its operational order. OMP's initial run is retained
+  as a failure because the first test missed the Node.js prerequisite and the
+  rewrite dropped it. Codex's initial run is retained because ambiguous `as
+  root` wording caused a rejected `sudo` attempt. The current request says
+  top-level agent and explicitly forbids operating-system user changes.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;

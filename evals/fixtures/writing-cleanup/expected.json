@@ -15,6 +15,7 @@
     "slop-patterns-removed",
     "root-diff-inspected",
     "passing-after-captured-by-root",
+    "top-level-verification-without-privilege-change",
     "only-document-changed",
     "no-delegation",
     "no-publication"

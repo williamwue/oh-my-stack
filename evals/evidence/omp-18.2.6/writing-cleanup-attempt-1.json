@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-writing-cleanup-attempt-1",
+  "fixture": "writing-cleanup",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated technical-writing and unslop Skills copied into a disposable Git fixture; explicit two-Skill allowlist; root-only write run; runner outputs stored outside the repository; original fixture omitted a machine assertion for the Node.js prerequisite.",
+    "permissionProfile": "auto-approved repository read, command, and write tools with delegation unavailable"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/writing-cleanup.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Both Skill reads came from the disposable repository." },
+    { "id": "technical-writing-loaded", "status": "pass", "evidence": "The root read the complete generated technical-writing Skill before editing." },
+    { "id": "unslop-loaded-after-technical-writing", "status": "pass", "evidence": "The root read the complete generated unslop Skill after technical-writing and before editing." },
+    { "id": "how-to-mode-selected", "status": "pass", "evidence": "The root selected action-plus-work how-to mode." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before writing, the root ran the document test from project and captured zero passes and one failure." },
+    { "id": "technical-meaning-preserved", "status": "fail", "evidence": "The rewrite removed the stated Node.js prerequisite; the initial fixture test did not detect that semantic loss, and the root disclosed it in the final limitation." },
+    { "id": "slop-patterns-removed", "status": "pass", "evidence": "The rewrite removed the fixture's filler, AI vocabulary, title case, emoji, curly quotes, em dash, passive instructions, and chatbot closing." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root inspected the complete document diff and Git status." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The root reran the then-current test and captured one pass, which exposed why the fixture needed a stronger semantic assertion." },
+    { "id": "top-level-verification-without-privilege-change", "status": "pass", "evidence": "The OMP root agent ran both checks without changing the operating-system user." },
+    { "id": "only-document-changed", "status": "pass", "evidence": "Only project/docs/run-locally.md changed, and the test file retained its baseline hash." },
+    { "id": "no-delegation", "status": "pass", "evidence": "The task tool was unavailable and no child ran." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The initial fixture enumerated commands and outputs but failed to include the source document's Node.js prerequisite in its machine assertion.",
+    "The hardened fixture adds that prerequisite to the request, the preserved-fact list, and the operational-order check.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

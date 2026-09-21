@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-writing-cleanup",
+  "fixture": "writing-cleanup",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated technical-writing and unslop Skills copied into a hardened disposable Git fixture; explicit two-Skill allowlist; root-only write run; runner outputs stored outside the repository; command, read, edit, write, glob, and grep tools enabled with no task tool.",
+    "permissionProfile": "auto-approved repository read, command, and write tools with delegation unavailable"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/writing-cleanup-attempt-1.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Both Skill reads came from the disposable repository and no installed Skill cache participated." },
+    { "id": "technical-writing-loaded", "status": "pass", "evidence": "The root read the complete generated technical-writing Skill before editing." },
+    { "id": "unslop-loaded-after-technical-writing", "status": "pass", "evidence": "The root read the complete generated unslop Skill after technical-writing and before editing." },
+    { "id": "how-to-mode-selected", "status": "pass", "evidence": "The root selected action-plus-work how-to mode and used one task heading with an ordered procedure." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before writing, the root ran node --test test/docs.test.mjs from project and captured zero passes and one failure." },
+    { "id": "technical-meaning-preserved", "status": "pass", "evidence": "The result preserves Node.js before npm test, port 4100, both commands, the test count, both expected outputs, the health URL, Ctrl+C, and their operational order." },
+    { "id": "slop-patterns-removed", "status": "pass", "evidence": "The rewrite removes every fixture slop marker and uses direct numbered instructions." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root inspected Git status, the full one-file diff, and the changed-path list." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The same root reran the exact command and captured one pass and zero failures." },
+    { "id": "top-level-verification-without-privilege-change", "status": "pass", "evidence": "The OMP root agent ran both checks without sudo or an operating-system user change." },
+    { "id": "only-document-changed", "status": "pass", "evidence": "Only project/docs/run-locally.md changed; the test hash matches the source fixture and diff check passes." },
+    { "id": "no-delegation", "status": "pass", "evidence": "The task tool was unavailable and no child ran." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The fixture verifies the document contract and does not start a real service.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

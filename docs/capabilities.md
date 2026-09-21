@@ -251,6 +251,18 @@ pass with empty Git status. The result is W1 fallback evidence only; forge
 authentication, remote-head availability, ready-PR creation, and read-back are
 still unverified W4 behavior.
 
+The standalone writing fixture proves W1 document editing on both CLI
+runtimes. The top-level agent reads `technical-writing` and then `unslop`, runs
+the failing check before editing, rewrites only `docs/run-locally.md` as a
+how-to, reviews the complete diff, and runs the same check to one pass. The
+machine contract preserves the Node.js prerequisite, both commands, port 4100,
+the test count, both expected outputs, the health URL, `Ctrl+C`, and their
+order. The first OMP attempt exposed a weak fixture because it removed Node.js
+while the old test still passed. The first Codex attempt exposed ambiguous
+ownership language by trying a rejected `sudo` command after an otherwise
+correct edit. Hardened reruns fix both boundaries, retain the failures, change
+only the document, and use neither delegation nor publication.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental
