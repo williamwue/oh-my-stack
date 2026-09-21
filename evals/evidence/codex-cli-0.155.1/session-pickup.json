@@ -21,6 +21,7 @@
   },
   "capabilities": [
     "commands.run",
+    "coordination.durable_state",
     "resources.relative_paths",
     "skills.discover",
     "skills.invoke.explicit",

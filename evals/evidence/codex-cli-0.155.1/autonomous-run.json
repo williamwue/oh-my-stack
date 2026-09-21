@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-autonomous-run",
+  "fixture": "autonomous-run",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, autonomous-run, and show-me-your-work Skills committed in one disposable Git repository; gpt-5.6-sol high; persisted session; user config and rules ignored; deterministic local controller; no external workflow operation.",
+    "permissionProfile": "Danger-full-access restricted operationally to one disposable fixture because the three local commits require writable Git metadata"
+  },
+  "capabilities": [
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "Session 01a0c652-5c0f-7853-96ae-56c294d6a011 loaded the repository-generated poteto-mode, autonomous-run, and show-me-your-work Skills."
+    },
+    {
+      "id": "fixed-contract-declared-before-iteration",
+      "status": "pass",
+      "evidence": "Before the first controller measurement, the root declared predicate 3/3, exact measurement, four-iteration and ten-minute budget, authorized writes, external-action prohibition, stop conditions, and continuous-local-no-scheduled-wake."
+    },
+    {
+      "id": "continuous-local-path-selected",
+      "status": "pass",
+      "evidence": "All three units were immediately ready, so the run performed local work without scheduling a wake, sleeping, busy polling, pushing, publishing, merging, or contacting an external workflow provider."
+    },
+    {
+      "id": "three-ordered-atomic-commits",
+      "status": "pass",
+      "evidence": "The root created exactly three ordered commits: ccfa6cfac4949dd8332b76da5ce4bb43009f46e9 for unit-a, e0c503304a6e648a0145aaed4a9c984331ae201a for unit-b, and 123400240e84c0ef7084f7bde05052dab9f90f6a for unit-c; each commit changed only its active unit after the named focused test passed."
+    },
+    {
+      "id": "predicate-advanced-once-per-iteration",
+      "status": "pass",
+      "evidence": "The deterministic controller accepted exactly one advance per commit and moved 0/3 to 1/3 to 2/3 to 3/3 without an early future-unit edit."
+    },
+    {
+      "id": "append-only-decision-trail-complete",
+      "status": "pass",
+      "evidence": "decisions.tsv contains one exact row for each of iterations 1 through 3, pointing to controller advance 1/3, 2/3, and 3/3 respectively."
+    },
+    {
+      "id": "stopped-at-predicate-without-publication",
+      "status": "pass",
+      "evidence": "report.json records three kept units, no discarded attempts, final predicate 3/3, stop reason predicate-met, published false, and no fourth iteration."
+    },
+    {
+      "id": "independent-verifier-passed",
+      "status": "pass",
+      "evidence": "verify.mjs produced AUTONOMOUS_RUN_OK=123400240e84c0ef7084f7bde05052dab9f90f6a in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This proves the continuous-local W1 branch of autonomous-run, not scheduled or event wake, external-system waiting, cold-start restart, deadline enforcement under a slow iteration, cost enforcement, discard or pivot behavior, or W4 completion.",
+    "The deterministic suite rejects an early future-unit edit, but the passing live run does not exercise a controller rejection or recovery path.",
+    "The required decision-trail audit ran in the root session; this fixture did not request or prove an independent reviewer session.",
+    "One model stream disconnected after the unit-b test and resumed through the CLI's retry without repeating a mutation, commit, controller advance, or log row.",
+    "Cloudflare MCP authentication warnings were unrelated and did not participate in the workflow."
+  ]
+}

@@ -3,6 +3,11 @@
   "target": "claude-code",
   "skills": [
     {
+      "name": "autonomous-run",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "babysit",
       "audience": "public",
       "invocation": "explicit"

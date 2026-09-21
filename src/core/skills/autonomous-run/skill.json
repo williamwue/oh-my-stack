@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "autonomous-run",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "commands.run",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "coordination.durable_state": "write_a_workspace_scoped_append_only_decision_log_and_resume_checkpoint",
+    "coordination.scheduled_wake": "continue_ready_local_work_now_but_pause_durably_instead_of_polling_when_future_external_state_is_required"
+  }
+}

@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "77ae423346d9f9154dfdd3a3214bf7ce124198c6aecf22c5e920b73b26c835bd"
+          "sha256": "97db7224e8c60a166d48a336d17fa0f9b1cdf1c6b384af4c2d129840764a44ab"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -107,7 +107,7 @@
           "sha256": "e2814f105f37334d8afd21eee55101177cd707a87276d6e6861161ec2d8c04c9"
         }
       ],
-      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, and source-host task syntax were reduced to an explicit intent router and independently graduated portable playbooks. Babysit separates read-only and mutating authority, while the router now admits separately defined pause and pickup workflows. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
+      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, and source-host task syntax were reduced to an explicit intent router and independently graduated portable playbooks. Babysit separates read-only and mutating authority, while the router now admits separately defined pause, pickup, and bounded autonomous-run workflows. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
     },
     {
       "id": "session-lifecycle-port",
@@ -146,6 +146,30 @@
         }
       ],
       "transformation": "Cursor-specific transcript paths, cloud-agent assumptions, implicit subagent parsing, and prose-only resume notes were replaced by workspace-scoped trails, an off-worktree structured checkpoint with exact Git anchors, stale-state refusal, inherited-versus-redone accounting, and fresh authorization for every mutation or publication. Pause and pickup remain separate explicit workflows so unattended continuation cannot be misread as a request to stop."
+    },
+    {
+      "id": "autonomous-run-port",
+      "sourceId": "cursor-pstack-autonomous-run",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-autonomous-run/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/autonomous-run.md",
+          "sha256": "15e54ad3ac92565613980772d8708de6e19cc4690bfd4bb3fb8836522407377b"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autonomous-run/SKILL.md",
+          "owner": "derived",
+          "sha256": "7e7871a506237c3153b2f9fea01d332a07d048b65d466bd807b52d61ab70d335"
+        },
+        {
+          "path": "src/core/skills/autonomous-run/skill.json",
+          "owner": "local-core",
+          "sha256": "e34ceb3600980d106d2e4134cfe47605f28a181701d7968a2274b19ccdcf6dc0"
+        }
+      ],
+      "transformation": "Cursor's unbounded loop command, implicit watcher behavior, and never-stop language were replaced by a fixed predicate, explicit iteration or time budget, capability-gated host wake, durable checkpoint fallback, per-iteration evidence, strict advancement or discard, and named terminal stop conditions. Continuous ready work and future external waits are separate branches so missing wake support cannot turn into busy polling."
     },
     {
       "id": "how-port",

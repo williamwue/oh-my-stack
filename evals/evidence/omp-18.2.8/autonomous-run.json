@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-autonomous-run",
+  "fixture": "autonomous-run",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, autonomous-run, and show-me-your-work Skills committed in one disposable Git repository; cursor/default; high reasoning; one persisted root session; deterministic local controller; no external network operation.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "Session 01a0c64d-6345-7423-8517-44aede5a2000 loaded the repository-generated poteto-mode, autonomous-run, and show-me-your-work Skills."
+    },
+    {
+      "id": "fixed-contract-declared-before-iteration",
+      "status": "pass",
+      "evidence": "Before the first controller measurement, the root declared predicate 3/3, exact measurement, four-iteration and ten-minute budget, authorized writes, external-action prohibition, stop conditions, and continuous-local-no-scheduled-wake."
+    },
+    {
+      "id": "continuous-local-path-selected",
+      "status": "pass",
+      "evidence": "All three units were immediately ready, so the run performed local work without scheduling a wake, sleeping, busy polling, pushing, publishing, merging, or contacting an external provider."
+    },
+    {
+      "id": "three-ordered-atomic-commits",
+      "status": "pass",
+      "evidence": "The root created exactly three ordered commits: 8ea82e5920367bace71f83a4fa97003b82e72438 for unit-a, cf77d9bd1951beea2c8bd1a19d0680fc1bd26015 for unit-b, and 9098a0caae66cecf650701318e9c82b166474dee for unit-c; each commit changed only its active unit after the named focused test passed."
+    },
+    {
+      "id": "predicate-advanced-once-per-iteration",
+      "status": "pass",
+      "evidence": "The deterministic controller accepted exactly one advance per commit and moved 0/3 to 1/3 to 2/3 to 3/3 without an early future-unit edit."
+    },
+    {
+      "id": "append-only-decision-trail-complete",
+      "status": "pass",
+      "evidence": "decisions.tsv contains one exact row for each of iterations 1 through 3, pointing to controller advance 1/3, 2/3, and 3/3 respectively."
+    },
+    {
+      "id": "stopped-at-predicate-without-publication",
+      "status": "pass",
+      "evidence": "report.json records three kept units, no discarded attempts, final predicate 3/3, stop reason predicate-met, published false, and no fourth iteration."
+    },
+    {
+      "id": "independent-verifier-passed",
+      "status": "pass",
+      "evidence": "verify.mjs produced AUTONOMOUS_RUN_OK=9098a0caae66cecf650701318e9c82b166474dee in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This proves the continuous-local W1 branch of autonomous-run, not scheduled or event wake, external-system waiting, cold-start restart, deadline enforcement under a slow iteration, cost enforcement, discard or pivot behavior, or W4 completion.",
+    "The deterministic suite rejects an early future-unit edit, but the passing live run does not exercise a controller rejection or recovery path.",
+    "The root first invoked the controller from the project directory, received a path error without changing fixture state, corrected the working directory, and then completed the fixed contract.",
+    "OMP delivery remains D0 overall because native plugin-manager D1 has not been established for the probed surface."
+  ]
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Autonomous Run"
+  short_description: "Autonomous Run workflow"
+  default_prompt: "Use $autonomous-run for this task."
+policy:
+  allow_implicit_invocation: false

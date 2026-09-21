@@ -15,6 +15,7 @@ Use the first matching row:
 
 | Observable request | Primary workflow |
 | --- | --- |
+| Drive one bounded task to a checkable predicate without intermediate prompting | `autonomous-run` |
 | Explicitly stop current in-flight work and leave it resumable | `pause-safely` |
 | Resume or take over prior in-flight work from a durable trail | `session-pickup` |
 | Check or make an existing pull request merge-ready without landing it | `babysit` |
@@ -32,11 +33,12 @@ state and record the secondary concern inside it. A discovered bug or feature
 must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
-Requests for unattended shipping, autonomous loops, merge control, or
-long-running orchestration remain outside the admitted set. State that boundary
-and execute only the independently useful admitted portion. Do not simulate an
-unimplemented advanced workflow. `babysit` is admitted only to the extent
-described by its own graduated modes; it never implies landing.
+Requests for unattended shipping, merge control, or multi-project orchestration
+remain outside the admitted set. State that boundary and execute only the
+independently useful admitted portion. Do not simulate an unimplemented
+advanced workflow. `autonomous-run` owns one bounded predicate and does not
+grant shipping authority. `babysit` is admitted only to the extent described by
+its own graduated modes; it never implies landing.
 
 ## Common invariants
 

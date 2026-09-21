@@ -481,7 +481,18 @@ Current progress:
   publication. The deterministic suite rejects unexplained dirty state.
 - Session lifecycle is W1 portable checkpoint evidence, not native runtime
   resume, transcript or cloud handoff, conflict recovery, or delegated W2
-  execution. `autonomous-run` is the next implementation slice.
+  execution.
+- `autonomous-run` is the forty-second public Skill. Its first continuous-local
+  slice passes on OMP 18.2.8 and Codex CLI 0.155.1: both roots declare one fixed
+  predicate, measurement, four-iteration and ten-minute budget, authority, and
+  stop conditions; complete three ready units with one focused test, one
+  single-file commit, one controller advance, and one append-only log row each;
+  stop at `3/3`; and pass the independent verifier without a wake or
+  publication. A deterministic negative case rejects an early future-unit edit.
+- That result is W1 continuous-local evidence, not the scheduled or event-wake
+  branch, external waiting, cold-start restart, deadline or cost enforcement,
+  discard or pivot behavior, or W4 completion. Host-native wake is therefore
+  the remaining `autonomous-run` slice before `shipping` begins.
 
 Add advanced workflows one at a time in this order:
 

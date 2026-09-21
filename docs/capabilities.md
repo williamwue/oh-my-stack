@@ -279,10 +279,11 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 41 public
+inferring it from naming or invocation policy. The catalog now admits 42 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
-Skills. The new `babysit`, `pause-safely`, and `session-pickup` fixtures
+Skills. The new `babysit`, `pause-safely`, `session-pickup`, and
+`autonomous-run` fixtures
 separately prove focused live loading and execution; the complete matrix will
 be refreshed after the Phase 7 catalog stabilizes. OMP transcripts contain the
 matching native
@@ -319,6 +320,18 @@ proves that unexplained dirty state is rejected. This is W1 file-checkpoint
 handoff; it does not claim native session continuation, transcript or cloud-task
 import, conflict recovery, or delegated W2 conformance. Codex again needs a
 permission profile that can write Git metadata inside the disposable fixture.
+
+The `autonomous-run` continuous-local fixture passes on OMP 18.2.8 and Codex
+CLI 0.155.1. Before iteration one, each root fixes the predicate, measurement,
+four-iteration and ten-minute budget, mutation authority, external-action
+boundary, and stop conditions. The controller reveals one ready unit at a time;
+each run produces exactly three ordered single-file commits, three accepted
+predicate advances, and three append-only decision rows before stopping at
+`3/3` without wake or publication. The deterministic negative case rejects a
+batched edit to the active and future units. This is W1 evidence for ready local
+work and a workspace decision-log fallback, not evidence for
+`coordination.scheduled_wake`, external waiting, cold-start restart, live
+deadline or cost enforcement, discard or pivot behavior, or W4 completion.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

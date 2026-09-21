@@ -2,6 +2,30 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/autonomous-run/controller.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Expose one active local unit at a time and advance the immutable predicate only after one clean verified commit.",
+      "network": false,
+      "writes": ["disposable autonomous-run state on advance"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run/setup.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Initialize the disposable three-unit repository and bounded autonomous-run controller state.",
+      "network": false,
+      "writes": ["disposable autonomous-run fixture copy"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run/verify.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify three ordered one-file iterations, append-only decision checkpoints, the fixed predicate, and absence of publication.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
       "path": "evals/fixtures/session-pickup/resume-check.mjs",
       "owner": "oh-my-stack",
       "purpose": "Reject stale, wrong-branch, or dirty pause checkpoints before a cold-start session edits the disposable repository.",

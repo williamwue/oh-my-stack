@@ -12,8 +12,9 @@ principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
 `bug-fix`), the Alpha 2 `interrogate` Skill, nine Alpha 3 workflow Skills
 (`how`, `technical-writing`, `unslop`, `poteto-mode`, `investigation`,
 `feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
-`setup-oh-my-stack` configuration Skill generate deterministic OMP, Codex,
-and Claude Code target packages. Seven canonical roles generate native
+`setup-oh-my-stack` configuration Skill, and the Phase 7 `babysit`,
+`pause-safely`, `session-pickup`, and `autonomous-run` Skills generate
+deterministic OMP, Codex, and Claude Code target packages. Seven canonical roles generate native
 read-only and writable definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
@@ -221,13 +222,13 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 41 public workflows and principles
+The canonical Skill catalog now separates 42 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
-remains unchanged. The new `babysit`, `pause-safely`, and `session-pickup`
-Skills are separately loaded and exercised by focused live fixtures; a
+remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`, and
+`autonomous-run` Skills are separately loaded and exercised by focused live fixtures; a
 refreshed whole-catalog live matrix remains pending until the rest of Phase 7
 stops changing the catalog.
 
@@ -279,14 +280,25 @@ permission profile that can write `.git`; its retained workspace-write failure
 is not counted as conformance. These are W1 local-provider results, not live
 forge access, hosted polling, `threads-only`, `background`, or W4 completion.
 
-The next Phase 7 slice adds separate `pause-safely` and `session-pickup`
-workflows. OMP 18.2.8 and Codex CLI 0.155.1 each pass a two-session cold-start
+The `pause-safely` and `session-pickup` workflows pass on OMP 18.2.8 and Codex
+CLI 0.155.1 in a two-session cold-start
 fixture: session A commits one existing atomic unit as `wip:`, writes an
 off-worktree checkpoint with exact Git anchors, and does not push; a distinct
 session B validates those anchors before editing, inherits the completed unit
 without redoing it, completes only the pending unit, runs combined verification,
 and still does not publish. This is W1 portable checkpoint handoff, not native
 runtime resume, transcript import, cloud handoff, or delegated W2 execution.
+
+The first `autonomous-run` slice also passes on OMP 18.2.8 and Codex CLI
+0.155.1. Each root freezes a `3/3` predicate, exact measurement, four-iteration
+and ten-minute budget, authorized mutations, and stop conditions before work.
+It then completes three ready local units in order with one focused test, one
+single-file commit, one controller advance, and one append-only decision row per
+iteration, stopping immediately at `3/3` without scheduling a wake or
+publishing. The deterministic suite rejects early edits to future units. This
+is continuous-local W1 evidence only; host-native scheduled or event wake,
+external waiting, restart, deadline and cost enforcement, discard or pivot
+behavior, and W4 completion remain unverified.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
