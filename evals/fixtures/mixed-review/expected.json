@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "actOn": ["F1"],
+  "dismissed": ["F2"],
+  "reviewerCount": 2,
+  "synthesizerCount": 1,
+  "assertions": [
+    "generated-resources-only",
+    "router-selected-interrogate",
+    "scope-frozen-before-review",
+    "two-reviewers-started-before-wait",
+    "identical-packets",
+    "reviewer-results-frozen",
+    "reviewers-read-only",
+    "one-new-synthesizer-after-review",
+    "attribution-preserved",
+    "true-positive-retained",
+    "false-positive-dismissed",
+    "root-reverified-findings",
+    "fallback-declared",
+    "no-project-writes",
+    "no-publication"
+  ]
+}
