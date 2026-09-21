@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "how",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.read_result": "root_runs_separated_exploration_passes_then_explains",
+    "agents.spawn": "root_runs_separated_exploration_passes_then_explains",
+    "agents.spawn_parallel": "run_independent_exploration_angles_sequentially",
+    "agents.wait": "root_runs_separated_exploration_passes_then_explains"
+  }
+}

@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads forty-two portable Skills, five roles, and three adapters", async () => {
+test("loads forty-three portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 42);
+  assert.equal(model.skills.length, 43);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "bug-fix",
     "check-cancellation",
@@ -32,6 +32,7 @@ test("loads forty-two portable Skills, five roles, and three adapters", async ()
     "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
+    "how",
     "interrogate",
     "principle-attack-the-premise",
     "principle-boundary-discipline",
@@ -72,6 +73,8 @@ test("loads forty-two portable Skills, five roles, and three adapters", async ()
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
   assert.deepEqual(model.roles.map((role) => role.metadata.name), [
     "evidence-reader",
+    "explainer",
+    "explorer",
     "implementer",
     "reviewer",
     "synthesizer",

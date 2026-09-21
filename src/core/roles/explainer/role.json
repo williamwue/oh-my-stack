@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "explainer",
+  "description": "Read-only author of a verified architectural explanation from frozen exploration evidence.",
+  "workload": "deep",
+  "constraints": ["read_only", "independent_session", "reasoning_required"],
+  "writes": false
+}

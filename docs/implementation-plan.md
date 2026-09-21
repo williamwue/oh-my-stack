@@ -213,6 +213,20 @@ Current progress:
 
 ### Alpha 3: routing and expansion
 
+Current progress:
+
+- The pinned `technical-writing` and `unslop` Skills are imported through the
+  reviewed mechanical transformation and generate native explicit-invocation
+  policy for all three targets.
+- `how` is a reviewed semantic port with simple and complex paths. Complex
+  questions use two to four independent read-only exploration angles, freeze
+  attributable findings, explain them in a distinct pass, and require root
+  verification of critical claims. Fixed source-host models and task syntax
+  were replaced by runtime-resolved explorer and explainer roles with explicit
+  sequential and root-only fallbacks.
+- Live OMP and Codex workflow verification for `how` remains pending. Claude
+  output is static-only until the deferred authenticated-runtime verification.
+
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;
 - investigation, feature, refactoring, prototype, and opening-a-pr playbooks;

@@ -2,6 +2,68 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "id": "how-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/SKILL.md",
+          "sha256": "06b714dbd830bc829bfb89e33a1c39daf6d72ea412e488ea9d65f5f33b885a0c"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/references/explainer-prompt.md",
+          "sha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/references/explorer-prompt.md",
+          "sha256": "3a6965276d23be7d8da6c305bfd5d7bf29d2aef09e5dae4119463ac72022a02d"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/how/SKILL.md",
+          "owner": "derived",
+          "sha256": "151b8992163dbc84d8d3ab519193210d667845ac4ab72e09e98b19e7880adb8d"
+        },
+        {
+          "path": "src/core/skills/how/skill.json",
+          "owner": "local-core",
+          "sha256": "f0664b85b96b6034fe9a0c4b0f6892a02f1f7b295a978c987b7fbc09a8ce370d"
+        },
+        {
+          "path": "src/core/skills/how/references/explainer.md",
+          "owner": "derived",
+          "sha256": "346491afe3acc14b308b06c0b9cd2db2b51a70bb3d23214bb27c90fc3a21c539"
+        },
+        {
+          "path": "src/core/skills/how/references/explorer.md",
+          "owner": "derived",
+          "sha256": "f747870d65889b1417465501fde94520b5eb08a850a8ed71d045f5be515b504b"
+        },
+        {
+          "path": "src/core/roles/explorer/instructions.md",
+          "owner": "local-core",
+          "sha256": "800567a8dfd86f3742f8342675180dc633908abf0ab71ceb02ebfb8e95e6152e"
+        },
+        {
+          "path": "src/core/roles/explorer/role.json",
+          "owner": "local-core",
+          "sha256": "e83b316c1e9be11905eb42741b096d82d58bac8d6937e8f331f434f49d188c86"
+        },
+        {
+          "path": "src/core/roles/explainer/instructions.md",
+          "owner": "local-core",
+          "sha256": "13c93cde5416f93fff2c78fd14fa10c5a28094e7d4a06d355f591d0963ab3a28"
+        },
+        {
+          "path": "src/core/roles/explainer/role.json",
+          "owner": "local-core",
+          "sha256": "cab4e3a587d7a438eb9872f8c646d15e41849e3b7eaaafeebf8c88b4665f4104"
+        }
+      ],
+      "transformation": "Fixed models, source-host task syntax, and an unverified handoff were replaced by runtime-resolved read-only explorer and explainer roles, frozen attributable findings, explicit concurrency and delegation fallbacks, evidence qualification, and independent root verification."
+    },
+    {
       "id": "interrogate-port",
       "sourceId": "cursor-pstack",
       "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",

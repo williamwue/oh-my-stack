@@ -9,8 +9,9 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
 implemented. Thirteen original capability fixtures, twenty-three pinned pstack
 principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
-`bug-fix`), and the Alpha 2 `interrogate` Skill generate deterministic OMP,
-Codex, and Claude Code target packages. Five canonical roles generate native
+`bug-fix`), the Alpha 2 `interrogate` Skill, and the first three Alpha 3 Skills
+(`how`, `technical-writing`, and `unslop`) generate deterministic OMP, Codex,
+and Claude Code target packages. Seven canonical roles generate native
 read-only and writable definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
@@ -99,8 +100,9 @@ because a separate reconnaissance model skipped the available native
 operation.
 
 The first pstack content slices are imported at the pinned upstream revision:
-all twenty-three `principle-*` Skills, `tdd`, `show-me-your-work`, and the
-`bug-fix` playbook semantics. Immutable source snapshots, per-file ownership,
+all twenty-three `principle-*` Skills, `tdd`, `technical-writing`, `unslop`,
+`how`, `show-me-your-work`, and the `bug-fix` playbook semantics. Immutable
+source snapshots, per-file ownership,
 mechanical transformation hashes, reviewed semantic-derivation records, and
 the candidate/baseline/verified pin lifecycle are stored under `upstream/`.
 Explicit-only policy is compiled into native target metadata rather than

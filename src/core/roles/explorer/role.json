@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "explorer",
+  "description": "Read-only investigator of one bounded code path or subsystem angle.",
+  "workload": "balanced",
+  "constraints": ["read_only", "independent_session"],
+  "writes": false
+}

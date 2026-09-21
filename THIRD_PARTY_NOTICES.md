@@ -2,8 +2,8 @@
 
 ## Cursor pstack
 
-The `principle-*`, `tdd`, `technical-writing`, `unslop`, `show-me-your-work`,
-`bug-fix`, and `interrogate` Skills under
+The `principle-*`, `tdd`, `technical-writing`, `unslop`, `how`,
+`show-me-your-work`, `bug-fix`, and `interrogate` Skills under
 `src/core/skills/` contain modified material from the pstack plugin in the
 Cursor plugins repository:
 
@@ -20,9 +20,9 @@ the corresponding target-native policy. Per-file ownership and hashes are in
 [`upstream/ownership.yaml`](upstream/ownership.yaml) and
 [`upstream/patches/`](upstream/patches/).
 
-`show-me-your-work`, `bug-fix`, and `interrogate` are reviewed semantic ports
-rather than mechanical frontmatter transformations. Their source snapshots, output
-ownership, hashes, and transformation rationale are recorded in
+`how`, `show-me-your-work`, `bug-fix`, and `interrogate` are reviewed semantic
+ports rather than mechanical frontmatter transformations. Their source
+snapshots, output ownership, hashes, and transformation rationale are recorded in
 [`upstream/semantic-derivations.json`](upstream/semantic-derivations.json).
 
 The other projects in [`upstream/sources.yaml`](upstream/sources.yaml) remain
