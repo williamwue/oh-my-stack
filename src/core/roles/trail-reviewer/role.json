@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "trail-reviewer",
+  "description": "Read-only independent reviewer for a frozen decision trail and its attributable evidence.",
+  "workload": "deep",
+  "constraints": [
+    "read_only",
+    "independent_session",
+    "reasoning_required",
+    "model_diversity_preferred"
+  ],
+  "writes": false
+}

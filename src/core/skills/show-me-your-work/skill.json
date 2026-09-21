@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "show-me-your-work",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "requires": [
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "scripts.execute",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.model_override": "use_available_reviewer_and_disclose_unverified_model_diversity",
+    "agents.read_result": "root_reviews_frozen_log_and_discloses_non_independent_fallback",
+    "agents.read_transcript": "audit_visible_evidence_and_disclose_transcript_limit",
+    "agents.spawn": "root_reviews_frozen_log_and_discloses_non_independent_fallback",
+    "agents.wait": "root_reviews_frozen_log_and_discloses_non_independent_fallback",
+    "scripts.execute": "append_equivalent_sanitized_tsv_row_without_helper"
+  }
+}

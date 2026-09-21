@@ -61,9 +61,49 @@ async function validateExecutableInventory(root) {
     for (const path of await filesUnder(executableRoot)) {
       const key = relative(root, path);
       const isTool = key.startsWith("tools/") && path.endsWith(".mjs");
-      const isSkillScript = key.includes("/scripts/") && path.endsWith(".mjs");
+      const isSkillScript = key.includes("/scripts/") && /\.(?:mjs|sh)$/.test(path);
       if (!isTool && !isSkillScript) continue;
       assert(seen.has(key), `${key}: executable is missing from security inventory`);
+    }
+  }
+}
+
+async function validateSemanticDerivations(root) {
+  const manifest = await readJson(join(root, "upstream", "semantic-derivations.json"));
+  assert(manifest.schemaVersion === 1, "upstream/semantic-derivations.json: schemaVersion must be 1");
+  assert(Array.isArray(manifest.entries), "upstream/semantic-derivations.json: entries are required");
+  const sourcesText = await readFile(join(root, "upstream", "sources.yaml"), "utf8");
+  const ids = new Set();
+  const outputs = new Set();
+  for (const entry of manifest.entries) {
+    assert(entry.id && !ids.has(entry.id), `duplicate semantic derivation ${entry.id}`);
+    ids.add(entry.id);
+    const source = readSourceRecord(sourcesText, entry.sourceId).fields;
+    assert(
+      [source.baseline_commit, source.verified_commit].includes(entry.sourceRevision),
+      `${entry.id}: source revision is not an accepted baseline for ${entry.sourceId}`,
+    );
+    assert(entry.transformation, `${entry.id}: transformation rationale is required`);
+    assert(Array.isArray(entry.sourceFiles) && entry.sourceFiles.length > 0, `${entry.id}: sourceFiles are required`);
+    assert(Array.isArray(entry.outputFiles) && entry.outputFiles.length > 0, `${entry.id}: outputFiles are required`);
+    const snapshotPrefix = `upstream/snapshots/${entry.sourceId}/${entry.sourceRevision}/`;
+    for (const file of entry.sourceFiles) {
+      assert(file.path.startsWith(snapshotPrefix), `${entry.id}: source is outside its immutable snapshot`);
+    }
+    for (const file of entry.outputFiles) {
+      assert(file.path.startsWith("src/core/"), `${entry.id}: derived output must be under src/core`);
+    }
+    for (const file of [...entry.sourceFiles, ...entry.outputFiles]) {
+      assert(typeof file.path === "string" && !file.path.startsWith("/"), `${entry.id}: unsafe absolute path`);
+      const resolved = resolve(root, file.path);
+      assert(resolved.startsWith(`${root}/`), `${entry.id}: path escapes repository: ${file.path}`);
+      assert(await exists(resolved), `${entry.id}: missing derivation file ${file.path}`);
+      assert(sha256(await readFile(resolved)) === file.sha256, `${entry.id}: hash drift in ${file.path}`);
+    }
+    for (const file of entry.outputFiles) {
+      assert(["derived", "local-core"].includes(file.owner), `${entry.id}: invalid owner for ${file.path}`);
+      assert(!outputs.has(file.path), `${file.path}: owned by multiple semantic derivations`);
+      outputs.add(file.path);
     }
   }
 }
@@ -218,6 +258,7 @@ export async function validate(root = repoRoot) {
   await validateJsonDocuments(root);
   await validateRuntimeEvidence(root, model);
   await validateUpstreamState(root);
+  await validateSemanticDerivations(root);
   await validateLocalMarkdownLinks(root);
   await validateExecutableInventory(root);
   return model;

@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "src/core/skills/show-me-your-work/scripts/log.sh",
+      "owner": "derived",
+      "purpose": "Append one sanitized, single-line decision row to a user-selected TSV log.",
+      "network": false,
+      "writes": ["user-selected decision log"],
+      "uninstallBehavior": "Removed with the owning generated Skill package; decision logs remain user-owned."
+    },
+    {
       "path": "src/core/skills/check-resources/scripts/render.mjs",
       "owner": "local-core",
       "purpose": "Read the packaged fixture asset and print deterministic resource markers.",

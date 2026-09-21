@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "show-me-your-work-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/SKILL.md",
+          "sha256": "831e85ba3f84f38bf338cd03e6af050fea357752e25a825e334c99f59d7f2077"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
+          "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/scripts/log.sh",
+          "sha256": "1601bc18f9aba0af3f5d6375e4f2d5dc6102334d1bca935026c0e3547cdadbbf"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/show-me-your-work/SKILL.md",
+          "owner": "derived",
+          "sha256": "d4faf45b15e57103f6867c98f3c549be31499d2d9bc175ba4dc91aedb9e3bb77"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/skill.json",
+          "owner": "local-core",
+          "sha256": "264669da2e8efb2cc86c98122002cdfbca8310ad70dd2ed97b0b3275a0689fe6"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/references/decision-log-template.tsv",
+          "owner": "derived",
+          "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/scripts/log.sh",
+          "owner": "derived",
+          "sha256": "8eece253c9c87ddd86842a90a00257a880f7d7f245f6bf87e8ab887ba11c5c05"
+        },
+        {
+          "path": "src/core/roles/trail-reviewer/role.json",
+          "owner": "local-core",
+          "sha256": "3233d7989b0981675aa6244217b0e8f8fb623d47ac152d17ad08dfc4cd5a0038"
+        },
+        {
+          "path": "src/core/roles/trail-reviewer/instructions.md",
+          "owner": "local-core",
+          "sha256": "79d26d76d45396bf959f0f9d755dadac85d9ee267eaa2e00666e3ab52dc0c57d"
+        }
+      ],
+      "transformation": "Runtime-specific transcript paths and mandatory model-family claims were replaced by capability-based evidence access, explicit fallbacks, append-only correction semantics, and independently verifiable model identity."
+    }
+  ]
+}
