@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/architecture-candidates/verify.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify the frozen architecture candidates have exactly one requirements-consistent winner and report their hashes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the repository fixture."
+    },
+    {
       "path": "tools/build-conformance.mjs",
       "owner": "oh-my-stack",
       "purpose": "Compile runtime-specific evidence into deterministic same-scenario semantic conformance records.",
