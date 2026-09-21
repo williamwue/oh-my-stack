@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "cursor-pstack",
+  "oldCommit": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+  "newCommit": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+  "transform": "portable-explicit-skill",
+  "outcomes": [
+    {
+      "path": "src/core/skills/principle-attack-the-premise/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "c87bd7536f772f8a403ad8155535ee17a1bbec9a353156693eb3bb1520c87ae3",
+      "resultSha256": "e358381398f0f25df6a2875807f79b8b3467ad0f0b949439f83e80f95b7e65fd"
+    },
+    {
+      "path": "src/core/skills/principle-boundary-discipline/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "62ac2862c2caa22dd14531f51c9c6bb445ceb198ca98a687e25b4d47c1f10a28",
+      "resultSha256": "3f7faa00f6a431d4ff7deba88fedb6c3321721459a1d5e09e045939898818cbd"
+    },
+    {
+      "path": "src/core/skills/principle-build-the-lever/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "458b269eab8e95a1573276955312f7d2a13ae8599879a9efc748248f6bc34b56",
+      "resultSha256": "cc5b0b5a97bbaec03de54ab39cd6cd1deba59e3231201580e7f6f122c87f6e47"
+    },
+    {
+      "path": "src/core/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "77044c83a9ac6df78fc643887ea5f1f11f082adaf14b717c060cdaed03cce863",
+      "resultSha256": "ac2f82f8c2db15a5074b3244663b587472162fde729272ddd362bc7f67fd8420"
+    },
+    {
+      "path": "src/core/skills/principle-exhaust-the-design-space/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "8583310d7297b7823d75494faa57b003564d436807febecdecbd8321abe5cf6e",
+      "resultSha256": "4312b424323f36cc3cd129e4d6c085ec7f27e897bb62d7adfed76487c6f65879"
+    },
+    {
+      "path": "src/core/skills/principle-experience-first/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b",
+      "resultSha256": "03dec5fb02843023a2d67811997425a2d0e1fadafc51caa1097c51d41c70b759"
+    },
+    {
+      "path": "src/core/skills/principle-fix-root-causes/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "ba4cd38da1dcc8fe5432feb64457cba95594736a9b21b2ebf8f8c52aee068707",
+      "resultSha256": "3dac4c86a2ce1c994b52e0963ff4dec21127a04e74928da6e97e1db67200688a"
+    },
+    {
+      "path": "src/core/skills/principle-foundational-thinking/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2",
+      "resultSha256": "f67f622beb4782234be02510a3599230b9b7c09f8f71e30abb151e55f5195a35"
+    },
+    {
+      "path": "src/core/skills/principle-guard-the-context-window/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "9f60e2c79b35f865cb103462f9128c6760b70f603475d1e535e5930f61840f66",
+      "resultSha256": "8cf18cd9bdb69b2932608a86c2cfe53992adb30c612107fd7c5c5ca12e0ba793"
+    },
+    {
+      "path": "src/core/skills/principle-laziness-protocol/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "9006579e9e3f33955d17569733db688ae65f22577dc3b21803d219a5a8445aff",
+      "resultSha256": "325fd80b4bcf8ba79648ab8db3e9c049bec5c26fd24c6f5771af550feb7b05b8"
+    },
+    {
+      "path": "src/core/skills/principle-make-operations-idempotent/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "540738217c3da7bf513b9886924ad6a2bc77e58be867f5bd2e1831c74bf2ce70",
+      "resultSha256": "1aee48fe14d000debbd6026fa8acf5e09a52ed9825fb74db056844b3506a0a7a"
+    },
+    {
+      "path": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "09978915a4a11990cf0a9a02d9c08cc59e0b7a04c5c24b83aa560fbe4146f75b",
+      "resultSha256": "d76b14b9e44c45ad24f928ab41986138872ed000f4538e9ff97b6cee985dde27"
+    },
+    {
+      "path": "src/core/skills/principle-minimize-reader-load/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "42551c5dc74cd578163c148da552db3ff67d29b78600ef216bfd311fb828fe69",
+      "resultSha256": "26982bbb5d3e0445ae9ab3a85e04a2298f6bf782cb91d186f25a0c37bd2bb004"
+    },
+    {
+      "path": "src/core/skills/principle-model-the-domain/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "bbadbb9a723fac3f76e782ae45665eb94058ec10993e4bae36d4dc6b0e4eac07",
+      "resultSha256": "ac50126ce85bddd0aad5e464b68ba461a25c161c4dfe155f0afc1d675efff75b"
+    },
+    {
+      "path": "src/core/skills/principle-never-block-on-the-human/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "d82bce9ab9193249d1ec0d514202d89602f0fd3d312174d622c2dd222bae5a2e",
+      "resultSha256": "0e21aee5f45abcb005eb87a503b7f4a0fea70255512bdb95e181c2b791a995a4"
+    },
+    {
+      "path": "src/core/skills/principle-outcome-oriented-execution/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "beedcaed75572a6a1662d47f16da203c2bd2c9dbffbbd678d4ba187d67b7e670",
+      "resultSha256": "e7db9af146e8eac656efa906ce5987246be7a240c133fde6dd7d95ee9db3d134"
+    },
+    {
+      "path": "src/core/skills/principle-prove-it-works/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "ae13d287984a5864312b6286899d4ee2b60f8272b5e5e8fcc586a7c3ea51020b",
+      "resultSha256": "f6f6a3f1cd159cbed277c3c268c0e9ed982a3d5b95bc5e10e27955368aabb52c"
+    },
+    {
+      "path": "src/core/skills/principle-redesign-from-first-principles/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "a1c7fd0a96b40e12a74bceb0e6bb20a9666dd844dcabfb624acb27da23b929fe",
+      "resultSha256": "c1eb13f3fce288acaf1adf4a7ab7a900c5bfaeee4407c9dbe0777211da3fc05c"
+    },
+    {
+      "path": "src/core/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb",
+      "resultSha256": "e356cb117d9a9262e9c0fd5f84abcb3fa9635d0ddc4cd37a6e9f16b5f9b795f1"
+    },
+    {
+      "path": "src/core/skills/principle-sequence-verifiable-units/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "761390804ee36c32f5338d8db47ec54463d40ff96dbb296dfafabcd5f2593eec",
+      "resultSha256": "69d654353417381a97097274c0246885fc79e7a82dcbe4010e873bca1a86f273"
+    },
+    {
+      "path": "src/core/skills/principle-subtract-before-you-add/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "a983a50e732c1ed315eba7aaf47a61329e31c4794eb1ab9d25d9945265b31e03",
+      "resultSha256": "aa44b5e3da04c74fa65806b4e8aadb5ab4e2330e4bca943e2f75b52a9cb24b07"
+    },
+    {
+      "path": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "87e40efe4e486f7ea639d2ed1fc0abe6c93b8fd0e89a81218086909d2470a52e",
+      "resultSha256": "e215d51af6cf4dc079d7bd1652a18114d794878c6ca1c0db72f10fc6429e6c75"
+    },
+    {
+      "path": "src/core/skills/principle-type-system-discipline/SKILL.md",
+      "status": "clean-update",
+      "sourceSha256": "c83da8031ffb4c86410030d3e261f659598fca2b7d8158fd9dc269d70a3a025e",
+      "resultSha256": "3f2b3316969bc8b668ab0924ff363b59da6010b2799970b91be5b47474cd8334"
+    },
+    {
+      "path": "src/core/skills/tdd/SKILL.md",
+      "status": "imported",
+      "sourceSha256": "011cab0ecc04a3632121efb493ae4d60aa282a9b72c66de74dd8ad7e4313e05a",
+      "resultSha256": "21ce4b53c0caa96c84a54d857fbfcbaa1ff397fff08dbd5774cb1b90e509297f"
+    }
+  ]
+}
