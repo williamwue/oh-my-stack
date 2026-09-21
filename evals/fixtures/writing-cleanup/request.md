@@ -15,9 +15,9 @@ facts.
 
 Run `node --test test/docs.test.mjs` from `project/` before editing and capture
 the intended failure. Edit only `project/docs/run-locally.md`. Do not delegate
-or modify the test to make it pass. Inspect the complete diff, then rerun the
-same command as root and require one passing test. Confirm that no other path
-changed.
+or modify the test to make it pass. Inspect the complete diff, then have the
+same top-level agent rerun the command and require one passing test. Do not use
+`sudo` or change the operating-system user. Confirm that no other path changed.
 
 Do not commit, push, publish, or open a pull request. Report the selected
 Diátaxis mode, the before and after outcomes, the changed path, the preserved
