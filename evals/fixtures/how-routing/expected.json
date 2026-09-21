@@ -12,6 +12,7 @@
   ],
   "assertions": [
     "router-loaded",
+    "generated-resources-only",
     "investigation-selected",
     "how-loaded",
     "two-explorers-started-before-wait",
