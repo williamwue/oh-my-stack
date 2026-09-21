@@ -334,10 +334,13 @@ Current progress:
 - All generated local links and scripts resolve inside the package.
 - The setup workflow never writes an unobserved model slug or destroys unrelated configuration.
 
-The setup portion of this gate now passes on both live CLI runtimes. The
-all-public-Skill discovery and explicit-invocation matrix remains the final
-Alpha 3 gate before Phase 5. Claude Code remains deferred by explicit project
-decision until an authenticated local runtime is available.
+The setup portion of this gate passes on both live CLI runtimes. A canonical
+catalog now partitions 38 public Skills from 12 internal `check-*` probes, and
+the four-batch public matrix discovers and explicitly loads every public Skill
+exactly once on OMP and Codex CLI while leaving each fixture repository clean.
+The active OMP/Codex Alpha 3 gate is therefore closed. Claude Code remains
+deferred by explicit project decision until an authenticated local runtime is
+available, so it does not block Phase 5 work on the verified surfaces.
 
 ## Phase 5: same-scenario conformance suite
 

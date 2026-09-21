@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-public-skill-matrix",
+  "fixture": "public-skill-matrix",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "All generated OMP Skills copied into a disposable Git fixture; the canonical catalog partitioned 38 public Skills from 12 check-* probes; four non-interactive read-only sessions used exact --skills allowlists of 10, 10, 10, and 8 public Skills with extensions and rules disabled; cursor/default with low thinking.",
+    "permissionProfile": "read tool only with no command, write, task, interaction, or publication tool"
+  },
+  "capabilities": [
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/prove-it-works.json"
+  ],
+  "assertions": [
+    { "id": "catalog-boundary-loaded", "status": "pass", "evidence": "The verifier loaded the canonical 38-public and 12-probe partition and rejected any report outside that exact boundary." },
+    { "id": "all-public-skills-discovered", "status": "pass", "evidence": "Four fresh sessions resolved all 38 cataloged public Skills from the disposable project .agents/skills directory." },
+    { "id": "all-public-skills-explicitly-loaded", "status": "pass", "evidence": "Persisted OMP transcripts contain exactly 10, 10, 10, and 8 successful read results whose source metadata is the requested skill:// URI." },
+    { "id": "canonical-names-match", "status": "pass", "evidence": "The aggregate report preserves the exact canonical public catalog order with no omissions or duplicates." },
+    { "id": "first-headings-match", "status": "pass", "evidence": "The fixture verifier matched every reported first level-one heading to the corresponding generated OMP SKILL.md." },
+    { "id": "probe-skills-excluded", "status": "pass", "evidence": "No check-* Skill appears in any requested batch, read result, or aggregate report." },
+    { "id": "no-workflow-executed", "status": "pass", "evidence": "The four sessions only read the requested Skill resources and returned metadata; no loaded workflow body was executed." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Strict post-run Git status was empty in the disposable fixture." },
+    { "id": "no-delegation", "status": "pass", "evidence": "The task tool was unavailable and no child session ran." },
+    { "id": "no-publication", "status": "pass", "evidence": "No command, network, forge, commit, push, or publication operation was available or performed." }
+  ],
+  "limitations": [
+    "This matrix proves discovery and explicit loading for every public Skill; it does not re-execute every workflow's semantic behavior.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 safety gate is unresolved."
+  ]
+}

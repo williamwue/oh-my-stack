@@ -207,6 +207,14 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
+The canonical Skill catalog now separates 38 public workflows and principles
+from 12 internal `check-*` runtime probes. A four-batch live matrix passes on
+both OMP and Codex CLI: every public Skill is discovered and explicitly loaded
+exactly once, its canonical name and first heading match the generated package,
+no probe Skill leaks into the public matrix, and the read-only fixture remains
+unchanged. This closes the public-Skill discovery and invocation portion of the
+Alpha 3 gate on the two currently verified CLI surfaces.
+
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
 setup or installation places those definitions in the host's discovered role

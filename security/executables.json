@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/public-skill-matrix/verify.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the repository fixture."
+    },
+    {
       "path": "src/core/skills/show-me-your-work/scripts/log.sh",
       "owner": "derived",
       "purpose": "Append one sanitized, single-line decision row to a user-selected TSV log.",

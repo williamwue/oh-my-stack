@@ -278,6 +278,17 @@ configuration workflow, not user-home installation or model quality. Claude
 Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
+The public-Skill matrix makes the product boundary machine-readable instead of
+inferring it from naming or invocation policy. The catalog admits 38 public
+workflows and principles and marks 12 `check-*` Skills as internal probes. Four
+fresh read-only sessions on each CLI surface load public batches of 10, 10, 10,
+and 8 Skills. OMP transcripts contain the matching native `skill://` reads;
+Codex transcripts contain matching `skills.selected_skill_instructions` items
+with complete project-local Skill bodies. The verifier checks exact catalog
+order, canonical names, first headings, probe exclusion, and a clean fixture.
+This proves D2/D3 delivery across the complete public catalog, not semantic
+success for every possible workflow input.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

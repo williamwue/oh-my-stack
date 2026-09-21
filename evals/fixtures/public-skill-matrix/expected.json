@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "batchSize": 10,
+  "assertions": [
+    "catalog-boundary-loaded",
+    "all-public-skills-discovered",
+    "all-public-skills-explicitly-loaded",
+    "canonical-names-match",
+    "first-headings-match",
+    "probe-skills-excluded",
+    "no-workflow-executed",
+    "no-project-writes",
+    "no-delegation",
+    "no-publication"
+  ]
+}
