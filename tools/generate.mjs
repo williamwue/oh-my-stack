@@ -2,6 +2,7 @@
 
 import {
   access,
+  cp,
   mkdir,
   mkdtemp,
   readFile,
@@ -280,7 +281,9 @@ export async function loadModel(root = repoRoot) {
 
   const skills = [];
   const skillRoot = join(root, "src", "core", "skills");
-  for (const entry of await readdir(skillRoot, { withFileTypes: true })) {
+  const skillEntries = await readdir(skillRoot, { withFileTypes: true });
+  skillEntries.sort((left, right) => left.name.localeCompare(right.name));
+  for (const entry of skillEntries) {
     if (!entry.isDirectory()) continue;
     const directory = join(skillRoot, entry.name);
     const metadataPath = join(directory, "skill.json");
@@ -334,7 +337,8 @@ export async function renderTarget(stageRoot, model, adapter) {
 
   for (const skill of model.skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
-    await writeText(join(skillTarget, "SKILL.md"), skill.text);
+    await cp(skill.directory, skillTarget, { recursive: true });
+    await rm(join(skillTarget, "skill.json"));
     if (adapter.id === "codex") {
       await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
     }
@@ -388,7 +392,7 @@ export async function treeMap(directory) {
   const map = new Map();
   for (const path of await filesUnder(directory)) {
     const key = relative(directory, path).split(sep).join("/");
-    map.set(key, await readFile(path, "utf8"));
+    map.set(key, (await readFile(path)).toString("base64"));
   }
   return map;
 }

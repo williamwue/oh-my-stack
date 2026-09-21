@@ -12,6 +12,8 @@
     "installedProviders": []
   },
   "capabilities": {
+    "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
+    "scripts.execute": { "status": "external", "provider": "node via shell", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "$skill-name", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },
     "workspace.inspect": { "status": "native", "provider": "shell", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" }

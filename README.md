@@ -6,9 +6,9 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Status
 
-Phase 1 and the Alpha 0 build slice are implemented. One original
-`prove-it-works` Skill generates deterministic OMP, Codex, and Claude Code
-target packages. All packages pass static `D0` validation.
+Phase 1 and the Alpha 0 build slice are implemented. Two original Skills,
+`prove-it-works` and `check-resources`, generate deterministic OMP, Codex, and
+Claude Code target packages. All packages pass static `D0` validation.
 
 Live `W1` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS arm64.
 The official Codex repository-marketplace lifecycle fixture establishes `D1`,
@@ -18,6 +18,11 @@ remains overall `D0`: its 18.2.6 plugin manager unexpectedly writes during a
 `--dry-run`, so the real D1 safety gate is unresolved. Codex desktop and Codex
 IDE remain unprobed. Claude Code verification is explicitly deferred until a
 local account and authenticated runtime are available.
+
+The resource fixture proves that OMP and Codex CLI can load packaged
+`references/` and `assets/`, then execute a packaged helper that resolves its
+own asset. Script execution currently depends on the external Node.js runtime
+and is recorded separately from native relative-resource support.
 
 No pstack workflow content has been imported yet.
 

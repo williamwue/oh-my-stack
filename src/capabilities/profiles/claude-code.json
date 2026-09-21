@@ -16,6 +16,8 @@
     "reason": "Deferred by the user until a local Claude Code account and authenticated runtime are available."
   },
   "capabilities": {
+    "resources.relative_paths": { "status": "unknown", "provider": null, "evidence": null },
+    "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
     "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
     "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null }

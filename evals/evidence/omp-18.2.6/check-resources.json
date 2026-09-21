@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-resources",
+  "fixture": "check-resources",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied to project .agents/skills; probe overlay cleared the machine-specific includeSkills allowlist.",
+    "permissionProfile": "Fixture required read-only behavior; runtime exposed only read and bash tools; auto-approval was not enabled."
+  },
+  "capabilities": ["resources.relative_paths", "scripts.execute"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The runtime resolved skill://check-resources from the project Skill directory." },
+    { "id": "reference-marker-reported", "status": "pass", "evidence": "The runtime read skill://check-resources/references/expected.md and reported reference-ok." },
+    { "id": "asset-marker-reported", "status": "pass", "evidence": "The runtime read skill://check-resources/assets/payload.json and reported asset-ok." },
+    { "id": "packaged-script-executed", "status": "pass", "evidence": "Node executed scripts/render.mjs with the Skill URI as cwd and returned SCRIPT_MARKER=script-ok;ASSET_MARKER=asset-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "The runtime used read and a read-only helper execution; no project mutation was requested or reported." }
+  ],
+  "limitations": [
+    "Node.js is an external executable provider rather than an OMP-native script runtime.",
+    "Overall delivery remains D0 because the separate OMP plugin-manager D1 safety gate failed."
+  ]
+}

@@ -12,6 +12,8 @@
     "installedProviders": []
   },
   "capabilities": {
+    "resources.relative_paths": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/check-resources.json" },
+    "scripts.execute": { "status": "external", "provider": "node via bash", "evidence": "evals/evidence/omp-18.2.6/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
     "workspace.inspect": { "status": "native", "provider": "read+bash", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" }

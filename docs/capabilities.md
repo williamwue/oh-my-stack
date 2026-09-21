@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed | Runtime package | Documented, schema-dependent | W1 passes and D2/D3 checks are observed; overall D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Documented, schema-dependent | Two W1 fixtures pass and D2/D3 checks are observed; overall D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed | Documented plugin browser | Documented | D3 and W1 pass on 0.155.1 |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Documented | D3 and two W1 fixtures pass on 0.155.1 |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "capabilities": [
     "resources.relative_paths",
+    "scripts.execute",
     "skills.discover",
     "skills.invoke.explicit",
     "workspace.inspect"

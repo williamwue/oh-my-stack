@@ -54,10 +54,15 @@ async function validateExecutableInventory(root) {
     assert(Array.isArray(entry.writes), `${entry.path}: writes must be an array`);
     assert(entry.owner && entry.purpose && entry.uninstallBehavior, `${entry.path}: incomplete inventory entry`);
   }
-  for (const path of await filesUnder(join(root, "tools"))) {
-    if (!path.endsWith(".mjs")) continue;
-    const key = relative(root, path);
-    assert(seen.has(key), `${key}: executable is missing from security inventory`);
+  const executableRoots = [join(root, "tools"), join(root, "src", "core", "skills")];
+  for (const executableRoot of executableRoots) {
+    for (const path of await filesUnder(executableRoot)) {
+      const key = relative(root, path);
+      const isTool = key.startsWith("tools/") && path.endsWith(".mjs");
+      const isSkillScript = key.includes("/scripts/") && path.endsWith(".mjs");
+      if (!isTool && !isSkillScript) continue;
+      assert(seen.has(key), `${key}: executable is missing from security inventory`);
+    }
   }
 }
 

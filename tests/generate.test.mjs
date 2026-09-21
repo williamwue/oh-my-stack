@@ -15,10 +15,10 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads one portable Skill and three adapters", async () => {
+test("loads portable Skills and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 1);
-  assert.equal(model.skills[0].metadata.name, "prove-it-works");
+  assert.equal(model.skills.length, 2);
+  assert.deepEqual(model.skills.map((skill) => skill.metadata.name), ["check-resources", "prove-it-works"]);
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
   assert.equal(model.profiles.size, 5);
 });
@@ -29,8 +29,12 @@ test("live profiles cite surface-specific evidence", async () => {
   const codexCli = model.profiles.get("codex-cli");
   assert.equal(omp.capabilities["skills.discover"].status, "native");
   assert.match(omp.capabilities["skills.discover"].evidence, /omp-18\.2\.6/);
+  assert.equal(omp.capabilities["resources.relative_paths"].status, "native");
+  assert.equal(omp.capabilities["scripts.execute"].status, "external");
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
   assert.match(codexCli.capabilities["skills.invoke.explicit"].evidence, /codex-cli-0\.155\.1/);
+  assert.equal(codexCli.capabilities["resources.relative_paths"].status, "native");
+  assert.equal(codexCli.capabilities["scripts.execute"].status, "external");
   const claude = model.profiles.get("claude-code-default");
   assert.equal(claude.capabilities["skills.discover"].status, "unknown");
   assert.equal(claude.verification.status, "pending");
@@ -49,7 +53,7 @@ test("portable core rejects runtime bindings", () => {
 
 test("unsupported requirements need an explicit fallback", async () => {
   const model = await loadModel();
-  const skill = structuredClone(model.skills[0]);
+  const skill = structuredClone(model.skills.find((entry) => entry.metadata.name === "prove-it-works"));
   const profile = structuredClone(model.profiles.get("omp-default"));
   profile.capabilities["workspace.inspect"].status = "unsupported";
   assert.throws(
