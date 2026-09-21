@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-opening-pr-fallback",
+  "fixture": "opening-pr-fallback",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W1", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": { "name": "codex-cli", "version": "0.155.1", "platform": "macos-arm64", "configuration": "Generated poteto-mode, opening-a-pr, technical-writing, and unslop Skills in a disposable two-commit repository; user configuration and rules ignored; read-only sandbox; all runner outputs stored outside the repository.", "permissionProfile": "read-only sandbox with approval policy never" },
+  "capabilities": ["commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/opening-pr-fallback-attempt-1.json"],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root loaded the repository-generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "All workflow Skills came from the fixture and no installed cache was read." },
+    { "id": "opening-pr-selected-from-explicit-intent", "status": "pass", "evidence": "The explicit ready-publication intent selected opening-a-pr." },
+    { "id": "writing-skills-loaded", "status": "pass", "evidence": "opening-a-pr, technical-writing, and unslop were loaded and applied in order." },
+    { "id": "destination-resolved-from-git", "status": "pass", "evidence": "The root resolved the repository path, GitHub remote, main base, feature head, and ready status." },
+    { "id": "complete-range-and-diff-inspected", "status": "pass", "evidence": "The exact commit range, one commit, complete diff, and two paths were inspected." },
+    { "id": "clean-check-run-by-root", "status": "pass", "evidence": "The root freshly ran the greeting test and captured exit 0, two passes, and zero failures." },
+    { "id": "ordered-commits-inspected", "status": "pass", "evidence": "The feature commit followed the baseline without rewriting history." },
+    { "id": "title-and-body-prepared", "status": "pass", "evidence": "A conventional title and exact polished body with all required sections were returned." },
+    { "id": "fallback-selected-for-unknown-capability", "status": "pass", "evidence": "Unknown scm.pull_requests triggered the declared briefing fallback." },
+    { "id": "exact-pending-operation-reported", "status": "pass", "evidence": "The result provides one exact gh command with quoted values and a quoted heredoc fed through --body-file -." },
+    { "id": "publication-not-attempted", "status": "pass", "evidence": "No network, forge API, browser, or gh operation ran." },
+    { "id": "no-url-fabricated", "status": "pass", "evidence": "The result explicitly states publication did not occur and no PR URL exists." },
+    { "id": "merge-not-attempted", "status": "pass", "evidence": "No merge or monitoring operation ran." },
+    { "id": "workspace-unchanged", "status": "pass", "evidence": "All runner artifacts were external and strict git status remained empty." }
+  ],
+  "limitations": [
+    "This proves W1 fallback behavior only; forge authentication, remote head availability, actual ready-PR creation, and read-back remain unverified W4 work.",
+    "The exact command was intentionally not executed.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
+  ]
+}

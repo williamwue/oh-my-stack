@@ -115,6 +115,17 @@ Codex attempt is retained as a failure because automatic approval rejected
 creation of a previously absent scratch directory; the passing harness tracks
 that empty repository-owned directory before invocation.
 
+The `opening-a-pr` fallback fixture passes on OMP and Codex CLI. Both roots
+resolve the real Git remote, base, head, one-commit range, and two-file diff;
+rerun the two-test verification command; apply `technical-writing` followed by
+`unslop`; and return an exact pending `gh pr create` operation. Because
+`scm.pull_requests` remains `unknown`, neither runtime contacts a forge,
+publishes a pull request, fabricates a URL, or merges anything. The first run
+on each runtime is retained as a harness failure because runner logs were
+written inside the fixture repository. Hardened reruns externalize every
+runner artifact and leave strict Git status clean. This is passing W1 fallback
+evidence, not authenticated W4 publication or forge read-back.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact

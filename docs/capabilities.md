@@ -238,6 +238,19 @@ scratch directory through automatic approval review. Pre-creating and tracking
 the empty repository-owned directory removes that ambiguity and the fresh run
 passes; both the failure and pass remain recorded.
 
+The `opening-a-pr` fixture validates the safe publication fallback on both CLI
+runtimes. Each root derives the GitHub destination, base, head, one-commit
+range, and two changed paths from real local Git state; runs the two-test check;
+loads `technical-writing` and then `unslop`; and produces a complete title,
+body, and exact pending `gh pr create` operation. The capability packet keeps
+`scm.pull_requests` at `unknown`, so no forge, network, browser, merge, or `gh`
+operation runs and no URL is invented. Both initial attempts correctly fail the
+strict cleanliness assertion because their harnesses placed logs inside the
+repository. Hardened reruns place all runner output outside the repository and
+pass with empty Git status. The result is W1 fallback evidence only; forge
+authentication, remote-head availability, ready-PR creation, and read-back are
+still unverified W4 behavior.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

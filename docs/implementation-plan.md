@@ -272,6 +272,16 @@ Current progress:
   approval rejected creation of a missing top-level scratch directory; the
   hardened harness pre-creates and tracks that empty repository-owned path and
   the fresh run passes.
+- The `opening-a-pr` fallback fixture passes on OMP and Codex CLI. Both roots
+  resolve the repository, GitHub remote, base, head, complete one-commit range,
+  and two changed paths; rerun the two-test check; apply `technical-writing`
+  followed by `unslop`; and return an exact pending `gh pr create` operation.
+  Since `scm.pull_requests` remains `unknown`, neither run contacts a forge,
+  creates a URL, or merges. Initial runs are retained as failures because the
+  harness wrote runner logs inside the fixture repository; hardened reruns
+  place all runner artifacts outside it and finish with strict Git status
+  clean. This establishes the declared W1 briefing fallback only. Authenticated
+  ready-PR creation and forge read-back remain separate W4 work.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;
