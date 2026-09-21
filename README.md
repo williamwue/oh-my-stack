@@ -8,10 +8,10 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
 implemented. Thirteen original capability fixtures, twenty-three pinned pstack
-principles, and the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
-`bug-fix`) generate deterministic OMP, Codex, and Claude Code target packages.
-Three canonical roles generate native read-only and writable definitions. All
-packages pass static `D0` validation.
+principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
+`bug-fix`), and the Alpha 2 `interrogate` Skill generate deterministic OMP,
+Codex, and Claude Code target packages. Five canonical roles generate native
+read-only and writable definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -63,6 +63,14 @@ integrated. Codex used one top-level managed worktree shared by root and child;
 the original source checkout remained clean, and the inline implementer
 fallback was used because that CLI surface cannot select the generated custom
 role.
+
+Alpha 2 now includes the portable `interrogate` workflow. Its live fixture
+passes on both OMP and Codex CLI with two reviewers started before waiting,
+identical frozen packets, frozen attributable results, a distinct later
+synthesizer, and independent root execution of every final `Act on` finding.
+Both runs kept the reviewed repository unchanged and correctly declined to
+claim model diversity: OMP resolved every child to the same model, while Codex
+exposed no independently verifiable child model identity in this run.
 
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the

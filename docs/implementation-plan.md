@@ -189,6 +189,22 @@ Current progress:
 
 ### Alpha 2: coordinated panel
 
+Current progress:
+
+- `interrogate` was selected instead of `architect` because it composes
+  directly with the already-probed panel lifecycle and does not pull the
+  unported `how`, `why`, and `arena` dependency chain into this alpha.
+- Its fixed source-host models and task syntax were replaced by canonical
+  reviewer/synthesizer roles, runtime-resolved diversity preferences, identical
+  frozen packets, immutable findings, and root-owned final judgment.
+- The same end-to-end fixture passes on OMP 18.2.6 and Codex CLI 0.155.1 with
+  two reviewers, a later distinct synthesizer, root execution of final
+  findings, preserved attribution, and no workspace modification.
+- Neither result claims model diversity: OMP proved the same resolved model for
+  all children, while Codex exposed no child model identity in this run.
+- Claude-compatible output passes static generation and validation; live
+  verification remains deferred.
+
 - `architect` or `interrogate`, not both initially;
 - parallel candidate start when supported;
 - frozen candidate and reviewer artifacts;

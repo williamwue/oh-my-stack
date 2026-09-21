@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-interrogate",
+  "fixture": "interrogate",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated interrogate Skill and reviewer/synthesizer roles copied into a disposable Git fixture; empty Skill allowlist; asynchronous task support enabled.",
+    "permissionProfile": "read-only workflow contract in a disposable repository with auto-approved inspection commands"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-panel.json",
+    "evals/evidence/omp-18.2.6/check-model-routing.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated interrogate Skill and its packaged references." },
+    { "id": "intent-and-scope-frozen", "status": "pass", "evidence": "The final verdict retained the exact intent, project/lib/window.mjs, Git revision, and SHA-256 80bf5704a0bcc57ee05b4143aea6b5bc258c45bf3c7a4d1a2264829cfcf99669." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "ReviewerA and ReviewerB were both started before the runtime waited for either result." },
+    { "id": "identical-review-packets", "status": "pass", "evidence": "Both reviewers received the same frozen intent, source, hash, rubric, quality lens, and output contract." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "Both complete attributable results were collected without follow-up, retry, replacement, or rewriting." },
+    { "id": "new-synthesizer-after-reviews", "status": "pass", "evidence": "Synthesizer1 was created only after both reviewer results froze and received those frozen results." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The verdict mapped each finding to ReviewerA, ReviewerB, or both and preserved the lone ReviewerB observation." },
+    { "id": "root-verified-act-on-findings", "status": "pass", "evidence": "The root executed examples confirming missing lower-bound rejection, upper-bound clamping, and partial numeric parsing." },
+    { "id": "model-diversity-not-overclaimed", "status": "pass", "evidence": "Runtime model_change and resolvedModel metadata showed cursor/default for both reviewers and the synthesizer; the verdict explicitly stated diversity was not established." },
+    { "id": "no-project-changes", "status": "pass", "evidence": "Outer git status was clean and the reviewed file retained its frozen SHA-256." }
+  ],
+  "limitations": [
+    "All three child sessions resolved to the same runtime model, so this proves independent sessions but not model diversity.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

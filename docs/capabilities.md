@@ -181,6 +181,19 @@ worktree and used the inline implementer fallback because its spawn surface
 cannot select the generated custom role. These results establish W1 and W2 for
 this fixture, not general bug-fixing success.
 
+The end-to-end `interrogate` fixture composes those lifecycle operations into a
+real adversarial review on both CLI runtimes. Two reviewers start before the
+first wait with identical intent, source hash, rubric, and output contract;
+their attributable results freeze before a distinct synthesizer starts. The
+root then executes examples for every final `Act on` claim and confirms the
+reviewed Git worktree is unchanged. OMP runtime metadata showed that both
+reviewers and the synthesizer resolved to the same model. The Codex run exposed
+no independently verifiable child model identity. Both verdicts therefore
+report independent sessions but correctly decline to claim model diversity.
+The Codex root also made one overly broad filename-only search outside the
+fixture while looking for repository instructions; it did not read or modify
+the matches, and the limitation remains in its evidence record.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

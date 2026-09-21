@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-interrogate",
+  "fixture": "interrogate",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated interrogate Skill and project agent TOML committed in a disposable Git fixture; non-interactive exec; user configuration and project rules ignored; persisted child sessions.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-panel.json",
+    "evals/evidence/codex-cli-0.155.1/check-custom-role.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated interrogate Skill and all four packaged references." },
+    { "id": "intent-and-scope-frozen", "status": "pass", "evidence": "The verdict retained the exact intent and source SHA-256 80bf5704a0bcc57ee05b4143aea6b5bc258c45bf3c7a4d1a2264829cfcf99669." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "Exactly two independent reviewer children started before the first wait." },
+    { "id": "identical-review-packets", "status": "pass", "evidence": "Both reviewers received the same frozen packet and no peer findings." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "The root captured complete R1 and R2 results without reviewer follow-up or replacement." },
+    { "id": "new-synthesizer-after-reviews", "status": "pass", "evidence": "A distinct synthesizer child started only after R1 and R2 were frozen." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The synthesis and final verdict attributed both concrete findings to R1 and R2." },
+    { "id": "root-verified-act-on-findings", "status": "pass", "evidence": "The root executed cases for partial strings, non-string inputs, symbols, and values below and above the allowed range." },
+    { "id": "model-diversity-not-overclaimed", "status": "pass", "evidence": "No runtime-produced child model identity was available, and the verdict explicitly reported model identity unavailable and diversity unproven." },
+    { "id": "no-project-changes", "status": "pass", "evidence": "Outer git status was clean and the reviewed file retained its frozen SHA-256." }
+  ],
+  "limitations": [
+    "Generated custom roles were not selectable on this CLI surface, so reviewer and synthesizer contracts were supplied inline.",
+    "The root performed an unnecessarily broad filename-only search for AGENTS.md under temporary directories; it did not read or modify those external matches, but future fixtures should constrain this lookup to repository ancestors.",
+    "Unrelated configured MCP startup warnings did not participate in the review."
+  ]
+}
