@@ -9,10 +9,11 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
 implemented. Thirteen original capability fixtures, twenty-three pinned pstack
 principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
-`bug-fix`), the Alpha 2 `interrogate` Skill, and the first three Alpha 3 Skills
+`bug-fix`), the Alpha 2 `interrogate` Skill, nine Alpha 3 workflow Skills
 (`how`, `technical-writing`, `unslop`, `poteto-mode`, `investigation`,
-`feature`, `refactoring`, `prototype`, and `opening-a-pr`) generate
-deterministic OMP, Codex, and Claude Code target packages. Seven canonical roles generate native
+`feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
+`setup-oh-my-stack` configuration Skill generate deterministic OMP, Codex,
+and Claude Code target packages. Seven canonical roles generate native
 read-only and writable definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
@@ -73,6 +74,18 @@ synthesizer, and independent root execution of every final `Act on` finding.
 Both runs kept the reviewed repository unchanged and correctly declined to
 claim model diversity: OMP resolved every child to the same model, while Codex
 exposed no independently verifiable child model identity in this run.
+
+The first Alpha 3 end-to-end fixture also passes on OMP and Codex CLI. The
+explicit `poteto-mode` router selects `investigation`, which invokes the
+complex `how` path: exactly two explorers start before waiting, their
+attributable results freeze before one new explainer starts, and the root
+independently re-reads the critical flow. An initial OMP attempt failed because
+it inspected an installed pstack cache and created a second explorer/explainer
+generation. That failure is retained as evidence; the fixture now requires
+repository-generated resources only and forbids successful-child replacement.
+The hardened rerun passes without modifying the project. Codex uses inline
+role contracts because its probed spawn surface cannot select generated custom
+roles. Neither run claims model diversity.
 
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
@@ -212,4 +225,8 @@ oh-my-stack/
 
 ## Attribution
 
-The planned implementation will derive material from MIT-licensed upstream projects. No third-party source has been copied into this repository yet. Before importing upstream content, add the applicable licenses, copyright notices, pinned revisions, and per-component provenance records.
+This repository contains mechanically imported and semantically derived
+material from the MIT-licensed upstream projects recorded in
+`upstream/sources.yaml`. Imported files are pinned to immutable revisions and
+tracked through source snapshots, per-component ownership, derivation records,
+license metadata, and `THIRD_PARTY_NOTICES.md`.

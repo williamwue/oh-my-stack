@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-how-routing",
+  "fixture": "how-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated Alpha 3 Skills committed in a disposable Git fixture; non-interactive exec; user configuration and project rules ignored; persisted child sessions; request restricted inspection to repository-generated resources.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-panel.json",
+    "evals/evidence/codex-cli-0.155.1/check-custom-role.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router from the disposable fixture." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root constrained its resource search to the fixture's generated .agents tree and project implementation and did not inspect installed Skill or plugin caches." },
+    { "id": "investigation-selected", "status": "pass", "evidence": "The router selected investigation for a read-only multi-module explanation request." },
+    { "id": "how-loaded", "status": "pass", "evidence": "The investigation playbook loaded the generated how Skill and followed its complex path." },
+    { "id": "two-explorers-started-before-wait", "status": "pass", "evidence": "Exactly two explorer child threads started before the first wait." },
+    { "id": "explorer-results-frozen", "status": "pass", "evidence": "The root froze both attributable results without follow-up, retry, or replacement." },
+    { "id": "new-explainer-after-exploration", "status": "pass", "evidence": "Exactly one distinct explainer child started after the two explorer results froze." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The explainer received and retained the entry/queue and worker/store attribution from the two explorers." },
+    { "id": "root-reverified-critical-flow", "status": "pass", "evidence": "The root re-read the critical implementation and integration test, then independently ran node --test project/test/report-system.test.mjs with 1/1 passing." },
+    { "id": "correct-flow-explained", "status": "pass", "evidence": "The final answer correctly explained composition, validation, normalization, ID assignment, FIFO processing, rendering, frozen storage, null-on-empty behavior, and caller-driven execution." },
+    { "id": "no-project-changes", "status": "pass", "evidence": "The project Git worktree stayed clean and all seven fixture source hashes matched; events.jsonl, final.txt, and stderr.log were runner artifacts outside project/." }
+  ],
+  "limitations": [
+    "Generated custom roles were not selectable on this CLI surface, so the explorer and explainer contracts were supplied inline.",
+    "User-level Cloudflare MCP authentication warnings appeared during startup despite --ignore-user-config; no MCP operation participated in the workflow.",
+    "No independently verifiable child model identity was exposed, so this record makes no model-diversity claim."
+  ]
+}

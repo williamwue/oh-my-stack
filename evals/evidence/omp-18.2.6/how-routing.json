@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-how-routing",
+  "fixture": "how-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Alpha 3 Skills and explorer/explainer roles copied into a disposable Git fixture; empty Skill allowlist; asynchronous task support enabled; request restricted inspection to repository-generated resources.",
+    "permissionProfile": "read-only workflow contract in a disposable repository with auto-approved inspection commands"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-panel.json",
+    "evals/evidence/omp-18.2.6/how-routing-attempt-1.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router from the disposable fixture." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root and children used the fixture's generated Skills and roles; the session contains no installed plugin-cache lookup." },
+    { "id": "investigation-selected", "status": "pass", "evidence": "The router selected investigation for a read-only multi-module explanation request." },
+    { "id": "how-loaded", "status": "pass", "evidence": "The investigation playbook loaded the generated how Skill and followed its complex path." },
+    { "id": "two-explorers-started-before-wait", "status": "pass", "evidence": "ExplorerAEntryQueue and ExplorerBWorkerStore started as one parallel pair before either result was awaited." },
+    { "id": "explorer-results-frozen", "status": "pass", "evidence": "Exactly two attributable explorer results were frozen locally with no follow-up, retry, or replacement." },
+    { "id": "new-explainer-after-exploration", "status": "pass", "evidence": "ExplainerReportFlow was the only explainer and started after both explorer results froze." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The explainer received and preserved the independently attributable entry/queue and worker/store findings." },
+    { "id": "root-reverified-critical-flow", "status": "pass", "evidence": "The root re-read the public entry, queue, worker, renderer, store, submitter, and integration test before answering." },
+    { "id": "correct-flow-explained", "status": "pass", "evidence": "The final answer correctly explained createReportSystem composition, validation and normalization, ID assignment, FIFO dequeue, rendering, frozen storage, null-on-empty behavior, and caller-driven processing." },
+    { "id": "no-project-changes", "status": "pass", "evidence": "Git status was clean and all seven fixture source hashes matched the committed fixture." }
+  ],
+  "limitations": [
+    "No independently useful child model identity was extracted, so this record makes no model-diversity claim.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -194,6 +194,20 @@ The Codex root also made one overly broad filename-only search outside the
 fixture while looking for repository instructions; it did not read or modify
 the matches, and the limitation remains in its evidence record.
 
+The Alpha 3 `how-routing` fixture composes the explicit router with a real
+multi-module explanation. OMP and Codex CLI both select
+`poteto-mode -> investigation -> how`, start exactly two independent explorers
+before waiting, freeze their attributable results without replacement, start
+one later explainer, and finish with an independent root read of the public
+entry, queue, worker, renderer, store, submitter, and integration test. Codex
+also reruns the integration test with one passing test. The first OMP attempt
+is deliberately retained as failing evidence because it inspected an external
+installed pstack cache and created a second child generation. The hardened
+fixture limits resource discovery to generated repository content and its
+fresh OMP and Codex runs pass without changing the project. Codex follows the
+inline-role fallback on the observed CLI surface; neither record claims model
+diversity.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

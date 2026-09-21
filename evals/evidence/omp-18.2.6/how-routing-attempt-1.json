@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-how-routing-attempt-1",
+  "fixture": "how-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Alpha 3 Skills and explorer/explainer roles copied into a disposable Git fixture; empty Skill allowlist; asynchronous task support enabled.",
+    "permissionProfile": "read-only workflow contract in a disposable repository with auto-approved inspection commands"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/how-routing.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "fail", "evidence": "The root searched and read an installed pstack cache outside the disposable fixture instead of relying only on repository-generated resources." },
+    { "id": "investigation-selected", "status": "pass", "evidence": "The root selected the investigation route for the multi-module explanation request." },
+    { "id": "how-loaded", "status": "pass", "evidence": "The generated how Skill was loaded, but external source-host material was also inspected." },
+    { "id": "two-explorers-started-before-wait", "status": "pass", "evidence": "The initial ExplorerAEntryQueue and ExplorerBWorkerPersist pair started before their results were awaited." },
+    { "id": "explorer-results-frozen", "status": "fail", "evidence": "After freezing the first pair, the root started ExplorerAEntryQueue-2 and ExplorerBWorkerPersist-2, violating the no-retry and no-replacement contract." },
+    { "id": "new-explainer-after-exploration", "status": "fail", "evidence": "ReportFlowExplainer was followed by ReportFlowExplainer2, so the run did not use exactly one new explainer over the frozen initial findings." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The locally frozen first-generation explorer findings retained their worker identities." },
+    { "id": "root-reverified-critical-flow", "status": "pass", "evidence": "The root independently inspected the report-system implementation before its final response." },
+    { "id": "correct-flow-explained", "status": "pass", "evidence": "The final explanation described submit, queue, processNext, render, store, and read correctly." },
+    { "id": "no-project-changes", "status": "pass", "evidence": "The disposable Git fixture remained unchanged." }
+  ],
+  "limitations": [
+    "This failed run motivated an explicit generated-resources-only boundary and a prohibition on retrying or replacing successful children in the fixture request.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

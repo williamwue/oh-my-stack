@@ -240,8 +240,18 @@ Current progress:
   configuration directory. Static tests cover all three output formats,
   unobserved-model rejection, modified-owned-file refusal, and preservation of
   unrelated files.
-- Live OMP and Codex workflow verification for `how` remains pending. Claude
-  output is static-only until the deferred authenticated-runtime verification.
+- The first Alpha 3 end-to-end fixture passes on OMP 18.2.6 and Codex CLI
+  0.155.1. In both runs `poteto-mode` selects `investigation`, `how` starts
+  exactly two explorers before waiting, freezes their attributable results,
+  starts one later explainer, and requires independent root verification of
+  the critical report-system flow. Neither run modifies the fixture project.
+- The initial OMP attempt is retained as a failing record: it read an installed
+  pstack cache and created a second explorer/explainer generation. The hardened
+  fixture restricts inspection to repository-generated resources and forbids
+  retrying or replacing successful children; the fresh rerun passes.
+- Codex used the declared inline-role fallback because its probed spawn surface
+  cannot select generated role files. Claude output remains static-only until
+  the deferred authenticated-runtime verification.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;
