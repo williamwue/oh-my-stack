@@ -28,6 +28,7 @@
     "interaction.free_text": { "status": "native", "provider": "request_user_input_async queued TUI card Other input", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
+    "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "$skill-name", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },

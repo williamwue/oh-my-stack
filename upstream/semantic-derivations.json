@@ -29,13 +29,17 @@
         {
           "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
           "sha256": "b173ff9638ff62f91f6813c1a0ed3417cdf9f6545a659be0c1fb1f42130e0e66"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/babysit.md",
+          "sha256": "51be21872152f97612d37258273269b88212b6696432d25d678cac30f02f4157"
         }
       ],
       "outputFiles": [
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "0483ddb94a04440b8e0227a559878abf407d492d0f208f28c4933d32a7de0610"
+          "sha256": "bf78b95f1e54a8403a379fb94929fbdae9e54e6b42f2bf3337df69ee14003c12"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -91,9 +95,19 @@
           "path": "src/core/skills/opening-a-pr/skill.json",
           "owner": "local-core",
           "sha256": "49814ab612bec491a28551dfa9d806821c01e83c613078e85468a8e0f1c559ab"
+        },
+        {
+          "path": "src/core/skills/babysit/SKILL.md",
+          "owner": "derived",
+          "sha256": "8266c1afeb9e5a62e1ddc0e55eb718a02969592d5edb417f7aa32609f45d7c7c"
+        },
+        {
+          "path": "src/core/skills/babysit/skill.json",
+          "owner": "local-core",
+          "sha256": "e2814f105f37334d8afd21eee55101177cd707a87276d6e6861161ec2d8c04c9"
         }
       ],
-      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, source-host task syntax, and unported autonomous workflows were reduced to an explicit intent router and five bounded alpha playbooks. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
+      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, and source-host task syntax were reduced to an explicit intent router, five bounded alpha playbooks, and a separately graduated babysit protocol. The first advanced slice admits a one-pass read-only check while preserving the mode boundary for later mutating fixtures. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
     },
     {
       "id": "how-port",

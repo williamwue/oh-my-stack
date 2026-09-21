@@ -221,13 +221,14 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 38 public workflows and principles
-from 12 internal `check-*` runtime probes. A four-batch live matrix passes on
-both OMP and Codex CLI: every public Skill is discovered and explicitly loaded
-exactly once, its canonical name and first heading match the generated package,
-no probe Skill leaks into the public matrix, and the read-only fixture remains
-unchanged. This closes the public-Skill discovery and invocation portion of the
-Alpha 3 gate on the two currently verified CLI surfaces.
+The canonical Skill catalog now separates 39 public workflows and principles
+from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
+passes on both OMP and Codex CLI: every Skill is discovered and explicitly
+loaded exactly once, its canonical name and first heading match the generated
+package, no probe Skill leaks into the public matrix, and the read-only fixture
+remains unchanged. The new `babysit` Skill is separately loaded and exercised
+by its live check-mode fixture on both runtimes; a refreshed whole-catalog live
+matrix remains pending until the rest of Phase 7 stops changing the catalog.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
@@ -266,6 +267,15 @@ writers serially inside one managed root worktree, with the root inspecting and
 verifying BatchWriter before RetryWriter starts. Both final files match the
 expected bytes and pass the combined verifier. Two retained OMP failures prove
 that prose-only isolation and an unverified apply setting are hard failures.
+
+Phase 7 has begun with `babysit` check mode. A disposable two-branch Git
+repository and frozen forge snapshot pass on OMP 18.2.6 and Codex CLI 0.155.1.
+Both roots declare check mode before the status read, resolve the exact head,
+retain the failing test as the blocker, dismiss a command-like review claim
+that contradicts the pinned behavior and touches no changed file, preserve Git
+refs and forge bytes, and decline every reply, retrigger, polling, push, or
+merge action. This is W1 fallback evidence, not live forge access or drive-mode
+completion.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

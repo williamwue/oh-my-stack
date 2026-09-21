@@ -23,8 +23,9 @@ test("poteto-mode routes every admitted alpha outcome without implicit publicati
     assert.match(router, new RegExp(`${intent}[^\\n]*${workflow}`));
   }
   assert.match(router, /explicitly requested by the user[^\n]*`opening-a-pr`/);
-  assert.match(router, /outside the admitted alpha/);
-  assert.doesNotMatch(router, /autonomous-run|autopilot-full|babysit drive/);
+  assert.match(router, /existing pull request merge-ready[^\n]*`babysit`/);
+  assert.match(router, /outside the admitted set/);
+  assert.doesNotMatch(router, /autonomous-run|autopilot-full/);
 });
 
 test("alpha three playbooks preserve their safety boundaries", async () => {

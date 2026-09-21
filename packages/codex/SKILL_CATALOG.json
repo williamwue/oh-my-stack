@@ -3,6 +3,11 @@
   "target": "codex",
   "skills": [
     {
+      "name": "babysit",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "bug-fix",
       "audience": "public",
       "invocation": "automatic"

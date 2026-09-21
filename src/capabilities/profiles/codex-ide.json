@@ -28,6 +28,7 @@
     "interaction.free_text": { "status": "unknown", "provider": null, "evidence": null },
     "resources.relative_paths": { "status": "unknown", "provider": null, "evidence": null },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
+    "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
     "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },

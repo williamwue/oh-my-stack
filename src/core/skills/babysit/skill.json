@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "babysit",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "commands.run",
+    "scm.pull_requests",
+    "scm.review_threads",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "scm.pull_requests": "inspect_a_frozen_status_artifact_once_and_mark_live_forge_fields_unverified",
+    "scm.review_threads": "report_thread_status_unavailable_without_inferring_merge_readiness"
+  }
+}

@@ -33,9 +33,9 @@ test("release archives and manifest are byte-reproducible", async () => {
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.1.0-alpha.0.tar.gz",
-    "oh-my-stack-codex-0.1.0-alpha.0.tar.gz",
-    "oh-my-stack-omp-0.1.0-alpha.0.tar.gz",
+    "oh-my-stack-claude-code-0.2.0-alpha.0.tar.gz",
+    "oh-my-stack-codex-0.2.0-alpha.0.tar.gz",
+    "oh-my-stack-omp-0.2.0-alpha.0.tar.gz",
     "release-manifest.json",
   ]);
 });
@@ -142,8 +142,13 @@ test("tagged release source requires the version tag at clean HEAD", async () =>
     const source = await releaseSource(root, "0.1.0-alpha.0", "v0.1.0-alpha.0");
     assert.equal(source.cleanTaggedCheckout, true);
     assert.equal(source.ref, "v0.1.0-alpha.0");
+    assert.equal(source.worktreeDirty, false);
     await assert.rejects(releaseSource(root, "0.1.0-alpha.0", "v0.2.0"), /release tag must be/);
     await writeFile(join(root, "untracked.txt"), "dirty\n");
+    const worktreeSource = await releaseSource(root, "0.1.0-alpha.0");
+    assert.equal(worktreeSource.ref, "WORKTREE");
+    assert.equal(worktreeSource.worktreeDirty, true);
+    assert.equal(worktreeSource.cleanTaggedCheckout, false);
     await assert.rejects(releaseSource(root, "0.1.0-alpha.0", "v0.1.0-alpha.0"), /clean checkout/);
   } finally {
     await rm(root, { recursive: true, force: true });

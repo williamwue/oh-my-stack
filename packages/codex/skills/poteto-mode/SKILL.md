@@ -15,6 +15,7 @@ Use the first matching row:
 
 | Observable request | Primary workflow |
 | --- | --- |
+| Check or make an existing pull request merge-ready without landing it | `babysit` |
 | Explain code, trace ownership, or answer a read-only engineering question | `investigation` |
 | Reproduce and correct defective behavior | `bug-fix` |
 | Add or intentionally change product behavior | `feature` |
@@ -30,9 +31,10 @@ must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
 Requests for unattended shipping, autonomous loops, merge control, session
-recovery, or long-running orchestration are outside the admitted alpha. State
+recovery, or long-running orchestration remain outside the admitted set. State
 that boundary and execute only the independently useful admitted portion. Do
-not simulate an unimplemented advanced workflow.
+not simulate an unimplemented advanced workflow. `babysit` is admitted only to
+the extent described by its own graduated modes; it never implies landing.
 
 ## Common invariants
 

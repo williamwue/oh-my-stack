@@ -17,6 +17,7 @@
     "interaction.free_text",
     "resources.relative_paths",
     "scm.pull_requests",
+    "scm.review_threads",
     "scripts.execute",
     "skills.discover",
     "skills.invoke.explicit",

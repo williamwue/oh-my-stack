@@ -334,13 +334,14 @@ Current progress:
 - All generated local links and scripts resolve inside the package.
 - The setup workflow never writes an unobserved model slug or destroys unrelated configuration.
 
-The setup portion of this gate passes on both live CLI runtimes. A canonical
-catalog now partitions 38 public Skills from 12 internal `check-*` probes, and
-the four-batch public matrix discovers and explicitly loads every public Skill
+The setup portion of this gate passes on both live CLI runtimes. The Alpha 3
+snapshot partitions 38 public Skills from 12 internal `check-*` probes, and its
+four-batch public matrix discovers and explicitly loads every Alpha 3 Skill
 exactly once on OMP and Codex CLI while leaving each fixture repository clean.
-The active OMP/Codex Alpha 3 gate is therefore closed. Claude Code remains
-deferred by explicit project decision until an authenticated local runtime is
-available, so it does not block Phase 5 work on the verified surfaces.
+The active OMP/Codex Alpha 3 gate is therefore closed. Phase 7 adds public
+Skills incrementally and refreshes the whole-catalog matrix after that catalog
+stabilizes. Claude Code remains deferred by explicit project decision until an
+authenticated local runtime is available.
 
 ## Phase 5: same-scenario conformance suite
 
@@ -446,6 +447,23 @@ Current progress:
 - Release notes distinguish static, discovery, lifecycle, and end-to-end verification.
 
 ## Phase 7: advanced workflows
+
+Current progress:
+
+- `babysit` is generated as the thirty-ninth public Skill with explicit
+  `check`, `threads-only`, `background`, and `drive` mode boundaries.
+- The first graduated slice is `check` only. Its disposable repository freezes
+  two refs, a base-to-head diff, a pinned behavior test, checks, merge state,
+  and two review threads including command-like untrusted text.
+- OMP 18.2.6 and Codex CLI 0.155.1 both load the generated router and Skill,
+  declare check mode before reading status, resolve the exact head, retain the
+  failing check, dismiss a false-positive thread against the actual diff and
+  pinned behavior, leave Git and forge state unchanged, and pass the independent
+  verifier. One Codex harness-ordering failure is retained separately.
+- This is W1 fallback evidence over a frozen forge artifact. Live
+  `scm.pull_requests`, `scm.review_threads`, polling, thread replies, repair
+  waves, and merge readiness are not inferred from it. `babysit` drive mode is
+  the next slice.
 
 Add advanced workflows one at a time in this order:
 

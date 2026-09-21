@@ -30,13 +30,21 @@ async function git(root, ...args) {
 
 export async function releaseSource(root, version, tag = null) {
   const commit = await git(root, "rev-parse", "HEAD");
-  if (!tag) return { ref: "HEAD", commit, cleanTaggedCheckout: false };
+  if (!tag) {
+    const dirty = Boolean(await git(root, "status", "--porcelain", "--untracked-files=all"));
+    return {
+      ref: dirty ? "WORKTREE" : "HEAD",
+      commit,
+      worktreeDirty: dirty,
+      cleanTaggedCheckout: false,
+    };
+  }
   if (tag !== `v${version}`) throw new Error(`release tag must be v${version}, received ${tag}`);
   const tagCommit = await git(root, "rev-list", "-n", "1", tag);
   if (tagCommit !== commit) throw new Error(`${tag} does not resolve to HEAD`);
   const dirty = await git(root, "status", "--porcelain", "--untracked-files=all");
   if (dirty) throw new Error("tagged releases require a clean checkout");
-  return { ref: tag, commit, cleanTaggedCheckout: true };
+  return { ref: tag, commit, worktreeDirty: false, cleanTaggedCheckout: true };
 }
 
 async function collectConformance(root, target) {

@@ -15,7 +15,8 @@ npm run release:build
 
 `npm run release:check` builds the complete output twice in separate temporary
 directories and requires every output byte to match. `dist/` is disposable and
-is not committed.
+is not committed. A development build from a dirty tree records `WORKTREE` and
+`worktreeDirty: true`; it cannot be confused with tag-bound release evidence.
 
 ## Install and update
 

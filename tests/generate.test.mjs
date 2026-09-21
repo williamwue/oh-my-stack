@@ -15,10 +15,11 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads fifty portable Skills, seven roles, and three adapters", async () => {
+test("loads fifty-one portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 50);
+  assert.equal(model.skills.length, 51);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+    "babysit",
     "bug-fix",
     "check-cancellation",
     "check-custom-role",
@@ -77,7 +78,7 @@ test("loads fifty portable Skills, seven roles, and three adapters", async () =>
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 38);
+  assert.equal(model.skillCatalog.public.length, 39);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)
@@ -266,5 +267,5 @@ test("committed packages match generator output", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.1.0-alpha.0");
+  assert.equal(model.project.version, "0.2.0-alpha.0");
 });

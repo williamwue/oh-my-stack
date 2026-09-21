@@ -28,6 +28,7 @@
     "interaction.free_text": { "status": "native", "provider": "ask interactive TUI custom input", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
     "resources.relative_paths": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
+    "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "native", "provider": ".agents/skills with explicit --skills inventory", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },

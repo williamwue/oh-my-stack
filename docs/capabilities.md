@@ -279,15 +279,18 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog admits 38 public
-workflows and principles and marks 12 `check-*` Skills as internal probes. Four
-fresh read-only sessions on each CLI surface load public batches of 10, 10, 10,
-and 8 Skills. OMP transcripts contain the matching native `skill://` reads;
+inferring it from naming or invocation policy. The catalog now admits 39 public
+workflows and principles and marks 12 `check-*` Skills as internal probes. The
+Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
+Skills. The new `babysit` check-mode fixture separately proves live loading and
+execution on both CLI runtimes; the complete matrix will be refreshed after the
+Phase 7 catalog stabilizes. OMP transcripts contain the matching native
+`skill://` reads;
 Codex transcripts contain matching `skills.selected_skill_instructions` items
 with complete project-local Skill bodies. The verifier checks exact catalog
 order, canonical names, first headings, probe exclusion, and a clean fixture.
-This proves D2/D3 delivery across the complete public catalog, not semantic
-success for every possible workflow input.
+The Alpha 3 run proves D2/D3 delivery across that 38-Skill catalog snapshot,
+not semantic success for every possible workflow input.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

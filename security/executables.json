@@ -2,6 +2,22 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/babysit-check/verify.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify a read-only babysit check report against frozen forge state and unchanged disposable Git refs.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the repository fixture."
+    },
+    {
+      "path": "evals/fixtures/babysit-check/setup.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Initialize the disposable Git branches and frozen pre-run hashes for the babysit check fixture.",
+      "network": false,
+      "writes": ["disposable babysit-check fixture copy"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
       "path": "evals/fixtures/architecture-candidates/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify the frozen architecture candidates have exactly one requirements-consistent winner and report their hashes.",
