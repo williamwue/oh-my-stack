@@ -146,6 +146,14 @@ The core separates workload class from role constraints and never names concrete
 
 A role adds constraints such as `read_only`, `independent_session`, `reasoning_required`, and `model_diversity_preferred`. `reviewer` and `synthesizer` are roles, not model tiers. Each runtime resolves workload and role constraints to its live inventory and permits user overrides. A diversity claim requires returned model or backend evidence; distinct agent names alone are insufficient.
 
+Resolution is deliberately host-native. An OMP adapter may bind a generated
+role to a configured `modelRoles` alias and thinking level, while a Codex
+adapter may pass a model and reasoning effort at spawn time. Both represent
+the same portable requirement, but neither concrete identifier nor host field
+name belongs in the core. Conformance requires runtime-produced session
+metadata for the resolved child values; a worker's statement about its own
+model is insufficient.
+
 ## Build pipeline
 
 ```text

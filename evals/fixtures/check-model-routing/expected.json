@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "assertions": [
+    "skill-loaded",
+    "one-worker-started",
+    "alternate-model-requested",
+    "reasoning-setting-requested",
+    "worker-result-collected",
+    "worker-model-independently-observed",
+    "worker-reasoning-independently-observed",
+    "worker-marker-found",
+    "root-did-not-read-worker-asset",
+    "root-marker-independently-verified",
+    "no-project-writes"
+  ]
+}

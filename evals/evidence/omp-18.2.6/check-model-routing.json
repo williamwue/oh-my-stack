@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-model-routing",
+  "fixture": "check-model-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill under project .agents/skills; probe-only routing-probe role under project .omp/agents; routing_probe model role resolved by an overlay to cursor/gpt-5.6-luna; root requested as cursor/default with medium thinking; worker role requested low thinking; includeSkills cleared.",
+    "permissionProfile": "Read-only role-backed worker; root tool calls restricted by the fixture contract; no tracked project writes"
+  },
+  "capabilities": [
+    "agents.model_override",
+    "agents.read_result",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-custom-role.json",
+    "evals/evidence/omp-18.2.6/check-delegation.json",
+    "evals/evidence/omp-18.2.6/check-transcript.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-model-routing Skill." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "The root transcript recorded exactly one task call and one RoutingProbe child session." },
+    { "id": "alternate-model-requested", "status": "pass", "evidence": "The root ran as cursor/default and selected the probe-only @routing_probe binding, which resolved to cursor/gpt-5.6-luna." },
+    { "id": "reasoning-setting-requested", "status": "pass", "evidence": "The probe role requested thinkingLevel=low while the root invocation explicitly requested --thinking medium." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The root waited for RoutingProbe and collected its terminal marker result." },
+    { "id": "worker-model-independently-observed", "status": "pass", "evidence": "The child JSONL recorded model_change=cursor/gpt-5.6-luna and session_init resolvedModel=cursor/gpt-5.6-luna with resolvedModelIsFallback=false." },
+    { "id": "worker-reasoning-independently-observed", "status": "pass", "evidence": "The child JSONL recorded thinking_level_change=low, and task job metadata independently reported resolvedThinkingLevel=low." },
+    { "id": "worker-marker-found", "status": "pass", "evidence": "The child read the assigned worker asset and returned ROUTING_MARKER=model-routing-ok." },
+    { "id": "root-did-not-read-worker-asset", "status": "pass", "evidence": "Root tool-call events contain the worker path only inside the task assignment; the only read of worker.txt is attributed to the RoutingProbe child." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before and after delegation and observed ROOT_MARKER=model-routing-root-ok." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "The external post-run Git status contained no tracked changes." }
+  ],
+  "limitations": [
+    "The concrete cursor/gpt-5.6-luna slug exists only in the target-specific probe overlay and evidence, not in the portable Skill or canonical role.",
+    "The root CLI invocation requested medium thinking, but the saved root session emitted thinking_level_change with a null value. The claim is limited to the independently observed per-worker low override, not resolved root-reasoning telemetry.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

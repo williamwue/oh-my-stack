@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-model-routing",
+  "fixture": "check-model-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME directories; generated Skill under project .agents/skills; user configuration and project rules ignored; root fixed to gpt-6-astra with medium reasoning; one worker requested as gpt-5.6-luna with low reasoning directly at spawn.",
+    "permissionProfile": "Read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.model_override",
+    "agents.read_result",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-delegation.json",
+    "evals/evidence/codex-cli-0.155.1/check-transcript.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-model-routing Skill before executing it." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "The parent made exactly one spawn_agent call and the isolated state directory contains exactly one child thread." },
+    { "id": "alternate-model-requested", "status": "pass", "evidence": "The spawn call requested gpt-5.6-luna while the parent turn_context recorded gpt-6-astra." },
+    { "id": "reasoning-setting-requested", "status": "pass", "evidence": "The spawn call requested low reasoning while the parent turn_context recorded medium." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The parent collected the terminal result from /root/routing_worker." },
+    { "id": "worker-model-independently-observed", "status": "pass", "evidence": "The persisted child turn_context independently recorded model=gpt-5.6-luna." },
+    { "id": "worker-reasoning-independently-observed", "status": "pass", "evidence": "The persisted child turn_context independently recorded effort=low." },
+    { "id": "worker-marker-found", "status": "pass", "evidence": "The child transcript attributes the worker asset read and ROUTING_MARKER=model-routing-ok result to /root/routing_worker." },
+    { "id": "root-did-not-read-worker-asset", "status": "pass", "evidence": "Parent command events did not read worker.txt; references were limited to instructions and an exclusion glob." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent read assets/root.txt before and after delegation and observed ROOT_MARKER=model-routing-root-ok." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External Git status with untracked probe logs excluded reported no tracked changes." }
+  ],
+  "limitations": [
+    "This evidence applies to Codex CLI 0.155.1 with persisted sessions, not ephemeral mode, desktop, or IDE surfaces.",
+    "The model identifiers are target-specific probe inputs and evidence, not portable-core policy.",
+    "Unrelated installed MCP providers attempted startup in the disposable state directory and emitted authentication warnings; the model-routing probe used no MCP provider and completed successfully."
+  ]
+}

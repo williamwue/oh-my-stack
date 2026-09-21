@@ -72,7 +72,11 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   reads its project definition but exposes no role selector on `spawn_agent`,
   so that exact surface is recorded as unsupported rather than normalized to
   the newer documented behavior.
-- Panels, model override, and interaction remain pending.
+- Per-worker model and reasoning overrides pass on both live CLI surfaces.
+  OMP resolves a probe-only role alias and `thinkingLevel`; Codex CLI applies
+  both values directly at spawn. Persisted runtime metadata independently
+  confirms the resolved worker values.
+- Panels and interaction remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

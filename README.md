@@ -7,8 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Nine original Skills—including the lifecycle probes through
-`check-custom-role`—and one canonical `evidence-reader` role generate
+implemented. Ten original Skills—including the lifecycle probes through
+`check-model-routing`—and one canonical `evidence-reader` role generate
 deterministic OMP, Codex, and Claude Code target packages. All packages pass
 static `D0` validation.
 
@@ -49,6 +49,14 @@ Codex CLI 0.155.1 finds the generated project role definition, but the
 surface is therefore recorded as `unsupported`, despite newer official Codex
 documentation describing custom-agent configuration; desktop and IDE remain
 separate, unprobed surfaces.
+
+Per-worker model and reasoning routing is independently observed on both live
+CLI surfaces. OMP resolves a probe-only role alias to an alternate model and
+applies its `thinkingLevel`; Codex CLI passes an alternate model and reasoning
+effort directly at spawn. Runtime session metadata—not worker self-report—
+confirms the resolved worker values. Concrete model identifiers remain outside
+the portable core and appear only in target-specific probe configuration and
+evidence.
 
 No pstack workflow content has been imported yet.
 

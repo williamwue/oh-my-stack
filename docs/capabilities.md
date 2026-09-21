@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, and isolated writer worktrees observed | Two W1 fixtures and seven delegated fixtures achieve W2; custom-role application, cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, and role-bound model/reasoning routing observed | Two W1 fixtures and eight delegated fixtures achieve W2; custom-role application, model/reasoning routing, cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, and a managed writer worktree observed; generated custom role cannot be selected | D3, two W1 fixtures, and six delegated fixtures achieve W2 on 0.155.1; custom roles are unsupported on the probed spawn surface, while cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, and direct per-worker model/reasoning routing observed; generated custom role cannot be selected | D3, two W1 fixtures, and seven delegated fixtures achieve W2 on 0.155.1; custom roles are unsupported on the probed spawn surface, while model/reasoning routing, cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -159,6 +159,17 @@ project TOML, but its actual `codex exec` `spawn_agent` schema exposes no role
 selector, both with and without `--ignore-user-config`. This conflicts with
 the newer official custom-agent documentation and is retained as a
 version-specific negative observation.
+
+The `check-model-routing` fixture keeps concrete model identifiers out of the
+portable Skill. OMP receives a probe-only `modelRoles` mapping and a generated
+role definition with `thinkingLevel`; the child session records the resolved
+model, thinking level, and non-fallback status. Codex CLI receives the model
+and reasoning effort directly in its single spawn call; persisted parent and
+child `turn_context` records independently show different model and effort
+values. OMP's root invocation requested medium thinking, but its root session
+serialized a null thinking-level event, so the evidence claims only the
+independently observed worker override rather than complete root-reasoning
+telemetry.
 
 The isolation boundary differs by runtime. OMP creates an isolated writer
 worktree and retains an unapplied patch. Codex CLI creates one managed worktree

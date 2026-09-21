@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "check-model-routing",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "requires": [
+    "agents.model_override",
+    "agents.read_result",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.model_override": "report_unsupported_without_substitution",
+    "agents.reasoning_override": "report_unsupported_without_substitution"
+  }
+}
