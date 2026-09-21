@@ -12,6 +12,7 @@
     "installedProviders": []
   },
   "capabilities": {
+    "agents.follow_up": { "status": "native", "provider": "followup_task", "evidence": "evals/evidence/codex-cli-0.155.1/check-follow-up.json" },
     "agents.read_result": { "status": "native", "provider": "child result messages", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
     "agents.spawn": { "status": "native", "provider": "spawn_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "multiple spawned child threads", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },

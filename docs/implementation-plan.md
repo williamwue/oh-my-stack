@@ -53,8 +53,11 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   asynchronous background-job waiting; Codex CLI requires persisted sessions
   in an isolated state directory because its ephemeral mode cannot spawn
   usable child threads on version 0.155.1.
-- Follow-up, cancellation, transcript access, worktree isolation, model
-  override, and interaction remain pending.
+- Both runtimes pass same-worker follow-up with retained context. OMP wakes the
+  completed worker through its hub; Codex records two turns in the same child
+  thread without rereading the first-turn asset.
+- Cancellation, stale-result suppression, transcript API access, worktree
+  isolation, model override, and interaction remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-follow-up",
+  "fixture": "check-follow-up",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in a disposable isolated Codex state directory with user config and rules ignored; generated Skill linked under project .agents/skills.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-delegation.json",
+    "evals/evidence/codex-cli-0.155.1/check-parallel.json",
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-follow-up Skill before executing it." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "The persisted parent transcript recorded exactly one spawn_agent call for fixture_worker." },
+    { "id": "first-result-collected", "status": "pass", "evidence": "The first wait collected SEED_MARKER=seed-ok from fixture_worker." },
+    { "id": "follow-up-sent-to-same-worker", "status": "pass", "evidence": "Exactly one followup_task targeted fixture_worker, and the resulting activity referenced the same child thread id and task path." },
+    { "id": "second-result-collected", "status": "pass", "evidence": "The second wait collected a result from the same fixture_worker author and child thread." },
+    { "id": "seed-marker-retained-without-reread", "status": "pass", "evidence": "The single child transcript contains two turn contexts; only its first turn read seed.txt, while its second returned REMEMBERED_SEED_MARKER=seed-ok." },
+    { "id": "follow-up-marker-attributed", "status": "pass", "evidence": "The child second turn read follow-up.txt and returned FOLLOW_UP_MARKER=follow-up-ok." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent re-read assets/root.txt after the second child result and observed ROOT_MARKER=follow-up-root-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "All threads inherited the read-only sandbox and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "This fixture proves follow-up to a completed read-only worker and context retention on that worker, not cancellation, stale-result suppression, transcript API access, or writer isolation.",
+    "The persisted child transcript is authoritative for same-thread continuity and the absence of a second seed.txt read.",
+    "Codex CLI lifecycle probes require persisted sessions; this evidence does not apply to ephemeral mode, desktop, or IDE surfaces."
+  ]
+}

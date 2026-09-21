@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-follow-up",
+  "fixture": "check-follow-up",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs enabled by the follow-up probe overlay.",
+    "permissionProfile": "Only read, task, and hub tools enabled; fixture required no writes"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-delegation.json",
+    "evals/evidence/omp-18.2.6/check-parallel.json",
+    "evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-follow-up Skill." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "One task invocation created the single FollowUpWorker identity." },
+    { "id": "first-result-collected", "status": "pass", "evidence": "FollowUpWorker returned SEED_MARKER=seed-ok before the second instruction was sent." },
+    { "id": "follow-up-sent-to-same-worker", "status": "pass", "evidence": "Native hub send targeted FollowUpWorker and returned a woken receipt rather than creating another worker." },
+    { "id": "second-result-collected", "status": "pass", "evidence": "The same FollowUpWorker identity returned the second result after it was woken." },
+    { "id": "seed-marker-retained-without-reread", "status": "pass", "evidence": "The second result reported REMEMBERED_SEED_MARKER=seed-ok and stated that seed.txt was not read again." },
+    { "id": "follow-up-marker-attributed", "status": "pass", "evidence": "FollowUpWorker read follow-up.txt on its second turn and returned FOLLOW_UP_MARKER=follow-up-ok." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root re-read assets/root.txt after the second worker result and observed ROOT_MARKER=follow-up-root-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "Only read, task, and hub tools were enabled and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "This fixture proves follow-up to a completed read-only worker and context retention on that worker, not cancellation, stale-result suppression, transcript access, or writer isolation.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

@@ -7,14 +7,15 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Four original Skills—`prove-it-works`, `check-resources`,
-`check-delegation`, and `check-parallel`—generate deterministic OMP, Codex,
-and Claude Code target packages. All packages pass static `D0` validation.
+implemented. Five original Skills—`prove-it-works`, `check-resources`,
+`check-delegation`, `check-parallel`, and `check-follow-up`—generate
+deterministic OMP, Codex, and Claude Code target packages. All packages pass
+static `D0` validation.
 
-Live `W1` and single-worker `W2` probes pass on OMP 18.2.6 and Codex CLI
-0.155.1 on macOS arm64. The `W2` fixtures prove one read-only worker and two
-parallel read-only workers can return separately attributable results before
-an independent root read.
+Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
+arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
+workers, and a two-turn follow-up on the same read-only worker. Results remain
+separately attributable and are followed by an independent root read.
 The official Codex repository-marketplace lifecycle fixture establishes `D1`,
 so Codex CLI reaches cumulative `D3` after its observed discovery and
 explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
@@ -28,11 +29,13 @@ The resource fixture proves that OMP and Codex CLI can load packaged
 own asset. Script execution currently depends on the external Node.js runtime
 and is recorded separately from native relative-resource support.
 
-OMP's parallel fixture also proves asynchronous background-job waiting. The
-current result does not yet prove follow-up, cancellation, transcript access,
-or writer isolation. Those remain separate Phase 2 probes. Codex lifecycle
-probes require persisted sessions; `--ephemeral` cannot create usable child
-threads in Codex CLI 0.155.1.
+OMP's parallel fixture also proves asynchronous background-job waiting. Its
+follow-up fixture proves an idle worker can be woken, while Codex records both
+worker turns on the same child thread. The current result does not yet prove
+cancellation, stale-result suppression, transcript API access, or writer
+isolation. Those remain separate Phase 2 probes. Codex lifecycle probes
+require persisted sessions; `--ephemeral` cannot create usable child threads
+in Codex CLI 0.155.1.
 
 No pstack workflow content has been imported yet.
 

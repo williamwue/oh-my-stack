@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "assertions": [
+    "skill-loaded",
+    "one-worker-started",
+    "first-result-collected",
+    "follow-up-sent-to-same-worker",
+    "second-result-collected",
+    "seed-marker-retained-without-reread",
+    "follow-up-marker-attributed",
+    "root-marker-independently-verified",
+    "no-intentional-project-writes"
+  ]
+}

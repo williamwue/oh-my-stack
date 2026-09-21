@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "capabilities": [
+    "agents.follow_up",
     "agents.read_result",
     "agents.spawn",
     "agents.spawn_parallel",
