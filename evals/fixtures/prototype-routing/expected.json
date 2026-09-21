@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "selectedRoute": "prototype",
+  "decision": "choose a stable first-seen de-duplication strategy for large event batches",
+  "variants": ["scan", "set"],
+  "expectedUniqueIds": ["a", "b", "c", "d", "e"],
+  "expectedMembershipChecks": {
+    "scan": 14,
+    "set": 8
+  },
+  "expectedRecommendation": "set",
+  "assertions": [
+    "router-loaded",
+    "generated-resources-only",
+    "prototype-selected",
+    "decision-and-variants-stated-before-build",
+    "repository-constraints-inspected",
+    "scratch-outside-production-source",
+    "one-repeatable-variant-switch",
+    "both-variants-observed",
+    "observable-output-equivalent",
+    "decision-variable-captured",
+    "evidence-backed-recommendation",
+    "production-source-unchanged",
+    "throwaway-status-explicit",
+    "cleanup-status-reported",
+    "feature-handoff-explicit",
+    "no-publication"
+  ]
+}
