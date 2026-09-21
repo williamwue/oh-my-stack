@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads forty-three portable Skills, seven roles, and three adapters", async () => {
+test("loads forty-nine portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 43);
+  assert.equal(model.skills.length, 49);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "bug-fix",
     "check-cancellation",
@@ -32,8 +32,12 @@ test("loads forty-three portable Skills, seven roles, and three adapters", async
     "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
+    "feature",
     "how",
     "interrogate",
+    "investigation",
+    "opening-a-pr",
+    "poteto-mode",
     "principle-attack-the-premise",
     "principle-boundary-discipline",
     "principle-build-the-lever",
@@ -57,7 +61,9 @@ test("loads forty-three portable Skills, seven roles, and three adapters", async
     "principle-subtract-before-you-add",
     "principle-test-behavior-not-implementation",
     "principle-type-system-discipline",
+    "prototype",
     "prove-it-works",
+    "refactoring",
     "show-me-your-work",
     "tdd",
     "technical-writing",
@@ -93,6 +99,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["scripts.execute"].status, "external");
   assert.equal(omp.capabilities["agents.cancel"].status, "native");
   assert.equal(omp.capabilities["commands.run"].status, "native");
+  assert.equal(omp.capabilities["scm.pull_requests"].status, "unknown");
   assert.equal(omp.capabilities["agents.custom_roles"].status, "native");
   assert.equal(omp.capabilities["agents.model_override"].status, "native");
   assert.equal(omp.capabilities["agents.reasoning_override"].status, "native");
@@ -116,6 +123,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.reasoning_override"].status, "native");
   assert.equal(codexCli.capabilities["agents.cancel"].status, "native");
   assert.equal(codexCli.capabilities["commands.run"].status, "native");
+  assert.equal(codexCli.capabilities["scm.pull_requests"].status, "unknown");
   assert.equal(codexCli.capabilities["agents.spawn"].status, "native");
   assert.equal(codexCli.capabilities["agents.follow_up"].status, "native");
   assert.equal(codexCli.capabilities["agents.spawn_parallel"].status, "native");

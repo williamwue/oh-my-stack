@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "refactoring",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.custom_roles",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.custom_roles": "inline_the_implementer_contract",
+    "agents.read_result": "root_refactors_and_verifies",
+    "agents.spawn": "root_refactors_and_verifies",
+    "agents.wait": "root_refactors_and_verifies",
+    "workspace.isolate": "serialize_one_writer_and_disclose_shared_workspace"
+  }
+}

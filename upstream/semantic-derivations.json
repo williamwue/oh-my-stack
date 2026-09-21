@@ -2,6 +2,100 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "id": "alpha3-router-playbooks-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/SKILL.md",
+          "sha256": "b3c505602b82fb3641a3983e9c46fb974881faa12ece1af804fae27afb7be532"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/investigation.md",
+          "sha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/feature.md",
+          "sha256": "430dae0fd736554ff7dffc3ef0644c9f0c845e25742f69e598c35b9b89660301"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/refactoring.md",
+          "sha256": "53bac1f1fe886600dd1991b5511b7975e6a206168038f9d282d88e45408e93cf"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/prototype.md",
+          "sha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+          "sha256": "b173ff9638ff62f91f6813c1a0ed3417cdf9f6545a659be0c1fb1f42130e0e66"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/poteto-mode/SKILL.md",
+          "owner": "derived",
+          "sha256": "0483ddb94a04440b8e0227a559878abf407d492d0f208f28c4933d32a7de0610"
+        },
+        {
+          "path": "src/core/skills/poteto-mode/skill.json",
+          "owner": "local-core",
+          "sha256": "20468fb3d0180b80fcf5d2e8d1f89e223efaa2b3fcc78529aecc4ee53de034f0"
+        },
+        {
+          "path": "src/core/skills/investigation/SKILL.md",
+          "owner": "derived",
+          "sha256": "834a556133b055010b0691e7e718fed19c7852491bdd9007e5071f743d9fcb46"
+        },
+        {
+          "path": "src/core/skills/investigation/skill.json",
+          "owner": "local-core",
+          "sha256": "1dd11d7b5993ea0fcd75f0dbcee951921b41ef0dbd044021ec97ef5edc9c5167"
+        },
+        {
+          "path": "src/core/skills/feature/SKILL.md",
+          "owner": "derived",
+          "sha256": "fd5badc9431cdba84d61108da1c28577378ec4119e846eba112cc46e73d7e56b"
+        },
+        {
+          "path": "src/core/skills/feature/skill.json",
+          "owner": "local-core",
+          "sha256": "537f9438d29e232b91c223b9677d1270c698a678e81342f02d3751e9ae207a15"
+        },
+        {
+          "path": "src/core/skills/refactoring/SKILL.md",
+          "owner": "derived",
+          "sha256": "6f25ae32e5c39dfb1a8dfecce1ce8025ce51ac11848fe9fd9c0d94c27856c483"
+        },
+        {
+          "path": "src/core/skills/refactoring/skill.json",
+          "owner": "local-core",
+          "sha256": "21ab84a68932b1a49c7141820d3e99a6253760577e7872b5a9d085a8930107d5"
+        },
+        {
+          "path": "src/core/skills/prototype/SKILL.md",
+          "owner": "derived",
+          "sha256": "1fbd2ca3d08085401c7e69eaca903658748b0dbf14a39a6ea4273bd452804863"
+        },
+        {
+          "path": "src/core/skills/prototype/skill.json",
+          "owner": "local-core",
+          "sha256": "b77737bc986db441405614292efbd31999c43ed9be0aa79f47ec850e11e4d726"
+        },
+        {
+          "path": "src/core/skills/opening-a-pr/SKILL.md",
+          "owner": "derived",
+          "sha256": "27a3d039523ed6eda45646afdbe6e42c3edc4aa7676cdb889b91cc1a278f2745"
+        },
+        {
+          "path": "src/core/skills/opening-a-pr/skill.json",
+          "owner": "local-core",
+          "sha256": "49814ab612bec491a28551dfa9d806821c01e83c613078e85468a8e0f1c559ab"
+        }
+      ],
+      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, source-host task syntax, and unported autonomous workflows were reduced to an explicit intent router and five bounded alpha playbooks. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
+    },
+    {
       "id": "how-port",
       "sourceId": "cursor-pstack",
       "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",

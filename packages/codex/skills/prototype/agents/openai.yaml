@@ -1,0 +1,6 @@
+interface:
+  display_name: "Prototype"
+  short_description: "Prototype workflow"
+  default_prompt: "Use $prototype for this task."
+policy:
+  allow_implicit_invocation: false

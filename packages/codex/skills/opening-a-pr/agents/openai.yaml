@@ -1,0 +1,6 @@
+interface:
+  display_name: "Opening A Pr"
+  short_description: "Opening A Pr workflow"
+  default_prompt: "Use $opening-a-pr for this task."
+policy:
+  allow_implicit_invocation: false

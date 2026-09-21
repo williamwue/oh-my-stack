@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "investigation",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.read_result": "root_runs_the_how_contract",
+    "agents.spawn": "root_runs_the_how_contract",
+    "agents.spawn_parallel": "run_exploration_angles_sequentially",
+    "agents.wait": "root_runs_the_how_contract"
+  }
+}

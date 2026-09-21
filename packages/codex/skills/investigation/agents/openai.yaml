@@ -1,0 +1,6 @@
+interface:
+  display_name: "Investigation"
+  short_description: "Investigation workflow"
+  default_prompt: "Use $investigation for this task."
+policy:
+  allow_implicit_invocation: false

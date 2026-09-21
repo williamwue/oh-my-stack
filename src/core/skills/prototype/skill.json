@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "prototype",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": ["commands.run", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "fallbacks": {
+    "workspace.isolate": "use_a_validated_scratch_directory_outside_production_source"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "opening-a-pr",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": ["commands.run", "scm.pull_requests", "workspace.inspect"],
+  "fallbacks": {
+    "scm.pull_requests": "prepare_the_exact_pr_briefing_and_report_publication_pending"
+  }
+}

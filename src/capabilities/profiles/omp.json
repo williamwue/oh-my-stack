@@ -27,6 +27,7 @@
     "interaction.fixed_choice": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/omp-18.2.6/check-interaction-fallback.json" },
     "interaction.free_text": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/omp-18.2.6/check-interaction-fallback.json" },
     "resources.relative_paths": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/check-resources.json" },
+    "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "external", "provider": "node via bash", "evidence": "evals/evidence/omp-18.2.6/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },

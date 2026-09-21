@@ -1,0 +1,6 @@
+interface:
+  display_name: "Poteto Mode"
+  short_description: "Poteto Mode workflow"
+  default_prompt: "Use $poteto-mode for this task."
+policy:
+  allow_implicit_invocation: false

@@ -224,6 +224,15 @@ Current progress:
   verification of critical claims. Fixed source-host models and task syntax
   were replaced by runtime-resolved explorer and explainer roles with explicit
   sequential and root-only fallbacks.
+- The explicit `poteto-mode` router now selects only admitted workflows from
+  observable user intent. Investigation, feature, refactoring, prototype, and
+  opening-a-pr have portable playbooks with root-owned verification and stated
+  delegation or isolation fallbacks. Finishing a workflow no longer implies
+  authority to publish a pull request.
+- Pull-request publication is modeled as a separate `scm.pull_requests`
+  capability. It remains `unknown` on every profile until a disposable real
+  forge fixture runs; the fallback produces an exact briefing without claiming
+  publication.
 - Live OMP and Codex workflow verification for `how` remains pending. Claude
   output is static-only until the deferred authenticated-runtime verification.
 
