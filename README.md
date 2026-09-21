@@ -7,10 +7,11 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Six original Skills—`prove-it-works`, `check-resources`,
+implemented. Seven original Skills—`prove-it-works`, `check-resources`,
 `check-delegation`, `check-parallel`, `check-follow-up`, and
-`check-cancellation`—generate deterministic OMP, Codex, and Claude Code target
-packages. All packages pass static `D0` validation.
+`check-cancellation`, plus `check-writer-isolation`—generate deterministic OMP,
+Codex, and Claude Code target packages. All packages pass static `D0`
+validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -33,11 +34,13 @@ OMP's parallel fixture also proves asynchronous background-job waiting. Its
 follow-up fixture proves an idle worker can be woken, while Codex records both
 worker turns on the same child thread. A W3-targeted cancellation fixture now
 proves active-worker cancellation and exclusion of the cancelled generation
-from accepted results on both runtimes. It does not yet prove a race where a
-late stale payload is delivered, transcript API access, or writer isolation,
-so achieved conformance remains W2. Codex lifecycle probes require persisted
-sessions; `--ephemeral` cannot create usable child threads in Codex CLI
-0.155.1.
+from accepted results on both runtimes. A second W3-targeted fixture proves one
+writer is isolated from the source checkout: OMP retains an unapplied patch
+from an isolated task worktree, while Codex runs the parent and writer in a
+managed `--worktree` checkout. It does not yet prove a race where a late stale
+payload is delivered, transcript API access, or panels, so achieved conformance
+remains W2. Codex lifecycle probes require persisted sessions; `--ephemeral`
+cannot create usable child threads in Codex CLI 0.155.1.
 
 No pstack workflow content has been imported yet.
 
@@ -57,6 +60,9 @@ access.
 Runtime probe records live under `evals/evidence/`. The OMP probe overlay at
 `evals/configs/omp-probe.yml` clears machine-specific Skill allowlists so the
 fixture measures the generated package rather than a developer preference.
+The writer-isolation fixture keeps its writable project data outside
+`.agents/skills`: Codex exposes project Skill content as read-only
+configuration even in a workspace-write session.
 Codex output contains the preferred portable root `plugin.json` plus the
 supported `.codex-plugin/plugin.json` compatibility manifest.
 

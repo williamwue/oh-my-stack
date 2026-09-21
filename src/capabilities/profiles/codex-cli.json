@@ -7,8 +7,8 @@
     "surface": "cli",
     "runtimeVersion": "0.155.1",
     "platform": "macos-arm64",
-    "configurationFingerprint": "isolated-codex-home+persisted-sessions+ignore-user-config+ignore-rules+project-agents-skill-symlink",
-    "permissionProfile": "sandbox-read-only+approval-never",
+    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+ignore-rules+project-agents-skill-copy+managed-worktree",
+    "permissionProfile": "sandbox-read-only-lifecycle+workspace-write-isolation+approval-never",
     "installedProviders": []
   },
   "capabilities": {
@@ -22,6 +22,8 @@
     "scripts.execute": { "status": "external", "provider": "node via shell", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "$skill-name", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },
-    "workspace.inspect": { "status": "native", "provider": "shell", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" }
+    "workspace.inspect": { "status": "native", "provider": "shell", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },
+    "workspace.isolate": { "status": "native", "provider": "codex exec --worktree", "evidence": "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json" },
+    "workspace.write": { "status": "native", "provider": "workspace-write sandbox in managed worktree", "evidence": "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json" }
   }
 }

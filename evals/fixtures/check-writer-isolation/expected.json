@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "assertions": [
+    "skill-loaded",
+    "observer-read-only",
+    "observer-result-collected",
+    "one-writer-started",
+    "writer-isolated",
+    "writer-result-collected",
+    "exact-change-independently-verified",
+    "source-checkout-not-modified",
+    "no-unexpected-changes",
+    "root-marker-independently-verified"
+  ]
+}

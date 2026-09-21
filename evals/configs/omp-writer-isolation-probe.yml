@@ -1,0 +1,9 @@
+skills:
+  includeSkills: []
+async:
+  enabled: true
+task:
+  isolation:
+    enabled: true
+    merge: patch
+    apply: false

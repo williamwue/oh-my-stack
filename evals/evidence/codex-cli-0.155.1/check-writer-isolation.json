@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-writer-isolation",
+  "fixture": "check-writer-isolation",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME directories; generated Skill copied under project .agents/skills; worktrees feature enabled; codex exec --worktree; project rules ignored.",
+    "permissionProfile": "workspace-write sandbox with approval policy never inside the managed worktree"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-cancellation.json",
+    "evals/evidence/codex-cli-0.155.1/check-follow-up.json",
+    "evals/evidence/codex-cli-0.155.1/check-parallel.json",
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-writer-isolation Skill before executing it." },
+    { "id": "observer-read-only", "status": "pass", "evidence": "The single observer child read the base fixture without writing." },
+    { "id": "observer-result-collected", "status": "pass", "evidence": "The parent collected OBSERVED_STATE=base and independently confirmed a clean managed worktree before starting the writer." },
+    { "id": "one-writer-started", "status": "pass", "evidence": "Persisted transcripts record exactly one writer child after the observer completed." },
+    { "id": "writer-isolated", "status": "pass", "evidence": "The root session and delegated writer operated in a Codex-managed detached worktree distinct from the source checkout; no nested worktree was created." },
+    { "id": "writer-result-collected", "status": "pass", "evidence": "The parent collected the writer child result before verification." },
+    { "id": "exact-change-independently-verified", "status": "pass", "evidence": "The parent independently read git diff and the fixture and verified the exact base-to-isolated-ok one-line change." },
+    { "id": "source-checkout-not-modified", "status": "pass", "evidence": "External post-run inspection found the original checkout clean with WRITER_STATE=base." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "The managed worktree had exactly one modified path: .oh-my-stack-eval/writer-isolation/writer.txt." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent re-read the Skill-owned marker and observed ROOT_MARKER=writer-isolation-root-ok." }
+  ],
+  "limitations": [
+    "Codex treats project .agents content as read-only configuration, so the writable fixture must be project-owned outside the Skill directory.",
+    "The isolation boundary is the top-level codex exec --worktree session shared by the writer child, not a separate worktree created per child.",
+    "The --worktree flag requires the worktrees feature and cannot be combined with --ignore-user-config in Codex CLI 0.155.1; disposable HOME and CODEX_HOME directories provided configuration isolation instead.",
+    "This W3-targeted fixture proves one-writer isolation only. Panels, transcript API access, and a cancellation race with a delivered late payload remain unproven, so workflowAchieved remains W2.",
+    "Persisted transcripts are the authoritative child-lifecycle evidence; this result does not apply to ephemeral mode, desktop, or IDE surfaces."
+  ]
+}

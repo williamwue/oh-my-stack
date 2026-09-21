@@ -7,8 +7,8 @@
     "surface": "cli",
     "runtimeVersion": "18.2.6",
     "platform": "macos-arm64",
-    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel",
-    "permissionProfile": "fixture-read-only+probe-scoped-tools+no-auto-approve",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel+isolated-writer-patch",
+    "permissionProfile": "fixture-read-only+probe-scoped-tools+isolated-writer-apply-false+no-auto-approve",
     "installedProviders": []
   },
   "capabilities": {
@@ -22,6 +22,8 @@
     "scripts.execute": { "status": "external", "provider": "node via bash", "evidence": "evals/evidence/omp-18.2.6/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
     "skills.invoke.explicit": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
-    "workspace.inspect": { "status": "native", "provider": "read+bash", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" }
+    "workspace.inspect": { "status": "native", "provider": "read+bash", "evidence": "evals/evidence/omp-18.2.6/prove-it-works.json" },
+    "workspace.isolate": { "status": "native", "provider": "task isolated worktree with patch merge", "evidence": "evals/evidence/omp-18.2.6/check-writer-isolation.json" },
+    "workspace.write": { "status": "native", "provider": "isolated task write tools", "evidence": "evals/evidence/omp-18.2.6/check-writer-isolation.json" }
   }
 }

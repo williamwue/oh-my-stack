@@ -22,6 +22,8 @@
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
     "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
-    "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null }
+    "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null },
+    "workspace.isolate": { "status": "unknown", "provider": null, "evidence": null },
+    "workspace.write": { "status": "unknown", "provider": null, "evidence": null }
   }
 }

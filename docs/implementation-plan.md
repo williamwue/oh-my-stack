@@ -60,8 +60,11 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   generation from accepted results. Neither probe delivered a late stale
   payload, so cancellation-race coverage remains pending and achieved
   conformance stays at W2.
-- Transcript API access, worktree isolation, model override, and interaction
-  remain pending.
+- Both runtimes pass one-writer isolation. OMP uses an isolated task worktree
+  with an unapplied retained patch; Codex CLI uses a managed top-level worktree
+  shared by the writer child. Both leave the source checkout clean.
+- Transcript API access, panels, model override, and interaction remain
+  pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

@@ -1,18 +1,17 @@
 {
+  "$schema": "../../../schemas/skill.schema.json",
   "schemaVersion": 1,
-  "capabilities": [
-    "agents.cancel",
-    "agents.follow_up",
+  "name": "check-writer-isolation",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
     "agents.read_result",
     "agents.spawn",
-    "agents.spawn_parallel",
     "agents.wait",
     "resources.relative_paths",
-    "scripts.execute",
-    "skills.discover",
-    "skills.invoke.explicit",
     "workspace.inspect",
     "workspace.isolate",
     "workspace.write"
-  ]
+  ],
+  "fallbacks": {}
 }

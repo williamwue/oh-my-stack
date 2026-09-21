@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-writer-isolation",
+  "fixture": "check-writer-isolation",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; project-owned writer fixture; includeSkills cleared; asynchronous jobs and task isolation enabled with patch merge and apply=false.",
+    "permissionProfile": "Probe-scoped read, task, hub, and bash tools; writer changes retained only in an isolated worktree and patch"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-cancellation.json",
+    "evals/evidence/omp-18.2.6/check-follow-up.json",
+    "evals/evidence/omp-18.2.6/check-parallel.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-writer-isolation Skill." },
+    { "id": "observer-read-only", "status": "pass", "evidence": "The single scout observer read only the project fixture and reported OBSERVED_STATE=base with no changes." },
+    { "id": "observer-result-collected", "status": "pass", "evidence": "The root collected the observer result before starting the writer and independently re-read the base fixture." },
+    { "id": "one-writer-started", "status": "pass", "evidence": "Exactly one IsolationWriter task was started after observer verification." },
+    { "id": "writer-isolated", "status": "pass", "evidence": "The writer task used isolated=true and ran in a dedicated OMP worktree distinct from the source checkout." },
+    { "id": "writer-result-collected", "status": "pass", "evidence": "The root collected the writer result and its isolated workspace and changed-path report." },
+    { "id": "exact-change-independently-verified", "status": "pass", "evidence": "The root read the isolated file and retained patch and verified the only diff was WRITER_STATE=base to WRITER_STATE=isolated-ok." },
+    { "id": "source-checkout-not-modified", "status": "pass", "evidence": "With apply=false, the source checkout remained clean and its writer fixture remained WRITER_STATE=base." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "The isolated worktree contained only the expected single-file, single-line change." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root re-read the Skill-owned marker and observed ROOT_MARKER=writer-isolation-root-ok." }
+  ],
+  "limitations": [
+    "The fixture had to distinguish the source checkout from a runtime-managed checkout explicitly; a temporary directory alone is not isolation evidence.",
+    "This W3-targeted fixture proves one-writer isolation only. Panels, transcript API access, and a cancellation race with a delivered late payload remain unproven, so workflowAchieved remains W2.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

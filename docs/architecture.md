@@ -163,9 +163,19 @@ Generated artifacts must be deterministic. Running the generator twice must prod
 
 The OMP target will generate Agent Skills plus OMP-native agent and lifecycle configuration. It will map canonical operations only to fields and operations observed in the live `task` and job-control schema, including isolation and durable result resources when available.
 
+Observed writer isolation uses an isolated task worktree with patch merge and
+`apply=false`. The root checkout remains the source boundary until runtime
+evidence proves otherwise; a temporary path alone is not isolation evidence.
+
 ### Codex
 
 The Codex target generates Skills, a portable root `plugin.json`, and the supported `.codex-plugin/plugin.json` compatibility manifest. It will add custom-agent TOML files and Hook definitions only when a workflow requires them. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
+
+For Codex CLI, a top-level managed worktree may be the single writer isolation
+boundary and delegated children may share it. Project `.agents` content is
+configuration and can be read-only under a workspace-write sandbox, so mutable
+workflow state belongs in ordinary project-owned paths rather than Skill
+assets.
 
 ### Claude Code
 
