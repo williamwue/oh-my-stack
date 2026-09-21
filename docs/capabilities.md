@@ -208,6 +208,17 @@ fresh OMP and Codex runs pass without changing the project. Codex follows the
 inline-role fallback on the observed CLI surface; neither record claims model
 diversity.
 
+The routed `feature` fixture adds a matching write scenario. Both roots inspect
+the existing `createReceipt -> normalizeOrder -> renderReceipt` boundary,
+capture one expected failing feature test before delegation, record the frozen
+`{ customer, note, items }` shape and one-writer throughput checkpoint, and
+start exactly one bounded implementer. OMP runs that writer in an isolated
+worktree and returns an unapplied patch for root integration. Codex isolates
+the root in a managed worktree and uses its declared serialized-writer fallback
+inside that checkout. Each root inspects the actual two-file diff and reruns
+the identical test to two passes. The original Codex fixture checkout remains
+unchanged, and neither runtime publishes external state.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

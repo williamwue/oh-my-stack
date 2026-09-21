@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-feature-routing",
+  "fixture": "feature-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, feature, and how Skills plus implementer TOML committed in a disposable Git fixture; worktrees feature enabled; root ran in a managed worktree; project rules ignored; base user configuration loaded because this CLI surface requires it for the authenticated run.",
+    "permissionProfile": "workspace-write sandbox in a managed root worktree with one serialized bounded writer"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/bug-fix-delegated.json",
+    "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json",
+    "evals/evidence/codex-cli-0.155.1/check-custom-role.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the repository-generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root read only the generated repository Skills, role definition, request, and project files; no external Skill or plugin cache participated." },
+    { "id": "feature-selected", "status": "pass", "evidence": "The router selected feature because the request intentionally added optional receipt-note behavior." },
+    { "id": "feature-and-how-loaded", "status": "pass", "evidence": "The root loaded feature and followed how's simple root inspection path over createReceipt, normalization, rendering, and tests." },
+    { "id": "current-boundary-inspected", "status": "pass", "evidence": "Before delegation the root read the entry point, both implementation modules, and the test and identified normalization as the input boundary." },
+    { "id": "direct-design-recorded", "status": "pass", "evidence": "The root selected frozen { customer, note, items }, recorded empty-string omission semantics, and explained why the specified behavior needed no prototype or panel." },
+    { "id": "throughput-checkpoint-recorded", "status": "pass", "evidence": "The root recorded the failing-test gate, shared two-file data contract, lack of independent slices, and one writer as the smallest safe decomposition." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before spawning the writer, the root ran node --test test/receipt.test.mjs and captured exit 1 with one pass and one missing-note failure." },
+    { "id": "exactly-one-writer", "status": "pass", "evidence": "Exactly one receipt_note child thread ran, with no retry or replacement." },
+    { "id": "writer-ownership-bounded", "status": "pass", "evidence": "The inline implementer contract permitted only normalize-order.mjs and receipt.mjs, and the child changed exactly those files." },
+    { "id": "writer-isolated-or-serialized", "status": "pass", "evidence": "The root ran in a managed worktree isolated from the original fixture; because nested child isolation was unavailable, exactly one child wrote serially inside that worktree." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root independently ran git diff --check, inspected the actual two-file diff, reread both implementations and index.mjs, and rejected no unrelated paths." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The root reran the exact command after the child completed and captured exit 0 with two passing tests." },
+    { "id": "existing-behavior-preserved", "status": "pass", "evidence": "The missing and whitespace-only note cases retained the original customer and items output." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Only the two allowed implementation files changed in the managed worktree; the original fixture stayed at its committed source hashes." },
+    { "id": "no-publication", "status": "pass", "evidence": "The run made no commit, push, publication, or pull-request operation." }
+  ],
+  "limitations": [
+    "The generated implementer role was not selectable on this CLI spawn surface, so its bounded contract was supplied inline.",
+    "The final response described nested child isolation as unavailable but omitted that the entire root session already ran in a managed worktree; the persisted session metadata and original-repository hashes establish that outer isolation.",
+    "The supplied behavioral test does not exercise a non-string note; the root disclosed that boundary.",
+    "Unrelated configured MCP startup and authentication warnings did not participate in the workflow."
+  ]
+}

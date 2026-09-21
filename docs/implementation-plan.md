@@ -252,6 +252,13 @@ Current progress:
 - Codex used the declared inline-role fallback because its probed spawn surface
   cannot select generated role files. Claude output remains static-only until
   the deferred authenticated-runtime verification.
+- The routed `feature` fixture also passes on both live CLI runtimes. It proves
+  root-owned inspection and design, a failing-before behavior check, one
+  bounded writer over an explicit two-file data contract, root diff review,
+  and passing-after verification on the same command. OMP returns an isolated
+  unapplied patch for root integration. Codex uses a managed root worktree and
+  serializes the writer inside it because nested worktree isolation is not
+  exposed to the child.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;

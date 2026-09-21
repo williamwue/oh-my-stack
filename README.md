@@ -87,6 +87,16 @@ The hardened rerun passes without modifying the project. Codex uses inline
 role contracts because its probed spawn surface cannot select generated custom
 roles. Neither run claims model diversity.
 
+The routed Alpha 3 `feature` fixture passes on both live CLI runtimes as well.
+Each root inspects the simple normalize-to-render boundary with `how`, captures
+the new receipt-note test failing before delegation, records the direct design
+and throughput checkpoint, starts exactly one bounded writer, inspects the
+actual two-file diff, and reruns the same command to two passing tests. OMP
+uses an isolated child worktree and root-applied patch. Codex isolates the
+whole root session in a managed worktree and serializes its single writer
+inside that checkout because nested child isolation is unavailable. Neither
+run changes tests or performs publication.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact
