@@ -12,6 +12,7 @@
     "installedProviders": []
   },
   "capabilities": {
+    "agents.cancel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.follow_up": { "status": "unknown", "provider": null, "evidence": null },
     "agents.read_result": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },

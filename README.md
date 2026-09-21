@@ -7,10 +7,10 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Five original Skills—`prove-it-works`, `check-resources`,
-`check-delegation`, `check-parallel`, and `check-follow-up`—generate
-deterministic OMP, Codex, and Claude Code target packages. All packages pass
-static `D0` validation.
+implemented. Six original Skills—`prove-it-works`, `check-resources`,
+`check-delegation`, `check-parallel`, `check-follow-up`, and
+`check-cancellation`—generate deterministic OMP, Codex, and Claude Code target
+packages. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -31,11 +31,13 @@ and is recorded separately from native relative-resource support.
 
 OMP's parallel fixture also proves asynchronous background-job waiting. Its
 follow-up fixture proves an idle worker can be woken, while Codex records both
-worker turns on the same child thread. The current result does not yet prove
-cancellation, stale-result suppression, transcript API access, or writer
-isolation. Those remain separate Phase 2 probes. Codex lifecycle probes
-require persisted sessions; `--ephemeral` cannot create usable child threads
-in Codex CLI 0.155.1.
+worker turns on the same child thread. A W3-targeted cancellation fixture now
+proves active-worker cancellation and exclusion of the cancelled generation
+from accepted results on both runtimes. It does not yet prove a race where a
+late stale payload is delivered, transcript API access, or writer isolation,
+so achieved conformance remains W2. Codex lifecycle probes require persisted
+sessions; `--ephemeral` cannot create usable child threads in Codex CLI
+0.155.1.
 
 No pstack workflow content has been imported yet.
 

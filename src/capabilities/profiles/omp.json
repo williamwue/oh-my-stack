@@ -7,11 +7,12 @@
     "surface": "cli",
     "runtimeVersion": "18.2.6",
     "platform": "macos-arm64",
-    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel",
     "permissionProfile": "fixture-read-only+probe-scoped-tools+no-auto-approve",
     "installedProviders": []
   },
   "capabilities": {
+    "agents.cancel": { "status": "native", "provider": "hub cancel background job", "evidence": "evals/evidence/omp-18.2.6/check-cancellation.json" },
     "agents.follow_up": { "status": "native", "provider": "hub send to idle worker", "evidence": "evals/evidence/omp-18.2.6/check-follow-up.json" },
     "agents.read_result": { "status": "native", "provider": "background task result payloads", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
     "agents.spawn": { "status": "native", "provider": "task", "evidence": "evals/evidence/omp-18.2.6/check-delegation.json" },

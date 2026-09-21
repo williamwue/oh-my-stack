@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "assertions": [
+    "skill-loaded",
+    "generation-one-started",
+    "generation-one-cancelled-while-active",
+    "cancellation-acknowledged",
+    "generation-two-started-after-cancellation",
+    "fresh-result-collected",
+    "stale-result-not-accepted",
+    "generation-one-terminal",
+    "root-marker-independently-verified",
+    "no-intentional-project-writes"
+  ]
+}

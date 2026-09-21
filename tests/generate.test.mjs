@@ -15,10 +15,11 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads five portable Skills and three adapters", async () => {
+test("loads six portable Skills and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 5);
+  assert.equal(model.skills.length, 6);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+    "check-cancellation",
     "check-delegation",
     "check-follow-up",
     "check-parallel",
@@ -37,6 +38,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.match(omp.capabilities["skills.discover"].evidence, /omp-18\.2\.6/);
   assert.equal(omp.capabilities["resources.relative_paths"].status, "native");
   assert.equal(omp.capabilities["scripts.execute"].status, "external");
+  assert.equal(omp.capabilities["agents.cancel"].status, "native");
   assert.equal(omp.capabilities["agents.spawn"].status, "native");
   assert.equal(omp.capabilities["agents.follow_up"].status, "native");
   assert.equal(omp.capabilities["agents.spawn_parallel"].status, "native");
@@ -46,6 +48,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.match(codexCli.capabilities["skills.invoke.explicit"].evidence, /codex-cli-0\.155\.1/);
   assert.equal(codexCli.capabilities["resources.relative_paths"].status, "native");
   assert.equal(codexCli.capabilities["scripts.execute"].status, "external");
+  assert.equal(codexCli.capabilities["agents.cancel"].status, "native");
   assert.equal(codexCli.capabilities["agents.spawn"].status, "native");
   assert.equal(codexCli.capabilities["agents.follow_up"].status, "native");
   assert.equal(codexCli.capabilities["agents.spawn_parallel"].status, "native");
@@ -53,6 +56,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.read_result"].status, "native");
   const claude = model.profiles.get("claude-code-default");
   assert.equal(claude.capabilities["skills.discover"].status, "unknown");
+  assert.equal(claude.capabilities["agents.cancel"].status, "unknown");
   assert.equal(claude.capabilities["agents.spawn"].status, "unknown");
   assert.equal(claude.capabilities["agents.follow_up"].status, "unknown");
   assert.equal(claude.capabilities["agents.spawn_parallel"].status, "unknown");

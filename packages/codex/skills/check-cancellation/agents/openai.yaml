@@ -1,0 +1,6 @@
+interface:
+  display_name: "Check Cancellation"
+  short_description: "Verify this workflow package installation"
+  default_prompt: "Use $check-cancellation to verify this installation without changing project files."
+policy:
+  allow_implicit_invocation: true

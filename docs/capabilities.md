@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | One-worker, parallel, and same-worker follow-up probes observed | Two W1 fixtures and three W2 fixtures pass, including asynchronous wait-all and idle-worker revival; D2/D3 are observed, but overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Delegation, parallelism, follow-up, and active cancellation observed | Two W1 fixtures and four delegated fixtures achieve W2; cancellation and stale-generation exclusion pass, but writer isolation is pending; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | One-worker, parallel, and same-worker follow-up probes observed | D3, two W1 fixtures, and three W2 fixtures pass on 0.155.1 with persisted isolated sessions |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, and active cancellation observed | D3, two W1 fixtures, and four delegated fixtures achieve W2 on 0.155.1; cancellation and stale-generation exclusion pass, but writer isolation is pending |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -137,12 +137,13 @@ documentation. Repository documentation must retain the observation date;
 generated evidence must retain the exact runtime coordinates.
 
 The current W2 observations prove `agents.spawn`, `agents.spawn_parallel`,
-`agents.follow_up`, `agents.wait`, and `agents.read_result` for read-only
-workers. OMP additionally proves native asynchronous background-job waiting
-and idle-worker revival. Codex records both instructions in the same child
-thread. These results do not imply support for cancellation, stale-result
-suppression, transcript API access, or isolated writers, and therefore do not
-establish W3.
+`agents.follow_up`, `agents.cancel`, `agents.wait`, and `agents.read_result`
+for read-only workers. OMP additionally proves native asynchronous
+background-job waiting and idle-worker revival. Codex records both follow-up
+instructions in the same child thread. The cancellation fixture excludes the
+cancelled generation from accepted results, but neither runtime produced a
+late stale payload during the probe. Transcript API access and isolated
+writers also remain unproven, so these results do not establish complete W3.
 
 Codex CLI lifecycle probes use persisted sessions inside a disposable isolated
 Codex state directory. Version 0.155.1 returned `no thread with id` when the

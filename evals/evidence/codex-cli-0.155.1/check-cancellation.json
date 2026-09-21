@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-cancellation",
+  "fixture": "check-cancellation",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in a disposable isolated Codex state directory with user config and rules ignored; generated Skill linked under project .agents/skills.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.cancel",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-follow-up.json",
+    "evals/evidence/codex-cli-0.155.1/check-parallel.json",
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-cancellation Skill before executing it." },
+    { "id": "generation-one-started", "status": "pass", "evidence": "The parent transcript recorded a spawn_agent call and started child thread generation_1." },
+    { "id": "generation-one-cancelled-while-active", "status": "pass", "evidence": "interrupt_agent targeted generation_1 and returned previous_status=running." },
+    { "id": "cancellation-acknowledged", "status": "pass", "evidence": "The parent recorded an interrupted activity for the same generation_1 child thread." },
+    { "id": "generation-two-started-after-cancellation", "status": "pass", "evidence": "The generation_2 spawn appears after the generation_1 interruption acknowledgement in the parent transcript." },
+    { "id": "fresh-result-collected", "status": "pass", "evidence": "Generation 2 alone returned FRESH_MARKER=fresh-ok, which the parent reported as ACCEPTED_MARKER=fresh-ok." },
+    { "id": "stale-result-not-accepted", "status": "pass", "evidence": "The final report states GENERATION_1_STALE=true, STALE_RESULT_ACCEPTED=false, and STALE_OUTPUT_RECEIVED=false." },
+    { "id": "generation-one-terminal", "status": "pass", "evidence": "The final agent snapshot reports generation_1 interrupted and generation_2 completed." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent re-read assets/root.txt after generation 2 completed and observed ROOT_MARKER=cancellation-root-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "All threads inherited the read-only sandbox and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "Generation 1 was interrupted before it produced a stale payload, so the accepted-result policy is proven for an interrupted active generation but not for a cancellation race that delivers a late payload.",
+    "This W3-targeted fixture proves native cancellation and stale-generation exclusion only; writer isolation, panels, and transcript API access remain unproven, so workflowAchieved remains W2.",
+    "The top-level JSON stream omits spawn and interrupt detail; persisted isolated transcripts are the authoritative lifecycle evidence.",
+    "Codex CLI lifecycle probes require persisted sessions; this evidence does not apply to ephemeral mode, desktop, or IDE surfaces."
+  ]
+}

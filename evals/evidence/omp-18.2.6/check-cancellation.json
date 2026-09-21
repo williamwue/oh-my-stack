@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-cancellation",
+  "fixture": "check-cancellation",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs enabled by the cancellation probe overlay.",
+    "permissionProfile": "Only read, task, and hub tools enabled; fixture required no writes"
+  },
+  "capabilities": [
+    "agents.cancel",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-follow-up.json",
+    "evals/evidence/omp-18.2.6/check-parallel.json",
+    "evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-cancellation Skill." },
+    { "id": "generation-one-started", "status": "pass", "evidence": "The task tool created Gen1StaleWorker and reported it running before cancellation." },
+    { "id": "generation-one-cancelled-while-active", "status": "pass", "evidence": "Native hub cancel targeted the running Gen1StaleWorker background job." },
+    { "id": "cancellation-acknowledged", "status": "pass", "evidence": "hub cancel returned a Cancelled report and a cancelled job status for Gen1StaleWorker." },
+    { "id": "generation-two-started-after-cancellation", "status": "pass", "evidence": "Gen2FreshWorker was started only after the generation 1 cancellation acknowledgement." },
+    { "id": "fresh-result-collected", "status": "pass", "evidence": "Gen2FreshWorker returned FRESH_MARKER=fresh-ok, which the root reported as ACCEPTED_MARKER=fresh-ok." },
+    { "id": "stale-result-not-accepted", "status": "pass", "evidence": "Generation 1 produced no completed output and the final report states STALE_RESULT_ACCEPTED=false." },
+    { "id": "generation-one-terminal", "status": "pass", "evidence": "The final hub jobs snapshot reports Gen1StaleWorker cancelled and no longer running." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root re-read assets/root.txt after generation 2 completed and observed ROOT_MARKER=cancellation-root-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "Only read, task, and hub tools were enabled and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "Generation 1 was cancelled before it produced a stale payload, so the accepted-result policy is proven for an aborted active job but not for a cancellation race that delivers a late payload.",
+    "This W3-targeted fixture proves native cancellation and stale-generation exclusion only; writer isolation, panels, and transcript access remain unproven, so workflowAchieved remains W2.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

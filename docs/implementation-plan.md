@@ -56,8 +56,12 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - Both runtimes pass same-worker follow-up with retained context. OMP wakes the
   completed worker through its hub; Codex records two turns in the same child
   thread without rereading the first-turn asset.
-- Cancellation, stale-result suppression, transcript API access, worktree
-  isolation, model override, and interaction remain pending.
+- Both runtimes pass active-worker cancellation and exclude the cancelled
+  generation from accepted results. Neither probe delivered a late stale
+  payload, so cancellation-race coverage remains pending and achieved
+  conformance stays at W2.
+- Transcript API access, worktree isolation, model override, and interaction
+  remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 
