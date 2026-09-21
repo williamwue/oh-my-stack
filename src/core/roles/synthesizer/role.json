@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "synthesizer",
+  "description": "Read-only adjudicator of frozen independent findings with preserved attribution.",
+  "workload": "deep",
+  "constraints": ["read_only", "independent_session", "reasoning_required"],
+  "writes": false
+}

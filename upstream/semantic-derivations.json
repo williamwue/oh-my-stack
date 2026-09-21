@@ -2,6 +2,86 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "id": "interrogate-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/SKILL.md",
+          "sha256": "2867910309e81411123ae4edca68ffca5795e66521d3f3bc0876f6213b542fb9"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/code-quality-review.md",
+          "sha256": "623d3d8122d075c303b562783b471a732992e84166b318f85ab6d6c118b13304"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/lead-judgment.md",
+          "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/reviewer-prompt.md",
+          "sha256": "a397cc61102add709803d917fb23d726920525bf23e7c06dc4ed0b5cbeb00e54"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/rubric.md",
+          "sha256": "59e9b7cc4556e735e1b859a7dd1f7637b013a2426a84825ac1c51979942c158a"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/interrogate/SKILL.md",
+          "owner": "derived",
+          "sha256": "347067c96cc03b416891a85e28fb806440d75b238170b70ca147375357e1e3c7"
+        },
+        {
+          "path": "src/core/skills/interrogate/skill.json",
+          "owner": "local-core",
+          "sha256": "e62fccc371c97630287d7a15d4c1391ffce8f3263f26c950b4d6473cec4f855e"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/code-quality-review.md",
+          "owner": "derived",
+          "sha256": "24fdc9cba3aec0f169471aa7a41af11369b6911d42219453c4b3393e2783d6bb"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/lead-judgment.md",
+          "owner": "derived",
+          "sha256": "2eb7266b8aa77a74784fb2dca568a3227151b6d6c3c33a5bd081329436ff65dd"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
+          "owner": "derived",
+          "sha256": "0961188e3a6758faefc48c84548e37338ece791f51f8187f6830ee09d25e1c9e"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/rubric.md",
+          "owner": "derived",
+          "sha256": "948913fd38c9f27af5a68bd7be01bc579da8a38abd1f56c8cbb75a84f2a4b971"
+        },
+        {
+          "path": "src/core/roles/reviewer/role.json",
+          "owner": "local-core",
+          "sha256": "64bad4ecd334843113c984602793cc2af1c70bb0078bca6a5203f07e9e717ec4"
+        },
+        {
+          "path": "src/core/roles/reviewer/instructions.md",
+          "owner": "local-core",
+          "sha256": "4f9d1fa3a5edd080631a33fe047b85324a9fe5a8bd66f21c80956097ffac8139"
+        },
+        {
+          "path": "src/core/roles/synthesizer/role.json",
+          "owner": "local-core",
+          "sha256": "194fb4c00cc7294ac941ff41c134d5bd0d38277ba048965646166ec802d9628b"
+        },
+        {
+          "path": "src/core/roles/synthesizer/instructions.md",
+          "owner": "local-core",
+          "sha256": "6594bc8923081c8ad534a1d49b00dd7d088cfb693678acd6f068d10711ddb5fd"
+        }
+      ],
+      "transformation": "Fixed model lists, source-host task syntax, private configuration paths, and direct aggregation were replaced by runtime-resolved reviewer roles, explicit diversity disclosure, identical frozen packets, a new synthesis session, immutable result boundaries, and independent root judgment."
+    },
+    {
       "id": "bug-fix-port",
       "sourceId": "cursor-pstack",
       "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",

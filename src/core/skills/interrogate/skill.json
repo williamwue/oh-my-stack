@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "interrogate",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.model_override",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.model_override": "use_available_reviewers_and_disclose_unverified_model_diversity",
+    "agents.read_result": "root_runs_two_frozen_review_passes_then_synthesizes",
+    "agents.spawn": "root_runs_two_frozen_review_passes_then_synthesizes",
+    "agents.spawn_parallel": "run_independent_reviewers_sequentially_without_cross_contamination",
+    "agents.wait": "root_runs_two_frozen_review_passes_then_synthesizes"
+  }
+}

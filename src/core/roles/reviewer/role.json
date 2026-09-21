@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "reviewer",
+  "description": "Independent read-only reviewer of one frozen scope and intent packet.",
+  "workload": "deep",
+  "constraints": ["read_only", "independent_session", "reasoning_required", "model_diversity_preferred"],
+  "writes": false
+}

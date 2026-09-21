@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "reviewedFile": "project/lib/window.mjs",
+  "expectedActOnMechanisms": [
+    "partial numeric prefixes are accepted",
+    "zero and negative integers are accepted"
+  ],
+  "assertions": [
+    "skill-loaded",
+    "intent-and-scope-frozen",
+    "two-reviewers-started-before-wait",
+    "identical-review-packets",
+    "reviewer-results-frozen",
+    "new-synthesizer-after-reviews",
+    "attribution-preserved",
+    "root-verified-act-on-findings",
+    "model-diversity-not-overclaimed",
+    "no-project-changes"
+  ]
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Interrogate"
+  short_description: "Interrogate workflow"
+  default_prompt: "Use $interrogate for this task."
+policy:
+  allow_implicit_invocation: false
