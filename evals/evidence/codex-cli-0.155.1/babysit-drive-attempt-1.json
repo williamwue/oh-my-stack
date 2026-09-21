@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-babysit-drive-attempt-1",
+  "fixture": "babysit-drive",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and babysit Skills committed in a disposable Git repository; gpt-5.6-sol high; user config and rules ignored; deterministic local provider and bare origin.",
+    "permissionProfile": "Workspace-write sandbox over project and fixture root with approval policy never"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "repair-behavior-reached-ready",
+      "status": "pass",
+      "evidence": "Session 01a0c615-d8ad-72e2-a0b9-2025993d0872 reproduced and repaired the defect, created one commit through copied Git metadata, pushed once, refreshed once, and reached READY."
+    },
+    {
+      "id": "original-git-metadata-authoritative",
+      "status": "fail",
+      "evidence": "The workspace-write sandbox denied .git/index.lock, so the session copied .git to gitmeta; the original branch ref stayed on the old head and the standard verifier failed its one-commit assertion."
+    }
+  ],
+  "limitations": [
+    "This is retained as a permission-profile failure and is not accepted as drive conformance.",
+    "A drive workflow that commits and pushes requires writable Git metadata; adding the fixture root to workspace-write does not make the protected .git directory writable.",
+    "The alternate-GIT_DIR verifier pass demonstrates why a verifier must use the original repository metadata rather than inheriting an agent workaround."
+  ]
+}

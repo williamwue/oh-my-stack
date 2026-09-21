@@ -2,6 +2,30 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/babysit-drive/forge.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Act as a deterministic local status provider that accepts one pushed repair wave and recomputes the disposable pull-request verdict.",
+      "network": false,
+      "writes": ["disposable babysit-drive forge state"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/babysit-drive/setup.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Initialize the disposable Git repository, bare origin, defective feature branch, and blocked pull-request state for babysit drive.",
+      "network": false,
+      "writes": ["disposable babysit-drive fixture copy"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/babysit-drive/verify.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify one bounded repair commit and push wave reaches merge-ready without changing main or merging.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the repository fixture."
+    },
+    {
       "path": "evals/fixtures/babysit-check/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify a read-only babysit check report against frozen forge state and unchanged disposable Git refs.",

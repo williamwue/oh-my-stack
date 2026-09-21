@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-babysit-drive",
+  "fixture": "babysit-drive",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and babysit Skills committed in a disposable Git repository; gpt-5.6-sol high; persisted session; user config and rules ignored; deterministic local pull-request provider and bare origin.",
+    "permissionProfile": "Danger-full-access restricted operationally to one disposable fixture, because Codex workspace-write protects Git metadata required by drive mode"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/babysit-drive-attempt-1.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "Session 01a0c61c-0b2f-7b11-b35a-89d9d7f20735 loaded the repository-generated poteto-mode and babysit Skills."
+    },
+    {
+      "id": "drive-mode-and-frontier-frozen",
+      "status": "pass",
+      "evidence": "The root declared babysit drive for PR 23 and froze feature/normalize-note at 3d0db1a07611939fd73fbc3fa182bf6a92a11664 before repair."
+    },
+    {
+      "id": "defect-reproduced-before-edit",
+      "status": "pass",
+      "evidence": "The pinned test failed because trim removed operator-authored spacing before any implementation edit."
+    },
+    {
+      "id": "smallest-repair-preserved-test",
+      "status": "pass",
+      "evidence": "Only lib/receipt.mjs changed; the root removed trim, left the test unchanged, passed the focused test, and checked the diff before commit."
+    },
+    {
+      "id": "one-commit-one-push-wave",
+      "status": "pass",
+      "evidence": "The original repository branch advanced by exactly one commit to 1a0d43079c6de27a426acb19fdd6ecd7e93553f3 and the provider recorded exactly one push-wave event."
+    },
+    {
+      "id": "single-refresh-reached-ready",
+      "status": "pass",
+      "evidence": "One refresh recomputed lint and test as SUCCESS, resolved T1, and returned terminal READY; the session did not poll the provider afterward."
+    },
+    {
+      "id": "topology-and-merge-boundaries-preserved",
+      "status": "pass",
+      "evidence": "Main and origin/main remained unchanged; no rebase, retarget, force-push, retry, merge authorization, or merge occurred."
+    },
+    {
+      "id": "root-verifier-passed",
+      "status": "pass",
+      "evidence": "The standard verifier using the original repository metadata produced BABYSIT_DRIVE_OK=1a0d43079c6de27a426acb19fdd6ecd7e93553f3 both in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "The deterministic local provider and bare origin prove a bounded W1 fallback, not live scm.pull_requests, scm.review_threads, hosted check reruns, or W4 external-system completion.",
+    "The fixture contains one known repair wave; it does not yet prove conflict, stale-base, flake, multi-wave, threads-only, or background behavior.",
+    "The run first invoked the provider from project instead of the fixture root, received ENOENT without reading or mutating provider state, inspected the CLI contract, and then completed correctly; the fixture instructions now encode the working directory explicitly.",
+    "Cloudflare MCP authentication warnings were unrelated and did not participate in the workflow."
+  ]
+}

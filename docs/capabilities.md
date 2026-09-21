@@ -292,6 +292,20 @@ order, canonical names, first headings, probe exclusion, and a clean fixture.
 The Alpha 3 run proves D2/D3 delivery across that 38-Skill catalog snapshot,
 not semantic success for every possible workflow input.
 
+The `babysit` fixture now separates read-only check authority from mutating
+drive authority. On OMP 18.2.6 and Codex CLI 0.155.1, drive mode freezes PR 23,
+reproduces a pinned spacing defect, edits only the owning source file, leaves
+the test unchanged, creates exactly one commit, pushes exactly one wave to a
+local bare origin, refreshes the deterministic provider once to `READY`, and
+stops without merging. The verifier independently checks unchanged main refs,
+the one-commit range, strict clean status, the changed-path set, passing test,
+provider event count, report bytes, and absent merge authority. Codex
+`workspace-write` protects `.git` even when the fixture root is added, so that
+failed profile is retained and the passing disposable run explicitly uses
+`danger-full-access`. This proves a bounded W1 local-provider workflow, not
+live forge APIs, hosted polling, conflict or stale-base handling, multi-wave
+repair, `threads-only`, `background`, or W4 completion.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

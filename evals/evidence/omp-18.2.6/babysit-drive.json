@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-babysit-drive",
+  "fixture": "babysit-drive",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and babysit Skills in a disposable Git repository; cursor/default; high reasoning; deterministic local pull-request provider and bare origin; no delegation or external network operation.",
+    "permissionProfile": "Writable disposable fixture including project Git metadata, local bare origin, provider state, and report path"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "Session 01a0c614-9ea1-7124-82b0-2d36f1d96c45 loaded the repository-generated poteto-mode and babysit Skills."
+    },
+    {
+      "id": "drive-mode-and-frontier-frozen",
+      "status": "pass",
+      "evidence": "The root selected babysit drive for PR 23 and froze feature/normalize-note at ba9503657286f8a84e36d98d2840e486e5d0bb32 before repair."
+    },
+    {
+      "id": "defect-reproduced-before-edit",
+      "status": "pass",
+      "evidence": "The pinned test failed because trim removed operator-authored spacing before any implementation edit."
+    },
+    {
+      "id": "smallest-repair-preserved-test",
+      "status": "pass",
+      "evidence": "Only lib/receipt.mjs changed; the root removed trim, left the test unchanged, and the focused test passed."
+    },
+    {
+      "id": "one-commit-one-push-wave",
+      "status": "pass",
+      "evidence": "The feature branch advanced by exactly one commit to 331d3c3c5a861e3d325476f8f62350ecfcdd3bea and the provider recorded exactly one push-wave event."
+    },
+    {
+      "id": "single-refresh-reached-ready",
+      "status": "pass",
+      "evidence": "One refresh recomputed lint and test as SUCCESS, resolved T1, and returned terminal READY; no later provider poll occurred."
+    },
+    {
+      "id": "topology-and-merge-boundaries-preserved",
+      "status": "pass",
+      "evidence": "Main and origin/main remained unchanged; no rebase, retarget, force-push, retry, merge authorization, or merge occurred."
+    },
+    {
+      "id": "root-verifier-passed",
+      "status": "pass",
+      "evidence": "The independent verifier produced BABYSIT_DRIVE_OK=331d3c3c5a861e3d325476f8f62350ecfcdd3bea both in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "The deterministic local provider and bare origin prove a bounded W1 fallback, not live scm.pull_requests, scm.review_threads, hosted check reruns, or W4 external-system completion.",
+    "The fixture contains one known repair wave; it does not yet prove conflict, stale-base, flake, multi-wave, threads-only, or background behavior.",
+    "OMP delivery remains D0 overall because the separate native plugin-manager D1 gate is unresolved."
+  ]
+}

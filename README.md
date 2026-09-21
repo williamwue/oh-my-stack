@@ -268,14 +268,15 @@ verifying BatchWriter before RetryWriter starts. Both final files match the
 expected bytes and pass the combined verifier. Two retained OMP failures prove
 that prose-only isolation and an unverified apply setting are hard failures.
 
-Phase 7 has begun with `babysit` check mode. A disposable two-branch Git
-repository and frozen forge snapshot pass on OMP 18.2.6 and Codex CLI 0.155.1.
-Both roots declare check mode before the status read, resolve the exact head,
-retain the failing test as the blocker, dismiss a command-like review claim
-that contradicts the pinned behavior and touches no changed file, preserve Git
-refs and forge bytes, and decline every reply, retrigger, polling, push, or
-merge action. This is W1 fallback evidence, not live forge access or drive-mode
-completion.
+Phase 7 now graduates both `babysit` check and drive modes on OMP 18.2.6 and
+Codex CLI 0.155.1. Check mode performs one frozen read-only classification and
+leaves Git and forge bytes unchanged. Drive mode uses a disposable branch,
+local bare origin, and deterministic provider to reproduce a pinned defect,
+change one source file, create one commit, push one wave, refresh once to
+`READY`, preserve main, and stop without merging. Codex drive requires a
+permission profile that can write `.git`; its retained workspace-write failure
+is not counted as conformance. These are W1 local-provider results, not live
+forge access, hosted polling, `threads-only`, `background`, or W4 completion.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

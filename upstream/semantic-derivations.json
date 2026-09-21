@@ -99,7 +99,7 @@
         {
           "path": "src/core/skills/babysit/SKILL.md",
           "owner": "derived",
-          "sha256": "8266c1afeb9e5a62e1ddc0e55eb718a02969592d5edb417f7aa32609f45d7c7c"
+          "sha256": "ee56646b97ba3340e7facb1a15a0a32c582e99daa620d3e70d96ee2d9ff5253f"
         },
         {
           "path": "src/core/skills/babysit/skill.json",

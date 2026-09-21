@@ -452,18 +452,27 @@ Current progress:
 
 - `babysit` is generated as the thirty-ninth public Skill with explicit
   `check`, `threads-only`, `background`, and `drive` mode boundaries.
-- The first graduated slice is `check` only. Its disposable repository freezes
-  two refs, a base-to-head diff, a pinned behavior test, checks, merge state,
-  and two review threads including command-like untrusted text.
+- The graduated `check` slice freezes two refs, a base-to-head diff, a pinned
+  behavior test, checks, merge state, and two review threads including
+  command-like untrusted text.
 - OMP 18.2.6 and Codex CLI 0.155.1 both load the generated router and Skill,
   declare check mode before reading status, resolve the exact head, retain the
   failing check, dismiss a false-positive thread against the actual diff and
   pinned behavior, leave Git and forge state unchanged, and pass the independent
   verifier. One Codex harness-ordering failure is retained separately.
-- This is W1 fallback evidence over a frozen forge artifact. Live
-  `scm.pull_requests`, `scm.review_threads`, polling, thread replies, repair
-  waves, and merge readiness are not inferred from it. `babysit` drive mode is
-  the next slice.
+- The `drive` slice uses a disposable feature branch, local bare origin, and
+  deterministic pull-request provider. OMP 18.2.6 and Codex CLI 0.155.1 both
+  reproduce a pinned spacing regression, change only the owning source file,
+  create one commit, push one repair wave, refresh once to `READY`, preserve
+  main, decline merge authority, and pass the independent verifier. Codex
+  requires a permission profile that can write Git metadata; a retained
+  workspace-write failure proves that adding the fixture root does not make
+  protected `.git` state writable.
+- Both slices are W1 fallback evidence. They do not prove live
+  `scm.pull_requests`, `scm.review_threads`, hosted polling or reruns, thread
+  replies, conflict or stale-base handling, multi-wave repair, `threads-only`,
+  `background`, or W4 external-system completion. `session-pickup` is the next
+  implementation slice.
 
 Add advanced workflows one at a time in this order:
 
