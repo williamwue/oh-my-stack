@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-conflicting-writers-attempt-2",
+  "fixture": "conflicting-writers",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Hardened conflicting-writers fixture with isolated:true on both task items, but a dotted-key overlay did not establish the required apply=false behavior.",
+    "permissionProfile": "two isolated writable implementers with automatic patch application into a disposable parent checkout"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/conflicting-writers-attempt-1.json", "evals/evidence/omp-18.2.6/conflicting-writers.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Only repository-generated Skills and the native implementer role participated." },
+    { "id": "router-selected-feature", "status": "pass", "evidence": "The root selected feature." },
+    { "id": "checkpoint-recorded", "status": "pass", "evidence": "The complete throughput checkpoint preceded delegation." },
+    { "id": "baseline-frozen", "status": "pass", "evidence": "All four baseline hashes matched the fixture." },
+    { "id": "strategy-declared-before-write", "status": "fail", "evidence": "The task call recorded isolated:true twice, but merge summaries and the parent diff proved patches were automatically applied despite the claimed apply=false boundary." },
+    { "id": "exactly-two-writers", "status": "pass", "evidence": "Exactly BatchWriter and RetryWriter ran." },
+    { "id": "writer-ownership-disjoint", "status": "pass", "evidence": "Each retained patch changed exactly one owned numeric line." },
+    { "id": "writers-isolated-or-serialized", "status": "pass", "evidence": "Both writers ran in distinct isolated workspaces and returned distinct patches." },
+    { "id": "writer-results-frozen", "status": "pass", "evidence": "Both original results completed without follow-up, retry, replacement, or horizontal communication." },
+    { "id": "root-inspected-each-diff", "status": "pass", "evidence": "The root read both retained patches and their single-line ownership." },
+    { "id": "root-integrated-combined", "status": "fail", "evidence": "The runtime had already integrated both patches before the root inspection boundary, so the root's later reset and replay could not make the original apply=false claim true." },
+    { "id": "combined-verification-passed", "status": "pass", "evidence": "After root replay, the combined verifier passed and the final file matched expected bytes." },
+    { "id": "fallback-declared", "status": "fail", "evidence": "The final report disclosed the apply mismatch, but the run had already proceeded under a false apply=false premise instead of choosing a safe fallback." },
+    { "id": "only-owned-file-changed", "status": "pass", "evidence": "Only workspace/settings.mjs changed." },
+    { "id": "no-publication", "status": "pass", "evidence": "No publication occurred." }
+  ],
+  "limitations": [
+    "The failure isolated a harness-configuration boundary rather than a writer-content defect.",
+    "The passing rerun writes isolation settings through a disposable OMP agent directory and reads back enabled=true, apply=false, and maxConcurrency=2 before launch."
+  ]
+}

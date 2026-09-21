@@ -352,6 +352,17 @@ roles; Codex accurately reports its inline-role fallback. Failed attempts are
 retained for OMP's one-word packet mismatch and Codex's initially incorrect
 claim that no fallback was used.
 
+The conflicting-writers conformance fixture passes on both CLI surfaces. OMP
+records `isolated:true` on exactly two task items after a disposable runtime
+configuration is read back as isolation enabled and automatic application
+disabled; each writer returns one same-file patch from the frozen baseline and
+the root integrates BatchWriter before RetryWriter. Codex uses its declared
+serialized shared-checkout fallback inside a managed root worktree: the first
+writer completes, the root inspects and verifies it, and only then does the
+second writer start. Persisted session timestamps prove no overlap. Retained
+OMP failures show why neither prose-only isolation nor a configuration that
+auto-applies patches satisfies the boundary.
+
 Phase 2 replaces each research or documented entry with a versioned observation. Separate profiles are created when platforms, permission modes, installed providers, or runtime versions change behavior.
 
 ## Fallback rules

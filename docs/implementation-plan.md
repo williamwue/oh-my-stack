@@ -350,13 +350,13 @@ Current progress:
   normalized records and fails on source-evidence, fixture, assertion, or
   generated-output drift.
 - The bug-fix, feature-boundary, behavior-preserving-refactor, frozen
-  architecture-candidates, and mixed-review scenarios now produce paired OMP
-  and Codex records with identical logical event sequences.
+  architecture-candidates, mixed-review, and conflicting-writers scenarios now
+  produce paired OMP and Codex records with identical logical event sequences.
 - Every record includes its runtime surface and version, configuration
   fingerprint, permission profile, provider-inventory evidence, model-resolution
   observability, fixture revision, per-artifact SHA-256 hashes, repetition
   threshold, semantic trace, and protocol-assertion mapping.
-- The current five scenarios are deterministic and require one of one passing
+- The current six scenarios are deterministic and require one of one passing
   run with zero acceptable failures. Scenario model identities remain
   `not-recorded` where the original evidence did not independently expose them.
 - The architecture scenario requires two byte-identical complete initial
@@ -367,8 +367,16 @@ Current progress:
 - The mixed review retains one reachable exclusive-end defect and dismisses one
   unreachable negative-index hypothesis. Retained failures prove that
   byte-level packet equality and accurate fallback disclosure are hard gates.
-- Conflicting writers remains pending a real same-scenario fixture; generic
-  capability probes are not substituted for that semantic requirement.
+- The conflicting-writers fixture proves two OMP isolated patches from one
+  frozen baseline with root-ordered integration and a Codex serialized fallback
+  in one managed root worktree. Retained OMP failures record both a falsely
+  claimed isolation strategy that raced in one checkout and a misconfigured
+  apply boundary that integrated patches before root inspection.
+
+The active OMP/Codex Phase 5 gate is closed with six scenarios and twelve
+normalized records. Claude Code remains explicitly deferred until an
+authenticated local runtime is available; its absence is not converted into a
+live conformance claim.
 
 ### Fixtures
 

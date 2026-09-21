@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-conflicting-writers",
+  "fixture": "conflicting-writers",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W3", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Hardened conflicting-writers fixture plus generated poteto-mode/feature Skills and native implementer role; cursor/default; disposable OMP agent directory with task isolation settings written and read back as enabled=true, apply=false, patch merge, and maxConcurrency=2.",
+    "permissionProfile": "auto-approved root in a disposable Git repository with exactly two bounded isolated writable implementers and root-owned patch integration"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/conflicting-writers-attempt-1.json", "evals/evidence/omp-18.2.6/conflicting-writers-attempt-2.json", "evals/evidence/omp-18.2.6/check-writer-isolation.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root used only repository-generated poteto-mode/feature Skills and the native implementer role." },
+    { "id": "router-selected-feature", "status": "pass", "evidence": "Poteto-mode selected feature from the intentional maxBatch and delayMs behavior change." },
+    { "id": "checkpoint-recorded", "status": "pass", "evidence": "Before any write the root named the same-file blocking gate, the two independent numeric changes, the shared mutable file, and strategy 1." },
+    { "id": "baseline-frozen", "status": "pass", "evidence": "The root captured all four expected SHA-256 values before the single task call." },
+    { "id": "strategy-declared-before-write", "status": "pass", "evidence": "Runtime settings were externally read back as isolation enabled, apply false, and concurrency two; the actual task call recorded isolated:true on both items." },
+    { "id": "exactly-two-writers", "status": "pass", "evidence": "One batch task call started exactly BatchWriter and RetryWriter; no other child session exists." },
+    { "id": "writer-ownership-disjoint", "status": "pass", "evidence": "BatchWriter.patch changes only maxBatch 10 to 25, while RetryWriter.patch changes only delayMs 100 to 250 from the same baseline." },
+    { "id": "writers-isolated-or-serialized", "status": "pass", "evidence": "Both task items used isolated:true, ran in distinct OMP workspaces, and left the parent checkout at the frozen baseline until root integration." },
+    { "id": "writer-results-frozen", "status": "pass", "evidence": "Both original writers yielded complete attributable results without retry, replacement, follow-up, or writer-to-writer hub calls." },
+    { "id": "root-inspected-each-diff", "status": "pass", "evidence": "The root inspected both retained patch files for their path and owned line before applying either." },
+    { "id": "root-integrated-combined", "status": "pass", "evidence": "The root applied BatchWriter.patch first, passed the batch check, then applied RetryWriter.patch and passed the retry check with the batch value preserved." },
+    { "id": "combined-verification-passed", "status": "pass", "evidence": "cmp reported byte equality and node verify.mjs combined exited 0 with maxBatch 25, delayMs 250, and matching c5840cc3...39402 hashes." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "The root reported that native OMP implementer selection was available, so neither serialization nor inline-role fallback was used." },
+    { "id": "only-owned-file-changed", "status": "pass", "evidence": "External Git inspection found only workspace/settings.mjs modified and git diff --check passed." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication operation occurred." }
+  ],
+  "limitations": [
+    "This fixture proves two isolated patches against one physical file and ordered root integration; it does not prove arbitrary semantic merge conflict resolution.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

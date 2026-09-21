@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-conflicting-writers",
+  "fixture": "conflicting-writers",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W3", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Hardened conflicting-writers fixture plus generated Skills and implementer TOML in a disposable repository; isolated CODEX_HOME; gpt-5.6-sol at high reasoning; root in a managed top-level worktree; two serialized writer sessions with the generated role contract supplied inline.",
+    "permissionProfile": "danger-full-access inside a disposable managed root worktree; exactly two bounded serialized writable children"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/check-writer-isolation.json", "evals/evidence/codex-cli-0.155.1/check-custom-role.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root loaded repository-generated poteto-mode/feature Skills and implementer TOML; unrelated Cloudflare authentication warnings did not participate." },
+    { "id": "router-selected-feature", "status": "pass", "evidence": "Poteto-mode selected feature for the intentional settings change." },
+    { "id": "checkpoint-recorded", "status": "pass", "evidence": "Before BatchWriter, the root recorded the first-result inspection gate, disjoint numeric work, shared file, serialized strategy, and inline-role fallback." },
+    { "id": "baseline-frozen", "status": "pass", "evidence": "The four expected hashes were captured before the first writer started." },
+    { "id": "strategy-declared-before-write", "status": "pass", "evidence": "The root explicitly selected strategy 2 because nested per-writer isolation is not exposed inside the managed Codex root worktree." },
+    { "id": "exactly-two-writers", "status": "pass", "evidence": "Persisted sessions contain exactly one root, BatchWriter, and RetryWriter; there were no other children." },
+    { "id": "writer-ownership-disjoint", "status": "pass", "evidence": "BatchWriter changed only maxBatch; RetryWriter changed only delayMs and preserved maxBatch 25." },
+    { "id": "writers-isolated-or-serialized", "status": "pass", "evidence": "BatchWriter completed at 21:24:07; after root diff inspection and focused verification, RetryWriter started at 21:24:49, proving no overlap." },
+    { "id": "writer-results-frozen", "status": "pass", "evidence": "Both original child results were frozen without follow-up, replacement, retry, or horizontal messages." },
+    { "id": "root-inspected-each-diff", "status": "pass", "evidence": "The root inspected the one-line diff and reran the batch check before starting RetryWriter, then inspected the cumulative two-line diff and reran the retry check." },
+    { "id": "root-integrated-combined", "status": "pass", "evidence": "Serialized shared-checkout integration preserved maxBatch 25 while adding delayMs 250 in the managed root worktree." },
+    { "id": "combined-verification-passed", "status": "pass", "evidence": "cmp exited 0 and node verify.mjs combined exited 0 with matching final and expected hashes." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "Before delegation and in the final response, the root declared both serialized shared-checkout execution and inline generated-role delivery as fallbacks." },
+    { "id": "only-owned-file-changed", "status": "pass", "evidence": "Only workspace/settings.mjs changed in the managed worktree, git diff --check passed, and the original checkout remained clean." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication occurred." }
+  ],
+  "limitations": [
+    "Codex CLI 0.155.1 cannot select the generated custom implementer role on spawn, so its full contract was supplied inline and disclosed.",
+    "The writers share the managed root checkout; safety comes from observed serialization rather than per-writer isolation.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
+  ]
+}

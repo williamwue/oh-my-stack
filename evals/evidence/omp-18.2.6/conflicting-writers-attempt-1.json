@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-conflicting-writers-attempt-1",
+  "fixture": "conflicting-writers",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Conflicting-writers fixture plus generated poteto-mode/feature Skills and native implementer role; cursor/default; task isolation was described in the prompt but not enabled in the actual task schema.",
+    "permissionProfile": "root and two writable implementers shared one disposable checkout"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/conflicting-writers.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The run used the repository-generated router, feature workflow, and implementer role." },
+    { "id": "router-selected-feature", "status": "pass", "evidence": "Poteto-mode selected feature for the intentional settings change." },
+    { "id": "checkpoint-recorded", "status": "pass", "evidence": "The root named the blocking same-file gate, disjoint semantic work, shared mutable file, and intended isolated strategy." },
+    { "id": "baseline-frozen", "status": "pass", "evidence": "The four required hashes were captured before the task call." },
+    { "id": "strategy-declared-before-write", "status": "fail", "evidence": "The root declared isolation, but the actual task call contained neither isolated:true nor any other active isolation control." },
+    { "id": "exactly-two-writers", "status": "pass", "evidence": "Exactly BatchWriter and RetryWriter were started." },
+    { "id": "writer-ownership-disjoint", "status": "fail", "evidence": "Assignments were disjoint, but both children observed and rewrote the shared file while the other was active." },
+    { "id": "writers-isolated-or-serialized", "status": "fail", "evidence": "Both writers ran concurrently in the same checkout; neither real isolation nor serialization protected the shared mutation." },
+    { "id": "writer-results-frozen", "status": "fail", "evidence": "The writers exchanged acknowledgements and repaired each other's observed changes instead of producing independent frozen results." },
+    { "id": "root-inspected-each-diff", "status": "fail", "evidence": "The root observed the race only after the shared checkout had lost RetryWriter's change." },
+    { "id": "root-integrated-combined", "status": "fail", "evidence": "Only maxBatch=25 remained in the root checkout; delayMs had reverted to 100." },
+    { "id": "combined-verification-passed", "status": "fail", "evidence": "External node verify.mjs combined failed because delayMs was 100 rather than 250." },
+    { "id": "fallback-declared", "status": "fail", "evidence": "The root did not select the serialized fallback after discovering that isolation controls were absent." },
+    { "id": "only-owned-file-changed", "status": "pass", "evidence": "The race was confined to workspace/settings.mjs." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull request occurred." }
+  ],
+  "limitations": [
+    "The run was interrupted after the writer-to-writer acknowledgement loop and failed combined verification were established.",
+    "The hardened fixture now requires observable isolation metadata, forbids horizontal writer communication, and mandates serialization when isolation cannot be observed."
+  ]
+}

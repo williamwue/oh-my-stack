@@ -217,8 +217,9 @@ Alpha 3 gate on the two currently verified CLI surfaces.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
-behavior-preserving refactor, a frozen architecture comparison, and a mixed
-true/false-positive review into ten normalized conformance records. Each record
+behavior-preserving refactor, a frozen architecture comparison, a mixed
+true/false-positive review, and conflicting writers into twelve normalized
+conformance records. Each record
 binds the runtime coordinate and configuration fingerprint
 to the source evidence, provider-inventory evidence, exact fixture and artifact
 hashes, repetition threshold, common semantic event trace, and mapped protocol
@@ -242,6 +243,15 @@ input first. Both runtimes used two frozen read-only reviews, one later
 synthesizer, and an independent root execution. Retained failures record an OMP
 one-word packet mismatch and a Codex run that failed to disclose its inline-role
 fallback before the hardened runs passed.
+
+The conflicting-writers fixture closes the sixth scenario family. OMP starts
+exactly two `isolated:true` native implementers from one frozen baseline with
+`task.isolation.apply=false`, freezes two disjoint same-file patches, and lets
+the root inspect and apply them in order. Codex runs exactly two inline-role
+writers serially inside one managed root worktree, with the root inspecting and
+verifying BatchWriter before RetryWriter starts. Both final files match the
+expected bytes and pass the combined verifier. Two retained OMP failures prove
+that prose-only isolation and an unverified apply setting are hard failures.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

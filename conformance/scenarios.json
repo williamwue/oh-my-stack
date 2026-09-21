@@ -160,6 +160,36 @@
         "semantic-trace-matches": ["router-selected-interrogate", "root-reverified-findings"]
       }
     },
-    { "id": "conflicting-writers", "status": "pending" }
+    {
+      "id": "conflicting-writers",
+      "status": "verified",
+      "fixture": "conflicting-writers",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/conflicting-writers.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/conflicting-writers.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "router-selected-feature"],
+        ["checkpoint_recorded", "root", "checkpoint-recorded"],
+        ["baseline_frozen", "root", "baseline-frozen"],
+        ["strategy_declared", "root", "strategy-declared-before-write"],
+        ["writers_started", "root", "exactly-two-writers"],
+        ["writer_results_frozen", "writer", "writer-results-frozen"],
+        ["changes_integrated", "root", "root-integrated-combined"],
+        ["verification_passed", "root", "combined-verification-passed"]
+      ],
+      "assertions": {
+        "playbook-selected": ["router-selected-feature"],
+        "expected-roles-spawned": ["exactly-two-writers"],
+        "candidates-frozen-before-review": ["baseline-frozen"],
+        "reviewer-did-not-write": [],
+        "writers-bounded-or-isolated": ["writer-ownership-disjoint", "writers-isolated-or-serialized"],
+        "root-independently-inspected": ["root-inspected-each-diff", "root-integrated-combined"],
+        "exact-verification-reported": ["combined-verification-passed"],
+        "child-report-not-accepted-alone": ["root-inspected-each-diff", "combined-verification-passed"],
+        "fallback-declared": ["fallback-declared"],
+        "semantic-trace-matches": ["checkpoint-recorded", "combined-verification-passed"]
+      }
+    }
   ]
 }
