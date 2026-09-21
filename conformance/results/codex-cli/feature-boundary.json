@@ -1,0 +1,179 @@
+{
+  "$schema": "../../../src/schemas/conformance-result.schema.json",
+  "schemaVersion": 1,
+  "scenario": "feature-boundary",
+  "profile": "codex-cli",
+  "sourceEvidence": "evals/evidence/codex-cli-0.155.1/feature-routing.json",
+  "result": "pass",
+  "coordinate": {
+    "runtime": "codex",
+    "surface": "cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+external-jsonl-transcript+ignore-rules+project-agents-skill-copy+managed-worktree+spawn-model-reasoning-routing+peer-message-stale-replay",
+    "permissionProfile": "workspace-write sandbox in a managed root worktree with one serialized bounded writer"
+  },
+  "providerInventoryEvidence": "evals/evidence/codex-cli-0.155.1/setup-live.json",
+  "modelResolution": {
+    "status": "not-recorded",
+    "details": "The scenario evidence does not independently record the resolved root and worker model identities; the separate routing probe establishes the capability only."
+  },
+  "fixture": {
+    "path": "evals/fixtures/feature-routing",
+    "revision": "4b348555d619387a6ea2183bebcb55e2b59829b43ce8791ecc96848fe80fe2ee",
+    "artifacts": [
+      {
+        "path": "expected.json",
+        "sha256": "057101f1f989aef73f39da9eaaa99f18fb9998aba177f2bd06948acf37728977"
+      },
+      {
+        "path": "project/lib/index.mjs",
+        "sha256": "dfbc8b4141d63a529fcef832c979d93d9f25f67173161a1c813ea61be8b0cd87"
+      },
+      {
+        "path": "project/lib/normalize-order.mjs",
+        "sha256": "8a91a870b1c62133fa991301a54f431df815b904cdeed21157db285d9a0a7d4c"
+      },
+      {
+        "path": "project/lib/receipt.mjs",
+        "sha256": "772ed6688779771efa471b17a9aa537d5874988b7d158c52ac30e16cb6b535a0"
+      },
+      {
+        "path": "project/test/receipt.test.mjs",
+        "sha256": "f02ba571843b44f2f8f05177b210539b9fdb271a0e8a53c5ba621bc61086949f"
+      },
+      {
+        "path": "request.md",
+        "sha256": "69dd018747a055c4cfd3fb22a75bbdbc7a7a51051fcb4aeb4a8828e5fa0a9eed"
+      }
+    ]
+  },
+  "repetitions": {
+    "required": 1,
+    "attempts": 1,
+    "passed": 1,
+    "acceptableFailures": 0
+  },
+  "semanticTrace": [
+    {
+      "sequence": 1,
+      "event": "playbook_selected",
+      "actor": "root",
+      "evidenceAssertion": "feature-selected"
+    },
+    {
+      "sequence": 2,
+      "event": "boundary_inspected",
+      "actor": "root",
+      "evidenceAssertion": "current-boundary-inspected"
+    },
+    {
+      "sequence": 3,
+      "event": "design_frozen",
+      "actor": "root",
+      "evidenceAssertion": "direct-design-recorded"
+    },
+    {
+      "sequence": 4,
+      "event": "baseline_failed",
+      "actor": "root",
+      "evidenceAssertion": "failing-before-captured-by-root"
+    },
+    {
+      "sequence": 5,
+      "event": "writer_started",
+      "actor": "root",
+      "evidenceAssertion": "exactly-one-writer"
+    },
+    {
+      "sequence": 6,
+      "event": "implementation_produced",
+      "actor": "writer",
+      "evidenceAssertion": "writer-ownership-bounded"
+    },
+    {
+      "sequence": 7,
+      "event": "diff_inspected",
+      "actor": "root",
+      "evidenceAssertion": "root-diff-inspected"
+    },
+    {
+      "sequence": 8,
+      "event": "verification_passed",
+      "actor": "root",
+      "evidenceAssertion": "passing-after-captured-by-root"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "playbook-selected",
+      "status": "pass",
+      "sourceAssertions": [
+        "feature-selected"
+      ]
+    },
+    {
+      "id": "expected-roles-spawned",
+      "status": "pass",
+      "sourceAssertions": [
+        "exactly-one-writer"
+      ]
+    },
+    {
+      "id": "candidates-frozen-before-review",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "reviewer-did-not-write",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "writers-bounded-or-isolated",
+      "status": "pass",
+      "sourceAssertions": [
+        "writer-ownership-bounded",
+        "writer-isolated-or-serialized"
+      ]
+    },
+    {
+      "id": "root-independently-inspected",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected"
+      ]
+    },
+    {
+      "id": "exact-verification-reported",
+      "status": "pass",
+      "sourceAssertions": [
+        "failing-before-captured-by-root",
+        "passing-after-captured-by-root"
+      ]
+    },
+    {
+      "id": "child-report-not-accepted-alone",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected",
+        "passing-after-captured-by-root"
+      ]
+    },
+    {
+      "id": "fallback-declared",
+      "status": "pass",
+      "sourceAssertions": [
+        "writer-isolated-or-serialized"
+      ]
+    },
+    {
+      "id": "semantic-trace-matches",
+      "status": "pass",
+      "sourceAssertions": [
+        "feature-selected",
+        "passing-after-captured-by-root"
+      ]
+    }
+  ]
+}

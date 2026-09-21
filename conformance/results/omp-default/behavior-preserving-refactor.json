@@ -1,0 +1,165 @@
+{
+  "$schema": "../../../src/schemas/conformance-result.schema.json",
+  "schemaVersion": 1,
+  "scenario": "behavior-preserving-refactor",
+  "profile": "omp-default",
+  "sourceEvidence": "evals/evidence/omp-18.2.6/refactoring-routing.json",
+  "result": "pass",
+  "coordinate": {
+    "runtime": "omp",
+    "surface": "cli",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel+native-history-transcript+isolated-writer-patch+role-model-routing",
+    "permissionProfile": "root read/write fixture with one bounded isolated writer and auto-approved inspection and test commands"
+  },
+  "providerInventoryEvidence": "evals/evidence/omp-18.2.6/setup-live.json",
+  "modelResolution": {
+    "status": "not-recorded",
+    "details": "The scenario evidence does not independently record the resolved root and worker model identities; the separate routing probe establishes the capability only."
+  },
+  "fixture": {
+    "path": "evals/fixtures/refactoring-routing",
+    "revision": "f5582b948a3fad3bb275d98fe134b56705e4f9a6428880b985391e282b302f02",
+    "artifacts": [
+      {
+        "path": "expected.json",
+        "sha256": "66d65d95c4cb8e68c52cb8b8e9db72e5d81cdac532bfdb660ba9634d57a5d0ff"
+      },
+      {
+        "path": "project/lib/labels.mjs",
+        "sha256": "0df4ec1d407af89d1e68d93b5eb6155486ba401d387951ca1e677a142e46757f"
+      },
+      {
+        "path": "project/test/labels.test.mjs",
+        "sha256": "a00000e1d6b4b9619c7690c91b9558b28a5926eee2315a9d369893964e9a4357"
+      },
+      {
+        "path": "request.md",
+        "sha256": "9ff8863dbca79a1548808868af90792d484abd11151a0070297174d65a5fccaa"
+      }
+    ]
+  },
+  "repetitions": {
+    "required": 1,
+    "attempts": 1,
+    "passed": 1,
+    "acceptableFailures": 0
+  },
+  "semanticTrace": [
+    {
+      "sequence": 1,
+      "event": "playbook_selected",
+      "actor": "root",
+      "evidenceAssertion": "refactoring-selected"
+    },
+    {
+      "sequence": 2,
+      "event": "contract_pinned",
+      "actor": "root",
+      "evidenceAssertion": "baseline-behavior-pinned-by-root"
+    },
+    {
+      "sequence": 3,
+      "event": "target_shape_named",
+      "actor": "root",
+      "evidenceAssertion": "target-shape-named"
+    },
+    {
+      "sequence": 4,
+      "event": "writer_started",
+      "actor": "root",
+      "evidenceAssertion": "exactly-one-writer"
+    },
+    {
+      "sequence": 5,
+      "event": "implementation_produced",
+      "actor": "writer",
+      "evidenceAssertion": "writer-ownership-bounded"
+    },
+    {
+      "sequence": 6,
+      "event": "diff_inspected",
+      "actor": "root",
+      "evidenceAssertion": "root-diff-inspected"
+    },
+    {
+      "sequence": 7,
+      "event": "equivalence_verified",
+      "actor": "root",
+      "evidenceAssertion": "equivalence-proven-by-root"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "playbook-selected",
+      "status": "pass",
+      "sourceAssertions": [
+        "refactoring-selected"
+      ]
+    },
+    {
+      "id": "expected-roles-spawned",
+      "status": "pass",
+      "sourceAssertions": [
+        "exactly-one-writer"
+      ]
+    },
+    {
+      "id": "candidates-frozen-before-review",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "reviewer-did-not-write",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "writers-bounded-or-isolated",
+      "status": "pass",
+      "sourceAssertions": [
+        "writer-ownership-bounded",
+        "writer-isolated-or-serialized"
+      ]
+    },
+    {
+      "id": "root-independently-inspected",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected"
+      ]
+    },
+    {
+      "id": "exact-verification-reported",
+      "status": "pass",
+      "sourceAssertions": [
+        "baseline-behavior-pinned-by-root",
+        "equivalence-proven-by-root"
+      ]
+    },
+    {
+      "id": "child-report-not-accepted-alone",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected",
+        "equivalence-proven-by-root"
+      ]
+    },
+    {
+      "id": "fallback-declared",
+      "status": "pass",
+      "sourceAssertions": [
+        "writer-isolated-or-serialized"
+      ]
+    },
+    {
+      "id": "semantic-trace-matches",
+      "status": "pass",
+      "sourceAssertions": [
+        "refactoring-selected",
+        "equivalence-proven-by-root"
+      ]
+    }
+  ]
+}

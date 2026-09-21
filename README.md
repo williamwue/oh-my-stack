@@ -215,6 +215,16 @@ no probe Skill leaks into the public matrix, and the read-only fixture remains
 unchanged. This closes the public-Skill discovery and invocation portion of the
 Alpha 3 gate on the two currently verified CLI surfaces.
 
+Phase 5 now has a deterministic same-scenario compiler. It converts the
+existing passing OMP and Codex evidence for bug fixing, a boundary-crossing
+feature, and a behavior-preserving refactor into six normalized conformance
+records. Each record binds the runtime coordinate and configuration fingerprint
+to the source evidence, provider-inventory evidence, exact fixture and artifact
+hashes, repetition threshold, common semantic event trace, and mapped protocol
+assertions. The compiler deliberately records scenario model resolution as
+`not-recorded` where the original run did not expose it instead of borrowing a
+model identity from a separate routing probe.
+
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
 setup or installation places those definitions in the host's discovered role

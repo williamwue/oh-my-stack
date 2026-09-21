@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "tools/build-conformance.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Compile runtime-specific evidence into deterministic same-scenario semantic conformance records.",
+      "network": false,
+      "writes": ["conformance/results"],
+      "uninstallBehavior": "Not installed in target packages."
+    },
+    {
       "path": "evals/fixtures/public-skill-matrix/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",

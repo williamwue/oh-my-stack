@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "requiredScenarioFamilies": [
+    "bug-fix",
+    "feature-boundary",
+    "behavior-preserving-refactor",
+    "architecture-candidates",
+    "mixed-review",
+    "conflicting-writers"
+  ],
+  "scenarios": [
+    {
+      "id": "bug-fix",
+      "status": "verified",
+      "fixture": "bug-fix-delegated",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/bug-fix-delegated.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/bug-fix-delegated.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "skill-loaded"],
+        ["baseline_failed", "root", "failing-before-captured-by-root"],
+        ["cause_identified", "root", "root-cause-identified-by-root"],
+        ["writer_started", "root", "one-worker-started"],
+        ["patch_produced", "writer", "worker-result-collected"],
+        ["diff_inspected", "root", "root-diff-inspected"],
+        ["verification_passed", "root", "passing-after-captured-by-root"]
+      ],
+      "assertions": {
+        "playbook-selected": ["skill-loaded"],
+        "expected-roles-spawned": ["one-worker-started"],
+        "candidates-frozen-before-review": [],
+        "reviewer-did-not-write": [],
+        "writers-bounded-or-isolated": ["one-writer-only"],
+        "root-independently-inspected": ["root-diff-inspected"],
+        "exact-verification-reported": ["failing-before-captured-by-root", "passing-after-captured-by-root"],
+        "child-report-not-accepted-alone": ["root-diff-inspected", "passing-after-captured-by-root"],
+        "fallback-declared": ["one-writer-only"],
+        "semantic-trace-matches": ["skill-loaded", "passing-after-captured-by-root"]
+      }
+    },
+    {
+      "id": "feature-boundary",
+      "status": "verified",
+      "fixture": "feature-routing",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/feature-routing.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/feature-routing.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "feature-selected"],
+        ["boundary_inspected", "root", "current-boundary-inspected"],
+        ["design_frozen", "root", "direct-design-recorded"],
+        ["baseline_failed", "root", "failing-before-captured-by-root"],
+        ["writer_started", "root", "exactly-one-writer"],
+        ["implementation_produced", "writer", "writer-ownership-bounded"],
+        ["diff_inspected", "root", "root-diff-inspected"],
+        ["verification_passed", "root", "passing-after-captured-by-root"]
+      ],
+      "assertions": {
+        "playbook-selected": ["feature-selected"],
+        "expected-roles-spawned": ["exactly-one-writer"],
+        "candidates-frozen-before-review": [],
+        "reviewer-did-not-write": [],
+        "writers-bounded-or-isolated": ["writer-ownership-bounded", "writer-isolated-or-serialized"],
+        "root-independently-inspected": ["root-diff-inspected"],
+        "exact-verification-reported": ["failing-before-captured-by-root", "passing-after-captured-by-root"],
+        "child-report-not-accepted-alone": ["root-diff-inspected", "passing-after-captured-by-root"],
+        "fallback-declared": ["writer-isolated-or-serialized"],
+        "semantic-trace-matches": ["feature-selected", "passing-after-captured-by-root"]
+      }
+    },
+    {
+      "id": "behavior-preserving-refactor",
+      "status": "verified",
+      "fixture": "refactoring-routing",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/refactoring-routing.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/refactoring-routing.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "refactoring-selected"],
+        ["contract_pinned", "root", "baseline-behavior-pinned-by-root"],
+        ["target_shape_named", "root", "target-shape-named"],
+        ["writer_started", "root", "exactly-one-writer"],
+        ["implementation_produced", "writer", "writer-ownership-bounded"],
+        ["diff_inspected", "root", "root-diff-inspected"],
+        ["equivalence_verified", "root", "equivalence-proven-by-root"]
+      ],
+      "assertions": {
+        "playbook-selected": ["refactoring-selected"],
+        "expected-roles-spawned": ["exactly-one-writer"],
+        "candidates-frozen-before-review": [],
+        "reviewer-did-not-write": [],
+        "writers-bounded-or-isolated": ["writer-ownership-bounded", "writer-isolated-or-serialized"],
+        "root-independently-inspected": ["root-diff-inspected"],
+        "exact-verification-reported": ["baseline-behavior-pinned-by-root", "equivalence-proven-by-root"],
+        "child-report-not-accepted-alone": ["root-diff-inspected", "equivalence-proven-by-root"],
+        "fallback-declared": ["writer-isolated-or-serialized"],
+        "semantic-trace-matches": ["refactoring-selected", "equivalence-proven-by-root"]
+      }
+    },
+    { "id": "architecture-candidates", "status": "pending" },
+    { "id": "mixed-review", "status": "pending" },
+    { "id": "conflicting-writers", "status": "pending" }
+  ]
+}

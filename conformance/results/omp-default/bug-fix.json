@@ -1,0 +1,164 @@
+{
+  "$schema": "../../../src/schemas/conformance-result.schema.json",
+  "schemaVersion": 1,
+  "scenario": "bug-fix",
+  "profile": "omp-default",
+  "sourceEvidence": "evals/evidence/omp-18.2.6/bug-fix-delegated.json",
+  "result": "pass",
+  "coordinate": {
+    "runtime": "omp",
+    "surface": "cli",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "project-agents-skill-copy+probe-overlays-empty-includeSkills+delegation-sync+parallel-async+follow-up-revival+background-job-cancel+native-history-transcript+isolated-writer-patch+role-model-routing",
+    "permissionProfile": "writable disposable root fixture plus one isolated writer; no external mutations"
+  },
+  "providerInventoryEvidence": "evals/evidence/omp-18.2.6/setup-live.json",
+  "modelResolution": {
+    "status": "not-recorded",
+    "details": "The scenario evidence does not independently record the resolved root and worker model identities; the separate routing probe establishes the capability only."
+  },
+  "fixture": {
+    "path": "evals/fixtures/bug-fix-delegated",
+    "revision": "6294b673ba9ea72c27d5dece6b7023e43feba0bae21dd0a90d72ea6f275a7c3f",
+    "artifacts": [
+      {
+        "path": "expected.json",
+        "sha256": "1fe007a63cbef37e177634a3642a756f379cfe686d9e2179966d98ae112b2fc2"
+      },
+      {
+        "path": "project/lib/port.mjs",
+        "sha256": "f2ba662d481d8cd97f1e18788b8a14bc01fb9f0ac3153a157b255d8a2b90b311"
+      },
+      {
+        "path": "project/test/port.test.mjs",
+        "sha256": "7f970391f2780cfd12b09a8b541bcdcaef1eacbb83743b9a7a615a69150dde2e"
+      },
+      {
+        "path": "request.md",
+        "sha256": "13f2873a154428921b9c3e51eb5c4dcacd97bacf58701c61ba8797e790fd9996"
+      }
+    ]
+  },
+  "repetitions": {
+    "required": 1,
+    "attempts": 1,
+    "passed": 1,
+    "acceptableFailures": 0
+  },
+  "semanticTrace": [
+    {
+      "sequence": 1,
+      "event": "playbook_selected",
+      "actor": "root",
+      "evidenceAssertion": "skill-loaded"
+    },
+    {
+      "sequence": 2,
+      "event": "baseline_failed",
+      "actor": "root",
+      "evidenceAssertion": "failing-before-captured-by-root"
+    },
+    {
+      "sequence": 3,
+      "event": "cause_identified",
+      "actor": "root",
+      "evidenceAssertion": "root-cause-identified-by-root"
+    },
+    {
+      "sequence": 4,
+      "event": "writer_started",
+      "actor": "root",
+      "evidenceAssertion": "one-worker-started"
+    },
+    {
+      "sequence": 5,
+      "event": "patch_produced",
+      "actor": "writer",
+      "evidenceAssertion": "worker-result-collected"
+    },
+    {
+      "sequence": 6,
+      "event": "diff_inspected",
+      "actor": "root",
+      "evidenceAssertion": "root-diff-inspected"
+    },
+    {
+      "sequence": 7,
+      "event": "verification_passed",
+      "actor": "root",
+      "evidenceAssertion": "passing-after-captured-by-root"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "playbook-selected",
+      "status": "pass",
+      "sourceAssertions": [
+        "skill-loaded"
+      ]
+    },
+    {
+      "id": "expected-roles-spawned",
+      "status": "pass",
+      "sourceAssertions": [
+        "one-worker-started"
+      ]
+    },
+    {
+      "id": "candidates-frozen-before-review",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "reviewer-did-not-write",
+      "status": "not-applicable",
+      "sourceAssertions": []
+    },
+    {
+      "id": "writers-bounded-or-isolated",
+      "status": "pass",
+      "sourceAssertions": [
+        "one-writer-only"
+      ]
+    },
+    {
+      "id": "root-independently-inspected",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected"
+      ]
+    },
+    {
+      "id": "exact-verification-reported",
+      "status": "pass",
+      "sourceAssertions": [
+        "failing-before-captured-by-root",
+        "passing-after-captured-by-root"
+      ]
+    },
+    {
+      "id": "child-report-not-accepted-alone",
+      "status": "pass",
+      "sourceAssertions": [
+        "root-diff-inspected",
+        "passing-after-captured-by-root"
+      ]
+    },
+    {
+      "id": "fallback-declared",
+      "status": "pass",
+      "sourceAssertions": [
+        "one-writer-only"
+      ]
+    },
+    {
+      "id": "semantic-trace-matches",
+      "status": "pass",
+      "sourceAssertions": [
+        "skill-loaded",
+        "passing-after-captured-by-root"
+      ]
+    }
+  ]
+}
