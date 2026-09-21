@@ -18,6 +18,14 @@
       "uninstallBehavior": "Removed with the owning generated Skill package."
     },
     {
+      "path": "tools/collect-model-inventory.mjs",
+      "owner": "local-core",
+      "purpose": "Collect and normalize the current OMP or Codex model inventory before model-role configuration.",
+      "network": true,
+      "writes": ["optional user-selected model inventory file"],
+      "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected inventory files remain user-owned."
+    },
+    {
       "path": "tools/configure-models.mjs",
       "owner": "local-core",
       "purpose": "Validate an observed model inventory and write target-native role model overrides into a user-selected project-owned directory.",

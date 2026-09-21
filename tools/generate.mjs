@@ -493,6 +493,7 @@ export async function renderTarget(stageRoot, model, adapter) {
     adapter: resolutionAdapters[adapter.id],
   });
   await mkdir(join(target, "scripts"), { recursive: true });
+  await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
   await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
 
   await writeJson(join(target, "GENERATION.json"), {
@@ -547,6 +548,7 @@ export async function validateRenderedTarget(target, adapter, model) {
   const resolution = await readJson(join(target, "config", "runtime-resolution.json"));
   assert(resolution.target === adapter.id, `${adapter.id}: runtime resolution target drift`);
   assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
+  assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
 }
 

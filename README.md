@@ -186,12 +186,15 @@ npm run check
 local links, the executable inventory, and the test suite without network
 access.
 
-Each generated package contains `scripts/configure-models.mjs` and
-`config/runtime-resolution.json`. The explicit `setup-oh-my-stack` Skill first
-collects a fresh runtime inventory, then uses the script to preview and write
-target-native role files into a dedicated directory. The resolver rejects
-unobserved model or reasoning identifiers and modified files it does not own.
-It never edits a user's broader runtime configuration directly.
+Each generated package contains `scripts/collect-model-inventory.mjs`,
+`scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The
+explicit `setup-oh-my-stack` Skill first runs the collector against the current
+runtime's native model inventory, then uses the configuration script to preview
+and write target-native role files into a dedicated directory. Collection
+fails closed for targets without a verified inventory operation. The resolver
+rejects unobserved model or reasoning identifiers and preflights every owned
+file before writing any update. It never edits a user's broader runtime
+configuration directly.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

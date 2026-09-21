@@ -154,13 +154,17 @@ name belongs in the core. Conformance requires runtime-produced session
 metadata for the resolved child values; a worker's statement about its own
 model is insufficient.
 
-Every generated target carries a runtime-resolution descriptor and the same
-offline setup script. The script accepts a timestamped, source-attributed model
-inventory plus explicit `fast`, `balanced`, and `deep` selections. It validates
-each model and reasoning effort against that inventory before rendering native
-role overrides. Outputs live in a dedicated project-owned directory; reruns
-replace only files whose hashes match the prior project manifest and preserve
-unrelated user files. Configuration alone never establishes model diversity.
+Every generated target carries a runtime-resolution descriptor, a live
+inventory collector, and the same offline configuration script. The collector
+calls the native inventory operation verified for that generated target and
+normalizes model identifiers plus supported reasoning efforts. It fails closed
+when no operation has been verified. The configuration script accepts that
+timestamped, source-attributed inventory plus explicit `fast`, `balanced`, and
+`deep` selections. It validates each model and reasoning effort before
+rendering native role overrides. Outputs live in a dedicated project-owned
+directory. Reruns preflight every owned file before writing, replace only files
+whose hashes match the prior project manifest, and preserve unrelated user
+files. Configuration alone never establishes model diversity.
 
 ## Build pipeline
 

@@ -113,12 +113,15 @@ function configuredRole(text, adapter, selection) {
   return insertYamlFields(text, fields);
 }
 
-async function safeWrite(path, content, outputDirectory, priorHashes) {
+async function assertSafeTarget(path, outputDirectory, priorHashes) {
   if (await exists(path)) {
     const key = relative(outputDirectory, path).split(sep).join("/");
     const current = await readFile(path);
     assert(priorHashes.get(key) === sha256(current), `${path}: refusing to overwrite an unowned or modified file`);
   }
+}
+
+async function safeWrite(path, content) {
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, content);
 }
@@ -188,7 +191,8 @@ export async function configure({ packageRoot, inventoryPath, outputRoot, select
   };
 
   if (apply) {
-    for (const write of writes) await safeWrite(write.path, write.content, outputDirectory, priorHashes);
+    for (const write of writes) await assertSafeTarget(write.path, outputDirectory, priorHashes);
+    for (const write of writes) await safeWrite(write.path, write.content);
     await mkdir(outputDirectory, { recursive: true });
     await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   }

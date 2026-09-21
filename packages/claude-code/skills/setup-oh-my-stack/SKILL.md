@@ -11,12 +11,18 @@ models available on the current runtime surface.
 
 ## 1. Observe before selecting
 
-Identify the active runtime surface and use its native inventory operation or
-documented local command to list models available to the current account and
-configuration. Do not reuse remembered model names or examples from
-documentation.
+Identify the active runtime surface. Locate this package's
+`scripts/collect-model-inventory.mjs` and run it with a dedicated output path.
+The collector calls the native inventory operation verified for the current
+generated target and normalizes its live response. Do not reuse remembered
+model names, examples from documentation, or an inventory from another runtime
+surface.
 
-Normalize the result into a JSON inventory with:
+The collector deliberately stops when the generated target has no verified
+inventory operation. If collection fails, report the exact missing observation.
+Do not replace the collector with a guessed model list.
+
+The resulting JSON inventory contains:
 
 - `schemaVersion: 1`;
 - the target runtime identifier;

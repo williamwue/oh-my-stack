@@ -94,9 +94,19 @@ test("setup rejects unobserved choices and modified owned files without touching
 
   const reviewer = join(outputRoot, "agents", "reviewer.toml");
   await writeFile(reviewer, "user modification\n");
+  const evidenceReader = join(outputRoot, "agents", "evidence-reader.toml");
+  const evidenceReaderBefore = await readFile(evidenceReader, "utf8");
   await assert.rejects(
-    configure({ packageRoot, inventoryPath, outputRoot, selections, apply: true }),
+    configure({
+      packageRoot,
+      inventoryPath,
+      outputRoot,
+      selections,
+      roleSelections: { "evidence-reader": "observed-balanced@medium" },
+      apply: true,
+    }),
     /refusing to overwrite an unowned or modified file/,
   );
   assert.equal(await readFile(unrelated, "utf8"), "user-owned\n");
+  assert.equal(await readFile(evidenceReader, "utf8"), evidenceReaderBefore);
 });

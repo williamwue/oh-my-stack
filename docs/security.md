@@ -19,6 +19,12 @@ Upstream content, external web content, subagent reports, transcripts, generated
 - Credentials, transcripts, and private workspace content are excluded from fixtures and generated packages.
 - External mutations, merges, destructive operations, and irreversible decisions remain root- and user-governed.
 
+The model-inventory collector may use the runtime's authenticated network path
+to read the current account catalog. It writes only an explicitly selected
+inventory file. The configuration step is offline, validates every selection
+against that file, and preflights all project-owned targets before applying an
+update. Neither step writes into the user's broader runtime configuration.
+
 ## Hook policy
 
 A target may generate a Hook only when a workflow declares it as an optional or required capability. The package documents the trigger, command, files read or written, network behavior, and disable path. Installation alone does not imply trust; the runtime's native trust or approval mechanism remains authoritative.
