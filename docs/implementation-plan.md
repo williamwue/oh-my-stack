@@ -42,6 +42,18 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 
 ## Phase 2: runtime probes
 
+### Current progress
+
+- OMP 18.2.6 and Codex CLI 0.155.1 pass discovery, explicit invocation,
+  relative-resource, packaged-script, and one read-only delegated-worker
+  fixtures on macOS arm64.
+- The delegated-worker fixture reaches `W2`: one child-only result is
+  collected, then the root independently re-reads its own evidence.
+- Parallel fan-out, asynchronous wait, follow-up, cancellation, transcript
+  access, worktree isolation, model override, and interaction remain pending.
+- Claude Code verification remains deferred until an authenticated local
+  runtime is available.
+
 ### Work
 
 - Record exact runtime surface, version, platform, configuration fingerprint, installed providers, and permission profile.

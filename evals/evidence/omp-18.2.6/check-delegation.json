@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-delegation",
+  "fixture": "check-delegation",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs disabled by the delegation probe overlay.",
+    "permissionProfile": "Only read and task tools enabled; fixture required no writes"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-delegation Skill." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "One native task call started exactly one bundled read-only scout named ChildMarkerReader." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "Synchronous task completion returned one completed task-result payload to the root." },
+    { "id": "child-marker-reported", "status": "pass", "evidence": "The scout read assets/child.txt and returned CHILD_MARKER=delegation-ok with its resource path." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before delegation and independently again after the task result." },
+    { "id": "markers-match", "status": "pass", "evidence": "The final response compared ROOT_MARKER and CHILD_MARKER as delegation-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "Only read and task tools were enabled and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "The probe disabled asynchronous jobs, so agents.wait is proven through blocking task completion rather than background job control.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

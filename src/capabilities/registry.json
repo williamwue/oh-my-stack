@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
     "resources.relative_paths",
     "scripts.execute",
     "skills.discover",

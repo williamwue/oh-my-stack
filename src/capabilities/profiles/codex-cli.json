@@ -12,6 +12,9 @@
     "installedProviders": []
   },
   "capabilities": {
+    "agents.read_result": { "status": "native", "provider": "collected subagent result", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
+    "agents.spawn": { "status": "native", "provider": "subagent workflow", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
+    "agents.wait": { "status": "native", "provider": "wait", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
     "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
     "scripts.execute": { "status": "external", "provider": "node via shell", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
     "skills.discover": { "status": "native", "provider": ".agents/skills", "evidence": "evals/evidence/codex-cli-0.155.1/prove-it-works.json" },

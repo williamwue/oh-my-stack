@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "assertions": [
+    "skill-loaded",
+    "one-worker-started",
+    "worker-result-collected",
+    "child-marker-reported",
+    "root-marker-independently-verified",
+    "markers-match",
+    "no-intentional-project-writes"
+  ]
+}

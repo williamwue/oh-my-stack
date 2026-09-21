@@ -1,0 +1,6 @@
+interface:
+  display_name: "Check Delegation"
+  short_description: "Verify this workflow package installation"
+  default_prompt: "Use $check-delegation to verify this installation without changing project files."
+policy:
+  allow_implicit_invocation: true

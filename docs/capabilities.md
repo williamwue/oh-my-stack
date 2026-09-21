@@ -123,13 +123,23 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Documented, schema-dependent | Two W1 fixtures pass and D2/D3 checks are observed; overall D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | One read-only worker observed | Two W1 fixtures and one W2 fixture pass; D2/D3 are observed, but overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Documented | D3 and two W1 fixtures pass on 0.155.1 |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | One read-only worker observed | D3, two W1 fixtures, and one W2 fixture pass on 0.155.1 |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
-The Codex baseline is derived from the official [Skills and Plugins](https://developers.openai.com/codex/skills-and-plugins), [Plugins](https://developers.openai.com/codex/plugins), and [Subagents](https://developers.openai.com/codex/subagents) documentation. Repository documentation must retain the observation date; generated evidence must retain the exact runtime coordinates.
+The Codex baseline is derived from the official
+[Build skills](https://developers.openai.com/plugins/build/skills),
+[Build plugins](https://developers.openai.com/plugins/build/plugins), and
+[Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+documentation. Repository documentation must retain the observation date;
+generated evidence must retain the exact runtime coordinates.
+
+The current W2 observation is intentionally the smallest lifecycle slice. It
+proves `agents.spawn`, `agents.wait`, and `agents.read_result` for one read-only
+worker. It does not imply support for parallel fan-out, background job control,
+follow-up, cancellation, transcript access, or isolated writers.
 
 Phase 2 replaces each research or documented entry with a versioned observation. Separate profiles are created when platforms, permission modes, installed providers, or runtime versions change behavior.
 

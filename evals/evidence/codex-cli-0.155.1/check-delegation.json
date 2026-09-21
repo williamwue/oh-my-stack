@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-delegation",
+  "fixture": "check-delegation",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Ephemeral execution with user config and rules ignored; generated Skill linked under project .agents/skills.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root read the generated check-delegation Skill before executing it." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "Exactly one subagent completion hook occurred and the final response reported exactly one read-only subagent." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "A native wait lifecycle event completed before the root's final read and the final response included the child-only marker." },
+    { "id": "child-marker-reported", "status": "pass", "evidence": "The collected result reported CHILD_MARKER=delegation-ok; the root command trace never read assets/child.txt." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before delegation and independently again after wait completion." },
+    { "id": "markers-match", "status": "pass", "evidence": "The final response compared ROOT_MARKER and CHILD_MARKER as delegation-ok." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "The runtime used a read-only sandbox and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "The JSON event stream exposed wait and the child completion hook but omitted a separate spawn event; the child-only marker and hook provide the observed spawn evidence.",
+    "A configured Cloudflare MCP server failed authentication during startup but was unrelated to this fixture.",
+    "This evidence applies to Codex CLI only; desktop and IDE profiles remain unknown."
+  ]
+}

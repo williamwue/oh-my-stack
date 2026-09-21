@@ -15,10 +15,14 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads portable Skills and three adapters", async () => {
+test("loads three portable Skills and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 2);
-  assert.deepEqual(model.skills.map((skill) => skill.metadata.name), ["check-resources", "prove-it-works"]);
+  assert.equal(model.skills.length, 3);
+  assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+    "check-delegation",
+    "check-resources",
+    "prove-it-works",
+  ]);
   assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
   assert.equal(model.profiles.size, 5);
 });
@@ -31,12 +35,19 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.match(omp.capabilities["skills.discover"].evidence, /omp-18\.2\.6/);
   assert.equal(omp.capabilities["resources.relative_paths"].status, "native");
   assert.equal(omp.capabilities["scripts.execute"].status, "external");
+  assert.equal(omp.capabilities["agents.spawn"].status, "native");
+  assert.equal(omp.capabilities["agents.wait"].status, "native");
+  assert.equal(omp.capabilities["agents.read_result"].status, "native");
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
   assert.match(codexCli.capabilities["skills.invoke.explicit"].evidence, /codex-cli-0\.155\.1/);
   assert.equal(codexCli.capabilities["resources.relative_paths"].status, "native");
   assert.equal(codexCli.capabilities["scripts.execute"].status, "external");
+  assert.equal(codexCli.capabilities["agents.spawn"].status, "native");
+  assert.equal(codexCli.capabilities["agents.wait"].status, "native");
+  assert.equal(codexCli.capabilities["agents.read_result"].status, "native");
   const claude = model.profiles.get("claude-code-default");
   assert.equal(claude.capabilities["skills.discover"].status, "unknown");
+  assert.equal(claude.capabilities["agents.spawn"].status, "unknown");
   assert.equal(claude.verification.status, "pending");
 });
 
