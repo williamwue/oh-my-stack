@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "selectedRoute": "opening-a-pr",
+  "repository": "example/oms-pr-fixture",
+  "forge": "github",
+  "baseBranch": "main",
+  "headBranch": "feature/normalize-greeting",
+  "verification": "node --test test/greeting.test.mjs",
+  "expectedChangedPaths": [
+    "project/lib/greeting.mjs",
+    "project/test/greeting.test.mjs"
+  ],
+  "requiredBodySections": ["Why", "Scope", "Blast Radius", "Verification"],
+  "assertions": [
+    "router-loaded",
+    "generated-resources-only",
+    "opening-pr-selected-from-explicit-intent",
+    "writing-skills-loaded",
+    "destination-resolved-from-git",
+    "complete-range-and-diff-inspected",
+    "clean-check-run-by-root",
+    "ordered-commits-inspected",
+    "title-and-body-prepared",
+    "fallback-selected-for-unknown-capability",
+    "exact-pending-operation-reported",
+    "publication-not-attempted",
+    "no-url-fabricated",
+    "merge-not-attempted",
+    "workspace-unchanged"
+  ]
+}
