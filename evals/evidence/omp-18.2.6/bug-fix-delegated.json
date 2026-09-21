@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-bug-fix-delegated",
+  "fixture": "bug-fix-delegated",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Alpha 1 Skills and implementer role copied into a disposable Git fixture; empty Skill allowlist; asynchronous task support; isolated task worktree with patch merge and apply=false.",
+    "permissionProfile": "writable disposable root fixture plus one isolated writer; no external mutations"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.wait", "commands.run", "skills.discover", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/bug-fix-root.json",
+    "evals/evidence/omp-18.2.6/check-writer-isolation.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The runtime applied the generated bug-fix workflow." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before delegation the root captured exit 1 and true !== false from the exact test command." },
+    { "id": "root-cause-identified-by-root", "status": "pass", "evidence": "The root identified the off-by-one upper bound before starting the writer." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "The runtime reported one isolated implementer named PortBoundFix and no second worker." },
+    { "id": "one-writer-only", "status": "pass", "evidence": "The implementer wrote in an isolated task worktree; its patch was not auto-applied, and the root applied the reviewed one-line correction only after the worker finished." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The root reported the isolated writer result and retained patch before integration." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root checked the patch before applying it; an outer check confirmed exactly one changed line." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The root reran the original command after integration; exit 0 reported two passes and zero failures." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Outer git status contained only project/lib/port.mjs." }
+  ],
+  "limitations": [
+    "The root manually integrated the retained patch because the probe deliberately configured apply=false.",
+    "This fixture proves one bounded writer, not concurrent writers or external-system completion."
+  ]
+}

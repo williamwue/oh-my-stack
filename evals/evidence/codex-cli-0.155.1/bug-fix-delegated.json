@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-bug-fix-delegated",
+  "fixture": "bug-fix-delegated",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated Alpha 1 Skills and implementer TOML committed in a disposable source repository; worktrees feature enabled; top-level managed worktree; project rules ignored; base user configuration loaded because this CLI rejects --worktree with --ignore-user-config.",
+    "permissionProfile": "workspace-write sandbox with approval policy never inside the managed worktree"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.wait", "commands.run", "skills.discover", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/bug-fix-root.json",
+    "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json",
+    "evals/evidence/codex-cli-0.155.1/check-custom-role.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root read and applied the generated bug-fix Skill." },
+    { "id": "failing-before-captured-by-root", "status": "pass", "evidence": "Before spawning the writer, the root captured exit 1 with actual true and expected false from the exact test command." },
+    { "id": "root-cause-identified-by-root", "status": "pass", "evidence": "The root identified the off-by-one upper bound before delegation." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "Exactly one bounded writer was started and collected; no replacement or retry worker was created." },
+    { "id": "one-writer-only", "status": "pass", "evidence": "The root made no implementation edit while the worker wrote. The child shared the top-level managed worktree, while the original source checkout remained clean." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The root collected the worker's one-line correction and passing focused-test report before inspecting state." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root ran git status, git diff, and git diff --check after collection; an outer check independently confirmed the one-line diff." },
+    { "id": "passing-after-captured-by-root", "status": "pass", "evidence": "The root reran the original command; exit 0 reported two passes and zero failures." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Only project/lib/port.mjs changed in the managed worktree and the source checkout remained clean." }
+  ],
+  "limitations": [
+    "The writer child shared the root's managed worktree; Codex CLI did not provide a separate per-child worktree on this surface.",
+    "The generated custom role was not selectable, so the workflow used its declared inline bounded-implementer fallback.",
+    "The run loaded base user configuration and emitted unrelated MCP authentication warnings because Codex CLI 0.155.1 rejects --worktree with --ignore-user-config."
+  ]
+}

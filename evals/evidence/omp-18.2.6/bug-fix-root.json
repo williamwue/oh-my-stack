@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-bug-fix-root",
+  "fixture": "bug-fix-root",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated bug-fix, tdd, and show-me-your-work Skills copied under project .agents/skills; empty Skill allowlist overlay; non-interactive print mode; auto-approval limited to the disposable fixture repository.",
+    "permissionProfile": "writable disposable Git fixture with no external mutations"
+  },
+  "capabilities": ["commands.run", "skills.discover", "workspace.inspect", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/prove-it-works.json"],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The runtime applied the generated bug-fix procedure and its root-owned verification contract." },
+    { "id": "failing-before-captured", "status": "pass", "evidence": "The root ran node --test test/port.test.mjs before editing; exit 1 reported true !== false for 65536." },
+    { "id": "root-cause-identified", "status": "pass", "evidence": "The root tied the failure to the inclusive <= 65536 upper bound while 65535 remained valid." },
+    { "id": "one-bounded-change", "status": "pass", "evidence": "The only diff changed <= 65536 to <= 65535 in project/lib/port.mjs." },
+    { "id": "passing-after-captured", "status": "pass", "evidence": "The root reran the identical command; exit 0 reported two passes and zero failures." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The runtime reported root diff inspection; an outer check independently confirmed the one-line diff and passing test." },
+    { "id": "no-worker-started", "status": "pass", "evidence": "The fixture required root-only execution and the runtime reported root-only execution." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Outer git status contained only project/lib/port.mjs." }
+  ],
+  "limitations": [
+    "This proves the bounded root-only bug-fix fixture, not arbitrary defect diagnosis.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

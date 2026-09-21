@@ -164,6 +164,23 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 
 ### Alpha 1: bounded bug fix
 
+Current progress:
+
+- The pinned `tdd` Skill is imported with explicit-invocation policy and native
+  metadata for all three targets.
+- `show-me-your-work` is a reviewed semantic port with an append-only TSV log,
+  a tested formula-safe helper, capability-based transcript auditing, and a
+  read-only trail-review role. Source and output hashes are recorded.
+- The portable `bug-fix` workflow keeps reproduction, diagnosis, integration,
+  and final verification with the root. It supports root-only execution and
+  exactly one bounded writer with declared role, delegation, and isolation
+  fallbacks.
+- Root-only and one-delegated-writer fixtures pass on OMP 18.2.6 and Codex CLI
+  0.155.1. Both prove failing-before and passing-after on the same command, a
+  one-line scoped fix, root diff inspection, and no unexpected changes.
+- Claude-compatible output passes static generation and validation; live
+  verification remains deferred until an authenticated local runtime exists.
+
 - `tdd`;
 - `show-me-your-work`;
 - a minimal bug-fix playbook and required principle leaves;

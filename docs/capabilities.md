@@ -89,6 +89,7 @@ Records also name the provider, permissions, probe, and evidence artifact. Docum
 
 ### Workspace
 
+- `commands.run`
 - `workspace.inspect`
 - `workspace.write`
 - `workspace.isolate`
@@ -168,6 +169,17 @@ W3 semantic families. OMP does not: two fresh stale-replay attempts stalled
 before the generation-1 peer-ready message, with no child assistant or tool
 event. That failure leaves `coordination.peer_messages` unknown instead of
 proving it unsupported.
+
+The Alpha 1 `bug-fix` fixtures additionally prove native command execution and
+the same bounded workflow on both CLI runtimes. Root-only runs captured the
+failing test before the edit and the passing result afterward. Delegated runs
+started exactly one writer only after root reproduction and causal diagnosis;
+the root then inspected real workspace state and reran the exact test. OMP
+returned an isolated unapplied patch for root integration. Codex isolated the
+entire run in a top-level managed worktree, while the child shared that
+worktree and used the inline implementer fallback because its spawn surface
+cannot select the generated custom role. These results establish W1 and W2 for
+this fixture, not general bug-fixing success.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

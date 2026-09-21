@@ -7,10 +7,11 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
-implemented. Thirteen original fixture Skills plus twenty-three pinned pstack
-principle Skills and one canonical `evidence-reader` role generate
-deterministic OMP, Codex, and Claude Code target packages. All packages pass
-static `D0` validation.
+implemented. Thirteen original capability fixtures, twenty-three pinned pstack
+principles, and the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
+`bug-fix`) generate deterministic OMP, Codex, and Claude Code target packages.
+Three canonical roles generate native read-only and writable definitions. All
+packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -53,6 +54,16 @@ at `W2` coverage and peer messaging remains `unknown`, not `unsupported`.
 Codex lifecycle probes require persisted sessions;
 `--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
 
+The Alpha 1 bounded bug-fix workflow passes both its root-only and one-worker
+fixtures on OMP 18.2.6 and Codex CLI 0.155.1. In every run the root captured
+the same failing test before the edit, established the off-by-one cause,
+inspected the one-line diff, and reran the identical test to two passes. OMP's
+worker produced an isolated unapplied patch that the root reviewed and
+integrated. Codex used one top-level managed worktree shared by root and child;
+the original source checkout remained clean, and the inline implementer
+fallback was used because that CLI surface cannot select the generated custom
+role.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact
@@ -79,11 +90,12 @@ passing interactive result is bound to the observed `cursor/default` model
 because a separate reconnaissance model skipped the available native
 operation.
 
-The first pstack content slice is imported at the pinned upstream revision:
-all twenty-three `principle-*` Skills. Immutable source snapshots, per-file
-ownership, transformation hashes, and the candidate/baseline/verified pin
-lifecycle are stored under `upstream/`. The principles remain explicit-only;
-that semantic policy is compiled into native target metadata rather than
+The first pstack content slices are imported at the pinned upstream revision:
+all twenty-three `principle-*` Skills, `tdd`, `show-me-your-work`, and the
+`bug-fix` playbook semantics. Immutable source snapshots, per-file ownership,
+mechanical transformation hashes, reviewed semantic-derivation records, and
+the candidate/baseline/verified pin lifecycle are stored under `upstream/`.
+Explicit-only policy is compiled into native target metadata rather than
 leaking source-host frontmatter into the portable core.
 
 ## Development

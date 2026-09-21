@@ -80,6 +80,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["resources.relative_paths"].status, "native");
   assert.equal(omp.capabilities["scripts.execute"].status, "external");
   assert.equal(omp.capabilities["agents.cancel"].status, "native");
+  assert.equal(omp.capabilities["commands.run"].status, "native");
   assert.equal(omp.capabilities["agents.custom_roles"].status, "native");
   assert.equal(omp.capabilities["agents.model_override"].status, "native");
   assert.equal(omp.capabilities["agents.reasoning_override"].status, "native");
@@ -102,6 +103,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.model_override"].status, "native");
   assert.equal(codexCli.capabilities["agents.reasoning_override"].status, "native");
   assert.equal(codexCli.capabilities["agents.cancel"].status, "native");
+  assert.equal(codexCli.capabilities["commands.run"].status, "native");
   assert.equal(codexCli.capabilities["agents.spawn"].status, "native");
   assert.equal(codexCli.capabilities["agents.follow_up"].status, "native");
   assert.equal(codexCli.capabilities["agents.spawn_parallel"].status, "native");
