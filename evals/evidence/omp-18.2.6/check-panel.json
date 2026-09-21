@@ -1,0 +1,56 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-panel",
+  "fixture": "check-panel",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs enabled; cursor/default model with low thinking; only read, task, and hub tools enabled; extensions and rules disabled.",
+    "permissionProfile": "Read-only panel probe with no project-write tools"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-parallel.json",
+    "evals/evidence/omp-18.2.6/check-writer-isolation.json",
+    "evals/evidence/omp-18.2.6/check-cancellation.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-panel Skill before executing it." },
+    { "id": "two-candidates-started-before-wait", "status": "pass", "evidence": "One task batch created CandidateA and CandidateB before the first hub wait; a wait snapshot showed both running together." },
+    { "id": "candidate-results-separately-attributed", "status": "pass", "evidence": "Separate CandidateA and CandidateB session records returned Amber/3/amber-panel-ok and Cobalt/7/cobalt-panel-ok respectively." },
+    { "id": "candidate-assets-isolated", "status": "pass", "evidence": "Each candidate transcript read its own candidate asset and the workflow Skill only; neither read the root or sibling candidate asset." },
+    { "id": "candidate-results-frozen-before-review", "status": "pass", "evidence": "Both complete candidate results were delivered before the reviewer task call, and no candidate received a follow-up or revision request." },
+    { "id": "reviewer-started-after-freeze", "status": "pass", "evidence": "The root transcript created Reviewer only after both candidate results had completed and been collected." },
+    { "id": "reviewer-used-only-frozen-evidence", "status": "pass", "evidence": "The reviewer transcript inspected workflow instructions but no root or candidate asset, and returned Cobalt/7/cobalt-panel-ok from the supplied frozen strings." },
+    { "id": "synthesizer-started-after-review", "status": "pass", "evidence": "The root transcript created Synthesizer only after the reviewer result completed and was collected." },
+    { "id": "synthesizer-used-only-frozen-evidence", "status": "pass", "evidence": "The synthesizer transcript inspected workflow instructions but no root or candidate asset, and confirmed the frozen review as consistent." },
+    { "id": "review-and-synthesis-sessions-distinct", "status": "pass", "evidence": "Reviewer and Synthesizer have different named session files and separate terminal results." },
+    { "id": "exactly-four-child-sessions", "status": "pass", "evidence": "The session directory contains exactly CandidateA, CandidateB, Reviewer, and Synthesizer child JSONL records." },
+    { "id": "winner-consistent-with-frozen-evidence", "status": "pass", "evidence": "Reviewer, synthesizer, and root all selected Cobalt with score 7 and marker cobalt-panel-ok; 7 is greater than 3." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read panel-root-ok before child creation and independently again after synthesis completed." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in the disposable probe repository." }
+  ],
+  "limitations": [
+    "This is one passing run of a model-mediated protocol. Two reconnaissance runs did not satisfy the final fixture: one exposed an overbroad no-file-read assertion, and the next duplicated reviewer and synthesizer sessions. The final Skill now requires exactly four children and forbids retries; a repetition threshold is not yet established.",
+    "Reviewer and synthesizer may inspect the workflow Skill, but the evidence shows that they did not read root or candidate evidence assets.",
+    "This panel fixture passes its W3 semantic assertions, but runtime-wide conformance remains W2 until a delivered late stale-generation race is observed or an equivalent fallback is proven.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads eleven portable Skills, one role, and three adapters", async () => {
+test("loads twelve portable Skills, one role, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 11);
+  assert.equal(model.skills.length, 12);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "check-cancellation",
     "check-custom-role",
@@ -25,6 +25,7 @@ test("loads eleven portable Skills, one role, and three adapters", async () => {
     "check-follow-up",
     "check-interaction",
     "check-model-routing",
+    "check-panel",
     "check-parallel",
     "check-resources",
     "check-transcript",

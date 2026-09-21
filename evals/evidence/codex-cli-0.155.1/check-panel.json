@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-panel",
+  "fixture": "check-panel",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME directories; generated Skill under project .agents/skills; user configuration and project rules ignored; gpt-6-astra parent with four fork_turns=none children.",
+    "permissionProfile": "Read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-parallel.json",
+    "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json",
+    "evals/evidence/codex-cli-0.155.1/check-cancellation.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent received and read the generated check-panel Skill before executing it." },
+    { "id": "two-candidates-started-before-wait", "status": "pass", "evidence": "The persisted parent transcript records candidate_a and candidate_b spawn calls before its first wait_agent call." },
+    { "id": "candidate-results-separately-attributed", "status": "pass", "evidence": "Separate child transcripts returned Amber/3/amber-panel-ok and Cobalt/7/cobalt-panel-ok." },
+    { "id": "candidate-assets-isolated", "status": "pass", "evidence": "Each candidate child issued exactly one command reading its assigned absolute candidate asset and no other project content." },
+    { "id": "candidate-results-frozen-before-review", "status": "pass", "evidence": "Both candidate child turns completed before the reviewer spawn timestamp, with no follow-up or revision call to either candidate." },
+    { "id": "reviewer-started-after-freeze", "status": "pass", "evidence": "The reviewer spawn follows the waits that collected both terminal candidate results." },
+    { "id": "reviewer-used-only-frozen-evidence", "status": "pass", "evidence": "The reviewer child made no file or tool call and returned Cobalt/7/cobalt-panel-ok." },
+    { "id": "synthesizer-started-after-review", "status": "pass", "evidence": "The synthesizer spawn follows the wait that collected the terminal reviewer result." },
+    { "id": "synthesizer-used-only-frozen-evidence", "status": "pass", "evidence": "The synthesizer child made no file or tool call and returned Cobalt/7/cobalt-panel-ok with REVIEW_CONSISTENT=true." },
+    { "id": "review-and-synthesis-sessions-distinct", "status": "pass", "evidence": "Reviewer and synthesizer use different child thread ids and separate persisted JSONL files." },
+    { "id": "exactly-four-child-sessions", "status": "pass", "evidence": "The isolated state directory contains one parent and exactly four child session files: two candidates, one reviewer, and one synthesizer." },
+    { "id": "winner-consistent-with-frozen-evidence", "status": "pass", "evidence": "Reviewer, synthesizer, and parent all selected Cobalt with score 7 and marker cobalt-panel-ok; 7 is greater than 3." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "After one failed repository-relative lookup, the parent successfully read the Skill-relative panel-root-ok asset before child creation and independently again after synthesis." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run Git status reported no changes in the disposable probe repository." }
+  ],
+  "limitations": [
+    "Codex encrypts child assignment bodies in the persisted parent transcript. Frozen payload byte equality is therefore supported by lifecycle ordering, lack of child asset reads, separately attributable results, and consistent terminal outputs rather than an externally readable assignment string.",
+    "A first reconnaissance run followed a conflicting probe prompt that omitted the initial root read and correctly reported that invariant as false; only the corrected fresh run is claimed as passing evidence.",
+    "This panel fixture passes its W3 semantic assertions, but runtime-wide conformance remains W2 until a delivered late stale-generation race is observed or an equivalent fallback is proven.",
+    "Unrelated installed MCP providers attempted startup in the disposable state directory and emitted authentication warnings; the panel probe used no MCP provider and completed successfully.",
+    "This evidence applies to Codex CLI only; desktop and IDE profiles remain unknown."
+  ]
+}

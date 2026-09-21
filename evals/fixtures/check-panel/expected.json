@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "assertions": [
+    "skill-loaded",
+    "two-candidates-started-before-wait",
+    "candidate-results-separately-attributed",
+    "candidate-assets-isolated",
+    "candidate-results-frozen-before-review",
+    "reviewer-started-after-freeze",
+    "reviewer-used-only-frozen-evidence",
+    "synthesizer-started-after-review",
+    "synthesizer-used-only-frozen-evidence",
+    "review-and-synthesis-sessions-distinct",
+    "exactly-four-child-sessions",
+    "winner-consistent-with-frozen-evidence",
+    "root-marker-independently-verified",
+    "no-project-writes"
+  ]
+}

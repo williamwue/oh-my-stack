@@ -7,7 +7,7 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
-implemented. Eleven original Skills—including the lifecycle probes through
+implemented. Twelve original Skills—including the lifecycle probes through
 `check-model-routing` and the interaction probe—plus one canonical
 `evidence-reader` role generate
 deterministic OMP, Codex, and Claude Code target packages. All packages pass
@@ -39,9 +39,12 @@ writer is isolated from the source checkout: OMP retains an unapplied patch
 from an isolated task worktree, while Codex runs the parent and writer in a
 managed `--worktree` checkout. Completed-worker transcript retrieval is also
 proven: OMP exposes a native `history://` resource, while Codex CLI requires an
-external read of its persisted session JSONL. It does not yet prove a race
-where a late stale payload is delivered or coordinated panels, so achieved
-conformance remains W2. Codex lifecycle probes require persisted sessions;
+external read of its persisted session JSONL. A W3-targeted panel fixture now
+proves two independent parallel candidates, frozen candidate and review
+boundaries, and distinct reviewer and synthesizer sessions on both runtimes.
+It does not yet prove a race where a late stale payload is delivered, so
+runtime-wide achieved conformance remains W2. Codex lifecycle probes require
+persisted sessions;
 `--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
 
 The generated custom read-only role is discovered and applied natively by OMP.

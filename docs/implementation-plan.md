@@ -80,7 +80,12 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   OMP and Codex CLI TUI profiles. Non-interactive OMP print mode and Codex
   `exec` pass the declared pause-and-return fallback without inventing input.
   Codex interaction is an experimental asynchronous queued-card surface;
-  OMP's observed success is model-bound. Panels remain pending.
+  OMP's observed success is model-bound.
+- A W3-targeted coordinated-panel fixture passes on both live CLI runtimes:
+  two independent candidates start before waiting, their results freeze before
+  a new reviewer, the review freezes before a distinct synthesizer, and the
+  root independently verifies afterward. Runtime-wide conformance remains W2
+  because a delivered late stale-generation race remains unobserved.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

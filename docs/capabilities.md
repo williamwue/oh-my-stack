@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | Interactive fixed-choice/custom input and non-interactive fallback pass; W1/W2 lifecycle fixtures pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | The W3 panel fixture passes; runtime-wide conformance remains W2 pending a delivered late stale result; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 and W1/W2 fixtures pass on 0.155.1; interactive queued-card input and non-interactive fallback use separate profiles; custom roles remain unsupported on the probed spawn surface |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 and the W3 panel fixture pass on 0.155.1; runtime-wide conformance remains W2 pending a delivered late stale result; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -149,7 +149,14 @@ CLI has no observed native transcript-read operation and instead reads the
 persisted session JSONL as an external artifact; the task body is encrypted,
 but its attributable assignment envelope, read command, ordinary assistant
 marker, final result, and completion event remain independently visible.
-Panels remain unproven, so these results do not establish complete W3.
+The coordinated-panel fixture passes on both live CLI runtimes. It starts two
+independent candidates before waiting, freezes both results before creating a
+new reviewer, freezes that result before creating a distinct synthesizer, and
+performs a final independent root read. OMP exposes the frozen task bodies and
+results in its session records. Codex persists the lifecycle order and child
+results but encrypts child assignment bodies, so exact frozen-payload equality
+is not externally readable there. Complete runtime-wide W3 remains unproven
+because neither cancellation probe delivered a late stale payload.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

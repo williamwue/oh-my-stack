@@ -1,0 +1,3 @@
+OPTION=Cobalt
+SCORE=7
+EVIDENCE_MARKER=cobalt-panel-ok
