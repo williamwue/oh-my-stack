@@ -1,6 +1,6 @@
 ---
 name: check-writer-isolation
-description: Verify one delegated writer changes only an isolated workspace while a separate observer remains read-only.
+description: "Verify one delegated writer changes only an isolated workspace while a separate observer remains read-only."
 ---
 
 # Check Writer Isolation

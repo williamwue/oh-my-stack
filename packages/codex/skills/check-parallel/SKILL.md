@@ -1,6 +1,6 @@
 ---
 name: check-parallel
-description: Verify two independent read-only workers start before waiting and return separately attributable results.
+description: "Verify two independent read-only workers start before waiting and return separately attributable results."
 ---
 
 # Check Parallel

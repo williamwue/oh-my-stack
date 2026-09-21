@@ -1,6 +1,6 @@
 ---
 name: check-stale-replay
-description: Verify a cancelled worker can later deliver its retained old-generation result without that stale result being accepted.
+description: "Verify a cancelled worker can later deliver its retained old-generation result without that stale result being accepted."
 ---
 
 # Check Stale Replay

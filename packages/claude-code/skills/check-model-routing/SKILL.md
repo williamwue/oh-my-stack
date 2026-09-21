@@ -1,6 +1,6 @@
 ---
 name: check-model-routing
-description: Verify one delegated worker resolves an explicit alternate model and reasoning setting with observable runtime metadata.
+description: "Verify one delegated worker resolves an explicit alternate model and reasoning setting with observable runtime metadata."
 ---
 
 # Check Model Routing

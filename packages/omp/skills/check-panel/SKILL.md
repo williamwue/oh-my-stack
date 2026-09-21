@@ -1,6 +1,6 @@
 ---
 name: check-panel
-description: Verify parallel independent candidates, frozen review inputs, and separate review and synthesis sessions.
+description: "Verify parallel independent candidates, frozen review inputs, and separate review and synthesis sessions."
 ---
 
 # Check Panel

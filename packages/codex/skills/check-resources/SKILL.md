@@ -1,6 +1,6 @@
 ---
 name: check-resources
-description: Verify that a packaged Skill can resolve its own references, assets, and executable helper without changing the workspace.
+description: "Verify that a packaged Skill can resolve its own references, assets, and executable helper without changing the workspace."
 ---
 
 # Check Resources

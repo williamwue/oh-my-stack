@@ -1,6 +1,6 @@
 ---
 name: check-transcript
-description: Verify a root session can retrieve a completed delegated worker transcript independently from its delivered result.
+description: "Verify a root session can retrieve a completed delegated worker transcript independently from its delivered result."
 ---
 
 # Check Transcript

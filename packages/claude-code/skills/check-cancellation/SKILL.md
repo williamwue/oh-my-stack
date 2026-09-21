@@ -1,6 +1,6 @@
 ---
 name: check-cancellation
-description: Verify an active delegated worker can be cancelled and its generation excluded from accepted results.
+description: "Verify an active delegated worker can be cancelled and its generation excluded from accepted results."
 ---
 
 # Check Cancellation

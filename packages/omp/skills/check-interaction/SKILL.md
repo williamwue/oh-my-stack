@@ -1,6 +1,6 @@
 ---
 name: check-interaction
-description: Verify that a runtime collects one fixed choice and one user-authored value without silently inventing either response.
+description: "Verify that a runtime collects one fixed choice and one user-authored value without silently inventing either response."
 ---
 
 # Check Interaction

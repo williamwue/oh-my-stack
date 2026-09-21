@@ -1,6 +1,6 @@
 interface:
   display_name: "Check Model Routing"
-  short_description: "Verify this workflow package installation"
-  default_prompt: "Use $check-model-routing to verify this installation without changing project files."
+  short_description: "Check Model Routing workflow"
+  default_prompt: "Use $check-model-routing for this task."
 policy:
   allow_implicit_invocation: true

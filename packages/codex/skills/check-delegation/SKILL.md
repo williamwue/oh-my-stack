@@ -1,6 +1,6 @@
 ---
 name: check-delegation
-description: Verify one read-only delegated worker, result collection, and independent root verification.
+description: "Verify one read-only delegated worker, result collection, and independent root verification."
 ---
 
 # Check Delegation

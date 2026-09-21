@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
@@ -149,6 +149,29 @@ test("rendering is deterministic for every adapter", async () => {
   } finally {
     await rm(first, { recursive: true, force: true });
     await rm(second, { recursive: true, force: true });
+  }
+});
+
+test("explicit invocation renders as target-native policy", async () => {
+  const model = await loadModel();
+  const skill = model.skills.find((entry) => entry.metadata.name === "prove-it-works");
+  skill.metadata.invocation = "explicit";
+  const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-invocation-"));
+  try {
+    for (const adapter of model.adapters) await renderTarget(stage, model, adapter);
+    const ompSkill = await readFile(join(stage, "packages/omp/skills/prove-it-works/SKILL.md"), "utf8");
+    const claudeSkill = await readFile(join(stage, "packages/claude-code/skills/prove-it-works/SKILL.md"), "utf8");
+    const codexSkill = await readFile(join(stage, "packages/codex/skills/prove-it-works/SKILL.md"), "utf8");
+    const codexPolicy = await readFile(
+      join(stage, "packages/codex/skills/prove-it-works/agents/openai.yaml"),
+      "utf8",
+    );
+    assert.match(ompSkill, /disable-model-invocation: true/);
+    assert.match(claudeSkill, /disable-model-invocation: true/);
+    assert.doesNotMatch(codexSkill, /disable-model-invocation/);
+    assert.match(codexPolicy, /allow_implicit_invocation: false/);
+  } finally {
+    await rm(stage, { recursive: true, force: true });
   }
 });
 

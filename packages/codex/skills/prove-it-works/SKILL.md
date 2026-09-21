@@ -1,6 +1,6 @@
 ---
 name: prove-it-works
-description: Verify that this workflow package can load a Skill and report concrete read-only workspace evidence.
+description: "Verify that this workflow package can load a Skill and report concrete read-only workspace evidence."
 ---
 
 # Prove It Works

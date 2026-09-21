@@ -1,6 +1,6 @@
 ---
 name: check-custom-role
-description: Verify a generated canonical read-only role is discovered and applied to one delegated worker.
+description: "Verify a generated canonical read-only role is discovered and applied to one delegated worker."
 ---
 
 # Check Custom Role

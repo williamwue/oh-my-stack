@@ -1,6 +1,6 @@
 ---
 name: check-follow-up
-description: Verify a second read-only instruction continues on the same delegated worker with preserved context.
+description: "Verify a second read-only instruction continues on the same delegated worker with preserved context."
 ---
 
 # Check Follow Up

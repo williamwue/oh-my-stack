@@ -134,10 +134,11 @@ function validateProject(project) {
 function validateSkillMetadata(skill, registry, path) {
   assertKeys(
     skill,
-    new Set(["$schema", "schemaVersion", "name", "deliveryTarget", "workflowTarget", "requires", "fallbacks"]),
+    new Set(["$schema", "schemaVersion", "name", "invocation", "deliveryTarget", "workflowTarget", "requires", "fallbacks"]),
     path,
   );
   assert(skill.schemaVersion === 1, `${path}: schemaVersion must be 1`);
+  assert(["automatic", "explicit"].includes(skill.invocation), `${path}: invalid invocation policy`);
   assert(/^D[0-3]$/.test(skill.deliveryTarget), `${path}: invalid delivery target`);
   assert(/^W[0-4]$/.test(skill.workflowTarget), `${path}: invalid workflow target`);
   assert(Array.isArray(skill.requires), `${path}: requires must be an array`);
@@ -356,15 +357,32 @@ export async function loadModel(root = repoRoot) {
 }
 
 function codexSkillMetadata(skill) {
+  const displayName = skill.metadata.name
+    .split("-")
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(" ");
   return [
     "interface:",
-    `  display_name: "${skill.metadata.name.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" ")}"`,
-    '  short_description: "Verify this workflow package installation"',
-    `  default_prompt: "Use $${skill.metadata.name} to verify this installation without changing project files."`,
+    `  display_name: ${yamlQuoted(displayName)}`,
+    `  short_description: ${yamlQuoted(`${displayName} workflow`)}`,
+    `  default_prompt: ${yamlQuoted(`Use $${skill.metadata.name} for this task.`)}`,
     "policy:",
-    "  allow_implicit_invocation: true",
+    `  allow_implicit_invocation: ${skill.metadata.invocation === "automatic"}`,
     "",
   ].join("\n");
+}
+
+function renderSkillDocument(skill, adapter) {
+  const body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
+  const frontmatter = [
+    "---",
+    `name: ${skill.metadata.name}`,
+    `description: ${yamlQuoted(skill.frontmatter.description)}`,
+  ];
+  if (skill.metadata.invocation === "explicit" && adapter.id !== "codex") {
+    frontmatter.push("disable-model-invocation: true");
+  }
+  return [...frontmatter, "---", "", body, ""].join("\n");
 }
 
 function yamlQuoted(value) {
@@ -432,6 +450,7 @@ export async function renderTarget(stageRoot, model, adapter) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
     await rm(join(skillTarget, "skill.json"));
+    await writeText(join(skillTarget, "SKILL.md"), renderSkillDocument(skill, adapter));
     if (adapter.id === "codex") {
       await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
     }

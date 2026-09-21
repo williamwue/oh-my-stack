@@ -3,11 +3,12 @@
   "$id": "https://oh-my-stack.invalid/schemas/skill.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "name", "deliveryTarget", "workflowTarget", "requires", "fallbacks"],
+  "required": ["schemaVersion", "name", "invocation", "deliveryTarget", "workflowTarget", "requires", "fallbacks"],
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": 1 },
     "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "invocation": { "enum": ["automatic", "explicit"] },
     "deliveryTarget": { "enum": ["D0", "D1", "D2", "D3"] },
     "workflowTarget": { "enum": ["W0", "W1", "W2", "W3", "W4"] },
     "requires": {
