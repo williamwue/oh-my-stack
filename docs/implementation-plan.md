@@ -259,6 +259,12 @@ Current progress:
   unapplied patch for root integration. Codex uses a managed root worktree and
   serializes the writer inside it because nested worktree isolation is not
   exposed to the child.
+- The routed `refactoring` fixture passes on OMP and Codex CLI. Both roots pin
+  four exact task/project label outputs before editing, reduce two duplicated
+  trim/state/assembly branches to one private helper through exactly one
+  writer, inspect the actual one-file diff and unchanged exports, and rerun the
+  same two-test contract successfully. Isolation follows the same OMP child
+  worktree and Codex managed-root-worktree boundaries as the feature fixture.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;

@@ -219,6 +219,15 @@ inside that checkout. Each root inspects the actual two-file diff and reruns
 the identical test to two passes. The original Codex fixture checkout remains
 unchanged, and neither runtime publishes external state.
 
+The routed `refactoring` fixture proves the corresponding preservation case.
+Both roots run the two-test, four-output contract before delegation, name the
+duplicated trim/state/assembly reader load and the private-helper target, start
+one bounded writer, and inspect the resulting one-file diff. They confirm that
+only `renderTask` and `renderProject` remain exported and rerun the identical
+test successfully. OMP supplies an isolated child patch; Codex uses the managed
+root worktree with one serialized child. The evidence is intentionally bounded
+to the fixture's only caller/test surface.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

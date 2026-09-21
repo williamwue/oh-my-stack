@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-refactoring-routing",
+  "fixture": "refactoring-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, refactoring, and how Skills plus the implementer role copied into a disposable Git fixture; empty Skill allowlist; one isolated task worktree with patch merge and apply=false.",
+    "permissionProfile": "root read/write fixture with one bounded isolated writer and auto-approved inspection and test commands"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/feature-routing.json",
+    "evals/evidence/omp-18.2.6/check-writer-isolation.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Every Skill and role read came from the disposable repository; filesystem searches stayed inside it and no installed cache was read." },
+    { "id": "refactoring-selected", "status": "pass", "evidence": "The router selected refactoring because structure changed while observable behavior was required to remain fixed." },
+    { "id": "refactoring-and-how-loaded", "status": "pass", "evidence": "The root loaded the generated refactoring and how Skills and followed how's simple path." },
+    { "id": "callers-and-contract-inspected", "status": "pass", "evidence": "The root inspected labels.mjs, the only repository caller/test surface, and the exact four asserted outputs before delegation." },
+    { "id": "baseline-behavior-pinned-by-root", "status": "pass", "evidence": "The root ran node --test test/labels.test.mjs before delegation and captured exit 0 with two passing tests." },
+    { "id": "reader-load-problem-named", "status": "pass", "evidence": "The root named the duplicated trimming, state selection, and label assembly in renderTask and renderProject." },
+    { "id": "target-shape-named", "status": "pass", "evidence": "Before editing, the root named one private renderLabel(kind, name, closed) plus two thin public adapters and no new export." },
+    { "id": "exactly-one-writer", "status": "pass", "evidence": "The session contains exactly one LabelsRefactor child with no retry or replacement." },
+    { "id": "writer-ownership-bounded", "status": "pass", "evidence": "The child was restricted to labels.mjs and its patch changed only that file." },
+    { "id": "writer-isolated-or-serialized", "status": "pass", "evidence": "OMP ran the writer in an isolated worktree and returned an unapplied patch for root integration." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root checked and applied the patch, inspected the actual diff and status, and reread the final module." },
+    { "id": "duplicate-branches-removed", "status": "pass", "evidence": "The final module contains one private trim/state/assembly implementation and two thin adapters; only renderTask and renderProject are exported." },
+    { "id": "equivalence-proven-by-root", "status": "pass", "evidence": "After integration the root reran the identical command and captured exit 0 with the same two tests and four exact outputs passing." },
+    { "id": "reader-load-reduction-explained", "status": "pass", "evidence": "The final report compares two duplicated branches with one shared private implementation and names the reduced reconciliation burden." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Only labels.mjs changed; the test hash remained at the fixture baseline." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "Equivalence evidence is bounded to the four observable assertions in the pinned test surface; the repository contains no other callers.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

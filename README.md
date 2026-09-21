@@ -97,6 +97,14 @@ whole root session in a managed worktree and serializes its single writer
 inside that checkout because nested child isolation is unavailable. Neither
 run changes tests or performs publication.
 
+The routed `refactoring` fixture now passes on the same two runtimes. Each root
+pins the exact four-output behavior before delegation, names the duplicated
+reader load and target private helper, runs exactly one bounded writer, checks
+that only the implementation module changed and that no public export was
+added, then reruns the identical test to the same two passing tests. OMP uses
+an isolated child patch; Codex uses its managed root worktree and serialized
+writer fallback. This is behavior-preserving evidence, not a feature claim.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact

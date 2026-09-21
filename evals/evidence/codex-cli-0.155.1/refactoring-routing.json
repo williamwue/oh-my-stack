@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-refactoring-routing",
+  "fixture": "refactoring-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, refactoring, and how Skills plus implementer TOML committed in a disposable Git fixture; worktrees feature enabled; root ran in a managed worktree; project rules ignored; persisted child session.",
+    "permissionProfile": "workspace-write sandbox in a managed root worktree with one serialized bounded writer"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.isolate", "workspace.write"],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/feature-routing.json",
+    "evals/evidence/codex-cli-0.155.1/check-writer-isolation.json",
+    "evals/evidence/codex-cli-0.155.1/check-custom-role.json"
+  ],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the repository-generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Workflow reads were confined to repository-generated Skills, role definition, request, and project files; no installed cache participated." },
+    { "id": "refactoring-selected", "status": "pass", "evidence": "The router selected refactoring because the request preserved behavior while changing structure." },
+    { "id": "refactoring-and-how-loaded", "status": "pass", "evidence": "The root loaded refactoring and how plus how's packaged simple-path explainer contract." },
+    { "id": "callers-and-contract-inspected", "status": "pass", "evidence": "The root inspected labels.mjs, the repository caller/test search, and all four exact asserted outputs before delegation." },
+    { "id": "baseline-behavior-pinned-by-root", "status": "pass", "evidence": "The root ran node --test test/labels.test.mjs before spawning the child and captured exit 0 with two passing tests." },
+    { "id": "reader-load-problem-named", "status": "pass", "evidence": "The root named duplicated trimming, state selection, and label assembly across the two public functions." },
+    { "id": "target-shape-named", "status": "pass", "evidence": "Before editing, the root named one private renderLabel(kind, name, closed), two thin adapters, and no public alias." },
+    { "id": "exactly-one-writer", "status": "pass", "evidence": "Exactly one labels_implementer child ran, with no retry or replacement." },
+    { "id": "writer-ownership-bounded", "status": "pass", "evidence": "The inline role contract restricted writes to labels.mjs and the child changed only that file." },
+    { "id": "writer-isolated-or-serialized", "status": "pass", "evidence": "The root ran in a managed worktree isolated from the original fixture; the single child wrote serially inside that checkout because nested isolation was unavailable." },
+    { "id": "root-diff-inspected", "status": "pass", "evidence": "The root ran git diff --check, inspected the actual diff and status, and reread the final implementation and unchanged test." },
+    { "id": "duplicate-branches-removed", "status": "pass", "evidence": "One private renderLabel owns trimming, state selection, and assembly; only renderTask and renderProject remain exported." },
+    { "id": "equivalence-proven-by-root", "status": "pass", "evidence": "The root reran the identical command after review and captured exit 0 with the same two tests and four exact outputs passing." },
+    { "id": "reader-load-reduction-explained", "status": "pass", "evidence": "The final report explains that each shared operation now appears once instead of requiring readers to reconcile two copies." },
+    { "id": "no-unexpected-changes", "status": "pass", "evidence": "Only labels.mjs changed in the managed worktree; the original fixture and test hash stayed at baseline." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The generated implementer role was not selectable on this CLI spawn surface, so its contract was supplied inline.",
+    "The final response omitted the already-present managed root worktree when describing nested child isolation as unavailable; persisted metadata and the clean original fixture establish outer isolation.",
+    "Equivalence evidence is bounded to the four observable assertions in the pinned test surface; the repository contains no other callers.",
+    "Unrelated configured MCP startup and authentication warnings did not participate in the workflow."
+  ]
+}
