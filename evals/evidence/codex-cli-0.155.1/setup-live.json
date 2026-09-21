@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-setup-live",
+  "fixture": "setup-live",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated setup-oh-my-stack Skill and Codex package copied into a hardened disposable Git fixture; isolated CODEX_HOME; live inventory collected through app-server model/list with hidden models excluded; deterministic first-eligible selection used for all workload classes; runner artifacts stored outside the repository.",
+    "permissionProfile": "workspace-write sandbox with automatic approval review"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "scripts.execute",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-model-routing.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The top-level agent used the generated setup Skill and package-local collector and configurator; no installed Skill cache participated." },
+    { "id": "setup-skill-loaded", "status": "pass", "evidence": "The top-level agent explicitly loaded the complete generated setup-oh-my-stack Skill before running either packaged script." },
+    { "id": "native-inventory-collected", "status": "pass", "evidence": "The packaged collector called codex app-server model/list with includeHidden=false and normalized five observed models." },
+    { "id": "inventory-source-and-time-recorded", "status": "pass", "evidence": "inventory.json records source codex app-server model/list (includeHidden=false) and observedAt 2026-09-21T13:18:58.869Z." },
+    { "id": "selection-observed", "status": "pass", "evidence": "The fixture policy selected the first observed model supporting low, medium, and high reasoning: gpt-6-astra." },
+    { "id": "invented-model-rejected-before-write", "status": "pass", "evidence": "A preview using invented-model-xyz@low exited nonzero before a resolution manifest or agent directory existed." },
+    { "id": "dry-run-before-apply", "status": "pass", "evidence": "A valid preview completed before the separate --apply invocation." },
+    { "id": "dry-run-created-no-output", "status": "pass", "evidence": "The valid preview reported applied false and created neither the owned manifest nor generated agent files." },
+    { "id": "seven-native-roles-applied", "status": "pass", "evidence": "Apply generated exactly seven Codex TOML role definitions plus oh-my-stack.resolution.json." },
+    { "id": "manifest-binds-inventory-hash", "status": "pass", "evidence": "The manifest records inventory SHA-256 ee1f9566d9ce3dee814f39d2956c99e61196b5c0d6174c115f106d1caaddc9c6, matching the collected file." },
+    { "id": "unrelated-file-preserved", "status": "pass", "evidence": "workspace/configured/keep-me.txt retained its source hash f8de004cd5ea461d38a3bedf7519fb732847a6709858915d2eaa3291b40d2725." },
+    { "id": "owned-files-only", "status": "pass", "evidence": "Strict Git status contained only inventory.json, seven generated role files, and the owned resolution manifest." },
+    { "id": "diversity-not-claimed", "status": "pass", "evidence": "Every role records diversityEstablished false because all three workload classes intentionally selected the same first eligible model." },
+    { "id": "no-delegation", "status": "pass", "evidence": "No spawn operation or child thread occurred." },
+    { "id": "no-broader-runtime-config-write", "status": "pass", "evidence": "All applied configuration stayed under workspace/configured and the isolated CODEX_HOME remained free of generated role overrides." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, package publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The first-eligible model choice is fixture policy, not a recommendation or a model-quality comparison.",
+    "The setup run proves repository-local configuration generation; it does not install files into a user-wide runtime home.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-setup-live",
+  "fixture": "setup-live",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated setup-oh-my-stack Skill, OMP package, and hardened setup-live fixture copied into a disposable Git repository; live inventory collected with extensions disabled; deterministic first-eligible selection used for all workload classes; runner artifacts stored outside the repository; no task tool enabled.",
+    "permissionProfile": "auto-approved repository read, command, and write tools with delegation unavailable"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "scripts.execute",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-model-routing.json"
+  ],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root used the generated setup Skill and package-local collector and configurator; no installed Skill cache participated." },
+    { "id": "setup-skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the complete generated setup-oh-my-stack Skill before running either packaged script." },
+    { "id": "native-inventory-collected", "status": "pass", "evidence": "The packaged collector ran omp models --json --no-extensions and normalized 124 observed models." },
+    { "id": "inventory-source-and-time-recorded", "status": "pass", "evidence": "inventory.json records source omp models --json --no-extensions and observedAt 2026-09-21T13:17:35.008Z." },
+    { "id": "selection-observed", "status": "pass", "evidence": "The fixture policy selected the first observed model supporting low, medium, and high reasoning: cursor/claude-4-sonnet." },
+    { "id": "invented-model-rejected-before-write", "status": "pass", "evidence": "A preview using invented-model-xyz@low exited nonzero before a resolution manifest or agent directory existed." },
+    { "id": "dry-run-before-apply", "status": "pass", "evidence": "A valid preview completed before the separate --apply invocation." },
+    { "id": "dry-run-created-no-output", "status": "pass", "evidence": "The valid preview reported applied false and created neither the owned manifest nor generated agent files." },
+    { "id": "seven-native-roles-applied", "status": "pass", "evidence": "Apply generated exactly seven OMP Markdown role definitions plus oh-my-stack.resolution.json." },
+    { "id": "manifest-binds-inventory-hash", "status": "pass", "evidence": "The manifest records inventory SHA-256 e48d3164bd6780b4694dc77408cf880a4950395db0709b2ec560000c82deb371, matching the collected file." },
+    { "id": "unrelated-file-preserved", "status": "pass", "evidence": "workspace/configured/keep-me.txt retained its source hash f8de004cd5ea461d38a3bedf7519fb732847a6709858915d2eaa3291b40d2725." },
+    { "id": "owned-files-only", "status": "pass", "evidence": "Strict Git status contained only inventory.json, seven generated role files, and the owned resolution manifest." },
+    { "id": "diversity-not-claimed", "status": "pass", "evidence": "Every role records diversityEstablished false because all three workload classes intentionally selected the same first eligible model." },
+    { "id": "no-delegation", "status": "pass", "evidence": "The task tool was unavailable and no child session ran." },
+    { "id": "no-broader-runtime-config-write", "status": "pass", "evidence": "All applied configuration stayed under workspace/configured; no user or machine runtime configuration was edited." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, package publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The first-eligible model choice is fixture policy, not a recommendation or a model-quality comparison.",
+    "The setup run proves repository-local configuration generation; it does not install files into a user-wide runtime home.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 safety gate is unresolved."
+  ]
+}

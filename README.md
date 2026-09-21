@@ -196,6 +196,17 @@ rejects unobserved model or reasoning identifiers and preflights every owned
 file before writing any update. It never edits a user's broader runtime
 configuration directly.
 
+The live setup fixture passes on OMP 18.2.6 and Codex CLI 0.155.1. OMP
+normalized 124 models from `omp models --json --no-extensions`; Codex
+normalized five models from app-server `model/list` with hidden models
+excluded. Each run rejected an invented identifier before writing, completed a
+no-output preview, generated seven native role definitions on apply, bound the
+result to the exact inventory hash, and preserved an unrelated marker file.
+The deterministic first-eligible selection used by the fixture mapped all
+three workload classes to one model, so every generated role correctly records
+that model diversity was not established. Claude Code remains fail-closed and
+deferred until an authenticated local runtime is available.
+
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
 setup or installation places those definitions in the host's discovered role

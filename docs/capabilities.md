@@ -263,6 +263,21 @@ ownership language by trying a rejected `sudo` command after an otherwise
 correct edit. Hardened reruns fix both boundaries, retain the failures, change
 only the document, and use neither delegation nor publication.
 
+The live `setup-oh-my-stack` fixture proves safe runtime-derived model
+configuration at W1 on both CLI runtimes. OMP 18.2.6 normalized 124 models from
+`omp models --json --no-extensions`; Codex CLI 0.155.1 normalized five models
+from app-server `model/list` with hidden models excluded. Each root loaded the
+generated Skill, rejected an invented model before any owned file existed,
+completed a valid preview without producing output, and then applied exactly
+seven native role definitions plus an inventory-bound manifest. An unrelated
+marker retained its hash and strict Git status contained only the expected
+generated paths. The fixture's deterministic first-eligible policy selected
+one model for all workload classes, so every role records
+`diversityEstablished: false`. These observations prove the package-local
+configuration workflow, not user-home installation or model quality. Claude
+Code collection still fails closed and remains deferred pending an
+authenticated runtime.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

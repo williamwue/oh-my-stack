@@ -240,6 +240,16 @@ Current progress:
   configuration directory. Static tests cover all three output formats,
   unobserved-model rejection, modified-owned-file refusal, and preservation of
   unrelated files.
+- The live setup fixture passes on OMP 18.2.6 and Codex CLI 0.155.1. OMP
+  normalized 124 models from its native model command and Codex normalized five
+  models from app-server `model/list`. Both runs rejected an invented model
+  before writing, proved the preview produced no files, applied exactly seven
+  native role definitions plus the owned manifest, bound the manifest to the
+  inventory hash, preserved unrelated configuration, and made no broader
+  runtime-config or publication write. The fixture deliberately chooses the
+  first model supporting low, medium, and high reasoning for all workloads;
+  this is deterministic test policy rather than a recommendation, and neither
+  run claims model diversity.
 - The first Alpha 3 end-to-end fixture passes on OMP 18.2.6 and Codex CLI
   0.155.1. In both runs `poteto-mode` selects `investigation`, `how` starts
   exactly two explorers before waiting, freezes their attributable results,
@@ -323,6 +333,11 @@ Current progress:
 - Every admitted public Skill is discoverable and explicitly invocable.
 - All generated local links and scripts resolve inside the package.
 - The setup workflow never writes an unobserved model slug or destroys unrelated configuration.
+
+The setup portion of this gate now passes on both live CLI runtimes. The
+all-public-Skill discovery and explicit-invocation matrix remains the final
+Alpha 3 gate before Phase 5. Claude Code remains deferred by explicit project
+decision until an authenticated local runtime is available.
 
 ## Phase 5: same-scenario conformance suite
 
