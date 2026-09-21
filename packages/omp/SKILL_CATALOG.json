@@ -98,6 +98,11 @@
       "invocation": "explicit"
     },
     {
+      "name": "pause-safely",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "poteto-mode",
       "audience": "public",
       "invocation": "explicit"
@@ -229,6 +234,11 @@
     },
     {
       "name": "refactoring",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "session-pickup",
       "audience": "public",
       "invocation": "explicit"
     },

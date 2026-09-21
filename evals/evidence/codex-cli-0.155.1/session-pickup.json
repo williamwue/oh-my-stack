@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-session-pickup",
+  "fixture": "session-pickup",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, pause-safely, and session-pickup Skills committed in one disposable Git repository; gpt-5.6-sol high; user config and rules ignored; two independent persisted root sessions; local bare origin only.",
+    "permissionProfile": "Danger-full-access restricted operationally to one disposable fixture because pause commits require writable Git metadata"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "two-independent-sessions-loaded-generated-skills",
+      "status": "pass",
+      "evidence": "Pause session 01a0c633-50fb-7351-9e4b-4cafa95aff86 loaded poteto-mode and pause-safely; fresh pickup session 01a0c635-67bc-79a3-afff-f9bdb0623b11 loaded poteto-mode and session-pickup."
+    },
+    {
+      "id": "pause-stopped-at-durable-boundary",
+      "status": "pass",
+      "evidence": "The pause session verified display preservation, retained the named failing labelKey test, committed only lib/labels.mjs as wip: preserve label display spacing at b117121963a8a92eccdaf7449f73a5dbb8ae75c1, and left the worktree clean."
+    },
+    {
+      "id": "checkpoint-complete-and-off-worktree",
+      "status": "pass",
+      "evidence": "checkpoint.json outside project records schema, objective, branch, base, exact WIP head, clean state, completed and pending units, passing and failing evidence, key files, gotcha, and first resume action; verify-pause accepted it."
+    },
+    {
+      "id": "pause-did-not-publish",
+      "status": "pass",
+      "evidence": "origin/main and origin/feature/labels remained at 85d3b33266d69c61c6efc603ab419a9a692d04f2; the pause created no push, pull request, or publication."
+    },
+    {
+      "id": "pickup-validated-anchor-before-edit",
+      "status": "pass",
+      "evidence": "The fresh pickup session ran resume-check first and received RESUME_ANCHOR_OK=b117121963a8a92eccdaf7449f73a5dbb8ae75c1 before editing."
+    },
+    {
+      "id": "pickup-preserved-inherited-unit",
+      "status": "pass",
+      "evidence": "The pickup named display-preservation as inherited, changed neither its function block nor the tests, did not rerun the original focused reproduction, and recorded redone as empty."
+    },
+    {
+      "id": "pickup-completed-only-pending-unit",
+      "status": "pass",
+      "evidence": "One completion commit 7405b454bee5dc48685058ab41cadd6a4e1f8808 implemented labelKey in lib/labels.mjs; the single full pinned-file run passed both behaviors."
+    },
+    {
+      "id": "final-verifier-passed-without-publication",
+      "status": "pass",
+      "evidence": "verify-final produced SESSION_PICKUP_OK=7405b454bee5dc48685058ab41cadd6a4e1f8808 in-session and externally, with two local commits, clean status, unchanged origin refs, and published false."
+    }
+  ],
+  "limitations": [
+    "This proves portable file-checkpoint handoff between two independent root sessions at W1, not codex exec resume, transcript import, a cloud task handoff, or delegated W2 workflow.",
+    "The deterministic test proves dirty-state rejection by resume-check; the live passing run does not exercise a stale-head stop or conflict handoff.",
+    "The pause session made one no-op commit attempt before staging the sole authorized file, then created exactly one actual WIP commit; no repository state changed during the failed attempt.",
+    "Cloudflare MCP authentication and plugin-directory warnings were unrelated and did not participate in the workflow."
+  ]
+}

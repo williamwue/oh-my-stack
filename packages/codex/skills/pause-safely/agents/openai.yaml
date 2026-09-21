@@ -1,0 +1,6 @@
+interface:
+  display_name: "Pause Safely"
+  short_description: "Pause Safely workflow"
+  default_prompt: "Use $pause-safely for this task."
+policy:
+  allow_implicit_invocation: false

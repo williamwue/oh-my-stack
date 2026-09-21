@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-session-pickup",
+  "fixture": "session-pickup",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode, pause-safely, and session-pickup Skills committed in one disposable Git repository; cursor/default; high reasoning; two independent persisted root sessions; local bare origin only.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture and local bare origin"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "two-independent-sessions-loaded-generated-skills",
+      "status": "pass",
+      "evidence": "Pause session 01a0c631-4c34-7529-bcf3-1e18a3808ee6 loaded poteto-mode and pause-safely; fresh pickup session 01a0c632-3045-757f-9030-24e24b0ce311 loaded poteto-mode and session-pickup."
+    },
+    {
+      "id": "pause-stopped-at-durable-boundary",
+      "status": "pass",
+      "evidence": "The pause session verified display preservation, retained the named failing labelKey test, committed only lib/labels.mjs as wip: preserve label display spacing at 48660ae52d74f693f0ca0f59179ab72736791105, and left the worktree clean."
+    },
+    {
+      "id": "checkpoint-complete-and-off-worktree",
+      "status": "pass",
+      "evidence": "checkpoint.json outside project records schema, objective, branch, base, exact WIP head, clean state, completed and pending units, passing and failing evidence, key files, gotcha, and first resume action; verify-pause accepted it."
+    },
+    {
+      "id": "pause-did-not-publish",
+      "status": "pass",
+      "evidence": "origin/main and origin/feature/labels remained at 621e2fbf23183a56001d6db49682ea290418ea95; the pause created no push, pull request, or publication."
+    },
+    {
+      "id": "pickup-validated-anchor-before-edit",
+      "status": "pass",
+      "evidence": "The fresh pickup session ran resume-check first and received RESUME_ANCHOR_OK=48660ae52d74f693f0ca0f59179ab72736791105 before editing."
+    },
+    {
+      "id": "pickup-preserved-inherited-unit",
+      "status": "pass",
+      "evidence": "The pickup named display-preservation as inherited, changed neither its function block nor the tests, did not rerun the original focused reproduction, and recorded redone as empty."
+    },
+    {
+      "id": "pickup-completed-only-pending-unit",
+      "status": "pass",
+      "evidence": "One completion commit db3569619695e0f95afe5910ac958ebb8160d56c implemented labelKey in lib/labels.mjs; the full pinned file passed both behaviors."
+    },
+    {
+      "id": "final-verifier-passed-without-publication",
+      "status": "pass",
+      "evidence": "verify-final produced SESSION_PICKUP_OK=db3569619695e0f95afe5910ac958ebb8160d56c in-session and externally, with two local commits, clean status, unchanged origin refs, and published false."
+    }
+  ],
+  "limitations": [
+    "This proves portable file-checkpoint handoff between two independent root sessions at W1, not a native runtime session-resume API, transcript import, cloud-agent URL, or delegated W2 workflow.",
+    "The deterministic test proves dirty-state rejection by resume-check; the live passing run does not exercise a stale-head stop or conflict handoff.",
+    "OMP delivery remains D0 overall because native plugin-manager D1 has not been established for the probed surface."
+  ]
+}

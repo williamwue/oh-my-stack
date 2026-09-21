@@ -279,12 +279,13 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 39 public
+inferring it from naming or invocation policy. The catalog now admits 41 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
-Skills. The new `babysit` check-mode fixture separately proves live loading and
-execution on both CLI runtimes; the complete matrix will be refreshed after the
-Phase 7 catalog stabilizes. OMP transcripts contain the matching native
+Skills. The new `babysit`, `pause-safely`, and `session-pickup` fixtures
+separately prove focused live loading and execution; the complete matrix will
+be refreshed after the Phase 7 catalog stabilizes. OMP transcripts contain the
+matching native
 `skill://` reads;
 Codex transcripts contain matching `skills.selected_skill_instructions` items
 with complete project-local Skill bodies. The verifier checks exact catalog
@@ -305,6 +306,19 @@ failed profile is retained and the passing disposable run explicitly uses
 `danger-full-access`. This proves a bounded W1 local-provider workflow, not
 live forge APIs, hosted polling, conflict or stale-base handling, multi-wave
 repair, `threads-only`, `background`, or W4 completion.
+
+The session-lifecycle fixture proves an explicit pause and cold-start pickup on
+OMP 18.2.8 and Codex CLI 0.155.1. One root session verifies a completed atomic
+unit, records the still-failing pending unit, creates one `wip:` commit, writes
+a structured checkpoint outside the worktree, verifies its exact branch, base,
+head and clean-state anchors, and leaves the local origin unchanged. A distinct
+root session runs the anchor validator before editing, preserves the inherited
+function and tests, completes only the pending unit, creates one completion
+commit, and passes combined artifact verification. The deterministic suite also
+proves that unexplained dirty state is rejected. This is W1 file-checkpoint
+handoff; it does not claim native session continuation, transcript or cloud-task
+import, conflict recovery, or delegated W2 conformance. Codex again needs a
+permission profile that can write Git metadata inside the disposable fixture.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

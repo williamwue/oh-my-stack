@@ -471,8 +471,17 @@ Current progress:
 - Both slices are W1 fallback evidence. They do not prove live
   `scm.pull_requests`, `scm.review_threads`, hosted polling or reruns, thread
   replies, conflict or stale-base handling, multi-wave repair, `threads-only`,
-  `background`, or W4 external-system completion. `session-pickup` is the next
-  implementation slice.
+  `background`, or W4 external-system completion.
+- `pause-safely` and `session-pickup` are the fortieth and forty-first public
+  Skills. OMP 18.2.8 and Codex CLI 0.155.1 each pass a two-session fixture: the
+  first session creates one durable WIP commit and an off-worktree checkpoint
+  without pushing; a distinct cold-start session validates the exact branch,
+  head, base, and clean-state anchors before editing, preserves completed work,
+  completes only the pending unit, and passes the combined verifier without
+  publication. The deterministic suite rejects unexplained dirty state.
+- Session lifecycle is W1 portable checkpoint evidence, not native runtime
+  resume, transcript or cloud handoff, conflict recovery, or delegated W2
+  execution. `autonomous-run` is the next implementation slice.
 
 Add advanced workflows one at a time in this order:
 

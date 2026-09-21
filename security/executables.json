@@ -2,6 +2,38 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/session-pickup/resume-check.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Reject stale, wrong-branch, or dirty pause checkpoints before a cold-start session edits the disposable repository.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/session-pickup/setup.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Initialize the disposable label repository, local bare origin, feature branch, and one completed uncommitted atomic unit.",
+      "network": false,
+      "writes": ["disposable session-pickup fixture copy"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/session-pickup/verify-final.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify a cold-start pickup preserved inherited work, completed only the pending unit, passed the full behavior check, and did not publish.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/session-pickup/verify-pause.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify the pause commit and off-worktree checkpoint exactly anchor completed and pending work without a push.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
       "path": "evals/fixtures/babysit-drive/forge.mjs",
       "owner": "oh-my-stack",
       "purpose": "Act as a deterministic local status provider that accepts one pushed repair wave and recomputes the disposable pull-request verdict.",

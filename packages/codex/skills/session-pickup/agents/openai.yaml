@@ -1,0 +1,6 @@
+interface:
+  display_name: "Session Pickup"
+  short_description: "Session Pickup workflow"
+  default_prompt: "Use $session-pickup for this task."
+policy:
+  allow_implicit_invocation: false

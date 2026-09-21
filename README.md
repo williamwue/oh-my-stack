@@ -221,14 +221,15 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 39 public workflows and principles
+The canonical Skill catalog now separates 41 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
-remains unchanged. The new `babysit` Skill is separately loaded and exercised
-by its live check-mode fixture on both runtimes; a refreshed whole-catalog live
-matrix remains pending until the rest of Phase 7 stops changing the catalog.
+remains unchanged. The new `babysit`, `pause-safely`, and `session-pickup`
+Skills are separately loaded and exercised by focused live fixtures; a
+refreshed whole-catalog live matrix remains pending until the rest of Phase 7
+stops changing the catalog.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
@@ -277,6 +278,15 @@ change one source file, create one commit, push one wave, refresh once to
 permission profile that can write `.git`; its retained workspace-write failure
 is not counted as conformance. These are W1 local-provider results, not live
 forge access, hosted polling, `threads-only`, `background`, or W4 completion.
+
+The next Phase 7 slice adds separate `pause-safely` and `session-pickup`
+workflows. OMP 18.2.8 and Codex CLI 0.155.1 each pass a two-session cold-start
+fixture: session A commits one existing atomic unit as `wip:`, writes an
+off-worktree checkpoint with exact Git anchors, and does not push; a distinct
+session B validates those anchors before editing, inherits the completed unit
+without redoing it, completes only the pending unit, runs combined verification,
+and still does not publish. This is W1 portable checkpoint handoff, not native
+runtime resume, transcript import, cloud handoff, or delegated W2 execution.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

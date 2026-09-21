@@ -36,6 +36,13 @@ Constraints:
 
 Decision: pin and synchronize it, but never publish a raw copy as a cross-runtime package.
 
+The main imported baseline remains commit
+`6ed0f7a9504f577d7529064103cecce9be7dfc5e`. Session lifecycle was added later
+upstream, so `session-pickup.md` and `pause-safely.md` are separately frozen as
+a reference-only snapshot at commit
+`640ea3abfbdef74aad432b58d8586e4bf645f42d`; this does not silently advance the
+verified import baseline or accept unrelated upstream changes.
+
 ## dsebban/skills
 
 Repository: <https://github.com/dsebban/skills>
