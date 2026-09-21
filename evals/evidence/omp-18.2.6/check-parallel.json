@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-parallel",
+  "fixture": "check-parallel",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared and asynchronous jobs enabled by the parallel probe overlay.",
+    "permissionProfile": "Only read, task, and hub tools enabled; fixture required no writes"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-delegation.json",
+    "evals/evidence/omp-18.2.6/plugin-manager-dry-run.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-parallel Skill." },
+    { "id": "two-workers-started-before-wait", "status": "pass", "evidence": "One native task batch created LeftReader and RightReader, and progress snapshots showed both jobs running concurrently before hub wait." },
+    { "id": "two-results-collected", "status": "pass", "evidence": "Native hub wait watched both job ids until both separately attributable results were delivered." },
+    { "id": "left-marker-attributed", "status": "pass", "evidence": "LeftReader read only assets/left.txt and returned LEFT_MARKER=parallel-ok." },
+    { "id": "right-marker-attributed", "status": "pass", "evidence": "RightReader read only assets/right.txt and returned RIGHT_MARKER=parallel-ok." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before the batch and independently again after both results." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "Only read, task, and hub tools were enabled and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "This fixture proves parallel read-only fan-out and asynchronous wait-all, not follow-up, cancellation, transcript access, or writer isolation.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

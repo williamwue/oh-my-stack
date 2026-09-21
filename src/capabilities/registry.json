@@ -3,6 +3,7 @@
   "capabilities": [
     "agents.read_result",
     "agents.spawn",
+    "agents.spawn_parallel",
     "agents.wait",
     "resources.relative_paths",
     "scripts.execute",

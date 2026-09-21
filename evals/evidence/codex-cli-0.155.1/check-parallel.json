@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-parallel",
+  "fixture": "check-parallel",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in a disposable isolated Codex state directory with user config and rules ignored; generated Skill linked under project .agents/skills.",
+    "permissionProfile": "read-only sandbox with approval policy never"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "resources.relative_paths"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-delegation.json",
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-parallel Skill before executing it." },
+    { "id": "two-workers-started-before-wait", "status": "pass", "evidence": "The persisted parent transcript recorded two spawn_agent calls and a world state with both children running before the first wait completed." },
+    { "id": "two-results-collected", "status": "pass", "evidence": "Two child transcripts completed and sent separately attributable FINAL_ANSWER messages to the parent before its final root read." },
+    { "id": "left-marker-attributed", "status": "pass", "evidence": "The left child transcript alone read assets/left.txt and reported LEFT_MARKER=parallel-ok." },
+    { "id": "right-marker-attributed", "status": "pass", "evidence": "The right child transcript alone read assets/right.txt and reported RIGHT_MARKER=parallel-ok." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent read only assets/root.txt before spawning and independently again after both child results." },
+    { "id": "no-intentional-project-writes", "status": "pass", "evidence": "All threads inherited the read-only sandbox and the external post-run Git status was clean." }
+  ],
+  "limitations": [
+    "The top-level --json stream omits spawn detail, so the persisted isolated parent and child transcripts are the authoritative lifecycle evidence.",
+    "This fixture proves parallel read-only fan-out and wait-all, not follow-up, cancellation, transcript API access, or writer isolation.",
+    "This evidence applies to Codex CLI only; desktop and IDE profiles remain unknown."
+  ]
+}

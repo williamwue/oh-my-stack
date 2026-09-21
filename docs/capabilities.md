@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | One read-only worker observed | Two W1 fixtures and one W2 fixture pass; D2/D3 are observed, but overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | One-worker and parallel read-only probes observed | Two W1 fixtures and two W2 fixtures pass, including asynchronous wait-all; D2/D3 are observed, but overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | One read-only worker observed | D3, two W1 fixtures, and one W2 fixture pass on 0.155.1 |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | One-worker and parallel read-only probes observed | D3, two W1 fixtures, and two W2 fixtures pass on 0.155.1 with persisted isolated sessions |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -136,10 +136,15 @@ The Codex baseline is derived from the official
 documentation. Repository documentation must retain the observation date;
 generated evidence must retain the exact runtime coordinates.
 
-The current W2 observation is intentionally the smallest lifecycle slice. It
-proves `agents.spawn`, `agents.wait`, and `agents.read_result` for one read-only
-worker. It does not imply support for parallel fan-out, background job control,
-follow-up, cancellation, transcript access, or isolated writers.
+The current W2 observations prove `agents.spawn`, `agents.spawn_parallel`,
+`agents.wait`, and `agents.read_result` for read-only workers. OMP additionally
+proves native asynchronous background-job waiting. They do not imply support
+for follow-up, cancellation, transcript access, or isolated writers.
+
+Codex CLI lifecycle probes use persisted sessions inside a disposable isolated
+Codex state directory. Version 0.155.1 returned `no thread with id` when the
+same parallel probe ran with `--ephemeral`; delivery-only and root-only success
+must not be treated as evidence that ephemeral child threads work.
 
 Phase 2 replaces each research or documented entry with a versioned observation. Separate profiles are created when platforms, permission modes, installed providers, or runtime versions change behavior.
 

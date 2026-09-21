@@ -49,8 +49,12 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
   fixtures on macOS arm64.
 - The delegated-worker fixture reaches `W2`: one child-only result is
   collected, then the root independently re-reads its own evidence.
-- Parallel fan-out, asynchronous wait, follow-up, cancellation, transcript
-  access, worktree isolation, model override, and interaction remain pending.
+- Both runtimes also pass two-worker parallel fan-out and wait-all. OMP proves
+  asynchronous background-job waiting; Codex CLI requires persisted sessions
+  in an isolated state directory because its ephemeral mode cannot spawn
+  usable child threads on version 0.155.1.
+- Follow-up, cancellation, transcript access, worktree isolation, model
+  override, and interaction remain pending.
 - Claude Code verification remains deferred until an authenticated local
   runtime is available.
 

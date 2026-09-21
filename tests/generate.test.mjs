@@ -15,11 +15,12 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads three portable Skills and three adapters", async () => {
+test("loads four portable Skills and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 3);
+  assert.equal(model.skills.length, 4);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "check-delegation",
+    "check-parallel",
     "check-resources",
     "prove-it-works",
   ]);
@@ -36,6 +37,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["resources.relative_paths"].status, "native");
   assert.equal(omp.capabilities["scripts.execute"].status, "external");
   assert.equal(omp.capabilities["agents.spawn"].status, "native");
+  assert.equal(omp.capabilities["agents.spawn_parallel"].status, "native");
   assert.equal(omp.capabilities["agents.wait"].status, "native");
   assert.equal(omp.capabilities["agents.read_result"].status, "native");
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
@@ -43,11 +45,13 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["resources.relative_paths"].status, "native");
   assert.equal(codexCli.capabilities["scripts.execute"].status, "external");
   assert.equal(codexCli.capabilities["agents.spawn"].status, "native");
+  assert.equal(codexCli.capabilities["agents.spawn_parallel"].status, "native");
   assert.equal(codexCli.capabilities["agents.wait"].status, "native");
   assert.equal(codexCli.capabilities["agents.read_result"].status, "native");
   const claude = model.profiles.get("claude-code-default");
   assert.equal(claude.capabilities["skills.discover"].status, "unknown");
   assert.equal(claude.capabilities["agents.spawn"].status, "unknown");
+  assert.equal(claude.capabilities["agents.spawn_parallel"].status, "unknown");
   assert.equal(claude.verification.status, "pending");
 });
 

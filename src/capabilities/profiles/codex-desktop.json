@@ -14,6 +14,7 @@
   "capabilities": {
     "agents.read_result": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
+    "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
     "resources.relative_paths": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
