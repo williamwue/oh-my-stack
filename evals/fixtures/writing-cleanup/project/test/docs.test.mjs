@@ -9,6 +9,7 @@ test("local run guide is a direct how-to that preserves every fact", () => {
   assert.match(doc, /^# Run the service locally$/m);
 
   const facts = [
+    "Node.js",
     "npm test",
     "4 passing, 0 failing",
     "node server.mjs --port 4100",
@@ -22,6 +23,7 @@ test("local run guide is a direct how-to that preserves every fact", () => {
   }
 
   const orderedActions = [
+    "Node.js",
     "npm test",
     "node server.mjs --port 4100",
     "curl http://127.0.0.1:4100/health",

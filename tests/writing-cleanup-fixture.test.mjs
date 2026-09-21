@@ -33,7 +33,7 @@ test("writing cleanup rejects slop and accepts a meaning-preserving how-to", asy
       join(project, "docs/run-locally.md"),
       `# Run the service locally
 
-Use this procedure to run the service on port \`4100\` and check its health.
+Before you start, install Node.js.
 
 1. Run the tests.
 
