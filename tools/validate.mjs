@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import { access, readFile } from "node:fs/promises";
-import { dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   filesUnder,
@@ -10,6 +11,7 @@ import {
   repoRoot,
   validateRenderedTarget,
 } from "./generate.mjs";
+import { readSourceRecord, transformPortableSkill } from "./sync-upstream.mjs";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -129,6 +131,80 @@ async function validateRuntimeEvidence(root, model) {
   }
 }
 
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+async function validateUpstreamState(root) {
+  const config = await readJson(join(root, "upstream/imports.json"));
+  assert(config.schemaVersion === 1, "upstream/imports.json: schemaVersion must be 1");
+  const sourcesText = await readFile(join(root, "upstream/sources.yaml"), "utf8");
+  const source = readSourceRecord(sourcesText, config.sourceId).fields;
+  const revision = source.candidate_commit ?? source.verified_commit;
+  assert(revision && /^[0-9a-f]{40}$/.test(revision), `${config.sourceId}: candidate or verified revision is required`);
+  if (!source.candidate_commit) {
+    assert(source.baseline_commit === source.verified_commit, `${config.sourceId}: baseline and verified revisions differ`);
+  }
+
+  const patchFiles = (await filesUnder(join(root, "upstream/patches", config.sourceId)))
+    .filter((path) => path.endsWith(".json"));
+  const patches = await Promise.all(patchFiles.map((path) => readJson(path)));
+  const matching = patches.filter((patch) => patch.newCommit === revision);
+  assert(matching.length === 1, `${config.sourceId}: expected one patch record for ${revision}`);
+  const patch = matching[0];
+  const outcomes = new Map(patch.outcomes.map((outcome) => [outcome.path, outcome]));
+  const ownership = await readFile(join(root, "upstream/ownership.yaml"), "utf8");
+
+  const licenseSnapshot = join(
+    root,
+    "upstream/snapshots",
+    config.sourceId,
+    revision,
+    config.sourceRoot,
+    config.licensePath,
+  );
+  assert(await exists(licenseSnapshot), `${config.sourceId}: missing license snapshot for ${revision}`);
+
+  for (const entry of config.entries) {
+    const outcome = outcomes.get(entry.target);
+    assert(outcome, `${entry.target}: missing patch outcome for ${revision}`);
+    const target = join(root, entry.target);
+    if (["deleted", "already-deleted"].includes(outcome.status)) {
+      assert(!(await exists(target)), `${entry.target}: deleted upstream entry still exists`);
+      continue;
+    }
+    const snapshot = join(
+      root,
+      "upstream/snapshots",
+      config.sourceId,
+      revision,
+      config.sourceRoot,
+      entry.upstreamPath,
+    );
+    assert(await exists(snapshot), `${entry.target}: missing immutable source snapshot`);
+    const sourceRaw = await readFile(snapshot);
+    assert(sha256(sourceRaw) === outcome.sourceSha256, `${entry.target}: source snapshot hash drift`);
+    transformPortableSkill(sourceRaw, `${entry.target}:snapshot`);
+    assert(await exists(target), `${entry.target}: imported target is missing`);
+    const current = await readFile(target);
+    assert(sha256(current) === outcome.resultSha256, `${entry.target}: imported result lacks a patch record`);
+    const metadata = await readJson(join(dirname(target), "skill.json"));
+    assert(metadata.name === basename(dirname(target)), `${entry.target}: metadata name drift`);
+    assert(metadata.invocation === "explicit", `${entry.target}: invocation policy drift`);
+    const ownershipMarker = [
+      `  - path: ${entry.target}`,
+      "    owner: upstream-derived",
+      `    source_id: ${config.sourceId}`,
+      `    source_path: ${config.sourceRoot}/${entry.upstreamPath}`,
+      `    source_revision: ${revision}`,
+    ].join("\n");
+    assert(ownership.includes(ownershipMarker), `${entry.target}: missing or stale ownership entry`);
+  }
+
+  const notices = await readFile(join(root, "THIRD_PARTY_NOTICES.md"), "utf8");
+  assert(notices.includes(revision), `${config.sourceId}: third-party notice omits active revision`);
+}
+
 export async function validate(root = repoRoot) {
   const model = await loadModel(root);
   for (const adapter of model.adapters) {
@@ -136,6 +212,7 @@ export async function validate(root = repoRoot) {
   }
   await validateJsonDocuments(root);
   await validateRuntimeEvidence(root, model);
+  await validateUpstreamState(root);
   await validateLocalMarkdownLinks(root);
   await validateExecutableInventory(root);
   return model;

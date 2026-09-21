@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Type System Discipline"
+  short_description: "Principle Type System Discipline workflow"
+  default_prompt: "Use $principle-type-system-discipline for this task."
+policy:
+  allow_implicit_invocation: false

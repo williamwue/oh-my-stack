@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "principle-type-system-discipline",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": [],
+  "fallbacks": {}
+}

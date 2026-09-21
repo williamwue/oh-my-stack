@@ -5,11 +5,12 @@ sources:
     path: pstack
     role: semantic-authority
     license: MIT
-    usage: planned-import-source
+    usage: imported-source
     inspected_at: "2026-09-21"
     inspected_commit: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
-    baseline_commit: null
-    verified_commit: null
+    candidate_commit: null
+    baseline_commit: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    verified_commit: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
 
   - id: pstack-claude
     repository: https://github.com/michael-denyer/pstack-claude.git
@@ -18,6 +19,7 @@ sources:
     usage: reference-only
     inspected_at: "2026-09-21"
     inspected_commit: 2fe2002190bff9257d3e27f84ba6818f2cfd7e32
+    candidate_commit: null
     baseline_commit: null
     verified_commit: null
 
@@ -28,6 +30,7 @@ sources:
     usage: reference-only
     inspected_at: "2026-09-21"
     inspected_commit: da1b131aad45222a477ce8da88c4474d68612423
+    candidate_commit: null
     baseline_commit: null
     verified_commit: null
 
@@ -38,5 +41,6 @@ sources:
     usage: reference-only
     inspected_at: "2026-09-21"
     inspected_commit: fc0eabd25f21b194a336b640e75e29c252382866
+    candidate_commit: null
     baseline_commit: null
     verified_commit: null

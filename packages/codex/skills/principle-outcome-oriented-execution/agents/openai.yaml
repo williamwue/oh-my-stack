@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Outcome Oriented Execution"
+  short_description: "Principle Outcome Oriented Execution workflow"
+  default_prompt: "Use $principle-outcome-oriented-execution for this task."
+policy:
+  allow_implicit_invocation: false

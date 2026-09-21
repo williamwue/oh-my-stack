@@ -1,6 +1,20 @@
 {
   "ignores": [
-    "node_modules/**"
+    "node_modules/**",
+    "upstream/snapshots/**"
+  ],
+  "overrides": [
+    {
+      "filter": [
+        "src/core/skills/principle-*/**/*.md",
+        "packages/*/skills/principle-*/**/*.md"
+      ],
+      "config": {
+        "MD032": false,
+        "MD036": false
+      },
+      "combine": "merge"
+    }
   ],
   "config": {
     "MD013": false,

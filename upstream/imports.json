@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "cursor-pstack",
+  "sourceRoot": "pstack",
+  "licensePath": "LICENSE",
+  "entries": [
+    { "upstreamPath": "skills/principle-attack-the-premise/SKILL.md", "target": "src/core/skills/principle-attack-the-premise/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-boundary-discipline/SKILL.md", "target": "src/core/skills/principle-boundary-discipline/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-build-the-lever/SKILL.md", "target": "src/core/skills/principle-build-the-lever/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-encode-lessons-in-structure/SKILL.md", "target": "src/core/skills/principle-encode-lessons-in-structure/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-exhaust-the-design-space/SKILL.md", "target": "src/core/skills/principle-exhaust-the-design-space/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-experience-first/SKILL.md", "target": "src/core/skills/principle-experience-first/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-fix-root-causes/SKILL.md", "target": "src/core/skills/principle-fix-root-causes/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-foundational-thinking/SKILL.md", "target": "src/core/skills/principle-foundational-thinking/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-guard-the-context-window/SKILL.md", "target": "src/core/skills/principle-guard-the-context-window/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-laziness-protocol/SKILL.md", "target": "src/core/skills/principle-laziness-protocol/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-make-operations-idempotent/SKILL.md", "target": "src/core/skills/principle-make-operations-idempotent/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md", "target": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-minimize-reader-load/SKILL.md", "target": "src/core/skills/principle-minimize-reader-load/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-model-the-domain/SKILL.md", "target": "src/core/skills/principle-model-the-domain/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-never-block-on-the-human/SKILL.md", "target": "src/core/skills/principle-never-block-on-the-human/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-outcome-oriented-execution/SKILL.md", "target": "src/core/skills/principle-outcome-oriented-execution/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-prove-it-works/SKILL.md", "target": "src/core/skills/principle-prove-it-works/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-redesign-from-first-principles/SKILL.md", "target": "src/core/skills/principle-redesign-from-first-principles/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-separate-before-serializing-shared-state/SKILL.md", "target": "src/core/skills/principle-separate-before-serializing-shared-state/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-sequence-verifiable-units/SKILL.md", "target": "src/core/skills/principle-sequence-verifiable-units/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-subtract-before-you-add/SKILL.md", "target": "src/core/skills/principle-subtract-before-you-add/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-test-behavior-not-implementation/SKILL.md", "target": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/principle-type-system-discipline/SKILL.md", "target": "src/core/skills/principle-type-system-discipline/SKILL.md", "transform": "portable-explicit-skill" }
+  ]
+}

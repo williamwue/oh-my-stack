@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Attack The Premise"
+  short_description: "Principle Attack The Premise workflow"
+  default_prompt: "Use $principle-attack-the-premise for this task."
+policy:
+  allow_implicit_invocation: false

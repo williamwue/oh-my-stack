@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Encode Lessons In Structure"
+  short_description: "Principle Encode Lessons In Structure workflow"
+  default_prompt: "Use $principle-encode-lessons-in-structure for this task."
+policy:
+  allow_implicit_invocation: false

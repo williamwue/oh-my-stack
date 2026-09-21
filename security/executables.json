@@ -18,6 +18,14 @@
       "uninstallBehavior": "Not installed in target packages."
     },
     {
+      "path": "tools/sync-upstream.mjs",
+      "owner": "local-core",
+      "purpose": "Plan, merge, stage, and verify pinned upstream workflow imports.",
+      "network": false,
+      "writes": ["src/core/skills", "upstream/snapshots", "upstream/patches", "upstream/ownership.yaml", "upstream/sources.yaml"],
+      "uninstallBehavior": "Not installed in target packages."
+    },
+    {
       "path": "tools/validate.mjs",
       "owner": "local-core",
       "purpose": "Validate source contracts and generated packages.",

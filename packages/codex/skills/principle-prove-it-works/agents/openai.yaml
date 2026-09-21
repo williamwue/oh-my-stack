@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Prove It Works"
+  short_description: "Principle Prove It Works workflow"
+  default_prompt: "Use $principle-prove-it-works for this task."
+policy:
+  allow_implicit_invocation: false

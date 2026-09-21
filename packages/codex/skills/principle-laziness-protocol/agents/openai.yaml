@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Laziness Protocol"
+  short_description: "Principle Laziness Protocol workflow"
+  default_prompt: "Use $principle-laziness-protocol for this task."
+policy:
+  allow_implicit_invocation: false

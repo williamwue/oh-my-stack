@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "principle-fix-root-causes",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": [],
+  "fallbacks": {}
+}

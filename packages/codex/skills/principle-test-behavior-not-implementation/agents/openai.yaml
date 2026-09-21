@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Test Behavior Not Implementation"
+  short_description: "Principle Test Behavior Not Implementation workflow"
+  default_prompt: "Use $principle-test-behavior-not-implementation for this task."
+policy:
+  allow_implicit_invocation: false

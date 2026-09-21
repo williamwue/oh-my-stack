@@ -7,9 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
-implemented. Thirteen original fixture Skills—including lifecycle, panel,
-interaction, and controlled stale-replay probes—plus one canonical
-`evidence-reader` role generate
+implemented. Thirteen original fixture Skills plus twenty-three pinned pstack
+principle Skills and one canonical `evidence-reader` role generate
 deterministic OMP, Codex, and Claude Code target packages. All packages pass
 static `D0` validation.
 
@@ -80,7 +79,12 @@ passing interactive result is bound to the observed `cursor/default` model
 because a separate reconnaissance model skipped the available native
 operation.
 
-No pstack workflow content has been imported yet.
+The first pstack content slice is imported at the pinned upstream revision:
+all twenty-three `principle-*` Skills. Immutable source snapshots, per-file
+ownership, transformation hashes, and the candidate/baseline/verified pin
+lifecycle are stored under `upstream/`. The principles remain explicit-only;
+that semantic policy is compiled into native target metadata rather than
+leaking source-host frontmatter into the portable core.
 
 ## Development
 

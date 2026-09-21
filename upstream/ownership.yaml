@@ -1,2 +1,163 @@
 schema_version: 1
-entries: []
+entries:
+  - path: src/core/skills/principle-attack-the-premise/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-attack-the-premise/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-boundary-discipline/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-boundary-discipline/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-build-the-lever/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-build-the-lever/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-encode-lessons-in-structure/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-encode-lessons-in-structure/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-exhaust-the-design-space/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-exhaust-the-design-space/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-experience-first/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-experience-first/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-fix-root-causes/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-fix-root-causes/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-foundational-thinking/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-foundational-thinking/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-guard-the-context-window/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-guard-the-context-window/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-laziness-protocol/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-laziness-protocol/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-make-operations-idempotent/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-make-operations-idempotent/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-minimize-reader-load/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-minimize-reader-load/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-model-the-domain/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-model-the-domain/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-never-block-on-the-human/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-never-block-on-the-human/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-outcome-oriented-execution/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-outcome-oriented-execution/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-prove-it-works/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-prove-it-works/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-redesign-from-first-principles/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-redesign-from-first-principles/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-separate-before-serializing-shared-state/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-sequence-verifiable-units/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-sequence-verifiable-units/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-subtract-before-you-add/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-subtract-before-you-add/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-test-behavior-not-implementation/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-test-behavior-not-implementation/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill
+  - path: src/core/skills/principle-type-system-discipline/SKILL.md
+    owner: upstream-derived
+    source_id: cursor-pstack
+    source_path: pstack/skills/principle-type-system-discipline/SKILL.md
+    source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    license: MIT
+    transform: portable-explicit-skill

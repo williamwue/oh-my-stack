@@ -1,0 +1,6 @@
+interface:
+  display_name: "Principle Model The Domain"
+  short_description: "Principle Model The Domain workflow"
+  default_prompt: "Use $principle-model-the-domain for this task."
+policy:
+  allow_implicit_invocation: false

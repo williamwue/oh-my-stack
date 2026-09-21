@@ -118,6 +118,24 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 
 ## Phase 3: upstream import and semantic core
 
+### Current progress
+
+- The pstack source is pinned at
+  `6ed0f7a9504f577d7529064103cecce9be7dfc5e` and all twenty-three
+  `principle-*` Skills are staged from immutable source snapshots.
+- Canonical metadata preserves their explicit-only invocation policy. OMP and
+  Claude-compatible packages receive generated frontmatter while Codex
+  receives generated `agents/openai.yaml` policy.
+- The upstream sync tool performs path and regular-file validation, immutable
+  snapshots, portable transformations, denylist checks, three-way text merge,
+  typed conflict reporting, transactional rollback, and two-step candidate
+  acceptance. The baseline and verified pins advance only after the repository
+  check command passes.
+- Fixture coverage includes no-op source records, clean updates, local forks,
+  non-overlapping merges, overlapping conflicts, deletion classification,
+  binary rejection, denylist rejection, transactional rollback, and failed
+  verification without pin advancement.
+
 ### Work
 
 - Pin a pstack upstream commit.
