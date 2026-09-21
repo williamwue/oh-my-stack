@@ -186,10 +186,110 @@ test("a sync against the accepted commit is a no-op", async () => {
         .replaceAll("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", commit)
         .replace("    candidate_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "    candidate_commit: null"),
     );
+    const snapshotRoot = join(root, "upstream/snapshots/cursor-pstack", commit, "pstack");
+    const skillRoot = join(root, "src/core/skills/principle-example");
+    await mkdir(join(snapshotRoot, "skills/principle-example"), { recursive: true });
+    await mkdir(skillRoot, { recursive: true });
+    await writeFile(join(snapshotRoot, "LICENSE"), "MIT\n");
+    await writeFile(join(snapshotRoot, "skills/principle-example/SKILL.md"), skillText);
+    await writeFile(join(skillRoot, "SKILL.md"), transformPortableSkill(skillText));
+    await writeFile(join(skillRoot, "skill.json"), `${JSON.stringify({
+      $schema: "../../../schemas/skill.schema.json",
+      schemaVersion: 1,
+      name: "principle-example",
+      invocation: "explicit",
+      deliveryTarget: "D3",
+      workflowTarget: "W1",
+      requires: [],
+      fallbacks: {},
+    }, null, 2)}\n`);
     const plan = await planSync({ root, sourceCheckout: source });
     assert.equal(plan.writes.size, 0);
     assert.equal(plan.deletes.size, 0);
     assert.deepEqual(plan.conflicts, []);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+    await rm(source, { recursive: true, force: true });
+  }
+});
+
+test("an accepted commit can extend its pinned import set", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-extend-root-"));
+  const source = await mkdtemp(join(tmpdir(), "oh-my-stack-extend-source-"));
+  try {
+    const secondSkill = skillText
+      .replaceAll("principle-example", "tdd")
+      .replace("Apply this example.", "Develop with tests first.");
+    await mkdir(join(root, "upstream"), { recursive: true });
+    await mkdir(join(source, "pstack/skills/principle-example"), { recursive: true });
+    await mkdir(join(source, "pstack/skills/tdd"), { recursive: true });
+    await writeFile(join(source, "pstack/LICENSE"), "MIT\n");
+    await writeFile(join(source, "pstack/skills/principle-example/SKILL.md"), skillText);
+    await writeFile(join(source, "pstack/skills/tdd/SKILL.md"), secondSkill);
+    for (const args of [
+      ["init", "-q"],
+      ["config", "user.email", "test@example.invalid"],
+      ["config", "user.name", "Test"],
+      ["add", "."],
+      ["commit", "-qm", "fixture"],
+    ]) {
+      const result = spawnSync("git", ["-C", source, ...args], { encoding: "utf8" });
+      assert.equal(result.status, 0, result.stderr);
+    }
+    const commit = spawnSync("git", ["-C", source, "rev-parse", "HEAD"], { encoding: "utf8" }).stdout.trim();
+    const entries = [
+      {
+        upstreamPath: "skills/principle-example/SKILL.md",
+        target: "src/core/skills/principle-example/SKILL.md",
+        transform: "portable-explicit-skill",
+      },
+      {
+        upstreamPath: "skills/tdd/SKILL.md",
+        target: "src/core/skills/tdd/SKILL.md",
+        transform: "portable-explicit-skill",
+      },
+    ];
+    await writeFile(join(root, "upstream/imports.json"), JSON.stringify({
+      schemaVersion: 1,
+      sourceId: "cursor-pstack",
+      sourceRoot: "pstack",
+      licensePath: "LICENSE",
+      entries,
+    }));
+    await writeFile(
+      join(root, "upstream/sources.yaml"),
+      sourceText
+        .replaceAll("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", commit)
+        .replace("    candidate_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "    candidate_commit: null"),
+    );
+    const snapshotRoot = join(root, "upstream/snapshots/cursor-pstack", commit, "pstack");
+    const existingSkillRoot = join(root, "src/core/skills/principle-example");
+    await mkdir(join(snapshotRoot, "skills/principle-example"), { recursive: true });
+    await mkdir(existingSkillRoot, { recursive: true });
+    await writeFile(join(snapshotRoot, "LICENSE"), "MIT\n");
+    await writeFile(join(snapshotRoot, "skills/principle-example/SKILL.md"), skillText);
+    await writeFile(join(existingSkillRoot, "SKILL.md"), transformPortableSkill(skillText));
+    await writeFile(join(existingSkillRoot, "skill.json"), `${JSON.stringify({
+      $schema: "../../../schemas/skill.schema.json",
+      schemaVersion: 1,
+      name: "principle-example",
+      invocation: "explicit",
+      deliveryTarget: "D3",
+      workflowTarget: "W1",
+      requires: [],
+      fallbacks: {},
+    }, null, 2)}\n`);
+
+    const plan = await planSync({ root, sourceCheckout: source });
+    assert.deepEqual(plan.conflicts, []);
+    assert(!plan.writes.has("src/core/skills/principle-example/SKILL.md"));
+    assert(plan.writes.has("src/core/skills/tdd/SKILL.md"));
+    assert(plan.writes.has("src/core/skills/tdd/skill.json"));
+    assert(plan.writes.has(`upstream/snapshots/cursor-pstack/${commit}/pstack/skills/tdd/SKILL.md`));
+    assert(
+      [...plan.writes.keys()].some((path) => path.startsWith(`upstream/patches/cursor-pstack/${commit}-extend-`)),
+    );
+    assert.equal(plan.outcomes.find((outcome) => outcome.path.endsWith("/tdd/SKILL.md")).status, "imported");
   } finally {
     await rm(root, { recursive: true, force: true });
     await rm(source, { recursive: true, force: true });

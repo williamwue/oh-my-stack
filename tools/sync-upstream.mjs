@@ -275,10 +275,6 @@ export async function planSync({ root = repoRoot, sourceCheckout }) {
     outcomes: [],
   };
 
-  if (record.baseline_commit === commit && !record.candidate_commit) {
-    return plan;
-  }
-
   const sourceRoot = inside(sourceCheckout, config.sourceRoot, "source checkout");
   const licenseSource = inside(sourceRoot, config.licensePath, "license source");
   const license = await readRegularFile(licenseSource, "upstream license");
@@ -356,31 +352,36 @@ export async function planSync({ root = repoRoot, sourceCheckout }) {
     if (record.baseline_commit) {
       const oldSnapshot = join(root, sourceSnapshotPath(config, record.baseline_commit, entry.upstreamPath));
       const oldRaw = await readOptional(oldSnapshot);
-      if (!oldRaw) {
+      if (!oldRaw && record.baseline_commit === commit) {
+        if (localRaw && localRaw.toString("utf8") !== candidateText) {
+          addConflict(plan, "untracked-local", entry.target, "new pinned entry would overwrite an existing file");
+          continue;
+        }
+        status = localRaw ? "already-current" : "imported";
+      } else if (!oldRaw) {
         addConflict(plan, "missing-baseline", entry.target, "baseline snapshot does not exist");
         continue;
-      }
-      if (!localRaw) {
+      } else if (!localRaw) {
         addConflict(plan, "local-deletion", entry.target, "local file is missing while upstream still selects it");
         continue;
-      }
-      if (isBinaryContent(oldRaw) || isBinaryContent(localRaw)) {
+      } else if (isBinaryContent(oldRaw) || isBinaryContent(localRaw)) {
         addConflict(plan, "binary", entry.target, "three-way merge supports text only");
         continue;
+      } else {
+        const baseText = transformPortableSkill(oldRaw, `${entry.target}:baseline`);
+        const merged = await mergeText({
+          base: baseText,
+          local: localRaw.toString("utf8"),
+          candidate: candidateText,
+          path: entry.target,
+        });
+        if (merged.status === "conflict") {
+          addConflict(plan, "content", entry.target, "overlapping local and upstream edits");
+          continue;
+        }
+        nextText = merged.text;
+        status = merged.status;
       }
-      const baseText = transformPortableSkill(oldRaw, `${entry.target}:baseline`);
-      const merged = await mergeText({
-        base: baseText,
-        local: localRaw.toString("utf8"),
-        candidate: candidateText,
-        path: entry.target,
-      });
-      if (merged.status === "conflict") {
-        addConflict(plan, "content", entry.target, "overlapping local and upstream edits");
-        continue;
-      }
-      nextText = merged.text;
-      status = merged.status;
     } else if (localRaw && localRaw.toString("utf8") !== candidateText) {
       addConflict(plan, "untracked-local", entry.target, "initial import would overwrite an existing file");
       continue;
@@ -411,9 +412,13 @@ export async function planSync({ root = repoRoot, sourceCheckout }) {
     });
   }
 
-  if (plan.conflicts.length === 0) {
+  const hasContentChanges = plan.writes.size > 0 || plan.deletes.size > 0;
+  if (plan.conflicts.length === 0 && hasContentChanges) {
     addWrite(plan, "upstream/ownership.yaml", renderOwnership(config, commit, plan.outcomes));
-    const patchName = `${record.baseline_commit ?? "bootstrap"}-to-${commit}.json`;
+    const transition = record.baseline_commit === commit
+      ? `${commit}-extend-${sha256(JSON.stringify(plan.outcomes)).slice(0, 12)}`
+      : `${record.baseline_commit ?? "bootstrap"}-to-${commit}`;
+    const patchName = `${transition}.json`;
     addWrite(
       plan,
       `upstream/patches/${config.sourceId}/${patchName}`,

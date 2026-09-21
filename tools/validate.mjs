@@ -149,8 +149,13 @@ async function validateUpstreamState(root) {
   const patchFiles = (await filesUnder(join(root, "upstream/patches", config.sourceId)))
     .filter((path) => path.endsWith(".json"));
   const patches = await Promise.all(patchFiles.map((path) => readJson(path)));
-  const matching = patches.filter((patch) => patch.newCommit === revision);
-  assert(matching.length === 1, `${config.sourceId}: expected one patch record for ${revision}`);
+  const targets = new Set(config.entries.map((entry) => entry.target));
+  const matching = patches.filter(
+    (patch) => patch.newCommit === revision
+      && targets.size === new Set(patch.outcomes.map((outcome) => outcome.path)).size
+      && patch.outcomes.every((outcome) => targets.has(outcome.path)),
+  );
+  assert(matching.length === 1, `${config.sourceId}: expected one complete patch record for ${revision}`);
   const patch = matching[0];
   const outcomes = new Map(patch.outcomes.map((outcome) => [outcome.path, outcome]));
   const ownership = await readFile(join(root, "upstream/ownership.yaml"), "utf8");
