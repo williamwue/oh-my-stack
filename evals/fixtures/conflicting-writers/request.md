@@ -4,6 +4,9 @@ Use only generated repository resources. Explicitly load `poteto-mode`, select
 the workflow that owns an intentional behavior change, then load that generated
 workflow and the generated implementer role.
 
+For this bounded fixture, the root performs the affected-subsystem inspection
+directly. Do not start explorer, reviewer, or planner children.
+
 Read `intent.md`, `ownership.md`, `workspace/settings.mjs`,
 `expected/settings.mjs`, `verify-part.mjs`, and `verify.mjs`. Record the four
 content hashes returned by `node verify.mjs baseline`. Before any write, state a
