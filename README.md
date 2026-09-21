@@ -7,9 +7,9 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Status
 
 Phase 1, the Alpha 0 build slice, and the first Phase 2 delegation slice are
-implemented. Seven original Skills—`prove-it-works`, `check-resources`,
-`check-delegation`, `check-parallel`, `check-follow-up`, and
-`check-cancellation`, plus `check-writer-isolation`—generate deterministic OMP,
+implemented. Eight original Skills—`prove-it-works`, `check-resources`,
+`check-delegation`, `check-parallel`, `check-follow-up`, `check-cancellation`,
+`check-transcript`, and `check-writer-isolation`—generate deterministic OMP,
 Codex, and Claude Code target packages. All packages pass static `D0`
 validation.
 
@@ -37,10 +37,12 @@ proves active-worker cancellation and exclusion of the cancelled generation
 from accepted results on both runtimes. A second W3-targeted fixture proves one
 writer is isolated from the source checkout: OMP retains an unapplied patch
 from an isolated task worktree, while Codex runs the parent and writer in a
-managed `--worktree` checkout. It does not yet prove a race where a late stale
-payload is delivered, transcript API access, or panels, so achieved conformance
-remains W2. Codex lifecycle probes require persisted sessions; `--ephemeral`
-cannot create usable child threads in Codex CLI 0.155.1.
+managed `--worktree` checkout. Completed-worker transcript retrieval is also
+proven: OMP exposes a native `history://` resource, while Codex CLI requires an
+external read of its persisted session JSONL. It does not yet prove a race
+where a late stale payload is delivered or coordinated panels, so achieved
+conformance remains W2. Codex lifecycle probes require persisted sessions;
+`--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
 
 No pstack workflow content has been imported yet.
 

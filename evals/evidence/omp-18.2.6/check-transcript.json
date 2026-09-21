@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-check-transcript",
+  "fixture": "check-transcript",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skill copied under project .agents/skills; includeSkills cleared; one scout worker; completed transcript retrieved with history:// after structured result delivery.",
+    "permissionProfile": "Read-only probe with task, hub, and read access; no project writes"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.6/check-delegation.json",
+    "evals/evidence/omp-18.2.6/check-follow-up.json",
+    "evals/evidence/omp-18.2.6/check-parallel.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated check-transcript Skill." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "Exactly one read-only TranscriptWorker task was started." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The root collected the worker's structured result containing transcript-ok." },
+    { "id": "transcript-retrieved-after-completion", "status": "pass", "evidence": "After the worker completed, the root read history://TranscriptWorker." },
+    { "id": "transcript-not-result-substitute", "status": "pass", "evidence": "The history resource contained the user and assistant turns, tool trace, and ordinary assistant marker separately from agent://TranscriptWorker and the delivered structured result." },
+    { "id": "assignment-envelope-found-in-transcript", "status": "pass", "evidence": "The transcript contained the complete worker assignment and acceptance contract." },
+    { "id": "worker-read-found-in-transcript", "status": "pass", "evidence": "The transcript recorded a successful read of assets/worker.txt." },
+    { "id": "marker-found-in-transcript", "status": "pass", "evidence": "The ordinary assistant portion of the transcript contained TRANSCRIPT_MARKER=transcript-ok before yield." },
+    { "id": "root-did-not-read-worker-asset", "status": "pass", "evidence": "The root read only the Skill and root marker; worker.txt was read by TranscriptWorker." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The root read assets/root.txt before delegation and again after transcript retrieval, observing transcript-root-ok both times." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "The disposable probe repository remained clean after the run." }
+  ],
+  "limitations": [
+    "OMP structured yield payloads are collapsed in history:// output, so the fixture requires an ordinary assistant marker before yield and verifies both records independently.",
+    "This proves native completed-worker transcript retrieval, not panel coordination or a cancellation race with a delivered late stale payload.",
+    "OMP remains overall D0 because its separate plugin-manager dry-run probe failed the D1 safety gate."
+  ]
+}

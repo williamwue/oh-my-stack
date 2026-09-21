@@ -123,9 +123,9 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Delegation, parallelism, follow-up, active cancellation, and isolated writer worktrees observed | Two W1 fixtures and five delegated fixtures achieve W2; cancellation, stale-generation exclusion, and one-writer isolation pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Delegation, parallelism, follow-up, active cancellation, completed-worker transcripts, and isolated writer worktrees observed | Two W1 fixtures and six delegated fixtures achieve W2; cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, and a managed writer worktree observed | D3, two W1 fixtures, and five delegated fixtures achieve W2 on 0.155.1; cancellation, stale-generation exclusion, and one-writer isolation pass |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, follow-up, active cancellation, external persisted-transcript reads, and a managed writer worktree observed | D3, two W1 fixtures, and six delegated fixtures achieve W2 on 0.155.1; cancellation, stale-generation exclusion, transcript retrieval, and one-writer isolation pass |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
@@ -143,8 +143,13 @@ background-job waiting and idle-worker revival. Codex records both follow-up
 instructions in the same child thread. The cancellation fixture excludes the
 cancelled generation from accepted results, but neither runtime produced a
 late stale payload during the probe. Both runtimes isolate one writer from the
-source checkout and independently verify its exact diff. Transcript API access
-and panels remain unproven, so these results do not establish complete W3.
+source checkout and independently verify its exact diff. OMP retrieves a
+completed worker transcript through its native `history://` resource. Codex
+CLI has no observed native transcript-read operation and instead reads the
+persisted session JSONL as an external artifact; the task body is encrypted,
+but its attributable assignment envelope, read command, ordinary assistant
+marker, final result, and completion event remain independently visible.
+Panels remain unproven, so these results do not establish complete W3.
 
 The isolation boundary differs by runtime. OMP creates an isolated writer
 worktree and retains an unapplied patch. Codex CLI creates one managed worktree

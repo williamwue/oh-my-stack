@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-transcript",
+  "fixture": "check-transcript",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Persisted sessions in disposable HOME and CODEX_HOME directories; generated Skill copied under project .agents/skills; project rules and user configuration ignored; one delegated worker.",
+    "permissionProfile": "Read-only sandbox with approval policy never; persisted session JSONL readable through the external filesystem interface"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.spawn",
+    "agents.wait",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/check-delegation.json",
+    "evals/evidence/codex-cli-0.155.1/check-follow-up.json",
+    "evals/evidence/codex-cli-0.155.1/check-parallel.json",
+    "evals/evidence/codex-cli-0.155.1/install-lifecycle.json"
+  ],
+  "assertions": [
+    { "id": "skill-loaded", "status": "pass", "evidence": "The parent read the generated check-transcript Skill before executing it." },
+    { "id": "one-worker-started", "status": "pass", "evidence": "Exactly one transcript_worker child thread was started." },
+    { "id": "worker-result-collected", "status": "pass", "evidence": "The parent collected the worker's final JSON result containing transcript-ok." },
+    { "id": "transcript-retrieved-after-completion", "status": "pass", "evidence": "After task_complete, the parent located and read the worker's persisted session JSONL." },
+    { "id": "transcript-not-result-substitute", "status": "pass", "evidence": "The JSONL contained the assignment envelope, command execution, ordinary commentary marker, final result, and task_complete as distinct records." },
+    { "id": "assignment-envelope-found-in-transcript", "status": "pass", "evidence": "The agent_message envelope records NEW_TASK from /root to /root/transcript_worker; its assignment body is encrypted by the runtime." },
+    { "id": "worker-read-found-in-transcript", "status": "pass", "evidence": "The transcript recorded the exact worker.txt read command, exit code zero, and marker output." },
+    { "id": "marker-found-in-transcript", "status": "pass", "evidence": "An ordinary assistant commentary message contained transcript-ok before the separate final JSON result." },
+    { "id": "root-did-not-read-worker-asset", "status": "pass", "evidence": "The parent avoided reading worker.txt; the only successful content read is recorded in the child transcript." },
+    { "id": "root-marker-independently-verified", "status": "pass", "evidence": "The parent read the root marker before delegation and again after transcript inspection, observing transcript-root-ok." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External post-run git status was clean and the parent also verified the fixture inventory, sizes, and modification times." }
+  ],
+  "limitations": [
+    "Codex CLI 0.155.1 exposed no callable native transcript-read operation in this probe; retrieval depended on externally reading the persisted session JSONL.",
+    "The NEW_TASK body is encrypted at rest, so the transcript proves the attributable assignment envelope rather than exposing its plaintext.",
+    "This result applies to persisted CLI sessions only, not ephemeral mode, desktop, or IDE surfaces.",
+    "This proves completed-worker transcript retrieval, not panel coordination or a cancellation race with a delivered late stale payload."
+  ]
+}

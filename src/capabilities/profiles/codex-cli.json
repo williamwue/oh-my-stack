@@ -7,7 +7,7 @@
     "surface": "cli",
     "runtimeVersion": "0.155.1",
     "platform": "macos-arm64",
-    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+ignore-rules+project-agents-skill-copy+managed-worktree",
+    "configurationFingerprint": "isolated-home+isolated-codex-home+persisted-sessions+external-jsonl-transcript+ignore-rules+project-agents-skill-copy+managed-worktree",
     "permissionProfile": "sandbox-read-only-lifecycle+workspace-write-isolation+approval-never",
     "installedProviders": []
   },
@@ -15,6 +15,7 @@
     "agents.cancel": { "status": "native", "provider": "interrupt_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-cancellation.json" },
     "agents.follow_up": { "status": "native", "provider": "followup_task", "evidence": "evals/evidence/codex-cli-0.155.1/check-follow-up.json" },
     "agents.read_result": { "status": "native", "provider": "child result messages", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
+    "agents.read_transcript": { "status": "external", "provider": "persisted session JSONL via filesystem", "evidence": "evals/evidence/codex-cli-0.155.1/check-transcript.json" },
     "agents.spawn": { "status": "native", "provider": "spawn_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "multiple spawned child threads", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },
     "agents.wait": { "status": "native", "provider": "wait", "evidence": "evals/evidence/codex-cli-0.155.1/check-parallel.json" },

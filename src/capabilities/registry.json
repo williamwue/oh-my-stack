@@ -4,6 +4,7 @@
     "agents.cancel",
     "agents.follow_up",
     "agents.read_result",
+    "agents.read_transcript",
     "agents.spawn",
     "agents.spawn_parallel",
     "agents.wait",

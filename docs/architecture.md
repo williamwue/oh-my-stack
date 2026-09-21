@@ -166,6 +166,10 @@ The OMP target will generate Agent Skills plus OMP-native agent and lifecycle co
 Observed writer isolation uses an isolated task worktree with patch merge and
 `apply=false`. The root checkout remains the source boundary until runtime
 evidence proves otherwise; a temporary path alone is not isolation evidence.
+Completed worker transcripts are available through the native `history://`
+resource. Structured yields may be collapsed in that view, so portable
+transcript assertions place independently verifiable evidence in an ordinary
+assistant message before the structured yield.
 
 ### Codex
 
@@ -176,6 +180,12 @@ boundary and delegated children may share it. Project `.agents` content is
 configuration and can be read-only under a workspace-write sandbox, so mutable
 workflow state belongs in ordinary project-owned paths rather than Skill
 assets.
+
+Codex CLI 0.155.1 has no observed native completed-child transcript reader in
+the probed surface. Persisted sessions can be inspected as an external JSONL
+artifact. Assignment bodies may be encrypted, so portable assertions accept
+an attributable task envelope and require the remaining evidence in visible
+tool and assistant records.
 
 ### Claude Code
 

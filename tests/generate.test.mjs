@@ -15,15 +15,16 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads seven portable Skills and three adapters", async () => {
+test("loads eight portable Skills and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 7);
+  assert.equal(model.skills.length, 8);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "check-cancellation",
     "check-delegation",
     "check-follow-up",
     "check-parallel",
     "check-resources",
+    "check-transcript",
     "check-writer-isolation",
     "prove-it-works",
   ]);
@@ -45,6 +46,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["agents.spawn_parallel"].status, "native");
   assert.equal(omp.capabilities["agents.wait"].status, "native");
   assert.equal(omp.capabilities["agents.read_result"].status, "native");
+  assert.equal(omp.capabilities["agents.read_transcript"].status, "native");
   assert.equal(omp.capabilities["workspace.isolate"].status, "native");
   assert.equal(omp.capabilities["workspace.write"].status, "native");
   assert.equal(codexCli.capabilities["skills.invoke.explicit"].status, "native");
@@ -57,6 +59,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCli.capabilities["agents.spawn_parallel"].status, "native");
   assert.equal(codexCli.capabilities["agents.wait"].status, "native");
   assert.equal(codexCli.capabilities["agents.read_result"].status, "native");
+  assert.equal(codexCli.capabilities["agents.read_transcript"].status, "external");
   assert.equal(codexCli.capabilities["workspace.isolate"].status, "native");
   assert.equal(codexCli.capabilities["workspace.write"].status, "native");
   const codexDesktop = model.profiles.get("codex-desktop");
@@ -70,6 +73,7 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(claude.capabilities["agents.cancel"].status, "unknown");
   assert.equal(claude.capabilities["agents.spawn"].status, "unknown");
   assert.equal(claude.capabilities["agents.follow_up"].status, "unknown");
+  assert.equal(claude.capabilities["agents.read_transcript"].status, "unknown");
   assert.equal(claude.capabilities["agents.spawn_parallel"].status, "unknown");
   assert.equal(claude.capabilities["workspace.isolate"].status, "unknown");
   assert.equal(claude.capabilities["workspace.write"].status, "unknown");
