@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "selectedRoute": "investigation",
+  "expectedFlow": [
+    "createReportSystem composes the queue and store",
+    "submit validates the title and enqueues one immutable report job",
+    "processNext dequeues the oldest job and returns null when empty",
+    "render converts the report to text",
+    "store.put persists the rendered record by report ID"
+  ],
+  "assertions": [
+    "router-loaded",
+    "investigation-selected",
+    "how-loaded",
+    "two-explorers-started-before-wait",
+    "explorer-results-frozen",
+    "new-explainer-after-exploration",
+    "attribution-preserved",
+    "root-reverified-critical-flow",
+    "correct-flow-explained",
+    "no-project-changes"
+  ]
+}
