@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "deliveryTarget": "D3",
+  "workflowTarget": "W2",
+  "selectedRoute": "feature",
+  "verification": "node --test test/receipt.test.mjs",
+  "allowedChanges": [
+    "project/lib/normalize-order.mjs",
+    "project/lib/receipt.mjs"
+  ],
+  "namedDataShape": "normalized order { customer, note, items }",
+  "assertions": [
+    "router-loaded",
+    "generated-resources-only",
+    "feature-selected",
+    "feature-and-how-loaded",
+    "current-boundary-inspected",
+    "direct-design-recorded",
+    "throughput-checkpoint-recorded",
+    "failing-before-captured-by-root",
+    "exactly-one-writer",
+    "writer-ownership-bounded",
+    "writer-isolated-or-serialized",
+    "root-diff-inspected",
+    "passing-after-captured-by-root",
+    "existing-behavior-preserved",
+    "no-unexpected-changes",
+    "no-publication"
+  ]
+}
