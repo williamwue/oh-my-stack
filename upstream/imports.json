@@ -27,6 +27,8 @@
     { "upstreamPath": "skills/principle-subtract-before-you-add/SKILL.md", "target": "src/core/skills/principle-subtract-before-you-add/SKILL.md", "transform": "portable-explicit-skill" },
     { "upstreamPath": "skills/principle-test-behavior-not-implementation/SKILL.md", "target": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md", "transform": "portable-explicit-skill" },
     { "upstreamPath": "skills/principle-type-system-discipline/SKILL.md", "target": "src/core/skills/principle-type-system-discipline/SKILL.md", "transform": "portable-explicit-skill" },
-    { "upstreamPath": "skills/tdd/SKILL.md", "target": "src/core/skills/tdd/SKILL.md", "transform": "portable-explicit-skill" }
+    { "upstreamPath": "skills/tdd/SKILL.md", "target": "src/core/skills/tdd/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/technical-writing/SKILL.md", "target": "src/core/skills/technical-writing/SKILL.md", "transform": "portable-explicit-skill" },
+    { "upstreamPath": "skills/unslop/SKILL.md", "target": "src/core/skills/unslop/SKILL.md", "transform": "portable-explicit-skill" }
   ]
 }

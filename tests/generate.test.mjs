@@ -15,9 +15,9 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads forty portable Skills, five roles, and three adapters", async () => {
+test("loads forty-two portable Skills, five roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 40);
+  assert.equal(model.skills.length, 42);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "bug-fix",
     "check-cancellation",
@@ -59,6 +59,8 @@ test("loads forty portable Skills, five roles, and three adapters", async () => 
     "prove-it-works",
     "show-me-your-work",
     "tdd",
+    "technical-writing",
+    "unslop",
   ]);
   assert.equal(
     model.skills.filter((skill) => skill.metadata.name.startsWith("principle-")).every(

@@ -2,8 +2,8 @@
 
 ## Cursor pstack
 
-The `principle-*`, `tdd`, `show-me-your-work`, `bug-fix`, and `interrogate`
-Skills under
+The `principle-*`, `tdd`, `technical-writing`, `unslop`, `show-me-your-work`,
+`bug-fix`, and `interrogate` Skills under
 `src/core/skills/` contain modified material from the pstack plugin in the
 Cursor plugins repository:
 

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Unslop"
+  short_description: "Unslop workflow"
+  default_prompt: "Use $unslop for this task."
+policy:
+  allow_implicit_invocation: false
