@@ -18,6 +18,30 @@
       "uninstallBehavior": "Not installed in target packages."
     },
     {
+      "path": "tools/build-release.mjs",
+      "owner": "local-core",
+      "purpose": "Build deterministic target archives, their file inventories, checksums, and the release manifest.",
+      "network": false,
+      "writes": ["dist"],
+      "uninstallBehavior": "Not installed in target packages; generated dist files may be deleted independently."
+    },
+    {
+      "path": "tools/install-release.mjs",
+      "owner": "local-core",
+      "purpose": "Install, atomically update, or uninstall one target archive in an explicit dedicated directory.",
+      "network": false,
+      "writes": ["explicit user-selected target package directory"],
+      "uninstallBehavior": "Removes only a directory whose generated ownership marker matches the selected target."
+    },
+    {
+      "path": "tools/release-lib.mjs",
+      "owner": "local-core",
+      "purpose": "Provide deterministic archive, checksum, safe extraction, ownership, rollback, and installed-tree verification primitives.",
+      "network": false,
+      "writes": ["caller-selected release or installation directories"],
+      "uninstallBehavior": "Library is not installed in target packages."
+    },
+    {
       "path": "evals/fixtures/public-skill-matrix/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",

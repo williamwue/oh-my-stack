@@ -33,6 +33,19 @@ A target may generate a Hook only when a workflow declares it as an optional or 
 
 Upstream synchronization operates from pinned commits and immutable source slices. A failed transformation, denylist hit, provenance gap, conflict, validation failure, or test failure leaves both generated files and the baseline pin unchanged. Release archives are built from a tagged clean checkout, not from a developer's working tree.
 
+Release archives contain regular files only under one fixed `oh-my-stack/`
+root. The installer checks the manifest SHA-256 before extraction, rejects
+absolute paths, parent traversal, links, special entries, duplicates, and tar
+checksum drift, and verifies the complete installed inventory before exposing
+the directory. Updates use a staging directory and restore the previous owned
+directory if replacement fails. Uninstall requires a matching generated target
+marker and never removes the parent plugin directory or user-selected runtime
+configuration.
+
+The release installer does not execute packaged scripts, register plugins, or
+edit runtime-global configuration. Target-native registration remains an
+explicit, separately reviewed action.
+
 ## Security gates
 
 Security validation starts in Phase 0 rather than at release time:

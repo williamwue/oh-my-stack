@@ -183,8 +183,22 @@ npm run check
 
 `npm run generate` replaces only the generator-owned target directories under
 `packages/`. `npm run check` verifies generated drift, schemas and invariants,
-local links, the executable inventory, and the test suite without network
-access.
+local links, deterministic release output, the executable inventory, and the
+test suite without network access.
+
+Build the three local Alpha archives and verify their checksums with:
+
+```bash
+npm run release:build
+(cd dist && shasum -a 256 -c SHA256SUMS)
+```
+
+The release manifest records every installed file, target profile, checksum,
+and separate static, discovery, lifecycle, and end-to-end status. See the
+[release process](docs/release-process.md) and the
+[0.1.0-alpha.0 release notes](docs/releases/0.1.0-alpha.0.md). Claude Code is
+packaged and lifecycle-tested offline, while its runtime discovery and
+end-to-end status remain explicitly deferred.
 
 Each generated package contains `scripts/collect-model-inventory.mjs`,
 `scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The
@@ -301,6 +315,8 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 - [Prior-art assessment](docs/prior-art.md)
 - [Implementation plan](docs/implementation-plan.md)
 - [Security model](docs/security.md)
+- [Release process](docs/release-process.md)
+- [Alpha release notes](docs/releases/0.1.0-alpha.0.md)
 - [ADR 0001: portable core and generated targets](docs/decisions/0001-portable-core.md)
 - [ADR 0002: surface-aware compatibility profiles](docs/decisions/0002-surface-aware-compatibility.md)
 - [ADR 0003: adapters compile and probe](docs/decisions/0003-adapters-compile-and-probe.md)

@@ -409,6 +409,26 @@ live conformance claim.
 
 ## Phase 6: alpha packaging
 
+Current progress:
+
+- One deterministic builder emits OMP, Codex, and Claude Code archives from
+  version `0.1.0-alpha.0`, plus complete file inventories, SHA-256 checksums,
+  source coordinates, profiles, conformance summaries, and verification labels.
+- Two independent builds must be byte-identical during every `npm run check`.
+- The owned-directory installer verifies checksums and archive safety, stages
+  and verifies exact files, atomically updates with rollback, and refuses to
+  uninstall a directory without the matching generated target marker.
+- Lifecycle tests cover clean install, update, injected rollback, exact tree
+  verification, user-owned sibling preservation, and uninstall for all three
+  target archives. Existing OMP npm and Codex repository-marketplace tests
+  remain separate surface evidence.
+- Release documentation separates static, discovery, package lifecycle, and
+  end-to-end claims. Claude Code runtime checks remain deferred, and OMP's
+  native plugin-manager D1 is not inferred from generic package lifecycle.
+- The clean-tag gate is implemented and tested in a disposable repository. The
+  final local release commit must be tagged and rebuilt from that exact clean
+  tag before Phase 6 closes; public publication remains separate.
+
 ### Work
 
 - Produce installable OMP, Codex, and Claude Code packages from the same release version.

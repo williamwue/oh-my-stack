@@ -12,10 +12,12 @@
     "generate:check": "node tools/generate.mjs --check",
     "conformance": "node tools/build-conformance.mjs",
     "conformance:check": "node tools/build-conformance.mjs --check",
+    "release:build": "node tools/build-release.mjs",
+    "release:check": "node tools/build-release.mjs --check",
     "validate": "node tools/validate.mjs",
     "lint:markdown": "markdownlint-cli2 '**/*.md'",
     "test": "node --test tests/*.test.mjs",
-    "check": "npm run generate:check && npm run conformance:check && npm run validate && npm run lint:markdown && npm test"
+    "check": "npm run generate:check && npm run conformance:check && npm run release:check && npm run validate && npm run lint:markdown && npm test"
   },
   "license": "MIT",
   "devDependencies": {

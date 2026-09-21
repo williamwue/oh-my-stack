@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/release-config.schema.json",
+  "schemaVersion": 1,
+  "archiveRoot": "oh-my-stack",
+  "targets": [
+    {
+      "id": "omp",
+      "packageDir": "packages/omp",
+      "verification": {
+        "static": "verified",
+        "discovery": "verified",
+        "lifecycle": "verified",
+        "endToEnd": "verified"
+      }
+    },
+    {
+      "id": "codex",
+      "packageDir": "packages/codex",
+      "verification": {
+        "static": "verified",
+        "discovery": "verified",
+        "lifecycle": "verified",
+        "endToEnd": "verified"
+      }
+    },
+    {
+      "id": "claude-code",
+      "packageDir": "packages/claude-code",
+      "verification": {
+        "static": "verified",
+        "discovery": "deferred",
+        "lifecycle": "verified",
+        "endToEnd": "deferred"
+      }
+    }
+  ]
+}
