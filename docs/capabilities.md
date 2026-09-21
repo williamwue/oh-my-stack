@@ -228,6 +228,16 @@ test successfully. OMP supplies an isolated child patch; Codex uses the managed
 root worktree with one serialized child. The evidence is intentionally bounded
 to the fixture's only caller/test surface.
 
+The root-only `prototype` fixture validates the scratch-directory fallback on
+both runtimes. A single script exposes scan and set variants, both preserve the
+same five first-seen IDs, and explicit membership-check instrumentation reports
+14 versus 8 without relying on timing. The project inputs retain their hashes;
+the retained scratch artifact is labeled throwaway and handed to a separate
+future feature run. Codex initially rejected creation of an absent top-level
+scratch directory through automatic approval review. Pre-creating and tracking
+the empty repository-owned directory removes that ambiguity and the fresh run
+passes; both the failure and pass remain recorded.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

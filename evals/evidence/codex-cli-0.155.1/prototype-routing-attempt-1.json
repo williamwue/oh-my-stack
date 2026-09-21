@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-prototype-routing-attempt-1",
+  "fixture": "prototype-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W0", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and prototype Skills committed in a disposable Git fixture; user configuration and project rules ignored; workspace-write sandbox; scratch directory absent at start.",
+    "permissionProfile": "workspace-write sandbox with automatic approval review"
+  },
+  "capabilities": ["commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/prototype-routing.json"],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Workflow reads stayed within the disposable repository's generated Skills and project inputs." },
+    { "id": "prototype-selected", "status": "pass", "evidence": "The router selected prototype for a throwaway comparison between scan and set." },
+    { "id": "decision-and-variants-stated-before-build", "status": "pass", "evidence": "The root stated the de-duplication decision and scan/set variants before attempting the artifact." },
+    { "id": "repository-constraints-inspected", "status": "pass", "evidence": "The root read constraints.md and events.json before the write attempt." },
+    { "id": "scratch-outside-production-source", "status": "fail", "evidence": "Automatic approval review rejected creation of scratch/dedupe-prototype.mjs as writing outside the project, so no scratch artifact existed." },
+    { "id": "one-repeatable-variant-switch", "status": "fail", "evidence": "No executable artifact was created." },
+    { "id": "both-variants-observed", "status": "fail", "evidence": "Neither variant ran after the rejected write." },
+    { "id": "observable-output-equivalent", "status": "fail", "evidence": "No variant outputs were available for comparison." },
+    { "id": "decision-variable-captured", "status": "fail", "evidence": "No membership-check counts were produced." },
+    { "id": "evidence-backed-recommendation", "status": "fail", "evidence": "The root correctly withheld a recommendation because the experiment did not run." },
+    { "id": "production-source-unchanged", "status": "pass", "evidence": "Both project input files retained their baseline hashes." },
+    { "id": "throwaway-status-explicit", "status": "pass", "evidence": "The final result still identified the intended artifact as throwaway." },
+    { "id": "cleanup-status-reported", "status": "pass", "evidence": "The root reported that no artifact existed and nothing required cleanup." },
+    { "id": "feature-handoff-explicit", "status": "pass", "evidence": "The final result said production implementation would require a separate feature run." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "Automatic approval review treated creation of a new top-level scratch directory as outside-project writing even though the CLI working root was the repository root.",
+    "The hardened rerun pre-creates and tracks an empty scratch directory so the workflow writes only inside a known repository-owned path."
+  ]
+}

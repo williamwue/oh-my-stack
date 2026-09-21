@@ -105,6 +105,16 @@ added, then reruns the identical test to the same two passing tests. OMP uses
 an isolated child patch; Codex uses its managed root worktree and serialized
 writer fallback. This is behavior-preserving evidence, not a feature claim.
 
+The root-only `prototype` fixture passes on OMP and Codex CLI. Both create one
+throwaway script under `scratch/`, run scan and set through the same variant
+switch, preserve identical first-seen output, and observe deterministic
+membership-check counts of 14 and 8 without using wall-clock timing. Project
+inputs retain their hashes, the artifact stays outside production source, and
+both reports require a separate `feature` run for implementation. The first
+Codex attempt is retained as a failure because automatic approval rejected
+creation of a previously absent scratch directory; the passing harness tracks
+that empty repository-owned directory before invocation.
+
 The generated custom read-only role is discovered and applied natively by OMP.
 Codex CLI 0.155.1 finds the generated project role definition, but the
 `spawn_agent` surface exposed to `codex exec` has no role selector. That exact

@@ -265,6 +265,13 @@ Current progress:
   writer, inspect the actual one-file diff and unchanged exports, and rerun the
   same two-test contract successfully. Isolation follows the same OMP child
   worktree and Codex managed-root-worktree boundaries as the feature fixture.
+- The root-only `prototype` fixture passes on OMP and Codex CLI. One repeatable
+  scan/set script produces identical ordered IDs and deterministic explicit
+  membership-check counts of 14 and 8, leaving production inputs unchanged and
+  requiring a later feature run. Codex's first attempt failed when automatic
+  approval rejected creation of a missing top-level scratch directory; the
+  hardened harness pre-creates and tracks that empty repository-owned path and
+  the fresh run passes.
 
 - `poteto-mode` router;
 - `how`, `unslop`, and `technical-writing`;

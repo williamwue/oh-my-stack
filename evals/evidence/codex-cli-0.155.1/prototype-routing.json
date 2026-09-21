@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-prototype-routing",
+  "fixture": "prototype-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W1", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and prototype Skills committed in a disposable Git fixture; user configuration and project rules ignored; workspace-write sandbox; repository-owned scratch directory pre-created and tracked empty by the harness.",
+    "permissionProfile": "workspace-write sandbox constrained to the disposable repository"
+  },
+  "capabilities": ["commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/prototype-routing-attempt-1.json"],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the repository-generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Workflow reads stayed within generated repository Skills and project inputs; no installed cache participated." },
+    { "id": "prototype-selected", "status": "pass", "evidence": "The router selected prototype for the throwaway scan/set comparison." },
+    { "id": "decision-and-variants-stated-before-build", "status": "pass", "evidence": "Before writing, the root named stable ordered de-duplication, the two variants, and explicit membership checks as the decision variable." },
+    { "id": "repository-constraints-inspected", "status": "pass", "evidence": "The root read constraints.md and events.json before constructing the script." },
+    { "id": "scratch-outside-production-source", "status": "pass", "evidence": "The created dedupe-prototype.mjs lives under repository-owned scratch/, outside production directory project/." },
+    { "id": "one-repeatable-variant-switch", "status": "pass", "evidence": "One script accepts --variant scan or set through the same command surface." },
+    { "id": "both-variants-observed", "status": "pass", "evidence": "The root ran each variant exactly once and captured exit 0 and exact JSON." },
+    { "id": "observable-output-equivalent", "status": "pass", "evidence": "Both variants returned [a,b,c,d,e] in first-seen order from eight inputs." },
+    { "id": "decision-variable-captured", "status": "pass", "evidence": "The scan reported 14 explicit comparisons and set reported 8 membership checks, with no timing benchmark." },
+    { "id": "evidence-backed-recommendation", "status": "pass", "evidence": "The root recommended set from equivalent output, fewer observed checks, and the 10,000-ID constraint while naming additional membership storage." },
+    { "id": "production-source-unchanged", "status": "pass", "evidence": "There was no project diff and both project input hashes matched the committed fixture." },
+    { "id": "throwaway-status-explicit", "status": "pass", "evidence": "The final report explicitly calls the script throwaway and not production code." },
+    { "id": "cleanup-status-reported", "status": "pass", "evidence": "The scratch script was retained untracked for inspection and that status was reported." },
+    { "id": "feature-handoff-explicit", "status": "pass", "evidence": "The final report requires a separate feature run for production implementation." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The first fresh run failed because automatic approval review rejected creation of a previously absent top-level scratch directory; the passing harness pre-creates and tracks the empty repository-owned directory.",
+    "The operation count measures explicit algorithm checks, not Set internals, allocation, memory, or wall-clock performance.",
+    "Unrelated Cloudflare MCP authentication and plugin-catalog warnings did not participate in the experiment."
+  ]
+}

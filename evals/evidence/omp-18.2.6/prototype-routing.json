@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-prototype-routing",
+  "fixture": "prototype-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W1", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Generated poteto-mode and prototype Skills copied into a disposable Git fixture; empty Skill allowlist; root-only writable run with scratch outside project/.",
+    "permissionProfile": "root may inspect project inputs and write only the disposable scratch artifact"
+  },
+  "capabilities": ["commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect", "workspace.write"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/prove-it-works.json"],
+  "assertions": [
+    { "id": "router-loaded", "status": "pass", "evidence": "The root explicitly loaded the generated poteto-mode router." },
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The run used the generated repository Skills and project inputs without reading installed caches." },
+    { "id": "prototype-selected", "status": "pass", "evidence": "The router selected prototype because the request asked for a throwaway experiment to choose between alternatives." },
+    { "id": "decision-and-variants-stated-before-build", "status": "pass", "evidence": "Before writing, the root named stable ordered de-duplication, scan, set, and deterministic membership checks." },
+    { "id": "repository-constraints-inspected", "status": "pass", "evidence": "The root read the 10,000-ID, first-seen-order constraints and the eight-ID input." },
+    { "id": "scratch-outside-production-source", "status": "pass", "evidence": "The only created implementation artifact was scratch/dedupe-prototype.mjs, outside project/." },
+    { "id": "one-repeatable-variant-switch", "status": "pass", "evidence": "One script accepted --variant scan or set and rejected other values." },
+    { "id": "both-variants-observed", "status": "pass", "evidence": "The root ran both commands once and captured exit 0 and exact JSON for each." },
+    { "id": "observable-output-equivalent", "status": "pass", "evidence": "Both variants returned ordered unique IDs [a,b,c,d,e] from eight inputs." },
+    { "id": "decision-variable-captured", "status": "pass", "evidence": "The scan reported 14 explicit comparisons and set reported 8 explicit membership checks, without wall-clock timing." },
+    { "id": "evidence-backed-recommendation", "status": "pass", "evidence": "The root recommended set from equivalent ordering, fewer observed checks, and the 10,000-ID constraint while disclosing its extra storage." },
+    { "id": "production-source-unchanged", "status": "pass", "evidence": "Git showed no project diff and constraints.md plus events.json retained their baseline hashes." },
+    { "id": "throwaway-status-explicit", "status": "pass", "evidence": "The report plainly calls the scratch script throwaway and not a production implementation." },
+    { "id": "cleanup-status-reported", "status": "pass", "evidence": "The scratch script was intentionally retained untracked for inspection and reported as not cleaned up." },
+    { "id": "feature-handoff-explicit", "status": "pass", "evidence": "The report requires a separate feature run for production implementation." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, publication, or pull-request operation occurred." }
+  ],
+  "limitations": [
+    "The operation count measures explicit algorithm membership checks, not Set internals, allocation, memory, or wall-clock performance.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}
