@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-mixed-review",
+  "fixture": "mixed-review",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W3", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Final hardened mixed-review fixture plus generated poteto-mode/interrogate Skills and native reviewer/synthesizer roles; cursor/default at low thinking; asynchronous tasks with root liveness waits and one reused reviewer task body; no extensions or rules.",
+    "permissionProfile": "read-only workflow with auto-approved read, bash, and task tools"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/mixed-review-attempt-1.json", "evals/evidence/omp-18.2.6/check-custom-role.json", "evals/evidence/omp-18.2.6/check-parallel.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "The root used only generated repository Skills, references, and native role definitions." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "Poteto-mode selected interrogate from the observable bounded-review intent." },
+    { "id": "scope-frozen-before-review", "status": "pass", "evidence": "The root froze the complete literal intent, baseline, proposed implementation, review seeds, and four matching hashes before delegation." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "One initial task call started exactly ReviewerA and ReviewerB before any wait or result read." },
+    { "id": "identical-packets", "status": "pass", "evidence": "External transcript inspection found the two 6,977-character initial task bodies byte-identical and containing every literal file and hash." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "Both reviewers yielded complete attributable F1/F2 classifications without follow-up, retry, replacement, or repair." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both native reviewer roles exposed read-only tools, and root plus external checks found no changes." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "Exactly one native synthesizer started only after both complete reviewer artifacts were frozen." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "The synthesis preserved ReviewerA and ReviewerB attribution while deduplicating their equivalent reasoning." },
+    { "id": "true-positive-retained", "status": "pass", "evidence": "F1 remained Act on because valid half-open windows traverse endExclusive under the proposed <= loop." },
+    { "id": "false-positive-dismissed", "status": "pass", "evidence": "F2 was dismissed because validateRange rejects every negative start before rows.at is reachable." },
+    { "id": "root-reverified-findings", "status": "pass", "evidence": "The root reread all inputs, matched all hashes, independently exercised reachable and rejected inputs, ran node verify.mjs F1 F2-dismissed with exit 0, and checked clean Git." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "Generated native OMP reviewer and synthesizer roles were selected; the root correctly declared that no inline-role fallback was used." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "Root and external Git checks found no diff or untracked file." },
+    { "id": "no-publication", "status": "pass", "evidence": "No commit, push, pull request, or other publication occurred." }
+  ],
+  "limitations": [
+    "Independent per-worker model identities were not established, so no model-diversity claim is made.",
+    "The verifier proves reachability and classification for the frozen JavaScript surface, not broader application behavior.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

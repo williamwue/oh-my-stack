@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-mixed-review-attempt-1",
+  "fixture": "mixed-review",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated Skills and role TOML in a disposable Git fixture with isolated CODEX_HOME; role contracts supplied inline because custom-role selection was unavailable.",
+    "permissionProfile": "workspace-write sandbox with read-only delegated contracts and automatic approval review"
+  },
+  "capabilities": ["agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/mixed-review.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "Generated repository Skills and roles were the only workflow resources used." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "Poteto-mode selected interrogate." },
+    { "id": "scope-frozen-before-review", "status": "pass", "evidence": "All four literal files and hashes were frozen before delegation." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "Both reviewer start operations preceded the first explicit wait." },
+    { "id": "identical-packets", "status": "pass", "evidence": "The root reports identical complete initial packets; both child results cover the full frozen scope without later messages." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "Both complete reviews were frozen without repair, retry, or replacement." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both inline contracts were read-only and Git stayed clean." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "One synthesizer started after both reviewer completions." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "Both reviewer results remained attributable through synthesis." },
+    { "id": "true-positive-retained", "status": "pass", "evidence": "F1 was retained as reachable Act on." },
+    { "id": "false-positive-dismissed", "status": "pass", "evidence": "F2 was dismissed as unreachable." },
+    { "id": "root-reverified-findings", "status": "pass", "evidence": "The root reread, rehashed, independently traced, ran the verifier, and checked clean Git." },
+    { "id": "fallback-declared", "status": "fail", "evidence": "The final report said no fallback was used even though generated role contracts were supplied inline because this CLI has no native custom-role selector." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "No repository changes occurred." },
+    { "id": "no-publication", "status": "pass", "evidence": "No publication occurred." }
+  ],
+  "limitations": [
+    "This run motivated an explicit fixture definition that inline role-contract delivery is a fallback and must be reported as used."
+  ]
+}

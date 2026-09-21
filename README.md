@@ -217,8 +217,9 @@ Alpha 3 gate on the two currently verified CLI surfaces.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
-behavior-preserving refactor, and a frozen architecture comparison into eight
-normalized conformance records. Each record binds the runtime coordinate and configuration fingerprint
+behavior-preserving refactor, a frozen architecture comparison, and a mixed
+true/false-positive review into ten normalized conformance records. Each record
+binds the runtime coordinate and configuration fingerprint
 to the source evidence, provider-inventory evidence, exact fixture and artifact
 hashes, repetition threshold, common semantic event trace, and mapped protocol
 assertions. The compiler deliberately records scenario model resolution as
@@ -233,6 +234,14 @@ a clean repository. Retained failed attempts document OMP print-mode child
 disposal and Codex's missing referenced-packet transport; the hardened passing
 runs use explicit root liveness and literal initial packets rather than hiding
 either failure.
+
+The mixed-review fixture proves judgment rather than reviewer voting. A
+reachable exclusive-end regression remains `Act on`, while a tempting negative
+`.at()` warning is `Dismissed` because the frozen public boundary rejects that
+input first. Both runtimes used two frozen read-only reviews, one later
+synthesizer, and an independent root execution. Retained failures record an OMP
+one-word packet mismatch and a Codex run that failed to disclose its inline-role
+fallback before the hardened runs passed.
 
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime

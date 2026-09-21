@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.6-macos-arm64-mixed-review-attempt-1",
+  "fixture": "mixed-review",
+  "profile": "omp-default",
+  "observedAt": "2026-09-21",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.6",
+    "platform": "macos-arm64",
+    "configuration": "Final mixed-review fixture plus generated poteto-mode/interrogate Skills and native reviewer/synthesizer roles; cursor/default; asynchronous task support with root liveness waits; no extensions or rules.",
+    "permissionProfile": "read-only workflow with auto-approved read, bash, and task tools"
+  },
+  "capabilities": ["agents.custom_roles", "agents.read_result", "agents.spawn", "agents.spawn_parallel", "agents.wait", "commands.run", "resources.relative_paths", "skills.discover", "skills.invoke.explicit", "workspace.inspect"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/mixed-review.json"],
+  "assertions": [
+    { "id": "generated-resources-only", "status": "pass", "evidence": "All Skills, references, and role definitions came from the disposable repository." },
+    { "id": "router-selected-interrogate", "status": "pass", "evidence": "The root selected interrogate for an adversarial review of a bounded change." },
+    { "id": "scope-frozen-before-review", "status": "pass", "evidence": "All four files and hashes were frozen before the first task call." },
+    { "id": "two-reviewers-started-before-wait", "status": "pass", "evidence": "Exactly two reviewers started in the first task call before any result wait." },
+    { "id": "identical-packets", "status": "fail", "evidence": "External transcript comparison found one two-character difference: ReviewerA received 'evidence: reachable path' while ReviewerB received 'evidence: a reachable path'." },
+    { "id": "reviewer-results-frozen", "status": "pass", "evidence": "Both complete attributable reviewer artifacts were frozen without follow-up, retry, or replacement." },
+    { "id": "reviewers-read-only", "status": "pass", "evidence": "Both native reviewer roles remained read-only and Git stayed clean." },
+    { "id": "one-new-synthesizer-after-review", "status": "pass", "evidence": "One synthesizer started after both reviewer artifacts existed." },
+    { "id": "attribution-preserved", "status": "pass", "evidence": "ReviewerA and ReviewerB reasoning stayed separately attributable through synthesis." },
+    { "id": "true-positive-retained", "status": "pass", "evidence": "Reviewers, synthesizer, and root classified reachable F1 as Act on." },
+    { "id": "false-positive-dismissed", "status": "pass", "evidence": "Reviewers, synthesizer, and root dismissed F2 because negative start is rejected before rows.at runs." },
+    { "id": "root-reverified-findings", "status": "pass", "evidence": "The root reread, rehashed, traced both paths, ran the verifier successfully, and checked clean Git." },
+    { "id": "fallback-declared", "status": "pass", "evidence": "Native OMP reviewer and synthesizer roles were selected, so the inline-role fallback was correctly reported unused." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "External Git inspection found no diff." },
+    { "id": "no-publication", "status": "pass", "evidence": "No publication operation occurred." }
+  ],
+  "limitations": [
+    "The semantic review result was correct, but the protocol requires byte-identical initial task bodies, so a one-word variation is a hard failure.",
+    "The passing rerun constructs one reviewer task string and reuses it byte-for-byte."
+  ]
+}

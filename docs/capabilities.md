@@ -343,6 +343,15 @@ of follow-up operations, and both complete child outputs rather than externally
 readable task plaintext. Neither run establishes model diversity or benchmarks
 the candidate's crash behavior and throughput.
 
+The mixed-review conformance fixture also passes on both CLI surfaces. Its
+frozen proposal contains a reachable inclusive-end regression and a tempting
+but unreachable negative-`.at()` hypothesis. Two independent reviewers, one
+later synthesizer, and the root all retain the former as `Act on` and dismiss
+the latter because boundary validation runs first. OMP uses native generated
+roles; Codex accurately reports its inline-role fallback. Failed attempts are
+retained for OMP's one-word packet mismatch and Codex's initially incorrect
+claim that no fallback was used.
+
 Phase 2 replaces each research or documented entry with a versioned observation. Separate profiles are created when platforms, permission modes, installed providers, or runtime versions change behavior.
 
 ## Fallback rules

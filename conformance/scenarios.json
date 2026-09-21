@@ -130,7 +130,36 @@
         "semantic-trace-matches": ["router-selected-interrogate", "root-reverified-decision"]
       }
     },
-    { "id": "mixed-review", "status": "pending" },
+    {
+      "id": "mixed-review",
+      "status": "verified",
+      "fixture": "mixed-review",
+      "evidence": {
+        "omp-default": "evals/evidence/omp-18.2.6/mixed-review.json",
+        "codex-cli": "evals/evidence/codex-cli-0.155.1/mixed-review.json"
+      },
+      "trace": [
+        ["playbook_selected", "root", "router-selected-interrogate"],
+        ["scope_frozen", "root", "scope-frozen-before-review"],
+        ["reviewers_started", "root", "two-reviewers-started-before-wait"],
+        ["reviewer_results_frozen", "reviewer", "reviewer-results-frozen"],
+        ["synthesizer_started", "root", "one-new-synthesizer-after-review"],
+        ["findings_synthesized", "synthesizer", "attribution-preserved"],
+        ["findings_reverified", "root", "root-reverified-findings"]
+      ],
+      "assertions": {
+        "playbook-selected": ["router-selected-interrogate"],
+        "expected-roles-spawned": ["two-reviewers-started-before-wait", "one-new-synthesizer-after-review"],
+        "candidates-frozen-before-review": ["scope-frozen-before-review", "identical-packets", "reviewer-results-frozen"],
+        "reviewer-did-not-write": ["reviewers-read-only"],
+        "writers-bounded-or-isolated": [],
+        "root-independently-inspected": ["root-reverified-findings"],
+        "exact-verification-reported": ["root-reverified-findings"],
+        "child-report-not-accepted-alone": ["true-positive-retained", "false-positive-dismissed", "root-reverified-findings"],
+        "fallback-declared": ["fallback-declared"],
+        "semantic-trace-matches": ["router-selected-interrogate", "root-reverified-findings"]
+      }
+    },
     { "id": "conflicting-writers", "status": "pending" }
   ]
 }
