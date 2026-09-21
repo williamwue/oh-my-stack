@@ -18,15 +18,23 @@ Use exactly one of these strategies:
 1. If the runtime has verified per-writer isolated worktrees and patch
    transport, start exactly two isolated implementers before waiting. Both must
    start from the frozen baseline, use `apply=false`, and receive only their
-   ownership from `ownership.md`. Freeze both complete results and patches
-   without follow-up, retry, or replacement. The root inspects both patches for
-   changed paths and owned lines, then integrates `BatchWriter` followed by
-   `RetryWriter` into the root checkout.
+   ownership from `ownership.md`. Isolation must be active in runtime metadata:
+   prose that merely says `isolated` or `apply=false` is not evidence. For OMP,
+   each task item must record `isolated: true` and the run configuration must
+   record `task.isolation.apply: false`. Freeze both complete results and
+   patches without follow-up, retry, or replacement. The root inspects both
+   patches for changed paths and owned lines, then integrates `BatchWriter`
+   followed by `RetryWriter` into the root checkout.
 2. Otherwise, declare the serialized shared-checkout fallback. Start
    `BatchWriter`, wait for and freeze its complete result, inspect its actual
    diff, and run its focused command. Only then start `RetryWriter`, freeze its
    result, inspect the cumulative diff and preservation of the batch change,
    and run its focused command. Do not overlap the writer sessions.
+
+Writers must not message, acknowledge, wait for, or otherwise coordinate with
+each other. All coordination and integration belongs to the root. If the
+runtime cannot make strategy 1 observable before spawning, select strategy 2
+instead of claiming isolation in prose.
 
 Supplying the generated implementer contract inline because a native role
 selector is unavailable is also a fallback and must be reported. In either
