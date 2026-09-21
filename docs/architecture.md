@@ -4,12 +4,33 @@
 
 One workflow definition must produce native, testable packages for OMP, Codex, and Claude Code without embedding one host's tool names in another host's prompt.
 
-The architecture has four layers:
+The architecture has five layers:
 
-1. The semantic core defines workflow intent and invariants.
-2. Capability manifests describe what each runtime can actually do.
-3. Runtime adapters implement canonical operations with native host mechanics.
-4. Packaging targets generate installable artifacts and host-specific metadata.
+1. Upstream staging preserves source provenance and reviewed transformations.
+2. The semantic core defines workflow intent and invariants.
+3. Capability profiles describe what a particular runtime surface can actually do.
+4. Runtime adapters render canonical operations into native host mechanics.
+5. Packaging targets generate installable artifacts and host-specific metadata.
+
+## Upstream staging
+
+Imported material moves through an explicit boundary:
+
+```text
+pinned upstream slice
+        ↓
+immutable snapshot + provenance record
+        ↓
+mechanical normalization
+        ↓
+reviewed semantic patches
+        ↓
+portable core
+```
+
+`upstream/sources.yaml` records sources and revisions. `upstream/ownership.yaml` records ownership at file or region granularity. `upstream/snapshots/` contains only the immutable source slices needed to reproduce an import. `upstream/patches/` records deliberate semantic or portability changes. Raw upstream content is never shipped directly as a portable target.
+
+An inspected revision is not automatically a baseline. The import baseline advances only after the derived core and all affected target packages pass their gates.
 
 ## Semantic core
 
@@ -61,9 +82,9 @@ The portable core initially recognizes four protocols:
 
 Every protocol keeps user interaction, irreversible actions, integration, and final verification with the root coordinator.
 
-## Capability manifests
+## Capability profiles
 
-Capabilities are machine-readable contracts, not prose suggestions. A playbook declares required and optional capabilities. Each runtime adapter declares how it implements them and which fallback is valid.
+Capabilities are machine-readable contracts, not prose suggestions. A playbook declares required and optional capabilities. A profile is bound to an exact runtime surface, version, platform, configuration, installed providers, and permission state. Each adapter declares how it renders a supported operation and which fallback is valid.
 
 Example:
 
@@ -81,36 +102,42 @@ fallbacks:
   workspace.isolate: one_writer_at_a_time
 ```
 
-The generator fails when a target lacks a required capability and has no declared fallback.
+Capability support uses `native`, `extension`, `external`, `fallback`, `unsupported`, or `unknown`. The generator fails when a target lacks a required capability and has no declared fallback. Runtime probes may further reduce what a generated package is allowed to claim.
 
 ## Runtime adapters
 
-Each adapter owns:
+Adapters are compiler and verification boundaries, not a portable orchestration daemon. Each adapter exposes four responsibilities:
+
+- `render`: expand canonical roles and protocols into native instructions and configuration;
+- `package`: create the target layout and manifests;
+- `validate`: reject invalid, unreachable, unsafe, or stale target output;
+- `probe`: exercise live runtime behavior and write evidence records.
+
+Within those responsibilities, an adapter owns:
 
 - canonical-role mapping;
 - spawn, wait, follow-up, cancel, and result retrieval mechanics;
 - workspace and worktree isolation;
-- model-tier mapping;
+- workload-class and role-constraint resolution;
 - task tracking and user interaction;
 - path and resource reference syntax;
 - transcript and durable-state discovery;
 - long-running wake mechanisms;
 - runtime-specific security and approval boundaries.
 
-Adapters generate concrete prose and metadata. Runtime Skills must not need to read a foreign-host translation table before using a tool.
+The host runtime performs the actual spawn, wait, cancellation, isolation, and tool execution. Adapters generate concrete prose and metadata; they do not proxy those calls. Runtime Skills must not need to read a foreign-host translation table before using a tool.
 
 ## Model policy
 
-The core uses model tiers, never model names:
+The core separates workload class from role constraints and never names concrete models:
 
-| Tier | Intended use |
+| Workload | Intended use |
 | --- | --- |
 | `fast` | Mechanical work and narrow reconnaissance |
 | `balanced` | Routine implementation |
 | `deep` | Difficult architecture and ambiguous implementation |
-| `judge` | Independent review and synthesis |
 
-Each runtime supplies defaults and permits user overrides. A panel declares desired diversity and size; an adapter reports when the available models reduce diversity.
+A role adds constraints such as `read_only`, `independent_session`, `reasoning_required`, and `model_diversity_preferred`. `reviewer` and `synthesizer` are roles, not model tiers. Each runtime resolves workload and role constraints to its live inventory and permits user overrides. A diversity claim requires returned model or backend evidence; distinct agent names alone are insufficient.
 
 ## Build pipeline
 
@@ -123,26 +150,26 @@ portable core + capability requirements
         ↓
 runtime adapter expansion
         ↓
-generated target packages
+committed generator-owned target trees
         ↓
-static validation → install tests → runtime conformance tests
+static validation → install tests → runtime conformance tests → release archives
 ```
 
-Generated artifacts must be deterministic. Running the generator twice must produce no diff.
+Generated artifacts must be deterministic. Running the generator twice must produce no diff. `packages/` is committed for review and Git-based installation; CI owns its contents. `dist/` is rebuilt from a tagged commit and is not committed.
 
 ## Target packages
 
 ### OMP
 
-The OMP target will generate Agent Skills plus OMP-native agent and lifecycle configuration. It will map canonical operations to the live `task` and job-control surface, including isolation and durable result resources when available.
+The OMP target will generate Agent Skills plus OMP-native agent and lifecycle configuration. It will map canonical operations only to fields and operations observed in the live `task` and job-control schema, including isolation and durable result resources when available.
 
 ### Codex
 
-The Codex target will generate a portable Agent Plugins manifest plus a Codex compatibility manifest when needed, Skills, Codex custom-agent TOML files, and trusted Hook definitions only when the workflow requires them.
+The Codex target will generate Skills, current Codex-compatible plugin metadata, custom-agent TOML files, and Hook definitions only when a workflow requires them. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
 
 ### Claude Code
 
-The Claude Code target will generate `.claude-plugin/plugin.json`, Skills, namespaced subagents, Hooks, and optional MCP configuration. Claude-specific Skill frontmatter stays in this target.
+The Claude Code target will generate `.claude-plugin/plugin.json`, Skills, namespaced subagents, Hooks, and optional MCP configuration. Claude-specific Skill frontmatter stays in this target. Optional MCP and Hook features are separately permissioned rather than silently enabled.
 
 ## Upstream ownership
 
@@ -154,19 +181,17 @@ Every imported file is classified as one of:
 - **target-only**, maintained by one runtime adapter;
 - **generated**, owned entirely by the build tool.
 
+The ownership ledger may classify regions when one Markdown file contains both upstream semantics and local adapter-owned material. Generated regions carry stable markers and must not be hand-edited.
+
 The sync tool must use a pinned old revision, a selected new revision, and the current local derivation. It must distinguish clean updates, local forks, automatic three-way merges, and real conflicts. A failed sync writes nothing and does not advance the pin.
 
 ## Verification strategy
 
-Support is established in layers:
+Support is reported on separate axes:
 
-1. Static package validity.
-2. Clean installation and discovery.
-3. Explicit Skill invocation.
-4. Native subagent lifecycle behavior.
-5. Workspace isolation and ownership.
-6. Same-scenario behavioral conformance.
-7. End-to-end verification against a real artifact.
+- delivery maturity: static validity, installation, discovery, and invocation;
+- workflow conformance: root-only, delegated, coordinated, and external-system behavior;
+- capability profile: individual operations and their providers or fallbacks;
+- evidence freshness: exact runtime surface, version, platform, configuration fingerprint, and observation date.
 
-Final responses and release notes must name the highest verified layer instead of using a single ambiguous `supported` label.
-
+Final responses and release notes name the verified coordinates rather than using a single ambiguous `supported` label.

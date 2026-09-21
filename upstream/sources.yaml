@@ -5,22 +5,38 @@ sources:
     path: pstack
     role: semantic-authority
     license: MIT
+    usage: planned-import-source
+    inspected_at: "2026-09-21"
     inspected_commit: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
+    baseline_commit: null
+    verified_commit: null
 
   - id: pstack-claude
     repository: https://github.com/michael-denyer/pstack-claude.git
     role: sync-generation-release-reference
     license: MIT
+    usage: reference-only
+    inspected_at: "2026-09-21"
     inspected_commit: 2fe2002190bff9257d3e27f84ba6818f2cfd7e32
+    baseline_commit: null
+    verified_commit: null
 
   - id: dsebban-skills
     repository: https://github.com/dsebban/skills.git
     role: omp-adapter-reference
     license: MIT
+    usage: reference-only
+    inspected_at: "2026-09-21"
     inspected_commit: da1b131aad45222a477ce8da88c4474d68612423
+    baseline_commit: null
+    verified_commit: null
 
   - id: oh-my-pstack
     repository: https://github.com/shrimpwtf/oh-my-pstack.git
     role: portable-vocabulary-and-pi-omp-packaging-reference
     license: MIT
+    usage: reference-only
+    inspected_at: "2026-09-21"
     inspected_commit: fc0eabd25f21b194a336b640e75e29c252382866
+    baseline_commit: null
+    verified_commit: null

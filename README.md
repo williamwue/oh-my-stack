@@ -1,8 +1,8 @@
-# oh-my-stack
+# Oh My Stack
 
 Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
-`oh-my-stack` is a portable execution framework derived from pstack's engineering workflows. It keeps workflow intent and verification rules independent from any one agent runtime, then generates native packages for each supported host.
+`oh-my-stack` is a portable execution framework derived from pstack's engineering workflows. It keeps workflow intent and verification rules independent from any one agent runtime, then generates native packages for each supported host and surface.
 
 ## Status
 
@@ -15,6 +15,7 @@ The repository currently contains the architecture and implementation plan. It d
 - Preserve upstream pstack provenance and make upstream synchronization reviewable.
 - Treat skill discovery, delegation, isolation, lifecycle control, model routing, and end-to-end behavior as separate compatibility claims.
 - Require observable evidence before declaring a runtime or workflow supported.
+- Keep packaging maturity separate from workflow conformance.
 
 ## Non-goals
 
@@ -23,6 +24,16 @@ The repository currently contains the architecture and implementation plan. It d
 - Make model slugs part of the portable core.
 - Maintain three hand-edited copies of every playbook.
 - Import all long-running and shipping workflows into the first release.
+- Build a cross-runtime agent daemon or replace native host orchestration.
+
+## Naming
+
+- Display name: **Oh My Stack**
+- Repository and plugin slug: `oh-my-stack`
+- Reserved future CLI command: `oms`
+- Reserved package scope: `@oh-my-stack/*`
+
+Use `oh-my-stack` in paths, manifests, package names, and documentation links. `ohmystack` is not a second identifier.
 
 ## Design documents
 
@@ -30,7 +41,10 @@ The repository currently contains the architecture and implementation plan. It d
 - [Runtime capability model](docs/capabilities.md)
 - [Prior-art assessment](docs/prior-art.md)
 - [Implementation plan](docs/implementation-plan.md)
+- [Security model](docs/security.md)
 - [ADR 0001: portable core and generated targets](docs/decisions/0001-portable-core.md)
+- [ADR 0002: surface-aware compatibility profiles](docs/decisions/0002-surface-aware-compatibility.md)
+- [ADR 0003: adapters compile and probe](docs/decisions/0003-adapters-compile-and-probe.md)
 
 ## Target repository shape
 
@@ -44,16 +58,23 @@ oh-my-stack/
 │   │   └── claude-code/
 │   ├── capabilities/
 │   └── packaging/
+├── packages/
+│   ├── omp/
+│   ├── codex/
+│   └── claude-code/
 ├── tools/
 ├── tests/
 ├── evals/
 ├── upstream/
+│   ├── sources.yaml
+│   ├── ownership.yaml
+│   ├── snapshots/
+│   └── patches/
 └── dist/
 ```
 
-`dist/` will be generated and must never become a second source of truth.
+`packages/` contains committed generator-owned installation trees so Git-based installs remain reviewable. CI regenerates them and rejects drift. `dist/` contains uncommitted release archives and checksums; neither directory is a semantic source of truth.
 
 ## Attribution
 
 The planned implementation will derive material from MIT-licensed upstream projects. No third-party source has been copied into this repository yet. Before importing upstream content, add the applicable licenses, copyright notices, pinned revisions, and per-component provenance records.
-

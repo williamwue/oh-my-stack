@@ -10,7 +10,8 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - Select the implementation runtime for generators and validators. Prefer Node.js with no production dependency unless a dependency materially reduces parser risk.
 - Add MIT licensing for original project code if approved.
 - Add `THIRD_PARTY_NOTICES.md` before importing any upstream content.
-- Create machine-readable source records for pstack, `pstack-claude`, `dsebban/skills`, and `oh-my-pstack`.
+- Create machine-readable source, snapshot, ownership, and patch records for pstack, `pstack-claude`, `dsebban/skills`, and `oh-my-pstack`.
+- Define the executable-entry inventory, Hook policy, minimum-permission policy, and user-owned configuration boundary.
 - Add CI that runs formatting, unit tests, generation checks, and link validation.
 
 ### Gate
@@ -18,16 +19,18 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - Clean clone installs development dependencies reproducibly.
 - Test and validation commands run with zero network access after installation.
 - No third-party content exists without a source revision and license record.
+- No executable entry point exists without an owner, permission description, and uninstall behavior.
 
 ## Phase 1: capability schema and build skeleton
 
 ### Work
 
-- Define JSON Schema or equivalent validation for runtimes, capabilities, roles, model tiers, playbook requirements, and fallbacks.
-- Add initial `omp.yaml`, `codex.yaml`, and `claude-code.yaml` manifests.
+- Define JSON Schema or equivalent validation for target coordinates, capabilities, canonical roles, workload classes, playbook requirements, fallbacks, and evidence records.
+- Add initial profiles for OMP, Codex desktop/CLI/IDE, and Claude Code. Unprobed capabilities start as `unknown`.
 - Implement a deterministic generator that can render one trivial Skill for all three targets.
 - Add forbidden-token checks that reject runtime names and tool syntax in core files.
-- Add target validators and snapshot tests.
+- Define each adapter through `render`, `package`, `validate`, and `probe` contracts.
+- Add target validators, permission checks, and snapshot tests.
 
 ### Gate
 
@@ -35,30 +38,33 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - Running generation twice produces no diff.
 - Removing a required capability or adapter mapping makes generation fail with an actionable error.
 - Injecting `spawn_agent`, `hub`, `Agent`, `.codex`, `.claude`, or `.omp` into the core makes validation fail.
+- A target cannot claim a documented capability as live evidence without a passing probe record.
 
 ## Phase 2: runtime probes
 
 ### Work
 
-- Record exact supported runtime versions.
+- Record exact runtime surface, version, platform, configuration fingerprint, installed providers, and permission profile.
 - Build minimal fixture Skills and agents for each host.
 - Probe discovery, explicit invocation, relative resources, scripts, one subagent, parallel subagents, wait, follow-up, cancellation, transcript access, worktree isolation, model override, and user interaction.
 - Store machine-readable evidence records under `evals/evidence/`.
-- Replace assumptions in the capability matrix with observed results.
+- Replace assumptions in capability profiles with observed results.
 
 ### Gate
 
-- Every capability required by the MVP has a current pass result or an explicit fallback test.
+- Every capability required by the active alpha has a current pass result or an explicit fallback test.
 - Runtime documentation and live behavior disagreements are recorded, not normalized away.
 - No adapter instruction names an operation that the corresponding probe could not invoke.
+- Codex desktop, CLI, and IDE results remain separate even when they share package content.
 
 ## Phase 3: upstream import and semantic core
 
 ### Work
 
 - Pin a pstack upstream commit.
+- Store the imported immutable source slice and distinguish inspected, baseline, candidate, and verified revisions.
 - Import the principle Skills first because they have minimal runtime coupling.
-- Classify every imported file by ownership.
+- Classify every imported file or generated region by ownership.
 - Implement substitutions and denylist rules for obvious runtime bindings.
 - Extract canonical roles and lifecycle protocols from `poteto-mode`.
 - Implement a sync tool with dry-run, atomic writes, old/new/local derivation, three-way merge, typed conflicts, and pin advancement only after success.
@@ -70,24 +76,39 @@ The plan is ordered by proof. Each phase ends with a usable artifact and a gate.
 - A clean upstream update, local fork, non-overlapping merge, overlapping conflict, deletion, binary change, and denylist hit each have fixture coverage.
 - Failed synchronization leaves files and the upstream pin unchanged.
 
-## Phase 4: MVP workflow set
+## Phase 4: progressive alpha workflow set
 
-### Scope
+### Alpha 0: packaging proof
 
-Include:
+- One portable principle Skill.
+- Explicit invocation only.
+- Skills-only packages for OMP, Codex, and Claude Code.
+- Delivery evidence through `D3` for each probed surface.
+
+### Alpha 1: bounded bug fix
+
+- `tdd`;
+- `show-me-your-work`;
+- a minimal bug-fix playbook and required principle leaves;
+- root-only and one delegated-session fixtures;
+- independent root verification.
+
+### Alpha 2: coordinated panel
+
+- `architect` or `interrogate`, not both initially;
+- parallel candidate start when supported;
+- frozen candidate and reviewer artifacts;
+- synthesis in a separate session;
+- isolation and fallback fixtures.
+
+### Alpha 3: routing and expansion
 
 - `poteto-mode` router;
-- `how`;
-- `architect`;
-- `interrogate`;
-- `tdd`;
-- `unslop`;
-- `technical-writing`;
-- `show-me-your-work`;
-- investigation, bug-fix, feature, refactoring, prototype, and opening-a-pr playbooks;
-- all required principle leaves.
+- `how`, `unslop`, and `technical-writing`;
+- investigation, feature, refactoring, prototype, and opening-a-pr playbooks;
+- remaining principle leaves required by those workflows.
 
-Delay:
+### Deferred beyond alpha
 
 - autonomous-run;
 - orchestrate;
@@ -99,17 +120,18 @@ Delay:
 
 ### Work
 
-- Express each MVP playbook in portable semantics.
+- Express each admitted alpha playbook in portable semantics.
 - Declare its capabilities and fallbacks.
 - Generate native OMP, Codex, and Claude Code Skills.
 - Generate native agent definitions per runtime.
-- Add model-tier configuration and per-runtime defaults.
+- Add workload-class and role-constraint configuration with per-runtime resolution.
 - Add a setup workflow that inspects live runtime inventory before writing overrides.
 
 ### Gate
 
-- All three targets install cleanly in isolated homes.
-- Every public Skill is discoverable and explicitly invocable.
+- Each alpha graduates independently on all required target surfaces before the next alpha expands scope.
+- All three targets install cleanly in isolated homes for Alpha 0.
+- Every admitted public Skill is discoverable and explicitly invocable.
 - All generated local links and scripts resolve inside the package.
 - The setup workflow never writes an unobserved model slug or destroys unrelated configuration.
 
@@ -135,12 +157,14 @@ Delay:
 - Exact verification commands and outcomes were reported.
 - No success claim was accepted from a child report alone.
 - Missing capabilities followed the declared fallback.
+- Semantic event traces match the protocol contract even when native tool names and event ordering differ.
 
 ### Gate
 
 - OMP, Codex, and Claude Code pass the same semantic assertions.
 - Differences are limited to adapter events and package paths.
-- Results include runtime version, model resolution, fixture revision, and artifact hashes.
+- Results include runtime surface and version, configuration fingerprint, provider inventory, model resolution when observable, fixture revision, semantic event trace, and artifact hashes.
+- Nondeterministic fixtures define repetition counts and an acceptable failure threshold; one lucky run is not conformance.
 
 ## Phase 6: alpha packaging
 
@@ -149,7 +173,7 @@ Delay:
 - Produce installable OMP, Codex, and Claude Code packages from the same release version.
 - Add clean install, update, uninstall, and rollback tests.
 - Add generated checksums and a release manifest.
-- Publish an explicit compatibility table per runtime and workflow.
+- Publish delivery maturity, workflow conformance, and capability profiles per runtime surface and workflow.
 - Document security and trust implications of Hooks and scripts.
 
 ### Gate
@@ -178,13 +202,13 @@ Each addition needs a real external-system fixture or disposable repository. Sta
 
 ## First implementation slice
 
-The first coding change after this plan should be Phase 1 only:
+The first coding change after this plan should implement Phase 1 and the Alpha 0 fixture only:
 
 1. Create the source and target directory skeleton.
-2. Define the capability schema.
+2. Define target-coordinate, capability, workload, role-constraint, and evidence schemas.
 3. Add one portable `prove-it-works` fixture Skill.
 4. Generate OMP, Codex, and Claude Code outputs.
-5. Validate deterministic generation and forbidden core tokens.
+5. Validate deterministic generation, permissions, and forbidden core tokens.
+6. Keep every capability `unknown` until its surface-specific probe runs.
 
 Do not import the full pstack tree until this vertical slice proves the architecture.
-

@@ -4,6 +4,17 @@
 
 The project starts from four sources. They solve different parts of the problem and should not be treated as interchangeable forks.
 
+## Adopted patterns
+
+| Source | Adopted | Deliberately not adopted |
+| --- | --- | --- |
+| Cursor pstack | Workflow semantics, principles, routing intent, and verification standards | Cursor tool names, model slugs, cloud assumptions, and raw cross-runtime publication |
+| `pstack-claude` | Pinned upstream revisions, deterministic generation, explicit sync ownership, three-way conflict classification, path validation, provenance, and release discipline | Claude-first shared prose and runtime translation by Codex |
+| `oh-my-pstack` | Canonical role vocabulary, lifecycle protocols, host-neutral direction, multi-host packaging, and fail-closed integrations | One Pi/OMP-oriented shared adapter and a large protected-path stop list as the primary merge strategy |
+| `dsebban/skills` | OMP role mapping, standalone child briefs, batching, isolation, follow-up, cancellation, durable result retrieval, and root-owned verification | OMP-specific tools or resource URIs in the portable core |
+
+These are architectural inputs, not implemented features. Until generated packages and live probes exist, the repository claims design adoption only.
+
 ## Cursor pstack
 
 Repository: <https://github.com/cursor/plugins/tree/main/pstack>
@@ -116,4 +127,3 @@ Decision: do not duplicate or rename this repository. Borrow its canonical vocab
 3. generated native targets with same-scenario runtime conformance tests.
 
 Implementation may copy MIT-licensed tooling ideas or adapted code only after adding exact provenance, licenses, pinned source revisions, and focused tests.
-

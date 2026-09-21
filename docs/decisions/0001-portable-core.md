@@ -20,7 +20,7 @@ Maintain a runtime-neutral semantic core and generate native target packages thr
 
 The core contains no target tool names, paths, model slugs, or resource URI syntax. Runtime adapters expand canonical roles and lifecycle operations into concrete target instructions and metadata.
 
-Generated target files are committed only if doing so improves installation or review, but they remain generator-owned and CI must reject manual drift.
+Generated installation trees under `packages/` are committed because current Git-based installation and review workflows benefit from visible native layouts. They remain generator-owned and CI rejects manual drift. Release archives under `dist/` are rebuilt from a tag and are not committed.
 
 ## Consequences
 
@@ -38,6 +38,7 @@ Generated target files are committed only if doing so improves installation or r
 - Target Skills may duplicate generated prose.
 - Upstream synchronization requires a semantic import step rather than copying files directly.
 - Supporting a new runtime requires a full capability inventory, not just a new install path.
+- Committed target trees increase repository size and require strict generator ownership.
 
 ## Rejected alternatives
 
@@ -56,4 +57,3 @@ Rejected for the same reason. `task`, `hub`, `agent://`, `history://`, and `skil
 ### Treat Agent Plugins as the universal runtime standard
 
 Rejected because Agent Plugins is a useful packaging format but does not define equal native agent lifecycle semantics across all three targets.
-
