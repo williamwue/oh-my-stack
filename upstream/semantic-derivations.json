@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "1c0c9980a7edcf6902da779a6c0f51fa57defef7d5f6deeac842c2d62977db7f"
+          "sha256": "78750ce694657db9a6d03c9a6149dc661bceb5be3181e5a3f07ee2bb4e0a4bfd"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -470,6 +470,30 @@
         }
       ],
       "transformation": "Cursor-cloud owners, provider-specific commands, fixed loop mechanics, mandatory external plugins, and implicit forge availability were replaced by capability-gated attributable owners, a bounded durable audit and wake contract, revision-bound independent reviewer lanes, one root topology writer, stable-patch preservation with rewritten-head refresh, lease-protected provider mutation, explicit no-landing authority, and fail-closed fallbacks."
+    },
+    {
+      "id": "autopilot-full-port",
+      "sourceId": "cursor-pstack-autopilot-full",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-autopilot-full/53e579f1481697931fc44f5445171397cfa2b24b/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+          "sha256": "2042a89a0399b5fe700110bc03746899536c10f0df186e9fb15bbd4a2f6dfce5"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autopilot-full/SKILL.md",
+          "owner": "derived",
+          "sha256": "7f63fc7b315686917438de002147cb7b67f4f98b9807f2541bc40bcc7601cdc4"
+        },
+        {
+          "path": "src/core/skills/autopilot-full/skill.json",
+          "owner": "local-core",
+          "sha256": "2cd9a436e3ad3212f9733c6ae7ee8d0756f90f01fcc0d7b1e391421f53ffb792"
+        }
+      ],
+      "transformation": "Cursor-only cloud agents, provider CLIs, mandatory third-party review and control plugins, fixed terminal loops, and implicit long-running forge access were replaced by provider capabilities, attributable one-owner-per-change lifecycle authority, three revision-bound independent verdict lanes, single-use root countersigns, owner-executed landing, operator-held queue gates, bounded durable audits and wakes, stable-patch rebase rules, and fail-closed fallbacks."
     }
   ]
 }

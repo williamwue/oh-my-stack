@@ -224,15 +224,16 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 45 public workflows and principles
+The canonical Skill catalog now separates 46 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
 remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, and `orchestrate` Skills are separately loaded
-and exercised by focused live fixtures. `autopilot-stack` currently has
-deterministic fixture coverage. A refreshed whole-catalog live matrix remains
+and exercised by focused live fixtures. `autopilot-stack` has focused live W3
+coverage, while `autopilot-full` currently has deterministic fixture coverage.
+A refreshed whole-catalog live matrix remains
 pending until the rest of Phase 7 stops changing the catalog.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
@@ -356,6 +357,18 @@ command. Both roots alone arrange `main <- change-51 <- change-52`, preserve the
 tip code verdict only across an unchanged stable patch, refresh checks at the
 rewritten head, and stop with two open, unarmed changes. This is coordinated
 local-provider evidence, not authenticated W4 forge completion.
+
+The first deterministic `autopilot-full` slice keeps the upstream authority
+split intact: each autonomous change has one attributable owner from build and
+self-proof through merge, while only the root aggregates the independent swarm
+and issues a single-use countersign. The fixture starts two independent branches
+from one target. The first owner lands only after gates, live, and regression
+lanes agree; the second owner then rebases onto current `main`, reruns proof,
+receives a fresh three-lane verdict and countersign, and lands its own change. A
+third operator-held item remains untouched. Negative cases reject delegation of
+that item, merge without countersign, root consumption of owner authority, and a
+head changed after countersign. Live OMP and Codex runs remain pending, and the
+local provider is not authenticated W4 forge evidence.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

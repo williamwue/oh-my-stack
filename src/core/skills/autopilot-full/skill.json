@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "autopilot-full",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "scm.merge",
+    "scm.pull_requests",
+    "scm.review_threads",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.follow_up": "start_a_fresh_attributable_owner_with_the_frozen_prior_result_instead_of_transferring_unrecorded_authority",
+    "agents.read_result": "persist_live_handles_and_stop_without_accepting_unread_owner_or_reviewer_results",
+    "agents.spawn": "persist_exact_owner_and_swarm_packets_then_stop_instead_of_building_reviewing_or_merging_in_the_root",
+    "agents.spawn_parallel": "serialize_disjoint_owner_or_reviewer_starts_without_combining_identity_or_authority",
+    "agents.wait": "persist_pending_handles_and_return_a_durable_pause_without_polling",
+    "coordination.durable_state": "write_a_workspace_scoped_program_store_and_decision_trails_before_dispatch",
+    "coordination.scheduled_wake": "continue_ready_local_work_now_but_pause_durably_when_future_provider_state_is_required",
+    "scm.merge": "deliver_revision_bound_clean_verdicts_and_unconsumed_owner_countersigns_without_claiming_any_landing",
+    "scm.pull_requests": "exercise_a_disposable_local_change_provider_and_mark_authenticated_forge_delivery_unverified",
+    "scm.review_threads": "record_review_thread_reconciliation_as_unverified_and_keep_the_change_out_of_the_clean_frontier",
+    "workspace.isolate": "serialize_branch_owners_and_stop_before_overlapping_scope"
+  }
+}

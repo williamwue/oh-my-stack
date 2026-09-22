@@ -15,6 +15,7 @@ Use the first matching row:
 
 | Observable request | Primary workflow |
 | --- | --- |
+| Autonomously build, independently verify, and owner-land a bounded queue | `autopilot-full` |
 | Autonomously build and verify a queue as one linear operator-landed stack | `autopilot-stack` |
 | Coordinate a standing multi-session program with dependent units and repeated integration | `orchestrate` |
 | Drive one bounded task to a checkable predicate without intermediate prompting | `autonomous-run` |
@@ -36,10 +37,9 @@ state and record the secondary concern inside it. A discovered bug or feature
 must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
-Requests for an autopilot that also owns landing remain outside the admitted
-set. State that boundary and execute only the independently useful admitted
-portion. Do not simulate `autopilot-full` before it is implemented.
-`autonomous-run` owns one bounded predicate and does not grant shipping
+`autopilot-full` requires an explicit bounded full-autonomy grant and keeps
+verdict authority in the root while each change owner performs its own
+authorized merge. `autonomous-run` owns one bounded predicate and does not grant shipping
 authority. `babysit` never implies landing; only explicit land, merge, or ship
 intent routes to `shipping`. `autopilot-stack` owns autonomous queue build,
 verification, and topology but never landing. `orchestrate` owns a durable
@@ -48,7 +48,8 @@ bounded task.
 
 ## Common invariants
 
-- The root owns scope, integration, verification, and the final claim.
+- The root owns scope, the verdict boundary, and the final claim; each selected
+  workflow assigns integration authority explicitly.
 - Read-only questions do not modify implementation files.
 - Writers receive bounded ownership and use isolation when available.
 - A child report is evidence to inspect, not proof of success.

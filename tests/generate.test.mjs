@@ -15,11 +15,12 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
-test("loads fifty-seven portable Skills, seven roles, and three adapters", async () => {
+test("loads fifty-eight portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 57);
+  assert.equal(model.skills.length, 58);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "autonomous-run",
+    "autopilot-full",
     "autopilot-stack",
     "babysit",
     "bug-fix",
@@ -84,7 +85,7 @@ test("loads fifty-seven portable Skills, seven roles, and three adapters", async
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 45);
+  assert.equal(model.skillCatalog.public.length, 46);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)

@@ -203,3 +203,10 @@ entries:
     source_revision: 640ea3abfbdef74aad432b58d8586e4bf645f42d
     license: MIT
     transform: reviewed-portable-autopilot-stack
+  - path: src/core/skills/autopilot-full/SKILL.md
+    owner: semantic-port
+    source_id: cursor-pstack-autopilot-full
+    source_path: pstack/skills/poteto-mode/playbooks/autopilot-full.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-autopilot-full

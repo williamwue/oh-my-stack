@@ -581,6 +581,18 @@ Current progress:
   two reviewer lane names share one deterministic verifier, authenticated W4
   forge behavior is pending, and Claude Code live verification remains deferred
   by project decision.
+- `autopilot-full` is the forty-sixth public Skill and generates for all three
+  targets. Its first deterministic fixture preserves the upstream division of
+  authority: one attributable owner carries each autonomous change from build
+  and self-proof through merge, while only the root aggregates a three-lane
+  gates/live/regression swarm and issues a single-use countersign bound to the
+  exact owner, target, head, and stable patch. Two independent branches begin
+  from one target; after the first owner lands, the second owner rebases onto
+  current `main`, reruns self-proof, receives a fresh swarm and countersign, and
+  lands its own change. A third operator-held item remains untouched. Negative
+  coverage rejects operator-item delegation, merge without countersign, a root
+  attempting to consume owner authority, and a head changed after countersign.
+  Live OMP and Codex coordinator runs remain pending.
 
 Add advanced workflows one at a time in this order:
 
