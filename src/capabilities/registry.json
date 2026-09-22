@@ -11,6 +11,7 @@
     "agents.spawn",
     "agents.spawn_parallel",
     "agents.wait",
+    "automation.recurring",
     "commands.run",
     "coordination.durable_state",
     "coordination.peer_messages",

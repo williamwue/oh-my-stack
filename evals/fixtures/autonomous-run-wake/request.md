@@ -21,10 +21,13 @@ heartbeat attached to the current thread, record its runtime-issued identifier
 with `node wake.mjs pause . <automation-id>`, run `node verify-pause.mjs .`, and
 stop. The test harness releases the provider independently.
 
-The saved heartbeat prompt must remain valid on a cold start. On wake, read the
-checkpoint, re-measure the provider, and run
+The saved heartbeat prompt must remain valid on a cold start. On wake, first
+run `node wake.mjs preflight . <automation-id>`. Only after that command proves
+the checkpoint is still waiting and all anchors and budgets are valid may the
+run re-measure the provider and run
 `node wake.mjs resume . <automation-id>` exactly once only when the anchored
 revision is `READY`. Disarm the heartbeat, require the host to confirm its
 inactive or deleted state, run `node wake.mjs cleanup . <automation-id>` only
 after that confirmation, and then run `node verify-final.mjs .`. Do not
-schedule another wake after a terminal predicate.
+schedule another wake after a terminal predicate. A stale queued run that sees
+a terminal checkpoint must exit before measuring the provider.

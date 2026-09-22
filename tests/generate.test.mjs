@@ -156,8 +156,14 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexCliInteractive.capabilities["interaction.fixed_choice"].status, "native");
   assert.equal(codexCliInteractive.capabilities["interaction.free_text"].status, "native");
   const codexDesktop = model.profiles.get("codex-desktop");
+  assert.equal(codexDesktop.target.runtimeVersion, "26.915.31945");
+  assert.equal(codexDesktop.capabilities["automation.recurring"].status, "native");
+  assert.equal(codexDesktop.capabilities["commands.run"].status, "native");
+  assert.equal(codexDesktop.capabilities["coordination.durable_state"].status, "fallback");
+  assert.equal(codexDesktop.capabilities["coordination.scheduled_wake"].status, "native");
+  assert.match(codexDesktop.capabilities["coordination.scheduled_wake"].evidence, /codex-desktop-26\.915\.31945/);
   assert.equal(codexDesktop.capabilities["workspace.isolate"].status, "unknown");
-  assert.equal(codexDesktop.capabilities["workspace.write"].status, "unknown");
+  assert.equal(codexDesktop.capabilities["workspace.write"].status, "native");
   const codexIde = model.profiles.get("codex-ide");
   assert.equal(codexIde.capabilities["workspace.isolate"].status, "unknown");
   assert.equal(codexIde.capabilities["workspace.write"].status, "unknown");

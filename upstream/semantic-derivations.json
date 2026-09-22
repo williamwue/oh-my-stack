@@ -161,7 +161,7 @@
         {
           "path": "src/core/skills/autonomous-run/SKILL.md",
           "owner": "derived",
-          "sha256": "dbccd5d4ff271a34ea6dae31b1fc1c57d8ffebe51ec0fec1695ef9441714d265"
+          "sha256": "967aca9d0bbd2504ec604f9a910c253cfca75c7bd41e45b1770996d32e12b30f"
         },
         {
           "path": "src/core/skills/autonomous-run/skill.json",
@@ -169,7 +169,7 @@
           "sha256": "e34ceb3600980d106d2e4134cfe47605f28a181701d7968a2274b19ccdcf6dc0"
         }
       ],
-      "transformation": "Cursor's unbounded loop command, implicit watcher behavior, and never-stop language were replaced by a fixed predicate, explicit iteration or time budget, capability-gated host wake, anchored cold-start checkpoint, runtime-issued wake identifier, bounded wake count or deadline, verified disarm, durable pause fallback, per-iteration evidence, strict advancement or discard, and named terminal stop conditions. Continuous ready work and future external waits are separate branches so missing wake support cannot turn into busy polling."
+      "transformation": "Cursor's unbounded loop command, implicit watcher behavior, and never-stop language were replaced by a fixed predicate, explicit iteration or time budget, capability-gated host wake, anchored cold-start checkpoint, runtime-issued wake identifier, pre-measurement terminal-state validation, non-overlapping recurrence, bounded wake count or deadline, verified disarm, durable pause fallback, per-iteration evidence, strict advancement or discard, and named terminal stop conditions. Continuous ready work and future external waits are separate branches so missing wake support cannot turn into busy polling, while a queued stale run cannot re-measure a completed provider."
     },
     {
       "id": "how-port",

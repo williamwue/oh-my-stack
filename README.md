@@ -25,9 +25,10 @@ The official Codex repository-marketplace lifecycle fixture establishes `D1`,
 so Codex CLI reaches cumulative `D3` after its observed discovery and
 explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
 remains overall `D0`: its 18.2.6 plugin manager unexpectedly writes during a
-`--dry-run`, so the real D1 safety gate is unresolved. Codex desktop and Codex
-IDE remain unprobed. Claude Code verification is explicitly deferred until a
-local account and authenticated runtime are available.
+`--dry-run`, so the real D1 safety gate is unresolved. Codex Desktop has a
+focused scheduled-wake probe; its other capability families and Codex IDE
+remain unprobed. Claude Code verification is explicitly deferred until a local
+account and authenticated runtime are available.
 
 The resource fixture proves that OMP and Codex CLI can load packaged
 `references/` and `assets/`, then execute a packaged helper that resolves its
@@ -300,15 +301,19 @@ is continuous-local W1 evidence only; host-native scheduled or event wake,
 external waiting, restart, deadline and cost enforcement, discard or pivot
 behavior, and W4 completion remain unverified.
 
-The deterministic waiting-branch fixture now persists a runtime-issued wake
+The deterministic waiting-branch fixture persists a runtime-issued wake
 identifier, provider revision, next observation, absolute deadline, wake-count
-budget, later-session authority, and verified-disarm boundary. Its first Codex
-Desktop 26.915.31945 attempt created a real one-minute current-task heartbeat
-and independently released the provider, but no scheduled run re-entered the
-workflow during the fixed fifteen-minute window. The heartbeat was deleted at
-the deadline without manually simulating resume or cleanup. Because the target
-task remained active throughout the window and the cause was not isolated,
-`coordination.scheduled_wake` remains `unknown`, not `unsupported`.
+budget, later-session authority, and verified-disarm boundary. Codex Desktop
+26.915.31945 passes this branch through one standalone local cron task: a later
+host-created task validates the waiting checkpoint, measures the independently
+released provider once, advances once, deletes its schedule, and verifies
+cleanup. The profile therefore records native `automation.recurring` and
+`coordination.scheduled_wake` for that exact surface. A retained one-minute
+recurrence failure shows that deleting a schedule does not cancel an occurrence
+already queued; the passing run uses a daily cadence whose first occurrence is
+the next useful minute and exits before provider measurement when a checkpoint
+is no longer waiting. A separate current-thread heartbeat attempt remains
+failed W0 evidence because it never re-entered the active task.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

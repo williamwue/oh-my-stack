@@ -489,28 +489,27 @@ Current progress:
   single-file commit, one controller advance, and one append-only log row each;
   stop at `3/3`; and pass the independent verifier without a wake or
   publication. A deterministic negative case rejects an early future-unit edit.
-- That result is W1 continuous-local evidence, not the scheduled or event-wake
-  branch, external waiting, cold-start restart, deadline or cost enforcement,
-  discard or pivot behavior, or W4 completion. Host-native wake is therefore
-  the remaining `autonomous-run` slice before `shipping` begins.
+- That result is W1 continuous-local evidence, not by itself the scheduled or
+  event-wake branch, external waiting, cold-start restart, deadline or cost
+  enforcement, discard or pivot behavior, or W4 completion.
 - The waiting-branch protocol and deterministic fixture now bind the provider
   revision, runtime-issued wake identifier, next useful observation, absolute
   deadline, maximum wake count, cold-start authority, and verified cleanup.
   Negative tests reject a mismatched identifier, premature observation,
   exhausted wake budget, and expired deadline without consuming the provider
   event.
-- Codex Desktop 26.915.31945 attempt 1 created an actual one-minute heartbeat
-  for the current task, saved the waiting checkpoint, and observed an
-  independent `WAITING` to `READY` provider transition. No scheduled run
-  re-entered the workflow before the fixed fifteen-minute deadline, so the
-  heartbeat was deleted and neither resume nor cleanup was simulated. The
-  target task remained active throughout the window; that is a possible but
-  unproven explanation. The result remains a failed W0 attempt and desktop
-  `coordination.scheduled_wake` remains `unknown`.
-- The wake branch is therefore not graduated and `shipping` must not begin
-  until a later host-scheduled run actually validates the checkpoint,
-  re-measures the provider, advances once, and verifies disarm. Claude Code
-  live verification remains deferred by project decision.
+- Codex Desktop 26.915.31945 passes the host-native wake branch through one
+  standalone local cron automation. A later host-created task validates the
+  anchored waiting checkpoint, measures the independently released provider
+  once, advances once, confirms deletion before cleanup, and passes the final
+  verifier. The profile records native `automation.recurring` and
+  `coordination.scheduled_wake` for that exact surface.
+- A retained one-minute recurrence attempt proves that deletion can occur after
+  another run is already queued. The passing run uses a daily recurrence whose
+  first occurrence is the next useful minute, and the fixture now requires
+  terminal or stale runs to exit before measuring the provider. A separate
+  current-task heartbeat attempt remains failed W0 evidence and does not prove
+  same-thread re-entry.
 - The no-wake fallback passes at W1 on OMP 18.2.8 and Codex CLI 0.155.1. Each
   hardened run loads only its generated target Skills, executes one provider
   measurement followed by durable pause and verification, persists
@@ -518,7 +517,12 @@ Current progress:
   completion report. OMP attempt 1 is retained as a failure because exploratory
   searches became background jobs whose later delivery triggered a duplicate
   measurement and pause attempt. This closes the safe fallback branch, not the
-  host-native wake branch.
+  host-native Desktop branch.
+- The `autonomous-run` wake slice is graduated for the current target matrix:
+  native standalone scheduled wake on Codex Desktop, and an explicit durable
+  pause on OMP and Codex CLI when their profiles have no verified scheduler.
+  `shipping` may begin. Claude Code live verification remains deferred by
+  project decision.
 
 Add advanced workflows one at a time in this order:
 

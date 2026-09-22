@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "native", "provider": "task", "evidence": "evals/evidence/omp-18.2.6/check-delegation.json" },
     "agents.spawn_parallel": { "status": "native", "provider": "task batch", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
     "agents.wait": { "status": "native", "provider": "hub background-job wait", "evidence": "evals/evidence/omp-18.2.6/check-parallel.json" },
+    "automation.recurring": { "status": "unknown", "provider": null, "evidence": null },
     "commands.run": { "status": "native", "provider": "bash", "evidence": "evals/evidence/omp-18.2.6/bug-fix-root.json" },
     "coordination.durable_state": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },

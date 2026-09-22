@@ -132,7 +132,7 @@ This is a documentation-derived research baseline, not live conformance evidence
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
 | OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | The W3 panel fixture passes; two controlled stale-replay attempts stopped before the peer-ready boundary, so W3-family coverage remains incomplete and peer messaging remains unknown; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
-| Codex desktop | Documented | Documented | Documented | Pending |
+| Codex desktop | Documented | Documented | Documented | Standalone local cron scheduled wake passes on 26.915.31945; same-thread heartbeat failed to dispatch; other families pending |
 | Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, child-to-parent peer messaging, controlled stale replay, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 passes on 0.155.1, with passing evidence across every W3 semantic family; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
@@ -342,14 +342,22 @@ deadline or cost enforcement, discard or pivot behavior, or W4 completion.
 
 The waiting-branch fixture separately enforces an anchored runtime-issued wake
 identifier, one-minute next observation, fifteen-minute absolute deadline,
-maximum wake count, cold-start authority, and terminal cleanup. Codex Desktop
-26.915.31945 attempt 1 created a real current-task heartbeat and the harness
-independently released the provider, but no scheduled run re-entered the
-workflow before the deadline. The heartbeat was then deleted without manually
-running resume or cleanup. The task stayed active during that observation
-window, which may explain the non-dispatch but was not proven. This is retained
-as W0 failure evidence; schedule creation is not a wake, and desktop
-`coordination.scheduled_wake` remains `unknown` rather than `unsupported`.
+maximum wake count, cold-start authority, pre-measurement checkpoint validation,
+and terminal cleanup. Codex Desktop 26.915.31945 passes through a standalone
+local cron automation. A later host-created task validates the checkpoint,
+measures the independently released provider once, advances completion once,
+confirms schedule deletion, and verifies final cleanup. This supplies native
+`automation.recurring` and `coordination.scheduled_wake` evidence for that
+exact desktop coordinate at W1.
+
+Two retained failures define the boundary. A current-task heartbeat never
+re-entered while its target task remained active, so same-thread wake remains
+unverified. A one-minute standalone recurrence completed its first run but had
+already queued a second run before deletion; that stale run performed one extra
+provider measurement. The passing schedule uses a daily recurrence whose first
+occurrence is the next useful minute, leaving enough time for self-deletion.
+The fixture now requires every queued run to reject a non-waiting checkpoint
+before provider measurement.
 
 OMP 18.2.8 and Codex CLI 0.155.1 separately pass the W1 unavailable-wake
 fallback. Both load only generated target Skills, measure the pinned provider
@@ -360,7 +368,8 @@ search, async job, sleep, poll, release, Git, or publication action. A retained
 OMP failure proves why this boundary matters: two exploratory searches were
 backgrounded and their later results triggered a duplicate pass. These passing
 records establish `coordination.durable_state` fallback behavior only;
-`coordination.scheduled_wake` remains unknown on both CLI profiles.
+`coordination.scheduled_wake` remains unknown on both CLI profiles. They do not
+weaken the separately observed Desktop provider.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

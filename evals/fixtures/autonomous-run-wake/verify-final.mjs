@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
 const root = resolve(process.argv[2] ?? ".");
+const expectedWakeStrategy = process.argv[3] ?? "codex-thread-heartbeat";
 const state = JSON.parse(await readFile(join(root, "state.json"), "utf8"));
 const checkpoint = JSON.parse(await readFile(join(root, "checkpoint.json"), "utf8"));
 const report = JSON.parse(await readFile(join(root, "report.json"), "utf8"));
@@ -28,7 +29,7 @@ assert.deepEqual(report, {
   workflow: "autonomous-run",
   exitPredicate: "provider-r1 READY, receipt accepted, heartbeat disarmed",
   budget: { maxWakeRuns: 2, maxMinutes: 15 },
-  wakeStrategy: "codex-thread-heartbeat",
+  wakeStrategy: expectedWakeStrategy,
   automationId: checkpoint.automationId,
   wakeRuns: 1,
   finalProviderRevision: "provider-r1",

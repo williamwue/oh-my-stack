@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-desktop-26.915.31945-macos-arm64-autonomous-run-wake-cron-attempt-1",
+  "fixture": "autonomous-run-wake-cron",
+  "profile": "codex-desktop",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D0",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": []
+  },
+  "runtime": {
+    "name": "codex-desktop",
+    "version": "26.915.31945",
+    "platform": "macos-arm64",
+    "configuration": "Standalone local cron automation oms-autonomous-wake-cron-fixture-a2-20260922 in the saved Code project; one-minute recurrence; disposable provider and anchored codex-standalone-cron checkpoint; two automation-created tasks 01a0c68d-4f2e-7aa3-af43-b05bbc23cfd2 and 01a0c68e-3990-7c13-bb51-47f713f315fe.",
+    "permissionProfile": "Local automation tasks constrained by prompt and fixture scripts to the disposable Code-project fixture"
+  },
+  "capabilities": [
+    "automation.recurring",
+    "commands.run",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json"
+  ],
+  "assertions": [
+    {
+      "id": "later-scheduled-run-started",
+      "status": "pass",
+      "evidence": "The desktop scheduler created the first standalone task at 2026-09-22T00:39:05Z, after the initial checkpoint and independent provider release."
+    },
+    {
+      "id": "first-run-reentered-and-completed",
+      "status": "pass",
+      "evidence": "The first task validated the checkpoint, measured provider-r1 READY once, resumed once, received deleteStatus deleted, ran cleanup, and observed AUTONOMOUS_WAKE_OK with measurementCount 2."
+    },
+    {
+      "id": "no-overlapping-wake-after-terminal",
+      "status": "fail",
+      "evidence": "A second task was queued at 2026-09-22T00:40:05Z before the first task deleted the automation. It later observed the already-complete checkpoint and performed another provider measurement, raising measurementCount from 2 to 3."
+    },
+    {
+      "id": "stale-run-did-not-resume",
+      "status": "pass",
+      "evidence": "The second task saw checkpoint status complete and did not run resume, cleanup, or create another schedule. completionCount and wakeCount remained 1."
+    }
+  ],
+  "limitations": [
+    "A successful first task and confirmed schedule deletion do not make a one-minute recurring cadence equivalent to a one-shot wake when another occurrence can already be queued.",
+    "The overlapping task changed only measurement accounting, but any post-terminal provider observation violates the fixed one-wake contract.",
+    "This failure motivated a daily cadence whose first occurrence is scheduled for the next minute and whose second occurrence is one day later, leaving ample time for terminal self-deletion.",
+    "This attempt does not negate the separate durable-pause fallback evidence or establish same-thread heartbeat wake."
+  ]
+}

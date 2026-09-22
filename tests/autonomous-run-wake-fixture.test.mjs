@@ -27,11 +27,38 @@ test("autonomous wake persists one bounded heartbeat handoff and consumes one re
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause", root, automationId], at("2026-09-22T00:00:00Z"));
     await execFileAsync(process.execPath, [join(root, "verify-pause.mjs"), root]);
     await execFileAsync(process.execPath, [join(root, "provider.mjs"), "release", root]);
+    await execFileAsync(process.execPath, [join(root, "wake.mjs"), "preflight", root, automationId], at("2026-09-22T00:01:00Z"));
     await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "resume", root, automationId], at("2026-09-22T00:01:00Z"));
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "cleanup", root, automationId]);
     const verified = await execFileAsync(process.execPath, [join(root, "verify-final.mjs"), root]);
     assert.match(verified.stdout, /AUTONOMOUS_WAKE_OK=fixture-heartbeat-1/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("autonomous wake preserves a standalone cron provider through resume and cleanup", async () => {
+  const root = await prepare();
+  const automationId = "fixture-cron-1";
+  const strategy = "codex-standalone-cron";
+  try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
+    await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause-cron", root, automationId], at("2026-09-22T00:00:00Z"));
+    await execFileAsync(process.execPath, [join(root, "verify-pause.mjs"), root, strategy]);
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "release", root]);
+    await execFileAsync(process.execPath, [join(root, "wake.mjs"), "preflight", root, automationId], at("2026-09-22T00:01:00Z"));
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
+    await execFileAsync(process.execPath, [join(root, "wake.mjs"), "resume", root, automationId], at("2026-09-22T00:01:00Z"));
+    await execFileAsync(process.execPath, [join(root, "wake.mjs"), "cleanup", root, automationId]);
+    const verified = await execFileAsync(process.execPath, [join(root, "verify-final.mjs"), root, strategy]);
+    assert.match(verified.stdout, /AUTONOMOUS_WAKE_OK=fixture-cron-1/);
+    await assert.rejects(
+      execFileAsync(process.execPath, [join(root, "wake.mjs"), "preflight", root, automationId], at("2026-09-22T00:02:00Z")),
+      /checkpoint is not waiting/,
+    );
+    const terminalState = JSON.parse(await readFile(join(root, "state.json"), "utf8"));
+    assert.equal(terminalState.measurementCount, 2, "a stale queued run must not re-measure the provider");
   } finally {
     await rm(root, { recursive: true, force: true });
   }

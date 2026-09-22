@@ -22,7 +22,18 @@ const requireAutomationId = () => {
   assert.match(automationId ?? "", /^[A-Za-z0-9][A-Za-z0-9._:-]{2,}$/, "runtime-issued automation id required");
 };
 
-if (action === "pause") {
+function validateWaitingCheckpoint(checkpoint) {
+  requireAutomationId();
+  assert.equal(checkpoint.automationId, automationId, "automation id does not match checkpoint");
+  assert.equal(checkpoint.providerRevision, state.providerRevision, "provider revision drifted");
+  assert.equal(checkpoint.status, "waiting", "checkpoint is not waiting");
+  assert.ok(Number.isInteger(checkpoint.wakeCount) && checkpoint.wakeCount >= 0, "wake count is invalid");
+  assert.ok(checkpoint.wakeCount < checkpoint.budget.maxWakeRuns, "wake budget exhausted");
+  assert.ok(now().getTime() >= Date.parse(checkpoint.nextObservationAt), "next observation time has not arrived");
+  assert.ok(now().getTime() <= Date.parse(checkpoint.deadlineAt), "wake deadline exceeded");
+}
+
+async function pauseScheduled(wakeStrategy) {
   requireAutomationId();
   assert.equal(state.providerRevision, "provider-r1");
   assert.equal(state.providerState, "WAITING", "pause requires a waiting provider");
@@ -39,7 +50,7 @@ if (action === "pause") {
     stopConditions: ["predicate-met", "budget", "deadline", "revision-drift", "checkpoint-mismatch", "wake-unavailable", "cleanup-failure"],
     providerRevision: "provider-r1",
     observedState: "WAITING",
-    wakeStrategy: "codex-thread-heartbeat",
+    wakeStrategy,
     automationId,
     createdAt: createdAt.toISOString().replace(/\.\d{3}Z$/, "Z"),
     nextObservationAt: new Date(createdAt.getTime() + 60_000).toISOString().replace(/\.\d{3}Z$/, "Z"),
@@ -54,6 +65,12 @@ if (action === "pause") {
     "",
   ].join("\n"), { flag: "wx" });
   console.log(`AUTONOMOUS_WAKE_PAUSED=${automationId}`);
+}
+
+if (action === "pause") {
+  await pauseScheduled("codex-thread-heartbeat");
+} else if (action === "pause-cron") {
+  await pauseScheduled("codex-standalone-cron");
 } else if (action === "pause-fallback") {
   assert.equal(automationId, undefined, "fallback must not invent an automation id");
   assert.equal(state.providerRevision, "provider-r1");
@@ -86,16 +103,13 @@ if (action === "pause") {
     "",
   ].join("\n"), { flag: "wx" });
   console.log("AUTONOMOUS_WAKE_FALLBACK_PAUSED=provider-r1");
-} else if (action === "resume") {
-  requireAutomationId();
+} else if (action === "preflight") {
   const checkpoint = JSON.parse(await readFile(checkpointPath, "utf8"));
-  assert.equal(checkpoint.automationId, automationId, "automation id does not match checkpoint");
-  assert.equal(checkpoint.providerRevision, state.providerRevision, "provider revision drifted");
-  assert.equal(checkpoint.status, "waiting", "checkpoint is not waiting");
-  assert.ok(Number.isInteger(checkpoint.wakeCount) && checkpoint.wakeCount >= 0, "wake count is invalid");
-  assert.ok(checkpoint.wakeCount < checkpoint.budget.maxWakeRuns, "wake budget exhausted");
-  assert.ok(now().getTime() >= Date.parse(checkpoint.nextObservationAt), "next observation time has not arrived");
-  assert.ok(now().getTime() <= Date.parse(checkpoint.deadlineAt), "wake deadline exceeded");
+  validateWaitingCheckpoint(checkpoint);
+  console.log(`AUTONOMOUS_WAKE_PREFLIGHT_OK=${automationId}`);
+} else if (action === "resume") {
+  const checkpoint = JSON.parse(await readFile(checkpointPath, "utf8"));
+  validateWaitingCheckpoint(checkpoint);
   assert.equal(state.providerState, "READY", "provider is not ready");
   assert.equal(state.releaseCount, 1, "provider release count is not exactly one");
   assert.equal(state.completionCount, 0, "completion already recorded");
@@ -139,5 +153,5 @@ if (action === "pause") {
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`AUTONOMOUS_WAKE_CLEAN=${automationId}`);
 } else {
-  throw new Error("usage: node wake.mjs <pause|pause-fallback|resume|cleanup> <fixture-root> [automation-id]");
+  throw new Error("usage: node wake.mjs <pause|pause-cron|pause-fallback|preflight|resume|cleanup> <fixture-root> [automation-id]");
 }

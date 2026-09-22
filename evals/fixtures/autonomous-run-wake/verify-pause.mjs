@@ -6,6 +6,7 @@ import { constants } from "node:fs";
 import { join, resolve } from "node:path";
 
 const root = resolve(process.argv[2] ?? ".");
+const expectedWakeStrategy = process.argv[3] ?? "codex-thread-heartbeat";
 const state = JSON.parse(await readFile(join(root, "state.json"), "utf8"));
 const checkpoint = JSON.parse(await readFile(join(root, "checkpoint.json"), "utf8"));
 const decisions = (await readFile(join(root, "decisions.tsv"), "utf8")).trimEnd().split("\n");
@@ -19,7 +20,7 @@ assert.deepEqual(state, {
 });
 assert.equal(checkpoint.providerRevision, "provider-r1");
 assert.equal(checkpoint.observedState, "WAITING");
-assert.equal(checkpoint.wakeStrategy, "codex-thread-heartbeat");
+assert.equal(checkpoint.wakeStrategy, expectedWakeStrategy);
 assert.equal(checkpoint.wakeCount, 0);
 assert.equal(checkpoint.status, "waiting");
 assert.match(checkpoint.createdAt, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);

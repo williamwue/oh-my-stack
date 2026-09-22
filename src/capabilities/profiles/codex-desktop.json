@@ -5,10 +5,10 @@
   "target": {
     "runtime": "codex",
     "surface": "desktop",
-    "runtimeVersion": null,
-    "platform": null,
-    "configurationFingerprint": null,
-    "permissionProfile": null,
+    "runtimeVersion": "26.915.31945",
+    "platform": "macos-arm64",
+    "configurationFingerprint": "saved-code-project+standalone-local-cron+self-delete+disposable-provider-checkpoint",
+    "permissionProfile": "local-automation-task+fixture-scoped-write",
     "installedProviders": []
   },
   "capabilities": {
@@ -22,10 +22,11 @@
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
-    "commands.run": { "status": "unknown", "provider": null, "evidence": null },
-    "coordination.durable_state": { "status": "unknown", "provider": null, "evidence": null },
+    "automation.recurring": { "status": "native", "provider": "Codex desktop standalone local cron automation", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" },
+    "commands.run": { "status": "native", "provider": "local automation task shell", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" },
+    "coordination.durable_state": { "status": "fallback", "provider": "workspace checkpoint file", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },
-    "coordination.scheduled_wake": { "status": "unknown", "provider": null, "evidence": null },
+    "coordination.scheduled_wake": { "status": "native", "provider": "self-deleting standalone local cron task", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" },
     "interaction.fixed_choice": { "status": "unknown", "provider": null, "evidence": null },
     "interaction.free_text": { "status": "unknown", "provider": null, "evidence": null },
     "resources.relative_paths": { "status": "unknown", "provider": null, "evidence": null },
@@ -34,8 +35,8 @@
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
     "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
     "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
-    "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null },
+    "workspace.inspect": { "status": "native", "provider": "local automation task shell", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" },
     "workspace.isolate": { "status": "unknown", "provider": null, "evidence": null },
-    "workspace.write": { "status": "unknown", "provider": null, "evidence": null }
+    "workspace.write": { "status": "native", "provider": "local automation task shell", "evidence": "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron.json" }
   }
 }

@@ -22,6 +22,7 @@
     "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
     "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
+    "automation.recurring": { "status": "unknown", "provider": null, "evidence": null },
     "commands.run": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.durable_state": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },

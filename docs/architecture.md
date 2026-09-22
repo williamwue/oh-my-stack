@@ -148,10 +148,15 @@ creating a schedule alone is not conformance evidence.
 
 Scheduled wake and recurring automation are separate capabilities. A host may
 support a bounded follow-up on one task without supporting a standalone job on
-an arbitrary cadence. Adapters use only an observed host-native operation. If
-the operation is unavailable or cannot be verified, the portable fallback is a
-durable pause checkpoint. A background shell sleep, busy poll, or detached
-process is not a wake provider.
+an arbitrary cadence. A recurring provider is safe for a one-shot wake only
+when its next recurrence cannot overlap the active run and the run disarms it
+before another occurrence can queue. Schedule deletion does not prove that an
+already queued occurrence was cancelled. Every later run therefore validates
+that the checkpoint is still waiting before it measures the provider; stale or
+terminal runs exit without another observation. Adapters use only an observed
+host-native operation. If the operation is unavailable or cannot be verified,
+the portable fallback is a durable pause checkpoint. A background shell sleep,
+busy poll, or detached process is not a wake provider.
 
 ## Model policy
 

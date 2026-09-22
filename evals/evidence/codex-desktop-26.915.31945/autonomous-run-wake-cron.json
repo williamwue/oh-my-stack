@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-desktop-26.915.31945-macos-arm64-autonomous-run-wake-cron",
+  "fixture": "autonomous-run-wake-cron",
+  "profile": "codex-desktop",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D0",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": []
+  },
+  "runtime": {
+    "name": "codex-desktop",
+    "version": "26.915.31945",
+    "platform": "macos-arm64",
+    "configuration": "Standalone local cron automation oms-autonomous-wake-cron-fixture-a3-20260922 in the saved Code project; FREQ=DAILY;BYHOUR=8;BYMINUTE=45 with its first occurrence in the next useful minute; disposable provider and anchored codex-standalone-cron checkpoint; one automation-created task 01a0c693-42a9-7263-8d44-8a5e1fde8f87.",
+    "permissionProfile": "Local automation task constrained by prompt and fixture scripts to the disposable Code-project fixture"
+  },
+  "capabilities": [
+    "automation.recurring",
+    "commands.run",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-cron-attempt-1.json",
+    "evals/evidence/codex-desktop-26.915.31945/autonomous-run-wake-attempt-1.json"
+  ],
+  "assertions": [
+    {
+      "id": "standalone-schedule-created-and-anchored",
+      "status": "pass",
+      "evidence": "The desktop created the named daily cron automation, and pause-cron persisted its runtime-issued identifier, provider-r1 WAITING, nextObservationAt 2026-09-22T00:44:32Z, deadlineAt 00:58:32Z, and wakeCount 0."
+    },
+    {
+      "id": "provider-released-independently",
+      "status": "pass",
+      "evidence": "The harness changed provider-r1 from WAITING to READY once after the initial measurement and checkpoint without invoking resume or cleanup."
+    },
+    {
+      "id": "later-host-task-reentered",
+      "status": "pass",
+      "evidence": "The host created task 01a0c693-42a9-7263-8d44-8a5e1fde8f87 at 2026-09-22T00:45:35Z, after the initial session had stopped, and that task completed at 00:47:05Z."
+    },
+    {
+      "id": "one-measurement-one-resume",
+      "status": "pass",
+      "evidence": "The later task validated the waiting checkpoint before action, measured provider-r1 READY exactly once, raised durable measurementCount from 1 to 2, and advanced completionCount and wakeCount from 0 to 1 exactly once."
+    },
+    {
+      "id": "schedule-disarmed-before-cleanup",
+      "status": "pass",
+      "evidence": "The later task received deleteStatus deleted for the cron automation before cleanup changed the checkpoint to complete and the report cleanup field to verified-disarmed."
+    },
+    {
+      "id": "independent-final-verification",
+      "status": "pass",
+      "evidence": "An external root invocation of verify-final.mjs with codex-standalone-cron returned AUTONOMOUS_WAKE_OK; state retained releaseCount 1, completionCount 1, measurementCount 2, and the report retained published false."
+    },
+    {
+      "id": "no-overlapping-second-run",
+      "status": "pass",
+      "evidence": "The daily recurrence left one day before another occurrence; the schedule was deleted during the first task, and the desktop task list contained exactly the one A3 task."
+    }
+  ],
+  "limitations": [
+    "This proves a later standalone local cron task, not re-entry through a current-thread heartbeat; the separate current-thread attempt remains failed W0 evidence.",
+    "The daily cadence was deliberately chosen so schedule deletion completes before another occurrence can queue. The retained one-minute attempt proves deletion does not cancel a run already queued.",
+    "This fixture does not measure Skill discovery or explicit invocation and therefore makes no D1, D2, or D3 delivery claim.",
+    "This result applies only to Codex Desktop 26.915.31945 on macOS arm64 and does not establish scheduled wake on OMP, Codex CLI, Codex IDE, or Claude Code."
+  ]
+}

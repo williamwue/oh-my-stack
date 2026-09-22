@@ -38,11 +38,14 @@ Before arming a wake, record the frozen predicate and provider revision, the
 checkpoint location, next useful observation time, maximum wake count or
 deadline, and the exact authority available to a later cold start. Store the
 runtime-issued wake identifier after creation. A wake run must validate those
-anchors before acting, increment the durable wake count once, and re-measure
-instead of trusting an earlier status report. Disarm the wake immediately when
-the predicate or another stop condition is reached. If disarming cannot be
-verified, report the still-active wake as an incomplete cleanup rather than
-claiming completion.
+anchors and confirm that the checkpoint is still waiting before it measures or
+mutates the provider. It then increments the durable wake count once and
+re-measures instead of trusting an earlier status report. A recurring schedule
+must leave enough time for the active run to disarm it before another occurrence
+can queue; deletion does not cancel a run already queued. Stale queued runs exit
+without measuring. Disarm the wake immediately when the predicate or another
+stop condition is reached. If disarming cannot be verified, report the
+still-active wake as an incomplete cleanup rather than claiming completion.
 
 ## Iteration
 
