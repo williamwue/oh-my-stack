@@ -40,10 +40,10 @@ test("release archives and manifest are byte-reproducible", async () => {
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.2.0-alpha.1.tar.gz",
-    "oh-my-stack-codex-0.2.0-alpha.1.tar.gz",
-    "oh-my-stack-codex-plugin-0.2.0-alpha.1.tar.gz",
-    "oh-my-stack-omp-0.2.0-alpha.1.tar.gz",
+    "oh-my-stack-claude-code-0.2.0-alpha.2.tar.gz",
+    "oh-my-stack-codex-0.2.0-alpha.2.tar.gz",
+    "oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz",
+    "oh-my-stack-omp-0.2.0-alpha.2.tar.gz",
     "release-manifest.json",
   ]);
 });

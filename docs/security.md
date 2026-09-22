@@ -17,6 +17,7 @@ Upstream content, external web content, subagent reports, transcripts, generated
 - Imported executable files retain source revision, license, content hash, and review status.
 - CI actions are pinned to immutable revisions and generated release artifacts receive checksums.
 - Credentials, transcripts, and private workspace content are excluded from fixtures and generated packages.
+- Public runtime observations follow the [public evidence policy](evidence-policy.md), which permits only minimal disposable identifiers needed for attribution and excludes resolvable private state.
 - External mutations, merges, destructive operations, and irreversible decisions remain root- and user-governed.
 
 The model-inventory collector may use the runtime's authenticated network path

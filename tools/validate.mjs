@@ -124,6 +124,45 @@ async function validateJsonDocuments(root) {
   await readJson(join(root, "package-lock.json"));
 }
 
+async function validatePublicHygiene(root) {
+  const roots = [
+    ".github",
+    "docs",
+    "evals",
+    "security",
+    "src",
+    "tests",
+    "tools",
+    "upstream",
+  ];
+  const paths = [];
+  for (const directory of roots) paths.push(...await filesUnder(join(root, directory)));
+  for (const name of [
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md",
+    "THIRD_PARTY_NOTICES.md",
+    "package.json",
+    "package-lock.json",
+  ]) {
+    paths.push(join(root, name));
+  }
+
+  for (const path of paths) {
+    const key = relative(root, path);
+    assert(!/\.env(?:\.|$)|\.(?:jsonl|sqlite3?|db|pem|key)$/.test(key), `${key}: private runtime or credential file cannot be published`);
+    if (!/\.(?:c?js|json|md|mjs|toml|txt|ya?ml)$/.test(path) && basename(path) !== "LICENSE") continue;
+    const text = await readFile(path, "utf8");
+    const macHomePrefix = ["", "Users", ""].join("/");
+    assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
+    assert(!/-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/.test(text), `${key}: contains a private key`);
+    assert(!/\bgh[pousr]_[A-Za-z0-9_]{20,}\b/.test(text), `${key}: contains a GitHub token-shaped value`);
+    assert(!/\bsk-[A-Za-z0-9_-]{20,}\b/.test(text), `${key}: contains a secret-key-shaped value`);
+  }
+}
+
 async function validateRuntimeEvidence(root, model) {
   const evidenceByPath = new Map();
   const evidenceRoot = join(root, "evals", "evidence");
@@ -261,6 +300,7 @@ export async function validate(root = repoRoot) {
   await validateSemanticDerivations(root);
   await validateLocalMarkdownLinks(root);
   await validateExecutableInventory(root);
+  await validatePublicHygiene(root);
   return model;
 }
 

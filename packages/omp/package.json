@@ -3,10 +3,18 @@
   "description": "Portable, verifiable engineering workflows for OMP.",
   "type": "module",
   "license": "MIT",
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamwue/oh-my-stack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/williamwue/oh-my-stack/issues"
+  },
   "omp": {
     "skills": [
       "./skills"
     ]
   },
-  "version": "0.2.0-alpha.1"
+  "version": "0.2.0-alpha.2"
 }

@@ -281,7 +281,31 @@ test("committed packages match generator output", async () => {
   await generate({ root: repoRoot, check: true });
 });
 
+test("generated manifests identify the public source repository", async () => {
+  const model = await loadModel();
+  const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-public-metadata-"));
+  try {
+    for (const adapter of model.adapters) await renderTarget(stage, model, adapter);
+    const manifests = [
+      "packages/omp/package.json",
+      "packages/codex/plugin.json",
+      "packages/codex/.codex-plugin/plugin.json",
+      "packages/claude-code/.claude-plugin/plugin.json",
+    ];
+    for (const path of manifests) {
+      const manifest = JSON.parse(await readFile(join(stage, path), "utf8"));
+      const repository = typeof manifest.repository === "string"
+        ? manifest.repository
+        : manifest.repository?.url;
+      assert.match(repository, /github\.com\/williamwue\/oh-my-stack/);
+      assert.match(manifest.homepage, /github\.com\/williamwue\/oh-my-stack/);
+    }
+  } finally {
+    await rm(stage, { recursive: true, force: true });
+  }
+});
+
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.2.0-alpha.1");
+  assert.equal(model.project.version, "0.2.0-alpha.2");
 });

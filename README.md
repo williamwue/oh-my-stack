@@ -4,7 +4,82 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 `oh-my-stack` is a portable execution framework derived from pstack's engineering workflows. It keeps workflow intent and verification rules independent from any one agent runtime, then generates native packages for each supported host and surface.
 
-## Status
+## Release status
+
+Oh My Stack is preparing its first public Alpha release. Codex CLI and OMP have
+live verification evidence. The Codex marketplace bundle has also passed an
+isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
+built and validated offline, but live Claude Code verification is deferred
+until an authenticated runtime is available.
+
+| Target | Package | Current confidence |
+| --- | --- | --- |
+| Codex | Native marketplace plugin and standalone package | Public Alpha ready on the verified CLI surface |
+| OMP | Native package | Public Alpha preview; native plugin-manager safety gate remains open |
+| Claude Code | Native plugin package | Preview; live discovery and end-to-end use are not yet verified |
+
+This is an Alpha project. Review the generated instructions before granting
+write, network, credential, merge, or deployment authority. Surface-specific
+details are tracked in [capabilities](docs/capabilities.md), while release
+claims use the separate verification labels documented in the
+[release process](docs/release-process.md).
+
+## Quick start
+
+### Build a local release candidate
+
+Requirements: Git, Node.js 20 or newer, and npm.
+
+```bash
+git clone https://github.com/williamwue/oh-my-stack.git
+cd oh-my-stack
+npm ci --ignore-scripts
+npm run check
+npm run release:build
+(cd dist && shasum -a 256 -c SHA256SUMS)
+```
+
+Until the first hosted release exists, this source build is the supported way
+to obtain the archives. Once GitHub Releases are available, download all files
+for one version and verify them with `SHA256SUMS` before installation.
+
+### Install the Codex plugin
+
+Extract `dist/oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz` into a dedicated
+directory. Then register that extracted marketplace root and install the
+plugin:
+
+```bash
+codex plugin marketplace add /absolute/path/to/oh-my-stack-marketplace
+codex plugin add oh-my-stack@oh-my-stack
+```
+
+Start a new Codex task after installation, then try an explicit workflow such
+as:
+
+```text
+Use $prove-it-works to verify this installation.
+```
+
+Inspect or remove the installation with:
+
+```bash
+codex plugin list
+codex plugin remove oh-my-stack@oh-my-stack
+codex plugin marketplace remove oh-my-stack
+```
+
+### OMP and Claude Code previews
+
+The release builder also creates OMP and Claude Code archives. Their package
+trees and owned-directory lifecycle are validated, but this Alpha does not yet
+claim one universal native-registration command for those runtimes. Use the
+generic installer only with a dedicated Oh My Stack directory, then follow the
+runtime-specific registration boundary described in the
+[release process](docs/release-process.md). Claude Code live verification is
+explicitly deferred.
+
+## Detailed verification status
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
 implemented. Thirteen original capability fixtures, twenty-three pinned pstack
@@ -203,11 +278,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.1 release notes](docs/releases/0.2.0-alpha.1.md). Claude Code is
+[0.2.0-alpha.2 release notes](docs/releases/0.2.0-alpha.2.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.1.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -457,6 +532,8 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 - [Implementation plan](docs/implementation-plan.md)
 - [Security model](docs/security.md)
 - [Release process](docs/release-process.md)
+- [Public evidence policy](docs/evidence-policy.md)
+- [0.2.0-alpha.2 public-release candidate notes](docs/releases/0.2.0-alpha.2.md)
 - [0.2.0-alpha.1 plugin release notes](docs/releases/0.2.0-alpha.1.md)
 - [0.2.0 Alpha release notes](docs/releases/0.2.0-alpha.0.md)
 - [0.1.0 Alpha release notes](docs/releases/0.1.0-alpha.0.md)

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://oh-my-stack.dev/schemas/release-config.schema.json",
+  "$id": "https://oh-my-stack.invalid/schemas/release-config.schema.json",
   "title": "Oh My Stack release configuration",
   "type": "object",
   "additionalProperties": false,

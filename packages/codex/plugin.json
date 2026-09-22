@@ -4,7 +4,10 @@
   "description": "Portable, verifiable engineering workflows for Codex.",
   "license": "MIT",
   "author": {
-    "name": "Oh My Stack contributors"
+    "name": "Oh My Stack contributors",
+    "url": "https://github.com/williamwue/oh-my-stack"
   },
-  "version": "0.2.0-alpha.1"
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": "https://github.com/williamwue/oh-my-stack",
+  "version": "0.2.0-alpha.2"
 }

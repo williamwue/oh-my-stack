@@ -10,8 +10,11 @@
     "name": "oh-my-stack",
     "description": "Portable, verifiable engineering workflows for Claude Code.",
     "author": {
-      "name": "Oh My Stack contributors"
+      "name": "Oh My Stack contributors",
+      "url": "https://github.com/williamwue/oh-my-stack"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+    "repository": "https://github.com/williamwue/oh-my-stack"
   }
 }
