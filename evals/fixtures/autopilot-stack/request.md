@@ -6,7 +6,9 @@ automatic merge, closing, deployment, and external publication are withheld.
 
 Start one isolated owner for each change before waiting. Each owner may build
 only its exact packet and must return its native identity, base, head, patch
-identity, focused proof, and trail. After both owners report `STACK_READY`, start
+identity, focused proof, and trail. Each bound owner runs its exact `build`
+command followed by its own exact `self-proof` command. After both owners report
+`STACK_READY` with passing self-proof, start
 two fresh independent reviewers per change: one `gates` lane and one `live`
 lane. The root must not run `review.mjs verify` or invent reviewer identities.
 

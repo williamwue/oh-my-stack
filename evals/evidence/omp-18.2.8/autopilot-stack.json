@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-autopilot-stack",
+  "fixture": "autopilot-stack",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated autopilot-stack Skill in a fresh disposable Git repository; gpt-6-astra high; persisted root session 01a0c708-2499-7130-a174-0df140899c58; two command-capable built-in owners resumed through native hub send and four fresh built-in reviewers; deterministic local change provider; no external publication or landing.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly loaded skill://autopilot-stack from the generated OMP package before measuring or mutating fixture state."
+    },
+    {
+      "id": "owners-bound-and-self-proved",
+      "status": "pass",
+      "evidence": "One native task call started CoastalNightingale and RespectablePike before the first wait. The root bound owner-CoastalNightingale and owner-RespectablePike, then serialized same-session build plus self-proof follow-ups because the fixture shares one checkout. Both owner-written heads and stable patch identities reached STACK_READY with PASS checks."
+    },
+    {
+      "id": "independent-revision-bound-verdicts",
+      "status": "pass",
+      "evidence": "A single native task call launched CorrectParrot and ProperHawk for change 51 plus LegislativeWombat and EventualMouse for change 52. The two distinct lanes per change returned PASS against the frozen base, head, stable patch identity, expected content, and exclusive changed path before root-only recording and aggregation."
+    },
+    {
+      "id": "single-topology-writer-and-root-exclusion",
+      "status": "pass",
+      "evidence": "Only root-coordinator recorded, aggregated, and appended. External parsing of all nine root bash commands found no owner.mjs build, owner.mjs self-proof, or review.mjs verify invocation; owner and reviewer execution remained attributable to native child identities."
+    },
+    {
+      "id": "stable-patch-rewrite-and-refreshed-checks",
+      "status": "pass",
+      "evidence": "Change 51 remained based on main at f997412378a99e5687e2914350f194fed783a024. Change 52 rebased from d1cc7f9132048a2446e2b982cc6dc7a024c9db29 to 5373b89e2e5e7501622118c6595f1851be3b3526; stable patch 3fd0d2e17880a4fc76f029ab60c4193eaafa7aa3 was unchanged, the code verdict was preserved, and fixture checks were refreshed at the rewritten head."
+    },
+    {
+      "id": "operator-gated-predicate-and-verifier-passed",
+      "status": "pass",
+      "evidence": "The report records main unchanged at f6e944d578f27c278c6f3ac119f68c2e35690a21, order 51 then 52, both changes OPEN and unarmed, no merges, and stop reason stack-delivered-without-landing. verify.mjs produced AUTOPILOT_STACK_OK=5373b89e2e5e7501622118c6595f1851be3b3526 in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local change provider, not W4 completion against an authenticated forge or deployment system.",
+    "The gates and live lanes exercise the same deterministic Git blob and changed-path verifier; they prove separate attributable sessions and frozen-coordinate behavior, not two different hosted production surfaces.",
+    "The built-in OMP owner and reviewer roles expose bash; assignments and transcripts constrained each child, but the runtime roles are not capability-level filesystem read-only.",
+    "One hub wait reported that RespectablePike was no longer running after its delivered follow-up even though its persisted owner state and proof were complete. EventualMouse mistyped its first cwd so no verifier ran, then executed the one valid assigned verifier successfully; both runtime wrinkles are retained rather than hidden.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

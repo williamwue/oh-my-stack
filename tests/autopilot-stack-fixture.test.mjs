@@ -31,6 +31,8 @@ test("autopilot stack builds, independently verifies, and delivers an unmerged l
   await withFixture(async (root) => {
     run("owner.mjs", root, "build", "51", "owner-/root/change_51");
     run("owner.mjs", root, "build", "52", "owner-/root/change_52");
+    run("owner.mjs", root, "self-proof", "51");
+    run("owner.mjs", root, "self-proof", "52");
 
     review(root, 51, "gates", "reviewer-/root/change_51_gates");
     review(root, 51, "live", "reviewer-/root/change_51_live");
@@ -49,6 +51,7 @@ test("autopilot stack builds, independently verifies, and delivers an unmerged l
 test("autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads", async () => {
   await withFixture(async (root) => {
     run("owner.mjs", root, "build", "51", "owner-/root/change_51");
+    run("owner.mjs", root, "self-proof", "51");
     assert.notEqual(attempt("topology.mjs", root, "append", "51", "root-coordinator").status, 0);
 
     review(root, 51, "gates", "reviewer-/root/change_51_gates");

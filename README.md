@@ -347,7 +347,15 @@ keeps the bottom change based on `main`, rebases the second branch onto that
 exact parent, preserves the code verdict only when the stable patch identity
 survives, and refreshes checks at the rewritten head. The verifier requires a
 linear open chain, unchanged `main`, and no merge or automatic-merge operation.
-Live OMP and Codex coordinator runs remain pending.
+Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs now pass the same local
+provider protocol at W3. Both start two attributable owners before waiting,
+serialize their exact build and self-proof commands across the shared checkout,
+and then use four fresh reviewers for the two frozen gates/live lanes. External
+transcript audits find no root owner build, owner self-proof, or reviewer verify
+command. Both roots alone arrange `main <- change-51 <- change-52`, preserve the
+tip code verdict only across an unchanged stable patch, refresh checks at the
+rewritten head, and stop with two open, unarmed changes. This is coordinated
+local-provider evidence, not authenticated W4 forge completion.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

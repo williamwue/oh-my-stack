@@ -567,7 +567,20 @@ Current progress:
   survives, refreshes checks at the rewritten head, and delivers an open,
   unarmed linear chain while the target remains unchanged. Negative coverage
   rejects missing aggregate verdicts, owner topology writes, and a reviewed head
-  that changes before append. Live OMP and Codex runs remain pending.
+  that changes before append.
+- Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs pass the same protocol
+  at W3. Both start the two owner sessions before waiting, bind runtime-issued
+  identities, serialize the exact build and self-proof follow-ups across the
+  shared checkout, and start four fresh reviewer sessions for the frozen
+  gates/live lanes. External transcript audits confirm that neither root runs an
+  owner build, owner self-proof, or reviewer verification command. Both roots
+  remain the single verdict aggregator and topology writer, preserve the tip
+  verdict only across an unchanged stable patch, refresh checks after rebase,
+  and stop with `main <- change-51 <- change-52`, unchanged `main`, no merge,
+  and no automatic-merge arming. This remains local-provider W3 evidence; the
+  two reviewer lane names share one deterministic verifier, authenticated W4
+  forge behavior is pending, and Claude Code live verification remains deferred
+  by project decision.
 
 Add advanced workflows one at a time in this order:
 

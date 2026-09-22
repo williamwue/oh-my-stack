@@ -13,6 +13,7 @@ const lane = laneFor(state, idArg);
 
 if (action === "packet") {
   assert.equal(lane.state, "STACK_READY");
+  assert.equal(lane.checks, "PASS", "owner self-proof is required before review");
   const live = liveCoordinates(project, lane);
   process.stdout.write(`${JSON.stringify({
     change: lane.id,
@@ -28,6 +29,7 @@ if (action === "packet") {
   if (!result.passed) process.exitCode = 1;
 } else if (action === "record") {
   assert.equal(lane.state, "STACK_READY");
+  assert.equal(lane.checks, "PASS", "owner self-proof is required before review");
   assert.ok(["gates", "live"].includes(reviewLane), "unknown review lane");
   assertNativeSession(reviewerSession, "reviewer");
   assert.notEqual(reviewerSession, lane.ownerSession, "owner cannot review its own change");

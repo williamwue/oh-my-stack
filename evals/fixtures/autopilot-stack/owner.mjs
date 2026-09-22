@@ -36,7 +36,7 @@ if (action === "packet") {
   lane.ownerSession = ownerSession;
   lane.headSha = git(project, "rev-parse", lane.headRef);
   lane.patchId = patchId(project, lane.baseSha, lane.headSha);
-  lane.checks = "PASS";
+  lane.checks = null;
   lane.state = "STACK_READY";
   await writeFile(join(root, "trails", `${lane.id}.tsv`), `change\towner\thead\tresult\n${lane.id}\t${ownerSession}\t${lane.headSha}\tSTACK_READY\n`, { flag: "wx" });
   await saveState(root, state);
@@ -46,6 +46,8 @@ if (action === "packet") {
   const expected = expectedFor(lane.id);
   assert.equal(`${git(project, "show", `${lane.headRef}:${expected.path}`)}\n`, expected.content);
   assert.equal(git(project, "diff", "--name-only", lane.baseRef, lane.headRef), expected.path);
+  lane.checks = "PASS";
+  await saveState(root, state);
   console.log(`AUTOPILOT_OWNER_PROOF=${lane.id}:${lane.headSha}`);
 } else {
   throw new Error("usage: node owner.mjs <packet|build|self-proof> <root> <change-id> [owner-session]");
