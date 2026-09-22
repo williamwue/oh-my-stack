@@ -226,20 +226,18 @@ that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
 The canonical Skill catalog now separates 49 public workflows and principles
-from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
-passes on both OMP and Codex CLI: every Skill is discovered and explicitly
+from 12 internal `check-*` runtime probes. The complete 49-Skill matrix passes
+on OMP 18.2.8 and Codex CLI 0.155.1: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
-package, no probe Skill leaks into the public matrix, and the read-only fixture
-remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
-`autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
-`autopilot-full` Skills are separately loaded and exercised by focused live
-fixtures. The three Benny Skills pass a deterministic local-provider fixture
-covering dormant setup, source-bound triage, tracker-write compensation,
+package, no probe Skill leaks into the public matrix, and both read-only Git
+fixtures remain unchanged. The advanced workflow Skills are also exercised by
+focused live fixtures. The three Benny Skills pass a deterministic
+local-provider fixture covering dormant setup, source-bound triage,
+tracker-write compensation,
 trusted-marker handoff, repeated before-and-after UI proof, independent media
 review identity, and an unmerged draft pull request. Focused OMP 18.2.8 and
 Codex CLI 0.155.1 runs pass the same local-provider protocol at W3 with one
 fresh read-only reviewer and externally audited parent and child transcripts.
-The refreshed 49-Skill whole-catalog matrix remains pending.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a

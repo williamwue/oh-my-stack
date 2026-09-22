@@ -16,7 +16,7 @@
     "name": "codex-cli",
     "version": "0.155.1",
     "platform": "macos-arm64",
-    "configuration": "All generated Codex Skills copied into a disposable Git fixture; the canonical catalog partitioned 38 public Skills from 12 check-* probes; four persisted non-interactive exec sessions explicitly named batches of 10, 10, 10, and 8 public Skills; isolated CODEX_HOME; user configuration and project rules ignored; gpt-6-astra with low reasoning.",
+    "configuration": "All generated Codex Skills copied into a disposable clean Git fixture; the canonical catalog partitioned 49 public Skills from 12 check-* probes; five fresh persisted non-interactive exec sessions explicitly selected batches of 10, 10, 10, 10, and 9 public Skills with $skill-name syntax; user configuration and project rules ignored; gpt-6-astra with low reasoning; sessions 01a0c76c-bfc1-7832-bbcb-5aeb223dab26, 01a0c76d-6eb7-7f33-912b-852868321df7, 01a0c76d-6ec1-7972-9613-f9c062145c90, 01a0c76d-6ed4-7c30-bb94-60b0969a93d5, and 01a0c76d-6ee8-7a82-9140-6edb6305344e.",
     "permissionProfile": "read-only sandbox with no command request, delegation, or publication"
   },
   "capabilities": [
@@ -29,19 +29,20 @@
     "evals/evidence/codex-cli-0.155.1/prove-it-works.json"
   ],
   "assertions": [
-    { "id": "catalog-boundary-loaded", "status": "pass", "evidence": "The verifier loaded the canonical 38-public and 12-probe partition and rejected any report outside that exact boundary." },
-    { "id": "all-public-skills-discovered", "status": "pass", "evidence": "Four fresh Codex CLI sessions resolved all 38 cataloged public Skills from the disposable project .agents/skills directory." },
-    { "id": "all-public-skills-explicitly-loaded", "status": "pass", "evidence": "Persisted session JSONL contains exactly 10, 10, 10, and 8 skills.selected_skill_instructions items with the complete generated Skill bodies and project-local paths." },
+    { "id": "catalog-boundary-loaded", "status": "pass", "evidence": "The verifier loaded the canonical 49-public and 12-probe partition and rejected any report outside that exact boundary." },
+    { "id": "all-public-skills-discovered", "status": "pass", "evidence": "Five fresh Codex CLI sessions resolved all 49 cataloged public Skills from the disposable project .agents/skills directory." },
+    { "id": "all-public-skills-explicitly-loaded", "status": "pass", "evidence": "Persisted session JSONL contains exactly 10, 10, 10, 10, and 9 skills.selected_skill_instructions items with complete generated Skill bodies and project-local paths; the union is the exact 49-Skill public catalog." },
     { "id": "canonical-names-match", "status": "pass", "evidence": "The aggregate report and independently parsed selected-Skill transcript items preserve the exact public catalog order with no omissions or duplicates." },
     { "id": "first-headings-match", "status": "pass", "evidence": "The fixture verifier matched every reported first level-one heading to the corresponding generated Codex SKILL.md." },
     { "id": "probe-skills-excluded", "status": "pass", "evidence": "No check-* Skill appears in any requested batch, selected-Skill transcript item, or aggregate report." },
-    { "id": "no-workflow-executed", "status": "pass", "evidence": "The four sessions returned only the requested metadata and emitted no tool call or child lifecycle event." },
+    { "id": "no-workflow-executed", "status": "pass", "evidence": "The five passing sessions returned only the requested metadata and emitted no tool call or child lifecycle event." },
     { "id": "no-project-writes", "status": "pass", "evidence": "Strict post-run Git status was empty in the disposable fixture." },
     { "id": "no-delegation", "status": "pass", "evidence": "No spawn operation or child thread occurred." },
     { "id": "no-publication", "status": "pass", "evidence": "No command, forge, commit, push, or publication operation was requested or performed." }
   ],
   "limitations": [
     "This matrix proves discovery and explicit loading for every public Skill; it does not re-execute every workflow's semantic behavior.",
+    "Codex CLI requires explicit $skill-name syntax for this probe. Five retained name-only attempts failed closed without loading a Skill, calling a tool, or changing the fixture and are not counted as passing evidence.",
     "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow."
   ]
 }

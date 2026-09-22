@@ -334,13 +334,12 @@ Current progress:
 - All generated local links and scripts resolve inside the package.
 - The setup workflow never writes an unobserved model slug or destroys unrelated configuration.
 
-The setup portion of this gate passes on both live CLI runtimes. The Alpha 3
-snapshot partitions 38 public Skills from 12 internal `check-*` probes, and its
-four-batch public matrix discovers and explicitly loads every Alpha 3 Skill
-exactly once on OMP and Codex CLI while leaving each fixture repository clean.
-The active OMP/Codex Alpha 3 gate is therefore closed. Phase 7 adds public
-Skills incrementally and refreshes the whole-catalog matrix after that catalog
-stabilizes. Claude Code remains deferred by explicit project decision until an
+The setup portion of this gate passes on both live CLI runtimes. The stabilized
+catalog partitions 49 public Skills from 12 internal `check-*` probes. Its
+five-batch public matrix discovers and explicitly loads every public Skill
+exactly once on OMP 18.2.8 and Codex CLI 0.155.1 while leaving both fixture
+repositories clean. The active OMP/Codex catalog gate is therefore closed.
+Claude Code remains deferred by explicit project decision until an
 authenticated local runtime is available.
 
 ## Phase 5: same-scenario conformance suite
@@ -624,8 +623,11 @@ Current progress:
   patched UI attempts, creates one unmerged draft PR, and enables only after
   thread safety passes. External parent and child transcript audits confirm
   root-only provider writes and read-only reviewer behavior. Authenticated W4
-  integrations and the refreshed 49-public-Skill matrix remain pending. Claude
-  Code live verification remains deferred by project decision.
+  integrations remain pending. The refreshed 49-public-Skill matrix passes on
+  OMP 18.2.8 and Codex CLI 0.155.1 in five read-only batches with exact catalog,
+  name, heading, probe-exclusion, no-write, no-delegation, and no-publication
+  verification. Claude Code live verification remains deferred by project
+  decision.
 
 Add advanced workflows one at a time in this order:
 

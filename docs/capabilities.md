@@ -294,8 +294,8 @@ authenticated runtime.
 The public-Skill matrix makes the product boundary machine-readable instead of
 inferring it from naming or invocation policy. The catalog now admits 49 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
-Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
-Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
+refreshed live matrix covers the complete public catalog in batches of 10, 10,
+10, 10, and 9 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
 `autopilot-full` fixtures separately prove live loading and execution.
 The three Benny Skills pass deterministic and focused live local-provider
@@ -303,16 +303,14 @@ fixtures on OMP 18.2.8 and Codex CLI 0.155.1. Each live run preserves one fresh
 read-only media-review identity, root-only provider writes, two baseline and
 two patched UI records, and an unmerged draft PR. These are W3 authority and
 state-machine results; the UI, media, message, tracker, automation, and PR
-providers are simulated rather than authenticated W4 systems. The complete
-49-Skill matrix remains to be refreshed.
-OMP transcripts contain the
-matching native
-`skill://` reads;
+providers are simulated rather than authenticated W4 systems. OMP transcripts
+contain the matching native `skill://` reads;
 Codex transcripts contain matching `skills.selected_skill_instructions` items
 with complete project-local Skill bodies. The verifier checks exact catalog
 order, canonical names, first headings, probe exclusion, and a clean fixture.
-The Alpha 3 run proves D2/D3 delivery across that 38-Skill catalog snapshot,
-not semantic success for every possible workflow input.
+The refreshed matrix proves D2/D3 delivery across the complete 49-Skill public
+catalog on the observed OMP and Codex CLI coordinates, not semantic success for
+every possible workflow input.
 
 The `babysit` fixture now separates read-only check authority from mutating
 drive authority. On OMP 18.2.6 and Codex CLI 0.155.1, drive mode freezes PR 23,
