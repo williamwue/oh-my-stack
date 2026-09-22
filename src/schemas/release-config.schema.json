@@ -4,10 +4,68 @@
   "title": "Oh My Stack release configuration",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "archiveRoot", "targets"],
+  "required": ["schemaVersion", "archiveRoot", "pluginBundles", "targets"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "archiveRoot": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "pluginBundles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "target", "packageDir", "archiveRoot", "marketplace"],
+        "properties": {
+          "id": { "const": "codex-marketplace" },
+          "target": { "const": "codex" },
+          "packageDir": { "const": "packages/codex" },
+          "archiveRoot": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "marketplace": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "interface", "plugin"],
+            "properties": {
+              "name": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+              "interface": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["displayName"],
+                "properties": {
+                  "displayName": { "type": "string", "minLength": 1 }
+                }
+              },
+              "plugin": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "source", "policy", "category"],
+                "properties": {
+                  "name": { "type": "string", "pattern": "^[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*$" },
+                  "source": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["source", "path"],
+                    "properties": {
+                      "source": { "const": "local" },
+                      "path": { "const": "./plugins/oh-my-stack" }
+                    }
+                  },
+                  "policy": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["installation", "authentication"],
+                    "properties": {
+                      "installation": { "enum": ["NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"] },
+                      "authentication": { "enum": ["ON_INSTALL", "ON_USE"] }
+                    }
+                  },
+                  "category": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "targets": {
       "type": "array",
       "minItems": 1,

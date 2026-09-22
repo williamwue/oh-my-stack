@@ -1,10 +1,10 @@
 {
   "$schema": "../../../src/schemas/evidence.schema.json",
   "schemaVersion": 1,
-  "id": "codex-cli-0.155.1-repo-marketplace-lifecycle",
+  "id": "codex-cli-0.155.1-plugin-marketplace-lifecycle",
   "fixture": "install-lifecycle",
   "profile": "codex-cli",
-  "observedAt": "2026-09-21",
+  "observedAt": "2026-09-22",
   "result": "pass",
   "claims": {
     "deliveryTarget": "D1",
@@ -13,21 +13,28 @@
     "observedDeliveryChecks": ["D0", "D1"]
   },
   "runtime": {
-    "name": "codex-repository-marketplace",
+    "name": "codex-cli",
     "version": "0.155.1",
-    "platform": "portable-node-test",
-    "configuration": "Official repository-marketplace copy layout exercised in a disposable temporary repository root.",
-    "permissionProfile": "Writes restricted to a disposable temporary marketplace root."
+    "platform": "macos-arm64",
+    "configuration": "The 0.2.0-alpha.1 Codex plugin archive was extracted, registered with codex plugin marketplace add, installed twice with codex plugin add, listed, removed, and deregistered under an isolated temporary CODEX_HOME.",
+    "permissionProfile": "Writes restricted to a disposable marketplace extraction and isolated temporary CODEX_HOME; the user marketplace and plugin cache were not used."
   },
   "capabilities": [],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/public-skill-matrix.json",
+    "evals/evidence/codex-cli-0.155.1/prove-it-works.json"
+  ],
   "assertions": [
-    { "id": "clean-install", "status": "pass", "evidence": "The generated package and marketplace entry were created in a new temporary repository layout." },
-    { "id": "clean-update", "status": "pass", "evidence": "Atomic replacement removed a stale plugin-owned file and preserved a user-owned sibling sentinel." },
-    { "id": "clean-uninstall", "status": "pass", "evidence": "Removal deleted only the plugin and its catalog entry while preserving the user-owned sentinel." },
-    { "id": "manifest-compatibility", "status": "pass", "evidence": "Both root portable plugin.json and .codex-plugin/plugin.json compatibility manifests were present and named oh-my-stack." }
+    { "id": "marketplace-discovery", "status": "pass", "evidence": "Codex accepted the extracted marketplace root as oh-my-stack and listed its exact .agents/plugins/marketplace.json coordinate." },
+    { "id": "clean-install", "status": "pass", "evidence": "Codex listed oh-my-stack@oh-my-stack as available, installed version 0.2.0-alpha.1, and reported its isolated cache root." },
+    { "id": "exact-installed-tree", "status": "pass", "evidence": "A recursive comparison between packages/codex and the Codex cache root returned no difference." },
+    { "id": "clean-reinstall", "status": "pass", "evidence": "A second codex plugin add completed successfully at the same version and cache coordinate." },
+    { "id": "clean-uninstall", "status": "pass", "evidence": "Codex removed the plugin, listed it as not installed, removed the marketplace, and then reported no marketplaces in scope." },
+    { "id": "manifest-compatibility", "status": "pass", "evidence": "The installed tree retained the portable root plugin.json and .codex-plugin/plugin.json compatibility manifest, both at version 0.2.0-alpha.1." }
   ],
   "limitations": [
-    "This validates the official repository-marketplace filesystem lifecycle without changing the user's configured marketplaces or plugin cache.",
-    "Live Codex discovery and invocation are covered by the related prove-it-works evidence."
+    "The local marketplace is intentionally dormant until the user registers and installs it; release building and extraction do not change Codex configuration.",
+    "codex plugin marketplace upgrade is only available for Git marketplaces on this runtime. Local bundle refresh uses codex plugin add after replacing or re-extracting the marketplace tree.",
+    "Skill discovery and invocation are covered separately by the related complete public-Skill matrix and prove-it-works evidence."
   ]
 }

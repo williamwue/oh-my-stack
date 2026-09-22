@@ -15,7 +15,14 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 import { buildRelease, checkRelease, releaseSource, repoRoot } from "../tools/build-release.mjs";
-import { installArchive, sha256, uninstallOwned, verifyInstalledTree } from "../tools/release-lib.mjs";
+import {
+  extractArchive,
+  installArchive,
+  packageInventory,
+  sha256,
+  uninstallOwned,
+  verifyInstalledTree,
+} from "../tools/release-lib.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -33,11 +40,53 @@ test("release archives and manifest are byte-reproducible", async () => {
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.2.0-alpha.0.tar.gz",
-    "oh-my-stack-codex-0.2.0-alpha.0.tar.gz",
-    "oh-my-stack-omp-0.2.0-alpha.0.tar.gz",
+    "oh-my-stack-claude-code-0.2.0-alpha.1.tar.gz",
+    "oh-my-stack-codex-0.2.0-alpha.1.tar.gz",
+    "oh-my-stack-codex-plugin-0.2.0-alpha.1.tar.gz",
+    "oh-my-stack-omp-0.2.0-alpha.1.tar.gz",
     "release-manifest.json",
   ]);
+});
+
+test("Codex plugin bundle exposes the generated package through one local marketplace", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-plugin-bundle-"));
+  try {
+    const output = join(root, "dist");
+    const extracted = join(root, "marketplace");
+    const manifest = await buildRelease({ root: repoRoot, out: output });
+    const bundle = manifest.pluginBundles[0];
+    assert.equal(bundle.id, "codex-marketplace");
+    assert.equal(bundle.target, "codex");
+    assert.equal(bundle.marketplace.name, "oh-my-stack");
+    assert.equal(bundle.marketplace.plugins.length, 1);
+    assert.deepEqual(bundle.marketplace.plugins[0], {
+      name: "oh-my-stack",
+      source: { source: "local", path: "./plugins/oh-my-stack" },
+      policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
+      category: "Productivity",
+    });
+
+    const archive = await readFile(join(output, bundle.file));
+    assert.equal(sha256(archive), bundle.sha256);
+    await extractArchive(archive, bundle.archiveRoot, extracted);
+    assert.deepEqual(await packageInventory(extracted), bundle.files);
+    assert.deepEqual(
+      JSON.parse(await readFile(join(extracted, ".agents", "plugins", "marketplace.json"), "utf8")),
+      bundle.marketplace,
+    );
+
+    const codexArtifact = manifest.artifacts.find((artifact) => artifact.target === "codex");
+    assert.deepEqual(
+      await packageInventory(join(extracted, "plugins", "oh-my-stack")),
+      codexArtifact.files,
+    );
+    assert.equal(
+      JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", "plugin.json"), "utf8")).version,
+      manifest.version,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("all target archives install, update, roll back, and uninstall within their owned directory", async () => {

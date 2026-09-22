@@ -412,7 +412,7 @@ live conformance claim.
 Current progress:
 
 - One deterministic builder emits OMP, Codex, and Claude Code archives from
-  the current source version `0.2.0-alpha.0`, plus complete file inventories, SHA-256 checksums,
+  the current source version `0.2.0-alpha.1`, plus complete file inventories, SHA-256 checksums,
   source coordinates, profiles, conformance summaries, and verification labels.
 - Two independent builds must be byte-identical during every `npm run check`.
 - The owned-directory installer verifies checksums and archive safety, stages
@@ -425,6 +425,9 @@ Current progress:
 - Release documentation separates static, discovery, package lifecycle, and
   end-to-end claims. Claude Code runtime checks remain deferred, and OMP's
   native plugin-manager D1 is not inferred from generic package lifecycle.
+- A deterministic Codex marketplace bundle wraps the generated Codex package
+  without forking its Skill content. Its marketplace entry uses the required
+  availability, authentication, category, and local-source metadata.
 - The clean-tag gate is implemented and tested in a disposable repository. The
   final local release commit must be tagged and rebuilt from that exact clean
   tag before Phase 6 closes; public publication remains separate.

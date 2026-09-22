@@ -283,5 +283,5 @@ test("committed packages match generator output", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.2.0-alpha.0");
+  assert.equal(model.project.version, "0.2.0-alpha.1");
 });

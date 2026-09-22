@@ -23,8 +23,10 @@ Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
 workers, and a two-turn follow-up on the same read-only worker. Results remain
 separately attributable and are followed by an independent root read.
-The official Codex repository-marketplace lifecycle fixture establishes `D1`,
-so Codex CLI reaches cumulative `D3` after its observed discovery and
+The Codex CLI 0.155.1 plugin-manager lifecycle establishes `D1`: an isolated
+`CODEX_HOME` accepts the generated marketplace, installs the exact generated
+plugin tree, reinstalls it, removes it, and deregisters the marketplace. Codex
+CLI therefore reaches cumulative `D3` after its observed discovery and
 explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
 remains overall `D0`: its 18.2.6 plugin manager unexpectedly writes during a
 `--dry-run`, so the real D1 safety gate is unresolved. Codex Desktop has a
@@ -190,7 +192,8 @@ npm run check
 local links, deterministic release output, the executable inventory, and the
 test suite without network access.
 
-Build the three local Alpha archives and verify their checksums with:
+Build the three runtime archives plus the Codex plugin marketplace bundle and
+verify their checksums with:
 
 ```bash
 npm run release:build
@@ -200,9 +203,21 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.0 release notes](docs/releases/0.2.0-alpha.0.md). Claude Code is
+[0.2.0-alpha.1 release notes](docs/releases/0.2.0-alpha.1.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
+
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.1.tar.gz`.
+After extracting it, add the extracted marketplace root and install the plugin:
+
+```bash
+codex plugin marketplace add /absolute/path/to/oh-my-stack-marketplace
+codex plugin add oh-my-stack@oh-my-stack
+```
+
+Start a new Codex task after installation so its bundled Skills are loaded.
+The marketplace bundle contains the exact same generated Codex plugin tree as
+the standalone Codex runtime archive; it does not maintain a second Skill copy.
 
 Each generated package contains `scripts/collect-model-inventory.mjs`,
 `scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The
@@ -442,6 +457,7 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 - [Implementation plan](docs/implementation-plan.md)
 - [Security model](docs/security.md)
 - [Release process](docs/release-process.md)
+- [0.2.0-alpha.1 plugin release notes](docs/releases/0.2.0-alpha.1.md)
 - [0.2.0 Alpha release notes](docs/releases/0.2.0-alpha.0.md)
 - [0.1.0 Alpha release notes](docs/releases/0.1.0-alpha.0.md)
 - [ADR 0001: portable core and generated targets](docs/decisions/0001-portable-core.md)

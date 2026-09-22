@@ -2,6 +2,32 @@
   "$schema": "../schemas/release-config.schema.json",
   "schemaVersion": 1,
   "archiveRoot": "oh-my-stack",
+  "pluginBundles": [
+    {
+      "id": "codex-marketplace",
+      "target": "codex",
+      "packageDir": "packages/codex",
+      "archiveRoot": "oh-my-stack-marketplace",
+      "marketplace": {
+        "name": "oh-my-stack",
+        "interface": {
+          "displayName": "Oh My Stack"
+        },
+        "plugin": {
+          "name": "oh-my-stack",
+          "source": {
+            "source": "local",
+            "path": "./plugins/oh-my-stack"
+          },
+          "policy": {
+            "installation": "AVAILABLE",
+            "authentication": "ON_INSTALL"
+          },
+          "category": "Productivity"
+        }
+      }
+    }
+  ],
   "targets": [
     {
       "id": "omp",

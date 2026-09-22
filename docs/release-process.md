@@ -5,6 +5,11 @@ archives are deterministic, contain one target package under the
 `oh-my-stack/` archive root, and are accompanied by a complete file inventory,
 SHA-256 checksums, and explicit verification maturity.
 
+The Codex plugin bundle is a fourth archive rooted at
+`oh-my-stack-marketplace/`. It contains the generated Codex package at
+`plugins/oh-my-stack/` and a repository marketplace at
+`.agents/plugins/marketplace.json`.
+
 ## Local release candidate
 
 ```bash
@@ -47,6 +52,29 @@ marketplace may point at the installed directory, while OMP may install its npm
 package directly. The generic installer deliberately does not rewrite a
 runtime's global configuration.
 
+## Install the Codex plugin bundle
+
+Extract `oh-my-stack-codex-plugin-<version>.tar.gz`, then register the extracted
+marketplace root and install the plugin:
+
+```bash
+codex plugin marketplace add /absolute/path/to/oh-my-stack-marketplace
+codex plugin add oh-my-stack@oh-my-stack
+```
+
+Use `codex plugin marketplace list` and `codex plugin list` to inspect the
+resolved source and installed plugin. Start a new task after install or upgrade
+so Codex loads the new Skill set. To remove it:
+
+```bash
+codex plugin remove oh-my-stack@oh-my-stack
+codex plugin marketplace remove oh-my-stack
+```
+
+These commands update Codex's plugin configuration and cache. The release
+builder itself only creates the dormant marketplace bundle and never performs
+registration or installation.
+
 ## Uninstall
 
 ```bash
@@ -68,8 +96,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.0
-node tools/build-release.mjs --tag v0.2.0-alpha.0
+node tools/build-release.mjs --check --tag v0.2.0-alpha.1
+node tools/build-release.mjs --tag v0.2.0-alpha.1
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

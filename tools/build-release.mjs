@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -60,6 +60,66 @@ async function collectConformance(root, target) {
   return { status: "verified", profile, scenarios };
 }
 
+async function buildPluginBundle({ root, out, project, bundle }) {
+  if (
+    bundle.id !== "codex-marketplace"
+    || bundle.target !== "codex"
+    || bundle.packageDir !== "packages/codex"
+    || bundle.marketplace.plugin.name !== project.name
+    || bundle.marketplace.plugin.source.path !== `./plugins/${project.name}`
+  ) {
+    throw new Error("invalid Codex marketplace bundle configuration");
+  }
+  const packageRoot = join(root, bundle.packageDir);
+  const portableManifest = JSON.parse(await readFile(join(packageRoot, "plugin.json"), "utf8"));
+  const compatibilityManifest = JSON.parse(
+    await readFile(join(packageRoot, ".codex-plugin", "plugin.json"), "utf8"),
+  );
+  if (
+    portableManifest.name !== project.name
+    || portableManifest.version !== project.version
+    || compatibilityManifest.name !== project.name
+    || compatibilityManifest.version !== project.version
+  ) {
+    throw new Error("Codex plugin manifest name or version drift");
+  }
+
+  const staging = await mkdtemp(join(tmpdir(), "oh-my-stack-marketplace-"));
+  try {
+    const pluginRoot = join(staging, "plugins", project.name);
+    await mkdir(join(staging, ".agents", "plugins"), { recursive: true });
+    await cp(packageRoot, pluginRoot, { recursive: true });
+    const marketplace = {
+      name: bundle.marketplace.name,
+      interface: bundle.marketplace.interface,
+      plugins: [bundle.marketplace.plugin],
+    };
+    await writeFile(
+      join(staging, ".agents", "plugins", "marketplace.json"),
+      `${JSON.stringify(marketplace, null, 2)}\n`,
+    );
+
+    const file = `${project.name}-codex-plugin-${project.version}.tar.gz`;
+    const archive = await createArchive(staging, bundle.archiveRoot);
+    const files = await packageInventory(staging);
+    await writeFile(join(out, file), archive);
+    return {
+      id: bundle.id,
+      target: bundle.target,
+      file,
+      archiveRoot: bundle.archiveRoot,
+      sha256: sha256(archive),
+      size: archive.length,
+      contentSha256: sha256(Buffer.from(`${JSON.stringify(files)}\n`)),
+      files,
+      marketplace,
+      pluginPath: `plugins/${project.name}`,
+    };
+  } finally {
+    await rm(staging, { recursive: true, force: true });
+  }
+}
+
 export async function buildRelease({ root = repoRoot, out, tag = null }) {
   const project = JSON.parse(await readFile(join(root, "src/core/project.json"), "utf8"));
   const config = JSON.parse(await readFile(join(root, "src/packaging/release.json"), "utf8"));
@@ -67,6 +127,9 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
   const ids = config.targets.map((target) => target.id);
   if (JSON.stringify(ids) !== JSON.stringify(["omp", "codex", "claude-code"])) {
     throw new Error("release configuration must contain omp, codex, and claude-code in order");
+  }
+  if (config.pluginBundles?.length !== 1) {
+    throw new Error("release configuration must contain one Codex marketplace bundle");
   }
   const source = await releaseSource(root, project.version, tag);
   await mkdir(out, { recursive: true });
@@ -93,6 +156,10 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
       conformance: await collectConformance(root, target.id),
     });
   }
+  const pluginBundles = [];
+  for (const bundle of config.pluginBundles) {
+    pluginBundles.push(await buildPluginBundle({ root, out, project, bundle }));
+  }
   const manifest = {
     schemaVersion: 1,
     name: project.name,
@@ -100,11 +167,13 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
     archiveRoot: config.archiveRoot,
     source,
     artifacts,
+    pluginBundles,
   };
   const manifestBytes = Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`);
   await writeFile(join(out, "release-manifest.json"), manifestBytes);
   const sums = [
     ...artifacts.map((artifact) => `${artifact.sha256}  ${artifact.file}`),
+    ...pluginBundles.map((bundle) => `${bundle.sha256}  ${bundle.file}`),
     `${sha256(manifestBytes)}  release-manifest.json`,
   ];
   await writeFile(join(out, "SHA256SUMS"), `${sums.join("\n")}\n`);
@@ -149,7 +218,9 @@ async function main() {
     await rm(options.out, { recursive: true, force: true });
     await mkdir(dirname(options.out), { recursive: true });
     await import("node:fs/promises").then(({ rename }) => rename(temporary, options.out));
-    console.log(`Built ${manifest.artifacts.length} release artifacts in ${relative(repoRoot, options.out)}.`);
+    console.log(
+      `Built ${manifest.artifacts.length} runtime artifacts and ${manifest.pluginBundles.length} plugin bundle in ${relative(repoRoot, options.out)}.`,
+    );
   } catch (error) {
     await rm(temporary, { recursive: true, force: true });
     throw error;
