@@ -6,12 +6,12 @@ archives are deterministic, contain one target package under the
 SHA-256 checksums, and explicit verification maturity.
 
 The Codex plugin bundle is a fourth archive rooted at
-`oh-my-stack-marketplace/`. It contains a compact view of the generated Codex
+`oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. Four primary Skills remain exposed to the
-initial Codex catalog; the other public workflows move into the packaged
-`library/skills/` tree for router-directed loading. The standalone Codex
-archive remains the complete 49-Skill package.
+`.agents/plugins/marketplace.json`. All 49 public Skills remain discoverable
+and directly invocable. Codex descriptions are concise; full instructions and
+resources load on demand. Catalog categories distinguish 26 workflows and
+23 principles without moving either group outside the discovery directory.
 
 ## Local release candidate
 

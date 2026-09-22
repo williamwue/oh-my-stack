@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Experience First"
-  short_description: "Principle Experience First workflow"
+  display_name: "Principle: Experience First"
+  short_description: "Prioritize polished user experience in product and scope decisio"
   default_prompt: "Use $principle-experience-first for this task."
 policy:
   allow_implicit_invocation: false

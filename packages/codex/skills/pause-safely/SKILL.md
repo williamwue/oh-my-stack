@@ -1,6 +1,6 @@
 ---
 name: pause-safely
-description: "Stop explicitly requested in-flight engineering work at a durable boundary and leave a checkpoint another session can validate and resume."
+description: "Checkpoint in-flight work when the user requests a pause."
 ---
 
 # Pause Safely

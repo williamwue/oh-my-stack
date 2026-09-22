@@ -1,6 +1,6 @@
 interface:
-  display_name: "Babysit"
-  short_description: "Babysit workflow"
+  display_name: "Workflow: Babysit"
+  short_description: "Check or repair a pull request; require separate merge authoriza"
   default_prompt: "Use $babysit for this task."
 policy:
   allow_implicit_invocation: false

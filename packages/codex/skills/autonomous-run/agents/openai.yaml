@@ -1,6 +1,6 @@
 interface:
-  display_name: "Autonomous Run"
-  short_description: "Autonomous Run workflow"
+  display_name: "Workflow: Autonomous Run"
+  short_description: "Run a bounded task until its completion condition is verified."
   default_prompt: "Use $autonomous-run for this task."
 policy:
   allow_implicit_invocation: false

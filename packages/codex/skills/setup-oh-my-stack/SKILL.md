@@ -1,6 +1,6 @@
 ---
 name: setup-oh-my-stack
-description: "Configure role models from a freshly observed runtime inventory without overwriting unrelated user configuration."
+description: "Configure role models from observed runtime inventory."
 ---
 
 # Setup Oh My Stack

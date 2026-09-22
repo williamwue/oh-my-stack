@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Minimize Reader Load"
-  short_description: "Principle Minimize Reader Load workflow"
+  display_name: "Principle: Minimize Reader Load"
+  short_description: "Reduce indirection and hidden state in hard-to-follow code."
   default_prompt: "Use $principle-minimize-reader-load for this task."
 policy:
   allow_implicit_invocation: false

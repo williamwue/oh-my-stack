@@ -1,6 +1,6 @@
 interface:
-  display_name: "Setup Oh My Stack"
-  short_description: "Setup Oh My Stack workflow"
+  display_name: "Workflow: Setup Oh My Stack"
+  short_description: "Configure role models from observed runtime inventory."
   default_prompt: "Use $setup-oh-my-stack for this task."
 policy:
   allow_implicit_invocation: false

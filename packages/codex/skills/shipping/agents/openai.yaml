@@ -1,6 +1,6 @@
 interface:
-  display_name: "Shipping"
-  short_description: "Shipping workflow"
+  display_name: "Workflow: Shipping"
+  short_description: "Land an explicitly authorized PR or stack after independent chec"
   default_prompt: "Use $shipping for this task."
 policy:
   allow_implicit_invocation: false

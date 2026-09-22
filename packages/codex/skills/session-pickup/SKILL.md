@@ -1,6 +1,6 @@
 ---
 name: session-pickup
-description: "Resume or take over prior in-flight engineering work from a checkpoint, transcript, or branch without repeating completed work or inheriting stale authority."
+description: "Resume checkpointed work without repeating completed steps."
 ---
 
 # Session Pickup

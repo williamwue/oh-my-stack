@@ -1,6 +1,6 @@
 ---
 name: feature
-description: "Add or intentionally change behavior through an evidence-backed design, bounded implementation, and matching-surface verification."
+description: "Add or change behavior with design and end-to-end verification."
 ---
 
 # Feature

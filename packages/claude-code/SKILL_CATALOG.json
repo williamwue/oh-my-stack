@@ -5,246 +5,295 @@
     {
       "name": "autonomous-run",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "autopilot-full",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "autopilot-stack",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "babysit",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "bug-fix",
       "audience": "public",
+      "category": "workflow",
       "invocation": "automatic"
     },
     {
       "name": "feature",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "how",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "interrogate",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "investigation",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "opening-a-pr",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "orchestrate",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "pause-safely",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "poteto-mode",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "principle-attack-the-premise",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-boundary-discipline",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-build-the-lever",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-encode-lessons-in-structure",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-exhaust-the-design-space",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-experience-first",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-fix-root-causes",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-foundational-thinking",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-guard-the-context-window",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-laziness-protocol",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-make-operations-idempotent",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-migrate-callers-then-delete-legacy-apis",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-minimize-reader-load",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-model-the-domain",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-never-block-on-the-human",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-outcome-oriented-execution",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-prove-it-works",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-redesign-from-first-principles",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-separate-before-serializing-shared-state",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-sequence-verifiable-units",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-subtract-before-you-add",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-test-behavior-not-implementation",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "principle-type-system-discipline",
       "audience": "public",
+      "category": "principle",
       "invocation": "explicit"
     },
     {
       "name": "prototype",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "prove-it-works",
       "audience": "public",
+      "category": "workflow",
       "invocation": "automatic"
     },
     {
       "name": "refactoring",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "reproduce-and-fix-issues",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "session-pickup",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "setup-benny",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "setup-oh-my-stack",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "shipping",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "show-me-your-work",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "tdd",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "technical-writing",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "triage-issue-reports",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     },
     {
       "name": "unslop",
       "audience": "public",
+      "category": "workflow",
       "invocation": "explicit"
     }
   ]

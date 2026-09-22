@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Redesign From First Principles"
-  short_description: "Principle Redesign From First Principles workflow"
+  display_name: "Principle: Redesign From First Principles"
+  short_description: "Reconsider the design around a new requirement."
   default_prompt: "Use $principle-redesign-from-first-principles for this task."
 policy:
   allow_implicit_invocation: false

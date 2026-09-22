@@ -1,6 +1,6 @@
 ---
 name: autonomous-run
-description: "Drive one bounded engineering task through evidence-based iterations to a fixed predicate without stopping for routine intermediate prompts."
+description: "Run a bounded task until its completion condition is verified."
 ---
 
 # Autonomous Run

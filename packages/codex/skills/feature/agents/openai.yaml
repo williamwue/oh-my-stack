@@ -1,6 +1,6 @@
 interface:
-  display_name: "Feature"
-  short_description: "Feature workflow"
+  display_name: "Workflow: Feature"
+  short_description: "Add or change behavior with design and end-to-end verification."
   default_prompt: "Use $feature for this task."
 policy:
   allow_implicit_invocation: false

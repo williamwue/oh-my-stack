@@ -1,6 +1,6 @@
 ---
 name: shipping
-description: "Land an explicitly authorized pull request or stack only after independent revision-bound verdicts establish a contiguous safe frontier."
+description: "Land an explicitly authorized PR or stack after independent checks."
 ---
 
 # Shipping

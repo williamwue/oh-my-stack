@@ -1,6 +1,6 @@
 ---
 name: autopilot-full
-description: "Run an explicitly authorized queue through one-owner-per-change build, independent root verdict, and owner-executed landing until its bounded completion predicate is reached."
+description: "Build, review, and land a queue only with explicit authorization."
 ---
 
 # Autopilot Full

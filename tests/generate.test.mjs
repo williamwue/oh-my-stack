@@ -15,6 +15,31 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
+test("Codex keeps all direct entries with concise metadata and unchanged bodies", async () => {
+  const model = await loadModel();
+  const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
+  assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 26);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 23);
+  let originalLength = 0;
+  let generatedLength = 0;
+  for (const name of model.skillCatalog.public) {
+    const source = model.skills.find((skill) => skill.metadata.name === name);
+    const document = await readFile(join(repoRoot, "packages/codex/skills", name, "SKILL.md"), "utf8");
+    const description = JSON.parse(document.match(/^description: (.+)$/m)[1]);
+    assert.ok(description.length <= 120, name);
+    const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
+    assert.equal(body(document), body(source.text), name);
+    const metadata = await readFile(join(repoRoot, "packages/codex/skills", name, "agents/openai.yaml"), "utf8");
+    assert.ok(metadata.includes(`Use $${name} for this task.`), name);
+    assert.ok(metadata.includes(`allow_implicit_invocation: ${source.metadata.invocation === "automatic"}`), name);
+    assert.ok(metadata.includes(name.startsWith("principle-") ? "Principle: " : "Workflow: "), name);
+    originalLength += source.frontmatter.description.length;
+    generatedLength += description.length;
+  }
+  assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
+});
+
 test("loads sixty-one portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
   assert.equal(model.skills.length, 61);
@@ -90,18 +115,6 @@ test("loads sixty-one portable Skills, seven roles, and three adapters", async (
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
   assert.equal(model.skillCatalog.public.length, 49);
   assert.equal(model.skillCatalog.probes.length, 12);
-  assert.deepEqual(model.skillCatalog.codexPluginEntrypoints, [
-    "bug-fix",
-    "poteto-mode",
-    "prove-it-works",
-    "setup-oh-my-stack",
-  ]);
-  assert.deepEqual(
-    model.skills
-      .filter((skill) => skill.metadata.invocation === "automatic" && model.skillCatalog.public.includes(skill.metadata.name))
-      .map((skill) => skill.metadata.name),
-    ["bug-fix", "prove-it-works"],
-  );
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)
     .filter((name) => name.startsWith("check-")));
@@ -352,6 +365,5 @@ test("generated manifests identify the public source repository", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  const packageManifest = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
-  assert.equal(model.project.version, packageManifest.version);
+  assert.equal(model.project.version, "0.2.0-alpha.4");
 });

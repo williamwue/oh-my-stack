@@ -1,6 +1,6 @@
 interface:
-  display_name: "Refactoring"
-  short_description: "Refactoring workflow"
+  display_name: "Workflow: Refactoring"
+  short_description: "Improve code structure while verifying unchanged behavior."
   default_prompt: "Use $refactoring for this task."
 policy:
   allow_implicit_invocation: false

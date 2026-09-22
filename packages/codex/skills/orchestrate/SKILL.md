@@ -1,6 +1,6 @@
 ---
 name: orchestrate
-description: "Coordinate a standing multi-session engineering program through durable briefs, bounded rolling work, independent verification, and a continuously safe integration frontier."
+description: "Coordinate ongoing engineering work with bounded tasks and independent checks."
 ---
 
 # Orchestrate

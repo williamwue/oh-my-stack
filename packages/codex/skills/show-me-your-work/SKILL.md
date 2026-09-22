@@ -1,6 +1,6 @@
 ---
 name: show-me-your-work
-description: "Keep a reviewable, append-only decision trail for long-running, delegated, or unattended work."
+description: "Record an append-only decision trail for long or delegated work."
 ---
 
 # Show Me Your Work

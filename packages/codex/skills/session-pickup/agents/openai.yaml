@@ -1,6 +1,6 @@
 interface:
-  display_name: "Session Pickup"
-  short_description: "Session Pickup workflow"
+  display_name: "Workflow: Session Pickup"
+  short_description: "Resume checkpointed work without repeating completed steps."
   default_prompt: "Use $session-pickup for this task."
 policy:
   allow_implicit_invocation: false

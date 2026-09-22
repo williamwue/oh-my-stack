@@ -1,6 +1,6 @@
 interface:
-  display_name: "Interrogate"
-  short_description: "Interrogate workflow"
+  display_name: "Workflow: Interrogate"
+  short_description: "Review frozen inputs with independent reviewers and root judgmen"
   default_prompt: "Use $interrogate for this task."
 policy:
   allow_implicit_invocation: false

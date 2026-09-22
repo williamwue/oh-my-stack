@@ -1,6 +1,6 @@
 interface:
-  display_name: "How"
-  short_description: "How workflow"
+  display_name: "Workflow: How"
+  short_description: "Explain a code path or subsystem using verified repository evide"
   default_prompt: "Use $how for this task."
 policy:
   allow_implicit_invocation: false

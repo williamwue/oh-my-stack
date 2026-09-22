@@ -1,6 +1,6 @@
 interface:
-  display_name: "Bug Fix"
-  short_description: "Bug Fix workflow"
+  display_name: "Workflow: Bug Fix"
+  short_description: "Reproduce, fix, and independently verify a software defect."
   default_prompt: "Use $bug-fix for this task."
 policy:
   allow_implicit_invocation: true

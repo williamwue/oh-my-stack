@@ -1,6 +1,6 @@
 interface:
-  display_name: "Poteto Mode"
-  short_description: "Poteto Mode workflow"
+  display_name: "Workflow: Poteto Mode"
+  short_description: "Route an engineering request to the appropriate Oh My Stack work"
   default_prompt: "Use $poteto-mode for this task."
 policy:
   allow_implicit_invocation: false

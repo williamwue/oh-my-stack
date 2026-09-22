@@ -62,6 +62,15 @@ as:
 Use $prove-it-works to verify this installation.
 ```
 
+For direct invocation, type `$` in the composer and select the Oh My Stack
+Skill from the picker (for example, `oh-my-stack:how`), then describe the task.
+Display names distinguish workflows and principles; invocation names stay stable.
+To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal.
+Typing a Skill name as plain text, including in `codex exec`, is not equivalent
+to selecting a structured Skill input. Explicit-only Skills may be absent from
+the model's initial automatic-use list while remaining available in discovery.
+See the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md).
+
 Inspect or remove the installation with:
 
 ```bash
@@ -292,11 +301,14 @@ codex plugin add oh-my-stack@oh-my-stack
 ```
 
 Start a new Codex task after installation so its bundled Skills are loaded.
-The marketplace bundle exposes only `bug-fix`, `poteto-mode`,
-`prove-it-works`, and `setup-oh-my-stack` to Codex's initial Skill catalog.
-The other 45 public workflows ship under `library/skills/` and are loaded by
-`poteto-mode` only after routing selects one. The standalone Codex runtime
-archive retains all 49 public Skills for compatibility and direct invocation.
+The marketplace bundle and standalone archive both expose all 49 public Skills.
+Invoke a Skill directly, such as `$how`, `$interrogate`, or `$tdd`, or use
+`$poteto-mode` to select a workflow. Full instructions load when a Skill is used.
+Short Codex descriptions reduce discovery metadata without hiding entrypoints.
+The [Skill directory](docs/skill-directory.md) groups 26 workflows and 23
+principles. Codex display names and generated catalog metadata mark the same
+categories; invocation names remain unchanged. These labels do not require
+native grouped menus. Internal probes remain test-only.
 
 Each generated package contains `scripts/collect-model-inventory.mjs`,
 `scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The

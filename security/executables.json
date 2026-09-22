@@ -226,6 +226,14 @@
       "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected configuration remains user-owned."
     },
     {
+      "path": "tools/codex-skill-descriptions.mjs",
+      "owner": "local-core",
+      "purpose": "Export concise Codex discovery descriptions; no executable side effects.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Not installed in target packages."
+    },
+    {
       "path": "tools/generate.mjs",
       "owner": "local-core",
       "purpose": "Generate deterministic runtime target packages.",

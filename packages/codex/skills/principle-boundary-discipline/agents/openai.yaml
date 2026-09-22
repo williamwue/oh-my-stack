@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Boundary Discipline"
-  short_description: "Principle Boundary Discipline workflow"
+  display_name: "Principle: Boundary Discipline"
+  short_description: "Validate external boundaries and keep internal logic simple."
   default_prompt: "Use $principle-boundary-discipline for this task."
 policy:
   allow_implicit_invocation: false

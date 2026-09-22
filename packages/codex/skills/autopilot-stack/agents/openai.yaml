@@ -1,6 +1,6 @@
 interface:
-  display_name: "Autopilot Stack"
-  short_description: "Autopilot Stack workflow"
+  display_name: "Workflow: Autopilot Stack"
+  short_description: "Build and review a linear change stack; leave landing to the ope"
   default_prompt: "Use $autopilot-stack for this task."
 policy:
   allow_implicit_invocation: false

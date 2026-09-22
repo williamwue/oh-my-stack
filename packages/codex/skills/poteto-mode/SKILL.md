@@ -1,6 +1,6 @@
 ---
 name: poteto-mode
-description: "Route a software-engineering request to the smallest admitted Oh My Stack workflow while preserving root ownership and evidence boundaries."
+description: "Route an engineering request to the appropriate Oh My Stack workflow."
 ---
 
 # Poteto Mode

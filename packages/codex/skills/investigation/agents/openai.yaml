@@ -1,6 +1,6 @@
 interface:
-  display_name: "Investigation"
-  short_description: "Investigation workflow"
+  display_name: "Workflow: Investigation"
+  short_description: "Answer an engineering question from evidence without changing co"
   default_prompt: "Use $investigation for this task."
 policy:
   allow_implicit_invocation: false

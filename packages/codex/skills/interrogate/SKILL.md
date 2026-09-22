@@ -1,6 +1,6 @@
 ---
 name: interrogate
-description: "Run an adversarial multi-session review with identical inputs, frozen findings, independent synthesis, and root-owned judgment."
+description: "Review frozen inputs with independent reviewers and root judgment."
 ---
 
 # Interrogate

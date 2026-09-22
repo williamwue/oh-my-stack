@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Separate Before Serializing Shared State"
-  short_description: "Principle Separate Before Serializing Shared State workflow"
+  display_name: "Principle: Separate Before Serializing Shared State"
+  short_description: "Separate concurrent writers before serializing shared state."
   default_prompt: "Use $principle-separate-before-serializing-shared-state for this task."
 policy:
   allow_implicit_invocation: false

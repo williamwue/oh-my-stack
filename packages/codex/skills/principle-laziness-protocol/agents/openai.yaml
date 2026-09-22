@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Laziness Protocol"
-  short_description: "Principle Laziness Protocol workflow"
+  display_name: "Principle: Laziness Protocol"
+  short_description: "Prefer deletion and small changes when considering abstractions."
   default_prompt: "Use $principle-laziness-protocol for this task."
 policy:
   allow_implicit_invocation: false

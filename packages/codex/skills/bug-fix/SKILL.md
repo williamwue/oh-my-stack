@@ -1,6 +1,6 @@
 ---
 name: bug-fix
-description: "Diagnose and fix a reproducible software defect with bounded scope, same-surface evidence, and independent root verification."
+description: "Reproduce, fix, and independently verify a software defect."
 ---
 
 # Bug Fix

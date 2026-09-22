@@ -1,6 +1,6 @@
 ---
 name: refactoring
-description: "Improve code structure while pinning and proving unchanged externally observable behavior."
+description: "Improve code structure while verifying unchanged behavior."
 ---
 
 # Refactoring

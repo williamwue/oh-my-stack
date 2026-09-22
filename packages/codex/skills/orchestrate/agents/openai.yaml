@@ -1,6 +1,6 @@
 interface:
-  display_name: "Orchestrate"
-  short_description: "Orchestrate workflow"
+  display_name: "Workflow: Orchestrate"
+  short_description: "Coordinate ongoing engineering work with bounded tasks and indep"
   default_prompt: "Use $orchestrate for this task."
 policy:
   allow_implicit_invocation: false

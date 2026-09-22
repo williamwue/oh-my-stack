@@ -1,6 +1,6 @@
 interface:
-  display_name: "Autopilot Full"
-  short_description: "Autopilot Full workflow"
+  display_name: "Workflow: Autopilot Full"
+  short_description: "Build, review, and land a queue only with explicit authorization"
   default_prompt: "Use $autopilot-full for this task."
 policy:
   allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Never Block On The Human"
-  short_description: "Principle Never Block On The Human workflow"
+  display_name: "Principle: Never Block On The Human"
+  short_description: "Proceed with authorized reversible work; ask when authority is n"
   default_prompt: "Use $principle-never-block-on-the-human for this task."
 policy:
   allow_implicit_invocation: false

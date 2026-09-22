@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Make Operations Idempotent"
-  short_description: "Principle Make Operations Idempotent workflow"
+  display_name: "Principle: Make Operations Idempotent"
+  short_description: "Make retries and partial runs converge on the same result."
   default_prompt: "Use $principle-make-operations-idempotent for this task."
 policy:
   allow_implicit_invocation: false

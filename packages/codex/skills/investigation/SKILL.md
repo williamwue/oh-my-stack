@@ -1,6 +1,6 @@
 ---
 name: investigation
-description: "Answer a read-only engineering question from repository evidence without changing implementation files."
+description: "Answer an engineering question from evidence without changing code."
 ---
 
 # Investigation

@@ -1,6 +1,6 @@
 interface:
-  display_name: "Triage Issue Reports"
-  short_description: "Triage Issue Reports workflow"
+  display_name: "Workflow: Triage Issue Reports"
+  short_description: "Benny triage automation only: assess Slack reports and deduplica"
   default_prompt: "Use $triage-issue-reports for this task."
 policy:
   allow_implicit_invocation: false

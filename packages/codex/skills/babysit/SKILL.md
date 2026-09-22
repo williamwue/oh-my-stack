@@ -1,6 +1,6 @@
 ---
 name: babysit
-description: "Inspect or drive a pull request toward merge-ready while keeping status checks, repair authority, and merge authority separate."
+description: "Check or repair a pull request; require separate merge authorization."
 ---
 
 # Babysit

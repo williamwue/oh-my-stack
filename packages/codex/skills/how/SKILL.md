@@ -1,6 +1,6 @@
 ---
 name: how
-description: "Explain how a code path or subsystem works through evidence-backed exploration and a verified architectural walkthrough."
+description: "Explain a code path or subsystem using verified repository evidence."
 ---
 
 # How

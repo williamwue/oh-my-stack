@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Fix Root Causes"
-  short_description: "Principle Fix Root Causes workflow"
+  display_name: "Principle: Fix Root Causes"
+  short_description: "Reproduce a defect and repair its cause instead of hiding sympto"
   default_prompt: "Use $principle-fix-root-causes for this task."
 policy:
   allow_implicit_invocation: false

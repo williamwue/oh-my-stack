@@ -1,6 +1,6 @@
 ---
 name: opening-a-pr
-description: "Prepare and, only when explicitly requested, publish a reviewed branch as a ready pull request with verified scope and evidence."
+description: "Prepare a reviewed pull request; publish only when explicitly requested."
 ---
 
 # Opening a Pull Request

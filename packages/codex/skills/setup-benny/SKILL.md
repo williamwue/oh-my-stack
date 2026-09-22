@@ -1,6 +1,6 @@
 ---
 name: setup-benny
-description: "Configure Benny and prepare its triage and repro automations. Use when installing Benny or changing its Slack, tracker, repository, routing, control, model, or budget settings."
+description: "Configure Benny triage and reproduction automations."
 ---
 
 # Set up Benny

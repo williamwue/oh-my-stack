@@ -4,14 +4,13 @@ All notable changes to Oh My Stack are recorded here. The project uses
 Semantic Versioning prereleases while runtime compatibility is still being
 established.
 
-## 0.2.0-alpha.4 - Unreleased
+## 0.2.0-alpha.4 - 2026-09-23
 
-- Reduced the default Codex marketplace plugin from 49 initial Skill entries
-  to four primary entrypoints.
-- Kept the other 45 public workflows in a packaged, non-scanned library that
-  `poteto-mode` loads only after routing selects one.
-- Preserved the complete 49-Skill Codex archive for direct-invocation and
-  compatibility use cases.
+- Preserved all 49 direct Skill entrypoints in the default Codex plugin.
+- Shortened Codex discovery descriptions while preserving full instructions
+  and existing invocation policies.
+- Categorized 26 workflows and 23 principles in the Skill directory, generated
+  catalogs, and Codex display names without changing invocation names.
 
 ## 0.2.0-alpha.3 - 2026-09-22
 

@@ -1,6 +1,6 @@
 interface:
-  display_name: "Unslop"
-  short_description: "Unslop workflow"
+  display_name: "Workflow: Unslop"
+  short_description: "Remove AI writing patterns when editing prose."
   default_prompt: "Use $unslop for this task."
 policy:
   allow_implicit_invocation: false

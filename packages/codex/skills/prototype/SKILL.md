@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: "Build an isolated throwaway experiment that produces evidence for one explicit design or behavior decision."
+description: "Test a design decision with an isolated throwaway experiment."
 ---
 
 # Prototype

@@ -1,6 +1,6 @@
 ---
 name: autopilot-stack
-description: "Build, independently verify, and arrange an authorized queue as one linear reviewable change stack while reserving every landing decision for the operator."
+description: "Build and review a linear change stack; leave landing to the operator."
 ---
 
 # Autopilot Stack

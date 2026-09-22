@@ -1,6 +1,6 @@
 interface:
-  display_name: "Principle Attack The Premise"
-  short_description: "Principle Attack The Premise workflow"
+  display_name: "Principle: Attack The Premise"
+  short_description: "Question a shared premise after multiple fixes fail the same che"
   default_prompt: "Use $principle-attack-the-premise for this task."
 policy:
   allow_implicit_invocation: false

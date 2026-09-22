@@ -1,6 +1,6 @@
 ---
 name: principle-migrate-callers-then-delete-legacy-apis
-description: "Apply when introducing a new internal API while old callers still exist. Migrate callers and delete the old API in the same wave instead of preserving compatibility layers."
+description: "Migrate callers and remove the old internal API in the same change."
 ---
 
 # Migrate Callers Then Delete Legacy APIs

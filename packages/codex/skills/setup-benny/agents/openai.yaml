@@ -1,6 +1,6 @@
 interface:
-  display_name: "Setup Benny"
-  short_description: "Setup Benny workflow"
+  display_name: "Workflow: Setup Benny"
+  short_description: "Configure Benny triage and reproduction automations."
   default_prompt: "Use $setup-benny for this task."
 policy:
   allow_implicit_invocation: false

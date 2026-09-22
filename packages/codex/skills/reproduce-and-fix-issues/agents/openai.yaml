@@ -1,6 +1,6 @@
 interface:
-  display_name: "Reproduce And Fix Issues"
-  short_description: "Reproduce And Fix Issues workflow"
+  display_name: "Workflow: Reproduce And Fix Issues"
+  short_description: "Benny repro automation only: reproduce triaged bugs before a dra"
   default_prompt: "Use $reproduce-and-fix-issues for this task."
 policy:
   allow_implicit_invocation: false
