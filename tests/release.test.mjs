@@ -10,7 +10,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 
@@ -40,10 +40,10 @@ test("release archives and manifest are byte-reproducible", async () => {
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.2.0-alpha.3.tar.gz",
-    "oh-my-stack-codex-0.2.0-alpha.3.tar.gz",
-    "oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz",
-    "oh-my-stack-omp-0.2.0-alpha.3.tar.gz",
+    "oh-my-stack-claude-code-0.2.0-alpha.4.tar.gz",
+    "oh-my-stack-codex-0.2.0-alpha.4.tar.gz",
+    "oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz",
+    "oh-my-stack-omp-0.2.0-alpha.4.tar.gz",
     "release-manifest.json",
   ]);
 });
@@ -81,10 +81,38 @@ test("Codex plugin bundle exposes the generated package through one local market
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
     assert.equal(packagedSkills.length, 49);
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
+    const catalog = JSON.parse(await readFile(join(repoRoot, "src", "core", "skill-catalog.json"), "utf8"));
+    const pluginFiles = await packageInventory(join(extracted, "plugins", "oh-my-stack"));
+    const pluginSkills = pluginFiles
+      .map((file) => file.path)
+      .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path))
+      .map((path) => path.split("/")[1]);
+    const librarySkills = pluginFiles
+      .map((file) => file.path)
+      .filter((path) => /^library\/skills\/[^/]+\/SKILL\.md$/.test(path))
+      .map((path) => path.split("/")[2]);
+    assert.deepEqual(pluginSkills, catalog.codexPluginEntrypoints);
     assert.deepEqual(
-      await packageInventory(join(extracted, "plugins", "oh-my-stack")),
-      codexArtifact.files,
+      [...pluginSkills, ...librarySkills].sort(),
+      catalog.public,
     );
+    assert.equal(librarySkills.length, catalog.public.length - catalog.codexPluginEntrypoints.length);
+    assert.equal(pluginFiles.some((file) => /(^|\/)check-[^/]+\//.test(file.path)), false);
+    const routerPath = join(extracted, "plugins", "oh-my-stack", "skills", "poteto-mode", "SKILL.md");
+    const router = await readFile(routerPath, "utf8");
+    assert.match(router, /\.\.\/\.\.\/library\/skills\/<workflow-name>\/SKILL\.md/);
+    const deferredFeature = resolve(join(routerPath, ".."), "../../library/skills/feature/SKILL.md");
+    assert.match(await readFile(deferredFeature, "utf8"), /^---[\s\S]*\n# Feature\n/m);
+    const compactGeneration = JSON.parse(
+      await readFile(join(extracted, "plugins", "oh-my-stack", "GENERATION.json"), "utf8"),
+    );
+    assert.deepEqual(compactGeneration.skills, {
+      audience: "public",
+      included: catalog.public.length,
+      exposed: catalog.codexPluginEntrypoints.length,
+      deferred: catalog.public.length - catalog.codexPluginEntrypoints.length,
+      omittedProbes: catalog.probes.length,
+    });
     assert.equal(
       JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", "plugin.json"), "utf8")).version,
       manifest.version,

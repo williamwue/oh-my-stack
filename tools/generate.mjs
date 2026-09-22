@@ -131,21 +131,33 @@ function validateProject(project) {
   assert(project.displayName && project.description, "project: displayName and description are required");
 }
 
-function validateSkillCatalog(catalog, skillNames) {
+function validateSkillCatalog(catalog, skills) {
+  const skillNames = skills.map((skill) => skill.metadata.name);
   assertKeys(
     catalog,
-    new Set(["$schema", "schemaVersion", "public", "probes"]),
+    new Set(["$schema", "schemaVersion", "codexPluginEntrypoints", "public", "probes"]),
     "skill catalog",
   );
   assert(catalog.schemaVersion === 1, "skill catalog: schemaVersion must be 1");
+  assert(Array.isArray(catalog.codexPluginEntrypoints), "skill catalog: codexPluginEntrypoints must be an array");
   assert(Array.isArray(catalog.public), "skill catalog: public must be an array");
   assert(Array.isArray(catalog.probes), "skill catalog: probes must be an array");
+  const codexPluginEntrypoints = new Set(catalog.codexPluginEntrypoints);
   const publicNames = new Set(catalog.public);
   const probeNames = new Set(catalog.probes);
+  assert(codexPluginEntrypoints.size === catalog.codexPluginEntrypoints.length, "skill catalog: duplicate Codex plugin entrypoint");
   assert(publicNames.size === catalog.public.length, "skill catalog: duplicate public Skill");
   assert(probeNames.size === catalog.probes.length, "skill catalog: duplicate probe Skill");
+  assert(catalog.codexPluginEntrypoints.length > 0, "skill catalog: Codex plugin needs at least one entrypoint");
+  assert(catalog.codexPluginEntrypoints.every((name, index) => index === 0 || catalog.codexPluginEntrypoints[index - 1] < name), "skill catalog: Codex plugin entrypoints must be sorted");
   assert(catalog.public.every((name, index) => index === 0 || catalog.public[index - 1] < name), "skill catalog: public Skills must be sorted");
   assert(catalog.probes.every((name, index) => index === 0 || catalog.probes[index - 1] < name), "skill catalog: probe Skills must be sorted");
+  for (const name of codexPluginEntrypoints) assert(publicNames.has(name), `skill catalog: Codex plugin entrypoint is not public: ${name}`);
+  assert(codexPluginEntrypoints.has("poteto-mode"), "skill catalog: compact Codex plugin must expose poteto-mode");
+  for (const skill of skills) {
+    if (skill.metadata.invocation !== "automatic" || !publicNames.has(skill.metadata.name)) continue;
+    assert(codexPluginEntrypoints.has(skill.metadata.name), `skill catalog: automatic Skill must be a Codex plugin entrypoint: ${skill.metadata.name}`);
+  }
   for (const name of publicNames) assert(!probeNames.has(name), `skill catalog: ${name} has two audiences`);
   const catalogNames = [...publicNames, ...probeNames].sort();
   assert(JSON.stringify(catalogNames) === JSON.stringify([...skillNames].sort()), "skill catalog: must partition every portable Skill exactly once");
@@ -352,7 +364,7 @@ export async function loadModel(root = repoRoot) {
   }
   assert(skills.length > 0, "portable core has no skills");
   const skillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
-  validateSkillCatalog(skillCatalog, skills.map((skill) => skill.metadata.name));
+  validateSkillCatalog(skillCatalog, skills);
 
   const roles = [];
   const roleRoot = join(root, "src", "core", "roles");

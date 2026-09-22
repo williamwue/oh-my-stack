@@ -46,7 +46,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -279,11 +279,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.3 release notes](docs/releases/0.2.0-alpha.3.md). Claude Code is
+[0.2.0-alpha.4 release notes](docs/releases/0.2.0-alpha.4.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -292,8 +292,11 @@ codex plugin add oh-my-stack@oh-my-stack
 ```
 
 Start a new Codex task after installation so its bundled Skills are loaded.
-The marketplace bundle contains the exact same generated Codex plugin tree as
-the standalone Codex runtime archive; it does not maintain a second Skill copy.
+The marketplace bundle exposes only `bug-fix`, `poteto-mode`,
+`prove-it-works`, and `setup-oh-my-stack` to Codex's initial Skill catalog.
+The other 45 public workflows ship under `library/skills/` and are loaded by
+`poteto-mode` only after routing selects one. The standalone Codex runtime
+archive retains all 49 public Skills for compatibility and direct invocation.
 
 Each generated package contains `scripts/collect-model-inventory.mjs`,
 `scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The

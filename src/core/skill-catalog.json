@@ -1,6 +1,12 @@
 {
   "$schema": "../schemas/skill-catalog.schema.json",
   "schemaVersion": 1,
+  "codexPluginEntrypoints": [
+    "bug-fix",
+    "poteto-mode",
+    "prove-it-works",
+    "setup-oh-my-stack"
+  ],
   "public": [
     "autonomous-run",
     "autopilot-full",

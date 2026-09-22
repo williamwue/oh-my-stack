@@ -3,6 +3,6 @@
   "schemaVersion": 1,
   "name": "oh-my-stack",
   "displayName": "Oh My Stack",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.4",
   "description": "Portable, verifiable engineering workflows for agent runtimes."
 }

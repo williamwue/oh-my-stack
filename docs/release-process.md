@@ -6,9 +6,12 @@ archives are deterministic, contain one target package under the
 SHA-256 checksums, and explicit verification maturity.
 
 The Codex plugin bundle is a fourth archive rooted at
-`oh-my-stack-marketplace/`. It contains the generated Codex package at
-`plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`.
+`oh-my-stack-marketplace/`. It contains a compact view of the generated Codex
+package at `plugins/oh-my-stack/` and a repository marketplace at
+`.agents/plugins/marketplace.json`. Four primary Skills remain exposed to the
+initial Codex catalog; the other public workflows move into the packaged
+`library/skills/` tree for router-directed loading. The standalone Codex
+archive remains the complete 49-Skill package.
 
 ## Local release candidate
 
@@ -96,8 +99,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.3
-node tools/build-release.mjs --tag v0.2.0-alpha.3
+node tools/build-release.mjs --check --tag v0.2.0-alpha.4
+node tools/build-release.mjs --tag v0.2.0-alpha.4
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

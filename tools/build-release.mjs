@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFile } from "node:child_process";
-import { cp, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -71,6 +71,15 @@ async function buildPluginBundle({ root, out, project, bundle }) {
     throw new Error("invalid Codex marketplace bundle configuration");
   }
   const packageRoot = join(root, bundle.packageDir);
+  const skillCatalog = JSON.parse(await readFile(join(root, "src", "core", "skill-catalog.json"), "utf8"));
+  const entrypointNames = skillCatalog.codexPluginEntrypoints;
+  if (!Array.isArray(entrypointNames) || entrypointNames.length === 0) {
+    throw new Error("Codex marketplace bundle requires compact plugin entrypoints");
+  }
+  const entrypoints = new Set(entrypointNames);
+  for (const name of entrypoints) {
+    if (!skillCatalog.public.includes(name)) throw new Error(`Codex plugin entrypoint is not public: ${name}`);
+  }
   const portableManifest = JSON.parse(await readFile(join(packageRoot, "plugin.json"), "utf8"));
   const compatibilityManifest = JSON.parse(
     await readFile(join(packageRoot, ".codex-plugin", "plugin.json"), "utf8"),
@@ -89,6 +98,35 @@ async function buildPluginBundle({ root, out, project, bundle }) {
     const pluginRoot = join(staging, "plugins", project.name);
     await mkdir(join(staging, ".agents", "plugins"), { recursive: true });
     await cp(packageRoot, pluginRoot, { recursive: true });
+    const libraryRoot = join(pluginRoot, "library", "skills");
+    await mkdir(libraryRoot, { recursive: true });
+    for (const name of skillCatalog.public) {
+      if (entrypoints.has(name)) continue;
+      await rename(join(pluginRoot, "skills", name), join(libraryRoot, name));
+    }
+
+    const routerPath = join(pluginRoot, "skills", "poteto-mode", "SKILL.md");
+    const router = await readFile(routerPath, "utf8");
+    await writeFile(routerPath, `${router.trimEnd()}\n\n## Codex packaged workflow library\n\nThis compact Codex plugin exposes only its primary entrypoints to the initial\nSkill catalog. After selecting a workflow, read its complete instructions from\n\`../../library/skills/<workflow-name>/SKILL.md\`, resolved relative to this\nfile. Supporting Skills and principles named by that workflow use the same\nlibrary path. Treat a library workflow exactly like a selected Skill, including\nits safety boundaries and output contract. Do not infer its instructions from\nthe router table.\n`);
+
+    const generatedCatalogPath = join(pluginRoot, "SKILL_CATALOG.json");
+    const generatedCatalog = JSON.parse(await readFile(generatedCatalogPath, "utf8"));
+    generatedCatalog.skills = generatedCatalog.skills.map((skill) => ({
+      ...skill,
+      exposure: entrypoints.has(skill.name) ? "entrypoint" : "deferred",
+    }));
+    await writeFile(generatedCatalogPath, `${JSON.stringify(generatedCatalog, null, 2)}\n`);
+
+    const generationPath = join(pluginRoot, "GENERATION.json");
+    const generation = JSON.parse(await readFile(generationPath, "utf8"));
+    generation.skills = {
+      audience: "public",
+      included: skillCatalog.public.length,
+      exposed: entrypointNames.length,
+      deferred: skillCatalog.public.length - entrypointNames.length,
+      omittedProbes: skillCatalog.probes.length,
+    };
+    await writeFile(generationPath, `${JSON.stringify(generation, null, 2)}\n`);
     const marketplace = {
       name: bundle.marketplace.name,
       interface: bundle.marketplace.interface,
@@ -114,6 +152,10 @@ async function buildPluginBundle({ root, out, project, bundle }) {
       files,
       marketplace,
       pluginPath: `plugins/${project.name}`,
+      skillExposure: {
+        entrypoints: entrypointNames,
+        deferred: skillCatalog.public.length - entrypointNames.length,
+      },
     };
   } finally {
     await rm(staging, { recursive: true, force: true });

@@ -90,6 +90,18 @@ test("loads sixty-one portable Skills, seven roles, and three adapters", async (
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
   assert.equal(model.skillCatalog.public.length, 49);
   assert.equal(model.skillCatalog.probes.length, 12);
+  assert.deepEqual(model.skillCatalog.codexPluginEntrypoints, [
+    "bug-fix",
+    "poteto-mode",
+    "prove-it-works",
+    "setup-oh-my-stack",
+  ]);
+  assert.deepEqual(
+    model.skills
+      .filter((skill) => skill.metadata.invocation === "automatic" && model.skillCatalog.public.includes(skill.metadata.name))
+      .map((skill) => skill.metadata.name),
+    ["bug-fix", "prove-it-works"],
+  );
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)
     .filter((name) => name.startsWith("check-")));
@@ -340,5 +352,6 @@ test("generated manifests identify the public source repository", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.2.0-alpha.3");
+  const packageManifest = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
+  assert.equal(model.project.version, packageManifest.version);
 });
