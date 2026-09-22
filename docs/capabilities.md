@@ -298,9 +298,13 @@ Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
 `autopilot-full` fixtures separately prove live loading and execution.
-The three Benny Skills pass a deterministic local-provider fixture, but do not
-yet have focused OMP or Codex runs. The complete 49-Skill matrix will be
-refreshed after those focused runs.
+The three Benny Skills pass deterministic and focused live local-provider
+fixtures on OMP 18.2.8 and Codex CLI 0.155.1. Each live run preserves one fresh
+read-only media-review identity, root-only provider writes, two baseline and
+two patched UI records, and an unmerged draft PR. These are W3 authority and
+state-machine results; the UI, media, message, tracker, automation, and PR
+providers are simulated rather than authenticated W4 systems. The complete
+49-Skill matrix remains to be refreshed.
 OMP transcripts contain the
 matching native
 `skill://` reads;

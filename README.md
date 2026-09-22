@@ -236,8 +236,10 @@ remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
 fixtures. The three Benny Skills pass a deterministic local-provider fixture
 covering dormant setup, source-bound triage, tracker-write compensation,
 trusted-marker handoff, repeated before-and-after UI proof, independent media
-review identity, and an unmerged draft pull request. Live OMP and Codex Benny
-runs and the refreshed 49-Skill whole-catalog matrix remain pending.
+review identity, and an unmerged draft pull request. Focused OMP 18.2.8 and
+Codex CLI 0.155.1 runs pass the same local-provider protocol at W3 with one
+fresh read-only reviewer and externally audited parent and child transcripts.
+The refreshed 49-Skill whole-catalog matrix remains pending.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a

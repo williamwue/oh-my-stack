@@ -617,9 +617,15 @@ Current progress:
   proof to an independent reviewer identity, and creates an unmerged,
   undeployed draft pull request on an isolated branch. Negative cases reject a
   missing parent, untrusted marker, and insufficient UI proof.
-- Focused OMP and Codex live runs, transcript audits, and the refreshed
-  49-public-Skill matrix remain pending. Claude Code live verification remains
-  deferred by project decision.
+- Focused OMP 18.2.8 and Codex CLI 0.155.1 runs now pass the same
+  local-provider protocol at W3. Each loads all three generated Skills, plans
+  while dormant, posts one thread-only triage verdict, starts one fresh
+  read-only media reviewer before reproduction, records two baseline and two
+  patched UI attempts, creates one unmerged draft PR, and enables only after
+  thread safety passes. External parent and child transcript audits confirm
+  root-only provider writes and read-only reviewer behavior. Authenticated W4
+  integrations and the refreshed 49-public-Skill matrix remain pending. Claude
+  Code live verification remains deferred by project decision.
 
 Add advanced workflows one at a time in this order:
 

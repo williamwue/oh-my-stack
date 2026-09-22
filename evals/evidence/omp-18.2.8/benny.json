@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-benny",
+  "fixture": "benny",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Three generated Benny Skills in a fresh disposable Git repository; cursor/default root session 01a0c75f-636e-72c4-a019-19ae3fba96de; one fresh built-in MediaReviewer child; deterministic local communication, tracker, UI, media, and draft-PR provider; no authenticated external service.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "The root loaded setup-benny, triage-issue-reports, and reproduce-and-fix-issues from the generated project-local OMP package before the first provider mutation."
+    },
+    {
+      "id": "dormant-plan-and-thread-only-triage",
+      "status": "pass",
+      "evidence": "The plan action moved both absent automations only to DRAFT. Triage then froze C-SOURCE/1000.0001, created ISSUE-701 once, wrote one trusted [benny:bug] reply under that parent, and emitted no source-channel root post."
+    },
+    {
+      "id": "fresh-read-only-media-review",
+      "status": "pass",
+      "evidence": "The root started the fresh native MediaReviewer task before reproduction and preserved reviewer-MediaReviewer in provider state. External parsing of its child transcript found only read, grep, read-only directory inspection, and result submission; it performed no provider, message, tracker, Git, or fixture write."
+    },
+    {
+      "id": "bounded-reproduction-and-draft-fix",
+      "status": "pass",
+      "evidence": "The provider records two baseline UI attempts, two patched attempts, independent media verdict VISIBLE_BROKEN_STATE, one ISSUE-701-linked PR-801 in DRAFT, merged=false, deployed=false, and no gate raise. Main remains broken while benny-fix-701 contains the bounded fix."
+    },
+    {
+      "id": "enablement-after-thread-safety",
+      "status": "pass",
+      "evidence": "Both automations moved to ENABLED only after exactly two source-thread replies, a trusted marker, the independent review identity, before-and-after proof, and a draft PR existed."
+    },
+    {
+      "id": "root-state-machine-and-verifier-passed",
+      "status": "pass",
+      "evidence": "The root invoked only plan, triage, reproduce, enable, and verify as mutating fixture commands. The in-session and external verifiers both produced BENNY_OK=e1e28fc69f8428757d33d030bb527848b29482ca."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated evidence against deterministic local providers, not W4 completion against authenticated Slack, a tracker, real app control, media capture, GitHub, automation, deployment, or another external service.",
+    "The fixture records simulated UI and media observations; it proves workflow gates and authority boundaries, not visual correctness of a production application.",
+    "The built-in OMP reviewer role exposes bash. The assignment and persisted transcript constrained it to read-only behavior, but the runtime role is not capability-level filesystem read-only.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-benny",
+  "fixture": "benny",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Three generated project-local Benny Skills in a fresh disposable Git repository; gpt-6-astra high root session 01a0c762-c16b-7ec0-bcf0-523c898fefba; one fresh fork_turns=none media reviewer /root/media_reviewer; user config and project rules ignored; deterministic local communication, tracker, UI, media, and draft-PR provider; no authenticated external service.",
+    "permissionProfile": "Danger-full-access restricted operationally to the disposable fixture because the bounded fix creates a local branch and commit"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "The root read setup-benny, triage-issue-reports, and reproduce-and-fix-issues from the generated project-local Codex package before the first provider mutation."
+    },
+    {
+      "id": "dormant-plan-and-thread-only-triage",
+      "status": "pass",
+      "evidence": "The plan action moved both absent automations only to DRAFT. Triage then froze C-SOURCE/1000.0001, created ISSUE-701 once, wrote one trusted [benny:bug] reply under that parent, and emitted no source-channel root post."
+    },
+    {
+      "id": "fresh-read-only-media-review",
+      "status": "pass",
+      "evidence": "Root ordinal 53 spawned /root/media_reviewer with fork_turns=none after triage and before reproduction; waits at ordinals 64 and 71 froze its result. Its child transcript contains only four read-only cat commands and no provider, message, tracker, Git, or fixture write."
+    },
+    {
+      "id": "bounded-reproduction-and-draft-fix",
+      "status": "pass",
+      "evidence": "The provider records two baseline UI attempts, two patched attempts, reviewer-/root/media_reviewer with verdict VISIBLE_BROKEN_STATE, and one ISSUE-701-linked PR-801 in DRAFT with merged=false and deployed=false. Main remains broken while benny-fix-701 contains the bounded fix."
+    },
+    {
+      "id": "enablement-after-thread-safety",
+      "status": "pass",
+      "evidence": "Both automations moved to ENABLED only after exactly two source-thread replies, a trusted marker, the independent review identity, before-and-after proof, and a draft PR existed."
+    },
+    {
+      "id": "root-state-machine-and-verifier-passed",
+      "status": "pass",
+      "evidence": "Completed root mutation calls were exactly plan, triage, reproduce, and enable, followed by verify; no child performed one of those actions. The in-session and external verifiers both produced BENNY_OK=c2f73afa3a1436d52c9a4caa5611f6f33fb2dfc6."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated evidence against deterministic local providers, not W4 completion against authenticated Slack, a tracker, real app control, media capture, GitHub, automation, deployment, or another external service.",
+    "The fixture records simulated UI and media observations; it proves workflow gates and authority boundaries, not visual correctness of a production application.",
+    "Codex CLI exposes no generated custom-role selector on spawn, and danger-full-access remained available at the process boundary. The fork_turns=none assignment and persisted child commands prove operational read-only behavior, not capability-level tool removal.",
+    "Unrelated Cloudflare MCP authentication warnings occurred at startup and shutdown; no MCP operation participated in the fixture."
+  ]
+}
