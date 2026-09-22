@@ -64,6 +64,13 @@ Each capability has one status:
 
 Records also name the provider, permissions, probe, and evidence artifact. Documentation can seed a hypothesis but cannot produce a `pass` observation.
 
+`coordination.scheduled_wake` is credited only when a later host-scheduled run
+actually re-enters the workflow, validates its durable anchors, re-measures the
+provider, and verifies schedule cleanup at a terminal state. Successfully
+creating an active schedule is delivery evidence for the operation, but not a
+passing wake. A documented feature or an untriggered schedule remains
+`unknown`; a durable checkpoint may still provide an explicit fallback.
+
 ## Canonical capabilities
 
 ### Skills and resources
@@ -332,6 +339,17 @@ batched edit to the active and future units. This is W1 evidence for ready local
 work and a workspace decision-log fallback, not evidence for
 `coordination.scheduled_wake`, external waiting, cold-start restart, live
 deadline or cost enforcement, discard or pivot behavior, or W4 completion.
+
+The waiting-branch fixture separately enforces an anchored runtime-issued wake
+identifier, one-minute next observation, fifteen-minute absolute deadline,
+maximum wake count, cold-start authority, and terminal cleanup. Codex Desktop
+26.915.31945 attempt 1 created a real current-task heartbeat and the harness
+independently released the provider, but no scheduled run re-entered the
+workflow before the deadline. The heartbeat was then deleted without manually
+running resume or cleanup. The task stayed active during that observation
+window, which may explain the non-dispatch but was not proven. This is retained
+as W0 failure evidence; schedule creation is not a wake, and desktop
+`coordination.scheduled_wake` remains `unknown` rather than `unsupported`.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

@@ -2,6 +2,46 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "path": "evals/fixtures/autonomous-run-wake/provider.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Expose and independently release one pinned local provider revision for the scheduled-wake fixture.",
+      "network": false,
+      "writes": ["disposable autonomous-run wake provider state on release"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run-wake/setup.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Initialize the disposable waiting provider state for the scheduled-wake fixture.",
+      "network": false,
+      "writes": ["disposable autonomous-run wake fixture copy"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run-wake/verify-final.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify one anchored heartbeat wake consumes one ready event and reaches the fixed predicate without publication.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run-wake/verify-pause.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify the initial waiting observation produced a bounded checkpoint and no premature completion.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run-wake/wake.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Persist and validate the runtime-issued heartbeat handoff, wake count, decision trail, and completion receipt.",
+      "network": false,
+      "writes": ["disposable autonomous-run wake checkpoint, decision log, provider state, and report"],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
       "path": "evals/fixtures/autonomous-run/controller.mjs",
       "owner": "oh-my-stack",
       "purpose": "Expose one active local unit at a time and advance the immutable predicate only after one clean verified commit.",

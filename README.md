@@ -300,6 +300,16 @@ is continuous-local W1 evidence only; host-native scheduled or event wake,
 external waiting, restart, deadline and cost enforcement, discard or pivot
 behavior, and W4 completion remain unverified.
 
+The deterministic waiting-branch fixture now persists a runtime-issued wake
+identifier, provider revision, next observation, absolute deadline, wake-count
+budget, later-session authority, and verified-disarm boundary. Its first Codex
+Desktop 26.915.31945 attempt created a real one-minute current-task heartbeat
+and independently released the provider, but no scheduled run re-entered the
+workflow during the fixed fifteen-minute window. The heartbeat was deleted at
+the deadline without manually simulating resume or cleanup. Because the target
+task remained active throughout the window and the cause was not isolated,
+`coordination.scheduled_wake` remains `unknown`, not `unsupported`.
+
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
 setup or installation places those definitions in the host's discovered role

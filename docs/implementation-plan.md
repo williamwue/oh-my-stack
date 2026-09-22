@@ -493,6 +493,24 @@ Current progress:
   branch, external waiting, cold-start restart, deadline or cost enforcement,
   discard or pivot behavior, or W4 completion. Host-native wake is therefore
   the remaining `autonomous-run` slice before `shipping` begins.
+- The waiting-branch protocol and deterministic fixture now bind the provider
+  revision, runtime-issued wake identifier, next useful observation, absolute
+  deadline, maximum wake count, cold-start authority, and verified cleanup.
+  Negative tests reject a mismatched identifier, premature observation,
+  exhausted wake budget, and expired deadline without consuming the provider
+  event.
+- Codex Desktop 26.915.31945 attempt 1 created an actual one-minute heartbeat
+  for the current task, saved the waiting checkpoint, and observed an
+  independent `WAITING` to `READY` provider transition. No scheduled run
+  re-entered the workflow before the fixed fifteen-minute deadline, so the
+  heartbeat was deleted and neither resume nor cleanup was simulated. The
+  target task remained active throughout the window; that is a possible but
+  unproven explanation. The result remains a failed W0 attempt and desktop
+  `coordination.scheduled_wake` remains `unknown`.
+- The wake branch is therefore not graduated and `shipping` must not begin
+  until a later host-scheduled run actually validates the checkpoint,
+  re-measures the provider, advances once, and verifies disarm. Claude Code
+  live verification remains deferred by project decision.
 
 Add advanced workflows one at a time in this order:
 

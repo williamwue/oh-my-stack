@@ -34,6 +34,16 @@ to the shortest possible interval. If no verified wake mechanism exists, use a
 durable pause checkpoint and stop; never simulate wake with an unbounded sleep
 or busy-poll loop.
 
+Before arming a wake, record the frozen predicate and provider revision, the
+checkpoint location, next useful observation time, maximum wake count or
+deadline, and the exact authority available to a later cold start. Store the
+runtime-issued wake identifier after creation. A wake run must validate those
+anchors before acting, increment the durable wake count once, and re-measure
+instead of trusting an earlier status report. Disarm the wake immediately when
+the predicate or another stop condition is reached. If disarming cannot be
+verified, report the still-active wake as an incomplete cleanup rather than
+claiming completion.
+
 ## Iteration
 
 1. Measure the predicate and freeze the current evidence.

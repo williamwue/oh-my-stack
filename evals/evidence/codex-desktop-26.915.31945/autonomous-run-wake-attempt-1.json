@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-desktop-26.915.31945-macos-arm64-autonomous-run-wake-attempt-1",
+  "fixture": "autonomous-run-wake",
+  "profile": "codex-desktop",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D0",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": []
+  },
+  "runtime": {
+    "name": "codex-desktop",
+    "version": "26.915.31945",
+    "platform": "macos-arm64",
+    "configuration": "Current local Codex task 01a0c27b-39b8-7593-8b18-6e40c1afa47a; generated autonomous-run Skill read from the repository package; disposable local provider fixture; one actual current-thread heartbeat named OMS autonomous wake fixture 20260922 with runtime-issued id oms-autonomous-wake-fixture-20260922 and a one-minute interval.",
+    "permissionProfile": "Full-access local task constrained operationally to the disposable fixture and the heartbeat create/delete lifecycle"
+  },
+  "capabilities": [
+    "commands.run",
+    "coordination.durable_state",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "heartbeat-created-and-active",
+      "status": "pass",
+      "evidence": "The desktop automation operation created heartbeat oms-autonomous-wake-fixture-20260922 as ACTIVE at 2026-09-22T07:53:40+08:00 with FREQ=MINUTELY;INTERVAL=1 and the current task as its target."
+    },
+    {
+      "id": "waiting-checkpoint-anchored",
+      "status": "pass",
+      "evidence": "The fixture recorded provider-r1 WAITING, the runtime-issued heartbeat id, max two wake runs, a fifteen-minute budget, wakeCount 0, completionCount 0, and no report before returning control."
+    },
+    {
+      "id": "provider-released-independently",
+      "status": "pass",
+      "evidence": "The harness independently changed provider-r1 from WAITING to READY exactly once without running the resume or cleanup actions."
+    },
+    {
+      "id": "scheduled-run-reentered-workflow",
+      "status": "fail",
+      "evidence": "At the fixed 2026-09-22T08:08:40+08:00 deadline and a final observation at 08:08:52, no heartbeat run had re-entered the workflow: wakeCount remained 0, completionCount remained 0, and report.json did not exist."
+    },
+    {
+      "id": "heartbeat-deleted-at-deadline",
+      "status": "pass",
+      "evidence": "The desktop automation operation returned deleteStatus deleted for oms-autonomous-wake-fixture-20260922, and its automation file was no longer present. Resume and cleanup were deliberately not run manually."
+    }
+  ],
+  "limitations": [
+    "The target task remained active under the persistent project goal for the whole observation window. That may have prevented a same-task heartbeat from dispatching, but this attempt does not establish the cause.",
+    "Creating and later deleting an active schedule does not prove coordination.scheduled_wake; that capability remains unknown on the Codex desktop profile.",
+    "This attempt did not measure package discovery or explicit invocation and therefore makes no D1, D2, or D3 delivery claim.",
+    "This failed desktop attempt says nothing about OMP, Codex CLI, Codex IDE, or Claude Code wake behavior."
+  ]
+}

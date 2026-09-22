@@ -134,6 +134,25 @@ Within those responsibilities, an adapter owns:
 
 The host runtime performs the actual spawn, wait, cancellation, isolation, and tool execution. Adapters generate concrete prose and metadata; they do not proxy those calls. Runtime Skills must not need to read a foreign-host translation table before using a tool.
 
+### Long-running wake contract
+
+`coordination.scheduled_wake` means the runtime can start a later observation,
+not that the current process can sleep. Before a workflow arms a wake, it
+persists the fixed predicate, provider revision, checkpoint locator, next useful
+observation, wake-count or deadline budget, later-session authority, and every
+terminal stop. The adapter stores the runtime-issued wake identifier with that
+checkpoint. A later run validates the anchors, consumes at most one wake,
+re-measures the provider, and disarms the wake when the predicate or another
+stop condition is reached. Completion requires an inactive or deleted wake;
+creating a schedule alone is not conformance evidence.
+
+Scheduled wake and recurring automation are separate capabilities. A host may
+support a bounded follow-up on one task without supporting a standalone job on
+an arbitrary cadence. Adapters use only an observed host-native operation. If
+the operation is unavailable or cannot be verified, the portable fallback is a
+durable pause checkpoint. A background shell sleep, busy poll, or detached
+process is not a wake provider.
+
 ## Model policy
 
 The core separates workload class from role constraints and never names concrete models:
