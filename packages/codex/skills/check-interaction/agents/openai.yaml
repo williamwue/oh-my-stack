@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Interaction"
-  short_description: "Check Interaction workflow"
-  default_prompt: "Use $check-interaction for this task."
-policy:
-  allow_implicit_invocation: true

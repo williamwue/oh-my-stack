@@ -28,66 +28,6 @@
       "invocation": "automatic"
     },
     {
-      "name": "check-cancellation",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-custom-role",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-delegation",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-follow-up",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-interaction",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-model-routing",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-panel",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-parallel",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-resources",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-stale-replay",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-transcript",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
-      "name": "check-writer-isolation",
-      "audience": "probe",
-      "invocation": "automatic"
-    },
-    {
       "name": "feature",
       "audience": "public",
       "invocation": "explicit"

@@ -468,8 +468,15 @@ function renderClaudeRole(role) {
   ].join("\n");
 }
 
-export async function renderTarget(stageRoot, model, adapter) {
+function packageSkills(model, includeProbes) {
+  if (includeProbes) return model.skills;
+  const publicNames = new Set(model.skillCatalog.public);
+  return model.skills.filter((skill) => publicNames.has(skill.metadata.name));
+}
+
+export async function renderTarget(stageRoot, model, adapter, { includeProbes = false } = {}) {
   const target = join(stageRoot, adapter.packageDir);
+  const skills = packageSkills(model, includeProbes);
   const manifest = { ...adapter.manifest, version: model.project.version };
   await writeJson(join(target, adapter.manifestPath), manifest);
   if (adapter.portableManifestPath) {
@@ -479,7 +486,7 @@ export async function renderTarget(stageRoot, model, adapter) {
     });
   }
 
-  for (const skill of model.skills) {
+  for (const skill of skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
     await rm(join(skillTarget, "skill.json"));
@@ -496,7 +503,7 @@ export async function renderTarget(stageRoot, model, adapter) {
   await writeJson(join(target, "SKILL_CATALOG.json"), {
     schemaVersion: 1,
     target: adapter.id,
-    skills: model.skills.map((skill) => ({
+    skills: skills.map((skill) => ({
       name: skill.metadata.name,
       audience: audiences.get(skill.metadata.name),
       invocation: skill.metadata.invocation,
@@ -540,6 +547,11 @@ export async function renderTarget(stageRoot, model, adapter) {
     target: adapter.id,
     sourceVersion: model.project.version,
     profiles: adapter.profiles,
+    skills: {
+      audience: includeProbes ? "all" : "public",
+      included: skills.length,
+      omittedProbes: includeProbes ? 0 : model.skillCatalog.probes.length,
+    },
     claims: {
       delivery: "D0",
       workflow: "W0",
@@ -550,7 +562,8 @@ export async function renderTarget(stageRoot, model, adapter) {
   return target;
 }
 
-export async function validateRenderedTarget(target, adapter, model) {
+export async function validateRenderedTarget(target, adapter, model, { includeProbes = false } = {}) {
+  const skills = packageSkills(model, includeProbes);
   const manifestPath = join(target, adapter.manifestPath);
   assert(await exists(manifestPath), `${adapter.id}: generated manifest is missing`);
   const manifest = await readJson(manifestPath);
@@ -567,8 +580,11 @@ export async function validateRenderedTarget(target, adapter, model) {
   assert(generation.claims.delivery === "D0", `${adapter.id}: unprobed package overclaims delivery maturity`);
   assert(generation.claims.workflow === "W0", `${adapter.id}: unprobed package overclaims workflow conformance`);
   assert(JSON.stringify(generation.profiles) === JSON.stringify(adapter.profiles), `${adapter.id}: profile list drift`);
+  assert(generation.skills.audience === (includeProbes ? "all" : "public"), `${adapter.id}: generated Skill audience drift`);
+  assert(generation.skills.included === skills.length, `${adapter.id}: generated Skill count drift`);
+  assert(generation.skills.omittedProbes === (includeProbes ? 0 : model.skillCatalog.probes.length), `${adapter.id}: omitted probe count drift`);
 
-  for (const skill of model.skills) {
+  for (const skill of skills) {
     const skillPath = join(target, adapter.skillsDir, skill.metadata.name, "SKILL.md");
     const frontmatter = parseSkillFrontmatter(await readFile(skillPath, "utf8"), skillPath);
     assert(frontmatter.name === skill.metadata.name, `${adapter.id}: generated skill name drift`);
@@ -576,11 +592,15 @@ export async function validateRenderedTarget(target, adapter, model) {
       assert(await exists(join(dirname(skillPath), "agents", "openai.yaml")), "codex: missing Skill UI metadata");
     }
   }
+  for (const name of model.skillCatalog.probes) {
+    if (includeProbes) continue;
+    assert(!(await exists(join(target, adapter.skillsDir, name))), `${adapter.id}: probe Skill leaked into public package: ${name}`);
+  }
   const catalog = await readJson(join(target, "SKILL_CATALOG.json"));
   assert(catalog.target === adapter.id, `${adapter.id}: generated Skill catalog target drift`);
-  assert(catalog.skills.length === model.skills.length, `${adapter.id}: generated Skill catalog length drift`);
+  assert(catalog.skills.length === skills.length, `${adapter.id}: generated Skill catalog length drift`);
   assert(catalog.skills.filter((entry) => entry.audience === "public").length === model.skillCatalog.public.length, `${adapter.id}: generated public Skill catalog drift`);
-  assert(catalog.skills.filter((entry) => entry.audience === "probe").length === model.skillCatalog.probes.length, `${adapter.id}: generated probe Skill catalog drift`);
+  assert(catalog.skills.filter((entry) => entry.audience === "probe").length === (includeProbes ? model.skillCatalog.probes.length : 0), `${adapter.id}: generated probe Skill catalog drift`);
   for (const role of model.roles) {
     const extension = adapter.id === "codex" ? "toml" : "md";
     assert(
@@ -664,12 +684,35 @@ export async function generate({ root = repoRoot, check = false } = {}) {
   }
 }
 
+export async function generateProbeTargets({
+  root = repoRoot,
+  out = join(root, ".tmp", "probe-packages"),
+} = {}) {
+  const model = await loadModel(root);
+  await rm(out, { recursive: true, force: true });
+  await mkdir(out, { recursive: true });
+  for (const adapter of model.adapters) {
+    const target = await renderTarget(out, model, adapter, { includeProbes: true });
+    await validateRenderedTarget(target, adapter, model, { includeProbes: true });
+  }
+  return model;
+}
+
 async function main() {
-  const unknown = process.argv.slice(2).filter((argument) => argument !== "--check");
+  const unknown = process.argv.slice(2).filter(
+    (argument) => !["--check", "--include-probes"].includes(argument),
+  );
   assert(unknown.length === 0, `unknown arguments: ${unknown.join(" ")}`);
   const check = process.argv.includes("--check");
+  const includeProbes = process.argv.includes("--include-probes");
+  assert(!(check && includeProbes), "--check cannot be combined with --include-probes");
+  if (includeProbes) {
+    const model = await generateProbeTargets();
+    console.log(`Generated test-only targets from ${model.skills.length} Skill under .tmp/probe-packages/.`);
+    return;
+  }
   const model = await generate({ check });
-  console.log(`${check ? "Verified" : "Generated"} ${model.adapters.length} targets from ${model.skills.length} Skill.`);
+  console.log(`${check ? "Verified" : "Generated"} ${model.adapters.length} public targets with ${model.skillCatalog.public.length} of ${model.skills.length} source Skill.`);
 }
 
 if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {

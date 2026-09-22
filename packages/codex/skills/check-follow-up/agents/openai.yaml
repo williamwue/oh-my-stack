@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Follow Up"
-  short_description: "Check Follow Up workflow"
-  default_prompt: "Use $check-follow-up for this task."
-policy:
-  allow_implicit_invocation: true

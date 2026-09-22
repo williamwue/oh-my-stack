@@ -96,8 +96,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.2
-node tools/build-release.mjs --tag v0.2.0-alpha.2
+node tools/build-release.mjs --check --tag v0.2.0-alpha.3
+node tools/build-release.mjs --tag v0.2.0-alpha.3
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Delegation"
-  short_description: "Check Delegation workflow"
-  default_prompt: "Use $check-delegation for this task."
-policy:
-  allow_implicit_invocation: true

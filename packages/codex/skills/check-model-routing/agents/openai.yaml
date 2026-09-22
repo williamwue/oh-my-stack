@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Model Routing"
-  short_description: "Check Model Routing workflow"
-  default_prompt: "Use $check-model-routing for this task."
-policy:
-  allow_implicit_invocation: true

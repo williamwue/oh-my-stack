@@ -1,6 +1,6 @@
 {
   "name": "oh-my-stack",
-  "version": "0.2.0-alpha.2",
+  "version": "0.2.0-alpha.3",
   "description": "Portable, verifiable engineering workflows for agent runtimes.",
   "private": true,
   "type": "module",
@@ -18,6 +18,7 @@
   "scripts": {
     "generate": "node tools/generate.mjs",
     "generate:check": "node tools/generate.mjs --check",
+    "generate:probes": "node tools/generate.mjs --include-probes",
     "conformance": "node tools/build-conformance.mjs",
     "conformance:check": "node tools/build-conformance.mjs --check",
     "release:build": "node tools/build-release.mjs",

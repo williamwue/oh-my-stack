@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Stale Replay"
-  short_description: "Check Stale Replay workflow"
-  default_prompt: "Use $check-stale-replay for this task."
-policy:
-  allow_implicit_invocation: true

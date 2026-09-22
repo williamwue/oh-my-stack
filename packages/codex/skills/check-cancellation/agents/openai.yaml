@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Cancellation"
-  short_description: "Check Cancellation workflow"
-  default_prompt: "Use $check-cancellation for this task."
-policy:
-  allow_implicit_invocation: true

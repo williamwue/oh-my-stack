@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
@@ -281,6 +281,39 @@ test("committed packages match generator output", async () => {
   await generate({ root: repoRoot, check: true });
 });
 
+test("release packages expose public Skills while probe Skills remain test-only", async () => {
+  const model = await loadModel();
+  for (const adapter of model.adapters) {
+    const skillRoot = join(repoRoot, adapter.packageDir, adapter.skillsDir);
+    const installed = (await readdir(skillRoot, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+    assert.deepEqual(installed, model.skillCatalog.public);
+    const catalog = JSON.parse(await readFile(
+      join(repoRoot, adapter.packageDir, "SKILL_CATALOG.json"),
+      "utf8",
+    ));
+    assert.deepEqual(catalog.skills.map((entry) => entry.name), model.skillCatalog.public);
+    assert.equal(catalog.skills.every((entry) => entry.audience === "public"), true);
+  }
+
+  const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-probe-packages-"));
+  try {
+    for (const adapter of model.adapters) {
+      await renderTarget(stage, model, adapter, { includeProbes: true });
+      const catalog = JSON.parse(await readFile(
+        join(stage, adapter.packageDir, "SKILL_CATALOG.json"),
+        "utf8",
+      ));
+      assert.equal(catalog.skills.length, model.skills.length);
+      assert.equal(catalog.skills.filter((entry) => entry.audience === "probe").length, 12);
+    }
+  } finally {
+    await rm(stage, { recursive: true, force: true });
+  }
+});
+
 test("generated manifests identify the public source repository", async () => {
   const model = await loadModel();
   const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-public-metadata-"));
@@ -307,5 +340,5 @@ test("generated manifests identify the public source repository", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.2.0-alpha.2");
+  assert.equal(model.project.version, "0.2.0-alpha.3");
 });

@@ -2,13 +2,18 @@
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
   "target": "codex",
-  "sourceVersion": "0.2.0-alpha.2",
+  "sourceVersion": "0.2.0-alpha.3",
   "profiles": [
     "codex-desktop",
     "codex-cli",
     "codex-cli-interactive",
     "codex-ide"
   ],
+  "skills": {
+    "audience": "public",
+    "included": 49,
+    "omittedProbes": 12
+  },
   "claims": {
     "delivery": "D0",
     "workflow": "W0"

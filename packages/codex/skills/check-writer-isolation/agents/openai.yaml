@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Writer Isolation"
-  short_description: "Check Writer Isolation workflow"
-  default_prompt: "Use $check-writer-isolation for this task."
-policy:
-  allow_implicit_invocation: true

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Resources"
-  short_description: "Check Resources workflow"
-  default_prompt: "Use $check-resources for this task."
-policy:
-  allow_implicit_invocation: true

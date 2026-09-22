@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Custom Role"
-  short_description: "Check Custom Role workflow"
-  default_prompt: "Use $check-custom-role for this task."
-policy:
-  allow_implicit_invocation: true

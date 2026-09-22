@@ -40,10 +40,10 @@ test("release archives and manifest are byte-reproducible", async () => {
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.2.0-alpha.2.tar.gz",
-    "oh-my-stack-codex-0.2.0-alpha.2.tar.gz",
-    "oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz",
-    "oh-my-stack-omp-0.2.0-alpha.2.tar.gz",
+    "oh-my-stack-claude-code-0.2.0-alpha.3.tar.gz",
+    "oh-my-stack-codex-0.2.0-alpha.3.tar.gz",
+    "oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz",
+    "oh-my-stack-omp-0.2.0-alpha.3.tar.gz",
     "release-manifest.json",
   ]);
 });
@@ -76,6 +76,11 @@ test("Codex plugin bundle exposes the generated package through one local market
     );
 
     const codexArtifact = manifest.artifacts.find((artifact) => artifact.target === "codex");
+    const packagedSkills = codexArtifact.files
+      .map((file) => file.path)
+      .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
+    assert.equal(packagedSkills.length, 49);
+    assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
       codexArtifact.files,

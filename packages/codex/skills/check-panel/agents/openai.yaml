@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Panel"
-  short_description: "Check Panel workflow"
-  default_prompt: "Use $check-panel for this task."
-policy:
-  allow_implicit_invocation: true

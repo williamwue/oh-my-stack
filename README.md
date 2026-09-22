@@ -6,8 +6,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Release status
 
-Oh My Stack is preparing its first public Alpha release. Codex CLI and OMP have
-live verification evidence. The Codex marketplace bundle has also passed an
+Oh My Stack is available as a public Alpha release. Codex CLI and OMP have live
+verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
 built and validated offline, but live Claude Code verification is deferred
 until an authenticated runtime is available.
@@ -39,13 +39,14 @@ npm run release:build
 (cd dist && shasum -a 256 -c SHA256SUMS)
 ```
 
-Until the first hosted release exists, this source build is the supported way
-to obtain the archives. Once GitHub Releases are available, download all files
-for one version and verify them with `SHA256SUMS` before installation.
+Download all files for one version from
+[GitHub Releases](https://github.com/williamwue/oh-my-stack/releases) and
+verify them with `SHA256SUMS` before installation. Building from source remains
+available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `dist/oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -278,11 +279,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.2 release notes](docs/releases/0.2.0-alpha.2.md). Claude Code is
+[0.2.0-alpha.3 release notes](docs/releases/0.2.0-alpha.3.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.2.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.3.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -533,6 +534,7 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 - [Security model](docs/security.md)
 - [Release process](docs/release-process.md)
 - [Public evidence policy](docs/evidence-policy.md)
+- [0.2.0-alpha.3 public-package boundary notes](docs/releases/0.2.0-alpha.3.md)
 - [0.2.0-alpha.2 public-release candidate notes](docs/releases/0.2.0-alpha.2.md)
 - [0.2.0-alpha.1 plugin release notes](docs/releases/0.2.0-alpha.1.md)
 - [0.2.0 Alpha release notes](docs/releases/0.2.0-alpha.0.md)
