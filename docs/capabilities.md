@@ -290,9 +290,8 @@ inferring it from naming or invocation policy. The catalog now admits 46 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
-`autonomous-run`, `shipping`, `orchestrate`, and `autopilot-stack` fixtures
-separately prove live loading and execution. `autopilot-full` currently has
-deterministic fixture evidence only.
+`autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
+`autopilot-full` fixtures separately prove live loading and execution.
 The complete matrix will be refreshed after the Phase 7 catalog stabilizes.
 OMP transcripts contain the
 matching native
@@ -403,17 +402,25 @@ open and unarmed. The two reviewer lane names currently share one deterministic
 Git blob and changed-path verifier, and no authenticated forge is involved, so
 this does not establish W4 external-system completion.
 
-The first deterministic `autopilot-full` fixture preserves a different
-authority model from both `shipping` and `orchestrate`: root owns the clean
-verdict and single-use countersign, but the bound change owner consumes that
-countersign and performs its own merge. Two autonomous owners build independent
-branches from one target. Each merge-ready head needs distinct gates, live, and
-regression reviewers at identical frozen coordinates. After the first owner
-lands, the second owner rebases onto current `main`, reruns self-proof, receives
-a fresh swarm and countersign, and lands. A third operator-held item remains at
-its gate with no owner or authorization. Negative coverage rejects
-uncountersigned, root-executed, stale-head, and operator-item merges. This is
-structural W1 evidence; live OMP and Codex owner-lifecycle runs remain pending,
+The `autopilot-full` fixture preserves a different authority model from both
+`shipping` and `orchestrate`: root owns the clean verdict and single-use
+countersign, but the bound change owner consumes that countersign and performs
+its own merge. Two autonomous owners build independent branches from one target.
+Each merge-ready head needs distinct gates, live, and regression reviewers at
+identical frozen coordinates. After the first owner lands, the second owner
+rebases onto current `main`, reruns self-proof, receives a fresh swarm and
+countersign, and lands. A third operator-held item remains at its gate with no
+owner or authorization. Negative coverage rejects uncountersigned,
+root-executed, stale-head, and operator-item merges.
+
+Live OMP 18.2.8 and Codex CLI 0.155.1 runs establish this local-provider
+workflow at W3. Both roots bind two long-lived owners before waiting, keep every
+owner lifecycle mutation and all six one-shot reviewer commands in attributable
+child sessions, and alone record, aggregate, and countersign the two swarms.
+The original second owner rebases only after the first authoritative merge,
+preserves its stable patch, reruns proof, and receives fresh reviewers. Both
+external verifiers pass with two owner-landed changes and one untouched
+operator-held item. The three lane names still share one deterministic verifier,
 and authenticated provider merge remains unverified W4 behavior.
 
 The `orchestrate` fixture supplies deterministic structural coverage plus live

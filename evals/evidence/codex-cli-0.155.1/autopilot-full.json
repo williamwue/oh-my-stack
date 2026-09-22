@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-autopilot-full",
+  "fixture": "autopilot-full",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated project-local autopilot-full Skill in a fresh disposable Git repository; gpt-6-astra high; user config and project rules ignored; persisted root session 01a0c735-cde8-7853-ab24-2da8fe2c855c; two persisted fork_turns=none lifecycle owners resumed through followup_task; two fresh three-lane reviewer swarms; deterministic local change provider; no deployment or external publication.",
+    "permissionProfile": "Danger-full-access restricted operationally to the disposable fixture because owner builds, rebases, and merges create local Git commits"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root read and followed the generated project-local autopilot-full Skill before dispatching owners or mutating provider state."
+    },
+    {
+      "id": "owners-spawned-and-bound-before-wait",
+      "status": "pass",
+      "evidence": "Persisted root call ordinals 32 and 39 spawned /root/owner_61 and /root/owner_62 with fork_turns=none before the first wait at ordinal 68. Both returned a no-command READY result, and the root persisted owner-/root/owner_61 and owner-/root/owner_62 before serial lifecycle dispatch."
+    },
+    {
+      "id": "same-owner-lifecycle-through-merge",
+      "status": "pass",
+      "evidence": "Every owner mutation used followup_task on its original handle. /root/owner_61 alone ran build, self-proof, and countersigned merge for change 61. /root/owner_62 alone ran build, self-proof, post-target-refresh rebase, renewed self-proof, and countersigned merge for change 62. Child transcript parsing confirms the exact assigned commands and no replacement owner."
+    },
+    {
+      "id": "fresh-independent-three-lane-swarms",
+      "status": "pass",
+      "evidence": "Root ordinals 104, 110, and 117 spawned the gates, live, and regression reviewers for change 61. After owner merge and target refresh, ordinals 194, 200, and 207 spawned three completely fresh reviewers for change 62. All used fork_turns=none and each child transcript contains exactly one assigned review.mjs verify command with a passing result."
+    },
+    {
+      "id": "root-countersign-and-execution-exclusion",
+      "status": "pass",
+      "evidence": "The root alone recorded and aggregated both swarms, then issued one single-use countersign per exact owner, target, head, and stable patch. External parsing of all fourteen completed root shell commands found no owner.mjs build, self-proof, rebase, or merge invocation and no review.mjs verify invocation."
+    },
+    {
+      "id": "target-refresh-stable-patch-and-owner-merge",
+      "status": "pass",
+      "evidence": "Change 61 owner-merged to main at b5a2d832cafefef7f2cacee3054887ea07298074. The original change 62 owner rebased 88a3ea4c47eb2f06b60db3efd9c66144e06b9d6f to 690a7dc28304d156ce83e387355cfc1a0eb78247 on that target, preserved patch 3fd0d2e17880a4fc76f029ab60c4193eaafa7aa3, reran self-proof, received a fresh swarm and countersign, and owner-merged to 06c05894ce11ec82c55518eecf6d4178cf51d185."
+    },
+    {
+      "id": "operator-held-boundary-and-verifier-passed",
+      "status": "pass",
+      "evidence": "Change 63 remained WAIT_OPERATOR with no owner, head, authorization, or merge. The report records two of two autonomous changes owner-merged and one operator item held; verify.mjs produced AUTOPILOT_FULL_OK=06c05894ce11ec82c55518eecf6d4178cf51d185 in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local change provider, not W4 completion against an authenticated forge, deployment system, or other external provider.",
+    "The gates, live, and regression lanes are distinct attributable sessions but exercise one deterministic fixture verifier; they do not prove three different hosted production surfaces.",
+    "Codex CLI 0.155.1 exposes no generated custom-role selector on spawn, so owners and reviewers received bounded inline contracts; danger-full-access remained available at the process boundary.",
+    "Persisted initial subagent assignment bodies are encrypted, so the audit proves runtime-issued identities, spawn and follow-up ordering, exact completed child commands, root command exclusion, and durable artifacts rather than externally rereading assignment plaintext.",
+    "The response stream disconnected once after the second review swarm and recovered through the CLI's built-in sampling retry without re-running any owner or reviewer command.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in owner work, review, countersigning, merge, or final verification."
+  ]
+}

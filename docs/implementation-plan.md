@@ -592,7 +592,19 @@ Current progress:
   lands its own change. A third operator-held item remains untouched. Negative
   coverage rejects operator-item delegation, merge without countersign, a root
   attempting to consume owner authority, and a head changed after countersign.
-  Live OMP and Codex coordinator runs remain pending.
+- Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs pass the same
+  local-provider protocol at W3. Both bind the two lifecycle owners before the
+  first wait, serialize their exact mutations, start a fresh three-lane swarm
+  for each frozen head, and keep every owner build, self-proof, rebase, merge,
+  and reviewer verification out of the root. Change 61 lands first through its
+  original owner and single-use countersign; the original change 62 owner then
+  rebases onto the authoritative target, preserves its stable patch, reruns
+  proof, and lands after a fresh swarm and countersign. External transcript
+  audits confirm the authority boundary, both final verifiers pass, and change
+  63 remains operator-held. This remains local-provider W3 evidence; the three
+  reviewer lane names share one deterministic verifier, authenticated W4 forge
+  behavior is pending, and Claude Code live verification remains deferred by
+  project decision.
 
 Add advanced workflows one at a time in this order:
 

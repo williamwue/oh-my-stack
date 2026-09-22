@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-autopilot-full",
+  "fixture": "autopilot-full",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated autopilot-full Skill in a fresh disposable Git repository; gpt-6-astra high root session 01a0c72b-7d9a-702e-894f-ee77d4fe6bde; two command-capable built-in lifecycle owners started together and resumed through native hub send; two fresh three-lane reviewer swarms; deterministic local change provider; no deployment or external publication.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly loaded skill://autopilot-full from the generated OMP package before measuring or mutating fixture state."
+    },
+    {
+      "id": "owners-started-and-bound-before-work",
+      "status": "pass",
+      "evidence": "One native task call started Change61Owner and Change62Owner before the first wait. The root persisted owner-Change61Owner and owner-Change62Owner, then serialized exact same-session mutations across the shared checkout."
+    },
+    {
+      "id": "same-owner-lifecycle-through-merge",
+      "status": "pass",
+      "evidence": "Change61Owner alone ran build, self-proof, and countersigned merge for change 61. Change62Owner alone ran build, self-proof, post-target-refresh rebase, renewed self-proof, and countersigned merge for change 62. Child transcript parsing found no retries or unassigned owner command."
+    },
+    {
+      "id": "fresh-independent-three-lane-swarms",
+      "status": "pass",
+      "evidence": "Review61Gates, Review61Live, and Review61Regression each ran exactly one revision-bound verifier for change 61. After change 61 landed and change 62 rebased, fresh sessions Review62Gates, Review62Live, and Review62Regression each ran exactly one verifier for change 62. All six results passed before root aggregation."
+    },
+    {
+      "id": "root-countersign-and-execution-exclusion",
+      "status": "pass",
+      "evidence": "The root alone recorded and aggregated both swarms, then issued one single-use countersign per exact owner, target, head, and stable patch. External parsing of all eight root bash commands found no owner.mjs build, self-proof, rebase, or merge invocation and no review.mjs verify invocation."
+    },
+    {
+      "id": "target-refresh-stable-patch-and-owner-merge",
+      "status": "pass",
+      "evidence": "Change 61 merged to main at 2914ea2e0627a20bb6c33b4768230261223996dd. The original change 62 owner rebased 00564c0fe88e1130c242a8b4c657301938d66d21 to 49396866adf753dbd5e92c458b6129e8f4fadbe1 on that target, preserved patch 3fd0d2e17880a4fc76f029ab60c4193eaafa7aa3, reran self-proof, received a fresh swarm and countersign, and owner-merged to 75507aaaf95e0bc1f71db891ebf1ef8f5713e65a."
+    },
+    {
+      "id": "operator-held-boundary-and-verifier-passed",
+      "status": "pass",
+      "evidence": "Change 63 remained WAIT_OPERATOR with no owner, head, authorization, or merge. The report records two of two autonomous changes owner-merged and one operator item held; verify.mjs produced AUTOPILOT_FULL_OK=75507aaaf95e0bc1f71db891ebf1ef8f5713e65a in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local change provider, not W4 completion against an authenticated forge, deployment system, or other external provider.",
+    "The gates, live, and regression lanes are distinct attributable sessions but exercise one deterministic fixture verifier; they do not prove three different hosted production surfaces.",
+    "The built-in OMP owner and reviewer roles expose bash; assignments and transcripts constrained each child to its lifecycle or one exact review command, but the runtime roles are not capability-level filesystem read-only.",
+    "The initial two-owner native task call remained open while its owner sessions waited for root follow-ups. It completed successfully after both owner lifecycles ended, but this long-lived-call behavior is retained as an OMP runtime constraint.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

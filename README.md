@@ -230,11 +230,10 @@ passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
 remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
-`autonomous-run`, `shipping`, and `orchestrate` Skills are separately loaded
-and exercised by focused live fixtures. `autopilot-stack` has focused live W3
-coverage, while `autopilot-full` currently has deterministic fixture coverage.
-A refreshed whole-catalog live matrix remains
-pending until the rest of Phase 7 stops changing the catalog.
+`autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
+`autopilot-full` Skills are separately loaded and exercised by focused live
+fixtures. A refreshed whole-catalog live matrix remains pending until the rest
+of Phase 7 stops changing the catalog.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
@@ -358,17 +357,27 @@ tip code verdict only across an unchanged stable patch, refresh checks at the
 rewritten head, and stop with two open, unarmed changes. This is coordinated
 local-provider evidence, not authenticated W4 forge completion.
 
-The first deterministic `autopilot-full` slice keeps the upstream authority
-split intact: each autonomous change has one attributable owner from build and
-self-proof through merge, while only the root aggregates the independent swarm
-and issues a single-use countersign. The fixture starts two independent branches
-from one target. The first owner lands only after gates, live, and regression
-lanes agree; the second owner then rebases onto current `main`, reruns proof,
-receives a fresh three-lane verdict and countersign, and lands its own change. A
-third operator-held item remains untouched. Negative cases reject delegation of
-that item, merge without countersign, root consumption of owner authority, and a
-head changed after countersign. Live OMP and Codex runs remain pending, and the
-local provider is not authenticated W4 forge evidence.
+The first `autopilot-full` slice keeps the upstream authority split intact:
+each autonomous change has one attributable owner from build and self-proof
+through merge, while only the root aggregates the independent swarm and issues
+a single-use countersign. The fixture starts two independent branches from one
+target. The first owner lands only after gates, live, and regression lanes
+agree; the second owner then rebases onto current `main`, reruns proof, receives
+a fresh three-lane verdict and countersign, and lands its own change. A third
+operator-held item remains untouched. Negative cases reject delegation of that
+item, merge without countersign, root consumption of owner authority, and a
+head changed after countersign.
+
+Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs now pass the same local
+provider protocol at W3. Both start and bind the two lifecycle owners before
+waiting, serialize mutations across the shared checkout, use six fresh
+reviewers across two three-lane swarms, and keep build, proof, rebase, review,
+and merge execution out of the root. In each runtime the original change-61
+owner lands first; the original change-62 owner then rebases with an unchanged
+stable patch, reruns self-proof, and lands after a fresh countersign. Independent
+transcript audits confirm the authority boundary, and the final verifier leaves
+change 63 at its operator gate. This is coordinated local-provider evidence,
+not authenticated W4 forge completion.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly
