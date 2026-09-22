@@ -200,7 +200,7 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.1.0-alpha.0 release notes](docs/releases/0.1.0-alpha.0.md). Claude Code is
+[0.2.0-alpha.0 release notes](docs/releases/0.2.0-alpha.0.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
@@ -442,7 +442,8 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 - [Implementation plan](docs/implementation-plan.md)
 - [Security model](docs/security.md)
 - [Release process](docs/release-process.md)
-- [Alpha release notes](docs/releases/0.1.0-alpha.0.md)
+- [0.2.0 Alpha release notes](docs/releases/0.2.0-alpha.0.md)
+- [0.1.0 Alpha release notes](docs/releases/0.1.0-alpha.0.md)
 - [ADR 0001: portable core and generated targets](docs/decisions/0001-portable-core.md)
 - [ADR 0002: surface-aware compatibility profiles](docs/decisions/0002-surface-aware-compatibility.md)
 - [ADR 0003: adapters compile and probe](docs/decisions/0003-adapters-compile-and-probe.md)

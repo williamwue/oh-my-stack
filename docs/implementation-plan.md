@@ -412,7 +412,7 @@ live conformance claim.
 Current progress:
 
 - One deterministic builder emits OMP, Codex, and Claude Code archives from
-  version `0.1.0-alpha.0`, plus complete file inventories, SHA-256 checksums,
+  the current source version `0.2.0-alpha.0`, plus complete file inventories, SHA-256 checksums,
   source coordinates, profiles, conformance summaries, and verification labels.
 - Two independent builds must be byte-identical during every `npm run check`.
 - The owned-directory installer verifies checksums and archive safety, stages
