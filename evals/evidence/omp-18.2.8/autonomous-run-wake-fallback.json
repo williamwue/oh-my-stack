@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-autonomous-run-wake-fallback",
+  "fixture": "autonomous-run-wake-fallback",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated OMP autonomous-run and show-me-your-work Skills supplied through --plugin-dir; cursor/default; high reasoning; persisted root session 01a0c686-59f9-7645-89f8-08f4befd8a42; disposable waiting-provider fixture.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/autonomous-run-wake-fallback-attempt-1.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "The root loaded exactly skill://autonomous-run and skill://show-me-your-work from the generated OMP package without a filesystem search."
+    },
+    {
+      "id": "fixed-fallback-contract-preserved",
+      "status": "pass",
+      "evidence": "The request fixed provider-r1 READY as the later predicate, one status measurement, zero wake runs, fifteen minutes, three authorized files, unavailable-wake stop, and explicit prohibitions on scheduling, polling, background work, release, publication, and completion claims."
+    },
+    {
+      "id": "provider-measured-exactly-once",
+      "status": "pass",
+      "evidence": "The only status command reported provider-r1 WAITING, completionCount 0, and durable measurementCount 1; the final fixture state retained measurementCount 1."
+    },
+    {
+      "id": "durable-pause-without-invented-wake",
+      "status": "pass",
+      "evidence": "pause-fallback wrote automationId null, wakeCount 0, status paused-no-wake, the fixed timestamps and budget, plus one append-only paused decision row; no report.json was created."
+    },
+    {
+      "id": "bounded-command-envelope-preserved",
+      "status": "pass",
+      "evidence": "After the two native Skill reads, the root issued exactly the three prescribed shell commands separately and started no task list, search, asynchronous job, detached process, sleep, poll, provider release, Git, or publication operation."
+    },
+    {
+      "id": "independent-verifier-passed",
+      "status": "pass",
+      "evidence": "verify-fallback.mjs returned AUTONOMOUS_WAKE_FALLBACK_OK=provider-r1 in session and again from an external root invocation while state remained WAITING with measurementCount 1."
+    }
+  ],
+  "limitations": [
+    "This proves the W1 durable-pause fallback when no verified wake capability exists; it does not prove coordination.scheduled_wake, later re-entry, unattended completion, or W4 external-system completion.",
+    "The runtime used the request's declared unavailable-wake profile rather than probing for a scheduler during the run; probing would violate the fixed three-command envelope.",
+    "The final audit ran in the root session and through an external verifier, not an independent reviewer session.",
+    "OMP delivery remains D0 overall because the native plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -18,9 +18,12 @@ if (fixtureNow !== undefined) {
 }
 const now = () => fixtureNow === undefined ? new Date() : new Date(fixtureNow);
 const timestamp = () => now().toISOString().replace(/\.\d{3}Z$/, "Z");
-assert.match(automationId ?? "", /^[A-Za-z0-9][A-Za-z0-9._:-]{2,}$/, "runtime-issued automation id required");
+const requireAutomationId = () => {
+  assert.match(automationId ?? "", /^[A-Za-z0-9][A-Za-z0-9._:-]{2,}$/, "runtime-issued automation id required");
+};
 
 if (action === "pause") {
+  requireAutomationId();
   assert.equal(state.providerRevision, "provider-r1");
   assert.equal(state.providerState, "WAITING", "pause requires a waiting provider");
   assert.equal(state.releaseCount, 0);
@@ -51,7 +54,40 @@ if (action === "pause") {
     "",
   ].join("\n"), { flag: "wx" });
   console.log(`AUTONOMOUS_WAKE_PAUSED=${automationId}`);
+} else if (action === "pause-fallback") {
+  assert.equal(automationId, undefined, "fallback must not invent an automation id");
+  assert.equal(state.providerRevision, "provider-r1");
+  assert.equal(state.providerState, "WAITING", "fallback pause requires a waiting provider");
+  assert.equal(state.releaseCount, 0);
+  assert.equal(state.completionCount, 0);
+  const createdAt = now();
+  const checkpoint = {
+    schemaVersion: 1,
+    workflow: "autonomous-run",
+    exitPredicate: "provider-r1 READY, receipt accepted by a later authorized pickup",
+    measurement: "node provider.mjs status .",
+    budget: { maxWakeRuns: 0, maxMinutes: 15 },
+    authorizedWrites: ["state.json", "checkpoint.json", "decisions.tsv"],
+    stopConditions: ["wake-unavailable", "budget", "deadline", "revision-drift", "checkpoint-mismatch"],
+    providerRevision: "provider-r1",
+    observedState: "WAITING",
+    wakeStrategy: "durable-pause-no-scheduled-wake",
+    automationId: null,
+    createdAt: createdAt.toISOString().replace(/\.\d{3}Z$/, "Z"),
+    nextObservationAt: new Date(createdAt.getTime() + 60_000).toISOString().replace(/\.\d{3}Z$/, "Z"),
+    deadlineAt: new Date(createdAt.getTime() + 15 * 60_000).toISOString().replace(/\.\d{3}Z$/, "Z"),
+    wakeCount: 0,
+    status: "paused-no-wake",
+  };
+  await writeFile(checkpointPath, `${JSON.stringify(checkpoint, null, 2)}\n`, { flag: "wx" });
+  await writeFile(decisionsPath, [
+    "ts\tphase\tdecision\twhy\tevidence\tresult",
+    `${timestamp()}\twake-0\tpause durably\twake unavailable\tprovider-r1 WAITING\tpaused`,
+    "",
+  ].join("\n"), { flag: "wx" });
+  console.log("AUTONOMOUS_WAKE_FALLBACK_PAUSED=provider-r1");
 } else if (action === "resume") {
+  requireAutomationId();
   const checkpoint = JSON.parse(await readFile(checkpointPath, "utf8"));
   assert.equal(checkpoint.automationId, automationId, "automation id does not match checkpoint");
   assert.equal(checkpoint.providerRevision, state.providerRevision, "provider revision drifted");
@@ -87,6 +123,7 @@ if (action === "pause") {
   }, null, 2)}\n`, { flag: "wx" });
   console.log(`AUTONOMOUS_WAKE_RESUMED=${automationId}`);
 } else if (action === "cleanup") {
+  requireAutomationId();
   const checkpoint = JSON.parse(await readFile(checkpointPath, "utf8"));
   const report = JSON.parse(await readFile(reportPath, "utf8"));
   assert.equal(checkpoint.automationId, automationId, "automation id does not match checkpoint");
@@ -102,5 +139,5 @@ if (action === "pause") {
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`AUTONOMOUS_WAKE_CLEAN=${automationId}`);
 } else {
-  throw new Error("usage: node wake.mjs <pause|resume|cleanup> <fixture-root> <automation-id>");
+  throw new Error("usage: node wake.mjs <pause|pause-fallback|resume|cleanup> <fixture-root> [automation-id]");
 }

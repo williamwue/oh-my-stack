@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-autonomous-run-wake-fallback",
+  "fixture": "autonomous-run-wake-fallback",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated autonomous-run and show-me-your-work Skills copied into one disposable project Skill directory; gpt-5.6-sol high; persisted thread 01a0c685-3eb9-7080-8c92-a7a502c60f73; user config and rules ignored; disposable waiting-provider fixture.",
+    "permissionProfile": "Workspace-write sandbox restricted to the disposable fixture"
+  },
+  "capabilities": [
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-selected",
+      "status": "pass",
+      "evidence": "The persisted thread recorded runtime selection of the generated autonomous-run and show-me-your-work Skills before the first command, with no filesystem Skill search."
+    },
+    {
+      "id": "fixed-fallback-contract-preserved",
+      "status": "pass",
+      "evidence": "The request fixed provider-r1 READY as the later predicate, one status measurement, zero wake runs, fifteen minutes, three authorized files, unavailable-wake stop, and explicit prohibitions on scheduling, polling, background work, release, publication, and completion claims."
+    },
+    {
+      "id": "provider-measured-exactly-once",
+      "status": "pass",
+      "evidence": "The only status command reported provider-r1 WAITING, completionCount 0, and durable measurementCount 1; the final fixture state retained measurementCount 1."
+    },
+    {
+      "id": "durable-pause-without-invented-wake",
+      "status": "pass",
+      "evidence": "pause-fallback wrote automationId null, wakeCount 0, status paused-no-wake, the fixed timestamps and budget, plus one append-only paused decision row; no report.json was created."
+    },
+    {
+      "id": "bounded-command-envelope-preserved",
+      "status": "pass",
+      "evidence": "The root issued exactly the three prescribed command executions separately and started no task list, search, asynchronous job, detached process, sleep, poll, provider release, Git, or publication operation."
+    },
+    {
+      "id": "independent-verifier-passed",
+      "status": "pass",
+      "evidence": "verify-fallback.mjs returned AUTONOMOUS_WAKE_FALLBACK_OK=provider-r1 in thread and again from an external root invocation while state remained WAITING with measurementCount 1."
+    }
+  ],
+  "limitations": [
+    "This proves the W1 durable-pause fallback when no verified wake capability exists; it does not prove coordination.scheduled_wake, later re-entry, unattended completion, or W4 external-system completion.",
+    "The runtime used the request's declared unavailable-wake profile rather than probing for a scheduler during the run; Codex CLI has no scheduled-task management surface in this fixture.",
+    "The final audit ran in the root session and through an external verifier, not an independent reviewer session.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in the workflow or its three command executions."
+  ]
+}

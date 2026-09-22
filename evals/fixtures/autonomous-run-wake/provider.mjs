@@ -10,10 +10,13 @@ const statePath = join(root, "state.json");
 const state = JSON.parse(await readFile(statePath, "utf8"));
 
 if (action === "status") {
+  state.measurementCount += 1;
+  await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify({
     revision: state.providerRevision,
     state: state.providerState,
     completionCount: state.completionCount,
+    measurementCount: state.measurementCount,
   }, null, 2)}\n`);
 } else if (action === "release") {
   assert.equal(state.providerRevision, "provider-r1", "provider revision drifted");

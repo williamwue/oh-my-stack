@@ -10,5 +10,6 @@ await writeFile(join(root, "state.json"), `${JSON.stringify({
   providerState: "WAITING",
   releaseCount: 0,
   completionCount: 0,
+  measurementCount: 0,
 }, null, 2)}\n`, { flag: "wx" });
 console.log("AUTONOMOUS_WAKE_READY=provider-r1");

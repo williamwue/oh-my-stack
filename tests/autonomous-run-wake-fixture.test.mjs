@@ -23,9 +23,11 @@ test("autonomous wake persists one bounded heartbeat handoff and consumes one re
   const root = await prepare();
   const automationId = "fixture-heartbeat-1";
   try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause", root, automationId], at("2026-09-22T00:00:00Z"));
     await execFileAsync(process.execPath, [join(root, "verify-pause.mjs"), root]);
     await execFileAsync(process.execPath, [join(root, "provider.mjs"), "release", root]);
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "resume", root, automationId], at("2026-09-22T00:01:00Z"));
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "cleanup", root, automationId]);
     const verified = await execFileAsync(process.execPath, [join(root, "verify-final.mjs"), root]);
@@ -38,6 +40,7 @@ test("autonomous wake persists one bounded heartbeat handoff and consumes one re
 test("autonomous wake rejects an early or mismatched resume without consuming the wake", async () => {
   const root = await prepare();
   try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause", root, "fixture-heartbeat-1"], at("2026-09-22T00:00:00Z"));
     await assert.rejects(
       execFileAsync(process.execPath, [join(root, "wake.mjs"), "resume", root, "wrong-heartbeat"], at("2026-09-22T00:00:30Z")),
@@ -61,8 +64,10 @@ test("autonomous wake rejects an expired deadline without consuming the ready ev
   const root = await prepare();
   const automationId = "fixture-heartbeat-1";
   try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause", root, automationId], at("2026-09-22T00:00:00Z"));
     await execFileAsync(process.execPath, [join(root, "provider.mjs"), "release", root]);
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await assert.rejects(
       execFileAsync(process.execPath, [join(root, "wake.mjs"), "resume", root, automationId], at("2026-09-22T00:15:01Z")),
       /wake deadline exceeded/,
@@ -81,8 +86,10 @@ test("autonomous wake rejects an exhausted wake budget before consuming the read
   const root = await prepare();
   const automationId = "fixture-heartbeat-1";
   try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     await execFileAsync(process.execPath, [join(root, "wake.mjs"), "pause", root, automationId], at("2026-09-22T00:00:00Z"));
     await execFileAsync(process.execPath, [join(root, "provider.mjs"), "release", root]);
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
     const checkpointPath = join(root, "checkpoint.json");
     const checkpoint = JSON.parse(await readFile(checkpointPath, "utf8"));
     checkpoint.wakeCount = checkpoint.budget.maxWakeRuns;
@@ -96,6 +103,23 @@ test("autonomous wake rejects an exhausted wake budget before consuming the read
     assert.equal(unchanged.wakeCount, 2);
     assert.equal(unchanged.status, "waiting");
     assert.equal(state.completionCount, 0);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("autonomous wake falls back to a durable pause without inventing a schedule", async () => {
+  const root = await prepare();
+  try {
+    await execFileAsync(process.execPath, [join(root, "provider.mjs"), "status", root]);
+    const paused = await execFileAsync(
+      process.execPath,
+      [join(root, "wake.mjs"), "pause-fallback", root],
+      at("2026-09-22T00:00:00Z"),
+    );
+    assert.match(paused.stdout, /AUTONOMOUS_WAKE_FALLBACK_PAUSED=provider-r1/);
+    const verified = await execFileAsync(process.execPath, [join(root, "verify-fallback.mjs"), root]);
+    assert.match(verified.stdout, /AUTONOMOUS_WAKE_FALLBACK_OK=provider-r1/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

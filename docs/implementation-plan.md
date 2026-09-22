@@ -511,6 +511,14 @@ Current progress:
   until a later host-scheduled run actually validates the checkpoint,
   re-measures the provider, advances once, and verifies disarm. Claude Code
   live verification remains deferred by project decision.
+- The no-wake fallback passes at W1 on OMP 18.2.8 and Codex CLI 0.155.1. Each
+  hardened run loads only its generated target Skills, executes one provider
+  measurement followed by durable pause and verification, persists
+  `measurementCount: 1`, records no automation identifier, and stops without a
+  completion report. OMP attempt 1 is retained as a failure because exploratory
+  searches became background jobs whose later delivery triggered a duplicate
+  measurement and pause attempt. This closes the safe fallback branch, not the
+  host-native wake branch.
 
 Add advanced workflows one at a time in this order:
 

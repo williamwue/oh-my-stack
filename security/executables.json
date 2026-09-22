@@ -4,9 +4,9 @@
     {
       "path": "evals/fixtures/autonomous-run-wake/provider.mjs",
       "owner": "oh-my-stack",
-      "purpose": "Expose and independently release one pinned local provider revision for the scheduled-wake fixture.",
+      "purpose": "Expose, count observations of, and independently release one pinned local provider revision for the scheduled-wake fixture.",
       "network": false,
-      "writes": ["disposable autonomous-run wake provider state on release"],
+      "writes": ["disposable autonomous-run wake provider state on observation or release"],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -21,6 +21,14 @@
       "path": "evals/fixtures/autonomous-run-wake/verify-final.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify one anchored heartbeat wake consumes one ready event and reaches the fixed predicate without publication.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the disposable fixture copy."
+    },
+    {
+      "path": "evals/fixtures/autonomous-run-wake/verify-fallback.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify an unavailable wake provider produces a durable pause without an invented schedule or completion claim.",
       "network": false,
       "writes": [],
       "uninstallBehavior": "Removed with the disposable fixture copy."

@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-autonomous-run-wake-fallback-attempt-1",
+  "fixture": "autonomous-run-wake-fallback",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated OMP autonomous-run and show-me-your-work Skills supplied through --plugin-dir; cursor/default; high reasoning; persisted root session 01a0c67e-2788-72a2-9524-a7a7662b2967; disposable waiting-provider fixture.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/autonomous-run-wake-fallback.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skills-loaded",
+      "status": "pass",
+      "evidence": "The session eventually loaded skill://autonomous-run and skill://show-me-your-work from the generated OMP package."
+    },
+    {
+      "id": "durable-pause-shape-verified",
+      "status": "pass",
+      "evidence": "The fixture ended with provider-r1 WAITING, automationId null, wakeCount 0, status paused-no-wake, no report.json, and AUTONOMOUS_WAKE_FALLBACK_OK=provider-r1."
+    },
+    {
+      "id": "generated-resource-boundary-preserved",
+      "status": "fail",
+      "evidence": "Before using skill://, the root searched the home directory, /tmp, an installed Cursor pstack cache, and other Oh My Stack target packages for Skill files."
+    },
+    {
+      "id": "single-bounded-pass",
+      "status": "fail",
+      "evidence": "Two exploratory shell searches were backgrounded by the runtime. Their later async delivery triggered another assistant pass, which measured the provider and attempted pause-fallback a second time; the second pause failed with EEXIST."
+    }
+  ],
+  "limitations": [
+    "A passing final verifier does not erase duplicate observation and action attempts earlier in the same session.",
+    "The fixture did not count provider observations in this attempt, so the duplicate measurement is established by the attributable transcript rather than final state.",
+    "This attempt motivated exact skill:// routing, a three-command ceiling, a no-background boundary, and persistent measurement counting in the hardened fixture.",
+    "OMP delivery remains D0 overall because the native plugin-manager D1 gate is unresolved."
+  ]
+}

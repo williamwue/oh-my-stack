@@ -351,6 +351,17 @@ window, which may explain the non-dispatch but was not proven. This is retained
 as W0 failure evidence; schedule creation is not a wake, and desktop
 `coordination.scheduled_wake` remains `unknown` rather than `unsupported`.
 
+OMP 18.2.8 and Codex CLI 0.155.1 separately pass the W1 unavailable-wake
+fallback. Both load only generated target Skills, measure the pinned provider
+once, preserve `measurementCount: 1`, write a checkpoint with `automationId:
+null`, `wakeCount: 0`, and `status: paused-no-wake`, and stop with no completion
+report. The hardened envelope permits exactly three separate commands and no
+search, async job, sleep, poll, release, Git, or publication action. A retained
+OMP failure proves why this boundary matters: two exploratory searches were
+backgrounded and their later results triggered a duplicate pass. These passing
+records establish `coordination.durable_state` fallback behavior only;
+`coordination.scheduled_wake` remains unknown on both CLI profiles.
+
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both
 questions as pending. Codex CLI 0.155.1 exposes an experimental

@@ -310,6 +310,16 @@ the deadline without manually simulating resume or cleanup. Because the target
 task remained active throughout the window and the cause was not isolated,
 `coordination.scheduled_wake` remains `unknown`, not `unsupported`.
 
+The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
+Each root loads only the generated Skills, measures the pinned provider exactly
+once, observes `WAITING`, writes a durable checkpoint with `automationId: null`
+and `wakeCount: 0`, and stops after an independent verifier succeeds. A retained
+initial OMP failure records why persistent measurement counting and a strict
+three-command envelope are required: exploratory searches were backgrounded,
+their later delivery caused another pass, and the provider was measured twice.
+The hardened passing runs start no schedule, sleep, poll, detached process, or
+publication operation and do not claim unattended completion.
+
 Canonical roles live beside the portable Skills. The generator emits native
 role definitions under each target package's `agents/` directory; runtime
 setup or installation places those definitions in the host's discovered role

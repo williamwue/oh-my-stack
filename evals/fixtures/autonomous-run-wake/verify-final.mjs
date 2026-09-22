@@ -15,6 +15,7 @@ assert.deepEqual(state, {
   providerState: "READY",
   releaseCount: 1,
   completionCount: 1,
+  measurementCount: 2,
 });
 assert.equal(checkpoint.automationId, report.automationId);
 assert.equal(checkpoint.wakeCount, 1);
