@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "97db7224e8c60a166d48a336d17fa0f9b1cdf1c6b384af4c2d129840764a44ab"
+          "sha256": "c627b2192e011fcb15717a5dfcf043f8ec602c4664738070668364fb27811f2d"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -398,6 +398,30 @@
         }
       ],
       "transformation": "Runtime-specific transcript paths and mandatory model-family claims were replaced by capability-based evidence access, explicit fallbacks, append-only correction semantics, and independently verifiable model identity."
+    },
+    {
+      "id": "shipping-port",
+      "sourceId": "cursor-pstack-shipping",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-shipping/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/shipping.md",
+          "sha256": "c301902136e0a9a0a55403c35374f6f5738e501aee66c27458dc197b87557550"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/shipping/SKILL.md",
+          "owner": "derived",
+          "sha256": "4241d13c81d14dc134335665c62bd59cd131952f3ac32d46e7eb5d0090aaae13"
+        },
+        {
+          "path": "src/core/skills/shipping/skill.json",
+          "owner": "local-core",
+          "sha256": "aa8edfa253ac0a4afa567784bc70706a5acabc47b32cf1d336cc6f23532564e3"
+        }
+      ],
+      "transformation": "Provider-specific CLIs, mandatory cloud reviewers, control-driver dependencies, queue polling, and implicit retargeting were replaced by provider capabilities, distinct read-only reviewer sessions, revision and stable-patch binding, a contiguous bottom-up frontier, one-at-a-time root landing, authoritative refresh after each merge, and explicit stop fallbacks when independent review or merge capability is unavailable."
     }
   ]
 }

@@ -30,6 +30,7 @@
     "interaction.fixed_choice": { "status": "native", "provider": "request_user_input_async queued TUI card", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "interaction.free_text": { "status": "native", "provider": "request_user_input_async queued TUI card Other input", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
     "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction.json" },
+    "scm.merge": { "status": "unknown", "provider": null, "evidence": null },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
     "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },

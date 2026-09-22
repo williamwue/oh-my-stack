@@ -30,6 +30,7 @@
     "interaction.fixed_choice": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },
     "interaction.free_text": { "status": "fallback", "provider": "pause_and_return_pending_questions", "evidence": "evals/evidence/codex-cli-0.155.1/check-interaction-fallback.json" },
     "resources.relative_paths": { "status": "native", "provider": "Skill directory", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },
+    "scm.merge": { "status": "unknown", "provider": null, "evidence": null },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
     "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "external", "provider": "node via shell", "evidence": "evals/evidence/codex-cli-0.155.1/check-resources.json" },

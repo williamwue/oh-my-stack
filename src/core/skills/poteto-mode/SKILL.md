@@ -19,6 +19,7 @@ Use the first matching row:
 | Explicitly stop current in-flight work and leave it resumable | `pause-safely` |
 | Resume or take over prior in-flight work from a durable trail | `session-pickup` |
 | Check or make an existing pull request merge-ready without landing it | `babysit` |
+| Explicitly land, merge, or ship an existing pull request or stack | `shipping` |
 | Explain code, trace ownership, or answer a read-only engineering question | `investigation` |
 | Reproduce and correct defective behavior | `bug-fix` |
 | Add or intentionally change product behavior | `feature` |
@@ -33,12 +34,12 @@ state and record the secondary concern inside it. A discovered bug or feature
 must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
-Requests for unattended shipping, merge control, or multi-project orchestration
-remain outside the admitted set. State that boundary and execute only the
-independently useful admitted portion. Do not simulate an unimplemented
-advanced workflow. `autonomous-run` owns one bounded predicate and does not
-grant shipping authority. `babysit` is admitted only to the extent described by
-its own graduated modes; it never implies landing.
+Requests for multi-project orchestration or autopilot programs remain outside
+the admitted set. State that boundary and execute only the independently useful
+admitted portion. Do not simulate an unimplemented advanced workflow.
+`autonomous-run` owns one bounded predicate and does not grant shipping
+authority. `babysit` never implies landing; only explicit land, merge, or ship
+intent routes to `shipping`.
 
 ## Common invariants
 

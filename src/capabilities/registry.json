@@ -19,6 +19,7 @@
     "interaction.fixed_choice",
     "interaction.free_text",
     "resources.relative_paths",
+    "scm.merge",
     "scm.pull_requests",
     "scm.review_threads",
     "scripts.execute",

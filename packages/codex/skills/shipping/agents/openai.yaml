@@ -1,0 +1,6 @@
+interface:
+  display_name: "Shipping"
+  short_description: "Shipping workflow"
+  default_prompt: "Use $shipping for this task."
+policy:
+  allow_implicit_invocation: false

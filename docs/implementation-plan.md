@@ -523,6 +523,13 @@ Current progress:
   pause on OMP and Codex CLI when their profiles have no verified scheduler.
   `shipping` may begin. Claude Code live verification remains deferred by
   project decision.
+- `shipping` is the forty-third public Skill and generates for all three
+  targets. Its deterministic local-provider fixture binds three independent
+  reviewer identities and verdicts to exact base, head, and stable patch
+  identities. It lands only the bottom-up `PASS`, `PASS+NOTES` prefix, stops at
+  the following `FAIL`, rejects an upper change before its frontier, and rejects
+  a head changed after review. This is structural W1 evidence; live OMP/Codex
+  reviewer sessions and any authenticated W4 forge merge are still pending.
 
 Add advanced workflows one at a time in this order:
 

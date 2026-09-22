@@ -253,6 +253,11 @@
       "invocation": "explicit"
     },
     {
+      "name": "shipping",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "show-me-your-work",
       "audience": "public",
       "invocation": "explicit"

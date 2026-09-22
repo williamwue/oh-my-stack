@@ -182,3 +182,10 @@ entries:
     source_revision: 6ed0f7a9504f577d7529064103cecce9be7dfc5e
     license: MIT
     transform: portable-explicit-skill
+  - path: src/core/skills/shipping/SKILL.md
+    owner: semantic-port
+    source_id: cursor-pstack-shipping
+    source_path: pstack/skills/poteto-mode/playbooks/shipping.md
+    source_revision: 640ea3abfbdef74aad432b58d8586e4bf645f42d
+    license: MIT
+    transform: reviewed-portable-shipping

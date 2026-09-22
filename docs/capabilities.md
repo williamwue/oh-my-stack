@@ -286,7 +286,7 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 42 public
+inferring it from naming or invocation policy. The catalog now admits 43 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The new `babysit`, `pause-safely`, `session-pickup`, and
@@ -370,6 +370,16 @@ backgrounded and their later results triggered a duplicate pass. These passing
 records establish `coordination.durable_state` fallback behavior only;
 `coordination.scheduled_wake` remains unknown on both CLI profiles. They do not
 weaken the separately observed Desktop provider.
+
+The deterministic `shipping` fixture supplies structural W1 evidence for the
+revision-bound landing protocol. Three local-provider changes freeze exact
+base, head, stable patch identity, writer session, distinct reviewer session,
+and verification outcome. The contiguous `PASS`, `PASS+NOTES` prefix lands one
+change at a time; the following `FAIL` stays open. Negative cases reject both
+an upper change before the current bottom and a reviewed head that changes
+before merge. This does not yet prove live reviewer-session behavior on OMP or
+Codex, `scm.merge` on any profile, merge-when-ready, hosted queues, or W4 forge
+completion.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
 accepts both a fixed selection and custom text, while print mode returns both

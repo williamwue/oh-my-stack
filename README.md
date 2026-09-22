@@ -13,7 +13,7 @@ principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
 (`how`, `technical-writing`, `unslop`, `poteto-mode`, `investigation`,
 `feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
 `setup-oh-my-stack` configuration Skill, and the Phase 7 `babysit`,
-`pause-safely`, `session-pickup`, and `autonomous-run` Skills generate
+`pause-safely`, `session-pickup`, `autonomous-run`, and `shipping` Skills generate
 deterministic OMP, Codex, and Claude Code target packages. Seven canonical roles generate native
 read-only and writable definitions. All packages pass static `D0` validation.
 
@@ -223,13 +223,14 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 42 public workflows and principles
+The canonical Skill catalog now separates 43 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
 remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`, and
-`autonomous-run` Skills are separately loaded and exercised by focused live fixtures; a
+`autonomous-run` Skills are separately loaded and exercised by focused live
+fixtures. `shipping` has deterministic fixture coverage; a
 refreshed whole-catalog live matrix remains pending until the rest of Phase 7
 stops changing the catalog.
 
@@ -314,6 +315,14 @@ already queued; the passing run uses a daily cadence whose first occurrence is
 the next useful minute and exits before provider measurement when a checkpoint
 is no longer waiting. A separate current-thread heartbeat attempt remains
 failed W0 evidence because it never re-entered the active task.
+
+The first `shipping` slice generates for all three targets and passes a
+deterministic local-provider fixture. Three stacked changes receive distinct
+revision- and patch-bound reviewer verdicts; only the contiguous `PASS`,
+`PASS+NOTES` run lands bottom-up, while the following `FAIL` remains open. The
+fixture also rejects an attempt to merge above the frontier and rejects a head
+changed after review. This is structural W1 evidence only. Live OMP and Codex
+reviewer-session runs and any authenticated W4 forge merge remain pending.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

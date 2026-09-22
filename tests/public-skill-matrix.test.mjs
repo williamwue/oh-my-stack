@@ -34,5 +34,5 @@ test("public Skill matrix verifier requires the exact catalog and headings", asy
     [join(repoRoot, "evals/fixtures/public-skill-matrix/verify.mjs"), report],
     { cwd: repoRoot, encoding: "utf8" },
   ));
-  assert.deepEqual(output, { runtime: "omp", publicSkillCount: 42, batchCount: 5, probeSkillCount: 12 });
+  assert.deepEqual(output, { runtime: "omp", publicSkillCount: 43, batchCount: 5, probeSkillCount: 12 });
 });

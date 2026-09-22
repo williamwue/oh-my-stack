@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "shipping",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "scm.merge",
+    "scm.pull_requests",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.read_result": "freeze_attributable_review_packets_and_stop_without_a_verdict_when_results_cannot_be_read",
+    "agents.spawn": "prepare_one_exact_read_only_review_packet_per_change_and_stop_instead_of_self_approving",
+    "agents.wait": "return_the_pending_independent_review_set_without_polling_or_claiming_a_verdict",
+    "scm.merge": "return_the_revision_bound_contiguous_run_and_exact_ordered_landing_plan_without_mutating_provider_state",
+    "scm.pull_requests": "inspect_a_frozen_provider_fixture_and_mark_live_forge_state_unverified"
+  }
+}

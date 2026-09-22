@@ -30,6 +30,7 @@
     "interaction.fixed_choice": { "status": "native", "provider": "ask interactive TUI", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
     "interaction.free_text": { "status": "native", "provider": "ask interactive TUI custom input", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
     "resources.relative_paths": { "status": "native", "provider": "skill://", "evidence": "evals/evidence/omp-18.2.6/check-interaction.json" },
+    "scm.merge": { "status": "unknown", "provider": null, "evidence": null },
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
     "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
