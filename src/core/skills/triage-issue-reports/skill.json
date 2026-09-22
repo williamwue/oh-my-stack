@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "triage-issue-reports",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.spawn",
+    "communication.attachments.read",
+    "communication.threads.read",
+    "communication.threads.reply",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "issue_tracker.lifecycle",
+    "skills.invoke.explicit",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.spawn": "perform_bounded_media_and_repository_review_in_the_coordinator_without_claiming_independent_review",
+    "communication.attachments.read": "state_that_media_was_unavailable_and_never_infer_its_contents",
+    "communication.threads.read": "stop_without_posting_or_writing_the_tracker",
+    "communication.threads.reply": "stop_without_creating_a_tracker_issue_because_the_thread_handoff_cannot_be_completed",
+    "coordination.durable_state": "freeze_source_coordinates_in_a_workspace_scoped_record_before_any_write",
+    "coordination.scheduled_wake": "persist_the_follow_up_predicate_and_stop_after_the_initial_verified_handoff",
+    "issue_tracker.lifecycle": "classify_without_tracker_writes_and_report_the_missing_adapter_only_in_run_output",
+    "skills.invoke.explicit": "apply_the_named_sibling_skill_contracts_directly_without_inventing_runtime_syntax",
+    "workspace.inspect": "classify_conservatively_without_guessing_code_ownership_or_cause"
+  }
+}

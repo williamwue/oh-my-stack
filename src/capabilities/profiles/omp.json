@@ -12,6 +12,12 @@
     "installedProviders": []
   },
   "capabilities": {
+    "app_control.ui": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.attachments.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.reply": { "status": "unknown", "provider": null, "evidence": null },
+    "issue_tracker.lifecycle": { "status": "unknown", "provider": null, "evidence": null },
+    "media.capture": { "status": "unknown", "provider": null, "evidence": null },
     "agents.cancel": { "status": "native", "provider": "hub cancel background job", "evidence": "evals/evidence/omp-18.2.6/check-cancellation.json" },
     "agents.custom_roles": { "status": "native", "provider": ".omp/agents role discovery and task agent selection", "evidence": "evals/evidence/omp-18.2.6/check-custom-role.json" },
     "agents.follow_up": { "status": "native", "provider": "hub send to idle worker", "evidence": "evals/evidence/omp-18.2.6/check-follow-up.json" },

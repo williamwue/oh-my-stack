@@ -258,7 +258,17 @@
       "invocation": "explicit"
     },
     {
+      "name": "reproduce-and-fix-issues",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "session-pickup",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "setup-benny",
       "audience": "public",
       "invocation": "explicit"
     },
@@ -284,6 +294,11 @@
     },
     {
       "name": "technical-writing",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
+      "name": "triage-issue-reports",
       "audience": "public",
       "invocation": "explicit"
     },

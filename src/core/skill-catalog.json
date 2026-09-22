@@ -41,12 +41,15 @@
     "prototype",
     "prove-it-works",
     "refactoring",
+    "reproduce-and-fix-issues",
     "session-pickup",
+    "setup-benny",
     "setup-oh-my-stack",
     "shipping",
     "show-me-your-work",
     "tdd",
     "technical-writing",
+    "triage-issue-reports",
     "unslop"
   ],
   "probes": [

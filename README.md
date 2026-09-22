@@ -14,9 +14,10 @@ principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
 `feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
 `setup-oh-my-stack` configuration Skill, and the Phase 7 `babysit`,
 `pause-safely`, `session-pickup`, `autonomous-run`, `shipping`, `orchestrate`,
-and `autopilot-stack` Skills generate deterministic OMP, Codex, and Claude Code
-target packages. Seven canonical roles generate native read-only and writable
-definitions. All packages pass static `D0` validation.
+`autopilot-stack`, `autopilot-full`, `setup-benny`, `triage-issue-reports`, and
+`reproduce-and-fix-issues` Skills generate deterministic OMP, Codex, and Claude
+Code target packages. Seven canonical roles generate native read-only and
+writable definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -224,7 +225,7 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 46 public workflows and principles
+The canonical Skill catalog now separates 49 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
@@ -232,8 +233,11 @@ package, no probe Skill leaks into the public matrix, and the read-only fixture
 remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
 `autopilot-full` Skills are separately loaded and exercised by focused live
-fixtures. A refreshed whole-catalog live matrix remains pending until the rest
-of Phase 7 stops changing the catalog.
+fixtures. The three Benny Skills pass a deterministic local-provider fixture
+covering dormant setup, source-bound triage, tracker-write compensation,
+trusted-marker handoff, repeated before-and-after UI proof, independent media
+review identity, and an unmerged draft pull request. Live OMP and Codex Benny
+runs and the refreshed 49-Skill whole-catalog matrix remain pending.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a

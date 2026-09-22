@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "setup-benny",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "app_control.ui",
+    "automation.recurring",
+    "communication.attachments.read",
+    "communication.threads.read",
+    "communication.threads.reply",
+    "issue_tracker.lifecycle",
+    "media.capture",
+    "scm.pull_requests",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "app_control.ui": "leave_the_reproduction_automation_disabled_until_a_complete_control_adapter_passes_preflight",
+    "automation.recurring": "produce_reviewed_prompt_drafts_for_manual_installation_without_claiming_live_automation",
+    "communication.attachments.read": "disable_media_dependent_triage_and_reproduction_instead_of_guessing_attachment_content",
+    "communication.threads.read": "stop_setup_before_automation_creation_because_source_coordinates_cannot_be_preflighted",
+    "communication.threads.reply": "stop_setup_before_enablement_because_thread_only_handoff_cannot_be_enforced",
+    "issue_tracker.lifecycle": "disable_tracker_writes_until_search_create_update_and_compensation_are_verified",
+    "media.capture": "leave_reproduction_disabled_until_screenshot_and_recording_evidence_can_be_captured",
+    "scm.pull_requests": "allow_reproduction_only_and_disable_the_bounded_fix_and_draft_pull_request_branch",
+    "skills.discover": "verify_every_required_project_local_skill_path_directly_before_preparing_automation",
+    "skills.invoke.explicit": "load_each_required_skill_from_its_verified_project_relative_path",
+    "workspace.inspect": "stop_without_claiming_repository_or_configuration_readiness"
+  }
+}

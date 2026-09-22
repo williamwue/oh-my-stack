@@ -126,6 +126,16 @@ Constraints:
 
 Decision: do not duplicate or rename this repository. Borrow its canonical vocabulary and Pi/OMP lessons, while building equal adapters and conformance evidence for all three target runtimes.
 
+For Benny specifically, the implementation imports the current official
+Cursor pstack automation source at
+`53e579f1481697931fc44f5445171397cfa2b24b`. The `oh-my-pstack` version remains
+useful design evidence for host-neutral wording and fail-closed integration,
+but it is not the semantic source of the new Skills. The port retains dormant
+setup, thread-only triage, cause-aware tracker routing, control-adapter and
+feature-map contracts, repeated UI reproduction, before-and-after evidence,
+and draft-only repair publication. It replaces Cursor paths, model slugs, and
+automation bindings with capability contracts and generated target packages.
+
 ## Build-or-fork decision
 
 `oh-my-stack` will start as a new repository rather than a direct fork because none of the references has all three properties:

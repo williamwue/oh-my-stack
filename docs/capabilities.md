@@ -118,6 +118,12 @@ passing wake. A documented feature or an untriggered schedule remains
 - `interaction.free_text`
 - `web.search`
 - `browser.control`
+- `app_control.ui`
+- `communication.attachments.read`
+- `communication.threads.read`
+- `communication.threads.reply`
+- `issue_tracker.lifecycle`
+- `media.capture`
 - `scm.pull_requests`
 - `scm.review_threads`
 - `scm.merge`
@@ -286,13 +292,15 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 46 public
+inferring it from naming or invocation policy. The catalog now admits 49 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, `orchestrate`, `autopilot-stack`, and
 `autopilot-full` fixtures separately prove live loading and execution.
-The complete matrix will be refreshed after the Phase 7 catalog stabilizes.
+The three Benny Skills pass a deterministic local-provider fixture, but do not
+yet have focused OMP or Codex runs. The complete 49-Skill matrix will be
+refreshed after those focused runs.
 OMP transcripts contain the
 matching native
 `skill://` reads;

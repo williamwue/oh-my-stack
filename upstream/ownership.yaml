@@ -210,3 +210,73 @@ entries:
     source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
     license: MIT
     transform: reviewed-portable-autopilot-full
+  - path: src/core/skills/setup-benny/SKILL.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/setup-benny/SKILL.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/setup-benny/references/configuration.example.yaml
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/templates/configuration.example.yaml
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/setup-benny/references/triage-automation-prompt.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/templates/triage-automation-prompt.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/setup-benny/references/reproduce-automation-prompt.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/templates/reproduce-automation-prompt.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/triage-issue-reports/SKILL.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/triage-issue-reports/SKILL.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/triage-issue-reports/references/routing.example.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/triage-issue-reports/references/routing.example.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/reproduce-and-fix-issues/SKILL.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/reproduce-and-fix-issues/SKILL.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/reproduce-and-fix-issues/references/control-adapter.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/reproduce-and-fix-issues/references/control-adapter.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/reproduce-and-fix-issues/references/feature-map.example.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/reproduce-and-fix-issues/references/feature-map.example.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny
+  - path: src/core/skills/reproduce-and-fix-issues/references/verify-existing-fix.md
+    owner: semantic-port
+    source_id: cursor-pstack-benny
+    source_path: pstack/automations/benny/skills/reproduce-and-fix-issues/references/verify-existing-fix.md
+    source_revision: 53e579f1481697931fc44f5445171397cfa2b24b
+    license: MIT
+    transform: reviewed-portable-benny

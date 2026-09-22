@@ -494,6 +494,141 @@
         }
       ],
       "transformation": "Cursor-only cloud agents, provider CLIs, mandatory third-party review and control plugins, fixed terminal loops, and implicit long-running forge access were replaced by provider capabilities, attributable one-owner-per-change lifecycle authority, three revision-bound independent verdict lanes, single-use root countersigns, owner-executed landing, operator-held queue gates, bounded durable audits and wakes, stable-patch rebase rules, and fail-closed fallbacks."
+    },
+    {
+      "id": "setup-benny-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/setup-benny/SKILL.md",
+          "sha256": "5a3cbe63360c9f6373b6cb6c79a1eaf7e0eba181bfaa1577e2e6431af3407282"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/configuration.example.yaml",
+          "sha256": "13e24b4ce9b9a0913916e85fe3b080b88d45f8e55dccfe8ae38e0751a997b6f5"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/reproduce-automation-prompt.md",
+          "sha256": "71ec574f1844e379394ae4ef14c48d7df10afbaa319d395c788d7f856f0e6899"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/triage-automation-prompt.md",
+          "sha256": "e0bba594547834f013ec805915610eb597e7929efe3ffbe85ae00339ee16d474"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/setup-benny/SKILL.md",
+          "owner": "derived",
+          "sha256": "157cdadc92fed99d20e7703ab6d89a5d2a702a2915284a5058ef2ba4deb3255f"
+        },
+        {
+          "path": "src/core/skills/setup-benny/skill.json",
+          "owner": "local-core",
+          "sha256": "28a50e0d6769b39cfc49cb668cc3494e87f41e0c498ba08a6fe63e2d034f0857"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/configuration.example.yaml",
+          "owner": "derived",
+          "sha256": "40ea1a77d8d154b705dd9a2a90d903fd540f45d3d5c5521e4299b7a15b6f3d8a"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/reproduce-automation-prompt.md",
+          "owner": "derived",
+          "sha256": "199c0a4e9dd2e1c234941af2df8403eefc2990038e0fd6a3a7af99dae12b7e54"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/triage-automation-prompt.md",
+          "owner": "derived",
+          "sha256": "43ee9db9fab0acdd63752d179ac1956bde0db6e8cf6ea91e0c7b20c76d4640ae"
+        }
+      ],
+      "transformation": "Cursor automation paths, runtime links, concrete model slugs, and immediate enablement were replaced by a host-neutral configuration contract, runtime-derived role inventory, reviewed native automation prompts, explicit capability checks, dormant-by-default installation, and fail-closed activation."
+    },
+    {
+      "id": "triage-issue-reports-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/triage-issue-reports/SKILL.md",
+          "sha256": "216a758b8711e64d19a55e6032c496527daac6364d010611040f3c04ef1a448f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/triage-issue-reports/references/routing.example.md",
+          "sha256": "e5e53013692568cf69da8e8b302fff929fe2fbc9aec1a4651fd7997e2c7a4025"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/triage-issue-reports/SKILL.md",
+          "owner": "derived",
+          "sha256": "66264c5302ee2e26b1f4639dd8118e3cd666bf772efea1655ff3a13afe953071"
+        },
+        {
+          "path": "src/core/skills/triage-issue-reports/skill.json",
+          "owner": "local-core",
+          "sha256": "db4687cd256ffe6b9f41959edbdb2e0c7f4f510b863943591ded7639d20c55e8"
+        },
+        {
+          "path": "src/core/skills/triage-issue-reports/references/routing.example.md",
+          "owner": "derived",
+          "sha256": "c7192dcd69ed83c6cf58b60beb46a2b9619d1409cbb3bf629b4bd5880c8588c6"
+        }
+      ],
+      "transformation": "Slack- and tracker-specific operations were replaced by communication-thread and issue-lifecycle capabilities, frozen source coordinates, exact trusted markers, cause-aware routing, deduplication, and a compensating rollback when the required thread-only verdict cannot be written."
+    },
+    {
+      "id": "reproduce-and-fix-issues-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/SKILL.md",
+          "sha256": "1363cc07343fe86aab42853b1bd4563288cbcbdf12f1c265b3b3b1afa25c09cb"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/control-adapter.md",
+          "sha256": "58b0615d2fca895f9a20df83266e280042b0d585b5f2fd324e2094a682fd846b"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+          "sha256": "1e5c7c8522daec3e43fcc2e73ceb97289ded65b552949ce65a11cc8eb3d2b6ee"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+          "sha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/SKILL.md",
+          "owner": "derived",
+          "sha256": "aa0b5e3e0bf1c3cb0cade613dbe5a8509237d3de6efc44f1abc39df44ac6c04f"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/skill.json",
+          "owner": "local-core",
+          "sha256": "4f23c8d0f171b5f102d9383f4b21a5a4da38859a161df7ab6cf7b2b11b363911"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/control-adapter.md",
+          "owner": "derived",
+          "sha256": "9215dd178e9c3dbf4f9f2410a57426c043854270ab71610b35bf7687b3fc6308"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+          "owner": "derived",
+          "sha256": "6ea18488deeca59a46b3d0f7c529cb3064ed83384aaca91b18f6aaa3acbe63af"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+          "owner": "derived",
+          "sha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+        }
+      ],
+      "transformation": "Cursor app-control and provider bindings were replaced by a configured control-adapter contract, trusted triage-marker gate, repeated before-and-after UI proof, independent media review, bounded local change authority, and draft-only pull-request publication with no merge or deployment authority."
     }
   ]
 }

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Reproduce And Fix Issues"
+  short_description: "Reproduce And Fix Issues workflow"
+  default_prompt: "Use $reproduce-and-fix-issues for this task."
+policy:
+  allow_implicit_invocation: false

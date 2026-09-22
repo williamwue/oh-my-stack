@@ -16,6 +16,12 @@
     "reason": "Deferred by the user until a local Claude Code account and authenticated runtime are available."
   },
   "capabilities": {
+    "app_control.ui": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.attachments.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.reply": { "status": "unknown", "provider": null, "evidence": null },
+    "issue_tracker.lifecycle": { "status": "unknown", "provider": null, "evidence": null },
+    "media.capture": { "status": "unknown", "provider": null, "evidence": null },
     "agents.cancel": { "status": "unknown", "provider": null, "evidence": null },
     "agents.custom_roles": { "status": "unknown", "provider": null, "evidence": null },
     "agents.follow_up": { "status": "unknown", "provider": null, "evidence": null },

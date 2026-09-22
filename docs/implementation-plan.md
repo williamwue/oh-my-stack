@@ -605,6 +605,21 @@ Current progress:
   reviewer lane names share one deterministic verifier, authenticated W4 forge
   behavior is pending, and Claude Code live verification remains deferred by
   project decision.
+- Benny is now represented by three public Skills: `setup-benny`,
+  `triage-issue-reports`, and `reproduce-and-fix-issues`. The port is pinned to
+  official Cursor pstack revision
+  `53e579f1481697931fc44f5445171397cfa2b24b`, while borrowing the host-neutral,
+  fail-closed posture observed in `oh-my-pstack`.
+- Its deterministic local-provider fixture keeps both automations dormant until
+  preflight passes, freezes communication source coordinates, compensates a
+  tracker write when the required thread reply fails, accepts only a trusted
+  triage marker, requires two baseline and two patched UI attempts, binds media
+  proof to an independent reviewer identity, and creates an unmerged,
+  undeployed draft pull request on an isolated branch. Negative cases reject a
+  missing parent, untrusted marker, and insufficient UI proof.
+- Focused OMP and Codex live runs, transcript audits, and the refreshed
+  49-public-Skill matrix remain pending. Claude Code live verification remains
+  deferred by project decision.
 
 Add advanced workflows one at a time in this order:
 

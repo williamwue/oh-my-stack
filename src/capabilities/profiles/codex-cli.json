@@ -12,6 +12,12 @@
     "installedProviders": []
   },
   "capabilities": {
+    "app_control.ui": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.attachments.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.read": { "status": "unknown", "provider": null, "evidence": null },
+    "communication.threads.reply": { "status": "unknown", "provider": null, "evidence": null },
+    "issue_tracker.lifecycle": { "status": "unknown", "provider": null, "evidence": null },
+    "media.capture": { "status": "unknown", "provider": null, "evidence": null },
     "agents.cancel": { "status": "native", "provider": "interrupt_agent", "evidence": "evals/evidence/codex-cli-0.155.1/check-cancellation.json" },
     "agents.custom_roles": { "status": "unsupported", "provider": "spawn_agent schema without a role selector", "evidence": "evals/evidence/codex-cli-0.155.1/check-custom-role.json" },
     "agents.follow_up": { "status": "native", "provider": "followup_task", "evidence": "evals/evidence/codex-cli-0.155.1/check-follow-up.json" },

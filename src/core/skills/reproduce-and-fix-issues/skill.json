@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "reproduce-and-fix-issues",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.spawn",
+    "app_control.ui",
+    "communication.attachments.read",
+    "communication.threads.read",
+    "communication.threads.reply",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "issue_tracker.lifecycle",
+    "media.capture",
+    "scm.pull_requests",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.spawn": "perform_bounded_analysis_locally_and_label_media_or_diff_review_as_non_independent",
+    "app_control.ui": "stop_blocked_without_claiming_a_ui_reproduction_or_attempting_a_fix",
+    "communication.attachments.read": "continue_only_when_the_text_report_is_sufficient_and_state_media_unavailability",
+    "communication.threads.read": "stop_without_source_posts_tracker_updates_or_code_changes",
+    "communication.threads.reply": "keep_results_in_run_output_and_do_not_create_a_replacement_root_or_channel_post",
+    "coordination.durable_state": "persist_source_coordinates_artifacts_budgets_and_phase_before_any_external_write",
+    "coordination.scheduled_wake": "write_a_durable_pause_for_verdict_rejection_or_follow_up_windows_instead_of_polling",
+    "issue_tracker.lifecycle": "preserve_the_source_tracker_link_without_mutating_tracker_state",
+    "media.capture": "stop_without_confirmed_reproduction_because_before_and_after_visual_evidence_is_required",
+    "scm.pull_requests": "leave_a_verified_local_branch_and_exact_draft_pull_request_brief_without_claiming_publication",
+    "skills.invoke.explicit": "apply_the_named_sibling_skill_contracts_directly_without_inventing_runtime_syntax",
+    "workspace.inspect": "stop_without_root_cause_or_existing_fix_claims",
+    "workspace.isolate": "preserve_user_changes_and_stop_before_baseline_or_patched_checkout_mutation",
+    "workspace.write": "complete_reproduction_only_and_do_not_attempt_a_fix"
+  }
+}
