@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-shipping-attempt-1",
+  "fixture": "shipping",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in disposable local-provider fixture; cursor/default; persisted root session 01a0c6af-e314-757a-ad50-acd06f14538e; no external forge.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/shipping.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly loaded skill://shipping from the disposable repository."
+    },
+    {
+      "id": "independent-reviewers-created",
+      "status": "fail",
+      "evidence": "The root created no native reviewer task and instead recorded invented reviewer-alpha, reviewer-beta, and reviewer-gamma labels."
+    },
+    {
+      "id": "root-did-not-self-review",
+      "status": "fail",
+      "evidence": "Transcript inspection found the root itself executed one chained command containing review.mjs verify for PRs 41, 42, and 43."
+    },
+    {
+      "id": "structural-final-state-passed",
+      "status": "pass",
+      "evidence": "The fixture landed 41 and 42, left 43 open, and passed its structural verifier, demonstrating why final state alone is insufficient evidence of independent review."
+    }
+  ],
+  "limitations": [
+    "This attempt is a semantic failure even though the deterministic final-state verifier passed.",
+    "The failure motivated an exact three-task requirement, root self-verification prohibition, packet action, and native task attribution.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

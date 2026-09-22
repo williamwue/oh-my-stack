@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-shipping",
+  "fixture": "shipping",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in a fresh disposable Git repository with deterministic local provider; gpt-6-astra high; user config and rules ignored; persisted root session 01a0c6c9-e895-7d90-a936-e11dd4b8253b and three persisted fork_turns=none children; no external forge.",
+    "permissionProfile": "Danger-full-access restricted operationally to the disposable fixture because local merge writes Git metadata"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/shipping-attempt-1.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly read the generated project shipping Skill before freezing provider state."
+    },
+    {
+      "id": "stack-and-authority-frozen",
+      "status": "pass",
+      "evidence": "The root froze merge-now authority and exact base, head, patch identity, writer, and verification command for PRs 41, 42, and 43 before review."
+    },
+    {
+      "id": "three-independent-reviewers-started-together",
+      "status": "pass",
+      "evidence": "Transcript inspection found exactly three spawn_agent calls for /root/reviewer_41, /root/reviewer_42, and /root/reviewer_43 before the first wait; each used fork_turns none and reviewed one distinct PR."
+    },
+    {
+      "id": "review-results-revision-bound",
+      "status": "pass",
+      "evidence": "The three verdict files preserve exact canonical nativeTaskId, distinct reviewerSession, baseSha, headSha, patchId, command, observed pass state, and PASS, PASS, FAIL verdicts."
+    },
+    {
+      "id": "root-did-not-self-review",
+      "status": "pass",
+      "evidence": "External parsing of the root transcript found no exec command invoking review.mjs verify; the three persisted child sessions performed the assigned verification."
+    },
+    {
+      "id": "contiguous-frontier-landed-bottom-up",
+      "status": "pass",
+      "evidence": "The root merged only PR 41 then PR 42, refreshed provider coordinates after each mutation, confirmed main at each landed head, and left failed PR 43 open and unarmed."
+    },
+    {
+      "id": "provider-and-independent-verifier-passed",
+      "status": "pass",
+      "evidence": "forge report produced SHIPPING_REPORT_OK=42 and verify.mjs produced SHIPPING_OK=e1c433a8e57e53ddcdf252877a9e90d5d96e820a in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local provider, not W4 completion against GitHub, GitLab, or another authenticated forge.",
+    "Codex CLI 0.155.1 exposes no custom reviewer selector, so each fork_turns none child received the read-only reviewer contract inline; danger-full-access remained available at the process boundary.",
+    "The root first tried two nonexistent frontier entry points and invoked forge report after only PR 41; all three operations failed without corrupting state before it used frontier.mjs, landed PR 42, and passed both final checks.",
+    "This does not establish native scm.merge, hosted merge queues, merge-when-ready, remote checks, review-thread replies, or conflict recovery.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in provider reads, review, or merge state."
+  ]
+}

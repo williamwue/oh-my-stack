@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-shipping-attempt-2",
+  "fixture": "shipping",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in disposable local-provider fixture; gpt-6-astra high; persisted root session 01a0c6b1-dd8e-73f4-9ed4-c022e75cb4e5; three native scout tasks; no external forge.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/shipping.json"
+  ],
+  "assertions": [
+    {
+      "id": "three-native-tasks-started-before-wait",
+      "status": "pass",
+      "evidence": "One task call started DeafeningSheep, ThirstyDuck, and ElectricJay before the root waited."
+    },
+    {
+      "id": "reviewers-could-run-verification",
+      "status": "fail",
+      "evidence": "All three assignments selected the built-in scout role, whose tool surface lacked bash; each worker truthfully returned no observed command result and no verdict."
+    },
+    {
+      "id": "fail-closed-without-merge",
+      "status": "pass",
+      "evidence": "No verdict file or merge was created after command execution proved unavailable."
+    }
+  ],
+  "limitations": [
+    "This run proves task existence is insufficient unless the selected native role exposes the verification capability.",
+    "The hardened OMP probe explicitly selects the command-capable built-in reviewer role.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

@@ -25,9 +25,12 @@ async function record(root, id, reviewer, verdict) {
 test("shipping lands only the revision-bound contiguous passing run", async () => {
   const root = await prepare();
   try {
-    await record(root, 41, "reviewer-a", "PASS");
-    await record(root, 42, "reviewer-b", "PASS+NOTES");
-    await record(root, 43, "reviewer-c", "FAIL");
+    const packet = JSON.parse((await execFileAsync(process.execPath, [join(root, "review.mjs"), "packet", root, "41"])).stdout);
+    assert.equal(packet.pullRequest, 41);
+    assert.match(packet.patchId, /^[0-9a-f]{40}$/);
+    await record(root, 41, "reviewer-Review41", "PASS");
+    await record(root, 42, "reviewer-Review42", "PASS+NOTES");
+    await record(root, 43, "reviewer-Review43", "FAIL");
     const initial = JSON.parse((await execFileAsync(process.execPath, [join(root, "frontier.mjs"), root])).stdout);
     assert.deepEqual(initial, { authorizedMode: "merge-now", landable: [41, 42], ceiling: 42, gap: { id: 43, reason: "failed-verdict" } });
     await execFileAsync(process.execPath, [join(root, "forge.mjs"), "status", root]);
@@ -66,6 +69,32 @@ test("shipping refuses an upper PR and a verdict whose reviewed head changed", a
     const state = JSON.parse(await readFile(join(root, "provider.json"), "utf8"));
     assert.deepEqual(state.merges, []);
     assert.equal(state.pullRequests[0].state, "OPEN");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("shipping accepts a clean PASS without fabricating reviewer notes", async () => {
+  const root = await prepare();
+  try {
+    await record(root, 42, "reviewer-Review42", "PASS");
+    const verdict = JSON.parse(await readFile(join(root, "verdicts", "42.json"), "utf8"));
+    assert.equal(verdict.reviewerSession, "reviewer-Review42");
+    assert.equal(verdict.nativeTaskId, "Review42");
+    assert.equal(verdict.verdict, "PASS");
+    assert.deepEqual(verdict.notes, []);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("shipping preserves a Codex canonical task name as native attribution", async () => {
+  const root = await prepare();
+  try {
+    await record(root, 41, "reviewer-/root/pr41_review", "PASS");
+    const verdict = JSON.parse(await readFile(join(root, "verdicts", "41.json"), "utf8"));
+    assert.equal(verdict.reviewerSession, "reviewer-/root/pr41_review");
+    assert.equal(verdict.nativeTaskId, "/root/pr41_review");
   } finally {
     await rm(root, { recursive: true, force: true });
   }

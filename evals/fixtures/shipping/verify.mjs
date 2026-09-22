@@ -15,7 +15,9 @@ assert.equal(git(project, "rev-parse", "main"), git(project, "rev-parse", "stack
 assert.throws(() => git(project, "merge-base", "--is-ancestor", "stack-3", "main"));
 const verdicts = await Promise.all(state.order.map((id) => loadVerdict(root, id)));
 assert.equal(new Set(verdicts.map((item) => item.reviewerSession)).size, 3);
-assert.deepEqual(verdicts.map((item) => item.verdict), ["PASS", "PASS+NOTES", "FAIL"]);
+assert.equal(verdicts[0].verdict, "PASS");
+assert.ok(["PASS", "PASS+NOTES"].includes(verdicts[1].verdict));
+assert.equal(verdicts[2].verdict, "FAIL");
 assert.deepEqual(report.frozenStack, [41, 42, 43]);
 assert.equal(report.verifiedCeiling, 42);
 assert.deepEqual(report.armed, []);

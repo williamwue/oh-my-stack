@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-shipping-attempt-3",
+  "fixture": "shipping",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in disposable local-provider fixture; gpt-6-astra high; persisted root session 01a0c6b4-e8cc-7360-ad94-7e5f16815729; three native reviewer tasks; no external forge.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/shipping.json"
+  ],
+  "assertions": [
+    {
+      "id": "three-command-capable-reviewers-ran",
+      "status": "pass",
+      "evidence": "Review41, Review42, and Review43 independently ran only their assigned verification commands and returned attributable PASS, PASS, and FAIL results."
+    },
+    {
+      "id": "native-attribution-recorded",
+      "status": "fail",
+      "evidence": "The fixture rejected exact reviewer-Review41, reviewer-Review42, and reviewer-Review43 attribution because its lowercase-only regular expression did not match native OMP identifiers."
+    },
+    {
+      "id": "fail-closed-without-merge",
+      "status": "pass",
+      "evidence": "The root did not rename reviewers, fabricate replacement identities, write verdict files, or merge any PR after attribution failed."
+    }
+  ],
+  "limitations": [
+    "The runtime behavior was valid; this attempt failed because the fixture encoded an invalid lowercase-only assumption about native task identifiers.",
+    "The hardened fixture preserves the exact native identifier and accepts its case without normalization.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

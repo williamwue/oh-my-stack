@@ -526,10 +526,21 @@ Current progress:
 - `shipping` is the forty-third public Skill and generates for all three
   targets. Its deterministic local-provider fixture binds three independent
   reviewer identities and verdicts to exact base, head, and stable patch
-  identities. It lands only the bottom-up `PASS`, `PASS+NOTES` prefix, stops at
-  the following `FAIL`, rejects an upper change before its frontier, and rejects
-  a head changed after review. This is structural W1 evidence; live OMP/Codex
-  reviewer sessions and any authenticated W4 forge merge are still pending.
+  identities. It lands only the bottom-up passing prefix, stops at the following
+  `FAIL`, rejects an upper change before its frontier, and rejects a head changed
+  after review.
+- Live OMP 18.2.8 and Codex CLI 0.155.1 runs now pass the same local-provider
+  protocol at W3. OMP starts three command-capable built-in reviewers in one
+  native task call; Codex starts three `fork_turns=none` reviewer sessions before
+  waiting. Both preserve the runtime-issued reviewer identifiers, keep review
+  execution out of the root, land PRs 41 and 42 one at a time, refresh provider
+  state after each merge, and leave failing PR 43 open and unarmed.
+- Retained failures prove that a structurally correct final state is insufficient
+  when the root self-reviews, a worker without command capability cannot observe
+  the contract, or the fixture rejects a valid runtime identifier. Native
+  `scm.merge`, merge-when-ready, hosted queues, and authenticated W4 forge
+  completion remain pending. Claude Code live verification remains deferred by
+  project decision.
 
 Add advanced workflows one at a time in this order:
 

@@ -1,0 +1,83 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-shipping",
+  "fixture": "shipping",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in a fresh disposable Git repository with deterministic local provider; gpt-6-astra high; persisted root session 01a0c6bc-291b-72ea-a86c-524f1db19597; one parallel call to three built-in reviewer tasks; no external forge.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/omp-18.2.8/shipping-attempt-1.json",
+    "evals/evidence/omp-18.2.8/shipping-attempt-2.json",
+    "evals/evidence/omp-18.2.8/shipping-attempt-3.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly loaded skill://shipping from the generated OMP target package copied into the fresh fixture."
+    },
+    {
+      "id": "stack-and-authority-frozen",
+      "status": "pass",
+      "evidence": "The root froze merge-now authority and exact base, head, patch identity, writer, and verification command for PRs 41, 42, and 43 before review."
+    },
+    {
+      "id": "three-independent-reviewers-started-together",
+      "status": "pass",
+      "evidence": "One native task call started command-capable reviewer tasks SolidPorpoise, YawningMarmot, and RenewedVole before waiting; each task reviewed one distinct PR and none matched its writer identity."
+    },
+    {
+      "id": "review-results-revision-bound",
+      "status": "pass",
+      "evidence": "The three verdict files preserve exact nativeTaskId, distinct reviewerSession, baseSha, headSha, patchId, command, observed pass state, and PASS, PASS, FAIL verdicts."
+    },
+    {
+      "id": "root-did-not-self-review",
+      "status": "pass",
+      "evidence": "External transcript parsing found no root bash call containing review.mjs verify; each child transcript contains only its assigned command."
+    },
+    {
+      "id": "contiguous-frontier-landed-bottom-up",
+      "status": "pass",
+      "evidence": "The root merged only PR 41 then PR 42, refreshed provider state after each mutation, and left failed PR 43 open and unarmed."
+    },
+    {
+      "id": "provider-and-independent-verifier-passed",
+      "status": "pass",
+      "evidence": "forge report produced SHIPPING_REPORT_OK=42 and verify.mjs produced SHIPPING_OK=ba355e3fde45c7cb44759738159ad82659080709 in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local provider, not W4 completion against GitHub, GitLab, or another authenticated forge.",
+    "The built-in OMP reviewer exposes bash; the assignment and transcript constrained each reviewer to one read-only verification command, but the runtime role is not capability-level filesystem read-only.",
+    "The root invoked forge report once after only PR 41 had landed; the fixture rejected the incomplete report, after which the root landed PR 42 and both final checks passed.",
+    "This does not establish native scm.merge, hosted merge queues, merge-when-ready, remote checks, review-thread replies, or conflict recovery.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

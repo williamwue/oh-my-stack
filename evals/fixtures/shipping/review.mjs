@@ -24,12 +24,26 @@ function verify() {
   return { path, expected, actual, passed: actual === expected };
 }
 
-if (action === "verify") {
+if (action === "packet") {
+  const live = liveCoordinates(project, pullRequest);
+  process.stdout.write(`${JSON.stringify({
+    pullRequest: id,
+    writerSession: pullRequest.writerSession,
+    baseSha: live.baseSha,
+    headSha: live.headSha,
+    patchId: live.patchId,
+    verificationCommand: `node review.mjs verify . ${id}`
+  }, null, 2)}\n`);
+} else if (action === "verify") {
   const result = verify();
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
   if (!result.passed) process.exitCode = 1;
 } else if (action === "record") {
-  assert.match(reviewerSession ?? "", /^reviewer-[a-z0-9-]+$/, "attributable reviewer session required");
+  assert.match(
+    reviewerSession ?? "",
+    /^reviewer-(?:[A-Za-z0-9][A-Za-z0-9._:-]*|\/[A-Za-z0-9][A-Za-z0-9_/-]*)$/,
+    "attributable native reviewer session required",
+  );
   assert.notEqual(reviewerSession, pullRequest.writerSession, "writer cannot review its own change");
   const existing = await readdir(join(root, "verdicts"));
   for (const file of existing) {
@@ -37,13 +51,17 @@ if (action === "verify") {
     assert.notEqual(verdict.reviewerSession, reviewerSession, "each PR requires a distinct reviewer session");
   }
   const verification = verify();
-  const expectedVerdict = verification.passed ? (id === 42 ? "PASS+NOTES" : "PASS") : "FAIL";
-  assert.equal(requestedVerdict, expectedVerdict, `verdict does not match observed behavior for PR ${id}`);
+  const acceptedVerdicts = verification.passed ? ["PASS", "PASS+NOTES"] : ["FAIL"];
+  assert.ok(
+    acceptedVerdicts.includes(requestedVerdict),
+    `verdict does not match observed behavior for PR ${id}: expected ${acceptedVerdicts.join(" or ")}`,
+  );
   const live = liveCoordinates(project, pullRequest);
   const verdict = {
     schemaVersion: 1,
     pullRequest: id,
     reviewerSession,
+    nativeTaskId: reviewerSession.slice("reviewer-".length),
     writerSession: pullRequest.writerSession,
     baseSha: live.baseSha,
     headSha: live.headSha,
@@ -51,10 +69,12 @@ if (action === "verify") {
     verificationCommand: `node review.mjs verify . ${id}`,
     verificationPassed: verification.passed,
     verdict: requestedVerdict,
-    notes: id === 42 ? ["non-blocking fixture note"] : verification.passed ? [] : ["expected gamma but observed BROKEN"]
+    notes: requestedVerdict === "PASS+NOTES"
+      ? ["non-blocking fixture note"]
+      : verification.passed ? [] : ["expected gamma but observed BROKEN"]
   };
   await writeFile(join(root, "verdicts", `${id}.json`), `${JSON.stringify(verdict, null, 2)}\n`, { flag: "wx" });
   console.log(`SHIPPING_VERDICT_RECORDED=${id}:${requestedVerdict}:${live.patchId}`);
 } else {
-  throw new Error("usage: node review.mjs <verify|record> <fixture-root> <pr-id> [reviewer-session] [verdict]");
+  throw new Error("usage: node review.mjs <packet|verify|record> <fixture-root> <pr-id> [reviewer-session] [verdict]");
 }

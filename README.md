@@ -316,13 +316,17 @@ the next useful minute and exits before provider measurement when a checkpoint
 is no longer waiting. A separate current-thread heartbeat attempt remains
 failed W0 evidence because it never re-entered the active task.
 
-The first `shipping` slice generates for all three targets and passes a
-deterministic local-provider fixture. Three stacked changes receive distinct
-revision- and patch-bound reviewer verdicts; only the contiguous `PASS`,
-`PASS+NOTES` run lands bottom-up, while the following `FAIL` remains open. The
-fixture also rejects an attempt to merge above the frontier and rejects a head
-changed after review. This is structural W1 evidence only. Live OMP and Codex
-reviewer-session runs and any authenticated W4 forge merge remain pending.
+The first `shipping` slice generates for all three targets and passes both its
+deterministic fixture and live OMP 18.2.8 and Codex CLI 0.155.1 runs against a
+disposable local provider. Each runtime starts three real independent reviewer
+sessions, preserves its runtime-issued reviewer identifiers, binds each verdict
+to the exact base, head, patch identity, and observed verification, and lands
+only the contiguous passing run bottom-up. PRs 41 and 42 land; the failing PR 43
+remains open and unarmed. Retained failures cover root self-review, a worker
+role without command capability, and overly narrow OMP and Codex task-identity
+grammars. Deterministic negative cases also reject an upper merge and a head
+changed after review. This is coordinated local-provider W3 evidence, not
+native `scm.merge` or an authenticated W4 forge merge.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

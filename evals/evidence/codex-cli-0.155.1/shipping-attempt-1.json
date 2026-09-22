@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-shipping-attempt-1",
+  "fixture": "shipping",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W0",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated shipping Skill in a fresh disposable Git repository with deterministic local provider; gpt-6-astra high; user config and rules ignored; persisted root session 01a0c6c6-77e3-74e3-b11c-4095b1ea0dd0 and three persisted children; no external forge.",
+    "permissionProfile": "Danger-full-access restricted operationally to the disposable fixture because local merge writes Git metadata"
+  },
+  "capabilities": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/codex-cli-0.155.1/shipping.json"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly read the project-generated shipping Skill and declared its boundary before provider mutation."
+    },
+    {
+      "id": "three-independent-reviewers-ran",
+      "status": "pass",
+      "evidence": "The root started three native subagents before waiting; /root/pr41_review, /root/pr42_review, and /root/pr43_review independently returned PASS, PASS, and FAIL for their exact packets."
+    },
+    {
+      "id": "native-attribution-recorded",
+      "status": "fail",
+      "evidence": "The fixture rejected reviewer-/root/pr41_review and its peers because its attribution grammar did not yet permit slash-delimited Codex canonical task names."
+    },
+    {
+      "id": "fail-closed-without-merge",
+      "status": "pass",
+      "evidence": "The root preserved the exact native names, wrote no verdict file, and left all three PRs open with zero merges."
+    }
+  ],
+  "limitations": [
+    "The runtime behavior was valid; this attempt failed because the fixture supported OMP task names but not slash-delimited Codex canonical task names.",
+    "The hardened fixture permits a constrained canonical task path and stores it byte-for-byte as nativeTaskId.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in provider reads, review, or merge state."
+  ]
+}

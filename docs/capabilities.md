@@ -371,14 +371,19 @@ records establish `coordination.durable_state` fallback behavior only;
 `coordination.scheduled_wake` remains unknown on both CLI profiles. They do not
 weaken the separately observed Desktop provider.
 
-The deterministic `shipping` fixture supplies structural W1 evidence for the
-revision-bound landing protocol. Three local-provider changes freeze exact
-base, head, stable patch identity, writer session, distinct reviewer session,
-and verification outcome. The contiguous `PASS`, `PASS+NOTES` prefix lands one
-change at a time; the following `FAIL` stays open. Negative cases reject both
-an upper change before the current bottom and a reviewed head that changes
-before merge. This does not yet prove live reviewer-session behavior on OMP or
-Codex, `scm.merge` on any profile, merge-when-ready, hosted queues, or W4 forge
+The `shipping` fixture supplies deterministic structural coverage plus live W3
+evidence on OMP 18.2.8 and Codex CLI 0.155.1. Three local-provider changes freeze
+exact base, head, stable patch identity, writer session, distinct native reviewer
+session, and verification outcome. OMP uses three command-capable built-in
+reviewers; Codex uses three persisted `fork_turns=none` reviewers with the role
+contract supplied inline because that CLI surface exposes no role selector.
+Both roots keep review execution delegated, land the contiguous passing prefix
+one change at a time, refresh the provider after each mutation, and leave the
+following `FAIL` open and unarmed. Negative cases reject an upper change before
+the current bottom and a reviewed head that changes before merge. Retained live
+failures also demonstrate fail-closed behavior for self-review, unavailable
+worker commands, and incompatible runtime task identifiers. This does not prove
+`scm.merge` on any profile, merge-when-ready, hosted queues, or W4 forge
 completion.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and
