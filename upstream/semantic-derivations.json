@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "acc65733f5172325385e8b9d050de3e4f67472d8e2641d0899532ff1eac7dc52"
+          "sha256": "1c0c9980a7edcf6902da779a6c0f51fa57defef7d5f6deeac842c2d62977db7f"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -446,6 +446,30 @@
         }
       ],
       "transformation": "Source-host cloud placement, fixed nesting depth, provider-specific stack commands, one store path, native task syntax, and unbounded fleet language were replaced by capability-gated delegation, a single-writer durable program store, generation-bound briefs and results, a mandatory end-to-end pilot, bounded rolling work, drain-time state transitions, revision-bound verification, continuous safe-frontier integration, bounded retry and stale-result reconciliation, and explicit stop fallbacks when delegation, persistence, isolation, or provider mutation is unavailable."
+    },
+    {
+      "id": "autopilot-stack-port",
+      "sourceId": "cursor-pstack-autopilot-stack",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-autopilot-stack/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+          "sha256": "60e0d997f7b369004a02089c71b9091d3f8e9bc0b4a3c1142598380faa7722fd"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autopilot-stack/SKILL.md",
+          "owner": "derived",
+          "sha256": "948499aaaacf1015cd93c0bc7dbe6591a7fb5e8082f95d58ae7ea897937a0ef8"
+        },
+        {
+          "path": "src/core/skills/autopilot-stack/skill.json",
+          "owner": "local-core",
+          "sha256": "3bfb542802cb66411ed4bf66022d1dde94ba82988f94e11421bae289f60dbcc3"
+        }
+      ],
+      "transformation": "Cursor-cloud owners, provider-specific commands, fixed loop mechanics, mandatory external plugins, and implicit forge availability were replaced by capability-gated attributable owners, a bounded durable audit and wake contract, revision-bound independent reviewer lanes, one root topology writer, stable-patch preservation with rewritten-head refresh, lease-protected provider mutation, explicit no-landing authority, and fail-closed fallbacks."
     }
   ]
 }

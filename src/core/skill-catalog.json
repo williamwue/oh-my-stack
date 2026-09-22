@@ -3,6 +3,7 @@
   "schemaVersion": 1,
   "public": [
     "autonomous-run",
+    "autopilot-stack",
     "babysit",
     "bug-fix",
     "feature",

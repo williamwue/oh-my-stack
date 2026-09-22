@@ -1,0 +1,6 @@
+interface:
+  display_name: "Autopilot Stack"
+  short_description: "Autopilot Stack workflow"
+  default_prompt: "Use $autopilot-stack for this task."
+policy:
+  allow_implicit_invocation: false

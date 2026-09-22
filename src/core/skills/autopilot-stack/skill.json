@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "autopilot-stack",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "coordination.scheduled_wake",
+    "scm.pull_requests",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.follow_up": "freeze_a_new_standalone_repair_brief_bound_to_the_prior_owner_result_and_start_a_fresh_attributable_owner",
+    "agents.read_result": "persist_pending_native_handles_and_stop_without_accepting_unread_owner_or_reviewer_results",
+    "agents.spawn": "persist_owner_and_review_packets_then_stop_instead_of_building_or_self_approving_in_the_root",
+    "agents.spawn_parallel": "serialize_disjoint_owners_without_changing_queue_order_or_verification_boundaries",
+    "agents.wait": "persist_live_handles_and_return_a_durable_pause_without_polling",
+    "coordination.durable_state": "write_a_workspace_scoped_single_writer_program_store_before_starting_owners",
+    "coordination.scheduled_wake": "continue_ready_local_work_now_but_pause_durably_when_future_provider_state_is_required",
+    "scm.pull_requests": "build_and_verify_a_disposable_local_provider_stack_and_mark_live_forge_delivery_unverified",
+    "workspace.isolate": "serialize_branch_writers_and_stop_before_any_overlapping_scope"
+  }
+}

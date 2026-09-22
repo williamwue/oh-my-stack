@@ -27,8 +27,9 @@ test("poteto-mode routes every admitted alpha outcome without implicit publicati
   assert.match(router, /land, merge, or ship[^\n]*`shipping`/);
   assert.match(router, /bounded task to a checkable predicate[^\n]*`autonomous-run`/);
   assert.match(router, /standing multi-session program[^\n]*`orchestrate`/);
-  assert.match(router, /outside\s+the admitted set/);
-  assert.doesNotMatch(router, /autopilot-full/);
+  assert.match(router, /linear operator-landed stack[^\n]*`autopilot-stack`/);
+  assert.match(router, /autopilot that also owns landing remain outside the admitted\s+set/);
+  assert.match(router, /Do not simulate `autopilot-full`/);
 });
 
 test("alpha three playbooks preserve their safety boundaries", async () => {

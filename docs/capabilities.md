@@ -286,12 +286,13 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 44 public
+inferring it from naming or invocation policy. The catalog now admits 45 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
 `autonomous-run`, `shipping`, and `orchestrate` fixtures separately prove live
-loading and execution.
+loading and execution. `autopilot-stack` currently has deterministic fixture
+evidence only.
 The complete matrix will be refreshed after the Phase 7 catalog stabilizes.
 OMP transcripts contain the
 matching native
@@ -386,6 +387,17 @@ failures also demonstrate fail-closed behavior for self-review, unavailable
 worker commands, and incompatible runtime task identifiers. This does not prove
 `scm.merge` on any profile, merge-when-ready, hosted queues, or W4 forge
 completion.
+
+The first deterministic `autopilot-stack` fixture freezes an explicit
+build-and-stack authorization while withholding landing authority. Two owners
+build disjoint branches from one target head; two distinct reviewer lanes bind
+clean verdicts to each base, head, and stable patch identity. The named root is
+the only topology writer: it keeps the bottom branch on `main`, rebases the tip
+onto that exact parent, preserves the code verdict only across an unchanged
+stable patch, and refreshes checks at the rewritten head. The verifier requires
+a linear two-link chain, open and unarmed changes, unchanged `main`, and no
+merge. This is structural W1 evidence; live OMP and Codex coordinator runs are
+pending.
 
 The `orchestrate` fixture supplies deterministic structural coverage plus live
 W3 evidence on OMP 18.2.8 and Codex CLI 0.155.1. Both roots complete one pilot

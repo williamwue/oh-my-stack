@@ -558,6 +558,16 @@ Current progress:
   stop at `4/4`; external transcript audits find no root unit execution or unit
   verification. This remains local-provider evidence, not authenticated W4
   external-system completion or a real coordinator-restart recovery test.
+- `autopilot-stack` is the forty-fifth public Skill and generates for all three
+  targets. Its first deterministic fixture freezes build-and-stack authority
+  without landing authority, builds two disjoint changes, requires two distinct
+  revision-bound reviewer lanes per change, and gives only the root topology
+  writes. The root keeps the bottom change on the target, rebases the tip onto
+  its exact parent, preserves the code verdict only when stable patch identity
+  survives, refreshes checks at the rewritten head, and delivers an open,
+  unarmed linear chain while the target remains unchanged. Negative coverage
+  rejects missing aggregate verdicts, owner topology writes, and a reviewed head
+  that changes before append. Live OMP and Codex runs remain pending.
 
 Add advanced workflows one at a time in this order:
 

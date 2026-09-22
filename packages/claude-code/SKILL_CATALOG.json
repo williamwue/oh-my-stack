@@ -8,6 +8,11 @@
       "invocation": "explicit"
     },
     {
+      "name": "autopilot-stack",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "babysit",
       "audience": "public",
       "invocation": "explicit"
