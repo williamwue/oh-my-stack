@@ -437,12 +437,12 @@
         {
           "path": "src/core/skills/orchestrate/SKILL.md",
           "owner": "derived",
-          "sha256": "497e58983c4af9c11cb32edd19a039c56a10891f00f687972fabe029b981ab04"
+          "sha256": "9c6b1e67a673a77dcd5152e3b6a019c5d7119ee2ea109f0f7e22249542b0316c"
         },
         {
           "path": "src/core/skills/orchestrate/skill.json",
           "owner": "local-core",
-          "sha256": "ee684a83d2e5cc8a2d789ab30d31706b612b774d237074b435c9f59b7abe0f92"
+          "sha256": "4cd496bc39420ca41ad4cb47663ebe4e7168d80a0384e6ae4eda9ac2ac332d22"
         }
       ],
       "transformation": "Source-host cloud placement, fixed nesting depth, provider-specific stack commands, one store path, native task syntax, and unbounded fleet language were replaced by capability-gated delegation, a single-writer durable program store, generation-bound briefs and results, a mandatory end-to-end pilot, bounded rolling work, drain-time state transitions, revision-bound verification, continuous safe-frontier integration, bounded retry and stale-result reconciliation, and explicit stop fallbacks when delegation, persistence, isolation, or provider mutation is unavailable."

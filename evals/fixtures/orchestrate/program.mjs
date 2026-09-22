@@ -85,10 +85,12 @@ if (action === "status") {
   console.log(`ORCHESTRATE_STARTED=${id}:${actor}`);
 } else if (action === "drain") {
   const files = (await readdir(join(root, "inbox"))).filter((file) => file.endsWith(".json")).sort();
+  const selected = id ? new Set(id.split(",")) : null;
   const batch = [];
   for (const file of files) {
     if (program.processedInbox.includes(file)) continue;
     const pointer = await readJson(join(root, "inbox", file));
+    if (selected && !selected.has(pointer.unit)) continue;
     const target = findUnit(pointer.unit);
     assert.equal(target.state, "running", `${pointer.unit} completion arrived from ${target.state}`);
     assert.equal(pointer.generation, program.generation, `${pointer.unit} completion has stale generation`);
@@ -100,6 +102,7 @@ if (action === "status") {
     program.processedInbox.push(file);
     batch.push(pointer.unit);
   }
+  assert.ok(!selected || batch.length > 0, `selected drain ${id} has no arrivals`);
   program.drains.push({ sequence: program.drains.length + 1, arrivals: batch });
   await saveProgram(root, program);
   console.log(`ORCHESTRATE_DRAIN=${batch.join(",") || "empty"}`);
@@ -166,5 +169,5 @@ if (action === "status") {
   await writeJson(join(root, "report.json"), report, { flag: "wx" });
   console.log(`ORCHESTRATE_REPORT_OK=${report.predicate}`);
 } else {
-  throw new Error("usage: node program.mjs <status|brief|start|drain|verdict|integrate|report> <root> [unit] [actor] [verdict]");
+  throw new Error("usage: node program.mjs <status|brief|start|drain|verdict|integrate|report> <root> [unit-or-drain-selection] [actor] [verdict]");
 }

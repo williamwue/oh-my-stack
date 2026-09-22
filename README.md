@@ -229,12 +229,10 @@ from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
-remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`, and
-`autonomous-run` Skills are separately loaded and exercised by focused live
-fixtures. `shipping` also has focused live OMP and Codex coverage, while
-`orchestrate` has deterministic fixture coverage; a
-refreshed whole-catalog live matrix remains pending until the rest of Phase 7
-stops changing the catalog.
+remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`,
+`autonomous-run`, `shipping`, and `orchestrate` Skills are separately loaded
+and exercised by focused live fixtures. A refreshed whole-catalog live matrix
+remains pending until the rest of Phase 7 stops changing the catalog.
 
 Phase 5 now has a deterministic same-scenario compiler. It converts passing
 OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
@@ -329,6 +327,17 @@ role without command capability, and overly narrow OMP and Codex task-identity
 grammars. Deterministic negative cases also reject an upper merge and a head
 changed after review. This is coordinated local-provider W3 evidence, not
 native `scm.merge` or an authenticated W4 forge merge.
+
+The first `orchestrate` slice also passes its deterministic fixture and live
+OMP 18.2.8 and Codex CLI 0.155.1 runs. Each coordinator completes a pilot before
+fan-out, binds four runtime-issued worker identities through no-write standby
+turns and same-session follow-ups, starts alpha and beta before waiting, freezes
+alpha and beta in separate drains, and uses four distinct reviewers. The join
+brief carries the actual integrated alpha and beta heads, all verdicts bind to
+generation and output hashes, and both runs stop at `4/4` with no publication.
+External transcript audits confirm that neither root executes unit work or unit
+verification. This is coordinated local-provider W3 evidence, not recovery
+from a real coordinator restart or authenticated W4 external-system completion.
 
 The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
 Each root loads only the generated Skills, measures the pinned provider exactly

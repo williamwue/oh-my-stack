@@ -59,7 +59,8 @@ test("orchestrate pilots, drains a rolling window, relays receipts, and closes a
     await action(root, "start", "alpha", "worker-/root/alpha_writer");
     await action(root, "start", "beta", "worker-/root/beta_writer");
     await execute(root, "alpha", "worker-/root/alpha_writer");
-    await action(root, "drain");
+    await execute(root, "beta", "worker-/root/beta_writer");
+    await action(root, "drain", "alpha");
     await verifyAndRecord(root, "alpha", "reviewer-/root/alpha_reviewer");
     await action(root, "integrate", "alpha");
 
@@ -67,8 +68,7 @@ test("orchestrate pilots, drains a rolling window, relays receipts, and closes a
     assert.deepEqual(mid.inFlight, ["beta"]);
     assert.equal(mid.states.beta, "running");
 
-    await execute(root, "beta", "worker-/root/beta_writer");
-    await action(root, "drain");
+    await action(root, "drain", "beta");
     await verifyAndRecord(root, "beta", "reviewer-/root/beta_reviewer");
     await action(root, "integrate", "beta");
 

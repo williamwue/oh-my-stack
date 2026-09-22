@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.8-macos-arm64-orchestrate",
+  "fixture": "orchestrate",
+  "profile": "omp-default",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.8",
+    "platform": "macos-arm64",
+    "configuration": "Generated orchestrate Skill in a fresh disposable Git repository; gpt-6-astra high; persisted root session 01a0c6de-35bd-7695-a408-cb144bae3074; four command-capable built-in workers resumed through native hub send and four distinct command-capable built-in reviewers; deterministic local program provider; no external publication.",
+    "permissionProfile": "Yolo write approval restricted operationally to the disposable fixture"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root explicitly loaded skill://orchestrate from the generated OMP package before measuring or mutating program state."
+    },
+    {
+      "id": "pilot-completed-before-scale",
+      "status": "pass",
+      "evidence": "Worker CombativeCanid and reviewer AutomaticCrow completed the pilot through bound standby identity, native same-task follow-up, drain, PASS verdict, and integration at aeb8bd3061555712915c7b35574c7cfc2e1e4830 before alpha or beta started."
+    },
+    {
+      "id": "parallel-workers-bound-before-execution",
+      "status": "pass",
+      "evidence": "One native task call started standby workers ComprehensiveCoyote and YoungestHarrier together; both runtime identities were persisted and both native hub sends occurred before the root waited for a completion."
+    },
+    {
+      "id": "one-completion-drained-while-sibling-remained-live",
+      "status": "pass",
+      "evidence": "The root froze only alpha, reviewed and integrated c20eb7c30e25a2cfbe2695f9472aa5582e420bd1, then froze beta in a separate drain and integrated 28828bdb312f651962d573ef6c095f377df4578c."
+    },
+    {
+      "id": "independent-revision-bound-verdicts",
+      "status": "pass",
+      "evidence": "AutomaticCrow, MelodicSnipe, SubtleStoat, and LongGorilla each reviewed one distinct unit; program state binds every PASS verdict to generation 1, its output SHA-256, worker identity, reviewer identity, and resulting integrated head. External parsing found no root bash call invoking unit.mjs execute or unit.mjs verify."
+    },
+    {
+      "id": "dependency-receipts-relayed",
+      "status": "pass",
+      "evidence": "The frozen join brief carries the actual integrated alpha and beta heads, and join integrated at 4a6ba88318baec177a2c74ac9ba507b5f7624f1f only after both dependencies passed independent review."
+    },
+    {
+      "id": "predicate-and-independent-verifier-passed",
+      "status": "pass",
+      "evidence": "The write-once report records four single-unit drains, 4/4 integrated, no in-flight work, gates, retries, abandonment, or publication; verify.mjs produced ORCHESTRATE_OK=4a6ba88318baec177a2c74ac9ba507b5f7624f1f in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local program provider, not W4 completion against an authenticated external work tracker, forge, or deployment system.",
+    "The built-in OMP worker and reviewer roles expose bash; assignments and transcripts constrained each child to standby or one exact command, but the runtime roles are not capability-level filesystem read-only.",
+    "The root transcript contains seven native task calls because the alpha and beta workers share one parallel call, plus sixteen native hub operations; child task identities remain separately attributable.",
+    "OMP delivery remains D0 overall because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

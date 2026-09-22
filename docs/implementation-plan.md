@@ -549,8 +549,15 @@ Current progress:
   independent verdicts to output hashes, integrates one frontier unit at a
   time, and closes only at the fixed `4/4` predicate. Negative coverage rejects
   fan-out before the pilot, integration without a verdict, and an output changed
-  after review. This is structural W1 evidence; live OMP and Codex coordinator
-  runs remain pending.
+  after review.
+- Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs pass the same protocol
+  at W3. Both complete the pilot before scale, bind runtime-issued worker
+  identities through no-write standby turns and same-session follow-ups, start
+  alpha and beta before waiting, drain them separately, use four distinct
+  reviewers, and relay the actual integrated dependency heads into join. Both
+  stop at `4/4`; external transcript audits find no root unit execution or unit
+  verification. This remains local-provider evidence, not authenticated W4
+  external-system completion or a real coordinator-restart recovery test.
 
 Add advanced workflows one at a time in this order:
 

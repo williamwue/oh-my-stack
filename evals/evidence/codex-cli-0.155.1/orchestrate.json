@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-orchestrate",
+  "fixture": "orchestrate",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-22",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W3",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Generated orchestrate Skill in a fresh disposable Git repository; gpt-6-astra high; user config and rules ignored; persisted root session 01a0c6e4-b812-7c40-a8f3-9800df31224c; four persisted fork_turns=none workers resumed through followup_task and four distinct persisted reviewers; deterministic local program provider; no external publication.",
+    "permissionProfile": "Danger-full-access restricted operationally to the disposable fixture because integration creates local Git commits"
+  },
+  "capabilities": [
+    "agents.follow_up",
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "resources.relative_paths",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "assertions": [
+    {
+      "id": "generated-skill-loaded",
+      "status": "pass",
+      "evidence": "The root loaded the generated project orchestrate Skill before measuring or mutating program state."
+    },
+    {
+      "id": "pilot-completed-before-scale",
+      "status": "pass",
+      "evidence": "Pilot worker /root/pilot_worker and reviewer /root/pilot_reviewer completed through brief, bound standby identity, same-session execution, drain, PASS verdict, and integration at 63924f82e78e71e4efb93c6e81570724373cf77d before alpha or beta started."
+    },
+    {
+      "id": "parallel-workers-bound-before-execution",
+      "status": "pass",
+      "evidence": "Root transcript ordinals 132 and 139 created /root/alpha_worker and /root/beta_worker before the first wait at 147; ordinals 161 and 166 sent both same-session follow-ups before the completion wait at 171."
+    },
+    {
+      "id": "one-completion-drained-while-sibling-remained-live",
+      "status": "pass",
+      "evidence": "After both parallel completions could arrive, the root froze only the alpha drain, reviewed and integrated alpha at 48537a12fc3eb1a224b2a2c57a0397f1d8093185 while beta remained running, then froze beta in a separate drain and integrated bdda6384a770e7541114392df4a727a9d33fe31c."
+    },
+    {
+      "id": "independent-revision-bound-verdicts",
+      "status": "pass",
+      "evidence": "Four distinct reviewer sessions verified one unit each; program state binds every PASS verdict to generation 1, its output SHA-256, worker identity, reviewer identity, and resulting integrated head. External parsing found no root tool call invoking unit.mjs execute or unit.mjs verify."
+    },
+    {
+      "id": "dependency-receipts-relayed",
+      "status": "pass",
+      "evidence": "The frozen join brief carries the actual integrated alpha and beta heads, and join integrated at 87c37d6d2f0644e1f1b92d4633bdee6e787cad33 only after both dependencies passed independent review."
+    },
+    {
+      "id": "predicate-and-independent-verifier-passed",
+      "status": "pass",
+      "evidence": "The write-once report records four single-unit drains, 4/4 integrated, no in-flight work, gates, retries, abandonment, or publication; verify.mjs produced ORCHESTRATE_OK=87c37d6d2f0644e1f1b92d4633bdee6e787cad33 in-session and again externally."
+    }
+  ],
+  "limitations": [
+    "This is W3 coordinated multi-session evidence against a disposable local program provider, not W4 completion against an authenticated external work tracker, forge, or deployment system.",
+    "Codex CLI 0.155.1 exposes no custom role selector, so workers and reviewers received bounded inline contracts; danger-full-access remained available at the process boundary.",
+    "The root made one failed read-only exploratory call to program.mjs brief without a unit before using the documented interface; fixture state was unchanged.",
+    "Persisted initial subagent assignment bodies are encrypted, so the audit proves native task identities, spawn and follow-up ordering, child results, root command exclusion, and durable artifacts rather than externally rereading exact assignment plaintext.",
+    "Unrelated Cloudflare MCP authentication warnings did not participate in program state, worker execution, review, or integration."
+  ]
+}

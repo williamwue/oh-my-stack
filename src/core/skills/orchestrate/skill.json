@@ -7,6 +7,7 @@
   "workflowTarget": "W4",
   "requires": [
     "agents.read_result",
+    "agents.follow_up",
     "agents.spawn",
     "agents.spawn_parallel",
     "agents.wait",
@@ -20,6 +21,7 @@
   ],
   "fallbacks": {
     "agents.read_result": "persist_pending_native_task_handles_and_stop_without_accepting_unread_results",
+    "agents.follow_up": "persist_the_exact_brief_and_native_worker_handle_then_stop_before_execution_when_identity_must_be_bound_first",
     "agents.spawn": "persist_the_framed_program_and_exact_first_briefs_then_stop_instead_of_implementing_units_in_the_coordinator",
     "agents.spawn_parallel": "use_a_bounded_serial_window_while_preserving_pilot_drain_and_dependency_semantics",
     "agents.wait": "persist_active_task_handles_and_return_a_durable_pause_without_polling",

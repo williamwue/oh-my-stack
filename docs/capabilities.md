@@ -290,8 +290,8 @@ inferring it from naming or invocation policy. The catalog now admits 44 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
 Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
-`autonomous-run`, and `shipping` fixtures separately prove live loading and
-execution. `orchestrate` currently has deterministic fixture evidence only.
+`autonomous-run`, `shipping`, and `orchestrate` fixtures separately prove live
+loading and execution.
 The complete matrix will be refreshed after the Phase 7 catalog stabilizes.
 OMP transcripts contain the
 matching native
@@ -385,6 +385,19 @@ the current bottom and a reviewed head that changes before merge. Retained live
 failures also demonstrate fail-closed behavior for self-review, unavailable
 worker commands, and incompatible runtime task identifiers. This does not prove
 `scm.merge` on any profile, merge-when-ready, hosted queues, or W4 forge
+completion.
+
+The `orchestrate` fixture supplies deterministic structural coverage plus live
+W3 evidence on OMP 18.2.8 and Codex CLI 0.155.1. Both roots complete one pilot
+through worker, independent review, and integration before widening the window;
+bind runtime-issued identities through no-write standby turns and same-session
+follow-ups; start alpha and beta before waiting; and preserve separate alpha and
+beta drain boundaries. Four distinct reviewers bind verdicts to generation and
+output hashes. Join receives the actual integrated dependency heads and the
+fixed program closes at `4/4` with no external publication. Transcript audits
+find no root `unit.mjs execute` or `unit.mjs verify` command. This does not prove
+recovery after an actual coordinator restart, stale-generation reconciliation,
+retry exhaustion, a human gate, authenticated external providers, or W4
 completion.
 
 Interaction is also surface-specific. OMP's interactive TUI uses `ask` and

@@ -68,6 +68,12 @@ or hidden coordination. Refill capacity as completed results are drained rather
 than waiting for a fixed batch. Stop refilling when the landing reserve or another
 recorded stop condition is reached.
 
+When durable state must bind a runtime-issued worker identity before mutation,
+start the worker in a no-write standby turn carrying the complete brief, persist
+the returned native handle, then send the execution directive to that same
+worker. If same-worker continuation is unavailable, stop before execution rather
+than inventing an identity or accepting an unattributed result.
+
 Completions are queue events. At each drain boundary, freeze arrivals, classify
 every pointer, update unit rows and the verification ledger, recompute ready work
 and the integration frontier, then start the next ready units. Arrivals during a

@@ -9,12 +9,19 @@ The root is the coordinator and must not run `unit.mjs execute` or
 integrate, report, and final verification commands.
 
 Run `pilot` through a real native worker and a different real native reviewer,
-then integrate it before starting any other unit. After the pilot, create the
-generation-bound briefs for `alpha` and `beta`, start both workers before
-waiting, and treat each completion as an inbox event. Drain `alpha` by itself
-while `beta` remains live; review and integrate it, then drain, review, and
-integrate `beta`. Only then brief and run `join`, whose brief must carry the
-actual integrated head receipts for both dependencies.
+then integrate it before starting any other unit. A worker starts with the full
+brief and standing orders in a no-write standby turn. After it returns its real
+native task identifier, the root records `worker-<native-task-id>` with
+`program.mjs start` and sends the exact execution command back to that same task.
+
+After the pilot, create the generation-bound briefs for `alpha` and `beta` and
+start both standby workers before waiting. Bind both returned identities, then
+send both execution follow-ups before waiting for completion. Treat each result
+as an inbox event. Freeze the first drain with
+`node program.mjs drain . alpha`, even if the beta completion pointer has also
+arrived; review and integrate alpha, then drain beta separately, review it, and
+integrate it. Only then brief and run `join`, whose brief must carry the actual
+integrated head receipts for both dependencies.
 
 Every worker may run only
 `node unit.mjs execute . <unit> worker-<native-task-id>`. Every reviewer may run
