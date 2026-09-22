@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "orchestrate",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W4",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "coordination.durable_state",
+    "scm.merge",
+    "scm.pull_requests",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.read_result": "persist_pending_native_task_handles_and_stop_without_accepting_unread_results",
+    "agents.spawn": "persist_the_framed_program_and_exact_first_briefs_then_stop_instead_of_implementing_units_in_the_coordinator",
+    "agents.spawn_parallel": "use_a_bounded_serial_window_while_preserving_pilot_drain_and_dependency_semantics",
+    "agents.wait": "persist_active_task_handles_and_return_a_durable_pause_without_polling",
+    "coordination.durable_state": "write_a_workspace_scoped_single_writer_program_store_and_stop_before_delegation",
+    "scm.merge": "compute_the_revision_bound_frontier_and_return_ordered_integration_operations_without_mutating_provider_state",
+    "scm.pull_requests": "use_a_disposable_provider_fixture_and_mark_live_forge_state_unverified",
+    "workspace.isolate": "serialize_writers_with_disjoint_scopes_and_never_run_conflicting_writers_concurrently"
+  }
+}

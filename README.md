@@ -13,9 +13,10 @@ principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
 (`how`, `technical-writing`, `unslop`, `poteto-mode`, `investigation`,
 `feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
 `setup-oh-my-stack` configuration Skill, and the Phase 7 `babysit`,
-`pause-safely`, `session-pickup`, `autonomous-run`, and `shipping` Skills generate
-deterministic OMP, Codex, and Claude Code target packages. Seven canonical roles generate native
-read-only and writable definitions. All packages pass static `D0` validation.
+`pause-safely`, `session-pickup`, `autonomous-run`, `shipping`, and
+`orchestrate` Skills generate deterministic OMP, Codex, and Claude Code target
+packages. Seven canonical roles generate native read-only and writable
+definitions. All packages pass static `D0` validation.
 
 Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
 arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
@@ -223,14 +224,15 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 43 public workflows and principles
+The canonical Skill catalog now separates 44 public workflows and principles
 from 12 internal `check-*` runtime probes. The original 38-Skill Alpha matrix
 passes on both OMP and Codex CLI: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and the read-only fixture
 remains unchanged. The new `babysit`, `pause-safely`, `session-pickup`, and
 `autonomous-run` Skills are separately loaded and exercised by focused live
-fixtures. `shipping` has deterministic fixture coverage; a
+fixtures. `shipping` also has focused live OMP and Codex coverage, while
+`orchestrate` has deterministic fixture coverage; a
 refreshed whole-catalog live matrix remains pending until the rest of Phase 7
 stops changing the catalog.
 

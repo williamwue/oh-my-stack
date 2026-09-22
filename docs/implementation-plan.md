@@ -541,6 +541,16 @@ Current progress:
   `scm.merge`, merge-when-ready, hosted queues, and authenticated W4 forge
   completion remain pending. Claude Code live verification remains deferred by
   project decision.
+- `orchestrate` is the forty-fourth public Skill and generates for all three
+  targets. Its first deterministic disposable-repository fixture freezes a
+  four-unit generation, requires a complete pilot before fan-out, caps the
+  rolling worker window at two, drains one completion while a sibling remains
+  live, relays actual integrated head receipts into downstream briefs, binds
+  independent verdicts to output hashes, integrates one frontier unit at a
+  time, and closes only at the fixed `4/4` predicate. Negative coverage rejects
+  fan-out before the pilot, integration without a verdict, and an output changed
+  after review. This is structural W1 evidence; live OMP and Codex coordinator
+  runs remain pending.
 
 Add advanced workflows one at a time in this order:
 

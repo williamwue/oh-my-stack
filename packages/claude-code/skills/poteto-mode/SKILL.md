@@ -16,6 +16,7 @@ Use the first matching row:
 
 | Observable request | Primary workflow |
 | --- | --- |
+| Coordinate a standing multi-session program with dependent units and repeated integration | `orchestrate` |
 | Drive one bounded task to a checkable predicate without intermediate prompting | `autonomous-run` |
 | Explicitly stop current in-flight work and leave it resumable | `pause-safely` |
 | Resume or take over prior in-flight work from a durable trail | `session-pickup` |
@@ -35,12 +36,13 @@ state and record the secondary concern inside it. A discovered bug or feature
 must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
-Requests for multi-project orchestration or autopilot programs remain outside
-the admitted set. State that boundary and execute only the independently useful
-admitted portion. Do not simulate an unimplemented advanced workflow.
+Requests for autopilot programs remain outside the admitted set. State that
+boundary and execute only the independently useful admitted portion. Do not
+simulate an unimplemented advanced workflow.
 `autonomous-run` owns one bounded predicate and does not grant shipping
 authority. `babysit` never implies landing; only explicit land, merge, or ship
-intent routes to `shipping`.
+intent routes to `shipping`. `orchestrate` owns a durable program that outlives
+one worker; it is not a more elaborate name for one bounded task.
 
 ## Common invariants
 

@@ -286,13 +286,14 @@ Code collection still fails closed and remains deferred pending an
 authenticated runtime.
 
 The public-Skill matrix makes the product boundary machine-readable instead of
-inferring it from naming or invocation policy. The catalog now admits 43 public
+inferring it from naming or invocation policy. The catalog now admits 44 public
 workflows and principles and marks 12 `check-*` Skills as internal probes. The
 Alpha 3 live matrix covers its original public batches of 10, 10, 10, and 8
-Skills. The new `babysit`, `pause-safely`, `session-pickup`, and
-`autonomous-run` fixtures
-separately prove focused live loading and execution; the complete matrix will
-be refreshed after the Phase 7 catalog stabilizes. OMP transcripts contain the
+Skills. The focused `babysit`, `pause-safely`, `session-pickup`,
+`autonomous-run`, and `shipping` fixtures separately prove live loading and
+execution. `orchestrate` currently has deterministic fixture evidence only.
+The complete matrix will be refreshed after the Phase 7 catalog stabilizes.
+OMP transcripts contain the
 matching native
 `skill://` reads;
 Codex transcripts contain matching `skills.selected_skill_instructions` items

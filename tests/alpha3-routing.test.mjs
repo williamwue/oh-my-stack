@@ -26,6 +26,7 @@ test("poteto-mode routes every admitted alpha outcome without implicit publicati
   assert.match(router, /existing pull request merge-ready[^\n]*`babysit`/);
   assert.match(router, /land, merge, or ship[^\n]*`shipping`/);
   assert.match(router, /bounded task to a checkable predicate[^\n]*`autonomous-run`/);
+  assert.match(router, /standing multi-session program[^\n]*`orchestrate`/);
   assert.match(router, /outside\s+the admitted set/);
   assert.doesNotMatch(router, /autopilot-full/);
 });

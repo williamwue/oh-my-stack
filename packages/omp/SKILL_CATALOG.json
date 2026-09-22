@@ -103,6 +103,11 @@
       "invocation": "explicit"
     },
     {
+      "name": "orchestrate",
+      "audience": "public",
+      "invocation": "explicit"
+    },
+    {
       "name": "pause-safely",
       "audience": "public",
       "invocation": "explicit"

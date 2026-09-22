@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "c627b2192e011fcb15717a5dfcf043f8ec602c4664738070668364fb27811f2d"
+          "sha256": "acc65733f5172325385e8b9d050de3e4f67472d8e2641d0899532ff1eac7dc52"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -422,6 +422,30 @@
         }
       ],
       "transformation": "Provider-specific CLIs, mandatory cloud reviewers, control-driver dependencies, queue polling, and implicit retargeting were replaced by provider capabilities, distinct read-only reviewer sessions, revision and stable-patch binding, a contiguous bottom-up frontier, one-at-a-time root landing, authoritative refresh after each merge, and explicit stop fallbacks when independent review or merge capability is unavailable."
+    },
+    {
+      "id": "orchestrate-port",
+      "sourceId": "cursor-pstack-orchestrate",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-orchestrate/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/orchestrate.md",
+          "sha256": "d42b4375f1bd4ce23da0b575a198571a2117df7eea10c3c9fc6d92ae1053f7be"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/orchestrate/SKILL.md",
+          "owner": "derived",
+          "sha256": "497e58983c4af9c11cb32edd19a039c56a10891f00f687972fabe029b981ab04"
+        },
+        {
+          "path": "src/core/skills/orchestrate/skill.json",
+          "owner": "local-core",
+          "sha256": "ee684a83d2e5cc8a2d789ab30d31706b612b774d237074b435c9f59b7abe0f92"
+        }
+      ],
+      "transformation": "Source-host cloud placement, fixed nesting depth, provider-specific stack commands, one store path, native task syntax, and unbounded fleet language were replaced by capability-gated delegation, a single-writer durable program store, generation-bound briefs and results, a mandatory end-to-end pilot, bounded rolling work, drain-time state transitions, revision-bound verification, continuous safe-frontier integration, bounded retry and stale-result reconciliation, and explicit stop fallbacks when delegation, persistence, isolation, or provider mutation is unavailable."
     }
   ]
 }

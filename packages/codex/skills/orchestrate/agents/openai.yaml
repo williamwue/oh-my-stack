@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrate"
+  short_description: "Orchestrate workflow"
+  default_prompt: "Use $orchestrate for this task."
+policy:
+  allow_implicit_invocation: false
