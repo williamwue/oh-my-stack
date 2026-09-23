@@ -3,6 +3,30 @@
   "target": "claude-code",
   "skills": [
     {
+      "name": "architect",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "arena",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "authoring-a-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "automate-me",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "autonomous-run",
       "audience": "public",
       "category": "workflow",
@@ -27,13 +51,49 @@
       "invocation": "explicit"
     },
     {
+      "name": "blast-radius",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "bro",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "bug-fix",
       "audience": "public",
       "category": "workflow",
       "invocation": "automatic"
     },
     {
+      "name": "create-verification-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "eval",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "feature",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "figure-it-out",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "hillclimb",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -57,6 +117,30 @@
       "invocation": "explicit"
     },
     {
+      "name": "maintain-verification-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "make-bot-ui",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "multi-phase-plan",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "no-comments",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "opening-a-pr",
       "audience": "public",
       "category": "workflow",
@@ -70,6 +154,12 @@
     },
     {
       "name": "pause-safely",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "perf-issue",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -231,13 +321,31 @@
       "invocation": "automatic"
     },
     {
+      "name": "recall",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "refactoring",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
     },
     {
+      "name": "reflect",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "reproduce-and-fix-issues",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "runtime-forensics",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -273,7 +381,19 @@
       "invocation": "explicit"
     },
     {
+      "name": "swarm",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "tdd",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "teach",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -285,13 +405,43 @@
       "invocation": "explicit"
     },
     {
+      "name": "trace-forensics",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "triage-issue-reports",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
     },
     {
+      "name": "typescript-best-practices",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "unslop",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "visual-parity",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "why",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "worktree-cleanup",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"

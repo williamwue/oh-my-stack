@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Maintain Verification Skill"
+  short_description: "Audit and update a verification Skill using source and live beha"
+  default_prompt: "Use $maintain-verification-skill for this task."
+policy:
+  allow_implicit_invocation: false

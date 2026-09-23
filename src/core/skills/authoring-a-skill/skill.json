@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "authoring-a-skill",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "resources.relative_paths",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {}
+}

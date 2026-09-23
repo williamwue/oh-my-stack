@@ -15,6 +15,7 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 import { buildRelease, checkRelease, releaseSource, repoRoot } from "../tools/build-release.mjs";
+import { loadModel } from "../tools/generate.mjs";
 import {
   extractArchive,
   installArchive,
@@ -37,13 +38,15 @@ async function exists(path) {
 }
 
 test("release archives and manifest are byte-reproducible", async () => {
+  const model = await loadModel();
+  const version = model.project.version;
   const snapshot = await checkRelease({ root: repoRoot });
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
-    "oh-my-stack-claude-code-0.2.0-alpha.4.tar.gz",
-    "oh-my-stack-codex-0.2.0-alpha.4.tar.gz",
-    "oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz",
-    "oh-my-stack-omp-0.2.0-alpha.4.tar.gz",
+    `oh-my-stack-claude-code-${version}.tar.gz`,
+    `oh-my-stack-codex-${version}.tar.gz`,
+    `oh-my-stack-codex-plugin-${version}.tar.gz`,
+    `oh-my-stack-omp-${version}.tar.gz`,
     "release-manifest.json",
   ]);
 });
@@ -79,7 +82,7 @@ test("Codex plugin bundle exposes the generated package through one local market
     const packagedSkills = codexArtifact.files
       .map((file) => file.path)
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
-    assert.equal(packagedSkills.length, 49);
+    assert.equal(packagedSkills.length, 74);
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
@@ -178,6 +181,75 @@ test("release installer CLI consumes the generated manifest", async () => {
     await execFileAsync(process.execPath, [cli, "update", "--manifest", join(output, "release-manifest.json"), ...common]);
     await execFileAsync(process.execPath, [cli, "uninstall", ...common]);
     assert.equal(await exists(destination), false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("release installer CLI refuses an existing empty unowned directory", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-release-unowned-"));
+  try {
+    const output = join(root, "dist");
+    await buildRelease({ root: repoRoot, out: output });
+    const destination = join(root, "user-directory");
+    await mkdir(destination);
+    for (const action of ["install", "update"]) {
+      await assert.rejects(
+        execFileAsync(process.execPath, [
+          join(repoRoot, "tools", "install-release.mjs"), action,
+          "--manifest", join(output, "release-manifest.json"),
+          "--target", "codex", "--destination", destination,
+        ]),
+        (error) => error.code === 1 && /GENERATION\.json/.test(error.stderr),
+      );
+      assert.deepEqual(await readdir(destination), []);
+      assert.deepEqual((await readdir(root)).sort(), ["dist", "user-directory"]);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("release installer CLI verifies installed files without mutation or archives", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-release-verify-"));
+  try {
+    const output = join(root, "dist");
+    const manifest = await buildRelease({ root: repoRoot, out: output });
+    const cli = join(repoRoot, "tools", "install-release.mjs");
+    for (const artifact of manifest.artifacts) {
+      const destination = join(root, artifact.target);
+      const common = ["--manifest", join(output, "release-manifest.json"),
+        "--target", artifact.target, "--destination", destination];
+      await execFileAsync(process.execPath, [cli, "install", ...common]);
+      await rm(join(output, artifact.file));
+      const pristine = await packageInventory(root);
+      const result = await execFileAsync(process.execPath, [cli, "verify", ...common]);
+      assert.match(result.stdout, new RegExp(`Verified ${artifact.target} package`));
+      assert.deepEqual(await packageInventory(root), pristine);
+
+      const file = join(destination, artifact.files[0].path);
+      const original = await readFile(file);
+      for (const mutation of ["modified", "missing", "extra"]) {
+        const extra = join(destination, "unexpected.txt");
+        if (mutation === "modified") await writeFile(file, "changed\n");
+        if (mutation === "missing") await rm(file);
+        if (mutation === "extra") await writeFile(extra, "unexpected\n");
+        const before = await packageInventory(root);
+        await assert.rejects(
+          execFileAsync(process.execPath, [cli, "verify", ...common]),
+          (error) => error.code === 1 && /installed files do not match/.test(error.stderr),
+        );
+        assert.deepEqual(await packageInventory(root), before);
+        if (mutation === "extra") await rm(extra);
+        else await writeFile(file, original);
+      }
+    }
+    const missing = join(root, "does-not-exist");
+    await assert.rejects(execFileAsync(process.execPath, [cli, "verify",
+      "--manifest", join(output, "release-manifest.json"),
+      "--target", "codex", "--destination", missing]),
+    (error) => error.code === 1 && /ENOENT/.test(error.stderr));
+    assert.equal(await exists(missing), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

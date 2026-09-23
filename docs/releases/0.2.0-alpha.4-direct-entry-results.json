@@ -1,0 +1,533 @@
+{
+  "runtime": "codex-cli 0.155.1",
+  "installedVersion": "0.2.0-alpha.4",
+  "discovered": 49,
+  "selected": 49,
+  "fullBodyMatches": 45,
+  "result": "incomplete-full-body-acceptance",
+  "batches": [
+    {
+      "threadId": "01a0cb62-a38a-7ea0-834d-35a9e7a7ca7c",
+      "count": 10,
+      "headingsMatch": true,
+      "toolCalls": 0
+    },
+    {
+      "threadId": "01a0cb62-c324-7323-bade-8c8bb01df09c",
+      "count": 10,
+      "headingsMatch": true,
+      "toolCalls": 0
+    },
+    {
+      "threadId": "01a0cb62-e54e-7102-8f29-7342fc9f8cf6",
+      "count": 10,
+      "headingsMatch": true,
+      "toolCalls": 0
+    },
+    {
+      "threadId": "01a0cb63-0b29-7bc3-be7d-0ab1134389eb",
+      "count": 10,
+      "headingsMatch": true,
+      "toolCalls": 0
+    },
+    {
+      "threadId": "01a0cb63-2e8b-7d90-9015-443d0add34ff",
+      "count": 9,
+      "headingsMatch": true,
+      "toolCalls": 0
+    }
+  ],
+  "skills": [
+    {
+      "name": "autonomous-run",
+      "heading": "Autonomous Run",
+      "bodyLength": 3297,
+      "recordedLength": 3297,
+      "bodySha256": "7ed17f8771a5f052f861dc93a8675970273939074203fad1ad73301d6d9e70f3",
+      "recordedSha256": "7ed17f8771a5f052f861dc93a8675970273939074203fad1ad73301d6d9e70f3",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "autopilot-full",
+      "heading": "Autopilot Full",
+      "bodyLength": 6307,
+      "recordedLength": 6307,
+      "bodySha256": "a82cda142e322aee4d13340075e665f99684e7c60c2056929ab7e22e408523cf",
+      "recordedSha256": "a82cda142e322aee4d13340075e665f99684e7c60c2056929ab7e22e408523cf",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "autopilot-stack",
+      "heading": "Autopilot Stack",
+      "bodyLength": 5374,
+      "recordedLength": 5374,
+      "bodySha256": "2f5bf0a70369467c4f42b07a8d74447f9ee4b43653c007b0a190bc6c91e85f81",
+      "recordedSha256": "2f5bf0a70369467c4f42b07a8d74447f9ee4b43653c007b0a190bc6c91e85f81",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "babysit",
+      "heading": "Babysit",
+      "bodyLength": 3564,
+      "recordedLength": 3564,
+      "bodySha256": "13a3b4e48bbfe2dae7ab37faf32ab46ad93caa8e2b27fb054189b91bb994ee68",
+      "recordedSha256": "13a3b4e48bbfe2dae7ab37faf32ab46ad93caa8e2b27fb054189b91bb994ee68",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "bug-fix",
+      "heading": "Bug Fix",
+      "bodyLength": 3865,
+      "recordedLength": 3865,
+      "bodySha256": "120ef1a1137cb62091ecb8d08e1336e28746cfdee2f566199b772ed588eb76f3",
+      "recordedSha256": "120ef1a1137cb62091ecb8d08e1336e28746cfdee2f566199b772ed588eb76f3",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "feature",
+      "heading": "Feature",
+      "bodyLength": 1597,
+      "recordedLength": 1597,
+      "bodySha256": "ceec7ec7238170b7fc7ab234dd8ba7f32c00ef8cc44713e08813e078ea1d6d35",
+      "recordedSha256": "ceec7ec7238170b7fc7ab234dd8ba7f32c00ef8cc44713e08813e078ea1d6d35",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "how",
+      "heading": "How",
+      "bodyLength": 4106,
+      "recordedLength": 4106,
+      "bodySha256": "66fb5ad1c503bd96c6f7283b2d5867f3f81da45f66fe8df12d13071cd69e3b75",
+      "recordedSha256": "66fb5ad1c503bd96c6f7283b2d5867f3f81da45f66fe8df12d13071cd69e3b75",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "interrogate",
+      "heading": "Interrogate",
+      "bodyLength": 4087,
+      "recordedLength": 4087,
+      "bodySha256": "64ad992d7815983bdc49622f67a21786d5f174b36f72ddc74e716efac5f5a240",
+      "recordedSha256": "64ad992d7815983bdc49622f67a21786d5f174b36f72ddc74e716efac5f5a240",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "investigation",
+      "heading": "Investigation",
+      "bodyLength": 1151,
+      "recordedLength": 1151,
+      "bodySha256": "d362e38d71747674f991d202b063a5a1f5c58ac9053438ee526445b6d6482478",
+      "recordedSha256": "d362e38d71747674f991d202b063a5a1f5c58ac9053438ee526445b6d6482478",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "opening-a-pr",
+      "heading": "Opening a Pull Request",
+      "bodyLength": 1748,
+      "recordedLength": 1748,
+      "bodySha256": "f2eb429b900f1278ea8e5ac3cadb5ffddfcb2027a21ff18a0ee2b27ae1f9fab7",
+      "recordedSha256": "f2eb429b900f1278ea8e5ac3cadb5ffddfcb2027a21ff18a0ee2b27ae1f9fab7",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "orchestrate",
+      "heading": "Orchestrate",
+      "bodyLength": 5659,
+      "recordedLength": 5659,
+      "bodySha256": "04efe29dcff35de97f8533e22777c95382238bc2e1bc2b7e9ae6e962a360b66a",
+      "recordedSha256": "04efe29dcff35de97f8533e22777c95382238bc2e1bc2b7e9ae6e962a360b66a",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "pause-safely",
+      "heading": "Pause Safely",
+      "bodyLength": 1707,
+      "recordedLength": 1707,
+      "bodySha256": "061681e401bbf26f0bfd4c99a43c03126540026e6ce0ae9884c205431ec56515",
+      "recordedSha256": "061681e401bbf26f0bfd4c99a43c03126540026e6ce0ae9884c205431ec56515",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "poteto-mode",
+      "heading": "Poteto Mode",
+      "bodyLength": 3571,
+      "recordedLength": 3571,
+      "bodySha256": "ef12d35f81f122cd77a51dff7f8141a66101335add4409c11cbedb72ccacf8c1",
+      "recordedSha256": "ef12d35f81f122cd77a51dff7f8141a66101335add4409c11cbedb72ccacf8c1",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-attack-the-premise",
+      "heading": "Attack the Premise",
+      "bodyLength": 1755,
+      "recordedLength": 1755,
+      "bodySha256": "dc09677641ab2eeaf5c7f19de97400ddfd14fdfb2379ab4d5362c8a8693d7bcc",
+      "recordedSha256": "dc09677641ab2eeaf5c7f19de97400ddfd14fdfb2379ab4d5362c8a8693d7bcc",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-boundary-discipline",
+      "heading": "Boundary Discipline",
+      "bodyLength": 1701,
+      "recordedLength": 1701,
+      "bodySha256": "206082406addca2d4f889905ec59ca39f21a5680baa0310192d2634605306e4b",
+      "recordedSha256": "206082406addca2d4f889905ec59ca39f21a5680baa0310192d2634605306e4b",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-build-the-lever",
+      "heading": "Build the Lever",
+      "bodyLength": 2226,
+      "recordedLength": 2226,
+      "bodySha256": "5b014b3c0eabf88b0010dc82b6f4fcb67c76ebb27743bc9502aebeca775c9dd7",
+      "recordedSha256": "5b014b3c0eabf88b0010dc82b6f4fcb67c76ebb27743bc9502aebeca775c9dd7",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-encode-lessons-in-structure",
+      "heading": "Encode Lessons in Structure",
+      "bodyLength": 2033,
+      "recordedLength": 2033,
+      "bodySha256": "daeaeebd20ecaa6581390d7d6f2ffd526f0f5e69825070ddbc35373e24954795",
+      "recordedSha256": "daeaeebd20ecaa6581390d7d6f2ffd526f0f5e69825070ddbc35373e24954795",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-exhaust-the-design-space",
+      "heading": "Exhaust the Design Space",
+      "bodyLength": 1008,
+      "recordedLength": 1008,
+      "bodySha256": "fe15a7acc09182b4010ecb0cbf06da592cddc75f2870d07e1f9b4ee6ae3b52d5",
+      "recordedSha256": "fe15a7acc09182b4010ecb0cbf06da592cddc75f2870d07e1f9b4ee6ae3b52d5",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-experience-first",
+      "heading": "Experience First",
+      "bodyLength": 1057,
+      "recordedLength": 1057,
+      "bodySha256": "dbb043ec840bf1d34bdb30f36f8d7440e6c4e080b1d9bcebef244cc57d1bc700",
+      "recordedSha256": "dbb043ec840bf1d34bdb30f36f8d7440e6c4e080b1d9bcebef244cc57d1bc700",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-fix-root-causes",
+      "heading": "Fix Root Causes",
+      "bodyLength": 1115,
+      "recordedLength": 1115,
+      "bodySha256": "6e7f46d5ade406cca05e1dfbb00c1ab248174c3ce57bcb03896a0b9adf23bc63",
+      "recordedSha256": "6e7f46d5ade406cca05e1dfbb00c1ab248174c3ce57bcb03896a0b9adf23bc63",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-foundational-thinking",
+      "heading": "Foundational Thinking",
+      "bodyLength": 1359,
+      "recordedLength": 1359,
+      "bodySha256": "35a40f83743c6c9f58404a3a3484416ddc74786c28b9e395a8f83c7c976294c8",
+      "recordedSha256": "35a40f83743c6c9f58404a3a3484416ddc74786c28b9e395a8f83c7c976294c8",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-guard-the-context-window",
+      "heading": "Guard the Context Window",
+      "bodyLength": 934,
+      "recordedLength": 934,
+      "bodySha256": "930157581036a91748ef332915b2f3add9e325f9dd76a07855c5b0ae750f9f04",
+      "recordedSha256": "930157581036a91748ef332915b2f3add9e325f9dd76a07855c5b0ae750f9f04",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-laziness-protocol",
+      "heading": "Laziness Protocol",
+      "bodyLength": 1228,
+      "recordedLength": 1228,
+      "bodySha256": "c26f6efe5d8edece3782447eeb810b6f85440b7c9894eaaccea728ecfb4017ab",
+      "recordedSha256": "c26f6efe5d8edece3782447eeb810b6f85440b7c9894eaaccea728ecfb4017ab",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-make-operations-idempotent",
+      "heading": "Make Operations Idempotent",
+      "bodyLength": 1239,
+      "recordedLength": 1239,
+      "bodySha256": "265aa68bf8a38a33e97e79c0c8f446345080ee175d928120be8624c27dcd887f",
+      "recordedSha256": "265aa68bf8a38a33e97e79c0c8f446345080ee175d928120be8624c27dcd887f",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-migrate-callers-then-delete-legacy-apis",
+      "heading": "Migrate Callers Then Delete Legacy APIs",
+      "bodyLength": 1010,
+      "recordedLength": 1010,
+      "bodySha256": "c7fadd53d8bdc8cf1462a0ac5bbc8a32fd844d52128d5bcb9684c7f87d4192cd",
+      "recordedSha256": "c7fadd53d8bdc8cf1462a0ac5bbc8a32fd844d52128d5bcb9684c7f87d4192cd",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-minimize-reader-load",
+      "heading": "Minimize Reader Load",
+      "bodyLength": 1929,
+      "recordedLength": 1929,
+      "bodySha256": "b705a1d46098a5fc755c2ebdca0020a52f42b1340305506d326145a5cbf32012",
+      "recordedSha256": "b705a1d46098a5fc755c2ebdca0020a52f42b1340305506d326145a5cbf32012",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-model-the-domain",
+      "heading": "Model the Domain",
+      "bodyLength": 1942,
+      "recordedLength": 1942,
+      "bodySha256": "2b77b1d293ef6042040e3a7eebd54a36d91505819e24eeb6922250f2a8bcfa2e",
+      "recordedSha256": "2b77b1d293ef6042040e3a7eebd54a36d91505819e24eeb6922250f2a8bcfa2e",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-never-block-on-the-human",
+      "heading": "Never Block on the Human",
+      "bodyLength": 1199,
+      "recordedLength": 1199,
+      "bodySha256": "8b3b1db3fda85f3ee88913ba22fca090815a7b3c1df3d7070a50bcd3c3bcc14c",
+      "recordedSha256": "8b3b1db3fda85f3ee88913ba22fca090815a7b3c1df3d7070a50bcd3c3bcc14c",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-outcome-oriented-execution",
+      "heading": "Outcome-Oriented Execution",
+      "bodyLength": 969,
+      "recordedLength": 969,
+      "bodySha256": "80fcbca4503414c43da22e98f33d6802b234365a43e11c31ff246b8a8cdef490",
+      "recordedSha256": "80fcbca4503414c43da22e98f33d6802b234365a43e11c31ff246b8a8cdef490",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-prove-it-works",
+      "heading": "Prove It Works",
+      "bodyLength": 1716,
+      "recordedLength": 1716,
+      "bodySha256": "1592802ba0d4bbee94439ab6aef46a52b12524541067951cdccd49f99ea6fde5",
+      "recordedSha256": "1592802ba0d4bbee94439ab6aef46a52b12524541067951cdccd49f99ea6fde5",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-redesign-from-first-principles",
+      "heading": "Redesign From First Principles",
+      "bodyLength": 689,
+      "recordedLength": 689,
+      "bodySha256": "5964d53f74c4134af97ca26e7c6b6968746d02eb2d111deca7afaf53420afe35",
+      "recordedSha256": "5964d53f74c4134af97ca26e7c6b6968746d02eb2d111deca7afaf53420afe35",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-separate-before-serializing-shared-state",
+      "heading": "Separate Before Serializing Shared State",
+      "bodyLength": 1405,
+      "recordedLength": 1405,
+      "bodySha256": "c53969257a122ffa623a70aecbd04cacc0064f31a7849c7223ca542ba5bcb0ea",
+      "recordedSha256": "c53969257a122ffa623a70aecbd04cacc0064f31a7849c7223ca542ba5bcb0ea",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-sequence-verifiable-units",
+      "heading": "Sequence work into verifiable units",
+      "bodyLength": 1798,
+      "recordedLength": 1798,
+      "bodySha256": "5da7ee523ac1f17fde79e17f0a5fc56df502d86e95cfa1050b2749d0281b39c6",
+      "recordedSha256": "5da7ee523ac1f17fde79e17f0a5fc56df502d86e95cfa1050b2749d0281b39c6",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-subtract-before-you-add",
+      "heading": "Subtract Before You Add",
+      "bodyLength": 972,
+      "recordedLength": 972,
+      "bodySha256": "0cafaeaa070c43085df58184cab666312e76de7f825f26a1262ac645310211be",
+      "recordedSha256": "0cafaeaa070c43085df58184cab666312e76de7f825f26a1262ac645310211be",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-test-behavior-not-implementation",
+      "heading": "Test Behavior, Not Implementation",
+      "bodyLength": 2330,
+      "recordedLength": 2330,
+      "bodySha256": "8df7d4c87a4ef538aa89be968141b29ee74a2fa0a2028bcc9dd1d65075165204",
+      "recordedSha256": "8df7d4c87a4ef538aa89be968141b29ee74a2fa0a2028bcc9dd1d65075165204",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "principle-type-system-discipline",
+      "heading": "Type System Discipline",
+      "bodyLength": 4662,
+      "recordedLength": 4662,
+      "bodySha256": "4e5840f8828f7f1bf159ba892669526dbc7c0c0a08e79e80d62371a2cc77e94d",
+      "recordedSha256": "4e5840f8828f7f1bf159ba892669526dbc7c0c0a08e79e80d62371a2cc77e94d",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "prototype",
+      "heading": "Prototype",
+      "bodyLength": 1314,
+      "recordedLength": 1314,
+      "bodySha256": "c07a4f3911c922a8f9712bfa999aaff8767273f288c43fa11521ddd67b6dbf5d",
+      "recordedSha256": "c07a4f3911c922a8f9712bfa999aaff8767273f288c43fa11521ddd67b6dbf5d",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "prove-it-works",
+      "heading": "Prove It Works",
+      "bodyLength": 644,
+      "recordedLength": 644,
+      "bodySha256": "17f8ceaf80c495fbe1896c393da29b51fa273340a6bac3847905ed36737d9ef1",
+      "recordedSha256": "17f8ceaf80c495fbe1896c393da29b51fa273340a6bac3847905ed36737d9ef1",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "refactoring",
+      "heading": "Refactoring",
+      "bodyLength": 1525,
+      "recordedLength": 1525,
+      "bodySha256": "511e011bc6b5fbb54c6a8a6956c11e2f1b7c0cda475d763a5245e3f9809949a9",
+      "recordedSha256": "511e011bc6b5fbb54c6a8a6956c11e2f1b7c0cda475d763a5245e3f9809949a9",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "reproduce-and-fix-issues",
+      "heading": "Reproduce and fix issues",
+      "bodyLength": 14486,
+      "recordedLength": 8000,
+      "bodySha256": "2266084ebb58610293301ac0471084a36726b12c8e8182874dd8c5799510ef8f",
+      "recordedSha256": "317436b771a291451cd73e35b9fd4773df3adcb139bbc3759387b3d146d3c644",
+      "fullMatch": false,
+      "prefixMatch": true
+    },
+    {
+      "name": "session-pickup",
+      "heading": "Session Pickup",
+      "bodyLength": 2096,
+      "recordedLength": 2096,
+      "bodySha256": "95eafea59b879469529a3ea647a1207347a9cb2d2ffd93f0b2924eedc10689f1",
+      "recordedSha256": "95eafea59b879469529a3ea647a1207347a9cb2d2ffd93f0b2924eedc10689f1",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "setup-benny",
+      "heading": "Set up Benny",
+      "bodyLength": 13448,
+      "recordedLength": 8000,
+      "bodySha256": "423ee9479f0cd25e15843191557761aaa4cbd9ae8445b946afc5366ea96cbb87",
+      "recordedSha256": "143095786d766905c26164b5698ac739fd61021c384c788c3728545bd9a3aef9",
+      "fullMatch": false,
+      "prefixMatch": true
+    },
+    {
+      "name": "setup-oh-my-stack",
+      "heading": "Setup Oh My Stack",
+      "bodyLength": 3054,
+      "recordedLength": 3054,
+      "bodySha256": "74a18531fe04679301ee75433912edc26bfa03fb87ea693ebfc181827d9f5638",
+      "recordedSha256": "74a18531fe04679301ee75433912edc26bfa03fb87ea693ebfc181827d9f5638",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "shipping",
+      "heading": "Shipping",
+      "bodyLength": 3271,
+      "recordedLength": 3271,
+      "bodySha256": "68eacbf4ed906d89b3e2f757fb616c643fc44da74c639122b547ee66be3eb990",
+      "recordedSha256": "68eacbf4ed906d89b3e2f757fb616c643fc44da74c639122b547ee66be3eb990",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "show-me-your-work",
+      "heading": "Show Me Your Work",
+      "bodyLength": 3874,
+      "recordedLength": 3874,
+      "bodySha256": "8628afb1257dc3ab2e770ecd0fb6c3ea5e5f32728346c35ed9c7bcfada784863",
+      "recordedSha256": "8628afb1257dc3ab2e770ecd0fb6c3ea5e5f32728346c35ed9c7bcfada784863",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "tdd",
+      "heading": "TDD Bug Fix",
+      "bodyLength": 3369,
+      "recordedLength": 3369,
+      "bodySha256": "c36f22c06b3cc6c7e7ac6dfb7504e84047526a7fa9cbcb0d1ecfb63500c00b97",
+      "recordedSha256": "c36f22c06b3cc6c7e7ac6dfb7504e84047526a7fa9cbcb0d1ecfb63500c00b97",
+      "fullMatch": true,
+      "prefixMatch": true
+    },
+    {
+      "name": "technical-writing",
+      "heading": "Technical writing",
+      "bodyLength": 10772,
+      "recordedLength": 7999,
+      "bodySha256": "934c0f6bf5c9c7f0aa07f03e4f7a9ed7bd9b0d77e4081151ee032b9f29576085",
+      "recordedSha256": "90b4d874ea0ec682f072e6a0e32730fb483a191d8726431907c9e531f2d1c70c",
+      "fullMatch": false,
+      "prefixMatch": true
+    },
+    {
+      "name": "triage-issue-reports",
+      "heading": "Triage issue reports",
+      "bodyLength": 10511,
+      "recordedLength": 8000,
+      "bodySha256": "23f3149f73f8b9dba4f11cacf4ea5b87f11b627a43fc50d9434210e235918de0",
+      "recordedSha256": "8069977e489565a08b50527381659789fbcf4c06d3fe315b43a29c4c45dc0d54",
+      "fullMatch": false,
+      "prefixMatch": true
+    },
+    {
+      "name": "unslop",
+      "heading": "Unslop",
+      "bodyLength": 6059,
+      "recordedLength": 6059,
+      "bodySha256": "496eb641561619f9364491375ad83b4022fc40b11017a8c7c99f645a6937d677",
+      "recordedSha256": "496eb641561619f9364491375ad83b4022fc40b11017a8c7c99f645a6937d677",
+      "fullMatch": true,
+      "prefixMatch": true
+    }
+  ],
+  "rawLogSha256": "fddac0efe266658dacacb6fa74723d3644c24a9af92f857c944bcc544beef82e"
+}

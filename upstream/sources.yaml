@@ -128,3 +128,38 @@ sources:
     candidate_commit: null
     baseline_commit: null
     verified_commit: null
+
+  - id: cursor-pstack-discovery-design
+    repository: https://github.com/cursor/plugins.git
+    path: pstack
+    role: discovery-design-semantic-reference
+    license: MIT
+    usage: imported-source
+    inspected_at: "2026-09-23"
+    inspected_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+    candidate_commit: null
+    baseline_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+    verified_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+  - id: cursor-pstack-completion
+    repository: https://github.com/cursor/plugins.git
+    path: pstack
+    role: remaining-workflow-semantic-reference
+    license: MIT
+    usage: imported-source
+    inspected_at: "2026-09-23"
+    inspected_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+    candidate_commit: null
+    baseline_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+    verified_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+
+  - id: cursor-pstack-september-drift
+    repository: https://github.com/cursor/plugins.git
+    path: pstack
+    role: current-upstream-delta-reference
+    license: MIT
+    usage: reference-only
+    inspected_at: "2026-09-23"
+    inspected_commit: 70b2dc8b4b85c8d5648624ca40d692c421fff32f
+    candidate_commit: null
+    baseline_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
+    verified_commit: 70b2dc8b4b85c8d5648624ca40d692c421fff32f

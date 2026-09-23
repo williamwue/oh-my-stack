@@ -2,7 +2,16 @@
 
 The plan is ordered by proof. Each phase ends with a usable artifact and a gate. A later phase must not compensate for an unverified earlier layer.
 
+For the 2026-09-23 Codex inventory audit and the next ordered acceptance tasks,
+see [upstream parity and acceptance backlog](codex-parity-matrix.md). That audit
+separates missing upstream workflows from implemented but incompletely verified
+ones; the phase history below is not a claim of complete upstream parity.
+
 ## Phase 0: repository and provenance baseline
+
+Current priority override: [complete upstream workflow gaps](upstream-completion-plan.md)
+before release polish or publication. All 25 originally missing entries are now
+implemented in source and generated packages; live acceptance is tracked separately.
 
 ### Work
 
@@ -307,7 +316,12 @@ Current progress:
 - investigation, feature, refactoring, prototype, and opening-a-pr playbooks;
 - remaining principle leaves required by those workflows.
 
-### Deferred beyond alpha
+### Originally deferred beyond the initial alpha
+
+The following is the original scope boundary, not the current backlog. Later
+Phase 7 work added local implementations and fixture evidence for the workflows
+listed here. Real external-system and recovery acceptance remains separate;
+consult the current parity matrix above for outstanding work.
 
 - autonomous-run;
 - orchestrate;

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "recall",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.spawn": "root_searches_scoped_history",
+    "agents.spawn_parallel": "search_scoped_history_sequentially",
+    "agents.wait": "report_unread_history_as_gap"
+  }
+}

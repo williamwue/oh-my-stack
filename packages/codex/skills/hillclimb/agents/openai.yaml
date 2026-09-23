@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Hillclimb"
+  short_description: "Improve one metric through bounded measured attempts."
+  default_prompt: "Use $hillclimb for this task."
+policy:
+  allow_implicit_invocation: false

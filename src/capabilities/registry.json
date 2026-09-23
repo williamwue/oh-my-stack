@@ -13,6 +13,7 @@
     "agents.spawn_parallel",
     "agents.wait",
     "automation.recurring",
+    "automation.webhook",
     "communication.attachments.read",
     "communication.threads.read",
     "communication.threads.reply",

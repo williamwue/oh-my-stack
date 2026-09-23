@@ -60,6 +60,15 @@ async function collectConformance(root, target) {
   return { status: "verified", profile, scenarios };
 }
 
+function archiveMetadata(archive, files) {
+  return {
+    sha256: sha256(archive),
+    size: archive.length,
+    contentSha256: sha256(Buffer.from(`${JSON.stringify(files)}\n`)),
+    files,
+  };
+}
+
 async function buildPluginBundle({ root, out, project, bundle }) {
   if (
     bundle.id !== "codex-marketplace"
@@ -108,10 +117,7 @@ async function buildPluginBundle({ root, out, project, bundle }) {
       target: bundle.target,
       file,
       archiveRoot: bundle.archiveRoot,
-      sha256: sha256(archive),
-      size: archive.length,
-      contentSha256: sha256(Buffer.from(`${JSON.stringify(files)}\n`)),
-      files,
+      ...archiveMetadata(archive, files),
       marketplace,
       pluginPath: `plugins/${project.name}`,
     };
@@ -147,10 +153,7 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
     artifacts.push({
       target: target.id,
       file,
-      sha256: sha256(archive),
-      size: archive.length,
-      contentSha256: sha256(Buffer.from(`${JSON.stringify(files)}\n`)),
-      files,
+      ...archiveMetadata(archive, files),
       profiles: generation.profiles,
       verification: target.verification,
       conformance: await collectConformance(root, target.id),

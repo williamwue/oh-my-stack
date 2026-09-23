@@ -1,0 +1,406 @@
+{
+  "runtime": "codex-cli 0.155.1",
+  "status": "candidate-verified-not-installed",
+  "candidateEntries": {
+    "runtime": "codex-cli 0.155.1",
+    "count": 49,
+    "batchSizes": [
+      10,
+      10,
+      10,
+      10,
+      9
+    ],
+    "batches": [
+      {
+        "threadId": "01a0cb72-3ff1-7bd2-8847-5deb0d080e0d",
+        "count": 10,
+        "status": "completed",
+        "headingsMatched": true,
+        "toolCalls": 0
+      },
+      {
+        "threadId": "01a0cb72-6224-7471-9b91-fd9347249679",
+        "count": 10,
+        "status": "completed",
+        "headingsMatched": true,
+        "toolCalls": 0
+      },
+      {
+        "threadId": "01a0cb72-89c9-7f70-96ee-9ea84c473d54",
+        "count": 10,
+        "status": "completed",
+        "headingsMatched": true,
+        "toolCalls": 0
+      },
+      {
+        "threadId": "01a0cb72-ad4d-7e82-9b0a-48a6ecefc6ad",
+        "count": 10,
+        "status": "completed",
+        "headingsMatched": true,
+        "toolCalls": 0
+      },
+      {
+        "threadId": "01a0cb72-dc17-7ab1-a33b-217ebb8c8658",
+        "count": 9,
+        "status": "completed",
+        "headingsMatched": true,
+        "toolCalls": 0
+      }
+    ],
+    "skills": [
+      {
+        "name": "autonomous-run",
+        "heading": "Autonomous Run",
+        "bodySha256": "7ed17f8771a5f052f861dc93a8675970273939074203fad1ad73301d6d9e70f3",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "autopilot-full",
+        "heading": "Autopilot Full",
+        "bodySha256": "a82cda142e322aee4d13340075e665f99684e7c60c2056929ab7e22e408523cf",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "autopilot-stack",
+        "heading": "Autopilot Stack",
+        "bodySha256": "2f5bf0a70369467c4f42b07a8d74447f9ee4b43653c007b0a190bc6c91e85f81",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "babysit",
+        "heading": "Babysit",
+        "bodySha256": "13a3b4e48bbfe2dae7ab37faf32ab46ad93caa8e2b27fb054189b91bb994ee68",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "bug-fix",
+        "heading": "Bug Fix",
+        "bodySha256": "120ef1a1137cb62091ecb8d08e1336e28746cfdee2f566199b772ed588eb76f3",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "feature",
+        "heading": "Feature",
+        "bodySha256": "ceec7ec7238170b7fc7ab234dd8ba7f32c00ef8cc44713e08813e078ea1d6d35",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "how",
+        "heading": "How",
+        "bodySha256": "66fb5ad1c503bd96c6f7283b2d5867f3f81da45f66fe8df12d13071cd69e3b75",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "interrogate",
+        "heading": "Interrogate",
+        "bodySha256": "64ad992d7815983bdc49622f67a21786d5f174b36f72ddc74e716efac5f5a240",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "investigation",
+        "heading": "Investigation",
+        "bodySha256": "d362e38d71747674f991d202b063a5a1f5c58ac9053438ee526445b6d6482478",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "opening-a-pr",
+        "heading": "Opening a Pull Request",
+        "bodySha256": "f2eb429b900f1278ea8e5ac3cadb5ffddfcb2027a21ff18a0ee2b27ae1f9fab7",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "orchestrate",
+        "heading": "Orchestrate",
+        "bodySha256": "04efe29dcff35de97f8533e22777c95382238bc2e1bc2b7e9ae6e962a360b66a",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "pause-safely",
+        "heading": "Pause Safely",
+        "bodySha256": "061681e401bbf26f0bfd4c99a43c03126540026e6ce0ae9884c205431ec56515",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "poteto-mode",
+        "heading": "Poteto Mode",
+        "bodySha256": "ef12d35f81f122cd77a51dff7f8141a66101335add4409c11cbedb72ccacf8c1",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-attack-the-premise",
+        "heading": "Attack the Premise",
+        "bodySha256": "dc09677641ab2eeaf5c7f19de97400ddfd14fdfb2379ab4d5362c8a8693d7bcc",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-boundary-discipline",
+        "heading": "Boundary Discipline",
+        "bodySha256": "206082406addca2d4f889905ec59ca39f21a5680baa0310192d2634605306e4b",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-build-the-lever",
+        "heading": "Build the Lever",
+        "bodySha256": "5b014b3c0eabf88b0010dc82b6f4fcb67c76ebb27743bc9502aebeca775c9dd7",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-encode-lessons-in-structure",
+        "heading": "Encode Lessons in Structure",
+        "bodySha256": "daeaeebd20ecaa6581390d7d6f2ffd526f0f5e69825070ddbc35373e24954795",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-exhaust-the-design-space",
+        "heading": "Exhaust the Design Space",
+        "bodySha256": "fe15a7acc09182b4010ecb0cbf06da592cddc75f2870d07e1f9b4ee6ae3b52d5",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-experience-first",
+        "heading": "Experience First",
+        "bodySha256": "dbb043ec840bf1d34bdb30f36f8d7440e6c4e080b1d9bcebef244cc57d1bc700",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-fix-root-causes",
+        "heading": "Fix Root Causes",
+        "bodySha256": "6e7f46d5ade406cca05e1dfbb00c1ab248174c3ce57bcb03896a0b9adf23bc63",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-foundational-thinking",
+        "heading": "Foundational Thinking",
+        "bodySha256": "35a40f83743c6c9f58404a3a3484416ddc74786c28b9e395a8f83c7c976294c8",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-guard-the-context-window",
+        "heading": "Guard the Context Window",
+        "bodySha256": "930157581036a91748ef332915b2f3add9e325f9dd76a07855c5b0ae750f9f04",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-laziness-protocol",
+        "heading": "Laziness Protocol",
+        "bodySha256": "c26f6efe5d8edece3782447eeb810b6f85440b7c9894eaaccea728ecfb4017ab",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-make-operations-idempotent",
+        "heading": "Make Operations Idempotent",
+        "bodySha256": "265aa68bf8a38a33e97e79c0c8f446345080ee175d928120be8624c27dcd887f",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-migrate-callers-then-delete-legacy-apis",
+        "heading": "Migrate Callers Then Delete Legacy APIs",
+        "bodySha256": "c7fadd53d8bdc8cf1462a0ac5bbc8a32fd844d52128d5bcb9684c7f87d4192cd",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-minimize-reader-load",
+        "heading": "Minimize Reader Load",
+        "bodySha256": "b705a1d46098a5fc755c2ebdca0020a52f42b1340305506d326145a5cbf32012",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-model-the-domain",
+        "heading": "Model the Domain",
+        "bodySha256": "2b77b1d293ef6042040e3a7eebd54a36d91505819e24eeb6922250f2a8bcfa2e",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-never-block-on-the-human",
+        "heading": "Never Block on the Human",
+        "bodySha256": "8b3b1db3fda85f3ee88913ba22fca090815a7b3c1df3d7070a50bcd3c3bcc14c",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-outcome-oriented-execution",
+        "heading": "Outcome-Oriented Execution",
+        "bodySha256": "80fcbca4503414c43da22e98f33d6802b234365a43e11c31ff246b8a8cdef490",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-prove-it-works",
+        "heading": "Prove It Works",
+        "bodySha256": "1592802ba0d4bbee94439ab6aef46a52b12524541067951cdccd49f99ea6fde5",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-redesign-from-first-principles",
+        "heading": "Redesign From First Principles",
+        "bodySha256": "5964d53f74c4134af97ca26e7c6b6968746d02eb2d111deca7afaf53420afe35",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-separate-before-serializing-shared-state",
+        "heading": "Separate Before Serializing Shared State",
+        "bodySha256": "c53969257a122ffa623a70aecbd04cacc0064f31a7849c7223ca542ba5bcb0ea",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-sequence-verifiable-units",
+        "heading": "Sequence work into verifiable units",
+        "bodySha256": "5da7ee523ac1f17fde79e17f0a5fc56df502d86e95cfa1050b2749d0281b39c6",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-subtract-before-you-add",
+        "heading": "Subtract Before You Add",
+        "bodySha256": "0cafaeaa070c43085df58184cab666312e76de7f825f26a1262ac645310211be",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-test-behavior-not-implementation",
+        "heading": "Test Behavior, Not Implementation",
+        "bodySha256": "8df7d4c87a4ef538aa89be968141b29ee74a2fa0a2028bcc9dd1d65075165204",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "principle-type-system-discipline",
+        "heading": "Type System Discipline",
+        "bodySha256": "4e5840f8828f7f1bf159ba892669526dbc7c0c0a08e79e80d62371a2cc77e94d",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "prototype",
+        "heading": "Prototype",
+        "bodySha256": "c07a4f3911c922a8f9712bfa999aaff8767273f288c43fa11521ddd67b6dbf5d",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "prove-it-works",
+        "heading": "Prove It Works",
+        "bodySha256": "17f8ceaf80c495fbe1896c393da29b51fa273340a6bac3847905ed36737d9ef1",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "refactoring",
+        "heading": "Refactoring",
+        "bodySha256": "511e011bc6b5fbb54c6a8a6956c11e2f1b7c0cda475d763a5245e3f9809949a9",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "reproduce-and-fix-issues",
+        "heading": "Reproduce and fix issues",
+        "bodySha256": "cdeadaaa95bf86969c1184ab3e9bb74e1d3484314578cd75625178cdbb25af71",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "session-pickup",
+        "heading": "Session Pickup",
+        "bodySha256": "95eafea59b879469529a3ea647a1207347a9cb2d2ffd93f0b2924eedc10689f1",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "setup-benny",
+        "heading": "Set up Benny",
+        "bodySha256": "ecc20ca180f07539604e6fda83e286da0f1de7f2e9a31a2cd95b8bcf05bd6804",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "setup-oh-my-stack",
+        "heading": "Setup Oh My Stack",
+        "bodySha256": "74a18531fe04679301ee75433912edc26bfa03fb87ea693ebfc181827d9f5638",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "shipping",
+        "heading": "Shipping",
+        "bodySha256": "68eacbf4ed906d89b3e2f757fb616c643fc44da74c639122b547ee66be3eb990",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "show-me-your-work",
+        "heading": "Show Me Your Work",
+        "bodySha256": "8628afb1257dc3ab2e770ecd0fb6c3ea5e5f32728346c35ed9c7bcfada784863",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "tdd",
+        "heading": "TDD Bug Fix",
+        "bodySha256": "c36f22c06b3cc6c7e7ac6dfb7504e84047526a7fa9cbcb0d1ecfb63500c00b97",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "technical-writing",
+        "heading": "Technical writing",
+        "bodySha256": "d41a0d26ef31834cf2678075c23fc69ba8f4013f827ed6b18f334f89c6829461",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "triage-issue-reports",
+        "heading": "Triage issue reports",
+        "bodySha256": "27b9743dd573ede4767cc7130e91d5c92846a8310149cd39c6db54a2ba17d8c8",
+        "fullBodyMatched": true
+      },
+      {
+        "name": "unslop",
+        "heading": "Unslop",
+        "bodySha256": "496eb641561619f9364491375ad83b4022fc40b11017a8c7c99f645a6937d677",
+        "fullBodyMatched": true
+      }
+    ],
+    "rawLogSha256": "070ab43e5bdf58442644f366723f7ff99f4b42f1750b869c9e2a80f624199d87"
+  },
+  "fullReads": {
+    "rows": [
+      {
+        "name": "reproduce-and-fix-issues",
+        "threadId": "01a0cb72-a685-7b52-ad95-1ed7a49d7376",
+        "fullReadMatched": true,
+        "tailMatched": true,
+        "losslessAgainstInstalled": true,
+        "workflowSha256": "2266084ebb58610293301ac0471084a36726b12c8e8182874dd8c5799510ef8f",
+        "entryBytes": 712,
+        "readCommands": [
+          "/bin/zsh -lc 'wc -l .agents/skills/reproduce-and-fix-issues/SKILL.md .agents/skills/reproduce-and-fix-issues/WORKFLOW.md; cat .agents/skills/reproduce-and-fix-issues/SKILL.md; cat .agents/skills/reproduce-and-fix-issues/WORKFLOW.md'"
+        ]
+      },
+      {
+        "name": "setup-benny",
+        "threadId": "01a0cb72-e042-7a11-a1ba-c5ccdb0f8c1d",
+        "fullReadMatched": true,
+        "tailMatched": true,
+        "losslessAgainstInstalled": true,
+        "workflowSha256": "423ee9479f0cd25e15843191557761aaa4cbd9ae8445b946afc5366ea96cbb87",
+        "entryBytes": 669,
+        "readCommands": [
+          "/bin/zsh -lc 'wc -l .agents/skills/setup-benny/WORKFLOW.md'",
+          "/bin/zsh -lc \"sed -n '1,80p' .agents/skills/setup-benny/WORKFLOW.md\"",
+          "/bin/zsh -lc \"sed -n '81,160p' .agents/skills/setup-benny/WORKFLOW.md\"",
+          "/bin/zsh -lc \"sed -n '161,235p' .agents/skills/setup-benny/WORKFLOW.md\""
+        ]
+      },
+      {
+        "name": "technical-writing",
+        "threadId": "01a0cb73-3454-7a42-a502-5f7dfc2880ba",
+        "fullReadMatched": true,
+        "tailMatched": true,
+        "losslessAgainstInstalled": true,
+        "workflowSha256": "934c0f6bf5c9c7f0aa07f03e4f7a9ed7bd9b0d77e4081151ee032b9f29576085",
+        "entryBytes": 702,
+        "readCommands": [
+          "/bin/zsh -lc 'wc -l .agents/skills/technical-writing/SKILL.md .agents/skills/technical-writing/WORKFLOW.md && cat .agents/skills/technical-writing/SKILL.md && cat .agents/skills/technical-writing/WORKFLOW.md'"
+        ]
+      },
+      {
+        "name": "triage-issue-reports",
+        "threadId": "01a0cb73-623e-7c00-8605-02b0fe3b9a3a",
+        "fullReadMatched": true,
+        "tailMatched": true,
+        "losslessAgainstInstalled": true,
+        "workflowSha256": "23f3149f73f8b9dba4f11cacf4ea5b87f11b627a43fc50d9434210e235918de0",
+        "entryBytes": 709,
+        "readCommands": [
+          "/bin/zsh -lc 'wc -l .agents/skills/triage-issue-reports/SKILL.md .agents/skills/triage-issue-reports/WORKFLOW.md && cat .agents/skills/triage-issue-reports/SKILL.md && cat .agents/skills/triage-issue-reports/WORKFLOW.md'"
+        ]
+      }
+    ],
+    "candidateFilesUnchanged": true,
+    "rawLogSha256": "5f7a1c0d9114452ba7046da1bc87c63b8eb1095bee475f3229a987eb5238d3a8"
+  }
+}

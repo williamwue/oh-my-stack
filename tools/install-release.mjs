@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { installArchive, uninstallOwned } from "./release-lib.mjs";
+import { installArchive, uninstallOwned, verifyInstalledTree } from "./release-lib.mjs";
 
 function parseArgs(argv) {
   const action = argv.shift();
@@ -16,9 +16,9 @@ function parseArgs(argv) {
     else if (arg === "--destination") options.destination = resolve(argv[++index]);
     else throw new Error(`unknown argument: ${arg}`);
   }
-  if (!["install", "update", "uninstall"].includes(action)) throw new Error("action must be install, update, or uninstall");
+  if (!["install", "update", "uninstall", "verify"].includes(action)) throw new Error("action must be install, update, uninstall, or verify");
   if (!options.target || !options.destination) throw new Error("--target and --destination are required");
-  if (action !== "uninstall" && !options.manifest) throw new Error("--manifest is required for install and update");
+  if (action !== "uninstall" && !options.manifest) throw new Error("--manifest is required for install, update, and verify");
   return options;
 }
 
@@ -32,6 +32,11 @@ async function main() {
   const manifest = JSON.parse(await readFile(options.manifest, "utf8"));
   const artifact = manifest.artifacts.find((entry) => entry.target === options.target);
   if (!artifact) throw new Error(`manifest has no ${options.target} artifact`);
+  if (options.action === "verify") {
+    await verifyInstalledTree(options.destination, artifact.files);
+    console.log(`Verified ${options.target} package at ${options.destination}.`);
+    return;
+  }
   const archive = await readFile(join(dirname(options.manifest), artifact.file));
   await installArchive({
     archive,

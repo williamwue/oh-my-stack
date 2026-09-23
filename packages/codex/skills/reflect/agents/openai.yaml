@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Reflect"
+  short_description: "Review conversation lessons and propose scoped Skill improvement"
+  default_prompt: "Use $reflect for this task."
+policy:
+  allow_implicit_invocation: false

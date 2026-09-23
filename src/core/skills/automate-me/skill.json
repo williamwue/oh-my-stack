@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "automate-me",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.spawn": "inspect_scoped_history_in_root",
+    "agents.spawn_parallel": "review_history_slices_sequentially",
+    "agents.wait": "report_unread_history_as_gap"
+  }
+}

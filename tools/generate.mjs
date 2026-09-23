@@ -495,7 +495,16 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
     await rm(join(skillTarget, "skill.json"));
-    await writeText(join(skillTarget, "SKILL.md"), renderSkillDocument(skill, adapter));
+    const document = renderSkillDocument(skill, adapter);
+    if (adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
+      assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
+      await writeText(join(skillTarget, "WORKFLOW.md"), document);
+      const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];
+      const heading = document.match(/^# .+$/m)[0];
+      await writeText(join(skillTarget, "SKILL.md"), `${frontmatter}\n${heading}\n\nRead the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying\nthis Skill. Read it through the end; if a tool truncates output, continue with\nbounded chunks until the whole file has been read. Do not execute a partial\nprocedure or infer missing instructions. If the file cannot be read, report\nthe limitation and stop before taking workflow actions.\n\nThe user's request sets the scope and authorization. Loading this Skill does\nnot authorize writes, external actions, or running its workflow when the user\nonly asks to inspect or explain it.\n`);
+    } else {
+      await writeText(join(skillTarget, "SKILL.md"), document);
+    }
     if (adapter.id === "codex") {
       await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
     }

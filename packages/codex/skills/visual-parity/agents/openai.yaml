@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Visual Parity"
+  short_description: "Migrate a UI against frozen visual baselines."
+  default_prompt: "Use $visual-parity for this task."
+policy:
+  allow_implicit_invocation: false

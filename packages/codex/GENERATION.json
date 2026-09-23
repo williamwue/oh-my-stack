@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
   "target": "codex",
-  "sourceVersion": "0.2.0-alpha.4",
+  "sourceVersion": "0.2.0-alpha.5",
   "profiles": [
     "codex-desktop",
     "codex-cli",
@@ -11,7 +11,7 @@
   ],
   "skills": {
     "audience": "public",
-    "included": 49,
+    "included": 74,
     "omittedProbes": 12
   },
   "claims": {

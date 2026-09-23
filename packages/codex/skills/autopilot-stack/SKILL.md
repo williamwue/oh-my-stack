@@ -37,7 +37,8 @@ Start one isolated owner per ready change and parallelize only disjoint scopes.
 Each owner receives its full brief and owns implementation, focused proof, its
 branch, the ready change request, and an append-only decision trail. The owner
 reports the exact base, head, stable patch identity, checks, changed paths, and
-trail location. It never edits another branch or stack topology.
+trail location. It also records child handles, expected runtimes, and states in
+a durable ledger. It never edits another branch or stack topology.
 
 Persist runtime-issued owner handles before accepting work. Count observable
 side effects and store updates as progress, not reassuring summaries. At an
@@ -49,14 +50,17 @@ When progress depends on future provider state, use a verified host-native wake
 with a bounded deadline and wake count. If no wake is available, write a durable
 pause and stop instead of sleeping or polling indefinitely.
 
-## Verify each stack-ready head
+## Verify each changed patch
 
-Freeze a stack-ready packet with the owner identity, base, head, stable patch
-identity, diff, acceptance contract, checks, and live behavior surface. Start
-independent read-only reviewer sessions that did not write the change. At least
-one lane reruns the named gates at the frozen head; when the change has a live
-surface, another lane exercises that surface. Reviewers inspect the actual diff
-and receipts rather than trusting the change-request body.
+Freeze a packet when the owner reports its code-ready head, and again for each
+later push that changes the patch. The packet names owner identity, base, head,
+stable patch identity, diff, acceptance contract, checks, and live behavior
+surface. The owner later reports stack-ready with its exact head after its own
+loop is green. Start independent read-only reviewer sessions that did not write
+the change. At least one lane reruns the named gates at the frozen head; when
+the change has a live surface, another lane exercises that surface. Two or
+more review lanes inspect the actual diff and receipts with different main
+focuses rather than trusting the change-request body.
 
 Aggregate only attributable verdicts bound to the same base, head, patch, and
 contract. Findings return to the same owner for fix-forward within budget, and a

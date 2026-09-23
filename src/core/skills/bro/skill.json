@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "bro",
+  "invocation": "explicit",
+  "deliveryTarget": "D0",
+  "workflowTarget": "W0",
+  "requires": [],
+  "fallbacks": {}
+}

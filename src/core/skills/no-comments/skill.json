@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "no-comments",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "commands.run",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "agents.spawn": "root_reviews_scope_and_discloses_absent_independent_reviewer",
+    "agents.read_result": "root_reviews_scope_and_discloses_absent_independent_reviewer"
+  }
+}

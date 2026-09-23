@@ -4,6 +4,22 @@ All notable changes to Oh My Stack are recorded here. The project uses
 Semantic Versioning prereleases while runtime compatibility is still being
 established.
 
+## 0.2.0-alpha.5 - candidate, not published
+
+- Added portable counterparts for the remaining 25 pinned pstack entries:
+  five discovery/design workflows, 11 other main workflows, and nine playbooks.
+  The public catalog now has 74 directly selectable Skills: 51 workflows and
+  23 principles. The 12 internal probes remain outside public packages.
+- Preserved full long-Skill instructions in the Codex plugin while keeping
+  discovery descriptions concise; generated OMP, Codex, and Claude Code
+  packages from one source.
+- Adapted the reviewed upstream `swarm` evidence and `autopilot` round rules,
+  and made decision-log initialization append without truncating existing data.
+- Verified local 74-entry loading on Codex CLI and OMP, bounded read-only
+  workflow decisions, and OMP failure/cancellation paths. Real hosted workflows
+  and Claude Code live use remain unverified. OMP 18.2.10 still writes during
+  `plugin link --dry-run`; do not treat that command as a safe preview.
+
 ## 0.2.0-alpha.4 - 2026-09-23
 
 - Preserved all 49 direct Skill entrypoints in the default Codex plugin.

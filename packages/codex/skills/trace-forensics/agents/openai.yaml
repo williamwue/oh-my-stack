@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Trace Forensics"
+  short_description: "Diagnose an existing trace or profile and map it to source."
+  default_prompt: "Use $trace-forensics for this task."
+policy:
+  allow_implicit_invocation: false

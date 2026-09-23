@@ -50,35 +50,47 @@ stack merely to avoid rebasing.
 
 Each owner creates an append-only decision trail and owns implementation, the
 first provider update, a ready non-draft change request, focused self-proof on
-the real artifact, cleanup, current-target rebase, checks, and the eventual
-merge. Open the change request early enough that its provider identity, head,
-checks, and trail form durable evidence. The owner may not review itself,
-aggregate the swarm, invent a countersign, edit another owner's branch, or merge
-from a head the root did not authorize.
+the real artifact, cleanup, checks, and the eventual merge. Open the change
+request early enough that its provider identity, head, checks, and trail form
+durable evidence. The owner tracks each child handle, expected runtime, and
+state in a durable child ledger. It performs the first current-target rebase
+before reporting a code-ready head; fix rounds keep that base unless a target
+conflict or target-caused check failure requires another rebase. A final rebase
+belongs to merge preparation, after verification lanes have started. The owner
+may not review itself, aggregate the swarm, invent a countersign, edit another
+owner's branch, or merge from a head the root did not authorize.
 
 Count only observable side effects and durable state transitions as progress.
 At every audit boundary, refresh provider state and reconcile each live handle.
 Record a stalled or stale owner before replacement; late output remains stale
 until deliberately reconciled.
 
-## Swarm-verify the merge-ready head
+## Swarm-verify every changed patch
 
-After owner self-proof, freeze a merge-ready packet containing owner identity,
-target head, base, change head, stable patch identity, diff, acceptance contract,
-checks, live surface, and decision trail. Start fresh independent reviewer
-sessions that did not write the change:
+When the owner reports its code-ready head, freeze a verification packet
+containing owner identity, target head, base, change head, stable patch
+identity, diff, acceptance contract, checks, live surface, and decision trail.
+Start a new round for that patch and for each later push that changes it.
+Self-proof, checks, and babysitting may continue alongside the round. Start
+fresh independent reviewer sessions that did not write the change:
 
 - a gates lane reruns required checks at the frozen head;
 - a live lane proves the load-bearing behavior on the actual affected surface;
 - a regression lane compares the same behavior with current target. If the
   target lacks the new feature, record that fact and verify the added behavior
   and required end state instead of fabricating a target result.
+- at least two diff-and-receipts review lanes receive the full packet, each
+  with a distinct main focus such as consumer parity, races, or data safety.
 
 The live lane is mandatory. Aggregate only attributable results bound to the
-same base, head, patch, and contract. Findings return to the same owner for
-fix-forward within budget, and every changed patch needs a fresh swarm. If a
-required independent or live surface is unavailable, preserve the packets and
-stop without a clean verdict.
+same base, head, patch, and contract. Before issuing a verdict, inspect the
+owner's merge-ready receipts. Treat a proven defect filed as a note as a
+finding. Send all proven findings in one fix-forward packet; request a red test
+covering every site with the same behavior defect, or a repro receipt when no
+test can show it. Carry the defect into the next round's reviewer briefs.
+Every changed patch needs a fresh round; no old clean result alone authorizes
+landing. If a required independent or live surface is unavailable, preserve
+the packets and stop without a clean verdict.
 
 ## Root countersigns; the owner lands
 
@@ -87,12 +99,13 @@ and issues one single-use countersign bound to the owner, provider, target head,
 change head, stable patch identity, and verdict. The owner, never the root or a
 reviewer, consumes that countersign to land its own change.
 
-The owner first rebases onto the current target and refreshes provider state. A
-changed stable patch invalidates all prior review. An unchanged patch may retain
-its code judgment, but checks, live receipts, mergeability, target coordinates,
-and the root countersign must be current for the rewritten head. If the target
-moves after countersign, do not merge; refresh or re-review according to the
-recorded patch identity and issue a new countersign.
+At merge preparation, the owner rebases onto the current target and refreshes
+provider state. CI must pass on the resulting head. A changed stable patch
+invalidates all prior review. An unchanged patch may retain its code judgment,
+but checks, live receipts, mergeability, target coordinates, and the root
+countersign must be current for the rewritten head. If the target moves after
+countersign, do not merge; refresh or re-review according to the recorded patch
+identity and issue a new countersign.
 
 After the provider reports merged, confirm the landed revision is present in the
 target before assigning the owner another item. Never pre-authorize a later
@@ -101,8 +114,10 @@ merge or let a clean status stand in for the root countersign.
 ## Audit, wake, and stop
 
 At the recorded cadence, re-read the durable program contract, refresh provider
-state, probe owners generically, collect decision trails, reconcile merges, and
-run any post-merge review-comment sweep. A new raise of a pinned gate or budget
+state, probe owners and their child ledgers, collect decision trails, reconcile
+merges, and run any post-merge review-comment sweep. A stalled child is
+recorded and, if its work is still needed, replaced within budget; a stall
+neither proves nor drops the work. A new raise of a pinned gate or budget
 requires fresh verifier proof and an explicit root countersign; absorbing a
 value already present on target is drift reconciliation, not a raise.
 

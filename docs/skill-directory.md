@@ -1,13 +1,38 @@
 # Skill directory
 
-All 49 public Skills remain directly invocable. In Codex, select a Skill with
+All 74 public Skills remain directly invocable. In Codex, select a Skill with
 `$` or use `poteto-mode` to choose a workflow. Names below are unchanged.
 Categories are documentation and display labels, not separate installations.
 
-## Workflows (26)
+## Workflows (51)
 
 | Skill | Scope |
 | --- | --- |
+| [authoring-a-skill](../src/core/skills/authoring-a-skill/SKILL.md) | Create or revise a scoped Skill and check its behavior. |
+| [automate-me](../src/core/skills/automate-me/SKILL.md) | Capture a user's recurring work conventions in a personal Skill. |
+| [blast-radius](../src/core/skills/blast-radius/SKILL.md) | Prove the safety assumptions and downstream risks of a change. |
+| [bro](../src/core/skills/bro/SKILL.md) | Restate the last answer plainly without changing its meaning. |
+| [create-verification-skill](../src/core/skills/create-verification-skill/SKILL.md) | Create and exercise a project-local user-path verification Skill. |
+| [eval](../src/core/skills/eval/SKILL.md) | Compare workflow variants with blinded outputs and a frozen rubric. |
+| [figure-it-out](../src/core/skills/figure-it-out/SKILL.md) | Plan and verify a complex task with an auditable decision trail. |
+| [hillclimb](../src/core/skills/hillclimb/SKILL.md) | Improve one metric through bounded measured attempts. |
+| [maintain-verification-skill](../src/core/skills/maintain-verification-skill/SKILL.md) | Audit and update a verification Skill using source and live behavior. |
+| [make-bot-ui](../src/core/skills/make-bot-ui/SKILL.md) | Build a local control page for an authenticated webhook. |
+| [multi-phase-plan](../src/core/skills/multi-phase-plan/SKILL.md) | Write a dependency plan with verifiable units and live checks. |
+| [no-comments](../src/core/skills/no-comments/SKILL.md) | Review comments, remove redundancy, and encode real constraints. |
+| [perf-issue](../src/core/skills/perf-issue/SKILL.md) | Fix one performance issue with before and after traces. |
+| [recall](../src/core/skills/recall/SKILL.md) | Rebuild recent work context from history and live state. |
+| [reflect](../src/core/skills/reflect/SKILL.md) | Review conversation lessons and propose scoped Skill improvements. |
+| [runtime-forensics](../src/core/skills/runtime-forensics/SKILL.md) | Diagnose a live process using runtime evidence. |
+| [trace-forensics](../src/core/skills/trace-forensics/SKILL.md) | Diagnose an existing trace or profile and map it to source. |
+| [typescript-best-practices](../src/core/skills/typescript-best-practices/SKILL.md) | Apply type and boundary guidance to TS or TSX work. |
+| [visual-parity](../src/core/skills/visual-parity/SKILL.md) | Migrate a UI against frozen visual baselines. |
+| [worktree-cleanup](../src/core/skills/worktree-cleanup/SKILL.md) | Audit and reclaim scoped worktrees while preserving active work. |
+| [architect](../src/core/skills/architect/SKILL.md) | Caller-first design, alternative sketches, and scoped implementation. |
+| [arena](../src/core/skills/arena/SKILL.md) | Independent candidates, cross-judgment, synthesis, and verification. |
+| [swarm](../src/core/skills/swarm/SKILL.md) | Bounded coverage or races with complete drainage and reporting. |
+| [teach](../src/core/skills/teach/SKILL.md) | Evidence-backed teaching of mechanics and rationale. |
+| [why](../src/core/skills/why/SKILL.md) | Historical rationale with explicit confidence and coverage. |
 | [autonomous-run](../src/core/skills/autonomous-run/SKILL.md) | Run a bounded task until its completion condition is verified. |
 | [autopilot-full](../src/core/skills/autopilot-full/SKILL.md) | Build, review, and land a queue only with explicit authorization. |
 | [autopilot-stack](../src/core/skills/autopilot-stack/SKILL.md) | Build and review a linear change stack; leave landing to the operator. |

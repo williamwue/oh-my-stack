@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Arena"
+  short_description: "Compare independent candidates, select a base, graft stronger id"
+  default_prompt: "Use $arena for this task."
+policy:
+  allow_implicit_invocation: false

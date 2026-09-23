@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import {
   chmod,
+  lstat,
   mkdir,
   mkdtemp,
   readFile,
@@ -195,12 +196,17 @@ export async function installArchive({ archive, artifact, destination, archiveRo
     await extractArchive(archive, archiveRoot, stage);
     await verifyInstalledTree(stage, artifact.files);
     await assertOwnedInstall(stage, artifact.target);
-    try {
+    const destinationExists = await lstat(destination).then(
+      () => true,
+      (error) => {
+        if (error.code === "ENOENT") return false;
+        throw error;
+      },
+    );
+    if (destinationExists) {
       await assertOwnedInstall(destination, artifact.target);
       await rename(destination, backup);
       backedUp = true;
-    } catch (error) {
-      if (error.code !== "ENOENT") throw error;
     }
     if (faultAfterBackup) throw new Error("injected failure after backup");
     await rename(stage, destination);

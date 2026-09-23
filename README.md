@@ -6,7 +6,9 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Release status
 
-Oh My Stack is available as a public Alpha release. Codex CLI and OMP have live
+Oh My Stack is available as a public alpha.4 release. A local, unpublished
+alpha.5 candidate expands the catalog from 49 to 74 public Skills; see its
+[release notes](docs/releases/0.2.0-alpha.5.md). Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
 built and validated offline, but live Claude Code verification is deferred
@@ -69,7 +71,9 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md).
+See the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
+for the published bundle and the [alpha.5 candidate record](docs/release-candidate-readiness.md)
+for the current local build.
 
 Inspect or remove the installation with:
 
@@ -113,8 +117,11 @@ The Codex CLI 0.155.1 plugin-manager lifecycle establishes `D1`: an isolated
 plugin tree, reinstalls it, removes it, and deregisters the marketplace. Codex
 CLI therefore reaches cumulative `D3` after its observed discovery and
 explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
-remains overall `D0`: its 18.2.6 plugin manager unexpectedly writes during a
-`--dry-run`, so the real D1 safety gate is unresolved. Codex Desktop has a
+remains overall `D0`: its plugin manager unexpectedly writes during a
+`--dry-run`, observed on both 18.2.6 and 18.2.10, so the real D1 safety gate is
+unresolved. Do not treat `omp plugin link --dry-run` as read-only. See the
+[local release-candidate acceptance](docs/release-candidate-readiness.md).
+Codex Desktop has a
 focused scheduled-wake probe; its other capability families and Codex IDE
 remain unprobed. Claude Code verification is explicitly deferred until a local
 account and authenticated runtime are available.
@@ -301,11 +308,13 @@ codex plugin add oh-my-stack@oh-my-stack
 ```
 
 Start a new Codex task after installation so its bundled Skills are loaded.
-The marketplace bundle and standalone archive both expose all 49 public Skills.
+The published alpha.4 bundle exposes 49 public Skills. The local alpha.5
+candidate and generated packages expose 74, including the 25 upstream entries
+added after alpha.4. Their full real-project acceptance remains in progress.
 Invoke a Skill directly, such as `$how`, `$interrogate`, or `$tdd`, or use
 `$poteto-mode` to select a workflow. Full instructions load when a Skill is used.
 Short Codex descriptions reduce discovery metadata without hiding entrypoints.
-The [Skill directory](docs/skill-directory.md) groups 26 workflows and 23
+The current [Skill directory](docs/skill-directory.md) groups 51 workflows and 23
 principles. Codex display names and generated catalog metadata mark the same
 categories; invocation names remain unchanged. These labels do not require
 native grouped menus. Internal probes remain test-only.
@@ -331,8 +340,8 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. Claude Code remains fail-closed and
 deferred until an authenticated local runtime is available.
 
-The canonical Skill catalog now separates 49 public workflows and principles
-from 12 internal `check-*` runtime probes. The complete 49-Skill matrix passes
+The canonical Skill catalog now separates 74 public workflows and principles
+from 12 internal `check-*` runtime probes. The previous 49-Skill matrix passes
 on OMP 18.2.8 and Codex CLI 0.155.1: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated
 package, no probe Skill leaks into the public matrix, and both read-only Git
@@ -544,6 +553,7 @@ Use `oh-my-stack` in paths, manifests, package names, and documentation links. `
 
 - [Architecture](docs/architecture.md)
 - [Runtime capability model](docs/capabilities.md)
+- [Codex upstream parity and acceptance backlog](docs/codex-parity-matrix.md)
 - [Prior-art assessment](docs/prior-art.md)
 - [Implementation plan](docs/implementation-plan.md)
 - [Security model](docs/security.md)

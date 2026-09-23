@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "worktree-cleanup",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "commands.run",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {}
+}

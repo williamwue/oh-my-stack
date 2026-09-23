@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "4820c9b11be779f7e826041fa8f15df482520a81",
+  "baselineWorktreeDirty": true,
+  "before": [
+    {
+      "path": "oh-my-stack-claude-code-0.2.0-alpha.4.tar.gz",
+      "size": 77079,
+      "mode": "0644",
+      "sha256": "9bff9595d009c243ebe21a85696adeb8ed3e82397dacd03f9d15afe9c14d2160"
+    },
+    {
+      "path": "oh-my-stack-codex-0.2.0-alpha.4.tar.gz",
+      "size": 79127,
+      "mode": "0644",
+      "sha256": "ee0f3284982f693797c4a15c0024920de83b8d19bc849228f258333bb5ce8354"
+    },
+    {
+      "path": "oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz",
+      "size": 79315,
+      "mode": "0644",
+      "sha256": "f28bd57498b19e0434b2f1035fa1b92adf1586d0428c4eeb299a803018ea6de4"
+    },
+    {
+      "path": "oh-my-stack-omp-0.2.0-alpha.4.tar.gz",
+      "size": 77103,
+      "mode": "0644",
+      "sha256": "d097b6f2f804858ebcdb6e4954d6971303954289b1d3c56fb75e0b7cf239c858"
+    },
+    {
+      "path": "release-manifest.json",
+      "size": 96940,
+      "mode": "0644",
+      "sha256": "c3e74982988b8625815240c17d3c7d250e6e1b744b38dda1f5f62c0ddd21f362"
+    },
+    {
+      "path": "SHA256SUMS",
+      "size": 519,
+      "mode": "0644",
+      "sha256": "277311152723c01136da1093ae22f471eda5125c8db41eb3676dd4e76b0a09d6"
+    }
+  ],
+  "after": [
+    {
+      "path": "oh-my-stack-claude-code-0.2.0-alpha.4.tar.gz",
+      "size": 77079,
+      "mode": "0644",
+      "sha256": "9bff9595d009c243ebe21a85696adeb8ed3e82397dacd03f9d15afe9c14d2160"
+    },
+    {
+      "path": "oh-my-stack-codex-0.2.0-alpha.4.tar.gz",
+      "size": 79127,
+      "mode": "0644",
+      "sha256": "ee0f3284982f693797c4a15c0024920de83b8d19bc849228f258333bb5ce8354"
+    },
+    {
+      "path": "oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz",
+      "size": 79315,
+      "mode": "0644",
+      "sha256": "f28bd57498b19e0434b2f1035fa1b92adf1586d0428c4eeb299a803018ea6de4"
+    },
+    {
+      "path": "oh-my-stack-omp-0.2.0-alpha.4.tar.gz",
+      "size": 77103,
+      "mode": "0644",
+      "sha256": "d097b6f2f804858ebcdb6e4954d6971303954289b1d3c56fb75e0b7cf239c858"
+    },
+    {
+      "path": "release-manifest.json",
+      "size": 96940,
+      "mode": "0644",
+      "sha256": "c3e74982988b8625815240c17d3c7d250e6e1b744b38dda1f5f62c0ddd21f362"
+    },
+    {
+      "path": "SHA256SUMS",
+      "size": 519,
+      "mode": "0644",
+      "sha256": "277311152723c01136da1093ae22f471eda5125c8db41eb3676dd4e76b0a09d6"
+    }
+  ],
+  "exactInventoryMatch": true
+}

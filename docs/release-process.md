@@ -8,9 +8,9 @@ SHA-256 checksums, and explicit verification maturity.
 The Codex plugin bundle is a fourth archive rooted at
 `oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. All 49 public Skills remain discoverable
+`.agents/plugins/marketplace.json`. All 74 current public Skills remain discoverable
 and directly invocable. Codex descriptions are concise; full instructions and
-resources load on demand. Catalog categories distinguish 26 workflows and
+resources load on demand. Catalog categories distinguish 51 workflows and
 23 principles without moving either group outside the discovery directory.
 
 ## Local release candidate
@@ -54,6 +54,30 @@ Target-native registration remains separate. For example, a Codex repository
 marketplace may point at the installed directory, while OMP may install its npm
 package directly. The generic installer deliberately does not rewrite a
 runtime's global configuration.
+
+## Verify an installed package
+
+Using the source checkout, compare an installed target directory with the
+trusted manifest from the same release:
+
+```bash
+node tools/install-release.mjs verify \
+  --manifest /path/to/release-manifest.json \
+  --target codex \
+  --destination /path/to/plugins/oh-my-stack
+```
+
+This read-only command exits successfully only when file paths, sizes,
+normalized executable modes, and SHA-256 hashes match the manifest inventory.
+Modified, missing, or additional files cause a nonzero exit. It does not repair
+files, create a missing destination, register plugins, or require the release
+archive. For a marketplace installation, select the actual plugin directory,
+not the enclosing marketplace root. Targets are `omp`, `codex`, and `claude-code`.
+
+Use a manifest from a trusted release: this is an integrity comparison, not
+signature verification or proof that a runtime has loaded the Skills. Concurrent
+file changes are outside the snapshot guarantee. This command is currently a
+working-tree addition; it is not part of the already published alpha.4 source.
 
 ## Install the Codex plugin bundle
 
@@ -99,8 +123,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.4
-node tools/build-release.mjs --tag v0.2.0-alpha.4
+node tools/build-release.mjs --check --tag v0.2.0-alpha.5
+node tools/build-release.mjs --tag v0.2.0-alpha.5
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

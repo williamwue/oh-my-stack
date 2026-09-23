@@ -15,6 +15,26 @@ Use the first matching row:
 
 | Observable request | Primary workflow |
 | --- | --- |
+| Build a local control page for an authenticated bot webhook | `make-bot-ui` |
+| Create a project-local user-path verification Skill | `create-verification-skill` |
+| Audit and repair an existing verification Skill and feature map | `maintain-verification-skill` |
+| Capture recurring personal working conventions in a mode Skill | `automate-me` |
+| Create or revise a task-specific Skill | `authoring-a-skill` |
+| Reflect on conversation lessons and route them to scoped Skill changes | `reflect` |
+| Reconstruct recent work from scoped history and current state | `recall` |
+| Restate the last answer in plain language | `bro` |
+| Compare workflow variants in a blinded experiment | `eval` |
+| Improve one metric through sustained measured attempts | `hillclimb` |
+| Diagnose an existing trace or profile artifact | `trace-forensics` |
+| Diagnose a live process with captured runtime evidence | `runtime-forensics` |
+| Migrate components against a frozen visual baseline | `visual-parity` |
+| Audit and reclaim scoped worktrees or simulator state | `worktree-cleanup` |
+| Write a dependency plan for several verifiable units without executing it | `multi-phase-plan` |
+| Investigate downstream risks and prove the safety assumption behind a diff | `blast-radius` |
+| Diagnose and fix one measured performance issue | `perf-issue` |
+| Review comments and encode real constraints in scoped code | `no-comments` |
+| Read or edit TypeScript with type and boundary guidance | `typescript-best-practices` |
+| Execute a complex task that lacks a narrower workflow with an auditable plan | `figure-it-out` |
 | Autonomously build, independently verify, and owner-land a bounded queue | `autopilot-full` |
 | Autonomously build and verify a queue as one linear operator-landed stack | `autopilot-stack` |
 | Coordinate a standing multi-session program with dependent units and repeated integration | `orchestrate` |
@@ -23,6 +43,11 @@ Use the first matching row:
 | Resume or take over prior in-flight work from a durable trail | `session-pickup` |
 | Check or make an existing pull request merge-ready without landing it | `babysit` |
 | Explicitly land, merge, or ship an existing pull request or stack | `shipping` |
+| Teach a subsystem or change with mechanics and rationale | `teach` |
+| Investigate why a design, threshold, or tradeoff exists | `why` |
+| Design caller-first types, signatures, and module boundaries before implementation | `architect` |
+| Compare competing candidates and synthesize one artifact | `arena` |
+| Run bounded parallel coverage or races and return one report | `swarm` |
 | Explain code, trace ownership, or answer a read-only engineering question | `investigation` |
 | Reproduce and correct defective behavior | `bug-fix` |
 | Add or intentionally change product behavior | `feature` |

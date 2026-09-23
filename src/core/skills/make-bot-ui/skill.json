@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "make-bot-ui",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "automation.webhook",
+    "commands.run",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "automation.webhook": "produce_only_a_local_reviewable_ui_and_report_live_wake_unverified"
+  }
+}

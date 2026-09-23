@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "teach",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "commands.run",
+    "resources.relative_paths",
+    "workspace.inspect"
+  ],
+  "fallbacks": {
+    "agents.read_result": "report_unread_or_incomplete_results_without_claiming_completion",
+    "agents.spawn": "run_separated_root_passes_and_disclose_absent_independence",
+    "agents.spawn_parallel": "run_bounded_sequential_passes_and_disclose_absent_parallelism",
+    "agents.wait": "report_outstanding_handles_and_incomplete_drainage_without_claiming_completion"
+  }
+}

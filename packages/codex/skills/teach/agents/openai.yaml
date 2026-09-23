@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Teach"
+  short_description: "Explain mechanics and rationale plainly while preserving evidenc"
+  default_prompt: "Use $teach for this task."
+policy:
+  allow_implicit_invocation: false

@@ -51,3 +51,21 @@ test("decision-log helper refuses unexpected headers and symbolic links", async 
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test("decision-log helper initializes an empty file without replacing valid rows", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "oh-my-stack-log-empty-"));
+  try {
+    const log = join(directory, "decisions.tsv");
+    await writeFile(log, "");
+    const first = append(log, ["frame", "first", "reason", "evidence", "open"]);
+    assert.equal(first.status, 0, first.stderr);
+    const before = await readFile(log, "utf8");
+    const second = append(log, ["verify", "second", "reason", "evidence", "pass"]);
+    assert.equal(second.status, 0, second.stderr);
+    const after = await readFile(log, "utf8");
+    assert.ok(after.startsWith(before));
+    assert.equal(after.trimEnd().split("\n").length, 3);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});

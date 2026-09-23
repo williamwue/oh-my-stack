@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "hillclimb",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "commands.run",
+    "coordination.durable_state",
+    "workspace.inspect",
+    "workspace.isolate",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "coordination.durable_state": "use_an_append_only_workspace_scoped_attempt_log",
+    "workspace.isolate": "serialize_one_writer_and_preserve_dirty_work"
+  }
+}

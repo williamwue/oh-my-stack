@@ -46,3 +46,31 @@ snapshots, output ownership, hashes, and transformation rationale are recorded i
 
 The other projects in [`upstream/sources.yaml`](upstream/sources.yaml) remain
 reference-only and have not contributed copied source material.
+
+The later semantic drift review compared pstack revision `86ecc820` with
+`70b2dc8b4b85c8d5648624ca40d692c421fff32f`. Host-neutral evidence and
+round-timing rules were adapted into `swarm`, `autopilot-full`, and
+`autopilot-stack`; the decision-log helper adopted no-truncate append behavior.
+See [the drift audit](docs/upstream-september-drift-audit.md). No Cursor model
+IDs or host-specific permission rules were copied. The Cursor pstack MIT
+attribution above also applies to these adaptations.
+
+## Remaining main workflows and playbooks
+
+The later 11 main Skills and nine poteto-mode playbooks were adapted from the
+same pinned [Cursor pstack revision](https://github.com/cursor/plugins/tree/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack).
+Copyright (c) 2026 Lauren Tan. MIT licensed. Their original texts, linked
+references, and license are retained under
+`upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/`.
+Per-file source and output hashes are in `upstream/semantic-derivations.json`.
+
+## Discovery and design workflow batch
+
+The `why`, `architect`, `arena`, `swarm`, and `teach` Skills are semantic
+ports of [Cursor pstack at 86ecc820](https://github.com/cursor/plugins/tree/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack).
+Copyright (c) 2026 Lauren Tan. MIT licensed. Original instructions, referenced
+documents, and license are retained under
+`upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/`.
+Source hashes and transformed output ownership are recorded in the semantic
+derivation manifest. Runtime bindings, authority, and evidence limitations are
+adapted explicitly; this is not a claim of host-specific feature equivalence.

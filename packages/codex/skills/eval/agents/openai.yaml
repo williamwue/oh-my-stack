@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Eval"
+  short_description: "Compare workflow variants with blinded outputs and a frozen rubr"
+  default_prompt: "Use $eval for this task."
+policy:
+  allow_implicit_invocation: false

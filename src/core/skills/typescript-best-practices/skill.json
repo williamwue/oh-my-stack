@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "typescript-best-practices",
+  "invocation": "explicit",
+  "deliveryTarget": "D1",
+  "workflowTarget": "W1",
+  "requires": [
+    "workspace.inspect"
+  ],
+  "fallbacks": {}
+}

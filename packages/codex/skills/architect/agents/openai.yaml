@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Architect"
+  short_description: "Design caller-first types and modules, compare alternatives, the"
+  default_prompt: "Use $architect for this task."
+policy:
+  allow_implicit_invocation: false

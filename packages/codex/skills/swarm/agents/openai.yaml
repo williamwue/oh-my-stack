@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Swarm"
+  short_description: "Run bounded coverage or races, drain workers, and consolidate ve"
+  default_prompt: "Use $swarm for this task."
+policy:
+  allow_implicit_invocation: false

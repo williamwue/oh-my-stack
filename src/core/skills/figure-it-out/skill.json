@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "figure-it-out",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "commands.run",
+    "coordination.durable_state",
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {
+    "coordination.durable_state": "use_a_workspace_scoped_decision_trail_and_disclose_lost_resume"
+  }
+}

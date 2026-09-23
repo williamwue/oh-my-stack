@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "runtime-forensics",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "commands.run",
+    "workspace.inspect"
+  ],
+  "fallbacks": {}
+}

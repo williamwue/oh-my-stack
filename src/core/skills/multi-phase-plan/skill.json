@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "multi-phase-plan",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "workspace.inspect",
+    "workspace.write"
+  ],
+  "fallbacks": {}
+}

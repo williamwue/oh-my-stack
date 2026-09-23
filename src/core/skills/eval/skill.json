@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "eval",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W3",
+  "requires": [
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect",
+    "workspace.isolate"
+  ],
+  "fallbacks": {
+    "agents.spawn": "report_native_candidate_comparison_unavailable",
+    "agents.spawn_parallel": "run_equivalent_isolated_candidates_sequentially",
+    "agents.wait": "report_unreturned_candidates",
+    "agents.read_result": "report_unread_candidate_output",
+    "agents.read_transcript": "grade_only_artifacts_and_disclose_process_unverified",
+    "workspace.isolate": "stop_candidate_execution_until_equivalent_isolation_exists"
+  }
+}

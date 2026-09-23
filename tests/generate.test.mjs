@@ -15,11 +15,31 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
+test("Codex long direct entries preserve complete procedures outside the injection budget", async () => {
+  const model = await loadModel();
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-long-skills-"));
+  try {
+    const adapter = model.adapters.find((entry) => entry.id === "codex");
+    const target = await renderTarget(root, model, adapter);
+    for (const name of model.skillCatalog.public) {
+      const path = join(target, "skills", name);
+      const entry = await readFile(join(path, "SKILL.md"), "utf8");
+      assert.ok(Buffer.byteLength(entry) <= 7500, `${name}: direct entry exceeds safe injection budget`);
+      const source = model.skills.find((skill) => skill.metadata.name === name);
+      const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
+      const complete = entry.includes("](WORKFLOW.md)") ? await readFile(join(path, "WORKFLOW.md"), "utf8") : entry;
+      assert.equal(body(complete), body(source.text), `${name}: complete procedure must remain lossless`);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("Codex keeps all direct entries with concise metadata and unchanged bodies", async () => {
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 26);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 51);
   assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 23);
   let originalLength = 0;
   let generatedLength = 0;
@@ -29,7 +49,9 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
     const description = JSON.parse(document.match(/^description: (.+)$/m)[1]);
     assert.ok(description.length <= 120, name);
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
-    assert.equal(body(document), body(source.text), name);
+    const complete = document.includes("](WORKFLOW.md)")
+      ? await readFile(join(repoRoot, "packages/codex/skills", name, "WORKFLOW.md"), "utf8") : document;
+    assert.equal(body(complete), body(source.text), name);
     const metadata = await readFile(join(repoRoot, "packages/codex/skills", name, "agents/openai.yaml"), "utf8");
     assert.ok(metadata.includes(`Use $${name} for this task.`), name);
     assert.ok(metadata.includes(`allow_implicit_invocation: ${source.metadata.invocation === "automatic"}`), name);
@@ -40,14 +62,20 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
 });
 
-test("loads sixty-one portable Skills, seven roles, and three adapters", async () => {
+test("loads eighty-six portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 61);
+  assert.equal(model.skills.length, 86);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+    "architect",
+    "arena",
+    "authoring-a-skill",
+    "automate-me",
     "autonomous-run",
     "autopilot-full",
     "autopilot-stack",
     "babysit",
+    "blast-radius",
+    "bro",
     "bug-fix",
     "check-cancellation",
     "check-custom-role",
@@ -61,13 +89,22 @@ test("loads sixty-one portable Skills, seven roles, and three adapters", async (
     "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
+    "create-verification-skill",
+    "eval",
     "feature",
+    "figure-it-out",
+    "hillclimb",
     "how",
     "interrogate",
     "investigation",
+    "maintain-verification-skill",
+    "make-bot-ui",
+    "multi-phase-plan",
+    "no-comments",
     "opening-a-pr",
     "orchestrate",
     "pause-safely",
+    "perf-issue",
     "poteto-mode",
     "principle-attack-the-premise",
     "principle-boundary-discipline",
@@ -94,17 +131,27 @@ test("loads sixty-one portable Skills, seven roles, and three adapters", async (
     "principle-type-system-discipline",
     "prototype",
     "prove-it-works",
+    "recall",
     "refactoring",
+    "reflect",
     "reproduce-and-fix-issues",
+    "runtime-forensics",
     "session-pickup",
     "setup-benny",
     "setup-oh-my-stack",
     "shipping",
     "show-me-your-work",
+    "swarm",
     "tdd",
+    "teach",
     "technical-writing",
+    "trace-forensics",
     "triage-issue-reports",
+    "typescript-best-practices",
     "unslop",
+    "visual-parity",
+    "why",
+    "worktree-cleanup",
   ]);
   assert.equal(
     model.skills.filter((skill) => skill.metadata.name.startsWith("principle-")).every(
@@ -113,7 +160,7 @@ test("loads sixty-one portable Skills, seven roles, and three adapters", async (
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 49);
+  assert.equal(model.skillCatalog.public.length, 74);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)
@@ -365,5 +412,6 @@ test("generated manifests identify the public source repository", async () => {
 
 test("source and generated packages satisfy repository validation", async () => {
   const model = await validate();
-  assert.equal(model.project.version, "0.2.0-alpha.4");
+  const pkg = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
+  assert.equal(model.project.version, pkg.version);
 });

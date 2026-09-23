@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Bro"
+  short_description: "Restate the last answer plainly without changing its meaning."
+  default_prompt: "Use $bro for this task."
+policy:
+  allow_implicit_invocation: false

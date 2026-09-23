@@ -22,8 +22,10 @@ if [ -n "$logdir" ] && [ "$logdir" != "." ] && [ ! -d "$logdir" ]; then
 fi
 
 header='ts	phase	decision	why	evidence	result'
-if [ ! -f "$logfile" ]; then
-	printf '%b\n' "$header" > "$logfile"
+# A network mount can report a populated log as absent. Append the header so a
+# stale existence check can add a stray line but can never truncate prior rows.
+if [ ! -s "$logfile" ]; then
+	printf '%b\n' "$header" >> "$logfile"
 else
 	IFS= read -r first_line < "$logfile" || true
 	if [ "$first_line" != "$(printf '%b' "$header")" ]; then

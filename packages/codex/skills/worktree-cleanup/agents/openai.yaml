@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Worktree Cleanup"
+  short_description: "Audit and reclaim scoped worktrees while preserving active work."
+  default_prompt: "Use $worktree-cleanup for this task."
+policy:
+  allow_implicit_invocation: false

@@ -26,9 +26,13 @@ async function exists(path) {
   }
 }
 
-async function validateLocalMarkdownLinks(root) {
+export async function validateLocalMarkdownLinks(root) {
+  // Immutable third-party snapshots contain upstream links and template URLs.
+  // Validate their integrity through provenance hashes, not local link resolution.
+  const snapshotRoot = `${join(root, "upstream", "snapshots")}/`;
   const markdownFiles = (await filesUnder(root)).filter(
-    (path) => path.endsWith(".md") && !path.includes(`${join(root, "node_modules")}`),
+    (path) => path.endsWith(".md") && !path.includes(`${join(root, "node_modules")}`)
+      && !path.startsWith(snapshotRoot),
   );
   for (const path of markdownFiles) {
     const text = await readFile(path, "utf8");
@@ -124,7 +128,7 @@ async function validateJsonDocuments(root) {
   await readJson(join(root, "package-lock.json"));
 }
 
-async function validatePublicHygiene(root) {
+export async function validatePublicHygiene(root) {
   const roots = [
     ".github",
     "docs",
@@ -156,7 +160,11 @@ async function validatePublicHygiene(root) {
     if (!/\.(?:c?js|json|md|mjs|toml|txt|ya?ml)$/.test(path) && basename(path) !== "LICENSE") continue;
     const text = await readFile(path, "utf8");
     const macHomePrefix = ["", "Users", ""].join("/");
-    assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
+    // Third-party source is retained byte-for-byte for provenance, including
+    // its path examples. It is not part of a generated user-facing Skill.
+    if (!key.startsWith("upstream/snapshots/")) {
+      assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
+    }
     assert(!/-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/.test(text), `${key}: contains a private key`);
     assert(!/\bgh[pousr]_[A-Za-z0-9_]{20,}\b/.test(text), `${key}: contains a GitHub token-shaped value`);
     assert(!/\bsk-[A-Za-z0-9_-]{20,}\b/.test(text), `${key}: contains a secret-key-shaped value`);
