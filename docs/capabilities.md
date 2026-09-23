@@ -143,6 +143,24 @@ This is a documentation-derived research baseline, not live conformance evidence
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
+Current Codex documentation describes project-scoped custom agents under
+`.codex/agents/` and optional model and reasoning fields. The current
+development branch can safely generate roles into that location with
+`configure-models.mjs --project-root`; the same option uses `.omp/agents/` for OMP.
+This is a configuration-path improvement, not a new live role-selection or
+multi-model verdict. The `codex-cli` profile below retains the observed
+0.155.1 spawn-schema limitation until a fresh, role-attributed native probe
+passes. OMP peer-message delivery and actual distinct-backend execution also
+remain open acceptance items.
+
+The next native gate is a fresh, disposable read-only run on each surface:
+select one generated project role without placing its policy marker in the
+assignment; then run two independently attributable workers configured for
+different observed models and verify their resolved identities in runtime
+metadata. OMP additionally needs a peer-message receipt across an interrupted
+or stale worker generation. Keep a missing role selector, same-model fallback,
+or absent message receipt as a failed or unknown result, not a substituted pass.
+
 The Codex baseline is derived from the official
 [Build skills](https://developers.openai.com/plugins/build/skills),
 [Build plugins](https://developers.openai.com/plugins/build/plugins), and

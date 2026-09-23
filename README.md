@@ -324,11 +324,16 @@ Each generated package contains `scripts/collect-model-inventory.mjs`,
 `scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The
 explicit `setup-oh-my-stack` Skill first runs the collector against the current
 runtime's native model inventory, then uses the configuration script to preview
-and write target-native role files into a dedicated directory. Collection
+and write target-native role files into a dedicated directory. On the current
+development branch, `--project-root` can instead activate Codex or OMP roles
+inside that project's native role directory after the same preview. This
+project-activation option is newer than the published alpha.5 bundle. Collection
 fails closed for targets without a verified inventory operation. The resolver
 rejects unobserved model or reasoning identifiers and preflights every owned
-file before writing any update. It never edits a user's broader runtime
-configuration directly.
+file before writing any update. It refuses symlink targets and does not edit
+global runtime configuration or unrelated project configuration. Role files
+and distinct model selections alone do not prove native role selection or
+multi-model execution; those still require a fresh worker trace.
 
 The live setup fixture passes on OMP 18.2.6 and Codex CLI 0.155.1. OMP
 normalized 124 models from `omp models --json --no-extensions`; Codex

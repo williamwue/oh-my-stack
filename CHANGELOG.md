@@ -4,6 +4,12 @@ All notable changes to Oh My Stack are recorded here. The project uses
 Semantic Versioning prereleases while runtime compatibility is still being
 established.
 
+## Unreleased
+
+- Added opt-in project-scoped Codex and OMP role activation from freshly
+  observed model inventories, with preview, ownership checks, and symlink
+  refusal. Configured model IDs remain separate from runtime execution proof.
+
 ## 0.2.0-alpha.5 - 2026-09-23
 
 - Added portable counterparts for the remaining 25 pinned pstack entries:

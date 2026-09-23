@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { access, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { access, lstat, mkdir, readFile, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,8 +38,8 @@ function parseArguments(argv) {
     const value = argv[index + 1];
     assert(value && !value.startsWith("--"), `${argument}: value is required`);
     index += 1;
-    if (["--inventory", "--output", "--package"].includes(argument)) {
-      result[argument.slice(2)] = value;
+    if (["--inventory", "--output", "--package", "--project-root"].includes(argument)) {
+      result[argument.slice(2).replace("-root", "Root")] = value;
     } else if (workloads.map((name) => `--${name}`).includes(argument)) {
       result.selections[argument.slice(2)] = value;
     } else if (argument === "--role") {
@@ -50,7 +51,7 @@ function parseArguments(argv) {
     }
   }
   assert(result.inventory, "--inventory is required");
-  assert(result.output, "--output is required");
+  assert(Boolean(result.output) !== Boolean(result.projectRoot), "provide exactly one of --output or --project-root");
   for (const workload of workloads) {
     assert(result.selections[workload], `--${workload} is required`);
   }
@@ -121,16 +122,36 @@ async function assertSafeTarget(path, outputDirectory, priorHashes) {
   }
 }
 
+async function assertNotSymlink(path) {
+  try {
+    assert(!(await lstat(path)).isSymbolicLink(), `${path}: symbolic links are not allowed in role output`);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+}
+
 async function safeWrite(path, content) {
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, content);
 }
 
-export async function configure({ packageRoot, inventoryPath, outputRoot, selections, roleSelections = {}, apply }) {
+export async function configure({ packageRoot, inventoryPath, outputRoot, projectRoot, selections, roleSelections = {}, apply }) {
   const packageDirectory = resolve(packageRoot ?? defaultPackageRoot);
-  const outputDirectory = resolve(outputRoot);
-  assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
+  assert(Boolean(outputRoot) !== Boolean(projectRoot), "provide exactly one outputRoot or projectRoot");
+  const projectDirectory = projectRoot ? resolve(projectRoot) : null;
+  assert(!projectDirectory || ![resolve("/"), homedir()].includes(projectDirectory), "project root must be a dedicated project directory");
+  if (projectDirectory) {
+    const stat = await lstat(projectDirectory);
+    assert(stat.isDirectory() && !stat.isSymbolicLink(), "project root must be an existing real directory");
+  }
   const descriptor = JSON.parse(await readFile(join(packageDirectory, "config", "runtime-resolution.json"), "utf8"));
+  assert(!projectDirectory || ["codex", "omp"].includes(descriptor.target), "project role activation is supported only for Codex and OMP");
+  const outputDirectory = projectDirectory
+    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : ".omp")
+    : resolve(outputRoot);
+  assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
+  await assertNotSymlink(outputDirectory);
+  await assertNotSymlink(join(outputDirectory, "agents"));
   const inventoryRaw = await readFile(resolve(inventoryPath));
   const inventory = JSON.parse(inventoryRaw);
   validateInventory(inventory);
@@ -159,6 +180,7 @@ export async function configure({ packageRoot, inventoryPath, outputRoot, select
   }
 
   const manifestPath = join(outputDirectory, "oh-my-stack.resolution.json");
+  await assertNotSymlink(manifestPath);
   const prior = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
   const priorHashes = new Map(Object.entries(prior?.ownedFiles ?? {}));
@@ -167,6 +189,7 @@ export async function configure({ packageRoot, inventoryPath, outputRoot, select
   for (const role of descriptor.roles) {
     const source = join(packageDirectory, "agents", `${role.name}.${extension}`);
     const target = join(outputDirectory, "agents", `${role.name}.${extension}`);
+    await assertNotSymlink(target);
     const content = configuredRole(await readFile(source, "utf8"), descriptor.adapter, roles[role.name]);
     writes.push({ path: target, content });
   }
@@ -182,6 +205,7 @@ export async function configure({ packageRoot, inventoryPath, outputRoot, select
     },
     workloads: resolvedWorkloads,
     roles,
+    configuredModelIds: [...new Set(Object.values(roles).map((role) => role.model))].sort(),
     ownedFiles: Object.fromEntries(
       writes.map(({ path, content }) => [
         relative(outputDirectory, path).split(sep).join("/"),
@@ -205,6 +229,7 @@ async function main() {
     packageRoot: arguments_.package,
     inventoryPath: arguments_.inventory,
     outputRoot: arguments_.output,
+    projectRoot: arguments_.projectRoot,
     selections: arguments_.selections,
     roleSelections: arguments_.roles,
     apply: arguments_.apply,
