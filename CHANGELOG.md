@@ -4,7 +4,7 @@ All notable changes to Oh My Stack are recorded here. The project uses
 Semantic Versioning prereleases while runtime compatibility is still being
 established.
 
-## 0.2.0-alpha.5 - candidate, not published
+## 0.2.0-alpha.5 - 2026-09-23
 
 - Added portable counterparts for the remaining 25 pinned pstack entries:
   five discovery/design workflows, 11 other main workflows, and nine playbooks.

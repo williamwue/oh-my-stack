@@ -6,9 +6,10 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Release status
 
-Oh My Stack is available as a public alpha.4 release. A local, unpublished
-alpha.5 candidate expands the catalog from 49 to 74 public Skills; see its
-[release notes](docs/releases/0.2.0-alpha.5.md). Codex CLI and OMP have live
+Oh My Stack is available as a public
+[alpha.5 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.5)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.5.md).
+Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
 built and validated offline, but live Claude Code verification is deferred
@@ -48,7 +49,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.5.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -71,9 +72,9 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
-for the published bundle and the [alpha.5 candidate record](docs/release-candidate-readiness.md)
-for the current local build.
+See the [alpha.5 release notes](docs/releases/0.2.0-alpha.5.md) for the
+current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
+remains historical evidence.
 
 Inspect or remove the installation with:
 
@@ -295,11 +296,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.4 release notes](docs/releases/0.2.0-alpha.4.md). Claude Code is
+[0.2.0-alpha.5 release notes](docs/releases/0.2.0-alpha.5.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.4.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.5.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -308,9 +309,9 @@ codex plugin add oh-my-stack@oh-my-stack
 ```
 
 Start a new Codex task after installation so its bundled Skills are loaded.
-The published alpha.4 bundle exposes 49 public Skills. The local alpha.5
-candidate and generated packages expose 74, including the 25 upstream entries
-added after alpha.4. Their full real-project acceptance remains in progress.
+The published alpha.5 bundle exposes 74 public Skills, including the 25
+upstream entries added after alpha.4. Their full real-project acceptance
+remains in progress.
 Invoke a Skill directly, such as `$how`, `$interrogate`, or `$tdd`, or use
 `$poteto-mode` to select a workflow. Full instructions load when a Skill is used.
 Short Codex descriptions reduce discovery metadata without hiding entrypoints.
