@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Triage issue reports
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Classify one Slack report and post one useful verdict in its source thread. Create a tracker issue only for a clear, new bug. Do not reproduce or fix it here.
 
 Load the external Benny configuration supplied by the automation. If the config is missing, malformed, or incomplete, stop without posting or writing to the tracker.

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-explicit-route-contract",
+  "fixture": "explicit-route-contract",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-23",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D3",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "codex-cli",
+    "version": "0.155.1",
+    "platform": "macos-arm64",
+    "configuration": "Disposable read-only project; live model/list inventory; pstack preset with medium budget; prepared how.explorer request; persisted parent 01a0cda2-1807-7c20-8881-6ad6e3e963f3 and child 01a0cda2-4689-7b61-a5de-bf19d0ba5cf5; user config and rules ignored.",
+    "permissionProfile": "Read-only sandbox; no project installation or publication"
+  },
+  "capabilities": ["agents.spawn", "agents.wait", "agents.read_result", "agents.model_override", "agents.reasoning_override"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/check-dual-model-routing.json", "evals/evidence/codex-cli-0.155.1/check-custom-role-refresh.json"],
+  "assertions": [
+    { "id": "prepared-role-contract", "status": "pass", "evidence": "The generated request contains the complete explorer contract, bounded read-only task, task name smoke_explorer, fork_turns=none, model=gpt-6-luna, and reasoning_effort=low." },
+    { "id": "explicit-parent-call", "status": "pass", "evidence": "The persisted parent function_call records task_name=smoke_explorer, fork_turns=none, model=gpt-6-luna, and reasoning_effort=low; no custom-role selector was supplied." },
+    { "id": "parent-child-link", "status": "pass", "evidence": "The persisted child session_meta cites the parent thread and /root/smoke_explorer." },
+    { "id": "resolved-child-settings", "status": "pass", "evidence": "The child turn_context independently records model=gpt-6-luna and effort=low; the verifier reports checkedChildContexts=1 and roleSelectionClaim=false." },
+    { "id": "child-result-received", "status": "pass", "evidence": "The parent waited for the child and reported receipt of its answer before the turn completed." }
+  ],
+  "limitations": [
+    "Codex encrypted the spawn message in its persisted parent record, so the exact role/task text in the actual call could not be independently compared to the prepared request; the verifier reports messageVerified=false.",
+    "This is a one-worker local smoke test, not end-to-end acceptance of every configured workflow route or desktop/IDE surface.",
+    "Generated custom-role TOML files were not used or claimed activated."
+  ]
+}

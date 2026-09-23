@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.10-macos-arm64-source-style-route-matrix",
+  "fixture": "source-style-route-matrix",
+  "profile": "omp-default",
+  "observedAt": "2026-09-23",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.10",
+    "platform": "macos-arm64",
+    "configuration": "Disposable projects tmp.jkKLZEWLSi and tmp.DLsON8Sup1; observed model inventory from omp models --json --no-extensions; pstack preset with small budget; five-worker parent session 01a0cdbd-37d5-77c0-9a43-3c5747741d6a and default divergent parent session 01a0cdc0-14d0-72a9-bb3f-526119abd36d.",
+    "permissionProfile": "Read-only marker tasks in disposable projects; no user OMP configuration change"
+  },
+  "capabilities": ["agents.custom_roles", "agents.spawn_parallel", "agents.model_override", "agents.reasoning_override", "agents.wait", "agents.read_result"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.10/source-style-route-smoke.json"],
+  "assertions": [
+    {
+      "id": "four-code-roles-selected",
+      "status": "pass",
+      "evidence": "FeatureRefactorProbe, BugFixProbe, PerfIssueProbe, and HillclimbProbe child session_init events each name their distinct ohmystack-code-* native agent. Each model_change resolves cursor/grok-4.7-xhigh-fast without fallback and each thinking_level_change records medium."
+    },
+    {
+      "id": "reflection-synthesizer-selected",
+      "status": "pass",
+      "evidence": "ReflectSynthProbe session_init names ohmystack-reflect-synthesizer; its child model resolves cursor/claude-opus-5-5 without fallback and thinking level is medium."
+    },
+    {
+      "id": "default-divergent-selected",
+      "status": "pass",
+      "evidence": "DefaultDivergent session_init names ohmystack-reflect-divergent; its child model resolves cursor/claude-opus-5-5 without fallback, thinking level is medium, and systemPrompt includes ROLE_POLICY=independent-frozen-review."
+    },
+    {
+      "id": "role-policy-followed-on-default-models",
+      "status": "pass",
+      "evidence": "The four code workers ended with ROLE_POLICY=bounded-implementation-only; the synthesis worker returned ROLE_POLICY=frozen-findings-synthesis; the default divergent worker returned ROLE_POLICY=independent-frozen-review. All returned the disposable README marker."
+    },
+    {
+      "id": "invalid-model-fails-without-manifest-write",
+      "status": "pass",
+      "evidence": "Applying code.perf-issue=cursor/not-in-inventory@high failed against the live observed inventory. The existing disposable manifest SHA-256 remained 310a76a6590bad0c96c4f4a61e140e0dd4a3ff3e6bcfa8ec8467b591275b5654 before and after. A subsequent read-only preview retained the small budget and cursor/gpt-5.6-luna@low divergent override."
+    }
+  ],
+  "limitations": [
+    "These six tests verify read-only native route activation and a narrow role-policy behavior, not real feature, bug-fix, performance, hillclimb, or reflection workflow outcomes.",
+    "A separate divergent rerun using an explicit cursor/gpt-5.6-luna override had correct session role, model, effort, and policy injection but its answer repeatedly denied seeing that policy. Custom-model behavioral reliability remains unproved; the successful default-Opus run does not erase this failure.",
+    "The native worker tests use one small-budget level. Large, medium, unlimited, unavailable-effort, panel-length, and modified-owned-file guards are covered by deterministic tests rather than this live matrix.",
+    "Overall OMP delivery remains D0 because the separate plugin-manager D1 gate is unresolved."
+  ]
+}

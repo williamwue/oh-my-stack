@@ -39,7 +39,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "98734f1cb87da6d35f15969df5dd2dcf78a0c1ac40599c534307d9315dd2b4b0"
+          "sha256": "8338d6c77c8391ff6f0548a1bf92fc718b779caecb17c20393cca05cc7c89068"
         },
         {
           "path": "src/core/skills/poteto-mode/skill.json",
@@ -59,7 +59,7 @@
         {
           "path": "src/core/skills/feature/SKILL.md",
           "owner": "derived",
-          "sha256": "fd5badc9431cdba84d61108da1c28577378ec4119e846eba112cc46e73d7e56b"
+          "sha256": "1c3ae2f965fc3b7cea6dd93580c7a56e8848643593cd1bddfa724de3a0959bf1"
         },
         {
           "path": "src/core/skills/feature/skill.json",
@@ -69,7 +69,7 @@
         {
           "path": "src/core/skills/refactoring/SKILL.md",
           "owner": "derived",
-          "sha256": "6f25ae32e5c39dfb1a8dfecce1ce8025ce51ac11848fe9fd9c0d94c27856c483"
+          "sha256": "6f5b5a238dab6142e65913ad2de29151260b6426067523e0537b7ee996ed09ab"
         },
         {
           "path": "src/core/skills/refactoring/skill.json",
@@ -193,7 +193,7 @@
         {
           "path": "src/core/skills/how/SKILL.md",
           "owner": "derived",
-          "sha256": "151b8992163dbc84d8d3ab519193210d667845ac4ab72e09e98b19e7880adb8d"
+          "sha256": "9321598a420351b313dc5cb22dac1b046f8de903a2a15bb0db73455490255fee"
         },
         {
           "path": "src/core/skills/how/skill.json",
@@ -263,7 +263,7 @@
         {
           "path": "src/core/skills/interrogate/SKILL.md",
           "owner": "derived",
-          "sha256": "347067c96cc03b416891a85e28fb806440d75b238170b70ca147375357e1e3c7"
+          "sha256": "237249c5da21dd7829f727e51e0149fb77f57631212c727524d97138b1946257"
         },
         {
           "path": "src/core/skills/interrogate/skill.json",
@@ -327,7 +327,7 @@
         {
           "path": "src/core/skills/bug-fix/SKILL.md",
           "owner": "derived",
-          "sha256": "40c1da11efb64c2ed78666c8ad6f1f0c31afda30591320b74979374d6a38b503"
+          "sha256": "26db3d1ce4a0e00a00fa7f0147f5859b2e34a3b57fe9d201fb097a8d02901e5f"
         },
         {
           "path": "src/core/skills/bug-fix/skill.json",
@@ -723,7 +723,7 @@
       "outputFiles": [
         {
           "path": "src/core/skills/why/SKILL.md",
-          "sha256": "4c8f6e99e891e9540c3804a92aa6a8550e1d8dc3f7338d30a679ed3ded6ffa04",
+          "sha256": "1bdbccc3ad9ec1f03c8476b25d2f808791156b234575e621c15198835ebfe653",
           "owner": "derived"
         },
         {
@@ -743,7 +743,7 @@
         },
         {
           "path": "src/core/skills/architect/SKILL.md",
-          "sha256": "ce8d1dd1c6a4eb7e5726234173994c64903997dd32e97b0d16ac1081fddcb65c",
+          "sha256": "33218c4b6777aa443ed802b0f6accd5fce330af741586b10ab4a78367477fb18",
           "owner": "derived"
         },
         {
@@ -758,7 +758,7 @@
         },
         {
           "path": "src/core/skills/arena/SKILL.md",
-          "sha256": "3d58b9cc4091e13a4d8508e4e0aff65d786ece077fadd1c0c1af9ca657737f38",
+          "sha256": "87ea1d3a322f69c1ee2c1cdac4bde0c6e370282de2e7d109704c22e420110c32",
           "owner": "derived"
         },
         {
@@ -768,7 +768,7 @@
         },
         {
           "path": "src/core/skills/swarm/SKILL.md",
-          "sha256": "ae5e6692e9f60770387da4df6af058cb68f09b885d221bb9a270168c6c707fcb",
+          "sha256": "9e92a0dcacd0444bdaaca6f950ae266b5d53b767980e1d650b434a8ca5f06156",
           "owner": "derived"
         },
         {
@@ -1055,7 +1055,7 @@
         {
           "path": "src/core/skills/reflect/SKILL.md",
           "owner": "derived",
-          "sha256": "731929c176c57780062557caacdeb8cb5d4de3a56ce08693bd6ee0fdd8a2eb39"
+          "sha256": "69570f822ce09154970a16a6415087988cd4cbe54f0baa8905607ba00491713c"
         },
         {
           "path": "src/core/skills/reflect/skill.json",

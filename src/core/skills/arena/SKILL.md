@@ -16,9 +16,14 @@ Freeze a rubric of three to six gradeable criteria before seeing candidates.
 Keep it for the parent and judge; candidates receive the same task contract and
 grounding, not the judging rubric or other candidates' work.
 
-Use the requested candidate count, or start with two independent attempts.
-Bound total attempts and concurrency. Resolve models from observed configured
-roles; disclose same-model execution and unsupported diversity. Give each
+Use the requested candidate count, or the length of an active
+`arena.runners` panel in the current resolution manifest; without one, start
+with two independent attempts. Assign entries in panel order, repeating only
+when the user explicitly requests more candidates than configured entries.
+For a separate cross-judge, select one entry from `arena.cross-judge-pool`,
+preferably a different resolved model family when observable. Bound total
+attempts and concurrency. Disclose same-model execution and unsupported
+diversity. Give each
 candidate an isolated output location. For implementation candidates, ensure
 each checkout has the same intended base and required local changes; a clean
 checkout that omits relevant uncommitted work is not the same starting state.

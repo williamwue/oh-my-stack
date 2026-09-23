@@ -6,6 +6,17 @@ disable-model-invocation: true
 
 # Feature
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+For this workflow's implementers use `code.feature-refactoring`.
+
 The root owns design, integration, and proof.
 
 1. Inspect the affected subsystem with the `how` workflow. Name the user-visible
@@ -21,7 +32,9 @@ The root owns design, integration, and proof.
    before implementation when practical.
 5. Assign one bounded writer or implement at the root. A delegated writer gets
    exact paths, the named data shape, constraints, and success commands. Use an
-   isolated workspace when available. If not, serialize writes and disclose it.
+   isolated workspace when available. Use the configured `code.feature-refactoring` route
+   when active; otherwise inherit the runtime model. If isolation is missing,
+   serialize writes and disclose it.
 6. The root inspects the actual diff, rejects unrelated changes, and runs the
    stated checks on the matching surface. Do not accept a child summary as
    verification.

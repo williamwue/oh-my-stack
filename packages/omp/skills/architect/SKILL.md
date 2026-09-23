@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Architect
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Design before implementation. Track grounding, sketches, synthesis/checkpoint,
 implementation, and redesign. A design-only request stops at a design. This
 workflow does not expand a request for advice into permission to edit code.
@@ -26,6 +36,8 @@ that design contract. Require at least two structurally distinct candidates,
 not two cosmetic versions of one design. State this requirement in the common
 brief. If candidates converge, ask for a concrete alternative within the budget
 or mark alternative exploration incomplete; do not silently waive the requirement.
+When configured, pass the ordered `architect.runners` panel to Arena rather
+than its general runner panel; its length sets the default candidate count.
 
 Candidates write caller usage first, derive types/signatures and module
 ownership from it, and mark bodies as pseudocode or not implemented. Keep

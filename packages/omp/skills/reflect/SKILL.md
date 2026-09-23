@@ -6,6 +6,18 @@ disable-model-invocation: true
 
 # Reflect
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+For the three reflection lenses use `reflect.tooling`, `reflect.judgment`,
+and `reflect.divergent`; use `reflect.synthesizer` for the final pass.
+
 Use only when the user asks to reflect on an actual conversation or work run.
 Trivial exchanges and one-off preferences do not justify durable Skill edits.
 Identify the active task transcript through the runtime's task history or the
@@ -16,8 +28,11 @@ visible context and disclose the loss of tool evidence.
 Run three independent read-only reviews when delegation is available: judgment
 (wrong decisions and missed evidence), tooling (friction and repeatable checks),
 and divergent alternatives. Give each the same frozen task record and require
-precise citations, counterexamples, and proposed destination. Use configured
-roles, not assumed model identities. With fewer workers, preserve separate
+precise citations, counterexamples, and proposed destination. When available,
+use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for
+the respective lenses; keep all three sessions independent. Use
+`reflect.synthesizer` for the later synthesis pass. Use configured routes,
+not assumed model identities. With fewer workers, preserve separate
 lenses and label reduced independence.
 
 Synthesize Accepted, Rejected, and Backlog findings. Root rechecks each accepted

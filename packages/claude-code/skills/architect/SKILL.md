@@ -26,6 +26,8 @@ that design contract. Require at least two structurally distinct candidates,
 not two cosmetic versions of one design. State this requirement in the common
 brief. If candidates converge, ask for a concrete alternative within the budget
 or mark alternative exploration incomplete; do not silently waive the requirement.
+When configured, pass the ordered `architect.runners` panel to Arena rather
+than its general runner panel; its length sets the default candidate count.
 
 Candidates write caller usage first, derive types/signatures and module
 ownership from it, and mark bodies as pseudocode or not implemented. Keep

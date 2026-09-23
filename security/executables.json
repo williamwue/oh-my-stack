@@ -226,6 +226,14 @@
       "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected configuration remains user-owned."
     },
     {
+      "path": "tools/codex-delegation.mjs",
+      "owner": "local-core",
+      "purpose": "Derive explicit Codex spawn parameters and complete role tasks, then verify persisted parent and child runtime records.",
+      "network": false,
+      "writes": ["optional user-selected prepared request or verification report file"],
+      "uninstallBehavior": "Generated Codex package copy is removed with its package; user-selected outputs remain user-owned."
+    },
+    {
       "path": "tools/codex-skill-descriptions.mjs",
       "owner": "local-core",
       "purpose": "Export concise Codex discovery descriptions; no executable side effects.",

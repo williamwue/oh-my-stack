@@ -28,7 +28,8 @@ test("Codex long direct entries preserve complete procedures outside the injecti
       const source = model.skills.find((skill) => skill.metadata.name === name);
       const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
       const complete = entry.includes("](WORKFLOW.md)") ? await readFile(join(path, "WORKFLOW.md"), "utf8") : entry;
-      assert.equal(body(complete), body(source.text), `${name}: complete procedure must remain lossless`);
+      const sourceAfterHeading = body(source.text).replace(/^# .+\n/, "").trim();
+      assert.ok(body(complete).endsWith(sourceAfterHeading), `${name}: complete procedure must remain lossless`);
     }
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -51,7 +52,8 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
     const complete = document.includes("](WORKFLOW.md)")
       ? await readFile(join(repoRoot, "packages/codex/skills", name, "WORKFLOW.md"), "utf8") : document;
-    assert.equal(body(complete), body(source.text), name);
+    const sourceAfterHeading = body(source.text).replace(/^# .+\n/, "").trim();
+    assert.ok(body(complete).endsWith(sourceAfterHeading), name);
     const metadata = await readFile(join(repoRoot, "packages/codex/skills", name, "agents/openai.yaml"), "utf8");
     assert.ok(metadata.includes(`Use $${name} for this task.`), name);
     assert.ok(metadata.includes(`allow_implicit_invocation: ${source.metadata.invocation === "automatic"}`), name);
@@ -200,7 +202,8 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(omp.capabilities["agents.wait"].status, "native");
   assert.equal(omp.capabilities["agents.read_result"].status, "native");
   assert.equal(omp.capabilities["agents.read_transcript"].status, "native");
-  assert.equal(omp.capabilities["coordination.peer_messages"].status, "unknown");
+  assert.equal(omp.capabilities["coordination.peer_messages"].status, "native");
+  assert.match(omp.capabilities["coordination.peer_messages"].evidence, /omp-18\.2\.10\/check-peer-message/);
   assert.equal(omp.capabilities["interaction.fixed_choice"].status, "fallback");
   assert.equal(omp.capabilities["interaction.free_text"].status, "fallback");
   assert.equal(omp.capabilities["workspace.isolate"].status, "native");

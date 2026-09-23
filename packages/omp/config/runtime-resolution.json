@@ -83,6 +83,150 @@
       "writes": false
     }
   ],
+  "routes": {
+    "code.delegates": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "judgment.prose": {
+      "kind": "single",
+      "role": "explainer",
+      "workload": "deep"
+    },
+    "hardest.tasks": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
+    },
+    "how.explorer": {
+      "kind": "single",
+      "role": "explorer",
+      "workload": "fast"
+    },
+    "how.explainer": {
+      "kind": "single",
+      "role": "explainer",
+      "workload": "deep"
+    },
+    "why.investigator": {
+      "kind": "single",
+      "role": "explorer",
+      "workload": "fast"
+    },
+    "why.synthesizer": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
+    },
+    "reflect.tooling": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "reflect.judgment": {
+      "kind": "single",
+      "role": "reviewer",
+      "workload": "deep"
+    },
+    "swarm.workers": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "arena.runners": {
+      "kind": "panel",
+      "role": "implementer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "arena.cross-judge-pool": {
+      "kind": "panel",
+      "role": "reviewer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "architect.runners": {
+      "kind": "panel",
+      "role": "explorer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "interrogate.reviewers": {
+      "kind": "panel",
+      "role": "reviewer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "code.feature-refactoring": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.bug-fix": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.perf-issue": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.hillclimb": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "reflect.divergent": {
+      "kind": "single",
+      "role": "reviewer",
+      "workload": "deep"
+    },
+    "reflect.synthesizer": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
+    }
+  },
+  "presets": {
+    "pstack": {
+      "workloads": {
+        "fast": "cursor/grok-4.7-xhigh-fast@high",
+        "balanced": "cursor/grok-4.7-xhigh-fast@high",
+        "deep": "cursor/claude-opus-5-5@max"
+      },
+      "routes": {
+        "code.feature-refactoring": "cursor/grok-4.7-xhigh-fast@high",
+        "code.bug-fix": "cursor/grok-4.7-xhigh-fast@high",
+        "code.perf-issue": "cursor/grok-4.7-xhigh-fast@high",
+        "code.hillclimb": "cursor/grok-4.7-xhigh-fast@high",
+        "reflect.tooling": "cursor/gpt-5.6-sol@max",
+        "reflect.divergent": "cursor/claude-opus-5-5@max",
+        "reflect.synthesizer": "cursor/claude-opus-5-5@max",
+        "arena.runners": [
+          "cursor/claude-opus-5-5@max",
+          "cursor/gpt-5.6-sol@max",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "arena.cross-judge-pool": [
+          "cursor/claude-opus-5-5@max",
+          "cursor/gpt-5.6-sol@max",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "architect.runners": [
+          "cursor/claude-opus-5-5@max",
+          "cursor/gpt-5.6-sol@max",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "interrogate.reviewers": [
+          "cursor/claude-opus-5-5@max",
+          "cursor/gpt-5.6-sol@max",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ]
+      }
+    }
+  },
   "adapter": {
     "format": "yaml",
     "modelField": "model",

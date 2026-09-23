@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.10-macos-arm64-check-dual-model-routing",
+  "fixture": "check-dual-model-routing",
+  "profile": "omp-default",
+  "observedAt": "2026-09-23",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D0", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "omp", "version": "18.2.10", "platform": "macos-arm64",
+    "configuration": "Disposable Git project, session 01a0cd5b-0596-7123-b2df-bf1d30082e67, two project agents evidence-reader and alternate-reader; alternate fixture bound to cursor/gpt-5.6-luna with low thinking; root cursor/default.",
+    "permissionProfile": "Read-only task agents; no project writes"
+  },
+  "capabilities": ["agents.custom_roles", "agents.spawn_parallel", "agents.model_override", "agents.reasoning_override", "agents.wait", "agents.read_result"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.6/check-model-routing.json"],
+  "assertions": [
+    { "id": "two-role-workers-completed", "status": "pass", "evidence": "WorkerA returned ROLE_MARKER=custom-role-ok and WorkerB returned ROUTING_MARKER=model-routing-ok from their distinct assigned files." },
+    { "id": "role-and-model-attributed", "status": "pass", "evidence": "WorkerA session_init agent=evidence-reader resolvedModel=cursor/default; WorkerB session_init agent=alternate-reader resolvedModel=cursor/gpt-5.6-luna. Each child model_change has resolvedModelIsFallback=false." },
+    { "id": "reasoning-observed", "status": "pass", "evidence": "WorkerB's own thinking_level_change records low; WorkerA's thinking level is null, so only WorkerB's role-bound effort is claimed." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "The disposable project's Git status retained only the initially copied probe paths." }
+  ],
+  "limitations": ["This proves two distinct resolved model selectors, not provider-backend diversity or model quality. WorkerA used the runtime default; its thinking level was not independently resolved.", "Overall OMP delivery remains D0 because the separate plugin-manager D1 gate is unresolved."]
+}

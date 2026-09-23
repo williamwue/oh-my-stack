@@ -5,6 +5,22 @@ description: "Explain a code path or subsystem using verified repository evidenc
 
 # How
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Use this workflow for code walkthroughs, ownership and layering questions, and
 questions about how a subsystem behaves. Explain observable structure and flow;
 do not invent motivation that the repository does not establish.
@@ -44,8 +60,11 @@ For a complex question:
    sharing earlier results. If delegation is unavailable, the root performs
    clearly separated exploration passes.
 
-Never hard-code a model or infer model diversity from session names. Runtime
-configuration selects the workload implementation.
+When a current Oh My Stack resolution manifest is active, use its
+`how.explorer` route for each explorer and `how.explainer` for the distinct
+explainer. Select the route's native agent when available, or its explicit
+model/effort at spawn time if role selection is unavailable. Otherwise inherit
+the runtime model. Never hard-code a model or infer diversity from names.
 
 ## 3. Freeze findings
 

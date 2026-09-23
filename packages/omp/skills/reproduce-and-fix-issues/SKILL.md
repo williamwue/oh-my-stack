@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Reproduce and fix issues
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Wait for a trusted triage marker in the source thread. Reproduce the exact symptom through the target app's real UI. Verify an existing fix when one exists. Attempt a bounded fix only after a confirmed repro.
 
 Load the external Benny configuration supplied by the automation. If the config, required actions, control adapter, or completed feature map is missing, fail closed.

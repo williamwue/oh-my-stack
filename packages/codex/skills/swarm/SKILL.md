@@ -5,6 +5,22 @@ description: "Run bounded coverage or races, drain workers, and consolidate veri
 
 # Swarm
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Coordinate one bounded fan-out and return one report. This is not a standing
 program, background monitor, or permission to publish. Keep a checklist: frame,
 fan out, aggregate, report.
@@ -19,7 +35,9 @@ criteria before dispatch. Define how a PASS is verified, not just self-reported.
 Set total worker count and maximum concurrency separately, with an attempt or
 time budget. Every required slice must have an owner. For mixed work, define
 the selection rule per slice and require all slices for overall completion.
-Resolve available configured roles without inventing models or execution hosts.
+Use `swarm.workers` from the current resolution manifest as the default
+worker route; an explicitly named model for a race arm takes precedence after
+runtime validation. Resolve available roles without inventing models or hosts.
 Local-only dependencies remain local; do not upload workspace data to a remote
 worker merely because the runtime supports it.
 

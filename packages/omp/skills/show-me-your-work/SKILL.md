@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Show Me Your Work
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Keep one canonical decision log. Use it for work with multiple phases, delegated
 sessions, important pivots, or verification that a reviewer will inspect later.
 Do not turn routine commands into noise.

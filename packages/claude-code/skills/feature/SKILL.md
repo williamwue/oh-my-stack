@@ -21,7 +21,9 @@ The root owns design, integration, and proof.
    before implementation when practical.
 5. Assign one bounded writer or implement at the root. A delegated writer gets
    exact paths, the named data shape, constraints, and success commands. Use an
-   isolated workspace when available. If not, serialize writes and disclose it.
+   isolated workspace when available. Use the configured `code.delegates` route
+   when active; otherwise inherit the runtime model. If isolation is missing,
+   serialize writes and disclose it.
 6. The root inspects the actual diff, rejects unrelated changes, and runs the
    stated checks on the matching surface. Do not accept a child summary as
    verification.

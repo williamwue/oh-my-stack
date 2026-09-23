@@ -80,7 +80,9 @@ bounded task.
 - A child report is evidence to inspect, not proof of success.
 - Verification runs on the surface and artifact named by the request.
 - External publication requires explicit user intent in the current request.
-- Runtime configuration resolves models and tools; portable workflow text does
+- Runtime configuration resolves models and tools. A current Oh My Stack
+  resolution manifest may supply named workflow routes and ordered model
+  panels; absent it, inherit the runtime model. Portable workflow text does
   not name concrete providers or model identifiers.
 - Report fallbacks and evidence gaps where they affect confidence.
 

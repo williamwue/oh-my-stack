@@ -19,7 +19,9 @@ criteria before dispatch. Define how a PASS is verified, not just self-reported.
 Set total worker count and maximum concurrency separately, with an attempt or
 time budget. Every required slice must have an owner. For mixed work, define
 the selection rule per slice and require all slices for overall completion.
-Resolve available configured roles without inventing models or execution hosts.
+Use `swarm.workers` from the current resolution manifest as the default
+worker route; an explicitly named model for a race arm takes precedence after
+runtime validation. Resolve available roles without inventing models or hosts.
 Local-only dependencies remain local; do not upload workspace data to a remote
 worker merely because the runtime supports it.
 

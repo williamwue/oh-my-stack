@@ -5,6 +5,22 @@ description: "Reproduce, fix, and independently verify a software defect."
 
 # Bug Fix
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 The root coordinator owns reproduction, scope, decisions, integration, and the
 final verification claim. Delegation can accelerate one bounded implementation
 unit, but a worker report is never sufficient proof that the defect is fixed.
@@ -47,7 +63,8 @@ decision trail. A small direct fix does not need a ceremonial log.
 
 Prefer root-only execution when the fix is small, tightly coupled to the root's
 context, or cannot be safely isolated. Otherwise start exactly one independent
-implementer session with:
+implementer session using the active `code.delegates` route when configured,
+or the runtime model otherwise, with:
 
 - the confirmed reproduction and root-cause evidence;
 - an explicit file and behavior scope;

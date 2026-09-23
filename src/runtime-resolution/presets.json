@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "pstack": {
+    "omp": {
+      "workloads": {
+        "fast": "cursor/grok-4.7-xhigh-fast@high",
+        "balanced": "cursor/grok-4.7-xhigh-fast@high",
+        "deep": "cursor/claude-opus-5-5@max"
+      },
+      "routes": {
+        "code.feature-refactoring": "cursor/grok-4.7-xhigh-fast@high",
+        "code.bug-fix": "cursor/grok-4.7-xhigh-fast@high",
+        "code.perf-issue": "cursor/grok-4.7-xhigh-fast@high",
+        "code.hillclimb": "cursor/grok-4.7-xhigh-fast@high",
+        "reflect.tooling": "cursor/gpt-5.6-sol@max",
+        "reflect.divergent": "cursor/claude-opus-5-5@max",
+        "reflect.synthesizer": "cursor/claude-opus-5-5@max",
+        "arena.runners": ["cursor/claude-opus-5-5@max", "cursor/gpt-5.6-sol@max", "cursor/grok-4.7-xhigh-fast@high"],
+        "arena.cross-judge-pool": ["cursor/claude-opus-5-5@max", "cursor/gpt-5.6-sol@max", "cursor/grok-4.7-xhigh-fast@high"],
+        "architect.runners": ["cursor/claude-opus-5-5@max", "cursor/gpt-5.6-sol@max", "cursor/grok-4.7-xhigh-fast@high"],
+        "interrogate.reviewers": ["cursor/claude-opus-5-5@max", "cursor/gpt-5.6-sol@max", "cursor/grok-4.7-xhigh-fast@high"]
+      }
+    },
+    "codex": {
+      "workloads": {
+        "fast": "gpt-6-luna@low",
+        "balanced": "gpt-6-sol@medium",
+        "deep": "gpt-6-astra@low"
+      },
+      "routes": {
+        "reflect.tooling": "gpt-6-sol@medium",
+        "arena.runners": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],
+        "arena.cross-judge-pool": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],
+        "architect.runners": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],
+        "interrogate.reviewers": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"]
+      }
+    }
+  }
+}

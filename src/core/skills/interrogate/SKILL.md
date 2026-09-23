@@ -33,8 +33,11 @@ either result. Give every reviewer the same frozen packet. Do not assign
 personas or reveal another reviewer's findings. More than two reviewers are
 optional and must be justified by review risk rather than available capacity.
 
-Prefer model diversity when the runtime can resolve it, but do not hard-code
-models or equate distinct session names with distinct backends. If per-worker
+If the current resolution manifest has an `interrogate.reviewers` panel,
+start one reviewer per ordered entry before waiting. Otherwise start the
+minimum two independent reviewers above. Prefer model diversity when the
+runtime can resolve it, but do not hard-code models or equate distinct session
+names with distinct backends. If per-worker
 model selection is unavailable, use the available reviewers and disclose that
 diversity was not established. Report model identities only from runtime
 metadata, never reviewer self-description.

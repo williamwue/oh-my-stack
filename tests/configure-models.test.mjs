@@ -32,6 +32,22 @@ async function inventoryFile(root, runtime) {
   return path;
 }
 
+async function presetInventoryFile(root, runtime) {
+  const descriptor = JSON.parse(await readFile(join(repoRoot, "packages", runtime, "config", "runtime-resolution.json"), "utf8"));
+  const preset = descriptor.presets.pstack;
+  const values = [...Object.values(preset.workloads), ...Object.values(preset.routes).flat()];
+  const ids = [...new Set(values.map((value) => value.slice(0, value.lastIndexOf("@"))))];
+  const path = join(root, `${runtime}-preset-inventory.json`);
+  await writeFile(path, `${JSON.stringify({
+    schemaVersion: 1,
+    runtime,
+    observedAt: "2026-09-23T00:00:00.000Z",
+    source: "fixture native model inventory",
+    models: ids.map((id) => ({ id, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] })),
+  }, null, 2)}\n`);
+  return path;
+}
+
 test("setup resolves only observed models into every target-native role format", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-configure-"));
   for (const runtime of ["omp", "codex", "claude-code"]) {
@@ -170,4 +186,152 @@ test("project activation CLI and safety gate reject symlinks and unowned roles",
   await writeFile(otherReviewer, "user role\n");
   await assert.rejects(configure({ packageRoot, inventoryPath, projectRoot: otherProject, selections, apply: true }), /refusing to overwrite an unowned or modified file/);
   assert.equal(await readFile(otherReviewer, "utf8"), "user role\n");
+});
+
+test("pstack preset creates named workflow routes and ordered native panels on both runtimes", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-preset-"));
+  for (const runtime of ["codex", "omp"]) {
+    const inventoryPath = await presetInventoryFile(root, runtime);
+    const outputRoot = join(root, `${runtime}-preset-output`);
+    const packageRoot = join(repoRoot, "packages", runtime);
+    const preview = await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: false });
+    assert.equal(preview.manifest.preset, "pstack");
+    assert.equal(preview.manifest.routes["interrogate.reviewers"].entries.length, 3);
+    assert.equal(preview.manifest.routes["how.explorer"].entries.length, 1);
+    assert.equal(new Set(preview.manifest.routes["interrogate.reviewers"].entries.map((entry) => entry.model)).size, 3);
+    await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+
+    await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: true });
+    const extension = runtime === "codex" ? "toml" : "md";
+    const firstReviewer = await readFile(join(outputRoot, "agents", `ohmystack-interrogate-reviewers-1.${extension}`), "utf8");
+    assert.match(firstReviewer, new RegExp(preview.manifest.routes["interrogate.reviewers"].entries[0].model));
+    assert.match(firstReviewer, /ohmystack-interrogate-reviewers-1/);
+    const manifest = JSON.parse(await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8"));
+    assert.equal(manifest.routes["interrogate.reviewers"].entries[2].agent, "ohmystack-interrogate-reviewers-3");
+    assert.ok(Object.hasOwn(manifest.ownedFiles, `agents/ohmystack-interrogate-reviewers-3.${extension}`));
+  }
+});
+
+test("budget, inheritance, route overrides, and panel shrink stay owned and deterministic", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-preset-overrides-"));
+  const inventoryPath = await presetInventoryFile(root, "codex");
+  const outputRoot = join(root, "output");
+  const packageRoot = join(repoRoot, "packages", "codex");
+  const options = {
+    packageRoot, inventoryPath, outputRoot, presetName: "pstack", budget: "small",
+    roleSelections: { reviewer: "inherit-parent" },
+    routeSelections: { "how.explainer": "auto" },
+    panelSelections: { "interrogate.reviewers": "gpt-6-sol@max,inherit-parent" },
+    apply: true,
+  };
+  const first = await configure(options);
+  assert.equal(first.manifest.roles.reviewer.inheritParent, true);
+  assert.equal(first.manifest.routes["how.explainer"].entries[0].inheritParent, true);
+  assert.equal(first.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(first.manifest.routes["interrogate.reviewers"].entries[0].reasoning, "medium");
+  assert.equal(first.manifest.routes["interrogate.reviewers"].entries[1].inheritParent, true);
+  assert.doesNotMatch(await readFile(join(outputRoot, "agents", "reviewer.toml"), "utf8"), /^model =/m);
+  assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-how-explainer.toml"), "utf8"), /^model =/m);
+  assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-interrogate-reviewers-2.toml"), "utf8"), /^model =/m);
+
+  const smaller = { ...options, panelSelections: { "interrogate.reviewers": "gpt-6-sol@medium" } };
+  await configure(smaller);
+  await assert.rejects(readFile(join(outputRoot, "agents", "ohmystack-interrogate-reviewers-2.toml")));
+  assert.equal((await configure({ ...smaller, apply: false })).manifest.routes["interrogate.reviewers"].entries.length, 1);
+});
+
+test("unobserved preset and modified obsolete panel agent fail without partial writes", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-preset-safety-"));
+  const inventoryPath = await inventoryFile(root, "codex");
+  const outputRoot = join(root, "output");
+  const packageRoot = join(repoRoot, "packages", "codex");
+  await assert.rejects(
+    configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: true }),
+    /was not present in the observed inventory/,
+  );
+  await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+
+  const observed = await presetInventoryFile(root, "codex");
+  await configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack", apply: true });
+  const stale = join(outputRoot, "agents", "ohmystack-interrogate-reviewers-3.toml");
+  await writeFile(stale, "user modification\n");
+  await assert.rejects(
+    configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack", panelSelections: { "interrogate.reviewers": "gpt-6-sol@medium" }, apply: true }),
+    /refusing to remove a modified owned file/,
+  );
+  assert.equal(await readFile(stale, "utf8"), "user modification\n");
+});
+
+test("OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-omp-source-policy-"));
+  const inventoryPath = await presetInventoryFile(root, "omp");
+  const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+  inventory.models.find((model) => model.id === "cursor/grok-4.7-xhigh-fast").reasoningEfforts = ["low", "medium", "high"];
+  await writeFile(inventoryPath, `${JSON.stringify(inventory, null, 2)}\n`);
+  const options = {
+    packageRoot: join(repoRoot, "packages", "omp"), inventoryPath,
+    outputRoot: join(root, "output"), presetName: "pstack", budget: "large", apply: true,
+    routeSelections: { "code.perf-issue": "cursor/gpt-5.6-sol@low", "reflect.divergent": "inherit-parent" },
+    panelSelections: { "interrogate.reviewers": "cursor/gpt-5.6-sol@low,auto" },
+  };
+  const first = await configure(options);
+  assert.equal(first.manifest.routes["code.perf-issue"].entries[0].reasoning, "xhigh");
+  assert.equal(first.manifest.routes["code.bug-fix"].entries[0].reasoning, "high");
+  assert.equal(first.manifest.routes["reflect.synthesizer"].entries[0].reasoning, "xhigh");
+  assert.equal(first.manifest.routes["reflect.divergent"].entries[0].inheritParent, true);
+  assert.equal(first.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(first.manifest.routes["interrogate.reviewers"].entries[0].reasoning, "xhigh");
+  const rerun = await configure({
+    packageRoot: options.packageRoot, inventoryPath, outputRoot: options.outputRoot,
+    presetName: "pstack", apply: true,
+  });
+  assert.equal(rerun.manifest.budget, "large");
+  assert.equal(rerun.manifest.routes["code.perf-issue"].entries[0].model, "cursor/gpt-5.6-sol");
+  assert.equal(rerun.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(rerun.manifest.routes["reflect.divergent"].entries[0].inheritParent, true);
+  const changedBudget = await configure({
+    packageRoot: options.packageRoot, inventoryPath, outputRoot: options.outputRoot,
+    presetName: "pstack", budget: "small", apply: false,
+  });
+  assert.equal(changedBudget.manifest.routes["code.perf-issue"].entries[0].reasoning, "medium");
+  assert.equal(changedBudget.manifest.routes["interrogate.reviewers"].entries[0].reasoning, "medium");
+  assert.equal(changedBudget.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  const roleText = await readFile(join(options.outputRoot, "agents", "ohmystack-code-perf-issue.md"), "utf8");
+  assert.match(roleText, /thinkingLevel: "xhigh"/);
+  const manifestPath = join(options.outputRoot, "oh-my-stack.resolution.json");
+  const legacy = JSON.parse(await readFile(manifestPath, "utf8"));
+  delete legacy.overrides;
+  await writeFile(manifestPath, `${JSON.stringify(legacy, null, 2)}\n`);
+  const migrated = await configure({
+    packageRoot: options.packageRoot, inventoryPath, outputRoot: options.outputRoot,
+    presetName: "pstack", apply: true,
+  });
+  assert.equal(migrated.manifest.routes["code.perf-issue"].entries[0].model, "cursor/gpt-5.6-sol");
+  assert.equal(migrated.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(migrated.manifest.routes["reflect.divergent"].entries[0].inheritParent, true);
+});
+
+test("OMP generated workflows bind source-style slots without changing Codex routing", async () => {
+  const omp = join(repoRoot, "packages", "omp");
+  const codex = join(repoRoot, "packages", "codex");
+  const ompDescriptor = JSON.parse(await readFile(join(omp, "config", "runtime-resolution.json"), "utf8"));
+  const codexDescriptor = JSON.parse(await readFile(join(codex, "config", "runtime-resolution.json"), "utf8"));
+  for (const name of ["code.feature-refactoring", "code.bug-fix", "code.perf-issue", "code.hillclimb", "reflect.divergent", "reflect.synthesizer"]) {
+    assert.ok(ompDescriptor.routes[name], name);
+    assert.equal(codexDescriptor.routes[name], undefined, `${name}: OMP adaptation must not leak into Codex`);
+  }
+  const cases = [
+    ["feature", "code.feature-refactoring"], ["refactoring", "code.feature-refactoring"],
+    ["bug-fix", "code.bug-fix"], ["perf-issue", "code.perf-issue"],
+    ["hillclimb", "code.hillclimb"], ["reflect", "reflect.divergent"],
+  ];
+  for (const [skill, route] of cases) {
+    const text = await readFile(join(omp, "skills", skill, "SKILL.md"), "utf8");
+    assert.ok(text.includes(`\`${route}\``), `${skill}: missing OMP source-style route`);
+    assert.match(text, /\.omp\/oh-my-stack\.resolution\.json/);
+  }
+  const setup = await readFile(join(omp, "skills", "setup-oh-my-stack", "SKILL.md"), "utf8");
+  assert.match(setup, /target xhigh/);
+  assert.doesNotMatch(setup, /cap at xhigh/);
+  assert.match(setup, /preserves those overrides/);
 });

@@ -5,6 +5,22 @@ description: "Review conversation lessons and propose scoped Skill improvements.
 
 # Reflect
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Use only when the user asks to reflect on an actual conversation or work run.
 Trivial exchanges and one-off preferences do not justify durable Skill edits.
 Identify the active task transcript through the runtime's task history or the
@@ -15,8 +31,10 @@ visible context and disclose the loss of tool evidence.
 Run three independent read-only reviews when delegation is available: judgment
 (wrong decisions and missed evidence), tooling (friction and repeatable checks),
 and divergent alternatives. Give each the same frozen task record and require
-precise citations, counterexamples, and proposed destination. Use configured
-roles, not assumed model identities. With fewer workers, preserve separate
+precise citations, counterexamples, and proposed destination. When available,
+use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the
+divergent lens; keep all three sessions independent. Use configured routes,
+not assumed model identities. With fewer workers, preserve separate
 lenses and label reduced independence.
 
 Synthesize Accepted, Rejected, and Backlog findings. Root rechecks each accepted

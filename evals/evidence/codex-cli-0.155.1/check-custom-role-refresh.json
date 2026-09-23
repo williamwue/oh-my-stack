@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-custom-role-refresh",
+  "fixture": "check-custom-role",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-23",
+  "result": "fail",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W0", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli", "version": "0.155.1", "platform": "macos-arm64",
+    "configuration": "Disposable Git project with generated .codex/agents/evidence-reader.toml and check-custom-role Skill; persisted codex exec session 01a0cd57-e027-7f22-bd66-bfa96a0a0b14; --ignore-user-config.",
+    "permissionProfile": "Read-only sandbox; no project writes"
+  },
+  "capabilities": ["agents.custom_roles"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/check-custom-role.json"],
+  "assertions": [
+    { "id": "skill-and-root-loaded", "status": "pass", "evidence": "The parent read the Skill and its Skill-relative root marker in the corrected rerun." },
+    { "id": "custom-role-selector-exposed", "status": "fail", "evidence": "The available spawn_agent schema still had no agent-role selector; the parent stopped without starting a general fallback worker." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "The disposable project's Git status retained only the initially copied probe paths." }
+  ],
+  "limitations": ["The finding is specific to codex exec on CLI 0.155.1, not a contradiction of documented support on every Codex surface."]
+}

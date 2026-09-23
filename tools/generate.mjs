@@ -307,7 +307,11 @@ export async function loadModel(root = repoRoot) {
   const project = await readJson(join(root, "src", "core", "project.json"));
   validateProject(project);
   const resolutionPolicy = await readJson(join(root, "src", "runtime-resolution", "policy.json"));
+  const ompRoutesDocument = await readJson(join(root, "src", "runtime-resolution", "omp-routes.json"));
+  const resolutionPresets = await readJson(join(root, "src", "runtime-resolution", "presets.json"));
   assert(resolutionPolicy.schemaVersion === 1, "runtime resolution policy schemaVersion must be 1");
+  assert(ompRoutesDocument.schemaVersion === 1, "OMP route policy schemaVersion must be 1");
+  assert(resolutionPresets.schemaVersion === 1, "runtime resolution presets schemaVersion must be 1");
   assert(
     JSON.stringify(Object.keys(resolutionPolicy.workloads).sort()) === JSON.stringify(["balanced", "deep", "fast"]),
     "runtime resolution policy must define fast, balanced, and deep",
@@ -372,6 +376,25 @@ export async function loadModel(root = repoRoot) {
     roles.push({ directory, metadata, instructions });
   }
   assert(roles.length > 0, "portable core has no roles");
+  const roleNames = new Set(roles.map((role) => role.metadata.name));
+  for (const [name, route] of Object.entries({ ...resolutionPolicy.routes, ...ompRoutesDocument.routes })) {
+    assert(!Object.hasOwn(resolutionPolicy.routes, name) || !Object.hasOwn(ompRoutesDocument.routes, name), `${name}: OMP route duplicates a portable route`);
+    assert(["single", "panel"].includes(route.kind), `${name}: invalid route kind`);
+    assert(roleNames.has(route.role), `${name}: unknown route role ${route.role}`);
+    assert(resolutionPolicy.workloads[route.workload], `${name}: unknown route workload ${route.workload}`);
+    if (route.kind === "panel") assert(Number.isInteger(route.defaultCount) && route.defaultCount > 0, `${name}: panel count must be positive`);
+  }
+  for (const [presetName, runtimes] of Object.entries(resolutionPresets).filter(([name]) => name !== "schemaVersion")) {
+    for (const [runtime, preset] of Object.entries(runtimes)) {
+      assert(adapterIds.includes(runtime), `${presetName}: unknown runtime ${runtime}`);
+      for (const workload of Object.keys(preset.workloads)) assert(resolutionPolicy.workloads[workload], `${presetName}: unknown workload ${workload}`);
+      for (const [name, choices] of Object.entries(preset.routes ?? {})) {
+        const route = runtime === "omp" ? (ompRoutesDocument.routes[name] ?? resolutionPolicy.routes[name]) : resolutionPolicy.routes[name];
+        assert(route, `${presetName}: unknown route ${name}`);
+        assert(Array.isArray(choices) === (route.kind === "panel"), `${presetName}.${name}: route shape mismatch`);
+      }
+    }
+  }
 
   for (const path of await filesUnder(join(root, "src", "core"))) {
     if (!/\.(?:md|json)$/.test(path)) continue;
@@ -388,7 +411,7 @@ export async function loadModel(root = repoRoot) {
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { root, project, resolutionPolicy, registry, profiles, adapters, skills, skillCatalog, roles };
+  return { root, project, resolutionPolicy, ompRoutes: ompRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -408,7 +431,29 @@ function codexSkillMetadata(skill) {
 }
 
 function renderSkillDocument(skill, adapter) {
-  const body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
+  let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
+  if (adapter.id === "omp" && skill.metadata.name === "setup-oh-my-stack") {
+    body = body.replace(
+      "`unlimited` (keep preset effort), `large` (cap at xhigh), `medium` (cap at high),\nor `small` (cap at medium). A budget caps effort at the highest advertised\nsupported value at or below that ceiling; it does not replace a model family.",
+      "`unlimited` (keep preset effort), `large` (target xhigh), `medium` (target\nhigh), or `small` (target medium). For OMP, a budget sets each real model to\nits target effort, even if this raises the prior effort. If the target is\nunavailable, use that model's highest advertised effort below it; otherwise\nstop for a new choice. Keep the model family and panel length unchanged.",
+    );
+  }
+  if (adapter.id === "omp" && skill.metadata.name === "reflect") {
+    body = body.replace(
+      "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",
+      "use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for\nthe respective lenses; keep all three sessions independent. Use\n`reflect.synthesizer` for the later synthesis pass.",
+    );
+  }
+  const ompRouteBySkill = {
+    feature: "code.feature-refactoring",
+    refactoring: "code.feature-refactoring",
+    "bug-fix": "code.bug-fix",
+    "perf-issue": "code.perf-issue",
+    hillclimb: "code.hillclimb",
+  };
+  if (adapter.id === "omp" && Object.hasOwn(ompRouteBySkill, skill.metadata.name)) {
+    body = body.replaceAll("`code.delegates`", `\`${ompRouteBySkill[skill.metadata.name]}\``);
+  }
   const frontmatter = [
     "---",
     `name: ${skill.metadata.name}`,
@@ -417,7 +462,74 @@ function renderSkillDocument(skill, adapter) {
   if (skill.metadata.invocation === "explicit" && adapter.id !== "codex") {
     frontmatter.push("disable-model-invocation: true");
   }
-  return [...frontmatter, "---", "", body, ""].join("\n");
+  const codexDelegation = adapter.id === "codex" && skill.metadata.requires.includes("agents.spawn")
+    ? [
+      "## Codex delegation binding",
+      "",
+      "For every delegated worker in this workflow, derive the exact `model`,",
+      "`reasoning_effort`, and complete role-plus-task `message` with",
+      "`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active",
+      "resolution manifest and named route/panel entry where configured; otherwise",
+      "supply the canonical role and the observed parent model and effort. Pass",
+      "the returned `task_name`, `fork_turns=none`, model, effort, and message",
+      "explicitly to the spawn call. Do not use a generated custom-role name as a selector or",
+      "claim its TOML was activated. After the worker finishes, run the helper's",
+      "`verify` mode on the persisted parent and child records when available; it",
+      "checks the spawn metadata, parent link, and child `turn_context`.",
+      "The persisted spawn message may be encrypted; disclose when its exact",
+      "role/task text cannot be audited. If records are unavailable, state that",
+      "runtime model resolution is unverified.",
+      "",
+    ].join("\n")
+    : "";
+  const codexSetup = adapter.id === "codex" && skill.metadata.name === "setup-oh-my-stack"
+    ? [
+      "## Codex activation boundary",
+      "",
+      "Generated project TOML files and an applied resolution manifest are",
+      "configuration artifacts, not evidence that this Codex surface selected",
+      "those custom roles. Delegated workflows use explicit spawn parameters and",
+      "the complete generated role contract through `../../scripts/codex-delegation.mjs`.",
+      "Verify actual model and effort from persisted child records when available.",
+      "",
+    ].join("\n")
+    : "";
+  const ompSetup = adapter.id === "omp" && skill.metadata.name === "setup-oh-my-stack"
+    ? [
+      "## OMP source-style setup",
+      "",
+      "The project resolution manifest is the current Oh My Stack choice table.",
+      "On a re-run, preview the existing budget and any model-family, panel, or",
+      "inherit-parent overrides before asking for changes. With `--preset pstack`,",
+      "the configurator preserves those overrides and applies the selected budget",
+      "to real models using OMP's advertised thinking levels. Confirm the entire",
+      "ordered table before `--apply`. This project-scoped configuration is used",
+      "by Oh My Stack workflows; it is not a Cursor-style global always-applied rule.",
+      "",
+    ].join("\n")
+    : "";
+  const ompDelegation = adapter.id === "omp" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name) || skill.metadata.name === "poteto-mode")
+    ? [
+      "## OMP model routing",
+      "",
+      "At the start of this workflow, read the current project's",
+      "`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My",
+      "Stack model map for this project. For each configured route, select its",
+      "named agent from `.omp/agents/` through OMP's native task-agent selector;",
+      "preserve panel entry order and count. If no mapping is present, retain the",
+      "workflow's normal runtime model. Verify resolved worker model and thinking",
+      "level from OMP session/job metadata, not from the role file alone.",
+      ...(Object.hasOwn(ompRouteBySkill, skill.metadata.name)
+        ? [`For this workflow's implementers use \`${ompRouteBySkill[skill.metadata.name]}\`.`] : []),
+      ...(skill.metadata.name === "reflect"
+        ? ["For the three reflection lenses use `reflect.tooling`, `reflect.judgment`,",
+          "and `reflect.divergent`; use `reflect.synthesizer` for the final pass."] : []),
+      "",
+    ].join("\n")
+    : "";
+  const extension = [codexDelegation, codexSetup, ompSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
+  const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
+  return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
 
 function yamlQuoted(value) {
@@ -535,6 +647,17 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     await writeText(join(target, "agents", `${role.metadata.name}.${extension}`), renderer(role));
   }
 
+  if (adapter.id === "codex") {
+    await writeJson(join(target, "config", "role-contracts.json"), {
+      schemaVersion: 1,
+      target: "codex",
+      roles: Object.fromEntries(model.roles.map((role) => [role.metadata.name, {
+        description: role.metadata.description,
+        instructions: role.instructions.trim(),
+      }])),
+    });
+  }
+
   const resolutionAdapters = {
     omp: { format: "yaml", modelField: "model", reasoningField: "thinkingLevel" },
     codex: { format: "toml", modelField: "model", reasoningField: "model_reasoning_effort" },
@@ -550,11 +673,21 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       constraints: role.metadata.constraints,
       writes: role.metadata.writes,
     })),
+    routes: adapter.id === "omp"
+      ? { ...model.resolutionPolicy.routes, ...model.ompRoutes }
+      : model.resolutionPolicy.routes,
+    presets: Object.fromEntries(
+      Object.entries(model.resolutionPresets).filter(([name]) => name !== "schemaVersion")
+        .map(([name, runtimes]) => [name, runtimes[adapter.id] ?? null]),
+    ),
     adapter: resolutionAdapters[adapter.id],
   });
   await mkdir(join(target, "scripts"), { recursive: true });
   await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
   await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
+  if (adapter.id === "codex") {
+    await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+  }
 
   await writeJson(join(target, "GENERATION.json"), {
     schemaVersion: 1,

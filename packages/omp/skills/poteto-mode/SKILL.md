@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Poteto Mode
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Use this router when the user asks for the pstack-style execution mode or when
 they explicitly invoke this Skill. Select one primary workflow from observable
 intent. Do not combine workflows merely because several could be relevant.
@@ -81,7 +91,9 @@ bounded task.
 - A child report is evidence to inspect, not proof of success.
 - Verification runs on the surface and artifact named by the request.
 - External publication requires explicit user intent in the current request.
-- Runtime configuration resolves models and tools; portable workflow text does
+- Runtime configuration resolves models and tools. A current Oh My Stack
+  resolution manifest may supply named workflow routes and ordered model
+  panels; absent it, inherit the runtime model. Portable workflow text does
   not name concrete providers or model identifiers.
 - Report fallbacks and evidence gaps where they affect confidence.
 

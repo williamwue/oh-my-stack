@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "omp-18.2.10-macos-arm64-source-style-route-smoke",
+  "fixture": "source-style-route-smoke",
+  "profile": "omp-default",
+  "observedAt": "2026-09-23",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D2", "D3"]
+  },
+  "runtime": {
+    "name": "omp",
+    "version": "18.2.10",
+    "platform": "macos-arm64",
+    "configuration": "Disposable project tmp.jkKLZEWLSi; pstack preset with small budget and explicit reflect.divergent=cursor/gpt-5.6-luna@low; root cursor/default with low thinking; child session 01a0cdb5-6d65-703e-bcb7-68a20c34211e/RouteSmoke.",
+    "permissionProfile": "Read-only worker reading a disposable README marker; no writes to the user's OMP configuration"
+  },
+  "capabilities": ["agents.custom_roles", "agents.model_override", "agents.reasoning_override"],
+  "relatedEvidence": ["evals/evidence/omp-18.2.10/check-dual-model-routing.json"],
+  "assertions": [
+    {
+      "id": "native-route-selected",
+      "status": "pass",
+      "evidence": "Child session_init records agent=ohmystack-reflect-divergent and resolvedModel=cursor/gpt-5.6-luna; model_change records the same model with resolvedModelIsFallback=false."
+    },
+    {
+      "id": "source-style-budget-target-applied",
+      "status": "pass",
+      "evidence": "The explicit selection requested low, but the small budget targets medium. Generated role metadata and the child's thinking_level_change both record medium."
+    },
+    {
+      "id": "role-policy-injected",
+      "status": "pass",
+      "evidence": "The child session_init systemPrompt contains the generated role's ROLE_POLICY=independent-frozen-review line."
+    },
+    {
+      "id": "disposable-task-completed",
+      "status": "pass",
+      "evidence": "The child read the disposable README marker and returned OMP_ROUTE_MARKER=source-slot-ready to the parent."
+    }
+  ],
+  "limitations": [
+    "This checks one new OMP route, not every upstream-style slot or a full workflow outcome.",
+    "The child answer did not reproduce the exact role-policy marker; prompt injection is established by session metadata, while behavioral adherence is not claimed.",
+    "Overall delivery remains D0 because the separate OMP plugin-manager D1 gate is unresolved."
+  ]
+}

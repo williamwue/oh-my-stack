@@ -5,6 +5,22 @@ description: "Compare independent candidates, select a base, graft stronger idea
 
 # Arena
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Produce competing solutions to one task, then one coherent verified result.
 For partitioned coverage or a race with no synthesis, use [swarm](../swarm/SKILL.md).
 Keep a phase checklist: frame, fan out, cross-judge, pick, graft, verify.
@@ -16,9 +32,14 @@ Freeze a rubric of three to six gradeable criteria before seeing candidates.
 Keep it for the parent and judge; candidates receive the same task contract and
 grounding, not the judging rubric or other candidates' work.
 
-Use the requested candidate count, or start with two independent attempts.
-Bound total attempts and concurrency. Resolve models from observed configured
-roles; disclose same-model execution and unsupported diversity. Give each
+Use the requested candidate count, or the length of an active
+`arena.runners` panel in the current resolution manifest; without one, start
+with two independent attempts. Assign entries in panel order, repeating only
+when the user explicitly requests more candidates than configured entries.
+For a separate cross-judge, select one entry from `arena.cross-judge-pool`,
+preferably a different resolved model family when observable. Bound total
+attempts and concurrency. Disclose same-model execution and unsupported
+diversity. Give each
 candidate an isolated output location. For implementation candidates, ensure
 each checkout has the same intended base and required local changes; a clean
 checkout that omits relevant uncommitted work is not the same starting state.

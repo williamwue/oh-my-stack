@@ -183,12 +183,31 @@ inventory collector, and the same offline configuration script. The collector
 calls the native inventory operation verified for that generated target and
 normalizes model identifiers plus supported reasoning efforts. It fails closed
 when no operation has been verified. The configuration script accepts that
-timestamped, source-attributed inventory plus explicit `fast`, `balanced`, and
-`deep` selections. It validates each model and reasoning effort before
-rendering native role overrides. Outputs live in a dedicated project-owned
-directory. Reruns preflight every owned file before writing, replace only files
-whose hashes match the prior project manifest, and preserve unrelated user
-files. Configuration alone never establishes model diversity.
+timestamped, source-attributed inventory plus either explicit `fast`,
+`balanced`, and `deep` selections or a target-native `pstack` recommendation
+preset. The preset adds named workflow slots, ordered runner/reviewer panels,
+a reasoning-budget rule, and an `inherit-parent` choice. OMP applies the
+upstream target-effort semantics, using the highest supported effort at or
+below that target for a model, and retains explicit slot/panel choices on
+reconfiguration. Codex retains a ceiling-only interpretation. Preset model IDs
+remain target-specific data, never portable-core requirements; every selected
+ID and effort must be present in the observed inventory. Panel length is the
+intended worker count, while each generated route agent has a distinct name and
+ordered manifest entry. Outputs live in a dedicated project-owned directory.
+Reruns preflight every owned file before writing, replace only files whose
+hashes match the prior project manifest, remove only unchanged obsolete owned
+route agents, and preserve unrelated user files. Configuration alone never
+establishes model diversity or native route selection; a worker trace must
+verify both. OMP workflows read the project resolution manifest when invoked
+and select generated native task agents; unlike Cursor, this is not a global
+always-applied user rule. On Codex, a generated role file is only a reference artifact until
+native role selection is independently observed. The adapter instead derives
+each spawn's explicit model and reasoning effort, embeds the full role contract
+in the task message, and checks the parent spawn call plus child runtime record
+when persisted records are available. An encrypted persisted spawn message
+limits independent verification of its exact text; report that separately
+from verified model and effort. OMP retains its verified native
+project-role route.
 
 ## Build pipeline
 

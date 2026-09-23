@@ -44,8 +44,11 @@ For a complex question:
    sharing earlier results. If delegation is unavailable, the root performs
    clearly separated exploration passes.
 
-Never hard-code a model or infer model diversity from session names. Runtime
-configuration selects the workload implementation.
+When a current Oh My Stack resolution manifest is active, use its
+`how.explorer` route for each explorer and `how.explainer` for the distinct
+explainer. Select the route's native agent when available, or its explicit
+model/effort at spawn time if role selection is unavailable. Otherwise inherit
+the runtime model. Never hard-code a model or infer diversity from names.
 
 ## 3. Freeze findings
 

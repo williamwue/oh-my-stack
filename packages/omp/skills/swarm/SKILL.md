@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Swarm
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Coordinate one bounded fan-out and return one report. This is not a standing
 program, background monitor, or permission to publish. Keep a checklist: frame,
 fan out, aggregate, report.
@@ -20,7 +30,9 @@ criteria before dispatch. Define how a PASS is verified, not just self-reported.
 Set total worker count and maximum concurrency separately, with an attempt or
 time budget. Every required slice must have an owner. For mixed work, define
 the selection rule per slice and require all slices for overall completion.
-Resolve available configured roles without inventing models or execution hosts.
+Use `swarm.workers` from the current resolution manifest as the default
+worker route; an explicitly named model for a race arm takes precedence after
+runtime validation. Resolve available roles without inventing models or hosts.
 Local-only dependencies remain local; do not upload workspace data to a remote
 worker merely because the runtime supports it.
 

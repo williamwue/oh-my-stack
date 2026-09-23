@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # How
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Use this workflow for code walkthroughs, ownership and layering questions, and
 questions about how a subsystem behaves. Explain observable structure and flow;
 do not invent motivation that the repository does not establish.
@@ -45,8 +55,11 @@ For a complex question:
    sharing earlier results. If delegation is unavailable, the root performs
    clearly separated exploration passes.
 
-Never hard-code a model or infer model diversity from session names. Runtime
-configuration selects the workload implementation.
+When a current Oh My Stack resolution manifest is active, use its
+`how.explorer` route for each explorer and `how.explainer` for the distinct
+explainer. Select the route's native agent when available, or its explicit
+model/effort at spawn time if role selection is unavailable. Otherwise inherit
+the runtime model. Never hard-code a model or infer diversity from names.
 
 ## 3. Freeze findings
 

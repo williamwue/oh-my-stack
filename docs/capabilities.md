@@ -137,29 +137,72 @@ This is a documentation-derived research baseline, not live conformance evidence
 
 | Surface | Skills | Plugins | Custom/subagents | Live probe status |
 | --- | --- | --- | --- | --- |
-| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, role-bound model/reasoning routing, and interactive input observed | The W3 panel fixture passes; two controlled stale-replay attempts stopped before the peer-ready boundary, so W3-family coverage remains incomplete and peer messaging remains unknown; D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
+| OMP | Observed, including relative resources | Runtime package | Generated custom role, delegation, parallelism, coordinated panels, follow-up, active cancellation, completed-worker transcripts, isolated writer worktrees, two distinct resolved worker models, role-bound reasoning, child-to-parent peer messaging, and interactive input observed | The 18.2.10 stale-replay probe passed peer-ready delivery, active cancellation, and generation-2 acceptance but failed same-session revival after hard abort; W3-family coverage remains incomplete. D2/D3 are observed while overall delivery remains D0 because plugin-manager D1 is unresolved |
 | Codex desktop | Documented | Documented | Documented | Standalone local cron scheduled wake passes on 26.915.31945; same-thread heartbeat failed to dispatch; other families pending |
-| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, child-to-parent peer messaging, controlled stale replay, external persisted-transcript reads, a managed writer worktree, direct per-worker model/reasoning routing, and experimental interactive input observed; generated custom role cannot be selected | D3 passes on 0.155.1, with passing evidence across every W3 semantic family; custom roles remain unsupported on the probed spawn surface |
+| Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, child-to-parent peer messaging, controlled stale replay, external persisted-transcript reads, a managed writer worktree, two distinct resolved worker models through direct per-worker routing, and experimental interactive input observed; generated custom role cannot be selected | D3 passes on 0.155.1, with passing evidence across every W3 semantic family; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
 | Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
 
 Current Codex documentation describes project-scoped custom agents under
 `.codex/agents/` and optional model and reasoning fields. The current
-development branch can safely generate roles into that location with
-`configure-models.mjs --project-root`; the same option uses `.omp/agents/` for OMP.
-This is a configuration-path improvement, not a new live role-selection or
-multi-model verdict. The `codex-cli` profile below retains the observed
-0.155.1 spawn-schema limitation until a fresh, role-attributed native probe
-passes. OMP peer-message delivery and actual distinct-backend execution also
-remain open acceptance items.
+development branch can safely generate TOML files into that location with
+`configure-models.mjs --project-root`, but this does not establish that the
+tested Codex CLI spawn surface selected those roles. Codex workflows derive
+explicit spawn-time model and reasoning fields, include the complete role
+contract in the assignment, and check persisted parent and child records when
+available. Codex may encrypt the persisted spawn message, in which case its
+exact role/task text cannot be independently compared to the prepared request;
+model, effort, and child-parent linkage can still be checked. OMP continues to
+use its verified native `.omp/agents/` path.
+The OMP adapter now carries the upstream-style code and reflection slots,
+ordered panels, target-effort budget resolution, and preserved user overrides
+on setup re-runs. These are generated/configuration-path changes; the new
+slots have narrow route tests but not complete workflow acceptance. OMP Skills read
+the project manifest when invoked, not a globally always-applied Cursor rule.
+A disposable OMP 18.2.10 smoke run selected the new `reflect.divergent` native
+agent, resolved its requested model without fallback, raised its effort to the
+`small` budget target, and included the generated role policy in the child
+system prompt. The child did not reproduce the exact policy marker in its
+answer, so behavioral adherence and the remaining new slots are still open.
+See [source-style-route-smoke](../evals/evidence/omp-18.2.10/source-style-route-smoke.json).
+The remaining five new native OMP routes and a default-Opus rerun of
+`reflect.divergent` subsequently passed a read-only marker test, with distinct
+agent attribution, non-fallback models, `medium` effort, and the expected role
+policy line in each result. The earlier Luna override rerun selected and
+injected the role correctly but failed to report its policy consistently.
+These are narrow routing tests, not complete workflow acceptance. See
+[source-style-route-matrix](../evals/evidence/omp-18.2.10/source-style-route-matrix.json).
+The same disposable setup also rejected an unobserved model without changing
+the resolution manifest, and a new preview preserved its prior budget and
+explicit model override.
+The disposable `how.explorer` smoke run on Codex CLI 0.155.1 verified the
+prepared explicit `gpt-6-luna/low` parameters against the persisted parent
+call and child `turn_context`; the parent received the child result. The parent
+record encrypted the message, so it does not independently prove the exact
+role instructions delivered. See
+[explicit-route-contract](../evals/evidence/codex-cli-0.155.1/explicit-route-contract.json).
+This configuration-path improvement has now been followed by disposable,
+read-only CLI probes on 2026-09-23. OMP 18.2.10 selected a project role and
+returned its policy marker without including that marker in the worker
+assignment. Two OMP worker session records independently resolved
+`cursor/default` and `cursor/gpt-5.6-luna`; the latter also recorded low
+thinking. Codex CLI 0.155.1 resolved two parallel workers as `gpt-6-luna/low`
+and `gpt-6-sol/medium` in persisted child turn contexts, but a corrected
+custom-role rerun still had no spawn role selector. These are model-selector
+and runtime-metadata observations, not proof of distinct physical backends or
+model quality.
 
-The next native gate is a fresh, disposable read-only run on each surface:
-select one generated project role without placing its policy marker in the
-assignment; then run two independently attributable workers configured for
-different observed models and verify their resolved identities in runtime
-metadata. OMP additionally needs a peer-message receipt across an interrupted
-or stale worker generation. Keep a missing role selector, same-model fallback,
-or absent message receipt as a failed or unknown result, not a substituted pass.
+OMP's child-to-parent `hub` message now has a positive live receipt. The
+complete stale-generation protocol remains unproved: after Main cancelled the
+active generation-1 job, a follow-up to that same worker failed with
+`hard-aborted and cannot be messaged or revived`. Generation 2 returned and
+was accepted, but no late generation-1 payload arrived to test rejection.
+The next gate is a controlled in-flight stale-result design that can actually
+deliver a late payload without depending on revival after hard cancellation.
+The separate Codex custom-role gate still requires a spawn surface that can
+select the project role and expose attributable role metadata. An explicit
+model-and-effort worker with a complete copied contract is the supported
+workflow route here, but it is not evidence that custom-role selection works.
 
 The Codex baseline is derived from the official
 [Build skills](https://developers.openai.com/plugins/build/skills),
@@ -196,10 +239,10 @@ message delivery, worker reads, session identity, terminal results, and the
 absence of a second generation-1 file read are independently visible. This is
 a controlled replay and does not claim a naturally racing network response.
 With this result, the probed Codex CLI coordinate has passing evidence for all
-W3 semantic families. OMP does not: two fresh stale-replay attempts stalled
-before the generation-1 peer-ready message, with no child assistant or tool
-event. That failure leaves `coordination.peer_messages` unknown instead of
-proving it unsupported.
+W3 semantic families. OMP does not: its earlier 18.2.6 attempts stalled before
+the peer-ready message, while the 18.2.10 rerun delivered the message and then
+stopped at the hard-abort revival boundary. `coordination.peer_messages` is now
+observed; complete stale-replay rejection is not.
 
 The Alpha 1 `bug-fix` fixtures additionally prove native command execution and
 the same bounded workflow on both CLI runtimes. Root-only runs captured the
@@ -488,10 +531,11 @@ role definition with `thinkingLevel`; the child session records the resolved
 model, thinking level, and non-fallback status. Codex CLI receives the model
 and reasoning effort directly in its single spawn call; persisted parent and
 child `turn_context` records independently show different model and effort
-values. OMP's root invocation requested medium thinking, but its root session
-serialized a null thinking-level event, so the evidence claims only the
-independently observed worker override rather than complete root-reasoning
-telemetry.
+values. New two-worker runs independently verify distinct resolved worker
+models on both runtimes. OMP's root invocation in the earlier single-worker
+fixture requested medium thinking, but its root session serialized a null
+thinking-level event, so the evidence claims only independently observed
+worker override rather than complete root-reasoning telemetry.
 
 The isolation boundary differs by runtime. OMP creates an isolated writer
 worktree and retains an unapplied patch. Codex CLI creates one managed worktree

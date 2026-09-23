@@ -5,6 +5,17 @@ description: "Diagnose and fix a reproducible software defect with bounded scope
 
 # Bug Fix
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+For this workflow's implementers use `code.bug-fix`.
+
 The root coordinator owns reproduction, scope, decisions, integration, and the
 final verification claim. Delegation can accelerate one bounded implementation
 unit, but a worker report is never sufficient proof that the defect is fixed.
@@ -47,7 +58,8 @@ decision trail. A small direct fix does not need a ceremonial log.
 
 Prefer root-only execution when the fix is small, tightly coupled to the root's
 context, or cannot be safely isolated. Otherwise start exactly one independent
-implementer session with:
+implementer session using the active `code.bug-fix` route when configured,
+or the runtime model otherwise, with:
 
 - the confirmed reproduction and root-cause evidence;
 - an explicit file and behavior scope;

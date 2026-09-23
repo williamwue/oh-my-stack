@@ -16,8 +16,10 @@ visible context and disclose the loss of tool evidence.
 Run three independent read-only reviews when delegation is available: judgment
 (wrong decisions and missed evidence), tooling (friction and repeatable checks),
 and divergent alternatives. Give each the same frozen task record and require
-precise citations, counterexamples, and proposed destination. Use configured
-roles, not assumed model identities. With fewer workers, preserve separate
+precise citations, counterexamples, and proposed destination. When available,
+use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the
+divergent lens; keep all three sessions independent. Use configured routes,
+not assumed model identities. With fewer workers, preserve separate
 lenses and label reduced independence.
 
 Synthesize Accepted, Rejected, and Backlog findings. Root rechecks each accepted

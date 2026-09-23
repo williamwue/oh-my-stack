@@ -5,6 +5,22 @@ description: "Review frozen inputs with independent reviewers and root judgment.
 
 # Interrogate
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Use this workflow to challenge a change, design, or bounded code surface from
 independent angles. It produces a review verdict only. Do not modify the code
 under review or automatically apply suggestions.
@@ -33,8 +49,11 @@ either result. Give every reviewer the same frozen packet. Do not assign
 personas or reveal another reviewer's findings. More than two reviewers are
 optional and must be justified by review risk rather than available capacity.
 
-Prefer model diversity when the runtime can resolve it, but do not hard-code
-models or equate distinct session names with distinct backends. If per-worker
+If the current resolution manifest has an `interrogate.reviewers` panel,
+start one reviewer per ordered entry before waiting. Otherwise start the
+minimum two independent reviewers above. Prefer model diversity when the
+runtime can resolve it, but do not hard-code models or equate distinct session
+names with distinct backends. If per-worker
 model selection is unavailable, use the available reviewers and disclose that
 diversity was not established. Report model identities only from runtime
 metadata, never reviewer self-description.

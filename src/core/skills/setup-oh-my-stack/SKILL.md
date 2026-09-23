@@ -1,12 +1,12 @@
 ---
 name: setup-oh-my-stack
-description: Configure role models from a freshly observed runtime inventory without overwriting unrelated user configuration.
+description: Preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory.
 ---
 
 # Setup Oh My Stack
 
-Use this workflow to resolve portable workload classes and role constraints to
-models available on the current runtime surface.
+Use this workflow to give Oh My Stack opinionated, editable per-workflow model
+choices without assuming Cursor model names work on another runtime.
 
 ## 1. Observe before selecting
 
@@ -32,37 +32,46 @@ The resulting JSON inventory contains:
 If the runtime cannot expose an inventory, stop before writing configuration.
 Return the missing observation instead of guessing a model identifier.
 
-## 2. Select workload mappings
+## 2. Preview a pstack-style mapping
 
-Choose one observed model and advertised reasoning effort for each workload:
+Run `scripts/configure-models.mjs` without `--apply`, with `--preset pstack`,
+the observed inventory, and a dedicated `--project-root` or `--output` path.
+The target-specific preset recommends separate choices for code, explanation,
+judgment, and ordered review panels. The portable fallback still has three
+workload classes:
 
 - `fast` for narrow reconnaissance and mechanical work;
 - `balanced` for routine implementation;
 - `deep` for architecture, synthesis, and ambiguous judgment.
 
-Role metadata inherits its workload selection. A role-specific override is
-allowed only when its model and reasoning effort occur in the same fresh
-inventory. A model-diversity preference remains unverified unless runtime
-metadata later proves that distinct backends actually ran.
-When review roles prefer diversity and the user accepts the available cost and
-provider choices, preview distinct observed models through `--role` overrides.
-Report the configured model IDs separately from executed model IDs; do not
-invent the latter from the manifest.
+Show the proposed choice for every named route, including the *ordered* entries
+for `arena.runners`, `arena.cross-judge-pool`, `architect.runners`, and
+`interrogate.reviewers`. One panel entry means one intended worker; do not
+silently add or remove entries. Ask for the user's reasoning budget:
+`unlimited` (keep preset effort), `large` (cap at xhigh), `medium` (cap at high),
+or `small` (cap at medium). A budget caps effort at the highest advertised
+supported value at or below that ceiling; it does not replace a model family.
+Show meaningful cost/provider tradeoffs before applying. The preset is a
+recommendation, not a silent permission to spend on an expensive model.
 
-Ask the user only when multiple observed choices encode a real cost, quality,
-or provider preference that cannot be inferred from their existing settings.
-In a non-interactive session, return the observed choices and pending decision.
+Users may override a workload with `--fast`, `--balanced`, or `--deep`; a
+canonical role with `--role ROLE=MODEL@REASONING`; one workflow slot with
+`--route KEY=MODEL@REASONING`; or an ordered panel with
+`--panel KEY=MODEL@REASONING,MODEL@REASONING`. `inherit-parent` and `auto`
+are aliases that omit the native model override. A changed panel length changes
+the intended fan-out. An unavailable preset model must be replaced by an
+observed choice before applying; never guess a similarly named slug. Re-run
+the preview with the user's selections.
 
 ## 3. Preview and apply safely
 
-Locate this package's `scripts/configure-models.mjs`. Run it first without
-`--apply`, passing the inventory, an output location, and explicit
-`MODEL@REASONING` selections for `--fast`, `--balanced`, and `--deep`.
-
-Inspect the returned role mapping. If only a preview was requested, stop here.
-Otherwise rerun with `--apply`. The tool writes an owned resolution manifest
-and target-native agent definitions. It refuses model identifiers absent from
-the inventory and refuses to overwrite a modified or unowned agent file.
+Inspect the preview's workload, role, route, and panel mappings. If only a
+preview was requested, stop here. Otherwise rerun the same selections with
+`--apply` after the user accepts the choices. The tool writes an owned
+resolution manifest and target-native agent definitions. It refuses model IDs
+or reasoning settings absent from the inventory, refuses to overwrite modified
+or unowned files, and only prunes previously owned unchanged route agents when
+a panel shrinks.
 
 For a project whose target runtime supports native project-scoped roles, use
 `--project-root` with that existing project's path instead of `--output`.
@@ -73,17 +82,21 @@ project configuration. Do not treat plugin-bundled `agents/` as proof of native
 role discovery. Keep `--output` for detached review or targets without verified
 project role activation.
 
-After project activation, use a fresh runtime session to verify that the exact
-custom role is selected and its role-policy marker appears without copying
-that marker into the worker assignment. Verify actual worker model and reasoning
-from runtime metadata, not from configured files or self-report. If either
-observation is unavailable, report it as unverified; distinct configured
-model IDs do not establish multi-model execution.
+After writing project files, use a fresh runtime session to verify the actual
+route. Only call native role selection activated when the runtime selects the
+named role. Otherwise pass the selected model and reasoning effort explicitly
+at spawn time together with the complete role instructions and bounded task;
+report this as explicit routing, not native role selection. For panels, verify
+the number of spawned workers and their ordered, attributable model identities.
+Check worker model and reasoning from runtime records, not configured files or
+self-report. If records are unavailable, report resolution as unverified.
+Distinct configured IDs do not establish multi-model execution or distinct
+provider backends.
 
 ## Output
 
-Report the inventory timestamp and source, workload-to-model mapping,
-role-specific overrides, unresolved constraints, dry-run result, output
-directory or project root, whether files were applied, and which native role
-and model observations remain pending. Do not claim model diversity from
-configuration alone.
+Report the inventory timestamp and source, preset, budget, workload and named
+route mappings, ordered panel counts, user overrides, unresolved choices,
+preview/application status, target path, and which native role and model
+observations remain pending. Do not claim model diversity from configuration
+alone.

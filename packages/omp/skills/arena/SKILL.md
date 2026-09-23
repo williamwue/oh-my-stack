@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Arena
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Produce competing solutions to one task, then one coherent verified result.
 For partitioned coverage or a race with no synthesis, use [swarm](../swarm/SKILL.md).
 Keep a phase checklist: frame, fan out, cross-judge, pick, graft, verify.
@@ -17,9 +27,14 @@ Freeze a rubric of three to six gradeable criteria before seeing candidates.
 Keep it for the parent and judge; candidates receive the same task contract and
 grounding, not the judging rubric or other candidates' work.
 
-Use the requested candidate count, or start with two independent attempts.
-Bound total attempts and concurrency. Resolve models from observed configured
-roles; disclose same-model execution and unsupported diversity. Give each
+Use the requested candidate count, or the length of an active
+`arena.runners` panel in the current resolution manifest; without one, start
+with two independent attempts. Assign entries in panel order, repeating only
+when the user explicitly requests more candidates than configured entries.
+For a separate cross-judge, select one entry from `arena.cross-judge-pool`,
+preferably a different resolved model family when observable. Bound total
+attempts and concurrency. Disclose same-model execution and unsupported
+diversity. Give each
 candidate an isolated output location. For implementation candidates, ensure
 each checkout has the same intended base and required local changes; a clean
 checkout that omits relevant uncommitted work is not the same starting state.

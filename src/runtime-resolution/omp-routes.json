@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "routes": {
+    "code.feature-refactoring": { "kind": "single", "role": "implementer", "workload": "balanced" },
+    "code.bug-fix": { "kind": "single", "role": "implementer", "workload": "balanced" },
+    "code.perf-issue": { "kind": "single", "role": "implementer", "workload": "balanced" },
+    "code.hillclimb": { "kind": "single", "role": "implementer", "workload": "balanced" },
+    "reflect.divergent": { "kind": "single", "role": "reviewer", "workload": "deep" },
+    "reflect.synthesizer": { "kind": "single", "role": "synthesizer", "workload": "deep" }
+  }
+}

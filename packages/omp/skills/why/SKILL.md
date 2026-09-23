@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Why
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Explain what motivated a design, not just what code does. For mechanics use
 [how](../how/SKILL.md). This is a read-only investigation, not authorization to
 change code, contact people, configure integrations, or query unrelated data.
@@ -46,7 +56,10 @@ Assign one bounded read-only investigator to each available relevant source;
 give each the question, code anchor, scope, recipe, and evidence rules. Do not
 mix multiple source owners in one brief or let workers expand into unrelated
 systems. Start independent searches in parallel within the runtime limit.
-Use configured roles only when actually available; never invent model diversity.
+Use `why.investigator` for investigators and `why.synthesizer` for the later
+synthesis when those routes are active in the current resolution manifest.
+Use native route agents when selectable, otherwise explicit observed model
+settings or the parent model, and disclose the fallback. Never invent diversity.
 If delegation is unavailable, run separated root search passes. If concurrency
 is unavailable, run workers sequentially. Disclose the execution shape.
 

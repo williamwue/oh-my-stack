@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-cli-0.155.1-macos-arm64-check-dual-model-routing",
+  "fixture": "check-dual-model-routing",
+  "profile": "codex-cli",
+  "observedAt": "2026-09-23",
+  "result": "pass",
+  "claims": { "deliveryTarget": "D3", "deliveryAchieved": "D3", "workflowAchieved": "W2", "observedDeliveryChecks": ["D2", "D3"] },
+  "runtime": {
+    "name": "codex-cli", "version": "0.155.1", "platform": "macos-arm64",
+    "configuration": "Disposable Git project, persisted codex exec session 01a0cd55-f65e-7610-88fa-3e7cfcf53b05, user config ignored, root gpt-6-astra/low, parallel workers gpt-6-luna/low and gpt-6-sol/medium.",
+    "permissionProfile": "Read-only sandbox; no project writes"
+  },
+  "capabilities": ["agents.spawn", "agents.spawn_parallel", "agents.model_override", "agents.reasoning_override", "agents.wait", "agents.read_result"],
+  "relatedEvidence": ["evals/evidence/codex-cli-0.155.1/check-model-routing.json"],
+  "assertions": [
+    { "id": "two-workers-completed", "status": "pass", "evidence": "The parent collected /root/worker_a and /root/worker_b, each with a distinct exact file marker." },
+    { "id": "distinct-models-independently-observed", "status": "pass", "evidence": "Persisted child turn_context records for 01a0cd56-3a36-7210-afcc-b8a0f6484183 and 01a0cd56-4ec1-7143-99a0-2a18a0a53d20 record gpt-6-luna/low and gpt-6-sol/medium respectively; both session_meta records cite the same parent." },
+    { "id": "root-model-independently-observed", "status": "pass", "evidence": "Persisted parent turn_context records gpt-6-astra/low." },
+    { "id": "no-project-writes", "status": "pass", "evidence": "The disposable project's Git status retained only the initially copied probe paths." }
+  ],
+  "limitations": ["The child model and effort proof comes from local persisted runtime metadata, not the parent model's self-report.", "The workers used explicit spawn-time model settings, not generated custom roles or a measured difference in provider backend or quality."]
+}

@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Autopilot Stack
 
+## OMP model routing
+
+At the start of this workflow, read the current project's
+`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
+Stack model map for this project. For each configured route, select its
+named agent from `.omp/agents/` through OMP's native task-agent selector;
+preserve panel entry order and count. If no mapping is present, retain the
+workflow's normal runtime model. Verify resolved worker model and thinking
+level from OMP session/job metadata, not from the role file alone.
+
 Use this workflow when the operator explicitly authorizes autonomous work on a
 queue but withholds landing authority. A request to describe the protocol or
 state a plan does not start execution. Independent changes with landing authority

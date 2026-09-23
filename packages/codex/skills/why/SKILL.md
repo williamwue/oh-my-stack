@@ -5,6 +5,22 @@ description: "Investigate design rationale using cited history and available evi
 
 # Why
 
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
+resolution manifest and named route/panel entry where configured; otherwise
+supply the canonical role and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
 Explain what motivated a design, not just what code does. For mechanics use
 [how](../how/SKILL.md). This is a read-only investigation, not authorization to
 change code, contact people, configure integrations, or query unrelated data.
@@ -45,7 +61,10 @@ Assign one bounded read-only investigator to each available relevant source;
 give each the question, code anchor, scope, recipe, and evidence rules. Do not
 mix multiple source owners in one brief or let workers expand into unrelated
 systems. Start independent searches in parallel within the runtime limit.
-Use configured roles only when actually available; never invent model diversity.
+Use `why.investigator` for investigators and `why.synthesizer` for the later
+synthesis when those routes are active in the current resolution manifest.
+Use native route agents when selectable, otherwise explicit observed model
+settings or the parent model, and disclose the fallback. Never invent diversity.
 If delegation is unavailable, run separated root search passes. If concurrency
 is unavailable, run workers sequentially. Disclose the execution shape.
 

@@ -47,7 +47,8 @@ decision trail. A small direct fix does not need a ceremonial log.
 
 Prefer root-only execution when the fix is small, tightly coupled to the root's
 context, or cannot be safely isolated. Otherwise start exactly one independent
-implementer session with:
+implementer session using the active `code.delegates` route when configured,
+or the runtime model otherwise, with:
 
 - the confirmed reproduction and root-cause evidence;
 - an explicit file and behavior scope;
