@@ -7,8 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Release status
 
 Oh My Stack is available as a public
-[alpha.6 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.6)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.6.md).
+[alpha.7 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.7)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.7.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -49,7 +49,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.6.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.7.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -72,7 +72,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.6 release notes](docs/releases/0.2.0-alpha.6.md) for the
+See the [alpha.7 release notes](docs/releases/0.2.0-alpha.7.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -296,11 +296,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.6 release notes](docs/releases/0.2.0-alpha.6.md). Claude Code is
+[0.2.0-alpha.7 release notes](docs/releases/0.2.0-alpha.7.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.6.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.7.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
