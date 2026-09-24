@@ -119,7 +119,7 @@ export async function verifyDelegation({ request, parentRecord, childRecord }) {
   assert(matches.length === 1, `expected exactly one matching explicit spawn call, found ${matches.length}`);
   const observedMessage = JSON.parse(matches[0].payload.arguments).message;
   const messageVerified = observedMessage === request.message;
-  assert(messageVerified || /^gAAAA[A-Za-z0-9_-]+$/.test(observedMessage ?? ""), "spawn message differs from the prepared role task");
+  assert(messageVerified || /^gAAAA[A-Za-z0-9_-]+={0,2}$/.test(observedMessage ?? ""), "spawn message differs from the prepared role task");
   const contexts = child.filter((item) => item.type === "turn_context").map((item) => item.payload);
   assert(contexts.length > 0, "child turn_context is unavailable; model resolution is unverified");
   assert(contexts.every((context) => context.model === request.model && context.effort === request.reasoning_effort), "child runtime model or effort differs from the explicit request");

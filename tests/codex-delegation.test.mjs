@@ -84,7 +84,7 @@ test("verification requires matching parent call, child link, and runtime turn c
     record("session_meta", { id: "parent-id" }),
     record("response_item", { type: "function_call", name: "spawn_agent", arguments: JSON.stringify({
       task_name: request.task_name, fork_turns: "none", model: request.model,
-      reasoning_effort: request.reasoning_effort, message: "gAAAAABencryptedplaceholder",
+      reasoning_effort: request.reasoning_effort, message: "gAAAAABencryptedplaceholder==",
     }) }),
   ].join("\n"));
   const encrypted = await verifyDelegation({ request, parentRecord, childRecord });
