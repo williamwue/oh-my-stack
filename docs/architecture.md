@@ -189,7 +189,7 @@ preset. The preset adds named workflow slots, ordered runner/reviewer panels,
 a reasoning-budget rule, and an `inherit-parent` choice. OMP applies the
 upstream target-effort semantics, using the highest supported effort at or
 below that target for a model, and retains explicit slot/panel choices on
-reconfiguration. Codex retains a ceiling-only interpretation. Preset model IDs
+reconfiguration. Codex uses the same target-effort rule. Preset model IDs
 remain target-specific data, never portable-core requirements; every selected
 ID and effort must be present in the observed inventory. Panel length is the
 intended worker count, while each generated route agent has a distinct name and

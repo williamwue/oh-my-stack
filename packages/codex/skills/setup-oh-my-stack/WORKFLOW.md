@@ -1,9 +1,17 @@
 ---
 name: setup-oh-my-stack
-description: Preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory.
+description: "Configure role models from observed runtime inventory."
 ---
 
 # Setup Oh My Stack
+
+## Codex activation boundary
+
+Generated project TOML files and an applied resolution manifest are
+configuration artifacts, not evidence that this Codex surface selected
+those custom roles. Delegated workflows use explicit spawn parameters and
+the complete generated role contract through `../../scripts/codex-delegation.mjs`.
+Verify actual model and effort from persisted child records when available.
 
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.

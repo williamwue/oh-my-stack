@@ -96,6 +96,6 @@ test("Codex acceptance verifies explicit spawn without claiming native role acti
   const result = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord, requestPath });
   assert.equal(result.activation, "verified");
   assert.equal(result.observed.mechanism, "explicit-spawn");
-  assert.match(result.budget.meaning, /ceiling, not a cost limit/);
+  assert.match(result.budget.meaning, /target, not a cost limit/);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }), /requires --request/);
 });

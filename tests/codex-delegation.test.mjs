@@ -37,7 +37,7 @@ test("Codex delegation derives explicit parameters and complete role instruction
   });
   const contract = JSON.parse(await readFile(join(bundleRoot, "config", "role-contracts.json"), "utf8")).roles.reviewer;
   assert.equal(request.model, "gpt-6-sol");
-  assert.equal(request.reasoning_effort, "medium");
+  assert.equal(request.reasoning_effort, "high");
   assert.equal(request.fork_turns, "none");
   assert.equal(request.task_name, "review_two");
   assert.ok(request.message.includes(contract.instructions));
@@ -105,7 +105,7 @@ test("verification requires matching parent call, child link, and runtime turn c
       reasoning_effort: request.reasoning_effort, message: request.message,
     }) }),
   ].join("\n"));
-  await writeFile(childRecord, childLines.map((line) => line.replace(`"effort":"${request.reasoning_effort}"`, '"effort":"high"')).join("\n"));
+  await writeFile(childRecord, childLines.map((line) => line.replace(`"effort":"${request.reasoning_effort}"`, '"effort":"medium"')).join("\n"));
   await assert.rejects(verifyDelegation({ request, parentRecord, childRecord }), /differs from the explicit request/);
   await writeFile(childRecord, childLines[0]);
   await assert.rejects(verifyDelegation({ request, parentRecord, childRecord }), /unavailable/);
@@ -131,5 +131,7 @@ test("every generated Codex spawning workflow carries the same binding while OMP
   }
   assert.ok(checked >= 20);
   const setup = await readFile(join(bundleRoot, "skills", "setup-oh-my-stack", "SKILL.md"), "utf8");
-  assert.match(setup, /configuration artifacts, not evidence/);
+  const setupWorkflow = setup.includes("WORKFLOW.md")
+    ? await readFile(join(bundleRoot, "skills", "setup-oh-my-stack", "WORKFLOW.md"), "utf8") : setup;
+  assert.match(setupWorkflow, /configuration artifacts, not evidence/);
 });

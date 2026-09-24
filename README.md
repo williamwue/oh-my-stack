@@ -7,8 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Release status
 
 Oh My Stack is available as a public
-[alpha.8 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.8)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.8.md).
+[alpha.9 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.9)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.9.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -49,7 +49,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.8.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.9.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -72,7 +72,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.8 release notes](docs/releases/0.2.0-alpha.8.md) for the
+See the [alpha.9 release notes](docs/releases/0.2.0-alpha.9.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -296,11 +296,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.8 release notes](docs/releases/0.2.0-alpha.8.md). Claude Code is
+[0.2.0-alpha.9 release notes](docs/releases/0.2.0-alpha.9.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.8.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.9.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -338,6 +338,12 @@ inventory, preview the mapping without writing anything:
 node scripts/configure-models.mjs --inventory /absolute/path/to/inventory.json \
   --project-root /absolute/path/to/project --preset pstack --budget medium
 ```
+
+On both Codex and OMP, the budget is a reasoning target: `medium` targets
+`high` for every non-inherited role and route, raising lower preset efforts
+and lowering higher ones. A model that does not support the target uses its
+highest supported effort below it. Use `--uniform-reasoning EFFORT` only to
+request an exact explicit target; unsupported efforts are rejected.
 
 On OMP, `pstack` retains the upstream Cursor model choices and fails closed
 when those IDs are not in the live inventory. If OMP instead exposes the exact

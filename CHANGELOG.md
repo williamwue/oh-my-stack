@@ -10,6 +10,16 @@ established.
   observed model inventories, with preview, ownership checks, and symlink
   refusal. Configured model IDs remain separate from runtime execution proof.
 
+## 0.2.0-alpha.9 - 2026-09-24
+
+- Unified Codex and OMP setup budgets as reasoning targets: medium selects
+  high where the observed model supports it, including routes whose preset
+  effort was lower. Unlimited keeps the preset's per-route effort.
+- Aligned the OMP OpenAI-Codex alternative's base model and effort choices with
+  Codex before budget selection, and documented the effective route preview.
+- Preserved runtime inventory checks, explicit override handling, and the
+  distinction between generated configuration and observed worker execution.
+
 ## 0.2.0-alpha.8 - 2026-09-24
 
 - Added read-only setup acceptance for OMP and Codex that checks owned role

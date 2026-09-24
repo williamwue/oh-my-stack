@@ -40,8 +40,8 @@ function parseArguments(argv) {
     const value = argv[index + 1];
     assert(value && !value.startsWith("--"), `${argument}: value is required`);
     index += 1;
-    if (["--inventory", "--output", "--package", "--project-root", "--preset", "--budget"].includes(argument)) {
-      result[argument.slice(2).replace("-root", "Root")] = value;
+    if (["--inventory", "--output", "--package", "--project-root", "--preset", "--budget", "--uniform-reasoning"].includes(argument)) {
+      result[argument.slice(2).replace("-root", "Root").replace("-reasoning", "Reasoning")] = value;
     } else if (workloads.map((name) => `--${name}`).includes(argument)) {
       result.selections[argument.slice(2)] = value;
     } else if (["--role", "--route", "--panel"].includes(argument)) {
@@ -57,6 +57,8 @@ function parseArguments(argv) {
   assert(result.inventory, "--inventory is required");
   assert(Boolean(result.output) !== Boolean(result.projectRoot), "provide exactly one of --output or --project-root");
   assert(!result.budget || Object.hasOwn(budgetCaps, result.budget), "--budget must be unlimited, large, medium, or small");
+  assert(!result.uniformReasoning || result.uniformReasoning === "preset" || effortOrder.includes(result.uniformReasoning),
+    "--uniform-reasoning must be a supported effort name or preset");
   if (!result.preset) for (const workload of workloads) assert(result.selections[workload], `--${workload} is required without --preset`);
   return result;
 }
@@ -108,14 +110,22 @@ function validateSelection(selection, models, label) {
   );
 }
 
-function applyBudget(selection, models, budget, label, exactTarget = false) {
-  if (selection.inheritParent || !budgetCaps[budget]) return selection;
+function applyBudget(selection, models, budget, label, uniformReasoning) {
+  if (selection.inheritParent) return selection;
   const model = models.get(selection.model);
   assert(model, `${label}: model ${selection.model} was not present in the observed inventory`);
+  if (uniformReasoning) {
+    assert(!budgetCaps[budget] || effortOrder.indexOf(uniformReasoning) <= effortOrder.indexOf(budgetCaps[budget]),
+      `${label}: uniform reasoning ${uniformReasoning} exceeds ${budget} budget target`);
+    assert(model.reasoningEfforts.includes(uniformReasoning),
+      `${label}: ${selection.model} did not advertise uniform reasoning effort ${uniformReasoning}`);
+    return { ...selection, reasoning: uniformReasoning };
+  }
+  if (!budgetCaps[budget]) return selection;
   const cap = effortOrder.indexOf(budgetCaps[budget]);
   const requested = effortOrder.indexOf(selection.reasoning);
   assert(requested >= 0, `${label}: unknown reasoning effort ${selection.reasoning}`);
-  const target = exactTarget ? cap : Math.min(cap, requested);
+  const target = cap;
   const supported = model.reasoningEfforts
     .filter((effort) => effortOrder.indexOf(effort) <= target)
     .sort((left, right) => effortOrder.indexOf(right) - effortOrder.indexOf(left));
@@ -176,7 +186,7 @@ async function safeWrite(path, content) {
 
 export async function configure({
   packageRoot, inventoryPath, outputRoot, projectRoot, selections = {}, roleSelections = {},
-  routeSelections = {}, panelSelections = {}, presetName, budget, apply,
+  routeSelections = {}, panelSelections = {}, presetName, budget, uniformReasoning, apply,
 }) {
   const packageDirectory = resolve(packageRoot ?? defaultPackageRoot);
   assert(Boolean(outputRoot) !== Boolean(projectRoot), "provide exactly one outputRoot or projectRoot");
@@ -188,6 +198,8 @@ export async function configure({
   }
   const descriptor = JSON.parse(await readFile(join(packageDirectory, "config", "runtime-resolution.json"), "utf8"));
   assert(!budget || Object.hasOwn(budgetCaps, budget), `unknown budget ${budget}`);
+  assert(!uniformReasoning || uniformReasoning === "preset" || effortOrder.includes(uniformReasoning),
+    `unknown uniform reasoning ${uniformReasoning}`);
   const preset = presetName ? descriptor.presets?.[presetName] : null;
   assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
   assert(!projectDirectory || ["codex", "omp"].includes(descriptor.target), "project role activation is supported only for Codex and OMP");
@@ -208,6 +220,8 @@ export async function configure({
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
   const retainOmpChoices = descriptor.target === "omp" && presetName && prior?.target === "omp" && prior?.preset === presetName;
   const effectiveBudget = budget ?? (retainOmpChoices ? prior.budget : null) ?? "unlimited";
+  const effectiveUniformReasoning = uniformReasoning === "preset" ? null
+    : uniformReasoning ?? (retainOmpChoices ? prior.uniformReasoning : null) ?? null;
   const retained = retainOmpChoices ? (prior.overrides ?? legacyOmpOverrides(prior)) : {};
   const overrides = {
     workloads: { ...retained.workloads, ...selections },
@@ -215,14 +229,12 @@ export async function configure({
     routes: { ...retained.routes, ...routeSelections },
     panels: { ...retained.panels, ...panelSelections },
   };
-  const exactOmpBudget = descriptor.target === "omp" && Boolean(presetName);
-
   const modelMap = new Map(inventory.models.map((model) => [model.id, model]));
   const resolvedWorkloads = Object.fromEntries(
     workloads.map((workload) => {
       const raw = overrides.workloads[workload] ?? preset?.workloads?.[workload];
       assert(raw, `${workload}: no observed-model choice was supplied`);
-      const selection = applyBudget(parseSelection(raw, workload), modelMap, effectiveBudget, workload, exactOmpBudget);
+      const selection = applyBudget(parseSelection(raw, workload), modelMap, effectiveBudget, workload, effectiveUniformReasoning);
       return [workload, selection];
     }),
   );
@@ -236,7 +248,7 @@ export async function configure({
   }
   for (const role of descriptor.roles) {
     const selection = overrides.roles[role.name]
-      ? applyBudget(parseSelection(overrides.roles[role.name], role.name), modelMap, effectiveBudget, role.name, exactOmpBudget)
+      ? applyBudget(parseSelection(overrides.roles[role.name], role.name), modelMap, effectiveBudget, role.name, effectiveUniformReasoning)
       : resolvedWorkloads[role.workload];
     validateSelection(selection, modelMap, role.name);
     roles[role.name] = {
@@ -266,7 +278,7 @@ export async function configure({
       const entries = values.map((value, index) => {
         const label = `${name}[${index + 1}]`;
         const selection = typeof value === "string"
-          ? applyBudget(parseSelection(value.trim(), label), modelMap, effectiveBudget, label, exactOmpBudget)
+          ? applyBudget(parseSelection(value.trim(), label), modelMap, effectiveBudget, label, effectiveUniformReasoning)
           : value;
         validateSelection(selection, modelMap, label);
         const agent = `ohmystack-${name.replaceAll(".", "-")}${route.kind === "panel" ? `-${index + 1}` : ""}`;
@@ -303,10 +315,11 @@ export async function configure({
     preset: presetName ?? null,
     budget: effectiveBudget,
     budgetPolicy: {
-      kind: exactOmpBudget ? "reasoning-target" : "reasoning-ceiling",
+      kind: "reasoning-target",
       level: budgetCaps[effectiveBudget],
       costLimit: false,
     },
+    uniformReasoning: effectiveUniformReasoning,
     ...(descriptor.target === "omp" && presetName ? { overrides } : {}),
     observedInventory: {
       observedAt: inventory.observedAt,
@@ -362,6 +375,7 @@ async function main() {
     panelSelections: arguments_.panels,
     presetName: arguments_.preset,
     budget: arguments_.budget,
+    uniformReasoning: arguments_.uniformReasoning,
     apply: arguments_.apply,
   });
   console.log(JSON.stringify(result, null, 2));

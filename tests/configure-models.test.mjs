@@ -258,6 +258,65 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
   await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 });
 
+test("OMP and Codex raise matching OpenAI route efforts to the budget target", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-cross-runtime-effort-"));
+  const previews = {};
+  for (const runtime of ["omp", "codex"]) {
+    const inventoryPath = join(root, `${runtime}-inventory.json`);
+    await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime,
+      observedAt: "2026-09-24T00:00:00Z", source: "fixture native inventory",
+      models: ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+        id: runtime === "omp" ? `openai-codex/${name}` : name,
+        reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
+      })),
+    })}\n`);
+    previews[runtime] = (await configure({
+      packageRoot: join(repoRoot, "packages", runtime), inventoryPath,
+      outputRoot: join(root, runtime), presetName: runtime === "omp" ? "pstack-openai-codex" : "pstack",
+      budget: "medium", apply: false,
+    })).manifest;
+    assert.equal(previews[runtime].budgetPolicy.kind, "reasoning-target");
+  }
+  for (const workload of ["fast", "balanced", "deep"]) {
+    assert.equal(previews.omp.workloads[workload].reasoning, previews.codex.workloads[workload].reasoning);
+  }
+  for (const name of ["arena.runners", "arena.cross-judge-pool", "architect.runners", "interrogate.reviewers"]) {
+    assert.deepEqual(previews.omp.routes[name].entries.map((entry) => entry.reasoning),
+      previews.codex.routes[name].entries.map((entry) => entry.reasoning));
+  }
+  assert.deepEqual(previews.omp.routes["arena.runners"].entries.map((entry) => entry.reasoning),
+    ["high", "high", "high"]);
+});
+
+test("uniform high override is explicit, checked against inventory and budget, and reversible", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-uniform-effort-"));
+  const inventoryPath = join(root, "omp-inventory.json");
+  await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: "omp",
+    observedAt: "2026-09-24T00:00:00Z", source: "fixture native inventory",
+    models: ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+      id: `openai-codex/${name}`, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
+    })),
+  })}\n`);
+  const options = { packageRoot: join(repoRoot, "packages", "omp"), inventoryPath,
+    outputRoot: join(root, "output"), presetName: "pstack-openai-codex", budget: "large" };
+  const uniform = await configure({ ...options, uniformReasoning: "high", apply: true });
+  assert.equal(uniform.manifest.uniformReasoning, "high");
+  assert.ok(Object.values(uniform.manifest.workloads).every((choice) => choice.reasoning === "high"));
+  assert.ok(Object.values(uniform.manifest.routes).flatMap((route) => route.entries)
+    .every((choice) => choice.reasoning === "high"));
+  assert.equal((await configure({ ...options, apply: false })).manifest.uniformReasoning, "high");
+  const reset = await configure({ ...options, uniformReasoning: "preset", apply: false });
+  assert.equal(reset.manifest.uniformReasoning, null);
+  assert.equal(reset.manifest.workloads.fast.reasoning, "xhigh");
+  await assert.rejects(configure({ ...options, budget: "small", uniformReasoning: "high", apply: false }),
+    /exceeds small budget target/);
+  const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+  inventory.models.find((model) => model.id === "openai-codex/gpt-6-luna").reasoningEfforts = ["low", "medium"];
+  await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`);
+  await assert.rejects(configure({ ...options, uniformReasoning: "high", apply: false }),
+    /did not advertise uniform reasoning effort high/);
+});
+
 test("budget, inheritance, route overrides, and panel shrink stay owned and deterministic", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-preset-overrides-"));
   const inventoryPath = await presetInventoryFile(root, "codex");
@@ -379,5 +438,6 @@ test("OMP generated workflows bind source-style slots without changing Codex rou
   const setup = await readFile(join(omp, "skills", "setup-oh-my-stack", "SKILL.md"), "utf8");
   assert.match(setup, /target xhigh/);
   assert.doesNotMatch(setup, /cap at xhigh/);
+  assert.match(setup, /--uniform-reasoning EFFORT/);
   assert.match(setup, /preserves those overrides/);
 });

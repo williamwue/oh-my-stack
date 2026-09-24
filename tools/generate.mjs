@@ -432,12 +432,6 @@ function codexSkillMetadata(skill) {
 
 function renderSkillDocument(skill, adapter) {
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
-  if (adapter.id === "omp" && skill.metadata.name === "setup-oh-my-stack") {
-    body = body.replace(
-      "`unlimited` (keep preset effort), `large` (cap at xhigh), `medium` (cap at high),\nor `small` (cap at medium). A budget caps effort at the highest advertised\nsupported value at or below that ceiling; it does not replace a model family.",
-      "`unlimited` (keep preset effort), `large` (target xhigh), `medium` (target\nhigh), or `small` (target medium). For OMP, a budget sets each real model to\nits target effort, even if this raises the prior effort. If the target is\nunavailable, use that model's highest advertised effort below it; otherwise\nstop for a new choice. Keep the model family and panel length unchanged.",
-    );
-  }
   if (adapter.id === "omp" && skill.metadata.name === "reflect") {
     body = body.replace(
       "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",

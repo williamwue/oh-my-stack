@@ -54,13 +54,20 @@ Show the proposed choice for every named route, including the *ordered* entries
 for `arena.runners`, `arena.cross-judge-pool`, `architect.runners`, and
 `interrogate.reviewers`. One panel entry means one intended worker; do not
 silently add or remove entries. Ask for the user's reasoning budget:
-`unlimited` (keep preset effort), `large` (cap at xhigh), `medium` (cap at high),
-or `small` (cap at medium). A budget caps effort at the highest advertised
-supported value at or below that ceiling; it does not replace a model family.
+`unlimited` (keep preset effort), `large` (target xhigh), `medium` (target high),
+or `small` (target medium). Both generated runtimes set every non-inherited
+selection to that target, raising or lowering its preset or explicit effort.
+When the model does not advertise the target, use its highest advertised effort
+below the target; stop if none exists. The budget does not replace a model
+family or change panel length. `--uniform-reasoning EFFORT` is an optional
+explicit target override and requires every selected model to advertise that
+exact effort; it cannot exceed the chosen budget target. A target that
+preserves same-preset choices also keeps this explicit override on a re-run;
+use `--uniform-reasoning preset` to return to the budget target.
 Name this a reasoning setting, not a token or money spending limit. Show the
 *effective* model and effort for every route after budget processing, explicitly
-calling out any `deep` route below `medium` effort and any panel member above
-the user's budget label. Do not call a mixed-effort table uniformly `medium`.
+calling out any route that fell below the budget target because the model does
+not support it. Do not call a mixed-effort table uniformly `medium`.
 Show meaningful cost/provider tradeoffs before applying. The preset is a
 recommendation, not a silent permission to spend on an expensive model.
 
