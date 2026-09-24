@@ -157,6 +157,36 @@
       "role": "reviewer",
       "workload": "deep",
       "defaultCount": 3
+    },
+    "code.feature-refactoring": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.bug-fix": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.perf-issue": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "code.hillclimb": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "reflect.divergent": {
+      "kind": "single",
+      "role": "reviewer",
+      "workload": "deep"
+    },
+    "reflect.synthesizer": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
     }
   },
   "presets": {
@@ -168,7 +198,13 @@
         "deep": "gpt-6-astra@low"
       },
       "routes": {
+        "code.feature-refactoring": "gpt-6-sol@medium",
+        "code.bug-fix": "gpt-6-sol@medium",
+        "code.perf-issue": "gpt-6-sol@medium",
+        "code.hillclimb": "gpt-6-sol@medium",
         "reflect.tooling": "gpt-6-sol@medium",
+        "reflect.divergent": "gpt-6-astra@low",
+        "reflect.synthesizer": "gpt-6-astra@low",
         "arena.runners": [
           "gpt-6-astra@low",
           "gpt-6-sol@medium",

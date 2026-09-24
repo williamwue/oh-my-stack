@@ -15,6 +15,20 @@ import {
 } from "../tools/generate.mjs";
 import { validate } from "../tools/validate.mjs";
 
+function expectedCodexBody(name, sourceText) {
+  const routes = {
+    feature: "code.feature-refactoring", refactoring: "code.feature-refactoring",
+    "bug-fix": "code.bug-fix", "perf-issue": "code.perf-issue", hillclimb: "code.hillclimb",
+  };
+  let body = sourceText.replace(/^---\n[\s\S]*?\n---\n/, "").trim().replace(/^# .+\n/, "").trim();
+  if (routes[name]) body = body.replaceAll("`code.delegates`", `\`${routes[name]}\``);
+  if (name === "reflect") body = body.replace(
+    "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",
+    "use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for\nthe respective lenses; keep all three sessions independent. Use\n`reflect.synthesizer` for the later synthesis pass.",
+  );
+  return body;
+}
+
 test("Codex long direct entries preserve complete procedures outside the injection budget", async () => {
   const model = await loadModel();
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-long-skills-"));
@@ -28,7 +42,7 @@ test("Codex long direct entries preserve complete procedures outside the injecti
       const source = model.skills.find((skill) => skill.metadata.name === name);
       const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
       const complete = entry.includes("](WORKFLOW.md)") ? await readFile(join(path, "WORKFLOW.md"), "utf8") : entry;
-      const sourceAfterHeading = body(source.text).replace(/^# .+\n/, "").trim();
+      const sourceAfterHeading = expectedCodexBody(name, source.text);
       assert.ok(body(complete).endsWith(sourceAfterHeading), `${name}: complete procedure must remain lossless`);
     }
   } finally {
@@ -52,7 +66,7 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
     const complete = document.includes("](WORKFLOW.md)")
       ? await readFile(join(repoRoot, "packages/codex/skills", name, "WORKFLOW.md"), "utf8") : document;
-    const sourceAfterHeading = body(source.text).replace(/^# .+\n/, "").trim();
+    const sourceAfterHeading = expectedCodexBody(name, source.text);
     assert.ok(body(complete).endsWith(sourceAfterHeading), name);
     const metadata = await readFile(join(repoRoot, "packages/codex/skills", name, "agents/openai.yaml"), "utf8");
     assert.ok(metadata.includes(`Use $${name} for this task.`), name);

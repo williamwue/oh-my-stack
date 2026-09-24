@@ -307,10 +307,10 @@ export async function loadModel(root = repoRoot) {
   const project = await readJson(join(root, "src", "core", "project.json"));
   validateProject(project);
   const resolutionPolicy = await readJson(join(root, "src", "runtime-resolution", "policy.json"));
-  const ompRoutesDocument = await readJson(join(root, "src", "runtime-resolution", "omp-routes.json"));
+  const hostRoutesDocument = await readJson(join(root, "src", "runtime-resolution", "host-routes.json"));
   const resolutionPresets = await readJson(join(root, "src", "runtime-resolution", "presets.json"));
   assert(resolutionPolicy.schemaVersion === 1, "runtime resolution policy schemaVersion must be 1");
-  assert(ompRoutesDocument.schemaVersion === 1, "OMP route policy schemaVersion must be 1");
+  assert(hostRoutesDocument.schemaVersion === 1, "host route policy schemaVersion must be 1");
   assert(resolutionPresets.schemaVersion === 1, "runtime resolution presets schemaVersion must be 1");
   assert(
     JSON.stringify(Object.keys(resolutionPolicy.workloads).sort()) === JSON.stringify(["balanced", "deep", "fast"]),
@@ -377,8 +377,8 @@ export async function loadModel(root = repoRoot) {
   }
   assert(roles.length > 0, "portable core has no roles");
   const roleNames = new Set(roles.map((role) => role.metadata.name));
-  for (const [name, route] of Object.entries({ ...resolutionPolicy.routes, ...ompRoutesDocument.routes })) {
-    assert(!Object.hasOwn(resolutionPolicy.routes, name) || !Object.hasOwn(ompRoutesDocument.routes, name), `${name}: OMP route duplicates a portable route`);
+  for (const [name, route] of Object.entries({ ...resolutionPolicy.routes, ...hostRoutesDocument.routes })) {
+    assert(!Object.hasOwn(resolutionPolicy.routes, name) || !Object.hasOwn(hostRoutesDocument.routes, name), `${name}: host route duplicates a portable route`);
     assert(["single", "panel"].includes(route.kind), `${name}: invalid route kind`);
     assert(roleNames.has(route.role), `${name}: unknown route role ${route.role}`);
     assert(resolutionPolicy.workloads[route.workload], `${name}: unknown route workload ${route.workload}`);
@@ -389,7 +389,7 @@ export async function loadModel(root = repoRoot) {
       assert(adapterIds.includes(runtime), `${presetName}: unknown runtime ${runtime}`);
       for (const workload of Object.keys(preset.workloads)) assert(resolutionPolicy.workloads[workload], `${presetName}: unknown workload ${workload}`);
       for (const [name, choices] of Object.entries(preset.routes ?? {})) {
-        const route = runtime === "omp" ? (ompRoutesDocument.routes[name] ?? resolutionPolicy.routes[name]) : resolutionPolicy.routes[name];
+        const route = ["omp", "codex"].includes(runtime) ? (hostRoutesDocument.routes[name] ?? resolutionPolicy.routes[name]) : resolutionPolicy.routes[name];
         assert(route, `${presetName}: unknown route ${name}`);
         assert(Array.isArray(choices) === (route.kind === "panel"), `${presetName}.${name}: route shape mismatch`);
       }
@@ -411,7 +411,7 @@ export async function loadModel(root = repoRoot) {
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { root, project, resolutionPolicy, ompRoutes: ompRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, skillCatalog, roles };
+  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -432,7 +432,7 @@ function codexSkillMetadata(skill) {
 
 function renderSkillDocument(skill, adapter) {
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
-  if (adapter.id === "omp" && skill.metadata.name === "reflect") {
+  if (["omp", "codex"].includes(adapter.id) && skill.metadata.name === "reflect") {
     body = body.replace(
       "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",
       "use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for\nthe respective lenses; keep all three sessions independent. Use\n`reflect.synthesizer` for the later synthesis pass.",
@@ -445,7 +445,7 @@ function renderSkillDocument(skill, adapter) {
     "perf-issue": "code.perf-issue",
     hillclimb: "code.hillclimb",
   };
-  if (adapter.id === "omp" && Object.hasOwn(ompRouteBySkill, skill.metadata.name)) {
+  if (["omp", "codex"].includes(adapter.id) && Object.hasOwn(ompRouteBySkill, skill.metadata.name)) {
     body = body.replaceAll("`code.delegates`", `\`${ompRouteBySkill[skill.metadata.name]}\``);
   }
   const frontmatter = [
@@ -456,15 +456,16 @@ function renderSkillDocument(skill, adapter) {
   if (skill.metadata.invocation === "explicit" && adapter.id !== "codex") {
     frontmatter.push("disable-model-invocation: true");
   }
-  const codexDelegation = adapter.id === "codex" && skill.metadata.requires.includes("agents.spawn")
+  const codexDelegation = adapter.id === "codex" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name))
     ? [
       "## Codex delegation binding",
       "",
       "For every delegated worker in this workflow, derive the exact `model`,",
       "`reasoning_effort`, and complete role-plus-task `message` with",
-      "`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active",
-      "resolution manifest and named route/panel entry where configured; otherwise",
-      "supply the canonical role and the observed parent model and effort. Pass",
+      "`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves",
+      "the nearest project manifest first, then the user manifest. Supply the named",
+      "route/panel entry where configured; otherwise supply the canonical role",
+      "and the observed parent model and effort. Pass",
       "the returned `task_name`, `fork_turns=none`, model, effort, and message",
       "explicitly to the spawn call. Do not use a generated custom-role name as a selector or",
       "claim its TOML was activated. After the worker finishes, run the helper's",
@@ -473,6 +474,8 @@ function renderSkillDocument(skill, adapter) {
       "The persisted spawn message may be encrypted; disclose when its exact",
       "role/task text cannot be audited. If records are unavailable, state that",
       "runtime model resolution is unverified.",
+      ...(Object.hasOwn(ompRouteBySkill, skill.metadata.name)
+        ? [`For this workflow's implementers use \`${ompRouteBySkill[skill.metadata.name]}\`.`] : []),
       "",
     ].join("\n")
     : "";
@@ -480,7 +483,12 @@ function renderSkillDocument(skill, adapter) {
     ? [
       "## Codex activation boundary",
       "",
-      "Generated project TOML files and an applied resolution manifest are",
+      "Setup defaults to `--user` (`~/.codex/`); use `--project-root` only",
+      "for a complete project override. Resolve the nearest project manifest",
+      "first, then the user manifest. A user setup does not rewrite project",
+      "overrides. `--output` remains a detached review destination.",
+      "",
+      "Generated TOML files and an applied resolution manifest are",
       "configuration artifacts, not evidence that this Codex surface selected",
       "those custom roles. Delegated workflows use explicit spawn parameters and",
       "the complete generated role contract through `../../scripts/codex-delegation.mjs`.",
@@ -492,13 +500,18 @@ function renderSkillDocument(skill, adapter) {
     ? [
       "## OMP source-style setup",
       "",
-      "The project resolution manifest is the current Oh My Stack choice table.",
+      "Setup defaults to `--user` (`~/.omp/agent/`); use `--project-root`",
+      "only for a complete project override. Resolve the nearest project",
+      "manifest first, then the user manifest. A user setup does not rewrite",
+      "project overrides. `--output` remains a detached review destination.",
+      "",
+      "The user resolution manifest is the default Oh My Stack choice table.",
       "On a re-run, preview the existing budget and any model-family, panel, or",
       "inherit-parent overrides before asking for changes. When reusing the same preset,",
       "the configurator preserves those overrides and applies the selected budget",
       "to real models using OMP's advertised thinking levels. Confirm the entire",
-      "ordered table before `--apply`. This project-scoped configuration is used",
-      "by Oh My Stack workflows; it is not a Cursor-style global always-applied rule.",
+      "ordered table before `--apply`. A project manifest takes precedence where",
+      "present; this is not a Cursor-style globally injected rule.",
       "",
       "If `--preset pstack` fails because its Cursor model IDs are absent, check",
       "the observed inventory for every ID in the bundled `pstack-openai-codex`",
@@ -521,10 +534,13 @@ function renderSkillDocument(skill, adapter) {
     ? [
       "## OMP model routing",
       "",
-      "At the start of this workflow, read the current project's",
-      "`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My",
-      "Stack model map for this project. For each configured route, select its",
-      "named agent from `.omp/agents/` through OMP's native task-agent selector;",
+      "At the start of this workflow, run `../../scripts/model-resolution.mjs`",
+      "with `--runtime omp --cwd` set to the current workspace. Read the returned",
+      "manifest: nearest project first, then the user's `~/.omp/agent/` default.",
+      "For each configured route, select its named agent through OMP's native",
+      "task-agent selector and verify that its source matches the chosen scope;",
+      "for a canonical role, use the manifest role's `agent` name (user",
+      "defaults use namespaced `ohmystack-role-*` agents).",
       "preserve panel entry order and count. If no mapping is present, retain the",
       "workflow's normal runtime model. Verify resolved worker model and thinking",
       "level from OMP session/job metadata, not from the role file alone.",
@@ -682,8 +698,8 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       constraints: role.metadata.constraints,
       writes: role.metadata.writes,
     })),
-    routes: adapter.id === "omp"
-      ? { ...model.resolutionPolicy.routes, ...model.ompRoutes }
+    routes: ["omp", "codex"].includes(adapter.id)
+      ? { ...model.resolutionPolicy.routes, ...model.hostRoutes }
       : model.resolutionPolicy.routes,
     presets: Object.fromEntries(
       Object.entries(model.resolutionPresets).filter(([name]) => name !== "schemaVersion")
@@ -695,6 +711,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
   await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
   if (["omp", "codex"].includes(adapter.id)) {
+    await cp(join(model.root, "tools", "model-resolution.mjs"), join(target, "scripts", "model-resolution.mjs"));
     await cp(join(model.root, "tools", "setup-acceptance.mjs"), join(target, "scripts", "setup-acceptance.mjs"));
   }
   if (adapter.id === "codex") {
@@ -774,6 +791,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
   if (["omp", "codex"].includes(adapter.id)) {
+    assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
   }
 }

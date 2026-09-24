@@ -9,9 +9,10 @@ description: "Improve code structure while verifying unchanged behavior."
 
 For every delegated worker in this workflow, derive the exact `model`,
 `reasoning_effort`, and complete role-plus-task `message` with
-`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
-resolution manifest and named route/panel entry where configured; otherwise
-supply the canonical role and the observed parent model and effort. Pass
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
+the nearest project manifest first, then the user manifest. Supply the named
+route/panel entry where configured; otherwise supply the canonical role
+and the observed parent model and effort. Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -20,6 +21,7 @@ checks the spawn metadata, parent link, and child `turn_context`.
 The persisted spawn message may be encrypted; disclose when its exact
 role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
+For this workflow's implementers use `code.feature-refactoring`.
 
 The root owns the behavior contract. Structure may change; behavior may not.
 
@@ -34,7 +36,7 @@ The root owns the behavior contract. Structure may change; behavior may not.
    structure. For an API reshape, migrate all in-scope callers and delete the
    obsolete path in the same verified wave.
 4. Assign one bounded writer or implement at the root. A delegated writer uses
-   the active `code.delegates` route when configured. Use isolation when
+   the active `code.feature-refactoring` route when configured. Use isolation when
    available; otherwise serialize writes. Keep each step behavior-preserving and
    rerun the pin after each independently meaningful slice.
 5. The root reviews the diff and runs an equivalence check on the real artifact.

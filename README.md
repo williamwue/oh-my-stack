@@ -7,8 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Release status
 
 Oh My Stack is available as a public
-[alpha.9 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.9)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.9.md).
+[alpha.10 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.10)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.10.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -49,7 +49,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.9.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-alpha.10.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -72,7 +72,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.9 release notes](docs/releases/0.2.0-alpha.9.md) for the
+See the [alpha.10 release notes](docs/releases/0.2.0-alpha.10.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -296,11 +296,11 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.9 release notes](docs/releases/0.2.0-alpha.9.md). Claude Code is
+[0.2.0-alpha.10 release notes](docs/releases/0.2.0-alpha.10.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.9.tar.gz`.
+The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.10.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash
@@ -321,10 +321,12 @@ categories; invocation names remain unchanged. These labels do not require
 native grouped menus. Internal probes remain test-only.
 
 Each generated package contains `scripts/collect-model-inventory.mjs`,
-`scripts/configure-models.mjs`, and `config/runtime-resolution.json`. The
+`scripts/configure-models.mjs`, `scripts/model-resolution.mjs` on OMP/Codex,
+and `config/runtime-resolution.json`. The
 explicit `setup-oh-my-stack` Skill first runs the collector against the current
 runtime's native model inventory, then uses the configuration script to preview
-and write target-native role files into a dedicated directory. On the current
+and write target-native role files. OMP and Codex default to user scope;
+`--project-root` creates a complete override for one project. On the current
 development branch, `--preset pstack` offers named workflow slots (such as
 `how.explorer` and `why.investigator`), ordered reviewer/runner panels, and an
 optional `--budget unlimited|large|medium|small`. Individual slots can be
@@ -336,7 +338,7 @@ inventory, preview the mapping without writing anything:
 
 ```bash
 node scripts/configure-models.mjs --inventory /absolute/path/to/inventory.json \
-  --project-root /absolute/path/to/project --preset pstack --budget medium
+  --preset pstack --budget medium
 ```
 
 On both Codex and OMP, the budget is a reasoning target: `medium` targets
@@ -359,15 +361,18 @@ one. Switching presets does not automatically retain prior budget or overrides;
 pass and review any choices that should carry over.
 
 Review and adjust the exact model choices, then repeat the same command with
-`--apply` to write the Codex or OMP project role directory. OMP has a verified
-native project-role path. On OMP, the `pstack` preset now keeps the upstream
+`--apply` to write the Codex or OMP user role directory. OMP supports native
+user and project task agents; project configuration wins when present. On OMP,
+the `pstack` preset keeps the upstream
 workload-specific slots for feature/refactoring, bug-fix, perf-issue, hillclimb,
 and the separate reflection lenses. A selected budget targets its advertised
 thinking level even when that raises a previous setting, falling back to the
 highest supported lower level for the same model. Re-running the same preset keeps
-explicit model-family, alias, and ordered-panel choices. OMP Skills read the
-project manifest when used; this project-scoped equivalent is not Cursor's
-global always-applied rule. For Codex, generated TOML files are configuration
+explicit model-family, alias, and ordered-panel choices. OMP Skills resolve
+the nearest project manifest and then the user default. Codex now has the
+same six independently configurable code and reflection slots. These are
+on-demand workflow choices, not Cursor's globally injected rule. For Codex,
+generated TOML files are configuration
 artifacts, not evidence of activation: delegated work uses explicit model and
 reasoning parameters plus complete role instructions. The bundled
 `scripts/codex-delegation.mjs` prepares those spawn arguments and verifies the
@@ -376,25 +381,26 @@ available. From an extracted Codex package, a representative preparation is:
 
 ```bash
 node scripts/codex-delegation.mjs prepare \
-  --resolution /absolute/path/to/project/.codex/oh-my-stack.resolution.json \
   --route how.explorer --task-name explore_entry \
   --task-file /absolute/path/to/one-bounded-task.txt \
   --output /absolute/path/to/prepared-spawn.json
 ```
 
 Pass only the returned `task_name`, `fork_turns`, `model`,
-`reasoning_effort`, and `message` to the Codex spawn operation. Afterward,
+`reasoning_effort`, and `message` to the Codex spawn operation. Preparation
+uses the nearest project resolution or the user default; `--resolution` can
+select a manifest explicitly. Afterward,
 `verify --request ... --parent-record ... --child-record ...` checks the
 persisted call and resolved worker settings. Codex may encrypt the spawn message
 in its persisted parent record; the verifier reports that limitation rather
 than claiming the exact role/task text was independently read. If records are
 unavailable, report the model resolution as unverified. These per-workflow and
-project-scoped controls are newer than
+user and project-scoped controls are newer than
 the published alpha.5 bundle. Collection
 fails closed for targets without a verified inventory operation. The resolver
 rejects unobserved model or reasoning identifiers and preflights every owned
 file before writing any update. It refuses symlink targets and does not edit
-global runtime configuration or unrelated project configuration. Role files
+runtime settings or unrelated project configuration. Role files
 and distinct model selections alone do not prove native role selection or
 multi-model execution; those still require a fresh worker trace. In particular,
 the tested Codex CLI spawn surface does not select generated custom roles by

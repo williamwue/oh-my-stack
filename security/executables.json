@@ -220,10 +220,18 @@
     {
       "path": "tools/configure-models.mjs",
       "owner": "local-core",
-      "purpose": "Validate an observed model inventory and write target-native role model overrides into a user-selected project-owned directory.",
+      "purpose": "Validate an observed model inventory and write target-native role model overrides into an explicitly selected user or project configuration scope.",
       "network": false,
-      "writes": ["user-selected Oh My Stack runtime configuration directory"],
+      "writes": ["user-level or project-level Oh My Stack runtime configuration directory"],
       "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected configuration remains user-owned."
+    },
+    {
+      "path": "tools/model-resolution.mjs",
+      "owner": "local-core",
+      "purpose": "Read the nearest project or user Oh My Stack resolution manifest without modifying it.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Generated OMP and Codex package copies are removed with their packages; resolution manifests remain user-owned."
     },
     {
       "path": "tools/codex-delegation.mjs",

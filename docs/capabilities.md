@@ -157,8 +157,11 @@ use its verified native `.omp/agents/` path.
 The OMP adapter now carries the upstream-style code and reflection slots,
 ordered panels, target-effort budget resolution, and preserved user overrides
 on setup re-runs. These are generated/configuration-path changes; the new
-slots have narrow route tests but not complete workflow acceptance. OMP Skills read
-the project manifest when invoked, not a globally always-applied Cursor rule.
+slots have narrow route tests but not complete workflow acceptance. OMP Skills
+now resolve the nearest project manifest or the user default when invoked, not
+a globally always-applied Cursor rule. Codex has the same named slots in the
+generated configuration, with explicit spawn-time routing still required on
+the tested CLI surface.
 A disposable OMP 18.2.10 smoke run selected the new `reflect.divergent` native
 agent, resolved its requested model without fallback, raised its effort to the
 `small` budget target, and included the generated role policy in the child

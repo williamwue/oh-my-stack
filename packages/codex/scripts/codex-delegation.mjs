@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveActiveResolution } from "./model-resolution.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -30,7 +31,7 @@ function parseArgs(argv) {
 }
 
 export async function prepareDelegation({
-  bundleRoot = packageRoot, resolutionPath, routeName, roleName, entry = 1,
+  bundleRoot = packageRoot, resolutionPath, cwd, userRoot, routeName, roleName, entry = 1,
   task, taskName, parentModel, parentReasoning,
 }) {
   assert(Boolean(routeName) !== Boolean(roleName), "provide exactly one routeName or roleName");
@@ -39,7 +40,8 @@ export async function prepareDelegation({
   assert(Number.isInteger(entry) && entry > 0, "entry must be a positive integer");
   const contracts = JSON.parse(await readFile(join(bundleRoot, "config", "role-contracts.json"), "utf8"));
   assert(contracts.schemaVersion === 1 && contracts.target === "codex", "Codex role contracts are required");
-  const resolution = resolutionPath ? JSON.parse(await readFile(resolutionPath, "utf8")) : null;
+  const active = !resolutionPath && cwd ? await resolveActiveResolution({ runtime: "codex", cwd, userRoot }) : null;
+  const resolution = resolutionPath ? JSON.parse(await readFile(resolutionPath, "utf8")) : active?.manifest ?? null;
   assert(!resolution || (resolution.schemaVersion === 1 && resolution.owner === "oh-my-stack" && resolution.target === "codex"), "Codex resolution manifest is required");
   let selection;
   let role;
@@ -83,6 +85,7 @@ export async function prepareDelegation({
       contractSha256: hash(contract.instructions.trim()),
       taskSha256: hash(task.trim()),
       resolutionInventorySha256: resolution?.observedInventory?.sha256 ?? null,
+      resolutionScope: active?.scope ?? (resolutionPath ? "explicit" : null),
     },
   };
 }
@@ -143,6 +146,7 @@ async function main() {
     result = await prepareDelegation({
       bundleRoot: options.package ?? packageRoot,
       resolutionPath: options.resolution,
+      cwd: options.cwd ?? process.cwd(),
       routeName: options.route,
       roleName: options.role,
       entry: options.entry ? Number(options.entry) : 1,

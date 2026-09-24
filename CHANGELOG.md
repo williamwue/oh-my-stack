@@ -6,9 +6,17 @@ established.
 
 ## Unreleased
 
-- Added opt-in project-scoped Codex and OMP role activation from freshly
-  observed model inventories, with preview, ownership checks, and symlink
-  refusal. Configured model IDs remain separate from runtime execution proof.
+## 0.2.0-alpha.10 - 2026-09-24
+
+- Added user-level setup defaults for OMP and Codex. Workflows resolve a
+  project manifest first, then the user manifest, so ordinary projects need
+  no repeated setup; project setup remains a complete override. User-level
+  canonical agents are namespaced to avoid changing unrelated task agents.
+- Added the six source-style code and reflection slots to Codex with separate
+  model overrides, while keeping `code.delegates` for compatibility.
+- Preserved same-preset Codex choices on setup reruns and added two-project
+  inheritance, override, collision, and invalid-manifest tests. Generated
+  configuration is not proof of native role activation or worker execution.
 
 ## 0.2.0-alpha.9 - 2026-09-24
 

@@ -9,9 +9,10 @@ description: "Review conversation lessons and propose scoped Skill improvements.
 
 For every delegated worker in this workflow, derive the exact `model`,
 `reasoning_effort`, and complete role-plus-task `message` with
-`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
-resolution manifest and named route/panel entry where configured; otherwise
-supply the canonical role and the observed parent model and effort. Pass
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
+the nearest project manifest first, then the user manifest. Supply the named
+route/panel entry where configured; otherwise supply the canonical role
+and the observed parent model and effort. Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -32,8 +33,9 @@ Run three independent read-only reviews when delegation is available: judgment
 (wrong decisions and missed evidence), tooling (friction and repeatable checks),
 and divergent alternatives. Give each the same frozen task record and require
 precise citations, counterexamples, and proposed destination. When available,
-use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the
-divergent lens; keep all three sessions independent. Use configured routes,
+use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for
+the respective lenses; keep all three sessions independent. Use
+`reflect.synthesizer` for the later synthesis pass. Use configured routes,
 not assumed model identities. With fewer workers, preserve separate
 lenses and label reduced independence.
 

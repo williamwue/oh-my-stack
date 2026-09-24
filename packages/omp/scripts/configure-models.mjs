@@ -37,6 +37,10 @@ function parseArguments(argv) {
       result.apply = true;
       continue;
     }
+    if (argument === "--user") {
+      result.user = true;
+      continue;
+    }
     const value = argv[index + 1];
     assert(value && !value.startsWith("--"), `${argument}: value is required`);
     index += 1;
@@ -55,7 +59,9 @@ function parseArguments(argv) {
     }
   }
   assert(result.inventory, "--inventory is required");
-  assert(Boolean(result.output) !== Boolean(result.projectRoot), "provide exactly one of --output or --project-root");
+  assert([result.output, result.projectRoot, result.user].filter(Boolean).length <= 1,
+    "choose at most one of --user, --project-root, or --output");
+  if (!result.output && !result.projectRoot) result.user = true;
   assert(!result.budget || Object.hasOwn(budgetCaps, result.budget), "--budget must be unlimited, large, medium, or small");
   assert(!result.uniformReasoning || result.uniformReasoning === "preset" || effortOrder.includes(result.uniformReasoning),
     "--uniform-reasoning must be a supported effort name or preset");
@@ -74,7 +80,7 @@ function selectionText(selection) {
   return selection.inheritParent ? "inherit-parent" : `${selection.model}@${selection.reasoning}`;
 }
 
-function legacyOmpOverrides(prior) {
+function legacyOverrides(prior) {
   return {
     workloads: Object.fromEntries(Object.entries(prior.workloads ?? {}).map(([name, value]) => [name, selectionText(value)])),
     roles: Object.fromEntries(Object.entries(prior.roles ?? {}).map(([name, value]) => [name, selectionText(value)])),
@@ -185,16 +191,20 @@ async function safeWrite(path, content) {
 }
 
 export async function configure({
-  packageRoot, inventoryPath, outputRoot, projectRoot, selections = {}, roleSelections = {},
+  packageRoot, inventoryPath, outputRoot, projectRoot, userRoot, selections = {}, roleSelections = {},
   routeSelections = {}, panelSelections = {}, presetName, budget, uniformReasoning, apply,
 }) {
   const packageDirectory = resolve(packageRoot ?? defaultPackageRoot);
-  assert(Boolean(outputRoot) !== Boolean(projectRoot), "provide exactly one outputRoot or projectRoot");
+  assert([outputRoot, projectRoot, userRoot].filter(Boolean).length === 1,
+    "provide exactly one of outputRoot, projectRoot, or userRoot");
   const projectDirectory = projectRoot ? resolve(projectRoot) : null;
+  const userDirectory = userRoot ? resolve(userRoot) : null;
   assert(!projectDirectory || ![resolve("/"), homedir()].includes(projectDirectory), "project root must be a dedicated project directory");
-  if (projectDirectory) {
-    const stat = await lstat(projectDirectory);
-    assert(stat.isDirectory() && !stat.isSymbolicLink(), "project root must be an existing real directory");
+  assert(!userDirectory || userDirectory !== resolve("/"), "user root cannot be the filesystem root");
+  for (const [directory, label] of [[projectDirectory, "project"], [userDirectory, "user"]]) {
+    if (!directory) continue;
+    const stat = await lstat(directory);
+    assert(stat.isDirectory() && !stat.isSymbolicLink(), `${label} root must be an existing real directory`);
   }
   const descriptor = JSON.parse(await readFile(join(packageDirectory, "config", "runtime-resolution.json"), "utf8"));
   assert(!budget || Object.hasOwn(budgetCaps, budget), `unknown budget ${budget}`);
@@ -203,10 +213,14 @@ export async function configure({
   const preset = presetName ? descriptor.presets?.[presetName] : null;
   assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
   assert(!projectDirectory || ["codex", "omp"].includes(descriptor.target), "project role activation is supported only for Codex and OMP");
+  assert(!userDirectory || ["codex", "omp"].includes(descriptor.target), "user role activation is supported only for Codex and OMP");
   const outputDirectory = projectDirectory
     ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : ".omp")
-    : resolve(outputRoot);
+    : userDirectory
+      ? join(userDirectory, descriptor.target === "codex" ? ".codex" : join(".omp", "agent"))
+      : resolve(outputRoot);
   assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
+  if (userDirectory && descriptor.target === "omp") await assertNotSymlink(join(userDirectory, ".omp"));
   await assertNotSymlink(outputDirectory);
   await assertNotSymlink(join(outputDirectory, "agents"));
   const inventoryRaw = await readFile(resolve(inventoryPath));
@@ -218,11 +232,11 @@ export async function configure({
   await assertNotSymlink(manifestPath);
   const prior = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
-  const retainOmpChoices = descriptor.target === "omp" && presetName && prior?.target === "omp" && prior?.preset === presetName;
-  const effectiveBudget = budget ?? (retainOmpChoices ? prior.budget : null) ?? "unlimited";
+  const retainChoices = ["omp", "codex"].includes(descriptor.target) && presetName && prior?.target === descriptor.target && prior?.preset === presetName;
+  const effectiveBudget = budget ?? (retainChoices ? prior.budget : null) ?? "unlimited";
   const effectiveUniformReasoning = uniformReasoning === "preset" ? null
-    : uniformReasoning ?? (retainOmpChoices ? prior.uniformReasoning : null) ?? null;
-  const retained = retainOmpChoices ? (prior.overrides ?? legacyOmpOverrides(prior)) : {};
+    : uniformReasoning ?? (retainChoices ? prior.uniformReasoning : null) ?? null;
+  const retained = retainChoices ? (prior.overrides ?? legacyOverrides(prior)) : {};
   const overrides = {
     workloads: { ...retained.workloads, ...selections },
     roles: { ...retained.roles, ...roleSelections },
@@ -253,6 +267,7 @@ export async function configure({
     validateSelection(selection, modelMap, role.name);
     roles[role.name] = {
       ...selection,
+      agent: userDirectory ? `ohmystack-role-${role.name}` : role.name,
       workload: role.workload,
       constraints: role.constraints,
       diversityEstablished: false,
@@ -293,9 +308,10 @@ export async function configure({
   const writes = [];
   for (const role of descriptor.roles) {
     const source = join(packageDirectory, "agents", `${role.name}.${extension}`);
-    const target = join(outputDirectory, "agents", `${role.name}.${extension}`);
+    const nativeName = roles[role.name].agent;
+    const target = join(outputDirectory, "agents", `${nativeName}.${extension}`);
     await assertNotSymlink(target);
-    const content = configuredRole(await readFile(source, "utf8"), descriptor.adapter, roles[role.name]);
+    const content = configuredRole(await readFile(source, "utf8"), descriptor.adapter, roles[role.name], nativeName);
     writes.push({ path: target, content });
   }
   for (const [name, route] of Object.entries(routes)) {
@@ -320,7 +336,7 @@ export async function configure({
       costLimit: false,
     },
     uniformReasoning: effectiveUniformReasoning,
-    ...(descriptor.target === "omp" && presetName ? { overrides } : {}),
+    ...(["omp", "codex"].includes(descriptor.target) && presetName ? { overrides } : {}),
     observedInventory: {
       observedAt: inventory.observedAt,
       source: inventory.source,
@@ -369,6 +385,7 @@ async function main() {
     inventoryPath: arguments_.inventory,
     outputRoot: arguments_.output,
     projectRoot: arguments_.projectRoot,
+    userRoot: arguments_.user ? homedir() : undefined,
     selections: arguments_.selections,
     roleSelections: arguments_.roles,
     routeSelections: arguments_.routes,

@@ -39,8 +39,10 @@ stop and report the capability gap; do not present a written mapping as active.
 
 ## 2. Preview a pstack-style mapping
 
-Run `scripts/configure-models.mjs` without `--apply`, with `--preset pstack`,
-the observed inventory, and a dedicated `--project-root` or `--output` path.
+Run `scripts/configure-models.mjs` without `--apply`, with the observed inventory
+and the runtime's available pstack preset. Choose the target-supported user or
+project scope; use `--output` for detached review. When an existing
+configuration is present, inspect its effective scope before previewing changes.
 The target-specific preset recommends separate choices for code, explanation,
 judgment, and ordered review panels. The portable fallback still has three
 workload classes:
@@ -89,16 +91,15 @@ or reasoning settings absent from the inventory, refuses to overwrite modified
 or unowned files, and only prunes previously owned unchanged route agents when
 a panel shrinks.
 
-For a project whose target runtime supports native project-scoped roles, use
-`--project-root` with that existing project's path instead of `--output`.
-Preview with the same selections first, then apply. The tool selects the
-runtime's project role directory and writes only its owned role files and
-resolution manifest; it does not edit global runtime configuration or existing
-project configuration. Do not treat plugin-bundled `agents/` as proof of native
-role discovery. Keep `--output` for detached review or targets without verified
-project role activation.
+When the target supports user scope, prefer it for reusable defaults. This
+writes only Oh My Stack's owned manifest and agent files; it does not edit the
+runtime's other global settings. A project-specific manifest, when present,
+takes precedence as a complete configuration. A project setup must not modify
+the user default, and user setup must not modify existing project overrides.
+Keep `--output` for detached review. Do not treat generated agents as proof of
+native discovery.
 
-After writing project files, use a fresh runtime session to verify the actual
+After writing configuration files, use a fresh runtime session to verify the actual
 route. Only call native role selection activated when the runtime selects the
 named role. Otherwise pass the selected model and reasoning effort explicitly
 at spawn time together with the complete role instructions and bounded task;
@@ -114,7 +115,8 @@ It verifies the generated role hashes but intentionally reports activation as
 `unverified` until a fresh session supplies parent and child records. Next run
 one bounded, read-only child for a single configured route in that project.
 Give the child an exact existing file to inspect and forbid edits and further
-delegation. Use the native route agent where supported, or the documented
+delegation. In the target project, first resolve the active manifest and its
+scope. Use the native route agent where supported, or the documented
 explicit-spawn fallback. Pass the parent and child record paths, the route,
 and (for an explicit spawn) its prepared request to `setup-acceptance.mjs`.
 Do not run a multi-worker panel merely to certify basic setup. A failed,
@@ -125,12 +127,14 @@ model-consuming smoke when the user requested configuration only.
 Report four separate facts: applied files, runtime role discovery or explicit
 spawn mechanism, observed worker model/effort, and workflow-level coverage.
 One successful read-only child proves only its route, not every workflow or
-cross-provider diversity. A different project or machine needs its own setup.
+cross-provider diversity. Where user scope is supported, another project on
+the same runtime inherits that default unless it has its own override. A
+different machine or runtime needs its own inventory and setup.
 
 ## Output
 
 Report the inventory timestamp and source, preset, budget, workload and named
 route mappings, ordered panel counts, user overrides, unresolved choices,
-preview/application status, target path, and which native role and model
+preview/application status, scope, target path, and which native role and model
 observations remain pending. Do not claim model diversity from configuration
 alone.

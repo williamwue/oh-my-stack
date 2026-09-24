@@ -50,7 +50,13 @@
         "deep": "gpt-6-astra@low"
       },
       "routes": {
+        "code.feature-refactoring": "gpt-6-sol@medium",
+        "code.bug-fix": "gpt-6-sol@medium",
+        "code.perf-issue": "gpt-6-sol@medium",
+        "code.hillclimb": "gpt-6-sol@medium",
         "reflect.tooling": "gpt-6-sol@medium",
+        "reflect.divergent": "gpt-6-astra@low",
+        "reflect.synthesizer": "gpt-6-astra@low",
         "arena.runners": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],
         "arena.cross-judge-pool": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],
         "architect.runners": ["gpt-6-astra@low", "gpt-6-sol@medium", "gpt-6-luna@high"],

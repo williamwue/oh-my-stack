@@ -9,9 +9,10 @@ description: "Explain mechanics and rationale plainly while preserving evidence 
 
 For every delegated worker in this workflow, derive the exact `model`,
 `reasoning_effort`, and complete role-plus-task `message` with
-`../../scripts/codex-delegation.mjs prepare` relative to this Skill. Supply the active
-resolution manifest and named route/panel entry where configured; otherwise
-supply the canonical role and the observed parent model and effort. Pass
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
+the nearest project manifest first, then the user manifest. Supply the named
+route/panel entry where configured; otherwise supply the canonical role
+and the observed parent model and effort. Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's

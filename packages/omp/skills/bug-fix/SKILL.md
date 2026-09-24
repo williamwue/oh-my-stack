@@ -7,10 +7,13 @@ description: "Diagnose and fix a reproducible software defect with bounded scope
 
 ## OMP model routing
 
-At the start of this workflow, read the current project's
-`.omp/oh-my-stack.resolution.json` if present. It is the active Oh My
-Stack model map for this project. For each configured route, select its
-named agent from `.omp/agents/` through OMP's native task-agent selector;
+At the start of this workflow, run `../../scripts/model-resolution.mjs`
+with `--runtime omp --cwd` set to the current workspace. Read the returned
+manifest: nearest project first, then the user's `~/.omp/agent/` default.
+For each configured route, select its named agent through OMP's native
+task-agent selector and verify that its source matches the chosen scope;
+for a canonical role, use the manifest role's `agent` name (user
+defaults use namespaced `ohmystack-role-*` agents).
 preserve panel entry order and count. If no mapping is present, retain the
 workflow's normal runtime model. Verify resolved worker model and thinking
 level from OMP session/job metadata, not from the role file alone.

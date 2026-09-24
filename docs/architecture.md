@@ -193,14 +193,15 @@ reconfiguration. Codex uses the same target-effort rule. Preset model IDs
 remain target-specific data, never portable-core requirements; every selected
 ID and effort must be present in the observed inventory. Panel length is the
 intended worker count, while each generated route agent has a distinct name and
-ordered manifest entry. Outputs live in a dedicated project-owned directory.
+ordered manifest entry. OMP and Codex default to a user-owned configuration
+directory; a project manifest is a complete override for that project.
 Reruns preflight every owned file before writing, replace only files whose
-hashes match the prior project manifest, remove only unchanged obsolete owned
+hashes match the prior manifest, remove only unchanged obsolete owned
 route agents, and preserve unrelated user files. Configuration alone never
 establishes model diversity or native route selection; a worker trace must
-verify both. OMP workflows read the project resolution manifest when invoked
-and select generated native task agents; unlike Cursor, this is not a global
-always-applied user rule. On Codex, a generated role file is only a reference artifact until
+verify both. OMP workflows read the nearest project resolution manifest or
+the user default when invoked and select generated native task agents; unlike
+Cursor, this is not a globally injected rule. On Codex, a generated role file is only a reference artifact until
 native role selection is independently observed. The adapter instead derives
 each spawn's explicit model and reasoning effort, embeds the full role contract
 in the task message, and checks the parent spawn call plus child runtime record

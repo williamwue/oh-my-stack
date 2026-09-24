@@ -416,14 +416,14 @@ test("OMP mirrors source slots, targets budget effort, and retains explicit choi
   assert.equal(migrated.manifest.routes["reflect.divergent"].entries[0].inheritParent, true);
 });
 
-test("OMP generated workflows bind source-style slots without changing Codex routing", async () => {
+test("OMP and Codex generated workflows bind separate source-style slots", async () => {
   const omp = join(repoRoot, "packages", "omp");
   const codex = join(repoRoot, "packages", "codex");
   const ompDescriptor = JSON.parse(await readFile(join(omp, "config", "runtime-resolution.json"), "utf8"));
   const codexDescriptor = JSON.parse(await readFile(join(codex, "config", "runtime-resolution.json"), "utf8"));
   for (const name of ["code.feature-refactoring", "code.bug-fix", "code.perf-issue", "code.hillclimb", "reflect.divergent", "reflect.synthesizer"]) {
     assert.ok(ompDescriptor.routes[name], name);
-    assert.equal(codexDescriptor.routes[name], undefined, `${name}: OMP adaptation must not leak into Codex`);
+    assert.deepEqual(codexDescriptor.routes[name], ompDescriptor.routes[name], `${name}: route parity`);
   }
   const cases = [
     ["feature", "code.feature-refactoring"], ["refactoring", "code.feature-refactoring"],
@@ -431,9 +431,12 @@ test("OMP generated workflows bind source-style slots without changing Codex rou
     ["hillclimb", "code.hillclimb"], ["reflect", "reflect.divergent"],
   ];
   for (const [skill, route] of cases) {
-    const text = await readFile(join(omp, "skills", skill, "SKILL.md"), "utf8");
-    assert.ok(text.includes(`\`${route}\``), `${skill}: missing OMP source-style route`);
-    assert.match(text, /\.omp\/oh-my-stack\.resolution\.json/);
+    for (const [runtime, packageRoot] of [["omp", omp], ["codex", codex]]) {
+      const skillPath = join(packageRoot, "skills", skill);
+      const entry = await readFile(join(skillPath, "SKILL.md"), "utf8");
+      const text = entry.includes("](WORKFLOW.md)") ? await readFile(join(skillPath, "WORKFLOW.md"), "utf8") : entry;
+      assert.ok(text.includes(`\`${route}\``), `${runtime}/${skill}: missing source-style route`);
+    }
   }
   const setup = await readFile(join(omp, "skills", "setup-oh-my-stack", "SKILL.md"), "utf8");
   assert.match(setup, /target xhigh/);
