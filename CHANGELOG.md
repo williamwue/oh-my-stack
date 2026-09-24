@@ -6,15 +6,16 @@ established.
 
 ## Unreleased
 
-## 0.2.0-beta.1 - candidate
+## 0.2.0-beta.1 - 2026-09-24
 
 - Replaced OMP `plugin link --dry-run` as a release gate with archive and
   installed-tree verification followed by a real install, health check, Skill
   load, and cleanup in a randomly named isolated OMP profile.
 - Kept user-profile installation an explicit separate write step. The OMP
   dry-run defect remains documented; the new gate does not claim to fix OMP.
-- Preserved alpha.11 as the latest public release until beta.1 passes review
-  and is separately authorized for publication.
+- Verified beta.1 installation on OMP 18.3.0 and Codex CLI 0.155.1, including
+  native Skill discovery and bounded read-only execution. Existing setup
+  manifests remain unchanged; prior worker records were rechecked, not rerun.
 
 ## 0.2.0-alpha.11 - 2026-09-24
 

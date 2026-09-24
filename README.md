@@ -7,10 +7,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 ## Release status
 
 Oh My Stack is available as a public
-[alpha.11 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.11)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.11.md).
-`0.2.0-beta.1` is a local release candidate, not a published version; its
-OMP native-install gate is described in the [beta candidate record](docs/releases/0.2.0-beta.1-candidate.md).
+[beta.1 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.1)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.1.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -19,11 +17,11 @@ until an authenticated runtime is available.
 
 | Target | Package | Current confidence |
 | --- | --- | --- |
-| Codex | Native marketplace plugin and standalone package | Public Alpha ready on the verified CLI surface |
-| OMP | Native package | Public Alpha preview; native plugin-manager safety gate remains open |
+| Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
+| OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
 | Claude Code | Native plugin package | Preview; live discovery and end-to-end use are not yet verified |
 
-This is an Alpha project. Review the generated instructions before granting
+This is a Beta project. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
 details are tracked in [capabilities](docs/capabilities.md), while release
 claims use the separate verification labels documented in the
@@ -51,7 +49,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-alpha.11.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-beta.1.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -74,7 +72,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [alpha.11 release notes](docs/releases/0.2.0-alpha.11.md) for the
+See the [beta.1 release notes](docs/releases/0.2.0-beta.1.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -89,7 +87,7 @@ codex plugin marketplace remove oh-my-stack
 ### OMP and Claude Code previews
 
 The release builder also creates OMP and Claude Code archives. Their package
-trees and owned-directory lifecycle are validated. For OMP, the beta candidate
+trees and owned-directory lifecycle are validated. For OMP, the beta release
 uses a read-only package preflight and a real installation in a disposable
 profile before any user-profile installation. Follow the exact commands and
 cleanup boundary in the [release process](docs/release-process.md#omp-preflight-and-isolated-native-acceptance).
@@ -119,11 +117,12 @@ The Codex CLI 0.155.1 plugin-manager lifecycle establishes `D1`: an isolated
 `CODEX_HOME` accepts the generated marketplace, installs the exact generated
 plugin tree, reinstalls it, removes it, and deregisters the marketplace. Codex
 CLI therefore reaches cumulative `D3` after its observed discovery and
-explicit-invocation checks. The published alpha.11 OMP gate remained at `D0`
-because `plugin link --dry-run` wrote state on 18.2.6, 18.2.10, and 18.3.0.
-The beta.1 candidate instead verifies package bytes and performs a real native
-install in an isolated profile; it does not claim OMP's dry-run is repaired.
-See the [beta candidate record](docs/releases/0.2.0-beta.1-candidate.md).
+explicit-invocation checks. The alpha.11 OMP gate remained at `D0` because
+`plugin link --dry-run` wrote state on 18.2.6, 18.2.10, and 18.3.0. Beta.1
+uses a different safety gate: package-byte verification and real native
+installation in an isolated profile, followed by a separately authorized
+user-profile install. This does not repair OMP's dry-run. See the
+[beta.1 release notes](docs/releases/0.2.0-beta.1.md).
 Codex Desktop has a
 focused scheduled-wake probe; its other capability families and Codex IDE
 remain unprobed. Claude Code verification is explicitly deferred until a local
@@ -298,7 +297,7 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-alpha.11 release notes](docs/releases/0.2.0-alpha.11.md). Claude Code is
+[0.2.0-beta.1 release notes](docs/releases/0.2.0-beta.1.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
