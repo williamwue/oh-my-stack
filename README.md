@@ -9,6 +9,8 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 Oh My Stack is available as a public
 [alpha.11 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-alpha.11)
 with 74 public Skills; see the [release notes](docs/releases/0.2.0-alpha.11.md).
+`0.2.0-beta.1` is a local release candidate, not a published version; its
+OMP native-install gate is described in the [beta candidate record](docs/releases/0.2.0-beta.1-candidate.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -87,12 +89,12 @@ codex plugin marketplace remove oh-my-stack
 ### OMP and Claude Code previews
 
 The release builder also creates OMP and Claude Code archives. Their package
-trees and owned-directory lifecycle are validated, but this Alpha does not yet
-claim one universal native-registration command for those runtimes. Use the
-generic installer only with a dedicated Oh My Stack directory, then follow the
-runtime-specific registration boundary described in the
-[release process](docs/release-process.md). Claude Code live verification is
-explicitly deferred.
+trees and owned-directory lifecycle are validated. For OMP, the beta candidate
+uses a read-only package preflight and a real installation in a disposable
+profile before any user-profile installation. Follow the exact commands and
+cleanup boundary in the [release process](docs/release-process.md#omp-preflight-and-isolated-native-acceptance).
+Do not use `omp plugin link --dry-run` for preview. Claude Code live
+verification is explicitly deferred.
 
 ## Detailed verification status
 
@@ -117,11 +119,11 @@ The Codex CLI 0.155.1 plugin-manager lifecycle establishes `D1`: an isolated
 `CODEX_HOME` accepts the generated marketplace, installs the exact generated
 plugin tree, reinstalls it, removes it, and deregisters the marketplace. Codex
 CLI therefore reaches cumulative `D3` after its observed discovery and
-explicit-invocation checks. OMP's artifact-level npm lifecycle passes, but OMP
-remains overall `D0`: its plugin manager unexpectedly writes during a
-`--dry-run`, observed on both 18.2.6 and 18.2.10, so the real D1 safety gate is
-unresolved. Do not treat `omp plugin link --dry-run` as read-only. See the
-[local release-candidate acceptance](docs/release-candidate-readiness.md).
+explicit-invocation checks. The published alpha.11 OMP gate remained at `D0`
+because `plugin link --dry-run` wrote state on 18.2.6, 18.2.10, and 18.3.0.
+The beta.1 candidate instead verifies package bytes and performs a real native
+install in an isolated profile; it does not claim OMP's dry-run is repaired.
+See the [beta candidate record](docs/releases/0.2.0-beta.1-candidate.md).
 Codex Desktop has a
 focused scheduled-wake probe; its other capability families and Codex IDE
 remain unprobed. Claude Code verification is explicitly deferred until a local
@@ -300,7 +302,7 @@ and separate static, discovery, lifecycle, and end-to-end status. See the
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 
-The Codex bundle is `dist/oh-my-stack-codex-plugin-0.2.0-alpha.11.tar.gz`.
+The locally built Codex bundle is `dist/oh-my-stack-codex-plugin-<version>.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
 
 ```bash

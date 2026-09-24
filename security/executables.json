@@ -170,6 +170,14 @@
       "uninstallBehavior": "Not installed in target packages; generated dist files may be deleted independently."
     },
     {
+      "path": "tools/check-omp-install.mjs",
+      "owner": "local-core",
+      "purpose": "Verify OMP release bytes, then install, inspect, load one Skill, and uninstall in a randomly named isolated OMP profile.",
+      "network": false,
+      "writes": ["new isolated OMP profile plugin state; retained empty probe profile for inspection"],
+      "uninstallBehavior": "Uninstalls only the Oh My Stack probe link from the generated isolated profile; does not target the user profile."
+    },
+    {
       "path": "tools/install-release.mjs",
       "owner": "local-core",
       "purpose": "Install, atomically update, or uninstall one target archive in an explicit dedicated directory.",

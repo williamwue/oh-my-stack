@@ -6,6 +6,16 @@ established.
 
 ## Unreleased
 
+## 0.2.0-beta.1 - candidate
+
+- Replaced OMP `plugin link --dry-run` as a release gate with archive and
+  installed-tree verification followed by a real install, health check, Skill
+  load, and cleanup in a randomly named isolated OMP profile.
+- Kept user-profile installation an explicit separate write step. The OMP
+  dry-run defect remains documented; the new gate does not claim to fix OMP.
+- Preserved alpha.11 as the latest public release until beta.1 passes review
+  and is separately authorized for publication.
+
 ## 0.2.0-alpha.11 - 2026-09-24
 
 - Accepted Codex CLI's padded encrypted spawn-message record in the setup

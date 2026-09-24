@@ -1,6 +1,6 @@
 {
   "name": "oh-my-stack",
-  "version": "0.2.0-alpha.11",
+  "version": "0.2.0-beta.1",
   "description": "Portable, verifiable engineering workflows for agent runtimes.",
   "private": true,
   "type": "module",

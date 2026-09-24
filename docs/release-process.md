@@ -55,6 +55,51 @@ marketplace may point at the installed directory, while OMP may install its npm
 package directly. The generic installer deliberately does not rewrite a
 runtime's global configuration.
 
+### OMP preflight and isolated native acceptance
+
+Do not use `omp plugin link --dry-run` as a read-only preview: OMP 18.3.0 was
+observed creating a symlink and lock entry. For an OMP candidate, first verify
+the release checksums and install its archive into a new dedicated directory
+with the generic installer. Then run the native gate:
+
+```bash
+(cd dist && shasum -a 256 -c SHA256SUMS)
+node tools/install-release.mjs install \
+  --manifest dist/release-manifest.json \
+  --target omp \
+  --destination /absolute/owned/path/oh-my-stack
+node tools/check-omp-install.mjs \
+  --manifest dist/release-manifest.json \
+  --package /absolute/owned/path/oh-my-stack
+```
+
+The gate verifies archive and installed-tree bytes **before** calling OMP. It
+then performs a real local-path install in a randomly named isolated OMP
+profile, checks the listed version, package target, `plugin doctor`, and
+`skill://prove-it-works`, and uninstalls from that profile. The profile's
+directory may remain for inspection. In a fresh link-only profile, OMP may
+report `package_manifest: warning (Not created yet)`; that exact warning is
+allowed only when `plugin:oh-my-stack` is healthy. Other warnings fail. A
+failed probe reports its profile name; inspect any failed cleanup before
+reuse. This is a controlled write to the probe profile, not a zero-write
+dry-run or a repair to OMP's plugin manager.
+
+Only after that gate passes should an operator deliberately install the
+verified package into their own profile:
+
+```bash
+omp plugin install /absolute/owned/path/oh-my-stack
+omp plugin list --json
+omp plugin doctor --json
+omp read skill://prove-it-works
+```
+
+Inspect existing OMP plugins before the final install; a name collision may
+replace the existing Oh My Stack link. Retain the prior versioned package
+directory for rollback. Never manually edit OMP's `node_modules` symlink or
+lockfile to work around its dry-run defect. The setup model resolution is a
+separate opt-in step and is not changed by this gate.
+
 ## Verify an installed package
 
 Using the source checkout, compare an installed target directory with the
@@ -122,8 +167,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.11
-node tools/build-release.mjs --tag v0.2.0-alpha.11
+node tools/build-release.mjs --check --tag v0.2.0-beta.1
+node tools/build-release.mjs --tag v0.2.0-beta.1
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve
