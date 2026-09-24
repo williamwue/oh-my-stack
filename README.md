@@ -339,13 +339,26 @@ node scripts/configure-models.mjs --inventory /absolute/path/to/inventory.json \
   --project-root /absolute/path/to/project --preset pstack --budget medium
 ```
 
+On OMP, `pstack` retains the upstream Cursor model choices and fails closed
+when those IDs are not in the live inventory. If OMP instead exposes the exact
+OpenAI-Codex GPT-6 Luna, Sol, and Astra IDs, preview the optional
+`--preset pstack-openai-codex` with the same inventory and budget. It proposes
+Luna for fast work, Sol for routine coding, Astra for deep work, and ordered
+Astra/Sol/Luna panels; it never selects GPT-5.5 by default. This is an
+alternative proposal, not an assertion that these models match Cursor's or
+each other's behavior. Astra may cost substantially more, so review every
+route, panel, and runtime price before applying. If any required ID is absent,
+choose observed models explicitly rather than silently substituting an older
+one. Switching presets does not automatically retain prior budget or overrides;
+pass and review any choices that should carry over.
+
 Review and adjust the exact model choices, then repeat the same command with
 `--apply` to write the Codex or OMP project role directory. OMP has a verified
 native project-role path. On OMP, the `pstack` preset now keeps the upstream
 workload-specific slots for feature/refactoring, bug-fix, perf-issue, hillclimb,
 and the separate reflection lenses. A selected budget targets its advertised
 thinking level even when that raises a previous setting, falling back to the
-highest supported lower level for the same model. Re-running the setup keeps
+highest supported lower level for the same model. Re-running the same preset keeps
 explicit model-family, alias, and ordered-panel choices. OMP Skills read the
 project manifest when used; this project-scoped equivalent is not Cursor's
 global always-applied rule. For Codex, generated TOML files are configuration

@@ -160,6 +160,7 @@
     }
   },
   "presets": {
+    "pstack-openai-codex": null,
     "pstack": null
   },
   "adapter": {

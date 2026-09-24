@@ -160,6 +160,7 @@
     }
   },
   "presets": {
+    "pstack-openai-codex": null,
     "pstack": {
       "workloads": {
         "fast": "gpt-6-luna@low",

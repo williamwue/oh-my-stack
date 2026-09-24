@@ -212,6 +212,52 @@ test("pstack preset creates named workflow routes and ordered native panels on b
   }
 });
 
+test("OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-omp-openai-preset-"));
+  const inventoryPath = join(root, "inventory.json");
+  const outputRoot = join(root, "output");
+  const packageRoot = join(repoRoot, "packages", "omp");
+  const observed = {
+    schemaVersion: 1,
+    runtime: "omp",
+    observedAt: "2026-09-24T00:16:46.021Z",
+    source: "fixture omp models --json --no-extensions",
+    models: ["gpt-5.5", "gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+      id: `openai-codex/${name}`,
+      reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
+    })),
+  };
+  await writeFile(inventoryPath, `${JSON.stringify(observed)}\n`);
+
+  await assert.rejects(
+    configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", budget: "medium", apply: false }),
+    /cursor\/grok-4\.7-xhigh-fast was not present in the observed inventory/,
+  );
+  const preview = await configure({
+    packageRoot, inventoryPath, outputRoot, presetName: "pstack-openai-codex", budget: "medium", apply: false,
+  });
+  assert.equal(preview.applied, false);
+  assert.deepEqual(preview.manifest.workloads, {
+    fast: { model: "openai-codex/gpt-6-luna", reasoning: "high" },
+    balanced: { model: "openai-codex/gpt-6-sol", reasoning: "high" },
+    deep: { model: "openai-codex/gpt-6-astra", reasoning: "high" },
+  });
+  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "openai-codex/gpt-6-sol");
+  assert.deepEqual(preview.manifest.routes["arena.runners"].entries.map((entry) => entry.model), [
+    "openai-codex/gpt-6-astra", "openai-codex/gpt-6-sol", "openai-codex/gpt-6-luna",
+  ]);
+  assert.ok(!preview.manifest.configuredModelIds.includes("openai-codex/gpt-5.5"));
+  await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+
+  observed.models = observed.models.filter((model) => model.id !== "openai-codex/gpt-6-astra");
+  await writeFile(inventoryPath, `${JSON.stringify(observed)}\n`);
+  await assert.rejects(
+    configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack-openai-codex", budget: "medium", apply: true }),
+    /gpt-6-astra was not present in the observed inventory/,
+  );
+  await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+});
+
 test("budget, inheritance, route overrides, and panel shrink stay owned and deterministic", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-preset-overrides-"));
   const inventoryPath = await presetInventoryFile(root, "codex");

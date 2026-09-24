@@ -1,5 +1,27 @@
 {
   "schemaVersion": 1,
+  "pstack-openai-codex": {
+    "omp": {
+      "workloads": {
+        "fast": "openai-codex/gpt-6-luna@high",
+        "balanced": "openai-codex/gpt-6-sol@high",
+        "deep": "openai-codex/gpt-6-astra@max"
+      },
+      "routes": {
+        "code.feature-refactoring": "openai-codex/gpt-6-sol@high",
+        "code.bug-fix": "openai-codex/gpt-6-sol@high",
+        "code.perf-issue": "openai-codex/gpt-6-sol@high",
+        "code.hillclimb": "openai-codex/gpt-6-sol@high",
+        "reflect.tooling": "openai-codex/gpt-6-sol@max",
+        "reflect.divergent": "openai-codex/gpt-6-astra@max",
+        "reflect.synthesizer": "openai-codex/gpt-6-astra@max",
+        "arena.runners": ["openai-codex/gpt-6-astra@max", "openai-codex/gpt-6-sol@max", "openai-codex/gpt-6-luna@high"],
+        "arena.cross-judge-pool": ["openai-codex/gpt-6-astra@max", "openai-codex/gpt-6-sol@max", "openai-codex/gpt-6-luna@high"],
+        "architect.runners": ["openai-codex/gpt-6-astra@max", "openai-codex/gpt-6-sol@max", "openai-codex/gpt-6-luna@high"],
+        "interrogate.reviewers": ["openai-codex/gpt-6-astra@max", "openai-codex/gpt-6-sol@max", "openai-codex/gpt-6-luna@high"]
+      }
+    }
+  },
   "pstack": {
     "omp": {
       "workloads": {
