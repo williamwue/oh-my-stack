@@ -302,6 +302,11 @@ export async function configure({
     target: descriptor.target,
     preset: presetName ?? null,
     budget: effectiveBudget,
+    budgetPolicy: {
+      kind: exactOmpBudget ? "reasoning-target" : "reasoning-ceiling",
+      level: budgetCaps[effectiveBudget],
+      costLimit: false,
+    },
     ...(descriptor.target === "omp" && presetName ? { overrides } : {}),
     observedInventory: {
       observedAt: inventory.observedAt,

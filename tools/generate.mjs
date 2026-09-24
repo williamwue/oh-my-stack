@@ -700,6 +700,9 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   await mkdir(join(target, "scripts"), { recursive: true });
   await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
   await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
+  if (["omp", "codex"].includes(adapter.id)) {
+    await cp(join(model.root, "tools", "setup-acceptance.mjs"), join(target, "scripts", "setup-acceptance.mjs"));
+  }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
   }
@@ -776,6 +779,9 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
   assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
+  if (["omp", "codex"].includes(adapter.id)) {
+    assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
+  }
 }
 
 export async function treeMap(directory) {

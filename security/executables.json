@@ -234,6 +234,14 @@
       "uninstallBehavior": "Generated Codex package copy is removed with its package; user-selected outputs remain user-owned."
     },
     {
+      "path": "tools/setup-acceptance.mjs",
+      "owner": "local-core",
+      "purpose": "Audit generated role files and verify supplied parent-child runtime records for a selected setup route.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Generated OMP and Codex package copies are removed with their packages; user-selected configuration remains user-owned."
+    },
+    {
       "path": "tools/codex-skill-descriptions.mjs",
       "owner": "local-core",
       "purpose": "Export concise Codex discovery descriptions; no executable side effects.",

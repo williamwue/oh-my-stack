@@ -58,6 +58,11 @@ The resulting JSON inventory contains:
 If the runtime cannot expose an inventory, stop before writing configuration.
 Return the missing observation instead of guessing a model identifier.
 
+Before applying, also inspect the live child-delegation tool and its agent/model
+selection fields. A model inventory alone does not prove a child can use those
+models. If this surface cannot delegate or cannot select the proposed route,
+stop and report the capability gap; do not present a written mapping as active.
+
 ## 2. Preview a pstack-style mapping
 
 Run `scripts/configure-models.mjs` without `--apply`, with `--preset pstack`,
@@ -79,6 +84,10 @@ high), or `small` (target medium). For OMP, a budget sets each real model to
 its target effort, even if this raises the prior effort. If the target is
 unavailable, use that model's highest advertised effort below it; otherwise
 stop for a new choice. Keep the model family and panel length unchanged.
+Name this a reasoning setting, not a token or money spending limit. Show the
+*effective* model and effort for every route after budget processing, explicitly
+calling out any `deep` route below `medium` effort and any panel member above
+the user's budget label. Do not call a mixed-effort table uniformly `medium`.
 Show meaningful cost/provider tradeoffs before applying. The preset is a
 recommendation, not a silent permission to spend on an expensive model.
 
@@ -120,6 +129,24 @@ Check worker model and reasoning from runtime records, not configured files or
 self-report. If records are unavailable, report resolution as unverified.
 Distinct configured IDs do not establish multi-model execution or distinct
 provider backends.
+
+Run `scripts/setup-acceptance.mjs --resolution <applied-manifest>` after apply.
+It verifies the generated role hashes but intentionally reports activation as
+`unverified` until a fresh session supplies parent and child records. Next run
+one bounded, read-only child for a single configured route in that project.
+Give the child an exact existing file to inspect and forbid edits and further
+delegation. Use the native route agent where supported, or the documented
+explicit-spawn fallback. Pass the parent and child record paths, the route,
+and (for an explicit spawn) its prepared request to `setup-acceptance.mjs`.
+Do not run a multi-worker panel merely to certify basic setup. A failed,
+cancelled, or unavailable smoke leaves activation `unverified`; report the
+specific failed check and do not silently retry or reconfigure. Ask before a
+model-consuming smoke when the user requested configuration only.
+
+Report four separate facts: applied files, runtime role discovery or explicit
+spawn mechanism, observed worker model/effort, and workflow-level coverage.
+One successful read-only child proves only its route, not every workflow or
+cross-provider diversity. A different project or machine needs its own setup.
 
 ## Output
 

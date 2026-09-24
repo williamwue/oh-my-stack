@@ -10,6 +10,15 @@ established.
   observed model inventories, with preview, ownership checks, and symlink
   refusal. Configured model IDs remain separate from runtime execution proof.
 
+## 0.2.0-alpha.8 - 2026-09-24
+
+- Added read-only setup acceptance for OMP and Codex that checks owned role
+  files and independently verifies a selected worker's runtime model and
+  reasoning from parent and child records.
+- Setup now distinguishes configuration from activation, checks child-delegation
+  capability before applying, and explains OMP reasoning targets versus Codex
+  ceilings without implying a monetary budget.
+
 ## 0.2.0-alpha.5 - 2026-09-23
 
 - Added portable counterparts for the remaining 25 pinned pstack entries:
