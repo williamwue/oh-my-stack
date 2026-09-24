@@ -76,8 +76,7 @@ not the enclosing marketplace root. Targets are `omp`, `codex`, and `claude-code
 
 Use a manifest from a trusted release: this is an integrity comparison, not
 signature verification or proof that a runtime has loaded the Skills. Concurrent
-file changes are outside the snapshot guarantee. This command is currently a
-working-tree addition; it is not part of the already published alpha.4 source.
+file changes are outside the snapshot guarantee.
 
 ## Install the Codex plugin bundle
 
@@ -123,8 +122,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-alpha.10
-node tools/build-release.mjs --tag v0.2.0-alpha.10
+node tools/build-release.mjs --check --tag v0.2.0-alpha.11
+node tools/build-release.mjs --tag v0.2.0-alpha.11
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

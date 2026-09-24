@@ -6,6 +6,18 @@ established.
 
 ## Unreleased
 
+## 0.2.0-alpha.11 - 2026-09-24
+
+- Accepted Codex CLI's padded encrypted spawn-message record in the setup
+  verifier. Parent/child model and reasoning checks remain strict; encrypted
+  message contents are still reported as not independently readable.
+- Verified one user-level `how.explorer` child on OMP 18.3.0 and Codex CLI
+  0.155.1: both completed a bounded read-only task with the configured Luna
+  model at high reasoning. This does not certify every route or panel.
+- Reproduced OMP 18.3.0 writing a plugin link and lock entry during
+  `plugin link --dry-run` in an isolated profile. Keep OMP at Alpha preview
+  rather than presenting its native plugin manager as a safe dry-run path.
+
 ## 0.2.0-alpha.10 - 2026-09-24
 
 - Added user-level setup defaults for OMP and Codex. Workflows resolve a
