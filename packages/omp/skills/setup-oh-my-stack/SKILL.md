@@ -14,6 +14,9 @@ manifest first, then the user manifest. A user setup does not rewrite
 project overrides. `--output` remains a detached review destination.
 
 The user resolution manifest is the default Oh My Stack choice table.
+OMP's `modelRoles` such as `default`, `smol`, and `advisor` are separate
+host settings. This setup does not synchronize them with explicit
+Oh My Stack workflow agent choices or change the main conversation model.
 On a re-run, preview the existing budget and any model-family, panel, or
 inherit-parent overrides before asking for changes. When reusing the same preset,
 the configurator preserves those overrides and applies the selected budget
@@ -141,7 +144,12 @@ self-report. If records are unavailable, report resolution as unverified.
 Distinct configured IDs do not establish multi-model execution or distinct
 provider backends.
 
-Run `scripts/setup-acceptance.mjs --resolution <applied-manifest>` after apply.
+Run `scripts/setup-acceptance.mjs --resolution <applied-manifest> --cwd <current-project>` after apply.
+Read `effectiveConfiguration` before describing where the setup will be used.
+If its `matchesAuditedResolution` is false, report the selected manifest path
+and scope separately from the file just written. A user default may be saved
+successfully while the current project continues to use its project override.
+When no `--cwd` check was made, effective scope remains uninspected.
 It verifies the generated role hashes but intentionally reports activation as
 `unverified` until a fresh session supplies parent and child records. Next run
 one bounded, read-only child for a single configured route in that project.
@@ -164,8 +172,26 @@ different machine or runtime needs its own inventory and setup.
 
 ## Output
 
-Report the inventory timestamp and source, preset, budget, workload and named
-route mappings, ordered panel counts, user overrides, unresolved choices,
-preview/application status, scope, target path, and which native role and model
-observations remain pending. Do not claim model diversity from configuration
-alone.
+Lead with one concrete status: preview only, saved with runtime verification
+pending, or saved with the named route verified. If a project override selects
+a different manifest, lead with that fact alongside the saved status.
+
+Then show a compact receipt in the user's language:
+
+- Destination: user, project, or detached scope and the target manifest path,
+  taken from the configurator's `configuration` result.
+- Effective selection: the manifest selected for the current project, whether
+  it matches the destination, and that project's override when one exists.
+- Choices: inventory source/time, preset, reasoning target, overrides, every
+  named route and canonical role, and every panel entry in order. Group rows
+  only when model and effort match; retain every route name. Distinguish
+  inherited choices and efforts below the requested target.
+- Evidence: owned-file checks, delegation mechanism, observed worker model and
+  effort, and the exact tested route/entry. Label old records as prior evidence;
+  a written table or one tested route does not certify all workflows.
+- Next action: the specific missing verification or a workflow ready to try.
+
+Explain that this setup configures Oh My Stack's workflow agents. It does not
+select the main conversation model or rewrite the host's general model roles.
+Keep native discovery, explicit spawning, and workflow coverage separate in
+the receipt. Do not claim model diversity from configuration alone.

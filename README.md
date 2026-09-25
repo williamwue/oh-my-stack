@@ -6,6 +6,9 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 
 ## Release status
 
+See the [current project status and remaining work](docs/project-status.md)
+for completed work, next steps, and user-deferred acceptance.
+
 Oh My Stack is available as a public
 [beta.1 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.1)
 with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.1.md).
@@ -95,6 +98,9 @@ Do not use `omp plugin link --dry-run` for preview. Claude Code live
 verification is explicitly deferred.
 
 ## Detailed verification status
+
+The sections below include historical acceptance at the versions named in each
+record. Use the [current backlog](docs/project-status.md) for remaining work.
 
 Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
 implemented. Thirteen original capability fixtures, twenty-three pinned pstack

@@ -1,5 +1,10 @@
 # Codex upstream parity and acceptance backlog
 
+This is a historical parity audit with later implementation updates. The
+[current project status](project-status.md) supersedes its old task ordering:
+all 25 formerly missing entries are implemented, beta.1 is published, and
+real-project/external-system acceptance remains deferred by user choice.
+
 ## Assessment boundary
 
 Reviewed on 2026-09-23. Local implementation baseline: `v0.2.0-alpha.4`,
@@ -8,7 +13,7 @@ Upstream comparison: [cursor/plugins pstack at 86ecc820](https://github.com/curs
 resolved from upstream main during this review. This is a pinned inventory
 comparison, not a claim of line-by-line semantic equivalence.
 
-**Verdict: usable Codex Alpha, not a complete port of current upstream.**
+**Historical verdict at the alpha.4 baseline: usable Codex Alpha, not a complete port of current upstream.**
 Discovery, implementation, fixture behavior, installed-plugin behavior, and
 real external-system completion are separate claims.
 
@@ -18,7 +23,7 @@ revisions (`6ed0f7a9`, `640ea3ab`, and `53e579f1`). They do not claim synchroniz
 with the current upstream revision. This audit does not change those provenance
 records or imply that every missing entry was newly added upstream.
 
-## Current source progress
+## Source completion after the baseline
 
 The user reprioritized upstream completion before release work. The
 [completion plan](upstream-completion-plan.md) tracks all 25 original gaps.
@@ -26,7 +31,7 @@ All 25 originally missing entries now have core implementations, direct metadata
 router entries, pinned provenance, and three generated packages. The current
 source has **74 public entries (51 workflows, 23 principles)**. Their behavioral
 acceptance is not complete. The installed local Codex candidate now exposes
-74 entries; the published alpha.4 still exposes 49.
+74 entries; alpha.4 exposed 49. Published beta.1 exposes all 74.
 The [bounded acceptance record](discovery-design-acceptance.md) covers static
 checks and two independent forward tests with explicit execution limits.
 The [second-batch acceptance record](upstream-completion-acceptance.md) covers
@@ -180,7 +185,8 @@ plus four complete linked-procedure reads. The installed alpha.4 is unchanged;
 the [versioned local installation and repeat acceptance](releases/0.2.0-alpha.4-local-plugin-acceptance.md)
 now pass with 49 complete installed entries and four complete procedure reads.
 The published alpha.4 is unchanged. Desktop UI
-confirmation remain pending; steps 5–8 are also pending. The earlier implementation
+confirmation was then pending. Steps 5–6 below are now implemented;
+steps 7–8 remain user-deferred. The earlier implementation
 records remain root-only; no new Desktop picker or model-diversity claim follows.
 Keep every public direct entry,
 short descriptions, and workflow/principle categories. Do not reintroduce a
@@ -192,8 +198,8 @@ default hidden library or ship internal probes.
 | 2 | Installed-plugin feature and refactoring acceptance | One bounded behavior change and one separate behavior-preserving change; test new behavior and negative cases, or freeze invariants before refactoring |
 | 3 | Installed-plugin review and read-only routing acceptance | Review a frozen change; independently confirm findings, reject unsupported ones, and prove no unauthorized writes |
 | 4 | Direct-entry acceptance and UI confirmation | Record per-entry installed-path selection/loading separately from behavior; user/manual Desktop check when permitted |
-| 5 | Design the first missing-workflow batch | Specify `why`, `architect`, `arena`, `swarm`, then `teach` dependencies; review upstream contracts, provenance, host mapping, and negative acceptance cases before implementation |
-| 6 | Triage remaining upstream gaps | Decide port/defer/out-of-scope for the other 11 main entries and nine playbooks; do not silently mark deferred work complete |
+| 5 | First missing-workflow batch — implemented | `why`, `architect`, `arena`, `swarm`, and `teach` are implemented; full behavioral coverage remains incomplete |
+| 6 | Remaining upstream entries — implemented | All 11 remaining main entries and nine playbooks have portable implementations and direct entries; behavioral coverage is recorded separately |
 | 7 | External-system acceptance | On an explicitly authorized disposable repository: real PR creation, checks, review handling, and separately authorized merging; retain remote readback |
 | 8 | Long-running and automation acceptance | Exercise restart, stale state, conflicting writers, scheduled wake, and authenticated Benny integrations; track each dependency separately |
 

@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { lstat, readFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveActiveResolution } from "./model-resolution.mjs";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -88,12 +89,20 @@ async function verifyCodex({ manifest, routeName, entry, requestPath, parentReco
     messageAudit: result.messageAudit, childId: result.childId };
 }
 
-export async function inspectSetup({ resolutionPath, routeName, entry = 1, parentRecord, childRecord, requestPath }) {
+export async function inspectSetup({ resolutionPath, routeName, entry = 1, parentRecord, childRecord, requestPath,
+  cwd, userRoot }) {
   const path = resolve(resolutionPath);
   const manifest = JSON.parse(await readFile(path, "utf8"));
   assert(manifest.schemaVersion === 1 && manifest.owner === "oh-my-stack" && ["omp", "codex"].includes(manifest.target),
     "an applied OMP or Codex Oh My Stack resolution is required");
   const ownedFilesVerified = await checkOwnedFiles(path, manifest);
+  const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot }) : null;
+  const effectiveConfiguration = cwd ? {
+    cwd: resolve(cwd),
+    scope: active?.scope ?? null,
+    path: active?.path ?? null,
+    matchesAuditedResolution: active ? active.path === path : false,
+  } : null;
   const evidenceSupplied = Boolean(parentRecord || childRecord || requestPath);
   assert(!evidenceSupplied || (routeName && parentRecord && childRecord),
     "runtime evidence requires --route, --parent-record and --child-record");
@@ -103,7 +112,7 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
       ? "reasoning target, not a cost limit" : "reasoning ceiling, not a cost limit",
     level: manifest.budgetPolicy?.level ?? null };
   const base = { target: manifest.target, resolutionPath: path, preset: manifest.preset,
-    budget, ownedFilesVerified, configuration: "verified",
+    budget, ownedFilesVerified, configuration: "verified", effectiveConfiguration,
     workflowCoverage: "not assessed by setup acceptance",
     route: routeName ?? null, entry: routeName ? entry : null,
     expected: selected ? { agent: selected.selection.agent, model: selected.selection.model,
@@ -134,7 +143,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const result = await inspectSetup({ resolutionPath: args.resolution, routeName: args.route,
     entry: args.entry ? Number(args.entry) : 1, parentRecord: args["parent-record"],
-    childRecord: args["child-record"], requestPath: args.request });
+    childRecord: args["child-record"], requestPath: args.request, cwd: args.cwd });
   console.log(JSON.stringify(result, null, 2));
 }
 

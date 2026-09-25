@@ -375,7 +375,14 @@ export async function configure({
     await mkdir(outputDirectory, { recursive: true });
     await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   }
-  return { manifest, writes: writes.map(({ path }) => path), applied: apply };
+  return { manifest, writes: writes.map(({ path }) => path), applied: apply,
+    configuration: {
+      status: apply ? "applied" : "preview",
+      scope: projectDirectory ? "project" : userDirectory ? "user" : "detached",
+      manifestPath,
+      runtimeSettingsChanged: false,
+      runtimeVerification: "not performed by configuration",
+    } };
 }
 
 async function main() {

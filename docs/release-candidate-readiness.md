@@ -1,5 +1,8 @@
 # Local release-candidate readiness
 
+Historical alpha.4 record. For current release status and remaining tasks,
+see [project status](project-status.md).
+
 Date: 2026-09-23. This document records bounded acceptance of the unpublished
 `0.2.0-alpha.4` working tree and installed Codex candidate
 `0.2.0-alpha.4+codex.20260923055103`. It is not a tagged release claim.

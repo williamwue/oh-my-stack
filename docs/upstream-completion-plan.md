@@ -1,5 +1,9 @@
 # Upstream completion plan
 
+All 25 entries in this plan are now implemented. The remaining acceptance
+scenarios below describe behavioral coverage, not missing entrypoints. See
+[project status](project-status.md) for current priorities and user deferrals.
+
 ## Priority and scope
 
 On 2026-09-23 the user prioritized upstream workflow completion before release

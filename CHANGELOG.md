@@ -6,6 +6,14 @@ established.
 
 ## Unreleased
 
+- Added explicit setup destination metadata and an optional current-project
+  selection check to the setup audit. A saved user default is no longer
+  implicitly presented as the configuration selected by a project override.
+- Improved the setup receipt for scope, complete role/route choices, ordered
+  panels, runtime evidence, and the distinction from OMP's general model roles.
+- Consolidated the current backlog and recorded the user's successful
+  second-computer installation report separately from recorded runtime tests.
+
 ## 0.2.0-beta.1 - 2026-09-24
 
 - Replaced OMP `plugin link --dry-run` as a release gate with archive and

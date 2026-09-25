@@ -10,6 +10,7 @@ import { configure } from "../tools/configure-models.mjs";
 import { prepareDelegation } from "../tools/codex-delegation.mjs";
 import { repoRoot } from "../tools/generate.mjs";
 import { resolveActiveResolution } from "../tools/model-resolution.mjs";
+import { inspectSetup } from "../tools/setup-acceptance.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -39,6 +40,9 @@ test("user setup is inherited in two projects and a project manifest overrides o
     const preview = await configure({ packageRoot, inventoryPath, userRoot: root, presetName, budget: "medium", apply: false });
     assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].reasoning, "high");
     const globalPath = join(nativeUser, "oh-my-stack.resolution.json");
+    assert.equal(preview.configuration.status, "preview");
+    assert.equal(preview.configuration.scope, "user");
+    assert.equal(preview.configuration.manifestPath, globalPath);
     await assert.rejects(readFile(globalPath));
     await configure({ packageRoot, inventoryPath, userRoot: root, presetName, budget: "medium", apply: true });
     const globalBefore = await readFile(globalPath, "utf8");
@@ -60,6 +64,20 @@ test("user setup is inherited in two projects and a project manifest overrides o
     assert.equal(selectedA.scope, "project");
     assert.equal(selectedA.manifest.routes["code.bug-fix"].entries[0].model, override.slice(0, override.lastIndexOf("@")));
     assert.equal(selectedB.scope, "user");
+    assert.equal(await readFile(globalPath, "utf8"), globalBefore);
+
+    // A successful file audit must not imply the current project uses that file.
+    const shadowed = await inspectSetup({ resolutionPath: globalPath, cwd: projectA, userRoot: root });
+    assert.equal(shadowed.configuration, "verified");
+    assert.equal(shadowed.activation, "unverified");
+    assert.equal(shadowed.effectiveConfiguration.scope, "project");
+    assert.equal(shadowed.effectiveConfiguration.path, selectedA.path);
+    assert.equal(shadowed.effectiveConfiguration.matchesAuditedResolution, false);
+    const inherited = await inspectSetup({ resolutionPath: globalPath, cwd: projectB, userRoot: root });
+    assert.equal(inherited.effectiveConfiguration.scope, "user");
+    assert.equal(inherited.effectiveConfiguration.matchesAuditedResolution, true);
+    const unchecked = await inspectSetup({ resolutionPath: globalPath });
+    assert.equal(unchecked.effectiveConfiguration, null);
     assert.equal(await readFile(globalPath, "utf8"), globalBefore);
 
     const rerun = await configure({ packageRoot, inventoryPath, userRoot: root, presetName, apply: false });

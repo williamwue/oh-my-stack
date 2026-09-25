@@ -1,5 +1,8 @@
 # Implementation plan
 
+This document retains phase-by-phase implementation history. Use
+[project status](project-status.md) for the current backlog and completion state.
+
 The plan is ordered by proof. Each phase ends with a usable artifact and a gate. A later phase must not compensate for an unverified earlier layer.
 
 For the 2026-09-23 Codex inventory audit and the next ordered acceptance tasks,
