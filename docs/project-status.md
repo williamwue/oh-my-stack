@@ -113,12 +113,27 @@ from the desktop Skill picker; the available desktop-control interface denied
 access to the Codex app. The candidate still uses the source version
 `0.2.0-beta.1` and has not been published as a new release.
 
+A bounded `architect.runners` panel smoke on 2026-09-25 read only this
+repository's `package.json`. OMP beta.1 made one ordered three-task call;
+separate child records passed setup acceptance for native roles 1/2/3 at
+`openai-codex/gpt-6-astra@high`, `gpt-6-sol@high`, and `gpt-6-luna@high`, with
+no model fallback. One child gave an off-by-one file citation; the parent
+corrected it, so task-content accuracy remains a separate concern. Codex's
+isolated candidate package prepared all three explorer contracts and made
+exactly three explicit spawns in the same order. Each child record passed
+model/effort acceptance at Astra/Sol/Luna `@high`. Codex's parent message was
+encrypted in the runtime record, so contract text could not be compared
+byte-for-byte; native custom-role selection is not claimed. This verifies one
+synthetic read-only panel, not full architect implementation, all panels, or
+cross-provider backend diversity. The temporary Codex credential copy was
+removed and the OMP user plugin remains beta.1.
+
 ## Next work
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Verify structured Skill selection in the desktop UI | Fresh Codex and OMP interactive sessions select the installed candidate directly and show the complete receipt; CLI/model execution is already verified, but desktop picker access was unavailable to this task |
-| P1 | Expand worker evidence beyond the first route | New parent/child records cover representative panels and failure paths without treating the single-route smoke as full workflow parity |
+| P1 | Exercise bounded failure and cancellation paths | Fresh runtime records show how invalid model, fallback, failed child, and cancellation are surfaced without silently certifying the route; one positive three-worker panel is already verified on both hosts |
 | P2 | Simplify installation, diagnosis and upgrades | A documented entry identifies installed version and selected configuration, previews owned changes, and supports verified update/rollback |
 | P2 | Track host and model compatibility | Record tested host/OS versions and regressions for missing models, unsupported efforts and changed delegation tools |
 
