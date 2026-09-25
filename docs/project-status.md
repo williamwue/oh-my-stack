@@ -154,13 +154,17 @@ native isolated concurrent-writer integration, and Codex controlled stale
 replay with a delivered but rejected old-generation payload. An OMP process
 exit aborted its still-active child; a fresh process could inspect the trail
 but not reattach the job. This is a host boundary, not a passing recovery
-claim. The tested packages were not installed as beta.2 in the user's normal
-profiles. Full `npm run check` passed 112 tests after the local OMP lifecycle
-adapter update; these local acceptance commits are not yet pushed or released.
+claim. These runs preceded the user-profile plugin upgrade. The separate
+[beta.3 local candidate acceptance](releases/0.2.0-beta.3-candidate.md) now
+verifies fresh installed-plugin `how.explorer` runs on both OMP and Codex.
+Full `npm run check` passed 112 tests after the local OMP lifecycle adapter
+update. The beta.3 source commit is local and has not been tagged, pushed, or
+published.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Repeat plugin-native model-facing acceptance after a deliberate beta.2-or-newer installation |
+| P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
+| P1 | Public beta.3 release gate | Review the local candidate evidence, run the clean tagged gate and CI, then explicitly decide whether to publish; local plugin installation alone is not publication |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
