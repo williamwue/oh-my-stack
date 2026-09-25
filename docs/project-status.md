@@ -55,12 +55,45 @@ user scope and the missing parent/child evidence. Those sessions tested the
 source-guided receipt, not direct selection of a newly installed plugin Skill
 or actual worker dispatch. The user's global setup was not rewritten.
 
+Further installed-package acceptance on 2026-09-25 used a clean build from
+commit `a2708e2` (still reporting the source version `0.2.0-beta.1`, not a new
+published release). Archive checksums passed. Codex installed the candidate
+into an isolated `CODEX_HOME`; a fresh model session read the installed setup
+Skill and complete workflow and produced the full role, route, and panel
+receipt. That prompt deliberately limited inspection to the user manifest, so
+the session correctly left this project's effective selection unconfirmed;
+the separate read-only setup audit confirmed the user manifest is effective.
+OMP's isolated-profile package install, doctor, and `skill://setup-oh-my-stack`
+load passed, but that profile had no model login, so its candidate Skill was
+not exercised by an OMP model. Neither CLI test proves structured selection
+from the desktop Skill picker.
+
+One fresh `how.explorer` child was verified on each host against the existing
+user resolution, with the current project selecting that user manifest and 35
+owned files passing audit. OMP's installed beta.1 used native agent
+`ohmystack-how-explorer`; parent/child records for task
+`PackageMetadataAcceptance` observed `openai-codex/gpt-6-luna@high` with no
+model fallback. Codex's isolated candidate package prepared the full explorer
+contract and explicitly spawned `package_metadata_acceptance`; parent/child
+records (`01a0d616-ccd7-79f1-991b-3a95d1ac3046` and
+`01a0d616-f9b2-7591-a166-c921a8abfd7e`) observed `gpt-6-luna@high`.
+The parent record encrypted the message,
+so the audit could not compare its role text byte-for-byte, and Codex native
+role selection is not claimed. Both children read only `package.json`; this
+certifies one route on each host, not every workflow or panel.
+
+An OMP local-path install ignored `--scope=project` and briefly replaced the
+user plugin link during this test. The link was restored to the original beta.1
+package immediately, and `plugin doctor` passed. Local-path project isolation
+must not be assumed; use the tested isolated `--profile` gate instead. The
+temporary Codex credential copy used for model execution was removed.
+
 ## Next work
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Refresh representative worker evidence for the next package | New parent/child records identify the installed version, route, actual model/effort and role contract; previous logs retain their original dates |
-| P1 | Verify the next installed package's setup entry | Direct Skill selection in fresh Codex and OMP sessions shows the same complete receipt and correct effective scope |
+| P1 | Verify the next installed package's setup entry in both UIs | Direct structured Skill selection in fresh Codex and OMP sessions shows the complete receipt and correct effective scope; the OMP candidate model session requires an authenticated isolated profile or a deliberate user-profile update |
+| P1 | Expand worker evidence beyond the first route | New parent/child records cover representative panels and failure paths without treating the single-route smoke as full workflow parity |
 | P2 | Simplify installation, diagnosis and upgrades | A documented entry identifies installed version and selected configuration, previews owned changes, and supports verified update/rollback |
 | P2 | Track host and model compatibility | Record tested host/OS versions and regressions for missing models, unsupported efforts and changed delegation tools |
 

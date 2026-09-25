@@ -100,6 +100,13 @@ directory for rollback. Never manually edit OMP's `node_modules` symlink or
 lockfile to work around its dry-run defect. The setup model resolution is a
 separate opt-in step and is not changed by this gate.
 
+OMP 18.3.0 was also observed ignoring `--scope=project` for a local-path
+`plugin install` and linking that path into the user plugin directory. Do not
+use that flag to isolate local candidate testing. Use `--profile` as above,
+then check the actual installed path before running a model session. An
+isolated profile may need its own model login; package discovery alone does
+not establish model-facing acceptance.
+
 ## Verify an installed package
 
 Using the source checkout, compare an installed target directory with the
