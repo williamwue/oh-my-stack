@@ -154,7 +154,7 @@ exit aborted its still-active child; a fresh process could inspect the trail
 but not reattach the job. This is a host boundary, not a passing recovery
 claim. The tested packages were not installed as beta.2 in the user's normal
 profiles. Full `npm run check` passed 112 tests after the local OMP lifecycle
-adapter update; these two local commits are not yet pushed or released.
+adapter update; these local acceptance commits are not yet pushed or released.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
