@@ -70,6 +70,9 @@ function archiveMetadata(archive, files) {
 }
 
 async function buildPluginBundle({ root, out, project, bundle }) {
+  if (bundle.id === "claude-marketplace") {
+    return buildClaudeMarketplaceBundle({ root, out, project, bundle });
+  }
   if (
     bundle.id !== "codex-marketplace"
     || bundle.target !== "codex"
@@ -126,6 +129,48 @@ async function buildPluginBundle({ root, out, project, bundle }) {
   }
 }
 
+async function buildClaudeMarketplaceBundle({ root, out, project, bundle }) {
+  if (
+    bundle.target !== "claude-code"
+    || bundle.packageDir !== "packages/claude-code"
+    || bundle.marketplace.name !== project.name
+    || bundle.marketplace.plugins?.length !== 1
+    || bundle.marketplace.plugins[0].name !== project.name
+    || bundle.marketplace.plugins[0].source !== `./plugins/${project.name}`
+  ) {
+    throw new Error("invalid Claude marketplace bundle configuration");
+  }
+  const packageRoot = join(root, bundle.packageDir);
+  const pluginManifest = JSON.parse(await readFile(join(packageRoot, ".claude-plugin", "plugin.json"), "utf8"));
+  if (pluginManifest.name !== project.name || pluginManifest.version !== project.version) {
+    throw new Error("Claude plugin manifest name or version drift");
+  }
+  const staging = await mkdtemp(join(tmpdir(), "oh-my-stack-claude-marketplace-"));
+  try {
+    await mkdir(join(staging, ".claude-plugin"), { recursive: true });
+    await cp(packageRoot, join(staging, "plugins", project.name), { recursive: true });
+    await writeFile(
+      join(staging, ".claude-plugin", "marketplace.json"),
+      `${JSON.stringify(bundle.marketplace, null, 2)}\n`,
+    );
+    const file = `${project.name}-claude-plugin-${project.version}.tar.gz`;
+    const archive = await createArchive(staging, bundle.archiveRoot);
+    const files = await packageInventory(staging);
+    await writeFile(join(out, file), archive);
+    return {
+      id: bundle.id,
+      target: bundle.target,
+      file,
+      archiveRoot: bundle.archiveRoot,
+      ...archiveMetadata(archive, files),
+      marketplace: bundle.marketplace,
+      pluginPath: `plugins/${project.name}`,
+    };
+  } finally {
+    await rm(staging, { recursive: true, force: true });
+  }
+}
+
 export async function buildRelease({ root = repoRoot, out, tag = null }) {
   const project = JSON.parse(await readFile(join(root, "src/core/project.json"), "utf8"));
   const config = JSON.parse(await readFile(join(root, "src/packaging/release.json"), "utf8"));
@@ -134,8 +179,8 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
   if (JSON.stringify(ids) !== JSON.stringify(["omp", "codex", "claude-code"])) {
     throw new Error("release configuration must contain omp, codex, and claude-code in order");
   }
-  if (config.pluginBundles?.length !== 1) {
-    throw new Error("release configuration must contain one Codex marketplace bundle");
+  if (JSON.stringify(config.pluginBundles?.map((bundle) => bundle.id)) !== JSON.stringify(["codex-marketplace", "claude-marketplace"])) {
+    throw new Error("release configuration must contain Codex and Claude marketplace bundles in order");
   }
   const source = await releaseSource(root, project.version, tag);
   await mkdir(out, { recursive: true });
@@ -222,7 +267,7 @@ async function main() {
     await mkdir(dirname(options.out), { recursive: true });
     await import("node:fs/promises").then(({ rename }) => rename(temporary, options.out));
     console.log(
-      `Built ${manifest.artifacts.length} runtime artifacts and ${manifest.pluginBundles.length} plugin bundle in ${relative(repoRoot, options.out)}.`,
+      `Built ${manifest.artifacts.length} runtime artifacts and ${manifest.pluginBundles.length} plugin bundles in ${relative(repoRoot, options.out)}.`,
     );
   } catch (error) {
     await rm(temporary, { recursive: true, force: true });

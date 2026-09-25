@@ -10,8 +10,11 @@
     "archiveRoot": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "pluginBundles": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 2,
+      "maxItems": 2,
       "items": {
+        "oneOf": [
+        {
         "type": "object",
         "additionalProperties": false,
         "required": ["id", "target", "packageDir", "archiveRoot", "marketplace"],
@@ -64,6 +67,49 @@
             }
           }
         }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "target", "packageDir", "archiveRoot", "marketplace"],
+          "properties": {
+            "id": { "const": "claude-marketplace" },
+            "target": { "const": "claude-code" },
+            "packageDir": { "const": "packages/claude-code" },
+            "archiveRoot": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+            "marketplace": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "description", "owner", "plugins"],
+              "properties": {
+                "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+                "description": { "type": "string", "minLength": 1 },
+                "owner": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["name"],
+                  "properties": { "name": { "type": "string", "minLength": 1 } }
+                },
+                "plugins": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["name", "source", "description"],
+                    "properties": {
+                      "name": { "const": "oh-my-stack" },
+                      "source": { "const": "./plugins/oh-my-stack" },
+                      "description": { "type": "string", "minLength": 1 }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        ]
       }
     },
     "targets": {

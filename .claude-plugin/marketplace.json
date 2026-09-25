@@ -1,0 +1,14 @@
+{
+  "name": "oh-my-stack",
+  "description": "Oh My Stack workflows for Claude Code",
+  "owner": {
+    "name": "Oh My Stack contributors"
+  },
+  "plugins": [
+    {
+      "name": "oh-my-stack",
+      "source": "./packages/claude-code",
+      "description": "Portable, verifiable engineering workflows for Claude Code."
+    }
+  ]
+}

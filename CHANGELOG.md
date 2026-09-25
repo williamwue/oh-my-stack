@@ -6,6 +6,17 @@ established.
 
 ## Unreleased
 
+## 0.2.0-beta.4 - pending
+
+- Added native Claude Code marketplace metadata in the repository and a
+  deterministic release bundle for persistent plugin installation.
+- Validated Claude marketplace registration, user-scope installation,
+  same-version update, and removal in an isolated Claude configuration.
+- Added Sonnet/Opus Claude Code model setup, native route and ordered panel
+  checks, and effective-effort audit from the local candidate. A temporary
+  project panel passed; authenticated user-scope setup and complete workflows
+  remain unverified.
+
 ## 0.2.0-beta.2 - 2026-09-25
 
 - Added complete, deterministic setup receipts for Codex and OMP, including

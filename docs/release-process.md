@@ -13,6 +13,11 @@ and directly invocable. Codex descriptions are concise; full instructions and
 resources load on demand. Catalog categories distinguish 51 workflows and
 23 principles without moving either group outside the discovery directory.
 
+The Claude Code marketplace bundle is a fifth archive rooted at
+`oh-my-stack-claude-marketplace/`. It contains the generated Claude plugin at
+`plugins/oh-my-stack/` and `.claude-plugin/marketplace.json`. The repository
+root also has a Claude marketplace pointing at `packages/claude-code/`.
+
 ## Local release candidate
 
 ```bash
@@ -184,6 +189,37 @@ These commands update Codex's plugin configuration and cache. The release
 builder itself only creates the dormant marketplace bundle and never performs
 registration or installation.
 
+## Install the Claude Code plugin
+
+From a published repository, register its native marketplace and install at
+user scope:
+
+```bash
+claude plugin marketplace add williamwue/oh-my-stack
+claude plugin install oh-my-stack@oh-my-stack --scope user
+claude plugin list --json
+```
+
+Alternatively, extract the checksummed
+`oh-my-stack-claude-plugin-<version>.tar.gz` into a dedicated directory and
+register that directory with `claude plugin marketplace add`. Start a fresh
+Claude Code session and invoke `/oh-my-stack:prove-it-works`. `--plugin-dir`
+remains a session-only development path, not a persistent install. Update or
+remove the native plugin with:
+
+```bash
+claude plugin marketplace update oh-my-stack
+claude plugin update oh-my-stack@oh-my-stack
+claude plugin uninstall oh-my-stack@oh-my-stack --scope user
+claude plugin marketplace remove oh-my-stack
+```
+
+The native manager may keep cached plugin data after removal; these commands
+do not remove Oh My Stack model setup files. An isolated `CLAUDE_CONFIG_DIR`
+native install/list/same-version update/uninstall test verifies manager
+lifecycle without changing a personal Claude profile. Authenticated user-scope
+setup, live workers, and a future-version update remain separate acceptance.
+
 ## Uninstall
 
 ```bash
@@ -205,8 +241,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-beta.3
-node tools/build-release.mjs --tag v0.2.0-beta.3
+node tools/build-release.mjs --check --tag v0.2.0-beta.4
+node tools/build-release.mjs --tag v0.2.0-beta.4
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

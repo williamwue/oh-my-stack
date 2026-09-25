@@ -26,6 +26,24 @@
           "category": "Productivity"
         }
       }
+    },
+    {
+      "id": "claude-marketplace",
+      "target": "claude-code",
+      "packageDir": "packages/claude-code",
+      "archiveRoot": "oh-my-stack-claude-marketplace",
+      "marketplace": {
+        "name": "oh-my-stack",
+        "description": "Oh My Stack workflows for Claude Code",
+        "owner": { "name": "Oh My Stack contributors" },
+        "plugins": [
+          {
+            "name": "oh-my-stack",
+            "source": "./plugins/oh-my-stack",
+            "description": "Portable, verifiable engineering workflows for Claude Code."
+          }
+        ]
+      }
     }
   ],
   "targets": [

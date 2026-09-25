@@ -7,6 +7,13 @@ historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
+The user reported completing the Claude Code manual check on 2026-09-25.
+This closes the requested human check, but no transcript, exact selected
+entry, or host version was supplied for independent reproduction. The
+unpublished beta.4 candidate adds a native Claude marketplace. Its isolated
+plugin-manager lifecycle passed on the local CLI; this is not authenticated
+user-level setup or complete workflow acceptance.
+
 ## Completed
 
 - All 25 originally missing upstream entries are implemented: 16 main entries
@@ -167,7 +174,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | The unpublished local candidate uses observed Sonnet/Opus, excluding Haiku from the chosen mapping. One project-local `how.explorer` child used Sonnet. A later read-only `architect.runners` panel launched three ordered native children at Opus/Sonnet/Opus; parent/child records and a project-local hook observed each model and effective `high` effort. Isolated `CLAUDE_CONFIG_DIR` user-scope configuration/audit passes offline; authenticated user-level install, other panels, full workflows, and release acceptance remain open |
+| P1 | Claude Code model setup and route acceptance | The unpublished local candidate uses observed Sonnet/Opus, excluding Haiku from the chosen mapping. One project-local `how.explorer` child used Sonnet. A later read-only `architect.runners` panel launched three ordered native children at Opus/Sonnet/Opus; parent/child records and a project-local hook observed each model and effective `high` effort. Isolated `CLAUDE_CONFIG_DIR` user-scope configuration/audit and native plugin install/list/same-version update/uninstall passed; authenticated user-level setup, future-version update, other panels, and full workflows remain open |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries

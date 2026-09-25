@@ -44,11 +44,50 @@ test("release archives and manifest are byte-reproducible", async () => {
   assert.deepEqual(snapshot.map((entry) => entry.name), [
     "SHA256SUMS",
     `oh-my-stack-claude-code-${version}.tar.gz`,
+    `oh-my-stack-claude-plugin-${version}.tar.gz`,
     `oh-my-stack-codex-${version}.tar.gz`,
     `oh-my-stack-codex-plugin-${version}.tar.gz`,
     `oh-my-stack-omp-${version}.tar.gz`,
     "release-manifest.json",
   ]);
+});
+
+test("Claude plugin bundle exposes the generated package through a native marketplace", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-claude-bundle-"));
+  try {
+    const output = join(root, "dist");
+    const extracted = join(root, "marketplace");
+    const manifest = await buildRelease({ root: repoRoot, out: output });
+    const bundle = manifest.pluginBundles.find((item) => item.id === "claude-marketplace");
+    const artifact = manifest.artifacts.find((item) => item.target === "claude-code");
+    assert.equal(bundle.target, "claude-code");
+    assert.deepEqual(bundle.marketplace.plugins.map((item) => [item.name, item.source]), [
+      ["oh-my-stack", "./plugins/oh-my-stack"],
+    ]);
+    const archive = await readFile(join(output, bundle.file));
+    assert.equal(sha256(archive), bundle.sha256);
+    await extractArchive(archive, bundle.archiveRoot, extracted);
+    assert.deepEqual(await packageInventory(extracted), bundle.files);
+    assert.deepEqual(
+      JSON.parse(await readFile(join(extracted, ".claude-plugin", "marketplace.json"), "utf8")),
+      bundle.marketplace,
+    );
+    assert.deepEqual(await packageInventory(join(extracted, "plugins", "oh-my-stack")), artifact.files);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("repository Claude marketplace points at the generated native plugin", async () => {
+  const catalog = JSON.parse(await readFile(join(repoRoot, ".claude-plugin", "marketplace.json"), "utf8"));
+  const project = JSON.parse(await readFile(join(repoRoot, "src", "core", "project.json"), "utf8"));
+  const plugin = JSON.parse(await readFile(join(repoRoot, "packages", "claude-code", ".claude-plugin", "plugin.json"), "utf8"));
+  assert.equal(catalog.name, project.name);
+  assert.deepEqual(catalog.plugins.map((item) => [item.name, item.source]), [
+    [project.name, "./packages/claude-code"],
+  ]);
+  assert.equal(plugin.name, project.name);
+  assert.equal(plugin.version, project.version);
 });
 
 test("Codex plugin bundle exposes the generated package through one local marketplace", async () => {

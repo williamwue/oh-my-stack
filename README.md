@@ -20,11 +20,16 @@ native subagent run. A later unpublished candidate passed a project-local
 two-model setup and one ordered read-only panel; user-level installation and
 broader workflows remain unverified.
 
+The next candidate adds a native Claude Code marketplace for persistent
+installation. Its install/list/same-version update/uninstall lifecycle passed
+in an isolated Claude configuration directory; authenticated user-level setup
+and full workflow behavior remain outside that result.
+
 | Target | Package | Current confidence |
 | --- | --- | --- |
 | Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
 | OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
-| Claude Code | Native plugin package | Preview; unpublished two-model route/panel acceptance, user install pending |
+| Claude Code | Native plugin and marketplace candidate | Preview; isolated persistent-install lifecycle and bounded two-model panel acceptance |
 
 This is a Beta project. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
@@ -90,6 +95,19 @@ codex plugin marketplace remove oh-my-stack
 ```
 
 ### OMP and Claude Code previews
+
+After the next candidate is published, Claude Code can register this
+repository's marketplace and persist the plugin at user scope:
+
+```bash
+claude plugin marketplace add williamwue/oh-my-stack
+claude plugin install oh-my-stack@oh-my-stack --scope user
+claude plugin list --json
+```
+
+See the [release process](docs/release-process.md#install-the-claude-code-plugin)
+for update and removal. Installing the plugin does not apply a model mapping;
+setup still requires explicit model inventory and acceptance.
 
 The release builder also creates OMP and Claude Code archives. Their package
 trees and owned-directory lifecycle are validated. For OMP, the beta release
@@ -311,7 +329,7 @@ npm run check
 local links, deterministic release output, the executable inventory, and the
 test suite without network access.
 
-Build the three runtime archives plus the Codex plugin marketplace bundle and
+Build the three runtime archives plus the Codex and Claude marketplace bundles and
 verify their checksums with:
 
 ```bash
