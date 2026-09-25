@@ -10,8 +10,8 @@ See the [current project status and remaining work](docs/project-status.md)
 for completed work, next steps, and user-deferred acceptance.
 
 Oh My Stack is available as a public
-[beta.2 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.2)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.2.md).
+[beta.3 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.3)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.3.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
@@ -52,7 +52,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-beta.2.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-beta.3.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -75,7 +75,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [beta.2 release notes](docs/releases/0.2.0-beta.2.md) for the
+See the [beta.3 release notes](docs/releases/0.2.0-beta.3.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -303,7 +303,7 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-beta.2 release notes](docs/releases/0.2.0-beta.2.md). Claude Code is
+[0.2.0-beta.3 release notes](docs/releases/0.2.0-beta.3.md). Claude Code is
 packaged and lifecycle-tested offline, while its runtime discovery and
 end-to-end status remain explicitly deferred.
 

@@ -1,9 +1,9 @@
 # Project status
 
 Updated: 2026-09-25. Published baseline:
-[v0.2.0-beta.2](releases/0.2.0-beta.2.md).
-The [beta.3 local candidate](releases/0.2.0-beta.3-candidate.md) is being
-validated; it has not been tagged, pushed, or published.
+[v0.2.0-beta.3](releases/0.2.0-beta.3.md).
+The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
+historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
@@ -158,13 +158,15 @@ claim. These runs preceded the user-profile plugin upgrade. The separate
 [beta.3 local candidate acceptance](releases/0.2.0-beta.3-candidate.md) now
 verifies fresh installed-plugin `how.explorer` runs on both OMP and Codex.
 Full `npm run check` passed 112 tests after the local OMP lifecycle adapter
-update. The beta.3 source commit is local and has not been tagged, pushed, or
-published.
+update. The user also confirmed beta.3 Desktop Skill selection in a new task;
+this is manual acceptance, not an agent-controlled UI trace. Beta.3 then
+passed the clean tagged gate with 112 tests and five checksums; GitHub CI run
+`36121456525` passed. Its six release assets were downloaded and checked
+against `SHA256SUMS` after publication.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Public beta.3 release gate | Review the local candidate evidence, run the clean tagged gate and CI, then explicitly decide whether to publish; local plugin installation alone is not publication |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
