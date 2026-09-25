@@ -147,11 +147,18 @@ beta.1 plugins; they do not certify plugin-native beta.2 loading. Codex active
 cancellation and cross-host checkpoint pickup passed in the same narrow test.
 OMP 18.3.0 cancel-and-replace also passed through the current `proc://` API;
 the initial `hub`-based probe was obsolete and did not test that path.
-Full `npm run check` passed 111 tests before the tagged release gate.
+The next bounded runs passed OMP eight-second deadline cancellation and one
+native isolated concurrent-writer integration, and Codex controlled stale
+replay with a delivered but rejected old-generation payload. An OMP process
+exit aborted its still-active child; a fresh process could inspect the trail
+but not reattach the job. This is a host boundary, not a passing recovery
+claim. The tested packages were not installed as beta.2 in the user's normal
+profiles. Full `npm run check` passed 112 tests after the local OMP lifecycle
+adapter update; these two local commits are not yet pushed or released.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Complete collaboration lifecycle | Test real timeout and delayed-result handling, active-worker recovery after coordinator restart, and isolated concurrent writers; then repeat model-facing acceptance through normally installed beta.2 plugins |
+| P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Repeat plugin-native model-facing acceptance after a deliberate beta.2-or-newer installation |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
