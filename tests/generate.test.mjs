@@ -281,18 +281,18 @@ test("live profiles cite surface-specific evidence", async () => {
   assert.equal(codexIde.capabilities["workspace.isolate"].status, "unknown");
   assert.equal(codexIde.capabilities["workspace.write"].status, "unknown");
   const claude = model.profiles.get("claude-code-default");
-  assert.equal(claude.capabilities["skills.discover"].status, "unknown");
+  assert.equal(claude.capabilities["skills.discover"].status, "native");
   assert.equal(claude.capabilities["agents.cancel"].status, "unknown");
-  assert.equal(claude.capabilities["agents.custom_roles"].status, "unknown");
+  assert.equal(claude.capabilities["agents.custom_roles"].status, "native");
   assert.equal(claude.capabilities["agents.model_override"].status, "unknown");
   assert.equal(claude.capabilities["agents.reasoning_override"].status, "unknown");
-  assert.equal(claude.capabilities["agents.spawn"].status, "unknown");
+  assert.equal(claude.capabilities["agents.spawn"].status, "native");
   assert.equal(claude.capabilities["agents.follow_up"].status, "unknown");
-  assert.equal(claude.capabilities["agents.read_transcript"].status, "unknown");
+  assert.equal(claude.capabilities["agents.read_transcript"].status, "native");
   assert.equal(claude.capabilities["agents.spawn_parallel"].status, "unknown");
   assert.equal(claude.capabilities["workspace.isolate"].status, "unknown");
   assert.equal(claude.capabilities["workspace.write"].status, "unknown");
-  assert.equal(claude.verification.status, "pending");
+  assert.equal(claude.verification.status, "active");
 });
 
 test("portable core rejects runtime bindings", () => {

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.282-macos-native-plugin-smoke",
+  "fixture": "published-archive-skill-and-one-read-only-agent",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-25",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0", "D2", "D3"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.282",
+    "platform": "macos",
+    "configuration": "Authenticated account; published v0.2.0-beta.3 archive loaded for each session through --plugin-dir, without changing plugin settings.",
+    "permissionProfile": "plan mode; non-interactive permission prompts denied"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.spawn",
+    "agents.wait",
+    "commands.run",
+    "skills.discover",
+    "skills.invoke.explicit",
+    "workspace.inspect"
+  ],
+  "assertions": [
+    { "id": "archive-plugin-validates", "status": "pass", "evidence": "claude plugin validate passed on the extracted published beta.3 archive." },
+    { "id": "skill-loads-explicitly", "status": "pass", "evidence": "Session ac5351e3-222b-4f6a-81d8-cd16793e078e loaded /oh-my-stack:prove-it-works from the extracted archive and inspected the repository without edits." },
+    { "id": "native-agent-runs", "status": "pass", "evidence": "Session 7895af48-f81f-4d00-b0c7-8f3ae5f7c395 recorded one spawned and completed oh-my-stack:explorer child; the root independently verified its package.json answer." },
+    { "id": "child-transcript-observed", "status": "pass", "evidence": "The persisted child JSONL identified agentType oh-my-stack:explorer and assistant model claude-opus-5-5." },
+    { "id": "no-project-write", "status": "pass", "evidence": "Both model sessions were read-only; repository Git status remained clean." }
+  ],
+  "limitations": [
+    "D1 native Claude Code plugin installation, update, and uninstall were not tested, so cumulative delivery remains D0 despite observed D2 and D3 checks.",
+    "The child inherited its model; no Oh My Stack route model or effort was applied or verified.",
+    "The /model list includes Fable, but /model fable required one-time interactive consent on this account. Menu presence is not entitlement evidence.",
+    "No ordered panel, parallel worker, write workflow, or external-system workflow was tested."
+  ]
+}

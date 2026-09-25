@@ -141,7 +141,7 @@ This is a documentation-derived research baseline, not live conformance evidence
 | Codex desktop | Documented | Documented | Documented | Standalone local cron scheduled wake passes on 26.915.31945; same-thread heartbeat failed to dispatch; other families pending |
 | Codex CLI | Observed, including relative resources | Documented plugin browser | Delegation, parallelism, coordinated panels, follow-up, active cancellation, child-to-parent peer messaging, controlled stale replay, external persisted-transcript reads, a managed writer worktree, two distinct resolved worker models through direct per-worker routing, and experimental interactive input observed; generated custom role cannot be selected | D3 passes on 0.155.1, with passing evidence across every W3 semantic family; custom roles remain unsupported on the probed spawn surface |
 | Codex IDE | Documented | Documented unavailable | Documented | Pending |
-| Claude Code | Documented | Documented | Documented | Deferred: no local account or authenticated runtime available |
+| Claude Code CLI | One published-archive Skill invocation observed | Native plugin-scoped agent observed | One read-only child completed; route model/effort, panels, and writes unverified | Authenticated 2.1.282 session-only plugin smoke; setup still fails closed pending verified inventory |
 
 Current Codex documentation describes project-scoped custom agents under
 `.codex/agents/` and optional model and reasoning fields. The current
@@ -352,8 +352,9 @@ generated paths. The fixture's deterministic first-eligible policy selected
 one model for all workload classes, so every role records
 `diversityEstablished: false`. These observations prove the package-local
 configuration workflow, not user-home installation or model quality. Claude
-Code collection still fails closed and remains deferred pending an
-authenticated runtime.
+Code collection still fails closed pending an account-aware model and effort
+inventory; the later authenticated, bounded Skill and agent observations are
+recorded in [Claude Code acceptance](claude-code-acceptance-2026-09-25.md).
 
 The public-Skill matrix makes the product boundary machine-readable instead of
 inferring it from naming or invocation policy. The catalog now admits 49 public

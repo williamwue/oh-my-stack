@@ -167,6 +167,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
+| P1 | Claude Code model setup and route acceptance | An authenticated beta.3 Skill and one native custom agent now pass on Claude Code 2.1.282. Build a verified account-aware model/effort inventory before enabling setup, then test configured child identity and ordered panels |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
@@ -177,7 +178,9 @@ against `SHA256SUMS` after publication.
   fixtures do not certify every real-project scenario.
 - Authenticated external systems and long runs still need named test targets
   and authority: PRs, remote CI, scheduled wake, Benny and webhook delivery.
-- Claude Code authenticated runtime tests until the user has an account.
+- Claude Code plugin discovery and one read-only native child now have
+  [bounded acceptance](claude-code-acceptance-2026-09-25.md). Setup, route
+  model/effort activation, panels, and real-project workflows remain open.
 
 The user's personal OMP `modelRoles` configuration is separate from the
 product. No personal Cursor/OpenAI subscription choices are installed as

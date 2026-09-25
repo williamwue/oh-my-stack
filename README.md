@@ -14,15 +14,15 @@ Oh My Stack is available as a public
 with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.3.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
-isolated install, reinstall, and uninstall lifecycle. Claude Code packages are
-built and validated offline, but live Claude Code verification is deferred
-until an authenticated runtime is available.
+isolated install, reinstall, and uninstall lifecycle. On Claude Code 2.1.282,
+the published archive passed session-only Skill loading and one read-only
+native subagent run; model setup and broader workflows remain unverified.
 
 | Target | Package | Current confidence |
 | --- | --- | --- |
 | Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
 | OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
-| Claude Code | Native plugin package | Preview; live discovery and end-to-end use are not yet verified |
+| Claude Code | Native plugin package | Preview; one explicit Skill and native child verified, model routing pending |
 
 This is a Beta project. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
@@ -94,8 +94,21 @@ trees and owned-directory lifecycle are validated. For OMP, the beta release
 uses a read-only package preflight and a real installation in a disposable
 profile before any user-profile installation. Follow the exact commands and
 cleanup boundary in the [release process](docs/release-process.md#omp-preflight-and-isolated-native-acceptance).
-Do not use `omp plugin link --dry-run` for preview. Claude Code live
-verification is explicitly deferred.
+Do not use `omp plugin link --dry-run` for preview. Claude Code's
+[first native acceptance](docs/claude-code-acceptance-2026-09-25.md) used the
+published archive in a session-only plugin directory. After extracting that
+archive into a dedicated directory, run:
+
+```bash
+claude plugin validate /absolute/path/to/oh-my-stack
+claude --plugin-dir /absolute/path/to/oh-my-stack
+```
+
+Then invoke `/oh-my-stack:prove-it-works` in the fresh session. This does not
+install the plugin globally. Do not run Claude Code `setup-oh-my-stack` to
+apply model choices yet: its live model-inventory collector intentionally
+stops before writes until available models and efforts can be verified for
+the account.
 
 ## Detailed verification status
 
@@ -131,8 +144,8 @@ user-profile install. This does not repair OMP's dry-run. See the
 [beta.1 release notes](docs/releases/0.2.0-beta.1.md).
 Codex Desktop has a
 focused scheduled-wake probe; its other capability families and Codex IDE
-remain unprobed. Claude Code verification is explicitly deferred until a local
-account and authenticated runtime are available.
+remain unprobed. Claude Code now has bounded native Skill and child evidence,
+but model setup and broader workflows remain unverified.
 
 The resource fixture proves that OMP and Codex CLI can load packaged
 `references/` and `assets/`, then execute a packaged helper that resolves its
@@ -304,8 +317,8 @@ The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
 [0.2.0-beta.3 release notes](docs/releases/0.2.0-beta.3.md). Claude Code is
-packaged and lifecycle-tested offline, while its runtime discovery and
-end-to-end status remain explicitly deferred.
+packaged and lifecycle-tested offline, with one later bounded native Skill
+and child run; configured routes and end-to-end use remain unverified.
 
 The locally built Codex bundle is `dist/oh-my-stack-codex-plugin-<version>.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:

@@ -5,15 +5,15 @@
   "target": {
     "runtime": "claude-code",
     "surface": "cli",
-    "runtimeVersion": null,
-    "platform": null,
+    "runtimeVersion": "2.1.282",
+    "platform": "macos",
     "configurationFingerprint": null,
-    "permissionProfile": null,
+    "permissionProfile": "plan; permission prompts denied in non-interactive smoke",
     "installedProviders": []
   },
   "verification": {
-    "status": "pending",
-    "reason": "Deferred by the user until a local Claude Code account and authenticated runtime are available."
+    "status": "active",
+    "reason": "Authenticated, bounded CLI plugin loading and one native custom-agent run observed; model routing, setup, and broader workflow conformance remain unverified."
   },
   "capabilities": {
     "app_control.ui": { "status": "unknown", "provider": null, "evidence": null },
@@ -23,18 +23,18 @@
     "issue_tracker.lifecycle": { "status": "unknown", "provider": null, "evidence": null },
     "media.capture": { "status": "unknown", "provider": null, "evidence": null },
     "agents.cancel": { "status": "unknown", "provider": null, "evidence": null },
-    "agents.custom_roles": { "status": "unknown", "provider": null, "evidence": null },
+    "agents.custom_roles": { "status": "native", "provider": "plugin-scoped agents", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
     "agents.follow_up": { "status": "unknown", "provider": null, "evidence": null },
     "agents.model_override": { "status": "unknown", "provider": null, "evidence": null },
-    "agents.read_result": { "status": "unknown", "provider": null, "evidence": null },
-    "agents.read_transcript": { "status": "unknown", "provider": null, "evidence": null },
+    "agents.read_result": { "status": "native", "provider": "foreground Agent result", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
+    "agents.read_transcript": { "status": "native", "provider": "local parent and child JSONL records", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
     "agents.reasoning_override": { "status": "unknown", "provider": null, "evidence": null },
-    "agents.spawn": { "status": "unknown", "provider": null, "evidence": null },
+    "agents.spawn": { "status": "native", "provider": "Agent tool with plugin-scoped type", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
     "agents.spawn_parallel": { "status": "unknown", "provider": null, "evidence": null },
-    "agents.wait": { "status": "unknown", "provider": null, "evidence": null },
+    "agents.wait": { "status": "native", "provider": "foreground Agent completion", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
 "automation.recurring": { "status": "unknown", "provider": null, "evidence": null },
     "automation.webhook": { "status": "unknown", "provider": null, "evidence": null },
-    "commands.run": { "status": "unknown", "provider": null, "evidence": null },
+    "commands.run": { "status": "native", "provider": "read-only Bash calls in plan mode", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
     "coordination.durable_state": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.peer_messages": { "status": "unknown", "provider": null, "evidence": null },
     "coordination.scheduled_wake": { "status": "unknown", "provider": null, "evidence": null },
@@ -45,9 +45,9 @@
     "scm.pull_requests": { "status": "unknown", "provider": null, "evidence": null },
     "scm.review_threads": { "status": "unknown", "provider": null, "evidence": null },
     "scripts.execute": { "status": "unknown", "provider": null, "evidence": null },
-    "skills.discover": { "status": "unknown", "provider": null, "evidence": null },
-    "skills.invoke.explicit": { "status": "unknown", "provider": null, "evidence": null },
-    "workspace.inspect": { "status": "unknown", "provider": null, "evidence": null },
+    "skills.discover": { "status": "native", "provider": "session-only --plugin-dir", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
+    "skills.invoke.explicit": { "status": "native", "provider": "/oh-my-stack:prove-it-works", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
+    "workspace.inspect": { "status": "native", "provider": "Read and read-only Bash calls", "evidence": "evals/evidence/claude-code-2.1.282/native-plugin-smoke.json" },
     "workspace.isolate": { "status": "unknown", "provider": null, "evidence": null },
     "workspace.write": { "status": "unknown", "provider": null, "evidence": null }
   }
