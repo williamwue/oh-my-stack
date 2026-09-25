@@ -95,6 +95,46 @@ test("user setup is inherited in two projects and a project manifest overrides o
   }
 });
 
+test("Claude Code uses native user and project agent scopes without claiming activation", async () => {
+  const root = await mkdtemp(join(tmpdir(), "ohmystack-claude-scope-"));
+  const project = join(root, "project");
+  await mkdir(project);
+  const inventoryPath = join(root, "claude-models.json");
+  await writeFile(inventoryPath, `${JSON.stringify({
+    schemaVersion: 1, runtime: "claude-code", observedAt: "2026-09-25T00:00:00Z", source: "fixture model probes",
+    models: [
+      { id: "claude-haiku-4-5", reasoningEfforts: ["none"] },
+      { id: "claude-sonnet-5", reasoningEfforts: ["low", "medium", "high"] },
+      { id: "claude-opus-5-5", reasoningEfforts: ["low", "medium", "high"] },
+    ],
+  })}\n`);
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const selections = { fast: "claude-haiku-4-5@none", balanced: "claude-sonnet-5@medium", deep: "claude-opus-5-5@high" };
+  const options = { packageRoot, inventoryPath, selections, routeSelections: { "how.explorer": "claude-haiku-4-5@none" }, apply: true };
+  await configure({ ...options, userRoot: root });
+  const userPath = join(root, ".claude", "oh-my-stack.resolution.json");
+  assert.match(await readFile(join(root, ".claude", "agents", "ohmystack-role-explorer.md"), "utf8"), /effort: "medium"/);
+  assert.doesNotMatch(await readFile(join(root, ".claude", "agents", "ohmystack-how-explorer.md"), "utf8"), /effort:/);
+  assert.equal((await resolveActiveResolution({ runtime: "claude-code", cwd: project, userRoot: root })).scope, "user");
+  const audit = await inspectSetup({ resolutionPath: userPath, cwd: project, userRoot: root });
+  assert.equal(audit.configuration, "verified");
+  assert.equal(audit.activation, "unverified");
+  assert.equal(audit.effectiveConfiguration.matchesAuditedResolution, true);
+  await configure({ ...options, projectRoot: project });
+  const active = await resolveActiveResolution({ runtime: "claude-code", cwd: project, userRoot: root });
+  assert.equal(active.scope, "project");
+  const packaged = await execFileAsync(process.execPath, [join(packageRoot, "scripts", "model-resolution.mjs"),
+    "--runtime", "claude-code", "--cwd", project, "--user-root", root]);
+  assert.equal(JSON.parse(packaged.stdout).path, active.path);
+  const receipt = await execFileAsync(process.execPath, [join(packageRoot, "scripts", "setup-acceptance.mjs"),
+    "--resolution", active.path, "--cwd", project]);
+  assert.equal(JSON.parse(receipt.stdout).activation, "unverified");
+  assert.equal((await inspectSetup({ resolutionPath: userPath, cwd: project, userRoot: root })).effectiveConfiguration.matchesAuditedResolution, false);
+  await assert.rejects(inspectSetup({ resolutionPath: active.path, routeName: "how.explorer",
+    parentRecord: "parent", childRecord: "child", requestPath: "request" }),
+  /does not accept an explicit-spawn request/);
+});
+
 test("user setup preserves unrelated personal agents and refuses an owned-name collision", async () => {
   const root = await mkdtemp(join(tmpdir(), "ohmystack-user-collision-"));
   const inventoryPath = await inventory(root, "codex");

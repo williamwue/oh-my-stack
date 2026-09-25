@@ -166,6 +166,6 @@
   "adapter": {
     "format": "yaml",
     "modelField": "model",
-    "reasoningField": null
+    "reasoningField": "effort"
   }
 }

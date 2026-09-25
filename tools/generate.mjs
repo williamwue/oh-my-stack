@@ -533,6 +533,32 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
+  const claudeSetup = adapter.id === "claude-code" && skill.metadata.name === "setup-oh-my-stack"
+    ? [
+      "## Claude Code setup boundary",
+      "",
+      "There is no complete read-only account model catalog in this adapter.",
+      "The collector can make bounded live probes for `haiku`, `sonnet`, and",
+      "`opus` only, using `--claude-models haiku,sonnet,opus",
+      "--confirm-claude-probes`. Disclose usage and obtain approval first.",
+      "Never probe Fable or arbitrary IDs through this path; some requests can",
+      "incur separate usage credits without a terminal consent prompt.",
+      "The probe observes canonical model IDs. Its effort list comes from",
+      "reviewed Claude Code documentation, not a live capability API; account",
+      "or organization caps may lower effective effort.",
+      "",
+      "There is no static Claude pstack model preset. Choose three observed",
+      "workload IDs with `--fast`, `--balanced`, and `--deep`, plus desired",
+      "route and panel overrides. Preview the full table before `--apply`.",
+      "Setup defaults to `--user` (`~/.claude/`); `--project-root` writes a",
+      "complete project override and `--output` remains detached.",
+      "The setup auditor checks the manifest, hashes, effective scope, and",
+      "linked native child identity/model from parent and child records.",
+      "It cannot prove child effort from those transcripts. Treat model and",
+      "effort activation as separate claims until independently observed.",
+      "",
+    ].join("\n")
+    : "";
   const ompDelegation = adapter.id === "omp" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name) || skill.metadata.name === "poteto-mode")
     ? [
       "## OMP model routing",
@@ -564,7 +590,7 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, ompSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
+  const extension = [codexDelegation, codexSetup, ompSetup, claudeSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -698,7 +724,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   const resolutionAdapters = {
     omp: { format: "yaml", modelField: "model", reasoningField: "thinkingLevel" },
     codex: { format: "toml", modelField: "model", reasoningField: "model_reasoning_effort" },
-    "claude-code": { format: "yaml", modelField: "model", reasoningField: null },
+    "claude-code": { format: "yaml", modelField: "model", reasoningField: "effort" },
   };
   await writeJson(join(target, "config", "runtime-resolution.json"), {
     schemaVersion: 1,
@@ -722,7 +748,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   await mkdir(join(target, "scripts"), { recursive: true });
   await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
   await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
-  if (["omp", "codex"].includes(adapter.id)) {
+  if (["omp", "codex", "claude-code"].includes(adapter.id)) {
     await cp(join(model.root, "tools", "model-resolution.mjs"), join(target, "scripts", "model-resolution.mjs"));
     await cp(join(model.root, "tools", "setup-acceptance.mjs"), join(target, "scripts", "setup-acceptance.mjs"));
   }
@@ -802,7 +828,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
   assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
-  if (["omp", "codex"].includes(adapter.id)) {
+  if (["omp", "codex", "claude-code"].includes(adapter.id)) {
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
   }

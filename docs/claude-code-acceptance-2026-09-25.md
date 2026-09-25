@@ -32,4 +32,12 @@ inventory, native `model` and `effort` route definitions, and parent/child
 acceptance that checks the actual model and effort. Personal Claude settings
 and the project repository were not changed by these live probes.
 
+Subsequent unpublished local development added an opt-in bounded model probe,
+Claude-native user/project role output, and a setup file/scope auditor. The
+later temporary-project test observed Sonnet and Opus; requesting the Haiku
+alias instead yielded Sonnet, so the collector rejected that result. A native
+`ohmystack-how-explorer` child used its configured Sonnet model. Child effort
+was not observable in that record. This later code was not part of the
+published beta.3 acceptance.
+
 Machine-readable evidence: [native-plugin-smoke.json](../evals/evidence/claude-code-2.1.282/native-plugin-smoke.json).

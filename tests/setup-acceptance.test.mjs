@@ -139,6 +139,42 @@ test("OMP acceptance requires selected native agent and observed child model/eff
     /model\/thinking events are missing/);
 });
 
+test("Claude acceptance links native Agent call and child model but leaves effort unverified", async () => {
+  const root = await mkdtemp(join(tmpdir(), "ohmystack-claude-audit-"));
+  const projectRoot = join(root, "project");
+  await mkdir(projectRoot);
+  const inventoryPath = join(root, "inventory.json");
+  await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: "claude-code",
+    observedAt: "2026-09-25T00:00:00Z", source: "fixture probe",
+    models: [{ id: "claude-sonnet-5", reasoningEfforts: ["high"] }],
+  })}\n`);
+  await configure({ packageRoot: join(repoRoot, "packages", "claude-code"), inventoryPath, projectRoot,
+    selections: { fast: "claude-sonnet-5@high", balanced: "claude-sonnet-5@high", deep: "claude-sonnet-5@high" },
+    routeSelections: { "how.explorer": "claude-sonnet-5@high" }, apply: true });
+  const resolutionPath = join(projectRoot, ".claude", "oh-my-stack.resolution.json");
+  const parentRecord = join(root, "session.jsonl");
+  const childDirectory = join(root, "session", "subagents");
+  await mkdir(childDirectory, { recursive: true });
+  const childRecord = join(childDirectory, "agent-123.jsonl");
+  const agent = "ohmystack-how-explorer";
+  const call = { type: "tool_use", id: "toolu-1", name: "Agent", input: { subagent_type: agent } };
+  await writeFile(parentRecord, `${JSON.stringify({ message: { role: "assistant", content: [call] } })}\n`);
+  await writeFile(join(childDirectory, "agent-123.meta.json"), JSON.stringify({ agentType: agent, toolUseId: "toolu-1" }));
+  const child = [
+    { attachment: { type: "model", identity: { modelId: "claude-sonnet-5" } } },
+    { message: { role: "assistant", model: "claude-sonnet-5" } },
+  ];
+  await writeFile(childRecord, `${child.map((item) => JSON.stringify(item)).join("\n")}\n`);
+  const audit = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord });
+  assert.equal(audit.activation, "model-verified-effort-unverified");
+  assert.equal(audit.observed.model, "claude-sonnet-5");
+  assert.equal(audit.observed.reasoning, "unverified");
+  await writeFile(childRecord, `${child.map((item) => JSON.stringify(item.message
+    ? { message: { ...item.message, model: "claude-opus-5-5" } } : item)).join("\n")}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }),
+    /child model differs/);
+});
+
 test("Codex acceptance verifies explicit spawn without claiming native role activation", async () => {
   const { root, resolutionPath, packageRoot } = await fixture("codex");
   const request = await prepareDelegation({ bundleRoot: packageRoot, resolutionPath,

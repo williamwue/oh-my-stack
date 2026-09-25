@@ -85,7 +85,7 @@ test("setup resolves only observed models into every target-native role format",
     assert.match(reviewer, /observed-deep/);
     if (runtime === "codex") assert.match(reviewer, /model_reasoning_effort = "high"/);
     if (runtime === "omp") assert.match(reviewer, /thinkingLevel: "high"/);
-    if (runtime === "claude-code") assert.doesNotMatch(reviewer, /reasoning|thinkingLevel/);
+    if (runtime === "claude-code") assert.match(reviewer, /effort: "high"/);
   }
 });
 

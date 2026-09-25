@@ -19,10 +19,14 @@ function parseArguments(argv) {
   const result = {};
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
+    if (argument === "--confirm-claude-probes") {
+      result.confirmClaudeProbes = true;
+      continue;
+    }
     const value = argv[index + 1];
     assert(value && !value.startsWith("--"), `${argument}: value is required`);
     index += 1;
-    if (["--runtime", "--output", "--package", "--omp-bin", "--codex-bin"].includes(argument)) {
+    if (["--runtime", "--output", "--package", "--omp-bin", "--codex-bin", "--claude-bin", "--claude-models"].includes(argument)) {
       result[argument.slice(2).replace("-bin", "Bin")] = value;
     } else {
       throw new Error(`unknown argument ${argument}`);
@@ -72,19 +76,43 @@ export function normalizeCodexModels(models) {
   }));
 }
 
-function run(command, args) {
+const claudeEfforts = ["low", "medium", "high", "xhigh", "max"];
+
+export function normalizeClaudeProbe(alias, result) {
+  assert(["haiku", "sonnet", "opus"].includes(alias), `${alias}: only haiku, sonnet, and opus may be probed without a separate usage-credit policy`);
+  assert(result?.is_error === false && result?.subtype === "success", `${alias}: Claude model probe did not complete successfully`);
+  const models = Object.keys(result.modelUsage ?? {});
+  assert(models.length === 1, `${alias}: expected one observed model, found ${models.length}`);
+  const id = result.modelUsage[models[0]].canonicalModel ?? models[0];
+  assert(id.startsWith(`claude-${alias}-`), `${alias}: observed model ${id} is a different family or fallback`);
+  let reasoningEfforts;
+  if (/^claude-(?:opus-5-5|opus-5|sonnet-5|opus-4-8|opus-4-7)$/.test(id)) {
+    reasoningEfforts = claudeEfforts;
+  } else if (/^claude-(?:opus-4-6|sonnet-4-6)$/.test(id)) {
+    reasoningEfforts = ["low", "medium", "high", "max"];
+  } else if (alias === "haiku") {
+    reasoningEfforts = ["none"];
+  } else {
+    throw new Error(`${alias}: ${id} has no reviewed effort policy; stop before configuration`);
+  }
+  return { id, reasoningEfforts };
+}
+
+function run(command, args, timeoutMs = 60_000) {
   return new Promise((resolvePromise, reject) => {
     const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
+    const timeout = setTimeout(() => child.kill(), timeoutMs);
     child.stdout.setEncoding("utf8");
     child.stderr.setEncoding("utf8");
     child.stdout.on("data", (chunk) => { stdout += chunk; });
     child.stderr.on("data", (chunk) => { stderr += chunk; });
-    child.on("error", reject);
+    child.on("error", (error) => { clearTimeout(timeout); reject(error); });
     child.on("close", (code) => {
+      clearTimeout(timeout);
       if (code === 0) resolvePromise({ stdout, stderr });
-      else reject(new Error(`${command} ${args.join(" ")} exited ${code}: ${stderr.trim()}`));
+      else reject(new Error(`${command} ${args.join(" ")} exited ${code}${code === null ? " or timed out" : ""}: ${stderr.trim()}`));
     });
   });
 }
@@ -94,6 +122,27 @@ async function collectOmp(binary) {
   return {
     source: `${binary} models --json --no-extensions`,
     models: normalizeOmpModels(JSON.parse(stdout)),
+  };
+}
+
+async function collectClaude(binary, aliases, confirmed) {
+  assert(confirmed, "Claude model probes consume account usage; pass --confirm-claude-probes after reviewing the aliases");
+  assert(Array.isArray(aliases) && aliases.length > 0, "provide --claude-models haiku,sonnet,opus (or a reviewed subset)");
+  assert(new Set(aliases).size === aliases.length, "Claude model probe aliases must be unique");
+  for (const alias of aliases) {
+    assert(["haiku", "sonnet", "opus"].includes(alias), `${alias}: Fable and other models require a separate usage-credit policy`);
+  }
+  const models = [];
+  for (const alias of aliases) {
+    const { stdout } = await run(binary, ["-p", "Reply with exactly OK.", "--model", alias,
+      "--output-format", "json", "--max-turns", "1", "--permission-mode", "plan",
+      "--permission-prompts", "none", "--restricted"]);
+    const result = JSON.parse(stdout);
+    models.push(normalizeClaudeProbe(alias, result));
+  }
+  return {
+    source: `${binary} --model <${aliases.join(",")}> bounded live probes; effort support from https://code.claude.com/docs/en/model-config (account caps require runtime acceptance)`,
+    models: assertUniqueModels(models),
   };
 }
 
@@ -176,13 +225,13 @@ function collectCodex(binary) {
   });
 }
 
-export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", now = new Date() }) {
+export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", claudeBin = "claude",
+  claudeModels, confirmClaudeProbes = false, now = new Date() }) {
   let observed;
   if (runtime === "omp") observed = await collectOmp(ompBin);
   else if (runtime === "codex") observed = await collectCodex(codexBin);
-  else if (runtime === "claude-code") {
-    throw new Error("claude-code live model inventory is not verified; stop before writing configuration");
-  } else {
+  else if (runtime === "claude-code") observed = await collectClaude(claudeBin, claudeModels, confirmClaudeProbes);
+  else {
     throw new Error(`unsupported runtime ${runtime}`);
   }
   return {
@@ -207,6 +256,9 @@ async function main() {
     runtime,
     ompBin: arguments_.ompBin,
     codexBin: arguments_.codexBin,
+    claudeBin: arguments_.claudeBin,
+    claudeModels: arguments_["claude-models"]?.split(","),
+    confirmClaudeProbes: arguments_.confirmClaudeProbes,
   });
   const output = `${JSON.stringify(inventory, null, 2)}\n`;
   if (arguments_.output) {

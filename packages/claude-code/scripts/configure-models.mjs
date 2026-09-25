@@ -160,13 +160,13 @@ function configuredRole(text, adapter, selection, nativeName) {
     const renamed = nativeName ? text.replace(/^name = .+$/m, `name = ${JSON.stringify(nativeName)}`) : text;
     if (selection.inheritParent) return renamed;
     const fields = { [adapter.modelField]: selection.model };
-    if (adapter.reasoningField) fields[adapter.reasoningField] = selection.reasoning;
+    if (adapter.reasoningField && selection.reasoning !== "none") fields[adapter.reasoningField] = selection.reasoning;
     return insertTomlFields(renamed, fields);
   }
   const renamed = nativeName ? text.replace(/^name: .+$/m, `name: ${nativeName}`) : text;
   if (selection.inheritParent) return renamed;
   const fields = { [adapter.modelField]: selection.model };
-  if (adapter.reasoningField) fields[adapter.reasoningField] = selection.reasoning;
+  if (adapter.reasoningField && selection.reasoning !== "none") fields[adapter.reasoningField] = selection.reasoning;
   return insertYamlFields(renamed, fields);
 }
 
@@ -213,12 +213,12 @@ export async function configure({
     `unknown uniform reasoning ${uniformReasoning}`);
   const preset = presetName ? descriptor.presets?.[presetName] : null;
   assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
-  assert(!projectDirectory || ["codex", "omp"].includes(descriptor.target), "project role activation is supported only for Codex and OMP");
-  assert(!userDirectory || ["codex", "omp"].includes(descriptor.target), "user role activation is supported only for Codex and OMP");
+  assert(!projectDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "project role activation is unsupported for this target");
+  assert(!userDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "user role activation is unsupported for this target");
   const outputDirectory = projectDirectory
-    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : ".omp")
+    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? ".omp" : ".claude")
     : userDirectory
-      ? join(userDirectory, descriptor.target === "codex" ? ".codex" : join(".omp", "agent"))
+      ? join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : ".claude")
       : resolve(outputRoot);
   assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
   if (userDirectory && descriptor.target === "omp") await assertNotSymlink(join(userDirectory, ".omp"));
@@ -337,7 +337,7 @@ export async function configure({
       costLimit: false,
     },
     uniformReasoning: effectiveUniformReasoning,
-    ...(["omp", "codex"].includes(descriptor.target) && presetName ? { overrides } : {}),
+    ...(["omp", "codex", "claude-code"].includes(descriptor.target) && presetName ? { overrides } : {}),
     observedInventory: {
       observedAt: inventory.observedAt,
       source: inventory.source,

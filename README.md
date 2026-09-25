@@ -105,10 +105,14 @@ claude --plugin-dir /absolute/path/to/oh-my-stack
 ```
 
 Then invoke `/oh-my-stack:prove-it-works` in the fresh session. This does not
-install the plugin globally. Do not run Claude Code `setup-oh-my-stack` to
-apply model choices yet: its live model-inventory collector intentionally
-stops before writes until available models and efforts can be verified for
-the account.
+install the plugin globally. The published beta.3 Claude package does not yet
+support a verified setup. The current local development candidate adds
+opt-in, usage-consuming probes for Haiku/Sonnet/Opus and native agent model and
+effort output, but has not been published. In one temporary-project acceptance,
+native route selection and the Sonnet child model passed; effort remains
+unverified. Do not use a
+model-menu entry as proof of account entitlement, and do not probe Fable
+through print mode to infer it.
 
 ## Detailed verification status
 

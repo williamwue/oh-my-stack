@@ -167,7 +167,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | An authenticated beta.3 Skill and one native custom agent now pass on Claude Code 2.1.282. Build a verified account-aware model/effort inventory before enabling setup, then test configured child identity and ordered panels |
+| P1 | Claude Code model setup and route acceptance | The unpublished local candidate supports opt-in bounded model probes and native user/project agent definitions. In a temporary project, Sonnet and Opus probes passed, Haiku resolved to Sonnet and was rejected, and one `how.explorer` child used its configured Sonnet model. Effective effort, ordered panels, and release acceptance remain open |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries

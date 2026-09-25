@@ -6,6 +6,28 @@ disable-model-invocation: true
 
 # Setup Oh My Stack
 
+## Claude Code setup boundary
+
+There is no complete read-only account model catalog in this adapter.
+The collector can make bounded live probes for `haiku`, `sonnet`, and
+`opus` only, using `--claude-models haiku,sonnet,opus
+--confirm-claude-probes`. Disclose usage and obtain approval first.
+Never probe Fable or arbitrary IDs through this path; some requests can
+incur separate usage credits without a terminal consent prompt.
+The probe observes canonical model IDs. Its effort list comes from
+reviewed Claude Code documentation, not a live capability API; account
+or organization caps may lower effective effort.
+
+There is no static Claude pstack model preset. Choose three observed
+workload IDs with `--fast`, `--balanced`, and `--deep`, plus desired
+route and panel overrides. Preview the full table before `--apply`.
+Setup defaults to `--user` (`~/.claude/`); `--project-root` writes a
+complete project override and `--output` remains detached.
+The setup auditor checks the manifest, hashes, effective scope, and
+linked native child identity/model from parent and child records.
+It cannot prove child effort from those transcripts. Treat model and
+effort activation as separate claims until independently observed.
+
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.
 
@@ -18,17 +40,17 @@ generated target and normalizes its live response. Do not reuse remembered
 model names, examples from documentation, or an inventory from another runtime
 surface.
 
-The collector deliberately stops when the generated target has no verified
-inventory operation. If collection fails, report the exact missing observation.
-Do not replace the collector with a guessed model list.
+The collector deliberately stops when a target has no verified observation.
+If collection fails, report the exact missing observation; do not replace it
+with a guessed model list.
 
 The resulting JSON inventory contains:
 
 - `schemaVersion: 1`;
 - the target runtime identifier;
 - the observation timestamp and exact inventory source;
-- each returned model ID and the reasoning efforts that the runtime reports as
-  valid for it.
+- each observed model ID and its supported reasoning efforts, with the
+  provenance of effort support stated for the target.
 
 If the runtime cannot expose an inventory, stop before writing configuration.
 Return the missing observation instead of guessing a model identifier.
@@ -41,7 +63,9 @@ stop and report the capability gap; do not present a written mapping as active.
 ## 2. Preview a pstack-style mapping
 
 Run `scripts/configure-models.mjs` without `--apply`, with the observed inventory
-and the runtime's available pstack preset. Choose the target-supported user or
+and the runtime's available pstack preset, if any. Where there is no preset,
+choose `--fast`, `--balanced`, and `--deep` from observed IDs, then use route
+and panel overrides where appropriate. Choose the target-supported user or
 project scope; use `--output` for detached review. When an existing
 configuration is present, inspect its effective scope before previewing changes.
 The target-specific preset recommends separate choices for code, explanation,
@@ -57,7 +81,7 @@ for `arena.runners`, `arena.cross-judge-pool`, `architect.runners`, and
 `interrogate.reviewers`. One panel entry means one intended worker; do not
 silently add or remove entries. Ask for the user's reasoning budget:
 `unlimited` (keep preset effort), `large` (target xhigh), `medium` (target high),
-or `small` (target medium). Both generated runtimes set every non-inherited
+or `small` (target medium). The generated runtimes set every non-inherited
 selection to that target, raising or lowering its preset or explicit effort.
 When the model does not advertise the target, use its highest advertised effort
 below the target; stop if none exists. The budget does not replace a model
@@ -72,6 +96,8 @@ calling out any route that fell below the budget target because the model does
 not support it. Do not call a mixed-effort table uniformly `medium`.
 Show meaningful cost/provider tradeoffs before applying. The preset is a
 recommendation, not a silent permission to spend on an expensive model.
+For a target where effort is not configurable on one model, `none` denotes
+no native effort override. It does not claim the model performs no reasoning.
 
 Users may override a workload with `--fast`, `--balanced`, or `--deep`; a
 canonical role with `--role ROLE=MODEL@REASONING`; one workflow slot with
@@ -108,6 +134,8 @@ report this as explicit routing, not native role selection. For panels, verify
 the number of spawned workers and their ordered, attributable model identities.
 Check worker model and reasoning from runtime records, not configured files or
 self-report. If records are unavailable, report resolution as unverified.
+If a target's auditor cannot prove child effort from transcripts, keep child
+model and effort as separate claims until a trustworthy observation exists.
 Distinct configured IDs do not establish multi-model execution or distinct
 provider backends.
 
