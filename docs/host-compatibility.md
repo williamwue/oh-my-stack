@@ -7,7 +7,7 @@ versions or a guarantee for every model/provider account.
 | --- | --- | --- | --- |
 | OMP | 18.3.0 on macOS | Installed beta.3 `how` Skill and native `how.explorer` child, isolated-profile install gate, ordered `architect.runners` panel, bounded swarm drain/retry, `proc://` deadline cancellation, and one isolated concurrent-writer case | `plugin link --dry-run` and local-path `--scope=project` are not safe isolation mechanisms; cancelled workers were not reattached after parent process exit, and natural late-result rejection remains unverified |
 | Codex CLI | 0.155.1 on macOS | Installed beta.3 `how` Skill and explicit `how.explorer` child, complete setup receipt, ordered `architect.runners` panel, read-only swarm drain/retry, active cancellation, controlled stale replay, and cross-host checkpoint pickup | Custom role files are not claimed as natively activated; Desktop picker acceptance is user-reported separately; cancelled child model/effort was not observable after interruption; natural late-result delivery remains unverified |
-| Codex Desktop | User-confirmed selection on 2026-09-25 | User completed the desktop UI acceptance task | No agent-controlled screenshot or exhaustive picker traversal |
+| Codex Desktop | User-confirmed beta.3 selection on 2026-09-25 | User selected a beta.3 Oh My Stack Skill entry in a new task | No agent-controlled screenshot or exhaustive picker traversal |
 | Claude Code | Not authenticated locally | Generated package and static validation only | Native model/worker behavior remains unverified |
 | Windows/Linux | Not recorded for live host acceptance | CI offline checks run on Ubuntu | No interactive host certification |
 
