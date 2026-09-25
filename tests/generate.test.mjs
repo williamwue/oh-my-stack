@@ -50,6 +50,23 @@ test("Codex long direct entries preserve complete procedures outside the injecti
   }
 });
 
+test("OMP delegated workflows describe the current background-job lifecycle", async () => {
+  const model = await loadModel();
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-omp-lifecycle-"));
+  try {
+    const adapter = model.adapters.find((entry) => entry.id === "omp");
+    const target = await renderTarget(root, model, adapter);
+    const swarm = await readFile(join(target, "skills/swarm/SKILL.md"), "utf8");
+    assert.match(swarm, /read proc:\/\/<id>/);
+    assert.match(swarm, /write proc:\/\/<id>\/kill/);
+    assert.match(swarm, /Do not assume the deprecated `hub` tool exists/);
+    const setup = await readFile(join(target, "skills/setup-oh-my-stack/SKILL.md"), "utf8");
+    assert.doesNotMatch(setup, /write proc:\/\/<id>\/kill/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("Codex keeps all direct entries with concise metadata and unchanged bodies", async () => {
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));

@@ -15,9 +15,17 @@ For each configured route, select its named agent through OMP's native
 task-agent selector and verify that its source matches the chosen scope;
 for a canonical role, use the manifest role's `agent` name (user
 defaults use namespaced `ohmystack-role-*` agents).
-preserve panel entry order and count. If no mapping is present, retain the
+Preserve panel entry order and count. If no mapping is present, retain the
 workflow's normal runtime model. Verify resolved worker model and thinking
 level from OMP session/job metadata, not from the role file alone.
+When `task` returns a background job id, retain it until terminal status.
+On OMP hosts exposing `proc://` (observed in 18.3.0), use `read proc://<id>`
+for non-consuming status, `wait` to drain, and `write proc://<id>/kill`
+to cancel an owned job with the required approval. Confirm cancellation
+before replacing a worker and reject results from older generations.
+Do not assume the deprecated `hub` tool exists. If safe cancellation
+is unavailable, wait or report the unit incomplete; never silently
+treat an unconfirmed worker as cancelled.
 For this workflow's implementers use `code.feature-refactoring`.
 
 The root owns design, integration, and proof.

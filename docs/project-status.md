@@ -145,12 +145,13 @@ drain, and one-retry runs on both hosts are recorded in the
 These used beta.2 package instructions and helpers with normally installed
 beta.1 plugins; they do not certify plugin-native beta.2 loading. Codex active
 cancellation and cross-host checkpoint pickup passed in the same narrow test.
-OMP 18.3.0 non-interactive cancellation was unavailable in that invocation.
+OMP 18.3.0 cancel-and-replace also passed through the current `proc://` API;
+the initial `hub`-based probe was obsolete and did not test that path.
 Full `npm run check` passed 111 tests before the tagged release gate.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Complete collaboration lifecycle | Re-test OMP cancellation on a supported surface, real timeout and delayed-result handling, active-worker recovery after coordinator restart, and isolated concurrent writers; then repeat model-facing acceptance through normally installed beta.2 plugins |
+| P1 | Complete collaboration lifecycle | Test real timeout and delayed-result handling, active-worker recovery after coordinator restart, and isolated concurrent writers; then repeat model-facing acceptance through normally installed beta.2 plugins |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries

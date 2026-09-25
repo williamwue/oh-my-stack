@@ -53,9 +53,22 @@ cannot be certified from a child turn; the fresh child did expose
 OMP 18.3.0 non-interactive session
 `01a0d6df-27cd-77b9-a9a4-2ab680e7fd9c` did not expose a native `hub`
 cancel/status operation in its available tool set. The probe stopped before
-launching generation 1 and reported UNVERIFIED. Earlier OMP versions have
-recorded cancellation evidence, but it must not be transplanted to this
-invocation. The workflow's safe wait-or-incomplete fallback remains necessary.
+launching generation 1 and reported UNVERIFIED. This was a deprecated-interface
+probe, not evidence that OMP cancellation was unavailable. OMP's bundled
+`omp://tools/task.md`, `wait.md`, and `write.md` describe background jobs via
+`proc://`: `read proc://<id>` inspects status and `write proc://<id>/kill`
+cancels with approval. The OMP 18.3.0 release notes also mark `hub` deprecated.
+
+A corrected non-interactive session
+`01a0d6ec-78dd-753a-9f39-263a401d1ad8` launched StaleGeneration,
+cancelled it through `write proc://StaleGeneration/kill`, inspected its
+cancelled state, then launched and drained FreshGeneration. The fresh child
+returned `FRESH_MARKER=fresh-ok`; the root recorded
+`STALE_RESULT_ACCEPTED=false`. No natural late stale payload arrived, so
+delayed-result rejection remains unverified. The command used explicit
+execution approval for the native cancellation call. This proves the bounded
+cancel-and-replace path on the tested OMP surface, not every interactive UI
+or host version.
 
 ## Cold-start pickup
 
@@ -77,8 +90,7 @@ records are in the user's local session store. They are not release assets.
 
 ## Remaining acceptance
 
-Verify OMP 18.3.0 cancellation on a supported interactive or alternate native
-surface, real timeout and delayed-result handling, active-worker recovery
+Verify real timeout and delayed-result handling, active-worker recovery
 after coordinator restart, and an isolated concurrent-writer scenario. Re-run
 installed beta.2 plugin-native selection and model-facing execution before
 claiming beta.2 end-to-end acceptance. Unrelated optional MCP authorization

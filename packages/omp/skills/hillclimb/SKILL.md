@@ -15,7 +15,7 @@ For each configured route, select its named agent through OMP's native
 task-agent selector and verify that its source matches the chosen scope;
 for a canonical role, use the manifest role's `agent` name (user
 defaults use namespaced `ohmystack-role-*` agents).
-preserve panel entry order and count. If no mapping is present, retain the
+Preserve panel entry order and count. If no mapping is present, retain the
 workflow's normal runtime model. Verify resolved worker model and thinking
 level from OMP session/job metadata, not from the role file alone.
 For this workflow's implementers use `code.hillclimb`.
