@@ -11,7 +11,9 @@ The user reported completing the Claude Code manual check on 2026-09-25.
 This closes the requested human check, but no transcript, exact selected
 entry, or host version was supplied for independent reproduction. The
 published beta.4 release adds a native Claude marketplace. Its isolated
-plugin-manager lifecycle passed on the local CLI; this is not authenticated
+plugin-manager lifecycle passed on the local CLI. A fresh isolated profile also
+registered the published GitHub repository and installed beta.4 with 74 Skills
+and seven agents visible in native details. This is not authenticated
 user-level setup or complete workflow acceptance.
 
 ## Completed
