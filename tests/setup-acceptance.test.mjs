@@ -7,7 +7,7 @@ import test from "node:test";
 import { configure } from "../tools/configure-models.mjs";
 import { prepareDelegation } from "../tools/codex-delegation.mjs";
 import { repoRoot } from "../tools/generate.mjs";
-import { inspectSetup } from "../tools/setup-acceptance.mjs";
+import { inspectSetup, renderSetupReceipt } from "../tools/setup-acceptance.mjs";
 
 async function fixture(target) {
   const root = await mkdtemp(join(tmpdir(), `ohmystack-setup-${target}-`));
@@ -43,6 +43,28 @@ test("configuration audit is read-only and never promotes files to activation", 
   await writeFile(rolePath, "changed\n");
   await assert.rejects(inspectSetup({ resolutionPath }), /hash differs/);
   assert.ok(manifest.ownedFiles["agents/ohmystack-how-explorer.md"]);
+});
+
+test("setup receipt renders every configured role and route without summarization loss", async () => {
+  for (const target of ["omp", "codex"]) {
+    const { projectRoot, resolutionPath } = await fixture(target);
+    const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+    const receipt = await renderSetupReceipt({ resolutionPath, cwd: projectRoot });
+    assert.match(receipt, /Effective selection: project/);
+    assert.match(receipt, /runtime activation: unverified/);
+    for (const role of Object.keys(manifest.roles)) {
+      assert.equal(receipt.split(`- ${role}:`).length - 1, 1, `${target}: role ${role} missing or repeated`);
+    }
+    for (const [name, route] of Object.entries(manifest.routes)) {
+      assert.equal(receipt.split(`- ${name} [${route.role}]:`).length - 1, 1,
+        `${target}: route ${name} missing or repeated`);
+      if (route.kind === "panel") {
+        const row = receipt.split("\n").find((line) => line.startsWith(`- ${name} [`));
+        assert.ok(route.entries.every((entry, index) => row.includes(`${index + 1}. ${entry.model}@${entry.reasoning}`)));
+      }
+    }
+    assert.match(receipt, /Route count: 20 = 16 single \+ 4 panels\./);
+  }
 });
 
 test("OMP acceptance requires selected native agent and observed child model/effort", async () => {

@@ -126,6 +126,52 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
   return { ...base, activation: "verified", observed: verified };
 }
 
+export async function renderSetupReceipt({ resolutionPath, cwd, userRoot }) {
+  const audit = await inspectSetup({ resolutionPath, cwd, userRoot });
+  const manifest = JSON.parse(await readFile(resolve(resolutionPath), "utf8"));
+  const roles = Object.entries(manifest.roles ?? {});
+  const routes = Object.entries(manifest.routes ?? {});
+  const singles = routes.filter(([, route]) => route.kind === "single");
+  const panels = routes.filter(([, route]) => route.kind === "panel");
+  const overrides = Object.entries(manifest.overrides ?? {}).flatMap(([group, choices]) =>
+    Object.keys(choices ?? {}).map((name) => `${group}.${name}`));
+  assert(roles.length > 0 && routes.length > 0, "resolution has no roles or routes");
+  assert(routes.every(([, route]) => ["single", "panel"].includes(route.kind)
+    && Array.isArray(route.entries) && route.entries.length > 0), "resolution has an incomplete route");
+  const choice = (entry) => entry.inheritParent ? "inherit-parent"
+    : `${entry.model}@${entry.reasoning}`;
+  const lines = [
+    `# Oh My Stack setup receipt (${manifest.target})`,
+    `- Audited manifest: ${audit.resolutionPath}`,
+    `- Effective selection: ${audit.effectiveConfiguration
+      ? `${audit.effectiveConfiguration.scope ?? "none"} — ${audit.effectiveConfiguration.path ?? "none"}`
+      : "not inspected (pass --cwd)"}`,
+    `- Audited manifest selected: ${audit.effectiveConfiguration
+      ? audit.effectiveConfiguration.matchesAuditedResolution : "not inspected"}`,
+    `- Preset / reasoning budget: ${manifest.preset} / ${manifest.budget} (${audit.budget.level ?? "preset effort"})`,
+    `- Inventory: ${manifest.observedInventory?.source ?? "unknown"} at ${manifest.observedInventory?.observedAt ?? "unknown"}`,
+    `- Explicit overrides: ${overrides.length ? overrides.join(", ") : "none"}`,
+    `- Owned files verified: ${audit.ownedFilesVerified}; runtime activation: ${audit.activation}`,
+    "",
+    "## Workloads",
+    ...Object.entries(manifest.workloads ?? {}).map(([name, entry]) => `- ${name}: ${choice(entry)}`),
+    "",
+    `## Canonical roles (${roles.length})`,
+    ...roles.map(([name, entry]) => `- ${name}: ${choice(entry)}`),
+    "",
+    `## Named single routes (${singles.length})`,
+    ...singles.map(([name, route]) => `- ${name} [${route.role}]: ${choice(route.entries[0])}`),
+    "",
+    `## Ordered panels (${panels.length})`,
+    ...panels.map(([name, route]) => `- ${name} [${route.role}]: ${route.entries.map((entry, index) =>
+      `${index + 1}. ${choice(entry)}`).join(" → ")}`),
+    "",
+    `Route count: ${routes.length} = ${singles.length} single + ${panels.length} panels.`,
+    "Configuration and owned-file checks do not prove worker model, effort, native role selection, or full workflow coverage.",
+  ];
+  return lines.join("\n");
+}
+
 function parseArgs(argv) {
   const args = {};
   for (let index = 0; index < argv.length; index += 2) {
@@ -141,6 +187,13 @@ function parseArgs(argv) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  if (args.format) {
+    assert(args.format === "markdown", "--format must be markdown");
+    assert(!args.route && !args["parent-record"] && !args["child-record"] && !args.request,
+      "markdown receipt is for configuration inspection without runtime records");
+    console.log(await renderSetupReceipt({ resolutionPath: args.resolution, cwd: args.cwd }));
+    return;
+  }
   const result = await inspectSetup({ resolutionPath: args.resolution, routeName: args.route,
     entry: args.entry ? Number(args.entry) : 1, parentRecord: args["parent-record"],
     childRecord: args["child-record"], requestPath: args.request, cwd: args.cwd });

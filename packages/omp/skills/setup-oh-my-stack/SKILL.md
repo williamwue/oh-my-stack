@@ -191,6 +191,15 @@ Then show a compact receipt in the user's language:
   a written table or one tested route does not certify all workflows.
 - Next action: the specific missing verification or a workflow ready to try.
 
+For an existing or newly applied resolution manifest, run
+`scripts/setup-acceptance.mjs --resolution <manifest> --cwd <current-project> --format markdown`
+and retain its complete role, route, and ordered-panel rows in the receipt.
+It checks file hashes and prints counts directly from the manifest. Do not
+reconstruct the list from a truncated JSON read, omit names while grouping,
+or claim a complete receipt if the formatter could not run. The formatter's
+`runtime activation: unverified` line remains separate from any later
+route-specific parent/child verification.
+
 Explain that this setup configures Oh My Stack's workflow agents. It does not
 select the main conversation model or rewrite the host's general model roles.
 Keep native discovery, explicit spawning, and workflow coverage separate in
