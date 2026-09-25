@@ -135,27 +135,32 @@ Beta.2 was published from clean tag `v0.2.0-beta.2` at `cfe32b5` with four
 archives, a release manifest, and SHA-256 checksums. The local tagged gate
 passed 111 tests and all checksums; GitHub CI run `36093516834` passed. The
 user completed the desktop Skill-selection check on 2026-09-25. This is
-user-reported acceptance, not an agent-controlled UI trace. The beta.2
-candidate adds read-only package inspection/change planning, verified
+user-reported acceptance, not an agent-controlled UI trace. Beta.2 adds
+read-only package inspection/change planning, verified
 owned-directory rollback, and an observed [host matrix](host-compatibility.md).
 Its bounded negative regressions reject missing models, unsupported efforts,
-fallback and absent child evidence. They do not replace fresh live failed-child
-records or establish successful task completion. Full `npm run check` passed
-111 tests before the tagged release gate.
+fallback and absent child evidence. Fresh read-only failed-worker, parallel
+drain, and one-retry runs on both hosts are recorded in the
+[bounded collaboration acceptance](bounded-collaboration-acceptance-2026-09-25.md).
+These used beta.2 package instructions and helpers with normally installed
+beta.1 plugins; they do not certify plugin-native beta.2 loading. Codex active
+cancellation and cross-host checkpoint pickup passed in the same narrow test.
+OMP 18.3.0 non-interactive cancellation was unavailable in that invocation.
+Full `npm run check` passed 111 tests before the tagged release gate.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Fresh negative runtime evidence | Run a bounded failed child on each installed beta.2 host and retain real parent/child records; the regression suite currently covers invalid setup choices, OMP fallback and missing child contexts, not all live failure shapes |
+| P1 | Complete collaboration lifecycle | Re-test OMP cancellation on a supported surface, real timeout and delayed-result handling, active-worker recovery after coordinator restart, and isolated concurrent writers; then repeat model-facing acceptance through normally installed beta.2 plugins |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
-## Deferred by user choice
+## Later phases and explicit boundaries
 
-- Full real-project collaboration: swarm recovery, cancellation and retry,
+- Continue collaboration acceptance beyond the bounded read-only cases above:
   arena candidates/cross-judges, architect implementation/redesign, and
-  autopilot review/merge behavior. Bounded fixtures and earlier live cases
-  remain useful evidence without certifying every scenario.
-- Authenticated external systems and long runs: PRs, remote CI, scheduled wake,
-  coordinator restart, Benny and webhook delivery.
+  autopilot review/merge behavior require their own frozen scopes. Existing
+  fixtures do not certify every real-project scenario.
+- Authenticated external systems and long runs still need named test targets
+  and authority: PRs, remote CI, scheduled wake, Benny and webhook delivery.
 - Claude Code authenticated runtime tests until the user has an account.
 
 The user's personal OMP `modelRoles` configuration is separate from the
