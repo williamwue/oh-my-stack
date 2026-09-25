@@ -1,8 +1,7 @@
 # Project status
 
-Updated: 2026-09-25. Release candidate: [v0.2.0-beta.2](releases/0.2.0-beta.2.md).
-The last confirmed published baseline before this candidate is
-[v0.2.0-beta.1](releases/0.2.0-beta.1.md).
+Updated: 2026-09-25. Published baseline:
+[v0.2.0-beta.2](releases/0.2.0-beta.2.md).
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
@@ -132,7 +131,10 @@ removed and the OMP user plugin remains beta.1.
 
 ## Next work
 
-The user completed the desktop Skill-selection check on 2026-09-25. This is
+Beta.2 was published from clean tag `v0.2.0-beta.2` at `cfe32b5` with four
+archives, a release manifest, and SHA-256 checksums. The local tagged gate
+passed 111 tests and all checksums; GitHub CI run `36093516834` passed. The
+user completed the desktop Skill-selection check on 2026-09-25. This is
 user-reported acceptance, not an agent-controlled UI trace. The beta.2
 candidate adds read-only package inspection/change planning, verified
 owned-directory rollback, and an observed [host matrix](host-compatibility.md).
@@ -145,7 +147,6 @@ records or establish successful task completion. Full `npm run check` passed
 | --- | --- | --- |
 | P1 | Fresh negative runtime evidence | Run a bounded failed child on each installed beta.2 host and retain real parent/child records; the regression suite currently covers invalid setup choices, OMP fallback and missing child contexts, not all live failure shapes |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
-| Release | Publish beta.2 after its clean tagged gate | Tag and build from clean HEAD, verify archives and native install, then push and attach release artifacts; no publication is claimed by the source-only tests |
 
 ## Deferred by user choice
 
