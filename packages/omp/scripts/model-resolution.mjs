@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { existsSync, realpathSync } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -61,6 +62,6 @@ async function main() {
   console.log(JSON.stringify(selected ? { scope: selected.scope, path: selected.path } : { scope: null, path: null }));
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && existsSync(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main().catch((error) => { console.error(error.message); process.exitCode = 1; });
 }

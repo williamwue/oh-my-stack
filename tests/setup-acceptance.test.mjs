@@ -1,13 +1,17 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 
 import { configure } from "../tools/configure-models.mjs";
 import { prepareDelegation } from "../tools/codex-delegation.mjs";
 import { repoRoot } from "../tools/generate.mjs";
 import { inspectSetup, renderSetupReceipt } from "../tools/setup-acceptance.mjs";
+
+const execFileAsync = promisify(execFile);
 
 async function fixture(target) {
   const root = await mkdtemp(join(tmpdir(), `ohmystack-setup-${target}-`));
@@ -25,7 +29,7 @@ async function fixture(target) {
   await configure({ packageRoot, inventoryPath, projectRoot,
     presetName: target === "omp" ? "pstack-openai-codex" : "pstack", budget: "medium", apply: true });
   const resolutionPath = join(projectRoot, target === "omp" ? ".omp" : ".codex", "oh-my-stack.resolution.json");
-  return { root, projectRoot, packageRoot, resolutionPath };
+  return { root, projectRoot, packageRoot, resolutionPath, inventoryPath };
 }
 
 test("configuration audit is read-only and never promotes files to activation", async () => {
@@ -63,6 +67,25 @@ test("setup receipt renders every configured role and route without summarizatio
         assert.ok(route.entries.every((entry, index) => row.includes(`${index + 1}. ${entry.model}@${entry.reasoning}`)));
       }
     }
+    assert.match(receipt, /Route count: 20 = 16 single \+ 4 panels\./);
+  }
+});
+
+test("installed setup CLIs run through a symlinked package directory", async () => {
+  for (const target of ["omp", "codex"]) {
+    const { root, projectRoot, packageRoot, resolutionPath, inventoryPath } = await fixture(target);
+    const linkedPackage = join(root, "linked-package");
+    await symlink(packageRoot, linkedPackage, "dir");
+    const invoke = async (script, ...args) => (await execFileAsync(process.execPath,
+      [join(linkedPackage, "scripts", script), ...args])).stdout;
+    const selected = JSON.parse(await invoke("model-resolution.mjs", "--runtime", target,
+      "--cwd", projectRoot, "--user-root", root));
+    assert.equal(selected.scope, "project");
+    const preview = JSON.parse(await invoke("configure-models.mjs", "--inventory", inventoryPath,
+      "--project-root", projectRoot, "--preset", target === "omp" ? "pstack-openai-codex" : "pstack"));
+    assert.equal(preview.configuration.status, "preview");
+    const receipt = await invoke("setup-acceptance.mjs", "--resolution", resolutionPath,
+      "--cwd", projectRoot, "--format", "markdown");
     assert.match(receipt, /Route count: 20 = 16 single \+ 4 panels\./);
   }
 });
