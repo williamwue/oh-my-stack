@@ -70,7 +70,8 @@ async function verifyOmp({ parentRecord, childRecord, selection, requireReadOnly
   assert(thinkingEvents.every((item) => item.thinkingLevel === selection.reasoning),
     "child thinking level differs from configured route");
   return { mechanism: "native-role", agent: selection.agent, childName,
-    model: selection.model, reasoning: selection.reasoning };
+    model: selection.model, reasoning: selection.reasoning,
+    taskOutcome: "not-assessed" };
 }
 
 async function verifyCodex({ manifest, routeName, entry, requestPath, parentRecord, childRecord, selection }) {
@@ -87,7 +88,8 @@ async function verifyCodex({ manifest, routeName, entry, requestPath, parentReco
   assert(result.roleSelectionClaim === false, "explicit Codex delegation must not claim native role selection");
   return { mechanism: "explicit-spawn", agent: selection.agent,
     model: result.model, reasoning: result.reasoningEffort,
-    messageAudit: result.messageAudit, childId: result.childId };
+    messageAudit: result.messageAudit, childId: result.childId,
+    taskOutcome: "not-assessed" };
 }
 
 export async function inspectSetup({ resolutionPath, routeName, entry = 1, parentRecord, childRecord, requestPath,

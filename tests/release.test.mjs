@@ -173,12 +173,24 @@ test("release installer CLI consumes the generated manifest", async () => {
   try {
     const output = join(root, "dist");
     const destination = join(root, "plugins", "oh-my-stack");
-    await buildRelease({ root: repoRoot, out: output });
+    const manifest = await buildRelease({ root: repoRoot, out: output });
     const cli = join(repoRoot, "tools", "install-release.mjs");
     const common = ["--target", "claude-code", "--destination", destination];
+    const manifestPath = join(output, "release-manifest.json");
+    const initialPlan = JSON.parse((await execFileAsync(process.execPath,
+      [cli, "plan", "--manifest", manifestPath, ...common])).stdout);
+    assert.equal(initialPlan.installedVersion, null);
+    assert.ok(initialPlan.changes.added.length > 0);
+    assert.equal(await exists(destination), false);
     await execFileAsync(process.execPath, [cli, "install", "--manifest", join(output, "release-manifest.json"), ...common]);
     assert.equal(JSON.parse(await readFile(join(destination, "GENERATION.json"), "utf8")).target, "claude-code");
+    const inspected = JSON.parse((await execFileAsync(process.execPath, [cli, "inspect", ...common])).stdout);
+    assert.equal(inspected.installedVersion, manifest.version);
+    const installedPlan = JSON.parse((await execFileAsync(process.execPath,
+      [cli, "plan", "--manifest", manifestPath, ...common])).stdout);
+    assert.deepEqual(installedPlan.changes, { added: [], changed: [], removed: [] });
     await execFileAsync(process.execPath, [cli, "update", "--manifest", join(output, "release-manifest.json"), ...common]);
+    await execFileAsync(process.execPath, [cli, "rollback", "--manifest", manifestPath, ...common]);
     await execFileAsync(process.execPath, [cli, "uninstall", ...common]);
     assert.equal(await exists(destination), false);
   } finally {

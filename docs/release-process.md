@@ -55,6 +55,37 @@ marketplace may point at the installed directory, while OMP may install its npm
 package directly. The generic installer deliberately does not rewrite a
 runtime's global configuration.
 
+Before changing an owned package, inspect its installed version and preview
+the exact package-file additions, changes, and removals:
+
+```bash
+node tools/install-release.mjs inspect \
+  --target codex --destination /path/to/plugins/oh-my-stack
+node tools/install-release.mjs plan \
+  --manifest /path/to/new/release-manifest.json \
+  --target codex --destination /path/to/plugins/oh-my-stack
+```
+
+`plan` is read-only and does not register a plugin or update model settings.
+Use the [setup receipt](../README.md) to inspect the configuration selected by
+the current project; package version and model configuration are distinct.
+Retain the previous trusted release manifest and archives. To roll back an
+owned directory, run `plan` with that previous manifest, then:
+
+```bash
+node tools/install-release.mjs rollback \
+  --manifest /path/to/previous/release-manifest.json \
+  --target codex --destination /path/to/plugins/oh-my-stack
+node tools/install-release.mjs verify \
+  --manifest /path/to/previous/release-manifest.json \
+  --target codex --destination /path/to/plugins/oh-my-stack
+```
+
+The rollback command uses the same staged replacement and failure restoration
+as update. Restart the host session after a native plugin upgrade or rollback.
+The generic installer does not alter Codex marketplace registration or OMP
+plugin links; check and update those separately.
+
 ### OMP preflight and isolated native acceptance
 
 Do not use `omp plugin link --dry-run` as a read-only preview: OMP 18.3.0 was
@@ -174,8 +205,8 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-beta.1
-node tools/build-release.mjs --tag v0.2.0-beta.1
+node tools/build-release.mjs --check --tag v0.2.0-beta.2
+node tools/build-release.mjs --tag v0.2.0-beta.2
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve

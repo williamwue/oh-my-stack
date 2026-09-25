@@ -1,6 +1,8 @@
 # Project status
 
-Updated: 2026-09-25. Published baseline: [v0.2.0-beta.1](releases/0.2.0-beta.1.md).
+Updated: 2026-09-25. Release candidate: [v0.2.0-beta.2](releases/0.2.0-beta.2.md).
+The last confirmed published baseline before this candidate is
+[v0.2.0-beta.1](releases/0.2.0-beta.1.md).
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
@@ -130,12 +132,20 @@ removed and the OMP user plugin remains beta.1.
 
 ## Next work
 
+The user completed the desktop Skill-selection check on 2026-09-25. This is
+user-reported acceptance, not an agent-controlled UI trace. The beta.2
+candidate adds read-only package inspection/change planning, verified
+owned-directory rollback, and an observed [host matrix](host-compatibility.md).
+Its bounded negative regressions reject missing models, unsupported efforts,
+fallback and absent child evidence. They do not replace fresh live failed-child
+records or establish successful task completion. Full `npm run check` passed
+111 tests before the tagged release gate.
+
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Verify structured Skill selection in the desktop UI | Fresh Codex and OMP interactive sessions select the installed candidate directly and show the complete receipt; CLI/model execution is already verified, but desktop picker access was unavailable to this task |
-| P1 | Exercise bounded negative paths | Fresh runtime records show how invalid model, fallback, or failed child is surfaced without silently certifying the route; one positive three-worker panel is already verified on both hosts. Real collaboration cancellation remains user-deferred |
-| P2 | Simplify installation, diagnosis and upgrades | A documented entry identifies installed version and selected configuration, previews owned changes, and supports verified update/rollback |
-| P2 | Track host and model compatibility | Record tested host/OS versions and regressions for missing models, unsupported efforts and changed delegation tools |
+| P1 | Fresh negative runtime evidence | Run a bounded failed child on each installed beta.2 host and retain real parent/child records; the regression suite currently covers invalid setup choices, OMP fallback and missing child contexts, not all live failure shapes |
+| P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
+| Release | Publish beta.2 after its clean tagged gate | Tag and build from clean HEAD, verify archives and native install, then push and attach release artifacts; no publication is claimed by the source-only tests |
 
 ## Deferred by user choice
 

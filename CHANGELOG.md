@@ -6,6 +6,16 @@ established.
 
 ## Unreleased
 
+## 0.2.0-beta.2 - 2026-09-25
+
+- Added complete, deterministic setup receipts for Codex and OMP, including
+  effective scope, all roles and named routes, and ordered panel workers.
+- Fixed installed setup CLI execution through symlinked plugin directories.
+- Added read-only owned-package inspection and change preview, plus an explicit
+  rollback command using a retained trusted release archive.
+- Added negative setup and worker-activation regression tests and an observed
+  host compatibility matrix. Worker activation still does not prove task success.
+
 - Added a deterministic, read-only Markdown setup receipt that verifies owned
   files and prints every configured workload, canonical role, named route, and
   ordered panel with counts. The setup Skill now uses it for saved manifests.

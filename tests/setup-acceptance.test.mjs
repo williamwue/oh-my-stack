@@ -49,6 +49,21 @@ test("configuration audit is read-only and never promotes files to activation", 
   assert.ok(manifest.ownedFiles["agents/ohmystack-how-explorer.md"]);
 });
 
+test("invalid model and unsupported effort fail before configuration writes on both hosts", async () => {
+  for (const target of ["omp", "codex"]) {
+    const { projectRoot, packageRoot, resolutionPath, inventoryPath } = await fixture(target);
+    const baseline = await readFile(resolutionPath);
+    const common = { packageRoot, inventoryPath, projectRoot,
+      presetName: target === "omp" ? "pstack-openai-codex" : "pstack", budget: "medium", apply: true };
+    await assert.rejects(configure({ ...common, routeSelections: { "how.explorer": "missing/model@high" } }),
+      /not present in the observed inventory/);
+    await assert.rejects(configure({ ...common, budget: "unlimited", routeSelections: {
+      "how.explorer": `${target === "omp" ? "openai-codex/" : ""}gpt-6-luna@ultra`,
+    } }), /did not advertise reasoning effort/);
+    assert.deepEqual(await readFile(resolutionPath), baseline);
+  }
+});
+
 test("setup receipt renders every configured role and route without summarization loss", async () => {
   for (const target of ["omp", "codex"]) {
     const { projectRoot, resolutionPath } = await fixture(target);
@@ -111,12 +126,17 @@ test("OMP acceptance requires selected native agent and observed child model/eff
   const result = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord });
   assert.equal(result.activation, "verified");
   assert.equal(result.observed.mechanism, "native-role");
+  assert.equal(result.observed.taskOutcome, "not-assessed");
   await writeFile(childRecord, `${child.map((item) => JSON.stringify(item.type === "thinking_level_change"
     ? { ...item, thinkingLevel: "medium" } : item)).join("\n")}\n`);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }), /thinking level differs/);
   await writeFile(childRecord, `${child.map((item) => JSON.stringify(item.type === "model_change"
     ? { ...item, resolvedModelIsFallback: true } : item)).join("\n")}\n`);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }), /fallback/);
+  await writeFile(childRecord, `${JSON.stringify({ type: "session_init", agent,
+    resolvedModel: "openai-codex/gpt-6-luna", readOnly: true })}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }),
+    /model\/thinking events are missing/);
 });
 
 test("Codex acceptance verifies explicit spawn without claiming native role activation", async () => {
@@ -141,6 +161,12 @@ test("Codex acceptance verifies explicit spawn without claiming native role acti
   const result = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord, requestPath });
   assert.equal(result.activation, "verified");
   assert.equal(result.observed.mechanism, "explicit-spawn");
+  assert.equal(result.observed.taskOutcome, "not-assessed");
   assert.match(result.budget.meaning, /target, not a cost limit/);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }), /requires --request/);
+  await writeFile(childRecord, `${JSON.stringify({ type: "session_meta", payload: { id: "child-id",
+    source: { subagent: { thread_spawn: { parent_thread_id: "parent-id",
+      agent_path: "/root/setup_reader" } } } } })}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord,
+    requestPath }), /turn_context is unavailable/);
 });
