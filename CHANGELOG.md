@@ -6,7 +6,7 @@ established.
 
 ## Unreleased
 
-## 0.2.0-beta.4 - pending
+## 0.2.0-beta.4 - 2026-09-25
 
 - Added native Claude Code marketplace metadata in the repository and a
   deterministic release bundle for persistent plugin installation.

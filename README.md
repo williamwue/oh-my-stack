@@ -10,18 +10,17 @@ See the [current project status and remaining work](docs/project-status.md)
 for completed work, next steps, and user-deferred acceptance.
 
 Oh My Stack is available as a public
-[beta.3 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.3)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.3.md).
+[beta.4 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.4)
+with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.4.md).
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. On Claude Code 2.1.282,
 the published archive passed session-only Skill loading and one read-only
-native subagent run. A later unpublished candidate passed a project-local
-two-model setup and one ordered read-only panel; user-level installation and
-broader workflows remain unverified.
+native subagent run. Beta.4 adds a Claude marketplace and includes a bounded
+project-local two-model setup and ordered read-only panel observation;
+authenticated user-level setup and broader workflows remain unverified.
 
-The next candidate adds a native Claude Code marketplace for persistent
-installation. Its install/list/same-version update/uninstall lifecycle passed
+Its install/list/same-version update/uninstall lifecycle passed
 in an isolated Claude configuration directory; authenticated user-level setup
 and full workflow behavior remain outside that result.
 
@@ -29,7 +28,7 @@ and full workflow behavior remain outside that result.
 | --- | --- | --- |
 | Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
 | OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
-| Claude Code | Native plugin and marketplace candidate | Preview; isolated persistent-install lifecycle and bounded two-model panel acceptance |
+| Claude Code | Native plugin and marketplace | Preview; isolated persistent-install lifecycle and bounded two-model panel acceptance |
 
 This is a Beta project. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
@@ -59,7 +58,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-beta.3.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0-beta.4.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -82,7 +81,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [beta.3 release notes](docs/releases/0.2.0-beta.3.md) for the
+See the [beta.4 release notes](docs/releases/0.2.0-beta.4.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -96,8 +95,8 @@ codex plugin marketplace remove oh-my-stack
 
 ### OMP and Claude Code previews
 
-After the next candidate is published, Claude Code can register this
-repository's marketplace and persist the plugin at user scope:
+Claude Code can register this repository's marketplace and persist the plugin
+at user scope:
 
 ```bash
 claude plugin marketplace add williamwue/oh-my-stack
@@ -125,9 +124,8 @@ claude --plugin-dir /absolute/path/to/oh-my-stack
 ```
 
 Then invoke `/oh-my-stack:prove-it-works` in the fresh session. This does not
-install the plugin globally. The published beta.3 Claude package does not yet
-support a verified setup. The current unpublished candidate uses opt-in,
-usage-consuming Sonnet/Opus probes for a two-model setup; Haiku is not part of
+install the plugin globally. The beta.4 package uses opt-in, usage-consuming
+Sonnet/Opus probes for a two-model setup; Haiku is not part of
 that mapping. One temporary-project panel ran Opus/Sonnet/Opus with native
 roles and hook-observed `high` effort. This does not establish user-level
 installation or full workflow behavior. Do not use a model-menu entry as proof
@@ -340,10 +338,10 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-beta.3 release notes](docs/releases/0.2.0-beta.3.md). Claude Code is
-packaged and lifecycle-tested offline, with later bounded native Skill,
-single-route, and ordered read-only panel runs on an unpublished candidate.
-User-level installation and broader end-to-end use remain unverified.
+[0.2.0-beta.4 release notes](docs/releases/0.2.0-beta.4.md). Claude Code is
+packaged and lifecycle-tested in an isolated profile, with bounded native
+Skill, single-route, and ordered read-only panel runs. Authenticated user-level
+setup and broader end-to-end use remain unverified.
 
 The locally built Codex bundle is `dist/oh-my-stack-codex-plugin-<version>.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
