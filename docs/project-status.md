@@ -133,7 +133,7 @@ removed and the OMP user plugin remains beta.1.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Verify structured Skill selection in the desktop UI | Fresh Codex and OMP interactive sessions select the installed candidate directly and show the complete receipt; CLI/model execution is already verified, but desktop picker access was unavailable to this task |
-| P1 | Exercise bounded failure and cancellation paths | Fresh runtime records show how invalid model, fallback, failed child, and cancellation are surfaced without silently certifying the route; one positive three-worker panel is already verified on both hosts |
+| P1 | Exercise bounded negative paths | Fresh runtime records show how invalid model, fallback, or failed child is surfaced without silently certifying the route; one positive three-worker panel is already verified on both hosts. Real collaboration cancellation remains user-deferred |
 | P2 | Simplify installation, diagnosis and upgrades | A documented entry identifies installed version and selected configuration, previews owned changes, and supports verified update/rollback |
 | P2 | Track host and model compatibility | Record tested host/OS versions and regressions for missing models, unsupported efforts and changed delegation tools |
 
