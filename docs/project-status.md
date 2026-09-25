@@ -2,6 +2,8 @@
 
 Updated: 2026-09-25. Published baseline:
 [v0.2.0-beta.2](releases/0.2.0-beta.2.md).
+The [beta.3 local candidate](releases/0.2.0-beta.3-candidate.md) is being
+validated; it has not been tagged, pushed, or published.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
