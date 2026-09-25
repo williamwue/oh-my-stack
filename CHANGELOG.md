@@ -6,6 +6,12 @@ established.
 
 ## Unreleased
 
+- Added a deterministic, read-only Markdown setup receipt that verifies owned
+  files and prints every configured workload, canonical role, named route, and
+  ordered panel with counts. The setup Skill now uses it for saved manifests.
+- Fixed setup CLI entrypoints when a generated package is reached through an
+  OMP plugin symlink or a macOS `/tmp` alias; added installed-path regression
+  coverage.
 - Added explicit setup destination metadata and an optional current-project
   selection check to the setup audit. A saved user default is no longer
   implicitly presented as the configuration selected by a project override.

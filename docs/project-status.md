@@ -88,11 +88,36 @@ package immediately, and `plugin doctor` passed. Local-path project isolation
 must not be assumed; use the tested isolated `--profile` gate instead. The
 temporary Codex credential copy used for model execution was removed.
 
+Additional candidate acceptance on 2026-09-25 exposed a receipt omission:
+an authenticated OMP session read the installed setup Skill but summarized
+only 13 of 16 named single routes after a long, truncated manifest read. The
+source now provides a deterministic, read-only Markdown receipt that verifies
+owned hashes and emits all configured workloads, roles, routes, and ordered
+panels. A separate installed-path test also exposed CLI entrypoints that
+silently exited through a symlinked package or macOS `/tmp` alias; those
+entrypoints now resolve their actual script path. The full check passed 110
+tests, including both-runtime receipt completeness and symlinked CLI coverage.
+
+A clean candidate build from commit `5ec3394` passed archive checksums and
+OMP's isolated install gate. In an authenticated, temporary user-plugin link,
+the OMP model called `skill://setup-oh-my-stack` and the installed receipt
+script from outside the source checkout. Its final receipt contained all 7
+canonical roles, 16 single routes, and four ordered panels, with effective
+user scope and activation still unverified. The original beta.1 plugin link
+was restored; its lock/package hashes and plugin doctor matched the baseline.
+An isolated Codex CLI install of the same candidate read the installed Skill
+and workflow and ran its bundled receipt script. A fresh final answer matched
+that script's complete output after trimming surrounding newlines. Its temporary auth copy was
+removed. These are installed-package CLI/model tests, not structured selection
+from the desktop Skill picker; the available desktop-control interface denied
+access to the Codex app. The candidate still uses the source version
+`0.2.0-beta.1` and has not been published as a new release.
+
 ## Next work
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Verify the next installed package's setup entry in both UIs | Direct structured Skill selection in fresh Codex and OMP sessions shows the complete receipt and correct effective scope; the OMP candidate model session requires an authenticated isolated profile or a deliberate user-profile update |
+| P1 | Verify structured Skill selection in the desktop UI | Fresh Codex and OMP interactive sessions select the installed candidate directly and show the complete receipt; CLI/model execution is already verified, but desktop picker access was unavailable to this task |
 | P1 | Expand worker evidence beyond the first route | New parent/child records cover representative panels and failure paths without treating the single-route smoke as full workflow parity |
 | P2 | Simplify installation, diagnosis and upgrades | A documented entry identifies installed version and selected configuration, previews owned changes, and supports verified update/rollback |
 | P2 | Track host and model compatibility | Record tested host/OS versions and regressions for missing models, unsupported efforts and changed delegation tools |
