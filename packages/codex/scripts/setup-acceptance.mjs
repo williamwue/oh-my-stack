@@ -92,7 +92,7 @@ async function verifyCodex({ manifest, routeName, entry, requestPath, parentReco
     taskOutcome: "not-assessed" };
 }
 
-async function verifyClaude({ parentRecord, childRecord, selection }) {
+async function verifyClaude({ parentRecord, childRecord, hookRecord, route, selection }) {
   assert(basename(dirname(dirname(childRecord))) === basename(parentRecord, ".jsonl"),
     "Claude child record is not in the selected parent session directory");
   const metadataPath = childRecord.replace(/\.jsonl$/, ".meta.json");
@@ -109,6 +109,17 @@ async function verifyClaude({ parentRecord, childRecord, selection }) {
       && part.id === metadata.toolUseId)
     : []);
   assert(calls.length === 1, `expected one linked Claude Agent call for ${selection.agent}, found ${calls.length}`);
+  if (route.kind === "panel") {
+    const expectedOrder = route.entries.map((item) => item.agent);
+    const panelAgents = new Set(expectedOrder);
+    const actualOrder = parent.flatMap((item) => item.message?.role === "assistant"
+      ? (item.message.content ?? []).filter((part) => part.type === "tool_use"
+        && part.name === "Agent" && panelAgents.has(part.input?.subagent_type))
+        .map((part) => part.input.subagent_type)
+      : []);
+    assert(JSON.stringify(actualOrder) === JSON.stringify(expectedOrder),
+      `Claude panel call order/count differs from configured ${expectedOrder.join(", ")}`);
+  }
   const messages = child.filter((item) => item.message?.role === "assistant" && item.message.model);
   assert(messages.length > 0, "Claude child has no assistant model event");
   assert(messages.every((item) => item.message.model === selection.model),
@@ -116,30 +127,45 @@ async function verifyClaude({ parentRecord, childRecord, selection }) {
   const attachments = child.filter((item) => item.attachment?.type === "model");
   assert(attachments.some((item) => item.attachment.identity?.modelId === selection.model),
     "Claude child has no matching model identity attachment");
+  let reasoning = "unverified";
+  if (hookRecord) {
+    const childId = basename(childRecord, ".jsonl").replace(/^agent-/, "");
+    const childTools = new Set(child.flatMap((item) => item.message?.role === "assistant"
+      ? (item.message.content ?? []).filter((part) => part.type === "tool_use").map((part) => part.name)
+      : []));
+    const observed = (await readJsonLines(hookRecord)).filter((item) =>
+      item.agentId === childId && item.agentType === selection.agent
+      && item.hookEvent === "PreToolUse" && childTools.has(item.tool));
+    assert(observed.length > 0, `Claude child ${selection.agent} has no linked effort hook event`);
+    assert(observed.every((item) => item.effort === selection.reasoning),
+      `Claude child ${selection.agent} effective effort differs from configured route`);
+    reasoning = selection.reasoning;
+  }
   return { mechanism: "native-role", agent: selection.agent, model: selection.model,
-    reasoning: "unverified", configuredReasoning: selection.reasoning,
+    reasoning, configuredReasoning: selection.reasoning,
     taskOutcome: "not-assessed" };
 }
 
 export async function inspectSetup({ resolutionPath, routeName, entry = 1, parentRecord, childRecord, requestPath,
-  cwd, userRoot }) {
+  hookRecord, cwd, userRoot, claudeConfigDir }) {
   const path = resolve(resolutionPath);
   const manifest = JSON.parse(await readFile(path, "utf8"));
   assert(manifest.schemaVersion === 1 && manifest.owner === "oh-my-stack" && ["omp", "codex", "claude-code"].includes(manifest.target),
     "an applied OMP, Codex, or Claude Code Oh My Stack resolution is required");
   const ownedFilesVerified = await checkOwnedFiles(path, manifest);
-  const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot }) : null;
+  const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot, claudeConfigDir }) : null;
   const effectiveConfiguration = cwd ? {
     cwd: resolve(cwd),
     scope: active?.scope ?? null,
     path: active?.path ?? null,
     matchesAuditedResolution: active ? active.path === path : false,
   } : null;
-  const evidenceSupplied = Boolean(parentRecord || childRecord || requestPath);
+  const evidenceSupplied = Boolean(parentRecord || childRecord || requestPath || hookRecord);
   assert(!evidenceSupplied || (routeName && parentRecord && childRecord),
     "runtime evidence requires --route, --parent-record and --child-record");
   assert(!(manifest.target === "claude-code" && requestPath),
     "Claude Code uses native role selection and does not accept an explicit-spawn request");
+  assert(!hookRecord || manifest.target === "claude-code", "--hook-record is supported only for Claude Code");
   const selected = routeName ? selectedRoute(manifest, routeName, entry) : null;
   const budget = { name: manifest.budget,
     meaning: manifest.budgetPolicy?.kind === "reasoning-target" || (!manifest.budgetPolicy && manifest.target === "omp")
@@ -156,14 +182,16 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
     ? await verifyOmp({ parentRecord: resolve(parentRecord), childRecord: resolve(childRecord),
       selection: selected.selection, requireReadOnly: manifest.roles?.[selected.route.role]?.constraints?.includes("read_only") })
     : manifest.target === "claude-code"
-      ? await verifyClaude({ parentRecord: resolve(parentRecord), childRecord: resolve(childRecord), selection: selected.selection })
+      ? await verifyClaude({ parentRecord: resolve(parentRecord), childRecord: resolve(childRecord),
+        hookRecord: hookRecord ? resolve(hookRecord) : null, route: selected.route, selection: selected.selection })
       : await verifyCodex({ manifest, routeName, entry, requestPath,
         parentRecord, childRecord, selection: selected.selection });
-  return { ...base, activation: manifest.target === "claude-code" ? "model-verified-effort-unverified" : "verified", observed: verified };
+  return { ...base, activation: manifest.target === "claude-code" && verified.reasoning === "unverified"
+    ? "model-verified-effort-unverified" : "verified", observed: verified };
 }
 
-export async function renderSetupReceipt({ resolutionPath, cwd, userRoot }) {
-  const audit = await inspectSetup({ resolutionPath, cwd, userRoot });
+export async function renderSetupReceipt({ resolutionPath, cwd, userRoot, claudeConfigDir }) {
+  const audit = await inspectSetup({ resolutionPath, cwd, userRoot, claudeConfigDir });
   const manifest = JSON.parse(await readFile(resolve(resolutionPath), "utf8"));
   const roles = Object.entries(manifest.roles ?? {});
   const routes = Object.entries(manifest.routes ?? {});
@@ -225,14 +253,16 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.format) {
     assert(args.format === "markdown", "--format must be markdown");
-    assert(!args.route && !args["parent-record"] && !args["child-record"] && !args.request,
+    assert(!args.route && !args["parent-record"] && !args["child-record"] && !args.request && !args["hook-record"],
       "markdown receipt is for configuration inspection without runtime records");
-    console.log(await renderSetupReceipt({ resolutionPath: args.resolution, cwd: args.cwd }));
+    console.log(await renderSetupReceipt({ resolutionPath: args.resolution, cwd: args.cwd,
+      claudeConfigDir: args["claude-config-dir"] }));
     return;
   }
   const result = await inspectSetup({ resolutionPath: args.resolution, routeName: args.route,
     entry: args.entry ? Number(args.entry) : 1, parentRecord: args["parent-record"],
-    childRecord: args["child-record"], requestPath: args.request, cwd: args.cwd });
+    childRecord: args["child-record"], requestPath: args.request, hookRecord: args["hook-record"],
+    cwd: args.cwd, claudeConfigDir: args["claude-config-dir"] });
   console.log(JSON.stringify(result, null, 2));
 }
 

@@ -239,7 +239,7 @@
       "purpose": "Read the nearest project or user Oh My Stack resolution manifest without modifying it.",
       "network": false,
       "writes": [],
-      "uninstallBehavior": "Generated OMP and Codex package copies are removed with their packages; resolution manifests remain user-owned."
+      "uninstallBehavior": "Generated target package copies are removed with their packages; resolution manifests remain user-owned."
     },
     {
       "path": "tools/codex-delegation.mjs",
@@ -250,12 +250,20 @@
       "uninstallBehavior": "Generated Codex package copy is removed with its package; user-selected outputs remain user-owned."
     },
     {
+      "path": "tools/claude-effort-hook.mjs",
+      "owner": "local-core",
+      "purpose": "Capture only a Claude Code child identity, tool name, and effective effort from a user-selected diagnostic PreToolUse hook.",
+      "network": false,
+      "writes": ["explicit absolute JSONL diagnostic path supplied to --output"],
+      "uninstallBehavior": "Generated Claude package copy is removed with its package; a user-selected diagnostic log remains user-owned."
+    },
+    {
       "path": "tools/setup-acceptance.mjs",
       "owner": "local-core",
       "purpose": "Audit generated role files and verify supplied parent-child runtime records for a selected setup route.",
       "network": false,
       "writes": [],
-      "uninstallBehavior": "Generated OMP and Codex package copies are removed with their packages; user-selected configuration remains user-owned."
+      "uninstallBehavior": "Generated target package copies are removed with their packages; user-selected configuration remains user-owned."
     },
     {
       "path": "tools/codex-skill-descriptions.mjs",

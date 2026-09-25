@@ -135,6 +135,38 @@ test("Claude Code uses native user and project agent scopes without claiming act
   /does not accept an explicit-spawn request/);
 });
 
+test("Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope", async () => {
+  const root = await mkdtemp(join(tmpdir(), "ohmystack-claude-custom-config-"));
+  const configDir = join(root, "custom-config");
+  const project = join(root, "project");
+  await mkdir(project);
+  const inventoryPath = join(root, "inventory.json");
+  await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: "claude-code",
+    observedAt: "2026-09-25T00:00:00Z", source: "fixture probe",
+    models: [{ id: "claude-sonnet-5", reasoningEfforts: ["high"] },
+      { id: "claude-opus-5-5", reasoningEfforts: ["high"] }],
+  })}\n`);
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const environment = { ...process.env, CLAUDE_CONFIG_DIR: configDir };
+  const apply = await execFileAsync(process.execPath, [join(packageRoot, "scripts", "configure-models.mjs"),
+    "--inventory", inventoryPath, "--user", "--fast", "claude-sonnet-5@high",
+    "--balanced", "claude-sonnet-5@high", "--deep", "claude-opus-5-5@high",
+    "--route", "how.explorer=claude-sonnet-5@high", "--apply"], { env: environment });
+  const applied = JSON.parse(apply.stdout);
+  assert.equal(applied.configuration.manifestPath, join(configDir, "oh-my-stack.resolution.json"));
+  await assert.rejects(readFile(join(root, ".claude", "oh-my-stack.resolution.json")));
+  const selected = await resolveActiveResolution({ runtime: "claude-code", cwd: project,
+    userRoot: root, claudeConfigDir: configDir });
+  assert.equal(selected.scope, "user");
+  assert.equal(selected.path, applied.configuration.manifestPath);
+  const receipt = await inspectSetup({ resolutionPath: selected.path, cwd: project,
+    userRoot: root, claudeConfigDir: configDir });
+  assert.equal(receipt.effectiveConfiguration.matchesAuditedResolution, true);
+  await assert.rejects(configure({ packageRoot, inventoryPath, userRoot: root,
+    claudeConfigDir: "relative-path", selections: { fast: "claude-sonnet-5@high",
+      balanced: "claude-sonnet-5@high", deep: "claude-opus-5-5@high" } }), /must be an absolute path/);
+});
+
 test("user setup preserves unrelated personal agents and refuses an owned-name collision", async () => {
   const root = await mkdtemp(join(tmpdir(), "ohmystack-user-collision-"));
   const inventoryPath = await inventory(root, "codex");

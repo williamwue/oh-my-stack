@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.282-macos-local-setup-panel",
+  "fixture": "temporary-project-two-model-architect-panel",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-25",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.282",
+    "platform": "macos",
+    "configuration": "Unpublished local candidate, explicit Sonnet/Opus inventory, temporary project .claude/ agents and diagnostic hook; no user-level installation.",
+    "permissionProfile": "plan mode, non-interactive permission prompts denied, Agent and Read tools only"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": ["evals/evidence/claude-code-2.1.282/native-plugin-smoke.json"],
+  "assertions": [
+    {
+      "id": "two-model-inventory",
+      "status": "pass",
+      "evidence": "Bounded live probes observed claude-sonnet-5 and claude-opus-5-5. Haiku was excluded from the user's chosen mapping."
+    },
+    {
+      "id": "project-configuration",
+      "status": "pass",
+      "evidence": "Temporary project setup applied 29 owned native role files; scope and hashes passed the setup auditor at medium budget (target high effort)."
+    },
+    {
+      "id": "ordered-panel",
+      "status": "pass",
+      "evidence": "Session 247e88af-4bc0-4aad-a31f-597935331225 called ohmystack-architect-runners-1, -2, and -3 in order; all three children completed the same read-only README task."
+    },
+    {
+      "id": "worker-models",
+      "status": "pass",
+      "evidence": "Linked child metadata, model attachments, and assistant events matched Opus 5.5 / Sonnet 5 / Opus 5.5 for the three ordered positions."
+    },
+    {
+      "id": "effective-effort",
+      "status": "pass",
+      "evidence": "Project-local PreToolUse Read hook events matched each child ID and reported effective effort high for all three; no global hook was installed."
+    },
+    {
+      "id": "packaged-hook-and-auditor",
+      "status": "pass",
+      "evidence": "Session 435574c5-807a-4554-bf30-8a3016c85930 used the generated Claude package through --plugin-dir. Its packaged effort hook and setup-acceptance CLI verified one native how.explorer child at claude-sonnet-5@high. The parent answer added role-policy text to the fixture line; task-content accuracy is not claimed."
+    }
+  ],
+  "limitations": [
+    "Only one synthetic read-only architect panel was tested; full architect workflow and other panels are unverified.",
+    "The panel has two model identities, not three models or distinct providers.",
+    "No user-level installation, update, uninstall, or released-package acceptance was performed.",
+    "No real project files or global Claude settings were changed."
+  ]
+}

@@ -162,17 +162,37 @@ test("Claude acceptance links native Agent call and child model but leaves effor
   await writeFile(join(childDirectory, "agent-123.meta.json"), JSON.stringify({ agentType: agent, toolUseId: "toolu-1" }));
   const child = [
     { attachment: { type: "model", identity: { modelId: "claude-sonnet-5" } } },
-    { message: { role: "assistant", model: "claude-sonnet-5" } },
+    { message: { role: "assistant", model: "claude-sonnet-5", content: [
+      { type: "tool_use", name: "Read" },
+    ] } },
   ];
   await writeFile(childRecord, `${child.map((item) => JSON.stringify(item)).join("\n")}\n`);
   const audit = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord });
   assert.equal(audit.activation, "model-verified-effort-unverified");
   assert.equal(audit.observed.model, "claude-sonnet-5");
   assert.equal(audit.observed.reasoning, "unverified");
+  const hookRecord = join(root, "hooks.jsonl");
+  const hook = { agentId: "123", agentType: agent, hookEvent: "PreToolUse", tool: "Read", effort: "high" };
+  await writeFile(hookRecord, `${JSON.stringify(hook)}\n`);
+  const verified = await inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord, hookRecord });
+  assert.equal(verified.activation, "verified");
+  assert.equal(verified.observed.reasoning, "high");
+  await writeFile(hookRecord, `${JSON.stringify({ ...hook, effort: "medium" })}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord, hookRecord }),
+    /effective effort differs/);
   await writeFile(childRecord, `${child.map((item) => JSON.stringify(item.message
     ? { message: { ...item.message, model: "claude-opus-5-5" } } : item)).join("\n")}\n`);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "how.explorer", parentRecord, childRecord }),
     /child model differs/);
+  await writeFile(childRecord, `${child.map((item) => JSON.stringify(item)).join("\n")}\n`);
+  await writeFile(join(childDirectory, "agent-123.meta.json"), JSON.stringify({
+    agentType: "ohmystack-architect-runners-1", toolUseId: "toolu-1",
+  }));
+  await writeFile(parentRecord, `${JSON.stringify({ message: { role: "assistant", content: [
+    { ...call, input: { subagent_type: "ohmystack-architect-runners-1" } },
+  ] } })}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "architect.runners", entry: 1,
+    parentRecord, childRecord }), /panel call order\/count differs/);
 });
 
 test("Codex acceptance verifies explicit spawn without claiming native role activation", async () => {

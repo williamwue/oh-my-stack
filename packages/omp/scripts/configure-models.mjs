@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { existsSync, realpathSync } from "node:fs";
 import { access, lstat, mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, join, relative, resolve, sep } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -192,7 +192,8 @@ async function safeWrite(path, content) {
 }
 
 export async function configure({
-  packageRoot, inventoryPath, outputRoot, projectRoot, userRoot, selections = {}, roleSelections = {},
+  packageRoot, inventoryPath, outputRoot, projectRoot, userRoot,
+  claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? null, selections = {}, roleSelections = {},
   routeSelections = {}, panelSelections = {}, presetName, budget, uniformReasoning, apply,
 }) {
   const packageDirectory = resolve(packageRoot ?? defaultPackageRoot);
@@ -215,10 +216,13 @@ export async function configure({
   assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
   assert(!projectDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "project role activation is unsupported for this target");
   assert(!userDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "user role activation is unsupported for this target");
+  assert(!userDirectory || descriptor.target !== "claude-code" || !claudeConfigDir || isAbsolute(claudeConfigDir),
+    "CLAUDE_CONFIG_DIR must be an absolute path for user setup");
   const outputDirectory = projectDirectory
     ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? ".omp" : ".claude")
     : userDirectory
-      ? join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : ".claude")
+      ? descriptor.target === "claude-code" && claudeConfigDir ? resolve(claudeConfigDir)
+        : join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : ".claude")
       : resolve(outputRoot);
   assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
   if (userDirectory && descriptor.target === "omp") await assertNotSymlink(join(userDirectory, ".omp"));

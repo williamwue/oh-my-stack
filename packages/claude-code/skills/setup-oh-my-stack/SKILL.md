@@ -9,24 +9,33 @@ disable-model-invocation: true
 ## Claude Code setup boundary
 
 There is no complete read-only account model catalog in this adapter.
-The collector can make bounded live probes for `haiku`, `sonnet`, and
-`opus` only, using `--claude-models haiku,sonnet,opus
+For the two-model setup, probe `sonnet` and `opus` only, using
+`--claude-models sonnet,opus
 --confirm-claude-probes`. Disclose usage and obtain approval first.
-Never probe Fable or arbitrary IDs through this path; some requests can
+Haiku is optional only when the user wants it; do not add it to this
+two-model mapping. Never probe Fable or arbitrary IDs through this path; some requests can
 incur separate usage credits without a terminal consent prompt.
 The probe observes canonical model IDs. Its effort list comes from
 reviewed Claude Code documentation, not a live capability API; account
 or organization caps may lower effective effort.
 
-There is no static Claude pstack model preset. Choose three observed
-workload IDs with `--fast`, `--balanced`, and `--deep`, plus desired
-route and panel overrides. Preview the full table before `--apply`.
-Setup defaults to `--user` (`~/.claude/`); `--project-root` writes a
-complete project override and `--output` remains detached.
+There is no static Claude pstack model preset. The observed Sonnet ID
+may fill both `--fast` and `--balanced`; use the observed Opus ID for
+`--deep`. For ordered three-worker panels, an Opus/Sonnet/Opus proposal
+preserves three positions but only two model identities. It does not
+establish three-model or cross-provider diversity. Preview every route
+and panel before `--apply`.
+Setup defaults to `--user` (`~/.claude/`, or the absolute
+`CLAUDE_CONFIG_DIR` when set); `--project-root` writes a complete
+project override and `--output` remains detached. Resolve the active
+user directory before describing which configuration takes effect.
 The setup auditor checks the manifest, hashes, effective scope, and
 linked native child identity/model from parent and child records.
-It cannot prove child effort from those transcripts. Treat model and
-effort activation as separate claims until independently observed.
+A project-local PreToolUse hook can additionally record the runtime's
+effective effort through `scripts/claude-effort-hook.mjs`; pass that
+JSONL with `--hook-record`. Use an isolated project and do not install a
+diagnostic hook into the user's global settings. Without hook evidence,
+treat child effort as unverified even when the agent file specifies it.
 
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.

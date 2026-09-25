@@ -16,13 +16,15 @@ Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. On Claude Code 2.1.282,
 the published archive passed session-only Skill loading and one read-only
-native subagent run; model setup and broader workflows remain unverified.
+native subagent run. A later unpublished candidate passed a project-local
+two-model setup and one ordered read-only panel; user-level installation and
+broader workflows remain unverified.
 
 | Target | Package | Current confidence |
 | --- | --- | --- |
 | Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
 | OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
-| Claude Code | Native plugin package | Preview; one explicit Skill and native child verified, model routing pending |
+| Claude Code | Native plugin package | Preview; unpublished two-model route/panel acceptance, user install pending |
 
 This is a Beta project. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
@@ -106,13 +108,12 @@ claude --plugin-dir /absolute/path/to/oh-my-stack
 
 Then invoke `/oh-my-stack:prove-it-works` in the fresh session. This does not
 install the plugin globally. The published beta.3 Claude package does not yet
-support a verified setup. The current local development candidate adds
-opt-in, usage-consuming probes for Haiku/Sonnet/Opus and native agent model and
-effort output, but has not been published. In one temporary-project acceptance,
-native route selection and the Sonnet child model passed; effort remains
-unverified. Do not use a
-model-menu entry as proof of account entitlement, and do not probe Fable
-through print mode to infer it.
+support a verified setup. The current unpublished candidate uses opt-in,
+usage-consuming Sonnet/Opus probes for a two-model setup; Haiku is not part of
+that mapping. One temporary-project panel ran Opus/Sonnet/Opus with native
+roles and hook-observed `high` effort. This does not establish user-level
+installation or full workflow behavior. Do not use a model-menu entry as proof
+of account entitlement, and do not probe Fable through print mode to infer it.
 
 ## Detailed verification status
 
@@ -148,8 +149,9 @@ user-profile install. This does not repair OMP's dry-run. See the
 [beta.1 release notes](docs/releases/0.2.0-beta.1.md).
 Codex Desktop has a
 focused scheduled-wake probe; its other capability families and Codex IDE
-remain unprobed. Claude Code now has bounded native Skill and child evidence,
-but model setup and broader workflows remain unverified.
+remain unprobed. Claude Code now has bounded native Skill, child, and local
+two-model panel evidence; global installation and broader workflows remain
+unverified.
 
 The resource fixture proves that OMP and Codex CLI can load packaged
 `references/` and `assets/`, then execute a packaged helper that resolves its
@@ -321,8 +323,9 @@ The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
 [0.2.0-beta.3 release notes](docs/releases/0.2.0-beta.3.md). Claude Code is
-packaged and lifecycle-tested offline, with one later bounded native Skill
-and child run; configured routes and end-to-end use remain unverified.
+packaged and lifecycle-tested offline, with later bounded native Skill,
+single-route, and ordered read-only panel runs on an unpublished candidate.
+User-level installation and broader end-to-end use remain unverified.
 
 The locally built Codex bundle is `dist/oh-my-stack-codex-plugin-<version>.tar.gz`.
 After extracting it, add the extracted marketplace root and install the plugin:
@@ -438,8 +441,8 @@ no-output preview, generated seven native role definitions on apply, bound the
 result to the exact inventory hash, and preserved an unrelated marker file.
 The deterministic first-eligible selection used by the fixture mapped all
 three workload classes to one model, so every generated role correctly records
-that model diversity was not established. Claude Code remains fail-closed and
-deferred until an authenticated local runtime is available.
+that model diversity was not established. The published Claude beta.3 package
+predates the authenticated local two-model setup acceptance described above.
 
 The canonical Skill catalog now separates 74 public workflows and principles
 from 12 internal `check-*` runtime probes. The previous 49-Skill matrix passes

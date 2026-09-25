@@ -25,19 +25,30 @@ reasoning intensity. Neither a three-worker panel nor a write workflow ran.
 `claude -p '/model'` returned aliases including Fable, but a separate
 session-local `/model fable` request reported that Fable 5.1 requires one-time
 interactive consent on this account. A menu entry is therefore not sufficient
-evidence of account entitlement. The current Claude inventory collector
-continues to fail closed, and `setup-oh-my-stack` must not write a guessed
-model mapping. The next implementation slice is a verified account-aware
-inventory, native `model` and `effort` route definitions, and parent/child
-acceptance that checks the actual model and effort. Personal Claude settings
-and the project repository were not changed by these live probes.
+evidence of account entitlement. At the published beta.3 revision, the Claude
+inventory collector failed closed, and `setup-oh-my-stack` could not write a
+verified mapping. Personal Claude settings and the project repository were
+not changed by these first live probes.
 
 Subsequent unpublished local development added an opt-in bounded model probe,
 Claude-native user/project role output, and a setup file/scope auditor. The
 later temporary-project test observed Sonnet and Opus; requesting the Haiku
 alias instead yielded Sonnet, so the collector rejected that result. A native
 `ohmystack-how-explorer` child used its configured Sonnet model. Child effort
-was not observable in that record. This later code was not part of the
-published beta.3 acceptance.
+was not observable in that record. The user then chose a two-model mapping
+without Haiku. A second temporary-project run spawned the three configured
+`architect.runners` agents in order: Opus 5.5, Sonnet 5, Opus 5.5. All three
+completed the same read-only task. A project-local `PreToolUse` hook recorded
+each child identity and effective `high` effort, checked against matching
+parent and child records. This is one bounded panel, not full architect
+workflow acceptance. Neither run changed the user's global Claude settings.
+Another session-only `--plugin-dir` run exercised the generated package's
+effort hook and setup auditor for one `how.explorer` child at Sonnet 5 `@high`.
+That parent answer incorrectly treated appended role-policy text as part of the
+fixture file, so task-content correctness is not included in the acceptance.
+This later code was not part of the published beta.3 acceptance.
+
+Machine-readable local panel evidence:
+[setup-panel-local-candidate.json](../evals/evidence/claude-code-2.1.282/setup-panel-local-candidate.json).
 
 Machine-readable evidence: [native-plugin-smoke.json](../evals/evidence/claude-code-2.1.282/native-plugin-smoke.json).

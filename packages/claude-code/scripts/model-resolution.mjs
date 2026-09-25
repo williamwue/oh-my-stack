@@ -3,7 +3,7 @@
 import { existsSync, realpathSync } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const manifestName = "oh-my-stack.resolution.json";
@@ -29,7 +29,8 @@ async function checkedManifest(path, runtime) {
   return manifest;
 }
 
-export async function resolveActiveResolution({ runtime, cwd = process.cwd(), userRoot = homedir() }) {
+export async function resolveActiveResolution({ runtime, cwd = process.cwd(), userRoot = homedir(),
+  claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? null }) {
   const userDirectory = resolve(userRoot);
   let directory = resolve(cwd);
   while (directory !== userDirectory) {
@@ -39,7 +40,11 @@ export async function resolveActiveResolution({ runtime, cwd = process.cwd(), us
     if (parent === directory) break;
     directory = parent;
   }
-  const path = join(userDirectory, runtimeDirectory(runtime, 'user'), manifestName);
+  if (runtime === 'claude-code' && claudeConfigDir && !isAbsolute(claudeConfigDir)) {
+    throw new Error('CLAUDE_CONFIG_DIR must be an absolute path');
+  }
+  const path = join(runtime === 'claude-code' && claudeConfigDir
+    ? resolve(claudeConfigDir) : join(userDirectory, runtimeDirectory(runtime, 'user')), manifestName);
   if (await exists(path)) return { scope: 'user', path, manifest: await checkedManifest(path, runtime) };
   return null;
 }
@@ -50,7 +55,7 @@ async function main() {
   for (let index = 0; index < args.length; index += 2) {
     const key = args[index];
     const value = args[index + 1];
-    if (!['--runtime', '--cwd', '--user-root'].includes(key) || !value || value.startsWith('--')) {
+    if (!['--runtime', '--cwd', '--user-root', '--claude-config-dir'].includes(key) || !value || value.startsWith('--')) {
       throw new Error(`invalid option ${key ?? '<missing>'}`);
     }
     options[key.slice(2)] = value;
@@ -58,6 +63,7 @@ async function main() {
   if (!options.runtime) throw new Error('--runtime is required');
   const selected = await resolveActiveResolution({
     runtime: options.runtime, cwd: options.cwd ?? process.cwd(), userRoot: options['user-root'] ?? homedir(),
+    claudeConfigDir: options['claude-config-dir'] ?? process.env.CLAUDE_CONFIG_DIR ?? null,
   });
   console.log(JSON.stringify(selected ? { scope: selected.scope, path: selected.path } : { scope: null, path: null }));
 }

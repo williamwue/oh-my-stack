@@ -167,7 +167,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | The unpublished local candidate supports opt-in bounded model probes and native user/project agent definitions. In a temporary project, Sonnet and Opus probes passed, Haiku resolved to Sonnet and was rejected, and one `how.explorer` child used its configured Sonnet model. Effective effort, ordered panels, and release acceptance remain open |
+| P1 | Claude Code model setup and route acceptance | The unpublished local candidate uses observed Sonnet/Opus, excluding Haiku from the chosen mapping. One project-local `how.explorer` child used Sonnet. A later read-only `architect.runners` panel launched three ordered native children at Opus/Sonnet/Opus; parent/child records and a project-local hook observed each model and effective `high` effort. Isolated `CLAUDE_CONFIG_DIR` user-scope configuration/audit passes offline; authenticated user-level install, other panels, full workflows, and release acceptance remain open |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
@@ -178,9 +178,10 @@ against `SHA256SUMS` after publication.
   fixtures do not certify every real-project scenario.
 - Authenticated external systems and long runs still need named test targets
   and authority: PRs, remote CI, scheduled wake, Benny and webhook delivery.
-- Claude Code plugin discovery and one read-only native child now have
-  [bounded acceptance](claude-code-acceptance-2026-09-25.md). Setup, route
-  model/effort activation, panels, and real-project workflows remain open.
+- Claude Code plugin discovery, one read-only native child, and a temporary
+  project two-model panel now have
+  [bounded acceptance](claude-code-acceptance-2026-09-25.md). Other panels,
+  user-level installation, and real-project workflows remain open.
 
 The user's personal OMP `modelRoles` configuration is separate from the
 product. No personal Cursor/OpenAI subscription choices are installed as
