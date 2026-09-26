@@ -1,15 +1,15 @@
 # Project status
 
 Updated: 2026-09-26. Published baseline:
-[v0.2.0-beta.5](releases/0.2.0-beta.5.md).
-Beta.5 was published after clean tagged checks, GitHub CI and downloaded-asset
+[v0.2.0](releases/0.2.0.md).
+The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
 historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
-## First non-beta candidate: 0.2.0
+## First non-beta release: 0.2.0
 
 The 0.2.0 source candidate preserves beta.5 behavior and adds an explicit
 [support policy](support-policy.md), updated acceptance and release materials.
@@ -21,6 +21,19 @@ authorized publication. Historical beta.5 tests do not substitute for it:
 candidate authenticated acceptance remains unverified. The package lifecycle,
 Codex/OMP runtime checks and clean-build gates retain their separate evidence.
 See the [candidate checklist](releases/0.2.0-candidate.md).
+
+Tag `v0.2.0` points to `80cdd5de235d4224f10ec942459741aa07cc2aaa`.
+The clean tagged build passed 121 tests, reproducibility and six checksum
+validations. GitHub CI `36213390401` passed. All seven published files matched
+the local build after downloading. Downloaded packages passed installation
+checks; Codex/OMP native package smokes passed, and Claude manifest validation
+passed without the waived authenticated test.
+
+Follow-up: the source installer can silently no-op when its script is invoked
+through an aliased absolute macOS path. Use `node tools/install-release.mjs`
+from the source checkout or the canonical script path and check success output.
+The source entrypoint needs a later regression fix; native plugin managers
+are unaffected by that entrypoint.
 
 The user reported completing the Claude Code manual check on 2026-09-25.
 This closes the requested human check, but no transcript, exact selected
