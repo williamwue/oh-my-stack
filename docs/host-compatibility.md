@@ -1,6 +1,6 @@
 # Host compatibility evidence
 
-Updated 2026-09-25. These are observed combinations, not minimum supported
+Updated 2026-09-26. These are observed combinations, not minimum supported
 versions or a guarantee for every model/provider account.
 
 | Host | Observed version and platform | Evidence | Boundary |
@@ -8,7 +8,8 @@ versions or a guarantee for every model/provider account.
 | OMP | 18.3.0 on macOS | Installed beta.3 `how` Skill and native `how.explorer` child, isolated-profile install gate, ordered `architect.runners` panel, bounded swarm drain/retry, `proc://` deadline cancellation, and one isolated concurrent-writer case | `plugin link --dry-run` and local-path `--scope=project` are not safe isolation mechanisms; cancelled workers were not reattached after parent process exit, and natural late-result rejection remains unverified |
 | Codex CLI | 0.155.1 on macOS | Installed beta.3 `how` Skill and explicit `how.explorer` child, complete setup receipt, ordered `architect.runners` panel, read-only swarm drain/retry, active cancellation, controlled stale replay, and cross-host checkpoint pickup | Custom role files are not claimed as natively activated; Desktop picker acceptance is user-reported separately; cancelled child model/effort was not observable after interruption; natural late-result delivery remains unverified |
 | Codex Desktop | User-confirmed beta.3 selection on 2026-09-25 | User selected a beta.3 Oh My Stack Skill entry in a new task | No agent-controlled screenshot or exhaustive picker traversal |
-| Claude Code CLI | 2.1.282 on macOS | Published beta.3 archive passed native validation; session-only plugin loading, explicit Skill invocation, and one plugin-scoped explorer child passed | No user-level installation or setup; child inherited Opus 5.5, effort and workflow-route model selection unverified; panels and writes untested |
+| Claude Code CLI | 2.1.282 on macOS | Published beta.3 archive passed native validation; session-only plugin loading, explicit Skill invocation, and one plugin-scoped explorer child passed | Historical beta.3 result; no route model or effort verification in that run |
+| Claude Code CLI | 2.1.283 on macOS | Installed beta.4 user plugin, active user resolution, three ordered `interrogate.reviewers` children at Opus/Sonnet/Opus with hook-observed high effort, and a correct bounded review result; a second Skill run also completed a separate synthesis | Full Skill acceptance withheld: root named models from reviewer reports rather than runtime metadata; remaining panels, writes, and failure paths untested |
 | Windows/Linux | Not recorded for live host acceptance | CI offline checks run on Ubuntu | No interactive host certification |
 
 The observed OMP/Codex inventories used account-specific model IDs. Setup

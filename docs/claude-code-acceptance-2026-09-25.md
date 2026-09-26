@@ -52,3 +52,26 @@ Machine-readable local panel evidence:
 [setup-panel-local-candidate.json](../evals/evidence/claude-code-2.1.282/setup-panel-local-candidate.json).
 
 Machine-readable evidence: [native-plugin-smoke.json](../evals/evidence/claude-code-2.1.282/native-plugin-smoke.json).
+
+## Installed beta.4 follow-up — 2026-09-26
+
+On Claude Code 2.1.283, the user-scope beta.4 plugin was enabled. A read-only
+audit selected the user's medium-budget resolution in a temporary project and
+verified all 29 owned role files. A bounded three-reviewer test used a frozen
+six-line fixture with one real upper-clamp defect. Parent/child records and a
+project-local effort hook independently verified the ordered
+`interrogate.reviewers` panel at Opus 5.5, Sonnet 5, Opus 5.5, each `@high`.
+All three reviewers found the defect; the root independently confirmed it.
+
+A second session directly invoked `/oh-my-stack:interrogate`. It read the
+packaged review references, completed three independent reviewers and a
+separate synthesizer, and reached the same correct finding. External records
+again verified worker models and effort. However, the root answer attributed
+the model IDs to reviewer self-reports rather than runtime metadata. That
+violates the Skill's attribution rule, so full Skill acceptance is withheld.
+The root also disclosed that its restricted tool scope prevented it from
+checking the fixture hash and active user manifest; those facts were verified
+separately outside the Claude session. No global hook was installed and no
+business repository files were changed. See the
+[panel pass](../evals/evidence/claude-code-2.1.283/interrogate-panel-user-setup.json)
+and [Skill attribution gap](../evals/evidence/claude-code-2.1.283/interrogate-skill-attribution-gap.json).

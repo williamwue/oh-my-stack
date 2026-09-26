@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-macos-interrogate-skill-attribution-gap",
+  "fixture": "evals/fixtures/claude-interrogate/page.js SHA-256 cc9107971bdfbc801b92e27ededaf15741cf49627c9c47b36b6e21104eb10859",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Installed beta.4 user plugin and active medium-budget Sonnet/Opus resolution; temporary project with read-only fixture and diagnostic effort hook",
+    "permissionProfile": "plan mode, permission prompts denied, Read/Grep/Glob/Agent only, USD 3 CLI cap"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/claude-code-2.1.283/interrogate-panel-user-setup.json"
+  ],
+  "assertions": [
+    {
+      "id": "skill-stages",
+      "status": "pass",
+      "evidence": "Session 9ad1cfd0-05d0-4731-ab3d-627150f474ce read the packaged rubric and prompts, launched the three configured reviewers in order, collected all three findings, launched a separate ohmystack-role-synthesizer, and gave an independent root judgment. All four children completed."
+    },
+    {
+      "id": "external-route-audit",
+      "status": "pass",
+      "evidence": "The setup auditor independently linked parent/child records and hook events for all three reviewer entries: Opus 5.5@high, Sonnet 5@high, Opus 5.5@high. The synthesizer child transcript and its hook event separately showed Opus 5.5@high."
+    },
+    {
+      "id": "bounded-review-result",
+      "status": "pass",
+      "evidence": "Three reviewers and root identified the real line-5 upper-clamp defect. The fixture SHA-256 matched independently before and after execution; no fixture file changed."
+    },
+    {
+      "id": "root-model-attribution",
+      "status": "fail",
+      "evidence": "The final root answer named reviewer model IDs on the basis of reviewer self-reports and explicitly said it had not checked runtime metadata. The interrogate Skill requires runtime metadata rather than reviewer self-description for model claims. External auditing cannot retroactively make the root's attribution compliant."
+    }
+  ],
+  "limitations": [
+    "The root could not inspect the user resolution or compute the fixture hash under the deliberately restricted tool and path scope; it disclosed both gaps. External checks establish those facts separately, not as root verification.",
+    "The synthesized review was correct for one small positive fixture, but the model-attribution violation prevents full Skill acceptance.",
+    "No failure/cancellation path, writer workflow, or other panel is covered."
+  ]
+}

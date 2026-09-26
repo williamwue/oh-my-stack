@@ -176,7 +176,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | Beta.4 uses observed Sonnet/Opus, excluding Haiku from the chosen mapping. One project-local `how.explorer` child used Sonnet. A read-only `architect.runners` panel launched three ordered native children at Opus/Sonnet/Opus; parent/child records and a project-local hook observed each model and effective `high` effort. Isolated `CLAUDE_CONFIG_DIR` user-scope configuration/audit and native plugin install/list/same-version update/uninstall passed; authenticated user-level setup, future-version update, other panels, and full workflows remain open |
+| P1 | Claude Code model setup and route acceptance | Beta.4 uses observed Sonnet/Opus, excluding Haiku. The user confirmed real setup; a read-only audit independently selected the user manifest and verified 29 role hashes. On Claude Code 2.1.283, the installed beta.4 plugin ran all three `interrogate.reviewers` children at Opus/Sonnet/Opus with hook-observed `high` effort and a correct bounded review result. A second Skill run completed review and synthesis but failed the strict root model-attribution contract by relying on reviewer reports. Earlier project-local `how.explorer` and `architect.runners` tests remain distinct. Fix and retest attribution, future-version update, arena panels, and failure paths |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
@@ -187,10 +187,11 @@ against `SHA256SUMS` after publication.
   fixtures do not certify every real-project scenario.
 - Authenticated external systems and long runs still need named test targets
   and authority: PRs, remote CI, scheduled wake, Benny and webhook delivery.
-- Claude Code plugin discovery, one read-only native child, and a temporary
-  project two-model panel now have
-  [bounded acceptance](claude-code-acceptance-2026-09-25.md). Other panels,
-  authenticated user-level setup and real-project workflows remain open.
+- Claude Code plugin discovery, user-level setup selection, a read-only child,
+  and bounded architect/interrogate panels now have
+  [separate evidence](claude-code-acceptance-2026-09-25.md). The complete
+  `interrogate` Skill still has an attribution defect; arena panels and
+  real-project workflows remain open.
 
 The user's personal OMP `modelRoles` configuration is separate from the
 product. No personal Cursor/OpenAI subscription choices are installed as

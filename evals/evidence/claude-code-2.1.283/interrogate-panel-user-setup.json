@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-macos-interrogate-panel-user-setup",
+  "fixture": "evals/fixtures/claude-interrogate/page.js SHA-256 cc9107971bdfbc801b92e27ededaf15741cf49627c9c47b36b6e21104eb10859",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Installed beta.4 user-scope plugin and active medium-budget Sonnet/Opus user resolution; temporary read-only review project with local diagnostic hook",
+    "permissionProfile": "plan mode, non-interactive prompts denied, Read/Grep/Glob/Agent only, USD 2 CLI cap"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": ["evals/evidence/claude-code-2.1.282/setup-panel-local-candidate.json"],
+  "assertions": [
+    {
+      "id": "active-user-setup",
+      "status": "pass",
+      "evidence": "Native plugin list showed oh-my-stack@oh-my-stack 0.2.0-beta.4 enabled at user scope. Setup receipt selected the user resolution in the temporary project and verified 29 owned role hashes."
+    },
+    {
+      "id": "ordered-three-reviewer-panel",
+      "status": "pass",
+      "evidence": "Parent session fea0cf4d-98e0-4ccd-aa2f-a17378115fba requested exactly one each of ohmystack-interrogate-reviewers-1, -2, and -3 in order; all three completed."
+    },
+    {
+      "id": "observed-model-and-effort",
+      "status": "pass",
+      "evidence": "The packaged setup auditor linked parent/child records and project-local PreToolUse hook events for all three entries: Opus 5.5@high (a186d6f0c62213b9e), Sonnet 5@high (a765c910f512c5fcb), Opus 5.5@high (af63863080a2c42e4)."
+    },
+    {
+      "id": "bounded-review-result",
+      "status": "pass",
+      "evidence": "Three independent reviewers found the line-5 upper-clamp off-by-one defect. Root independently confirmed that normalizePage(10, 3) returns 4, outside the stated [1, 3] range. The fixture SHA-256 matched after execution; no fixture file changed."
+    }
+  ],
+  "limitations": [
+    "This was a direct three-reviewer panel task, not invocation of the complete interrogate Skill or its separate synthesis stage.",
+    "The two Opus positions share one model identity; cross-provider or three-model diversity is not claimed.",
+    "The temporary project hook measured effective effort; it was not installed globally.",
+    "Only this frozen one-file positive review case was tested; other panels, failure/cancellation, write workflows, and future-version plugin upgrade remain unverified."
+  ]
+}
