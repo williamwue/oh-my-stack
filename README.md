@@ -9,9 +9,11 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 See the [current project status and remaining work](docs/project-status.md)
 for completed work, next steps, and user-deferred acceptance.
 
-Oh My Stack is available as a public
-[beta.5 prerelease](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.5)
-with 74 public Skills; see the [release notes](docs/releases/0.2.0-beta.5.md).
+The first non-beta candidate is 0.2.0, with 74 public Skills; it is not yet published.
+The current published version remains
+[beta.5](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.5).
+See the [release notes](docs/releases/0.2.0.md) and
+[support policy](docs/support-policy.md) for its bounded support contract.
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code has a native
@@ -24,11 +26,11 @@ integration coverage remain unverified.
 
 | Target | Package | Current confidence |
 | --- | --- | --- |
-| Codex | Native marketplace plugin and standalone package | Public Beta on the verified CLI surface |
-| OMP | Native package | Public Beta with verified isolated-profile native installation; `--dry-run` remains unsafe |
-| Claude Code | Native plugin and marketplace | Preview; isolated persistent-install lifecycle and bounded two-model panel acceptance |
+| Codex | Native marketplace plugin and standalone package | Supported core on observed CLI versions; Desktop selection is separately user-verified |
+| OMP | Native package | Supported core on observed versions; isolated-profile installation required for tests; `--dry-run` remains unsafe |
+| Claude Code | Native plugin and marketplace | Supported core on observed versions; bounded Sonnet/Opus native role and collaboration evidence |
 
-This is a Beta project. Review the generated instructions before granting
+This is a pre-1.0 project with explicitly scoped support. Review the generated instructions before granting
 write, network, credential, merge, or deployment authority. Surface-specific
 details are tracked in [capabilities](docs/capabilities.md), while release
 claims use the separate verification labels documented in the
@@ -56,7 +58,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-Extract `oh-my-stack-codex-plugin-0.2.0-beta.5.tar.gz` into a dedicated
+For the 0.2.0 candidate, extract `oh-my-stack-codex-plugin-0.2.0.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 
@@ -79,7 +81,7 @@ To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal
 Typing a Skill name as plain text, including in `codex exec`, is not equivalent
 to selecting a structured Skill input. Explicit-only Skills may be absent from
 the model's initial automatic-use list while remaining available in discovery.
-See the [beta.5 release notes](docs/releases/0.2.0-beta.5.md) for the
+See the [0.2.0 release notes](docs/releases/0.2.0.md) for the
 current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
 remains historical evidence.
 
@@ -91,7 +93,7 @@ codex plugin remove oh-my-stack@oh-my-stack
 codex plugin marketplace remove oh-my-stack
 ```
 
-### OMP and Claude Code previews
+### OMP and Claude Code installation
 
 Claude Code can register this repository's marketplace and persist the plugin
 at user scope:
@@ -336,7 +338,7 @@ npm run release:build
 The release manifest records every installed file, target profile, checksum,
 and separate static, discovery, lifecycle, and end-to-end status. See the
 [release process](docs/release-process.md) and the
-[0.2.0-beta.5 release notes](docs/releases/0.2.0-beta.5.md). Claude Code is
+[0.2.0 release notes](docs/releases/0.2.0.md). Claude Code is
 packaged and lifecycle-tested in an isolated profile, with bounded native
 Skill, single-route, ordered panel, and isolated writer runs. User-level setup
 has separate bounded evidence; broader end-to-end use remains unverified.

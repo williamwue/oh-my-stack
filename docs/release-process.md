@@ -241,14 +241,27 @@ The release tag is exactly `v<version>`, where `version` comes from
 ```bash
 npm ci --ignore-scripts
 npm run check
-node tools/build-release.mjs --check --tag v0.2.0-beta.5
-node tools/build-release.mjs --tag v0.2.0-beta.5
+node tools/build-release.mjs --check --tag v0.2.0
+node tools/build-release.mjs --tag v0.2.0
 ```
 
 The tagged build rejects a version-mismatched tag, a tag that does not resolve
 to `HEAD`, or any tracked or untracked worktree change. The manifest records
 the exact tag and commit. Publishing the tag or archives is a separate external
 operation; a successful local build does not claim publication.
+
+For a non-prerelease, also complete the version's candidate checklist before
+creating the tag. A provider limit or missing authenticated smoke is a pending
+gate, not permission to reuse historical evidence as a fresh result. In the
+GitHub release, mark the version as non-prerelease only after the tagged build
+and remote CI pass. Download every asset after publishing and compare its
+checksum with the trusted local tagged build.
+
+For an extracted local Codex marketplace, `marketplace upgrade` is not the
+update operation: that command requires a Git marketplace. Replace only the
+dedicated extracted source with the verified new bundle, then run
+`codex plugin add oh-my-stack@oh-my-stack` and inspect the actual cached version.
+Retain the old bundle for rollback; do not overwrite unrelated marketplace files.
 
 ## Verification labels
 

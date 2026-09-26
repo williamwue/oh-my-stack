@@ -140,3 +140,12 @@ login; a separate authenticated run loaded its upgraded cache through
 installation Skill now requires an independent source read, and a fresh
 one-child smoke separated source and metadata correctly. See the
 [upgrade/smoke record](../evals/evidence/claude-code-2.1.283/beta5-upgrade-smoke.json).
+
+## Post-release continuation — 2026-09-26
+
+Subsequent beta.5 session-only tests passed natural late-payload rejection,
+actual-crash checkpoint pickup (including stale-HEAD rejection), and two
+architect design rounds following a new requirement. These supersede the
+corresponding open items in the historical runs above, not their observations.
+See the [continuation record](claude-continuation-acceptance-2026-09-26.md)
+for scope and remaining limits. Live-worker reattachment remains unverified.

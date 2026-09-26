@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Beta.5 generated package via session-only --plugin-dir with existing user roles",
+    "permissionProfile": "Disposable fixture; root owns implementation and design, candidates read-only; no external writes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "id": "claude-code-2.1.283-multi-round-redesign",
+  "fixture": "/tmp/oms-redesign.89DkQ6",
+  "assertions": [
+    {
+      "id": "two-round-implementation",
+      "status": "pass",
+      "evidence": "Session a70d7d07-07f6-4901-bfeb-573637170583 completed round 1 with three architect candidates, one judge, and passing synchronous event-bus implementation. New phase2 requirements caused one pass and two real failures before round 2."
+    },
+    {
+      "id": "return-to-arena",
+      "status": "pass",
+      "evidence": "Resumed session dispatched architect-runners-1/2/3 at 01:10:37.573Z, 01:10:42.879Z and 01:10:48.402Z, then arena-cross-judge-pool-1 at 01:12:34.843Z. Independently inspected judge input (15883 characters) contains concurrent, sequential and per-event queue design packages including code, rationale, tradeoffs and test implications."
+    },
+    {
+      "id": "independent-final-tests",
+      "status": "pass",
+      "evidence": "External node --test phase1.test.mjs phase2.test.mjs passed 3/3 after round 2. Root implemented concurrent fan-out and documented the delivery/completion ownership change. All four round-2 children completed."
+    },
+    {
+      "id": "preserved-history",
+      "status": "pass",
+      "evidence": "Round-1 implementation snapshot SHA256 0f411dbf9003f71499e9ce29e864f540123b362d798b0a29fe844767508b282a; design snapshot 75b3072be945036061c5f3300311a22a4f1b4255ad5a0fc481fade30be9d64ac; phase1 test d4f6ce7781697bdd1c37618ed29d4d2027e0d286291540e95087994013bfa057. Final implementation 6d50f4b3364b0296e33378e3fc17cdd74c838fae8ce7e26cfb72eeffbfd68b21."
+    }
+  ],
+  "limitations": [
+    "Round 2 was an explicitly requested requirement change with failing tests supplied, not autonomous discovery of an unstated requirement.",
+    "Round-1 judge input used sketches and summaries; full-package handoff is credited only to the inspected round-2 input.",
+    "This is two bounded design rounds, not indefinite convergence or full delegated how/why composition.",
+    "The tests do not exercise unsubscribe during delivery, out-of-order settlement or never-settling handlers. No timeout contract was requested."
+  ]
+}

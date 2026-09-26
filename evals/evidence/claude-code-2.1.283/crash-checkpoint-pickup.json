@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Beta.5 generated package via session-only --plugin-dir with existing user roles",
+    "permissionProfile": "Bounded disposable fixture; no external writes or user setup changes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "id": "claude-code-2.1.283-crash-checkpoint-pickup",
+  "fixture": "/tmp/oms-restart.vehMqr",
+  "assertions": [
+    {
+      "id": "actual-coordinator-crash",
+      "status": "pass",
+      "evidence": "External driver SIGKILLed coordinator PID 12423 at epoch 1790384857799 after checkpoint persistence and child start. Session cad53758-b688-4206-9fec-0e27d7950566 exited with SIGKILL. Child PID 13306 survived immediately after crash and was gone by epoch 1790384901064."
+    },
+    {
+      "id": "durable-pickup",
+      "status": "pass",
+      "evidence": "A new CLI process resumed cad53758-b688-4206-9fec-0e27d7950566 and invoked session-pickup. It verified repository, main, HEAD 9c19a9813cfaf879e70a05de8b338c302db33b3a and clean state; inherited completed A and dispatched only B to a fresh worker. resume-result.json records the combined result."
+    },
+    {
+      "id": "stale-checkpoint-rejected",
+      "status": "pass",
+      "evidence": "After fixture HEAD advanced to bd7fc88dc72e, fresh session 2334abac-f346-4a7e-b909-0d6466d89d81 rejected the old checkpoint. CLI recorded zero spawned children; first.txt was not reread and the pending task did not run."
+    }
+  ],
+  "limitations": [
+    "The old native worker handle was not recovered. The resumed tool surface did not expose TaskOutput, and the driver had already observed the orphan process exit before pickup. This establishes checkpoint recovery, not live-worker reattachment.",
+    "The read-only old worker survived coordinator SIGKILL for a bounded period. Writer recovery must confirm old work is terminal or isolate generations before replacement.",
+    "Unit B was newly dispatched; unit A was inherited from the validated checkpoint. The old B attempt had no accepted terminal result."
+  ]
+}

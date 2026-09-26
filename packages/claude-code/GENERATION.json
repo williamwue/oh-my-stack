@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
   "target": "claude-code",
-  "sourceVersion": "0.2.0-beta.5",
+  "sourceVersion": "0.2.0",
   "profiles": [
     "claude-code-default"
   ],

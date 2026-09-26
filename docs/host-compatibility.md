@@ -17,8 +17,11 @@ Beta.5 candidate additions on 2026-09-26:
 - Claude Code 2.1.283: bounded failure plus one retry, active command and
   eight-second deadline cancellation, isolated arena writers with final tests,
   and one architect implementation cycle. A native beta.4-to-beta.5 update in
-  an isolated profile preserved 29 copied role files. Natural late delivery and
-  multi-cycle redesign remain open.
+  an isolated profile preserved 29 copied role files. Subsequent beta.5 tests
+  passed bounded natural late delivery, actual-crash checkpoint recovery,
+  stale-HEAD rejection and two design rounds; see the
+  [continuation record](claude-continuation-acceptance-2026-09-26.md).
+  Live-worker reattachment and autonomous redesign remain unverified.
 - Codex CLI 0.157.0: isolated beta.5 installation and installed-source decision
   regressions for both changed Skills passed. An unrelated MCP startup auth
   warning did not prevent the read-only test; no external connector was used.

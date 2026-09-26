@@ -9,6 +9,17 @@ historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
+## First non-beta candidate: 0.2.0
+
+The 0.2.0 source candidate preserves beta.5 behavior and adds an explicit
+[support policy](support-policy.md), updated acceptance and release materials.
+The fresh Claude Code smoke was blocked by the account session limit before
+any child started; the provider reported a reset at 11:40 Asia/Taipei on
+2026-09-26. A fresh Sonnet/Opus inventory also could not complete.
+Do not tag, push this candidate to the public marketplace source, or publish
+until that gate is rerun. Historical beta.5 tests do not substitute for it.
+See the [candidate checklist](releases/0.2.0-candidate.md).
+
 The user reported completing the Claude Code manual check on 2026-09-25.
 This closes the requested human check, but no transcript, exact selected
 entry, or host version was supplied for independent reproduction. The
@@ -182,8 +193,8 @@ against `SHA256SUMS` after publication.
 
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
-| P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | Beta.5 preparation passed bounded attribution repair, arena full-output handoff and isolated writers, failure plus one retry, active cancellation, eight-second deadline cancellation, one architect redesign/implementation cycle, and native beta.4-to-beta.5 upgrade preserving 29 role files. Remaining work: natural late payloads and iterative redesign after new implementation evidence. See the dated Claude acceptance record. |
+| P1 | Complete collaboration lifecycle | Claude Code now passes a bounded naturally late payload test and actual-crash checkpoint pickup; Codex/OMP natural delivery and OMP hard-cancel replay remain unverified. No live-worker reattachment is claimed. Installed beta.3 plugin-native acceptance passed one `how.explorer` route on Codex/OMP; broaden only with named scopes. |
+| P1 | Claude Code model setup and route acceptance | Beta.5 preparation passed attribution repair, full-output arena handoff, isolated writers, retry, cancellation/deadline, and native upgrade preserving 29 role files. Post-release continuation passed late-payload rejection, crash checkpoint pickup with stale-HEAD rejection, and two architect design rounds. These bounded results do not establish autonomous redesign or full how/why composition; see the [continuation record](claude-continuation-acceptance-2026-09-26.md). |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries
@@ -197,9 +208,10 @@ against `SHA256SUMS` after publication.
 - Claude Code plugin discovery, user-level setup selection, a read-only child,
   and bounded architect/interrogate panels now have
   [separate evidence](claude-code-acceptance-2026-09-25.md). The complete
-  `interrogate` attribution defect is fixed in the unreleased candidate, and
+  `interrogate` attribution defect is fixed in beta.5, and
   a read-only arena comparison passed after fixing full-artifact delivery.
-  Implementation and real-project workflows remain open.
+  Bounded implementation and two-round redesign passed; broader real-project
+  workflows remain open.
 
 The user's personal OMP `modelRoles` configuration is separate from the
 product. No personal Cursor/OpenAI subscription choices are installed as

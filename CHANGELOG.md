@@ -1,10 +1,20 @@
 # Changelog
 
 All notable changes to Oh My Stack are recorded here. The project uses
-Semantic Versioning prereleases while runtime compatibility is still being
-established.
+Semantic Versioning. The first non-prerelease is 0.2.0; pre-1.0 releases do not
+promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
+
+## 0.2.0 - 2026-09-26
+
+- First non-beta release with 74 public Skills for Codex, OMP and Claude Code.
+- Retain beta.5 workflow behavior and publish explicit core-support and
+  experimental-capability boundaries.
+- Add Claude Code evidence for natural late-result rejection, actual-crash
+  checkpoint recovery with stale-HEAD rejection, and two-round redesign.
+- Preserve runtime-specific model selection, user/project setup separation,
+  safe owned-directory upgrade and rollback, and documented host limitations.
 
 ## 0.2.0-beta.5 - 2026-09-26
 

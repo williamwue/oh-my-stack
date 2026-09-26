@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Beta.5 generated package via session-only --plugin-dir with existing user roles",
+    "permissionProfile": "Bounded disposable fixture; no external writes or user setup changes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "id": "claude-code-2.1.283-natural-late-delivery",
+  "fixture": "/tmp/oms-late-delivery.GyMrpo",
+  "assertions": [
+    {
+      "id": "real-delayed-result",
+      "status": "pass",
+      "evidence": "a4abd42a-d6ff-4013-ba58-8d2e7fec1e66 launched two native swarm workers. The old child captured generation 1 at epoch 1790384782478 and returned at 1790384827479 after the source advanced to generation 2. The fast child read generation 2 at 1790384787533."
+    },
+    {
+      "id": "native-notification-order",
+      "status": "pass",
+      "evidence": "External inspection of the parent JSONL found the current-child completed notification at 2026-09-26T01:06:29.955Z and the old-child completed notification at 01:07:09.716Z. Both were real native completions; no TaskStop call or injected replay was used."
+    },
+    {
+      "id": "current-only-acceptance",
+      "status": "pass",
+      "evidence": "receipt.json accepted generation 2/current and rejected generation 1/old. Both started workers were drained. The root re-read state.json after delivery and it remained generation 2."
+    }
+  ],
+  "limitations": [
+    "The producer used a controlled 45-second delay in a local read-only fixture; this is actual native late delivery, not an uncontrolled production/network race.",
+    "Receipt root timestamps include admitted unknown windows. Exact notification ordering comes from the separately inspected native parent transcript, not those approximate fields.",
+    "The prompt explicitly supplied the generation acceptance contract; this does not prove every workflow applies it without task-specific instructions."
+  ]
+}
