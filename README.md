@@ -9,11 +9,13 @@ Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
 See the [current project status and remaining work](docs/project-status.md)
 for completed work, next steps, and user-deferred acceptance.
 
-The first non-beta candidate is 0.2.0, with 74 public Skills; it is not yet published.
-The current published version remains
-[beta.5](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0-beta.5).
+The first non-beta version is
+[0.2.0](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0),
+with 74 public Skills.
 See the [release notes](docs/releases/0.2.0.md) and
 [support policy](docs/support-policy.md) for its bounded support contract.
+Fresh Claude Code authenticated validation was skipped by explicit user
+approval after an account-limit failure; it is not recorded as passed.
 Codex CLI and OMP have live
 verification evidence. The Codex marketplace bundle has also passed an
 isolated install, reinstall, and uninstall lifecycle. Claude Code has a native
@@ -58,7 +60,7 @@ available for development and independent reproduction.
 
 ### Install the Codex plugin
 
-For the 0.2.0 candidate, extract `oh-my-stack-codex-plugin-0.2.0.tar.gz` into a dedicated
+Extract `oh-my-stack-codex-plugin-0.2.0.tar.gz` into a dedicated
 directory. Then register that extracted marketplace root and install the
 plugin:
 

@@ -16,8 +16,10 @@ The 0.2.0 source candidate preserves beta.5 behavior and adds an explicit
 The fresh Claude Code smoke was blocked by the account session limit before
 any child started; the provider reported a reset at 11:40 Asia/Taipei on
 2026-09-26. A fresh Sonnet/Opus inventory also could not complete.
-Do not tag, push this candidate to the public marketplace source, or publish
-until that gate is rerun. Historical beta.5 tests do not substitute for it.
+On 2026-09-26 the user explicitly waived this fresh Claude validation and
+authorized publication. Historical beta.5 tests do not substitute for it:
+candidate authenticated acceptance remains unverified. The package lifecycle,
+Codex/OMP runtime checks and clean-build gates retain their separate evidence.
 See the [candidate checklist](releases/0.2.0-candidate.md).
 
 The user reported completing the Claude Code manual check on 2026-09-25.
