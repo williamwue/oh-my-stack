@@ -1,9 +1,9 @@
 # Project status
 
 Updated: 2026-09-26. Published baseline:
-[v0.2.0-beta.4](releases/0.2.0-beta.4.md).
-The beta.5 candidate is being prepared from the repairs and bounded native
-acceptance recorded on 2026-09-26.
+[v0.2.0-beta.5](releases/0.2.0-beta.5.md).
+Beta.5 was published after clean tagged checks, GitHub CI and downloaded-asset
+verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
 historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
@@ -19,6 +19,11 @@ and seven agents visible in native details. This is not authenticated
 user-level setup or complete workflow acceptance.
 
 ## Completed
+
+- Beta.5 at `0fb789b` passed 121 tests in a clean tagged checkout, all six
+  checksum validations, and GitHub CI `36206895338`. Seven published assets
+  were downloaded and matched the local tagged build. Three host package
+  gates and bounded Claude collaboration evidence are in the release notes.
 
 - All 25 originally missing upstream entries are implemented: 16 main entries
   and nine extracted playbooks. The public catalog has 74 directly selectable
