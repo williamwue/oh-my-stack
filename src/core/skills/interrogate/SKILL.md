@@ -40,7 +40,11 @@ runtime can resolve it, but do not hard-code models or equate distinct session
 names with distinct backends. If per-worker
 model selection is unavailable, use the available reviewers and disclose that
 diversity was not established. Report model identities only from runtime
-metadata, never reviewer self-description.
+metadata inspected by the root, never reviewer self-description. If the root
+cannot inspect trustworthy per-worker metadata, record each model as
+`unverified` and do not name a model or claim diversity in the verdict, even
+when a reviewer says it read its own runtime metadata. An independent audit
+may establish those facts later, but cannot upgrade the earlier root verdict.
 
 If parallel start is unavailable, run independent reviewers sequentially
 without sharing prior results. If delegation is unavailable, perform two
@@ -88,8 +92,9 @@ The frozen intent and reviewed revision or hash.
 
 ### Reviewers
 
-One line per attributable reviewer with result state, verified model identity
-when available, and finding count.
+One line per attributable reviewer with result state, finding count, and model
+identity only when the root independently verified it from runtime metadata;
+otherwise write `model unverified`.
 
 ### Act On / Consider / Noted / Dismissed
 

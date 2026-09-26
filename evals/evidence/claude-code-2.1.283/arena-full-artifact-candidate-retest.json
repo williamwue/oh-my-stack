@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-macos-arena-full-artifact-candidate-retest",
+  "fixture": "evals/fixtures/claude-interrogate/page.js SHA-256 cc9107971bdfbc801b92e27ededaf15741cf49627c9c47b36b6e21104eb10859",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Unreleased generated package loaded via --plugin-dir from packages/claude-code; active user medium-budget Sonnet/Opus resolution; temporary read-only project",
+    "permissionProfile": "plan mode, permission prompts denied, Read/Grep/Glob/Agent only, USD 3 CLI cap"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/claude-code-2.1.283/arena-panel-readonly-probe.json"
+  ],
+  "assertions": [
+    {
+      "id": "candidate-panel-and-judge",
+      "status": "pass",
+      "evidence": "Session 066a11bc-1aab-4d28-a1b2-2d6c3c177c8a launched all three configured arena.runners in order and one separate arena.cross-judge-pool-1 child; all four completed. Previous probe independently verified the same native panel roles and high effort."
+    },
+    {
+      "id": "judge-full-artifact-input",
+      "status": "pass",
+      "evidence": "The parent Agent call to the cross-judge contains approximately 10 KB of input with BEGIN/END labels for three complete candidate outputs, rather than root-written summaries. The final root report independently disclosed this handoff."
+    },
+    {
+      "id": "read-only-arena-synthesis",
+      "status": "pass",
+      "evidence": "The judge scored all three candidates, recommended a base, and root reported its own comparison, rationale grafts, rejected alternatives, and a hand-traced final one-token patch. No source file was changed."
+    }
+  ],
+  "limitations": [
+    "Verification was by source reasoning only; no patch was applied or executed because the probe was read-only.",
+    "This single trivial positive fixture does not validate arena implementation isolation or failure/cancellation paths.",
+    "The user-installed beta.4 was not updated; this is an unpublished local candidate retest."
+  ]
+}

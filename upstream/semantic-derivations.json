@@ -263,7 +263,7 @@
         {
           "path": "src/core/skills/interrogate/SKILL.md",
           "owner": "derived",
-          "sha256": "237249c5da21dd7829f727e51e0149fb77f57631212c727524d97138b1946257"
+          "sha256": "474464561dd52a4a3c10bdbf3e66e5a7e7dae12ce18384011fa4f3f8519c302d"
         },
         {
           "path": "src/core/skills/interrogate/skill.json",
@@ -283,7 +283,7 @@
         {
           "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
           "owner": "derived",
-          "sha256": "0961188e3a6758faefc48c84548e37338ece791f51f8187f6830ee09d25e1c9e"
+          "sha256": "4589d329256f4bdfaa76646486366fceddbfa780c440d07c1cf96aec56f825c3"
         },
         {
           "path": "src/core/skills/interrogate/references/rubric.md",
@@ -311,7 +311,7 @@
           "sha256": "6594bc8923081c8ad534a1d49b00dd7d088cfb693678acd6f068d10711ddb5fd"
         }
       ],
-      "transformation": "Fixed model lists, source-host task syntax, private configuration paths, and direct aggregation were replaced by runtime-resolved reviewer roles, explicit diversity disclosure, identical frozen packets, a new synthesis session, immutable result boundaries, and independent root judgment."
+      "transformation": "Fixed model lists, source-host task syntax, private configuration paths, and direct aggregation were replaced by runtime-resolved reviewer roles, fail-closed root-verified model attribution, explicit diversity disclosure, identical frozen packets, a new synthesis session, immutable result boundaries, and independent root judgment."
     },
     {
       "id": "bug-fix-port",
@@ -758,7 +758,7 @@
         },
         {
           "path": "src/core/skills/arena/SKILL.md",
-          "sha256": "87ea1d3a322f69c1ee2c1cdac4bde0c6e370282de2e7d109704c22e420110c32",
+          "sha256": "e9c32a6016d42dc88763a2bee7ce3bf0e5b2307aac2940e57e9b2a3d4ca3f255",
           "owner": "derived"
         },
         {
@@ -787,7 +787,7 @@
           "owner": "local-core"
         }
       ],
-      "transformation": "Five explicit-only upstream workflows retain rationale confidence tiers and seven-source coverage, caller-first architecture with distinct alternatives and implementation/redesign, arena cross-judgment/base/graft/final verification, bounded swarm selection and complete drainage, and teach composition of how/why. Fixed model/provider/cloud bindings become observed runtime configuration; unsupported delegation, independence, isolation, evidence access, and verification remain disclosed gaps. Design-only and explanation requests never authorize edits or publication. Upstream mandatory image generation is optional when unavailable or unnecessary. Full source references are frozen; portable reference contracts condense their relevant semantics. The existing router admits these five explicit intent routes without promoting their live-validation status."
+      "transformation": "Five explicit-only upstream workflows retain rationale confidence tiers and seven-source coverage, caller-first architecture with distinct alternatives and implementation/redesign, arena cross-judgment/base/graft/final verification, bounded swarm selection and complete drainage, and teach composition of how/why. Arena cross-judgment now explicitly requires complete frozen candidate artifacts rather than root-written summaries after a Claude Code probe exposed that gap. Fixed model/provider/cloud bindings become observed runtime configuration; unsupported delegation, independence, isolation, evidence access, and verification remain disclosed gaps. Design-only and explanation requests never authorize edits or publication. Upstream mandatory image generation is optional when unavailable or unnecessary. Full source references are frozen; portable reference contracts condense their relevant semantics. The existing router admits these five explicit intent routes without promoting their live-validation status."
     },
     {
       "id": "remaining-main-and-playbooks-port",

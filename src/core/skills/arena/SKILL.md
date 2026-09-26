@@ -50,7 +50,11 @@ comparison. Do not let a timed-out writer continue changing a judged artifact.
 ## Cross-judge and pick
 
 After candidates are frozen, start a distinct read-only judge with the rubric
-and path-labeled artifacts. The parent reads every candidate end to end while
+and path-labeled complete candidate artifacts. Pass each candidate's full
+frozen output verbatim, or give the judge a readable immutable artifact path;
+root-written summaries are not a substitute. If the runtime cannot deliver
+every complete artifact to the judge, disclose the gap and do not claim an
+independent cross-judge comparison. The parent reads every candidate end to end while
 the judge scores them. Prefer configured model diversity only when supported.
 Without a separate judge, run a distinct root critique after freezing and
 explicitly mark the independent cross-judge as unavailable.

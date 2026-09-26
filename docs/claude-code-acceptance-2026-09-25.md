@@ -75,3 +75,28 @@ separately outside the Claude session. No global hook was installed and no
 business repository files were changed. See the
 [panel pass](../evals/evidence/claude-code-2.1.283/interrogate-panel-user-setup.json)
 and [Skill attribution gap](../evals/evidence/claude-code-2.1.283/interrogate-skill-attribution-gap.json).
+
+## Unreleased repair acceptance — 2026-09-26
+
+An explicit root-metadata requirement now prevents reviewer self-description
+from establishing model identity. A session-only candidate retest completed
+three reviewers and a separate synthesizer, found the fixture defect, and
+reported each model as unverified because the root lacked runtime records.
+The external auditor separately verified the three configured models and high
+effort. This passes the attribution repair, not the root's inaccessible hash
+and manifest checks. See the
+[attribution retest](../evals/evidence/claude-code-2.1.283/interrogate-skill-attribution-candidate-retest.json).
+
+A read-only arena probe launched all three configured runners and a separate
+cross-judge. The first run handed the judge summaries rather than complete
+candidate artifacts. The shared Skill now requires complete frozen outputs
+or readable immutable artifact paths. A subsequent candidate run delivered
+three labeled complete outputs, compared them, and returned a source-checked
+patch proposal. It did not apply or execute the patch. Preserve both the
+[initial gap](../evals/evidence/claude-code-2.1.283/arena-panel-readonly-probe.json)
+and [handoff retest](../evals/evidence/claude-code-2.1.283/arena-full-artifact-candidate-retest.json).
+
+The candidate passed 121 repository tests, generation and conformance checks,
+reproducible build, schema validation, and Markdown lint. These session-only
+tests did not upgrade the user's installed beta.4. Failure/cancellation,
+implementation isolation, redesign, and a newer-version upgrade remain open.

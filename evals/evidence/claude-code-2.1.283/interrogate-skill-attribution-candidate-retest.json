@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-macos-interrogate-attribution-candidate-retest",
+  "fixture": "evals/fixtures/claude-interrogate/page.js SHA-256 cc9107971bdfbc801b92e27ededaf15741cf49627c9c47b36b6e21104eb10859",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Unreleased generated Claude Code candidate loaded with --plugin-dir from /tmp/oh-my-stack-interrogate-candidate.F1dtMh/oh-my-stack; active user medium-budget Sonnet/Opus resolution; temporary project and diagnostic effort hook",
+    "permissionProfile": "plan mode, permission prompts denied, Read/Grep/Glob/Agent only, USD 3 CLI cap"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/claude-code-2.1.283/interrogate-skill-attribution-gap.json"
+  ],
+  "assertions": [
+    {
+      "id": "candidate-loaded",
+      "status": "pass",
+      "evidence": "Parent transcript 09b39606-5a75-4f48-86ac-061fbdd157d2 names /tmp/oh-my-stack-interrogate-candidate.F1dtMh/oh-my-stack/skills/interrogate as the Skill base directory and contains the new root-verification wording. This is not evidence that the installed beta.4 changed."
+    },
+    {
+      "id": "skill-stages",
+      "status": "pass",
+      "evidence": "CLI result records three completed ohmystack-interrogate-reviewers children and one completed independent synthesizer. All three raised the line-5 upper-clamp defect, and the root checked the cited source independently without changing it."
+    },
+    {
+      "id": "root-model-attribution",
+      "status": "pass",
+      "evidence": "The final root verdict labels all four child models unverified and makes no diversity claim. It does not borrow model identities from reviewer self-reports."
+    },
+    {
+      "id": "external-route-audit",
+      "status": "pass",
+      "evidence": "setup-acceptance.mjs passed for all three reviewer entries using parent transcript, child transcripts, and diagnostic hook events: Opus 5.5@high, Sonnet 5@high, Opus 5.5@high. This external audit does not upgrade the earlier root verdict."
+    },
+    {
+      "id": "fixture-unchanged",
+      "status": "pass",
+      "evidence": "The test was read-only. The root explicitly disclosed inability to verify the frozen SHA-256 under the constrained tool boundary."
+    }
+  ],
+  "limitations": [
+    "The root could not inspect the user resolution or compute the fixture hash under the deliberately restricted tool and path scope, so it did not claim complete workflow acceptance; external route auditing is separate evidence.",
+    "This tests a session-only unpublished candidate, not an updated personal installation or a release.",
+    "One small positive review fixture does not cover failure, cancellation, or the arena panel."
+  ]
+}

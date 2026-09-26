@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-macos-arena-panel-readonly-probe",
+  "fixture": "evals/fixtures/claude-interrogate/page.js SHA-256 cc9107971bdfbc801b92e27ededaf15741cf49627c9c47b36b6e21104eb10859",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "fail",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W1",
+    "observedDeliveryChecks": ["D0"]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Unreleased local candidate loaded through --plugin-dir with active user medium-budget Sonnet/Opus resolution; temporary read-only project",
+    "permissionProfile": "plan mode, permission prompts denied, Read/Grep/Glob/Agent only, USD 3 CLI cap"
+  },
+  "capabilities": [
+    "agents.custom_roles",
+    "agents.model_override",
+    "agents.read_result",
+    "agents.read_transcript",
+    "agents.reasoning_override",
+    "agents.spawn",
+    "agents.spawn_parallel",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "relatedEvidence": [
+    "evals/evidence/claude-code-2.1.283/interrogate-skill-attribution-candidate-retest.json"
+  ],
+  "assertions": [
+    {
+      "id": "runner-panel-activation",
+      "status": "pass",
+      "evidence": "Session b08c8ee3-61dc-47eb-bc4f-ea0ffcb7aed6 launched three ohmystack-arena-runners in configured order. setup-acceptance.mjs linked each parent call, child transcript, and diagnostic effort hook: Opus 5.5@high, Sonnet 5@high, Opus 5.5@high."
+    },
+    {
+      "id": "cross-judge-activation",
+      "status": "pass",
+      "evidence": "The parent launched ohmystack-arena-cross-judge-pool-1 as a separate child after the candidates. Its child transcript records claude-opus-5-5 with high effort. The three-entry panel auditor is not applicable to this one-judge workflow because it expects every configured entry."
+    },
+    {
+      "id": "candidate-and-synthesis-result",
+      "status": "pass",
+      "evidence": "All three candidates completed, proposed the same one-token upper-clamp correction, and root produced a rationale, graft/rejection record, and source-reasoning check. No code was changed or test run."
+    },
+    {
+      "id": "judge-full-artifact-input",
+      "status": "fail",
+      "evidence": "The final root report disclosed that the cross-judge saw root-written summaries rather than each complete frozen candidate output. This does not meet the Skill's path-labeled artifact handoff requirement and weakens independent comparison."
+    }
+  ],
+  "limitations": [
+    "This probe establishes native panel activation but not full arena workflow acceptance because the judge did not receive complete candidate artifacts.",
+    "Only a read-only design task was exercised; implementation isolation, test execution, and failure or cancellation paths remain untested.",
+    "The result is from a session-only local candidate. The installed beta.4 was not changed."
+  ]
+}
