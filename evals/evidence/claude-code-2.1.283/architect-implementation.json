@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Session-only local candidate with the existing user Sonnet/Opus roles",
+    "permissionProfile": "Temporary fixture, named file ownership, bounded CLI cost and launch count; no external writes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "limitations": [
+    "This covers redesign of an existing defective representation and one implementation cycle; a new contradiction after implementation did not trigger a second arena cycle.",
+    "Root grounding was local source inspection; complete delegated how/why composition and historical rationale were not exercised.",
+    "The judge raised numeric-owner behavior outside the frozen string-only contract; final acceptance is based on in-contract invariants and executable tests, not that observation."
+  ],
+  "id": "claude-code-2.1.283-architect-implementation",
+  "fixture": "/tmp/oms-cc-architect-write.yJsGTi",
+  "assertions": [
+    {
+      "id": "real-baseline-defects",
+      "status": "pass",
+      "evidence": "External pre-run node --test store.test.mjs failed 2/3 tests: colon-delimited composite keys collided, and prefix deletion crossed owners."
+    },
+    {
+      "id": "distinct-designs",
+      "status": "pass",
+      "evidence": "7c3a6bb6-0a8a-4aab-8e49-2b79320cc4c4: three configured architect runners proposed nested maps and a structurally distinct length-prefixed flat map. A separate cross-judge selected nested maps."
+    },
+    {
+      "id": "implemented-and-tested",
+      "status": "pass",
+      "evidence": "Only root wrote store.mjs, preserved the API, recorded a deviation ledger, and ran tests. External rerun passed 3/3. Final source SHA256 cbbb92095612fa12ded8e64d322d6ef6760e1cf4f178eb6e45d3a9ba2b947a16; immutable test SHA256 34cf9c621db726b51736368844b3757c9aa035dbf24edb36fb40d2bc79a00211."
+    }
+  ]
+}

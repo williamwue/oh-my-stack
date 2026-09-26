@@ -2,6 +2,8 @@
 
 Updated: 2026-09-26. Published baseline:
 [v0.2.0-beta.4](releases/0.2.0-beta.4.md).
+The beta.5 candidate is being prepared from the repairs and bounded native
+acceptance recorded on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
 historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
@@ -176,7 +178,7 @@ against `SHA256SUMS` after publication.
 | Priority | Work | Completion evidence |
 | --- | --- | --- |
 | P1 | Complete collaboration lifecycle | Keep natural late-delivery and OMP hard-cancel replay unverified; use validated checkpoint pickup rather than claiming live-worker reattachment. Installed beta.3 plugin-native model-facing acceptance passed for one `how.explorer` route on each host; broaden only with named scopes |
-| P1 | Claude Code model setup and route acceptance | Beta.4 uses observed Sonnet/Opus, excluding Haiku. The user confirmed real setup and 29 role hashes passed audit. Unreleased candidate fixes passed bounded interrogate attribution and arena full-artifact handoff retests. Native arena runners and one cross-judge ran; earlier architect tests remain separate. Remaining work: failure/cancellation, implementation isolation/redesign, and future-version upgrade. See the dated Claude acceptance record. |
+| P1 | Claude Code model setup and route acceptance | Beta.5 preparation passed bounded attribution repair, arena full-output handoff and isolated writers, failure plus one retry, active cancellation, eight-second deadline cancellation, one architect redesign/implementation cycle, and native beta.4-to-beta.5 upgrade preserving 29 role files. Remaining work: natural late payloads and iterative redesign after new implementation evidence. See the dated Claude acceptance record. |
 | P2 | Broaden host compatibility | Recheck changed delegation tools and test additional OS/host versions as available; the current matrix records only observed local combinations and Ubuntu offline CI |
 
 ## Later phases and explicit boundaries

@@ -6,6 +6,18 @@ established.
 
 ## Unreleased
 
+## 0.2.0-beta.5 - 2026-09-26
+
+- Require root-observed runtime metadata for interrogate model attribution and
+  complete frozen candidate artifacts for arena cross-judgment.
+- Make installation checks read the source before quoting delegated file
+  content, so role-policy footers cannot become claimed source text.
+- Correct Claude setup acceptance for a single selected arena cross-judge;
+  runner panels still require every configured entry in order.
+- Add bounded Claude Code failure/retry, executing-command cancellation,
+  deadline expiry, isolated candidate writing, and architecture implementation
+  evidence. Record incomplete initial probes and remaining boundaries.
+
 ## 0.2.0-beta.4 - 2026-09-25
 
 - Added native Claude Code marketplace metadata in the repository and a

@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "id": "claude-code-2.1.283-beta5-upgrade-smoke",
+  "fixture": "/tmp/oms-beta5-gates.hjk6yQ/claude-final-profile plus /tmp/oms-cc-lifecycle.Z0PNjB/present.txt",
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Native beta.4-to-beta.5 update in a fresh isolated profile; authenticated smoke uses that upgraded cache via --plugin-dir",
+    "permissionProfile": "Read-only smoke, one child, USD 1 cap"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "workspace.inspect"
+  ],
+  "assertions": [
+    {
+      "id": "native-upgrade",
+      "status": "pass",
+      "evidence": "Native list first showed enabled beta.4, native update reported beta.4 -> beta.5, and subsequent list showed enabled beta.5. Cached files passed install-release verify against the candidate manifest."
+    },
+    {
+      "id": "setup-preserved",
+      "status": "pass",
+      "evidence": "Copied existing user resolution and all 29 owned role files were preserved through update; setup-acceptance verified the user scope and hashes. No personal configuration was rewritten."
+    },
+    {
+      "id": "source-attribution-repair",
+      "status": "pass",
+      "evidence": "Earlier 70934f48-0f2b-416c-b969-26158a35bf33 incorrectly quoted a ROLE_POLICY footer as file text. After strengthening prove-it-works, session 7fa62730-7ba7-4e50-92c4-2321f604d8e7 completed one native how.explorer child; root read present.txt itself and correctly separated LIFECYCLE_OK from the child footer."
+    }
+  ],
+  "limitations": [
+    "The isolated profile has no login (failed smoke 7b104bed-f492-4817-8934-91d8508c6632). Authenticated smoke loaded its upgraded bytes using --plugin-dir in the existing logged-in environment; it is not an authenticated session inside that isolated profile.",
+    "One route and one source-quotation regression do not certify all workflows."
+  ]
+}

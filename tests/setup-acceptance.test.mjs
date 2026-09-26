@@ -193,6 +193,22 @@ test("Claude acceptance links native Agent call and child model but leaves effor
   ] } })}\n`);
   await assert.rejects(inspectSetup({ resolutionPath, routeName: "architect.runners", entry: 1,
     parentRecord, childRecord }), /panel call order\/count differs/);
+
+  const judge = "ohmystack-arena-cross-judge-pool-2";
+  await writeFile(join(childDirectory, "agent-123.meta.json"), JSON.stringify({
+    agentType: judge, toolUseId: "toolu-1",
+  }));
+  const judgeCall = { ...call, input: { subagent_type: judge } };
+  await writeFile(parentRecord, `${JSON.stringify({ message: { role: "assistant", content: [judgeCall] } })}\n`);
+  const judgeAudit = await inspectSetup({ resolutionPath, routeName: "arena.cross-judge-pool", entry: 2,
+    parentRecord, childRecord });
+  assert.equal(judgeAudit.observed.agent, judge);
+  assert.equal(judgeAudit.activation, "model-verified-effort-unverified");
+  await writeFile(parentRecord, `${JSON.stringify({ message: { role: "assistant", content: [judgeCall,
+    { ...call, id: "toolu-extra", input: { subagent_type: "ohmystack-arena-cross-judge-pool-1" } },
+  ] } })}\n`);
+  await assert.rejects(inspectSetup({ resolutionPath, routeName: "arena.cross-judge-pool", entry: 2,
+    parentRecord, childRecord }), /panel call order\/count differs/);
 });
 
 test("Codex acceptance verifies explicit spawn without claiming native role activation", async () => {

@@ -92,7 +92,7 @@ async function verifyCodex({ manifest, routeName, entry, requestPath, parentReco
     taskOutcome: "not-assessed" };
 }
 
-async function verifyClaude({ parentRecord, childRecord, hookRecord, route, selection }) {
+async function verifyClaude({ parentRecord, childRecord, hookRecord, routeName, route, selection }) {
   assert(basename(dirname(dirname(childRecord))) === basename(parentRecord, ".jsonl"),
     "Claude child record is not in the selected parent session directory");
   const metadataPath = childRecord.replace(/\.jsonl$/, ".meta.json");
@@ -110,8 +110,10 @@ async function verifyClaude({ parentRecord, childRecord, hookRecord, route, sele
     : []);
   assert(calls.length === 1, `expected one linked Claude Agent call for ${selection.agent}, found ${calls.length}`);
   if (route.kind === "panel") {
-    const expectedOrder = route.entries.map((item) => item.agent);
-    const panelAgents = new Set(expectedOrder);
+    const panelAgents = new Set(route.entries.map((item) => item.agent));
+    // Arena chooses one judge from the pool; runner panels dispatch every entry.
+    const expectedOrder = routeName === "arena.cross-judge-pool"
+      ? [selection.agent] : [...panelAgents];
     const actualOrder = parent.flatMap((item) => item.message?.role === "assistant"
       ? (item.message.content ?? []).filter((part) => part.type === "tool_use"
         && part.name === "Agent" && panelAgents.has(part.input?.subagent_type))
@@ -183,7 +185,8 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
       selection: selected.selection, requireReadOnly: manifest.roles?.[selected.route.role]?.constraints?.includes("read_only") })
     : manifest.target === "claude-code"
       ? await verifyClaude({ parentRecord: resolve(parentRecord), childRecord: resolve(childRecord),
-        hookRecord: hookRecord ? resolve(hookRecord) : null, route: selected.route, selection: selected.selection })
+        hookRecord: hookRecord ? resolve(hookRecord) : null, routeName,
+        route: selected.route, selection: selected.selection })
       : await verifyCodex({ manifest, routeName, entry, requestPath,
         parentRecord, childRecord, selection: selected.selection });
   return { ...base, activation: manifest.target === "claude-code" && verified.reasoning === "unverified"

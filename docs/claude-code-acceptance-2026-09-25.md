@@ -100,3 +100,43 @@ The candidate passed 121 repository tests, generation and conformance checks,
 reproducible build, schema validation, and Markdown lint. These session-only
 tests did not upgrade the user's installed beta.4. Failure/cancellation,
 implementation isolation, redesign, and a newer-version upgrade remain open.
+
+## Beta.5 preparation: lifecycle and writers — 2026-09-26
+
+New bounded runs retained a missing-file worker failure after exactly one retry
+and drained every started worker. Active command cancellation was checked
+against a fixture-written start marker, the native killed notification, and
+the process PID. A separate deadline run waited 8001 ms after actual start
+before cancellation. Earlier permission-denied and startup-only probes are
+not credited as executing-command cancellation. No late payload arrived, so
+late-delivery rejection remains unverified. See
+[lifecycle evidence](../evals/evidence/claude-code-2.1.283/lifecycle-failure-cancel.json).
+
+An arena writer retest used three identical candidate directories with separate
+file ownership and one root-owned final directory. All three candidates ran
+their tests, the judge received code, rationale, and test evidence, and the
+integrated final passed. An external four-file test run passed too; all test
+hashes and the baseline stayed unchanged. This is one small directory-isolated
+fixture, not OS-enforced containment. The first writer attempt had denied test
+commands and incomplete judge input and remains incomplete. See
+[writer evidence](../evals/evidence/claude-code-2.1.283/arena-writer-isolation.json).
+
+Architect compared nested maps with a length-prefixed flat map after two real
+owner-boundary tests failed. Root implemented the nested design, kept the API,
+recorded deviations, and all three final tests passed independently. This
+establishes one redesign/implementation cycle, not a later contradiction
+triggering another cycle or full delegated how/why composition. See
+[implementation evidence](../evals/evidence/claude-code-2.1.283/architect-implementation.json).
+
+The Claude setup auditor also incorrectly required all cross-judge pool entries
+to run. Arena selects one judge. The auditor now checks exactly that selected
+entry, keeps complete ordered checks for runner panels, and rejects extra pool
+calls. Unit checks and a replay of actual parent/child/hook records passed.
+
+The final beta.5 package also passed a native upgrade from beta.4 in a fresh
+isolated configuration, preserving 29 copied role files. That profile lacks a
+login; a separate authenticated run loaded its upgraded cache through
+`--plugin-dir`. An initial smoke quoted a role footer as source text. The
+installation Skill now requires an independent source read, and a fresh
+one-child smoke separated source and metadata correctly. See the
+[upgrade/smoke record](../evals/evidence/claude-code-2.1.283/beta5-upgrade-smoke.json).

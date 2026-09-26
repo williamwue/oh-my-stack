@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Session-only local candidate with the existing user Sonnet/Opus roles",
+    "permissionProfile": "Temporary fixture, named file ownership, bounded CLI cost and launch count; no external writes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "limitations": [
+    "Earlier cbc36c54-c909-4dcf-9c79-2e9911969ad7 had two denied candidate test commands and omitted rationale from judge input; it is not counted as full acceptance.",
+    "This is separate-directory isolation with explicit ownership, not an OS-enforced writer sandbox. The trivial fixture yielded identical fixes and does not prove diverse solutions for a complex task.",
+    "The test prompt explicitly required full rationale/test handoff and immutable hashes."
+  ],
+  "id": "claude-code-2.1.283-arena-writer-isolation",
+  "fixture": "/tmp/oms-cc-arena-write-retest.wQgKs7",
+  "assertions": [
+    {
+      "id": "isolated-writers",
+      "status": "pass",
+      "evidence": "cef4fd24-be30-46bb-b8b9-e3d74c2f96d6: three named runners owned separate candidate directories; root owned final/page.mjs. Baseline and test hashes were verified before and after. Three candidate files and final have SHA256 6566bea5e057ac8462f8a9b3897c855617df662640ef513f9a3f37af06c45cbf."
+    },
+    {
+      "id": "complete-judge-input",
+      "status": "pass",
+      "evidence": "One separate judge received complete candidate code, rationale, rejected alternatives and test evidence, scored five criteria and selected a base."
+    },
+    {
+      "id": "executed-final-tests",
+      "status": "pass",
+      "evidence": "Each candidate ran its test and root tested final. External rerun of all four test files passed 4/4; baseline SHA256 eaa2ccecf8dcd3f9845747e27dc72cd5e36ee5dc65bcb6ccebbe059db2ab67ab and all tests 60cf51938310ec24fc77ab6ed2203b46926ce11e1f7b800bdcaa6110d28e1fa5 remained unchanged."
+    }
+  ]
+}

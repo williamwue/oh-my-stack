@@ -12,6 +12,20 @@ versions or a guarantee for every model/provider account.
 | Claude Code CLI | 2.1.283 on macOS | Installed beta.4 user plugin, active user resolution, three ordered `interrogate.reviewers` children at Opus/Sonnet/Opus with hook-observed high effort, and a correct bounded review result; a second Skill run also completed a separate synthesis | Full Skill acceptance withheld: root named models from reviewer reports rather than runtime metadata; remaining panels, writes, and failure paths untested |
 | Windows/Linux | Not recorded for live host acceptance | CI offline checks run on Ubuntu | No interactive host certification |
 
+Beta.5 candidate additions on 2026-09-26:
+
+- Claude Code 2.1.283: bounded failure plus one retry, active command and
+  eight-second deadline cancellation, isolated arena writers with final tests,
+  and one architect implementation cycle. A native beta.4-to-beta.5 update in
+  an isolated profile preserved 29 copied role files. Natural late delivery and
+  multi-cycle redesign remain open.
+- Codex CLI 0.157.0: isolated beta.5 installation and installed-source decision
+  regressions for both changed Skills passed. An unrelated MCP startup auth
+  warning did not prevent the read-only test; no external connector was used.
+- OMP 18.3.0: beta.5 isolated install, doctor, Skill loading, cleanup and a
+  source-guided three-case decision regression passed. This is not full native
+  execution of both changed workflows.
+
 The observed OMP/Codex inventories used account-specific model IDs. Setup
 rejects missing model IDs and unsupported requested efforts before writing
 configuration. Its runtime acceptance rejects OMP model fallback, wrong

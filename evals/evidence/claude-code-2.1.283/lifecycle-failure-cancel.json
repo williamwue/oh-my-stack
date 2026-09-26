@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../src/schemas/evidence.schema.json",
+  "schemaVersion": 1,
+  "profile": "claude-code-default",
+  "observedAt": "2026-09-26",
+  "result": "pass",
+  "claims": {
+    "deliveryTarget": "D3",
+    "deliveryAchieved": "D0",
+    "workflowAchieved": "W2",
+    "observedDeliveryChecks": [
+      "D0"
+    ]
+  },
+  "runtime": {
+    "name": "claude-code",
+    "version": "2.1.283",
+    "platform": "macos",
+    "configuration": "Session-only local candidate with the existing user Sonnet/Opus roles",
+    "permissionProfile": "Temporary fixture, named file ownership, bounded CLI cost and launch count; no external writes"
+  },
+  "capabilities": [
+    "agents.spawn",
+    "agents.read_result",
+    "agents.wait",
+    "workspace.inspect"
+  ],
+  "limitations": [
+    "The first slow-worker probe was denied by a narrow command allowlist. A second stopped the task during startup. Neither is counted as executing-command cancellation.",
+    "No naturally late output arrived; stale-output rejection and reattachment after process restart remain unverified."
+  ],
+  "id": "claude-code-2.1.283-lifecycle-failure-cancel",
+  "fixture": "/tmp/oms-cc-lifecycle.Z0PNjB and /tmp/oms-cc-deadline.qxyfBE",
+  "assertions": [
+    {
+      "id": "failure-and-one-retry",
+      "status": "pass",
+      "evidence": "96cef830-4308-46a5-a7f0-7cccb9259b08: present.txt returned LIFECYCLE_OK; missing.txt failed, exactly one retry also failed, and all four started workers drained. The missing slice stayed BLOCKED."
+    },
+    {
+      "id": "active-cancellation",
+      "status": "pass",
+      "evidence": "148029ac-b25d-4a3f-b254-7af82a1b0a6d: child transcript records node slow.mjs, fixture start marker recorded PID 24529, TaskStop killed the child, and root confirmed PID gone. This run cancelled early and does not establish deadline expiry."
+    },
+    {
+      "id": "deadline-expiry",
+      "status": "pass",
+      "evidence": "651c26ec-2251-41dc-a05f-42daf820ebc6: fixture start 1790383716658, deadline helper returned 1790383724659 (8001ms later), then TaskStop reported killed and PID 28015 was gone."
+    }
+  ]
+}
