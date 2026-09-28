@@ -6,11 +6,21 @@ import { tmpdir } from "node:os";
 import test from "node:test";
 
 import { repoRoot } from "../tools/generate.mjs";
+import { bashExecutable, bashPath } from "./helpers/bash.mjs";
 
 const helper = join(repoRoot, "src/core/skills/show-me-your-work/scripts/log.sh");
 
 function append(log, fields) {
-  return spawnSync(helper, [log, ...fields], { encoding: "utf8" });
+  if (process.platform !== "win32") {
+    return spawnSync(bashExecutable(), [helper, log, ...fields], { encoding: "utf8" });
+  }
+  // Windows process arguments split embedded newlines before Git Bash receives them.
+  const env = { ...process.env };
+  for (const [index, value] of fields.entries()) env[`OMS_TEST_FIELD_${index}`] = value;
+  return spawnSync(bashExecutable(), [
+    "-c", 'exec "$1" "$2" "$OMS_TEST_FIELD_0" "$OMS_TEST_FIELD_1" "$OMS_TEST_FIELD_2" "$OMS_TEST_FIELD_3" "$OMS_TEST_FIELD_4"',
+    "show-work-test", bashPath(helper), bashPath(log),
+  ], { encoding: "utf8", env });
 }
 
 test("decision-log helper creates one header and appends sanitized rows", async () => {

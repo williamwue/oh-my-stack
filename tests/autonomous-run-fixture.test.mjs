@@ -7,6 +7,7 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 import { repoRoot } from "../tools/generate.mjs";
+import { bashExecutable, bashPath } from "./helpers/bash.mjs";
 
 const execFileAsync = promisify(execFile);
 const fixture = join(repoRoot, "evals", "fixtures", "autonomous-run");
@@ -46,9 +47,9 @@ test("autonomous run advances one verified unit per iteration and stops at its p
       const advanced = JSON.parse((await execFileAsync(process.execPath, [join(root, "controller.mjs"), "advance", root])).stdout);
       assert.equal(advanced.predicate, `${offset + 1}/3`);
       commits.push(advanced.head);
-      await execFileAsync("bash", [
-        helperTarget,
-        join(root, "decisions.tsv"),
+      await execFileAsync(bashExecutable(), [
+        bashPath(helperTarget),
+        bashPath(join(root, "decisions.tsv")),
         `iteration-${offset + 1}`,
         `keep ${unit.id}`,
         "predicate advanced",

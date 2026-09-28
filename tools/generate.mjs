@@ -67,13 +67,15 @@ async function writeText(path, value) {
   await writeFile(path, value.endsWith("\n") ? value : `${value}\n`);
 }
 
-export async function filesUnder(directory) {
+export async function filesUnder(directory, { excludeDirectory = () => false } = {}) {
   if (!(await exists(directory))) return [];
   const files = [];
   async function walk(current) {
     for (const entry of await readdir(current, { withFileTypes: true })) {
       const path = join(current, entry.name);
-      if (entry.isDirectory()) await walk(path);
+      if (entry.isDirectory()) {
+        if (!excludeDirectory(path)) await walk(path);
+      }
       else files.push(path);
     }
   }

@@ -10,6 +10,12 @@ import { repoRoot } from "../tools/generate.mjs";
 
 const execFileAsync = promisify(execFile);
 
+function runNpm(args) {
+  const cli = process.env.npm_execpath ?? (process.platform === "win32"
+    ? join(dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js") : null);
+  return cli ? execFileAsync(process.execPath, [cli, ...args]) : execFileAsync("npm", args);
+}
+
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
 }
@@ -41,15 +47,15 @@ test("OMP package survives clean npm install, update, and uninstall", async () =
   const source = join(repoRoot, "packages", "omp");
   try {
     const npmArgs = ["install", "--ignore-scripts", "--no-audit", "--no-fund", "--prefix", prefix, source];
-    await execFileAsync("npm", npmArgs);
+    await runNpm(npmArgs);
     assert.equal((await readJson(join(packagePath, "package.json"))).omp.skills[0], "./skills");
 
     const sentinel = join(prefix, "user-owned.txt");
     await writeFile(sentinel, "preserve me\n");
-    await execFileAsync("npm", [...npmArgs, "--force"]);
+    await runNpm([...npmArgs, "--force"]);
     assert.equal(await readFile(sentinel, "utf8"), "preserve me\n");
 
-    await execFileAsync("npm", ["uninstall", "--ignore-scripts", "--no-audit", "--no-fund", "--prefix", prefix, "oh-my-stack"]);
+    await runNpm(["uninstall", "--ignore-scripts", "--no-audit", "--no-fund", "--prefix", prefix, "oh-my-stack"]);
     assert.equal(await pathExists(packagePath), false);
     assert.equal(await readFile(sentinel, "utf8"), "preserve me\n");
   } finally {

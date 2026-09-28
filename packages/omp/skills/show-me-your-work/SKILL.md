@@ -31,6 +31,15 @@ Keep one canonical decision log. Use it for work with multiple phases, delegated
 sessions, important pivots, or verification that a reviewer will inspect later.
 Do not turn routine commands into noise.
 
+When a log spans runs, append a `start` row for each run with its attributable
+session or run identity and starting revision. Record its ending timestamp or
+checkpoint in a later row. Audit the rows between those boundaries against that
+run's evidence; a later run's success does not validate an earlier run's claims.
+If runs overlap, include the run identity in each row's evidence pointer rather
+than treating all intervening rows as one run. Preserve earlier rows, including
+incorrect ones, and supersede them with a later correction that cites the
+original row and resolvable evidence.
+
 ## Start the log
 
 Copy `references/decision-log-template.tsv` to `decisions.tsv` in the working

@@ -163,3 +163,15 @@ sources:
     candidate_commit: null
     baseline_commit: 86ecc82055e4d3cb567e72c56f390800a4978c9b
     verified_commit: 70b2dc8b4b85c8d5648624ca40d692c421fff32f
+
+  - id: cursor-pstack-september-28
+    repository: https://github.com/cursor/plugins.git
+    path: pstack
+    role: reviewed-september-28-semantic-delta
+    license: MIT
+    usage: imported-source
+    inspected_at: "2026-09-28"
+    inspected_commit: ecc249f1e306fc64ddf83c7bed16cacf7c2239db
+    candidate_commit: null
+    baseline_commit: ecc249f1e306fc64ddf83c7bed16cacf7c2239db
+    verified_commit: ecc249f1e306fc64ddf83c7bed16cacf7c2239db

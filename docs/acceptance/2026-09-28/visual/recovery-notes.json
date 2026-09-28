@@ -1,0 +1,11 @@
+{
+  "attempt1": "Invalid: JPEG backend dimension variance; retained in local scratch, no acceptance claim",
+  "attempt2": "Frozen PNG baseline before component extraction; default exact RGBA comparison",
+  "browserFailures": "Multiple screenshot timeouts and detached-debugger errors retained in conversation; new owned tabs restored connection",
+  "invalidNegative": "One mobile screenshot used captureBeyondViewport true and removed scrollbar. Discarded. Repeated with false and original 375px client width; accepted negative is 10959 changed pixels.",
+  "captureRecovery": "An explicit full-viewport clip plus captureBeyondViewport false fixed capture; restored mobile component still matched frozen baseline exactly.",
+  "consoleErrors": [],
+  "behavior": "Unchanged h1 text/level; mobile menu opens dialog containing product/API/resources/pricing/login/register; menu snapshot attached",
+  "cleanup": "Fishspeech isolated source restored to original HEAD bytes; owned dev server stopped. Three owned browser tabs could not close or reset viewport because the debugger had detached; no browser installation/config repair attempted.",
+  "serverBoundary": "Anonymous page renders, but /api/auth/get-session returned500 because BETTER_AUTH_SECRET was not configured. No auth/backend acceptance."
+}

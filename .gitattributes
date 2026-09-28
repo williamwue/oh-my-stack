@@ -1,0 +1,2 @@
+* text=auto eol=lf
+docs/acceptance/**/visual/*.patch whitespace=-blank-at-eol

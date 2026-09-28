@@ -1,0 +1,31 @@
+# Candidate 2 — repository-key boundary (design only)
+
+**Problem and constraints.** On Windows, `path.relative()` yields backslashes while evidence references and executable inventory entries use `/`. This breaks evidence lookup and script classification. Snapshot exclusion and repository-containment checks also mix native paths with hard-coded `/`. Preserve exact SHA-256 checks on raw snapshot, imported-target, and derivation bytes; preserve rejection of missing evidence, missing inventory files, repository escapes, duplicate ownership, private material, and invalid provenance. The reported prior `npm run check` failures were supplied in the task packet; I independently confirmed the separator mismatch with Node on Windows.
+
+**Caller usage.** Proposed calls, not implemented code:
+
+```js
+const paths = await RepositoryPaths.open(root);
+const key = paths.keyOf(discoveredEvidenceFile);
+evidenceByPath.set(key, document);
+const related = paths.parseKey(document.relatedEvidence[0], {
+  under: "evals/evidence",
+  label: `${key}: relatedEvidence`,
+});
+assert(evidenceByPath.has(related), `${key}: missing related evidence ${related}`);
+
+const script = paths.parseKey(entry.path, { label: "executables entry.path" });
+assert(await paths.fileExists(script), `missing executable ${script}`);
+
+const target = await paths.resolveLocalLink(markdownFile, decodedLinkTarget);
+```
+
+**Shape and ownership.** `tools/repository-paths.mjs` owns `RepoKey` (canonical slash-separated repository-relative identity) and `NativePath` (host filesystem path). Proposed operations are `parseKey(raw, {under,label})`, `keyOf(absolute)`, `pathOf(key)`, `isWithin(key,prefix)`, `fileExists(key)`, `resolveLocalLink(source,target)`, and `filesUnder(key,{prune})`. These bodies are unfinished. `parseKey` rejects absolute, drive, UNC, backslash, empty, dot, parent, NUL, and Windows stream forms without rewriting input. Native containment uses `path.relative()` and segment boundaries, with symlink checks before inspected reads. `tools/validate.mjs` retains evidence, hash, inventory, Markdown, and hygiene policies. Its exported entry points remain unchanged. `loadModel`’s schema-reference resolution uses the same containment rule. Existing evidence `Map` and inventory `Set` suffice; add no cache.
+
+Traversal prunes `.tmp`, `node_modules`, `.git`, `dist`, and `coverage` before descent. Snapshot Markdown links are exempt by `isWithin(key,"upstream/snapshots")`; snapshot files still receive provenance and secret checks. Manifest source, output, import, and patch paths are parsed before joining to root. Hash inputs remain raw buffers.
+
+**Tradeoff and rejection.** The boundary adds path-validation calls and filesystem checks while removing OS-specific path knowledge from policy code. Callers still supply the permitted subtree. Reject converting every manifest reference into a native path at each lookup: that duplicates security rules and can silently legitimize malformed references.
+
+**Executable checks.** Positive: Windows/POSIX evidence-key round trip; related/profile evidence lookup; tool and skill-script inventory matching; contained Markdown link; snapshot exclusion; unchanged raw hashes. Negative: `../`, absolute/drive/UNC paths, backslashes, dot or empty segments, sibling-prefix confusion, escaping Markdown link or symlink, missing evidence, missing executable, hash drift, private key in snapshot. Run focused path and Markdown tests, `npm run validate`, then `npm run check` on Windows and POSIX.
+
+ROLE_POLICY=independent-read-only-exploration

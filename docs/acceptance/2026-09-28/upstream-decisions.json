@@ -1,0 +1,427 @@
+{
+  "from": "70b2dc8b4b85c8d5648624ca40d692c421fff32f",
+  "to": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+  "changed": [
+    {
+      "path": "pstack/.cursor-plugin/plugin.json",
+      "beforeBlob": "974daecc794570c79e84256962f3be20697de2b4",
+      "afterBlob": "6ebc34b96f65088d695e3c3038eb412d750c8bdb",
+      "disposition": "portable-divergence",
+      "rationale": "Only the Cursor plugin version changes from 0.15.3 to 0.15.5. OMS owns a separate centrally versioned multi-runtime product; copying this upstream package version would be incorrect.",
+      "targets": [
+        "package.json",
+        "packages/codex/plugin.json"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/README.md",
+      "beforeBlob": "2731017a489090ae7a2101904c4ab71e49a736c6",
+      "afterBlob": "b7cdef8aeb15da88a8f9cdd82904d884552395b7",
+      "disposition": "already-covered",
+      "rationale": "The setup note replaces historical Cursor model names with generic old-default wording while preserving the instruction to remove stale role overrides. OMS setup already requires a live runtime inventory and forbids guessed model IDs.",
+      "targets": [
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "packages/omp/skills/setup-oh-my-stack/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/docs/guide/01-setup.md",
+      "beforeBlob": "0eacc52e68d2db4782af1ee3829863e4b93b00cf",
+      "afterBlob": "1e602f61c81eb1902150b849682b92b8e583fa7c",
+      "disposition": "already-covered",
+      "rationale": "Same model-default wording clarification as the README. OMS setup documentation is runtime-inventory-first and has no corresponding Cursor model pin to refresh.",
+      "targets": [
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "packages/omp/skills/setup-oh-my-stack/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/architect/SKILL.md",
+      "beforeBlob": "a062cb706c2aa3b79fc2b3f2687d840a2a233d19",
+      "afterBlob": "afa6eead878d2a7b8d22b8eb99e6cf0c6ee0ad69",
+      "disposition": "already-covered",
+      "rationale": "Upstream changes Architect to pass architect.runners instead of Arena's general panel. OMS already explicitly passes the ordered architect.runners panel to Arena when configured.",
+      "targets": [
+        "src/core/skills/architect/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/arena/SKILL.md",
+      "beforeBlob": "2139ad1cd68e3e4d74d4bea8538193bff01f29f5",
+      "afterBlob": "e50356e2f97608dbb48d9c1cd75af6d70b3f7059",
+      "disposition": "portable-divergence",
+      "rationale": "OMS already consumes its ordered arena.runners and arena.cross-judge-pool manifest routes and supports inherit-parent aliases through configuration/delegation. Do not port upstream family-prefix slug fallbacks: OMS validates against observed runtime models and should preserve configured identity or surface rejection.",
+      "targets": [
+        "src/core/skills/arena/SKILL.md",
+        "src/runtime-resolution/policy.json",
+        "tools/configure-models.mjs",
+        "tools/codex-delegation.mjs"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/figure-it-out/SKILL.md",
+      "beforeBlob": "33973339b71a564fe58670ce0da99abecfba6bae",
+      "afterBlob": "fbf3fb122cab127d71d3c41e84711e61cc5dec4c",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes an explicit delegate-artifact audit sentence. OMS already says a child report is not root proof and requires inspecting the artifact, which retains the stronger verification behavior.",
+      "targets": [
+        "src/core/skills/figure-it-out/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/how/SKILL.md",
+      "beforeBlob": "a3a835fa660673903ee0cbc5262b3258bf897d7a",
+      "afterBlob": "cd22fff659f14822ad2f485f711a355b6da0668d",
+      "disposition": "portable-divergence",
+      "rationale": "OMS uses how.explorer/how.explainer manifest routes, runtime-specific native selection, and explicit Codex delegation preparation; inherit-parent is supported by the model configurator. Upstream static defaults and rejected-slug fallbacks do not fit observed-model routing and would obscure route failures.",
+      "targets": [
+        "src/core/skills/how/SKILL.md",
+        "src/runtime-resolution/policy.json",
+        "tools/configure-models.mjs",
+        "tools/generate.mjs",
+        "tools/codex-delegation.mjs"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/interrogate/SKILL.md",
+      "beforeBlob": "0fd70fd89293e36a333c362264a3cfe2da66c10f",
+      "afterBlob": "bd82e5b179f186e1cd7913dd112db9f8b07b4846",
+      "disposition": "portable-divergence",
+      "rationale": "OMS already selects the ordered interrogate.reviewers panel and supports inherited entries. The upstream family-based fallback and static model defaults should not replace an observed route or hide a rejected model.",
+      "targets": [
+        "src/core/skills/interrogate/SKILL.md",
+        "src/core/skills/interrogate/skill.json",
+        "src/runtime-resolution/policy.json",
+        "tools/configure-models.mjs",
+        "tools/codex-delegation.mjs"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/interrogate/references/code-quality-review.md",
+      "beforeBlob": "50230358f9b6138caf66065b1084be595d453d81",
+      "afterBlob": "16581250d81044c7e80fe234c4970a3f7b7fc98a",
+      "disposition": "already-covered",
+      "rationale": "The removed reminder against flooding reviews with nits is covered by OMS guidance to prioritize a few high-conviction findings and avoid cosmetic volume.",
+      "targets": [
+        "src/core/skills/interrogate/references/code-quality-review.md",
+        "src/core/skills/interrogate/references/reviewer-prompt.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/interrogate/references/reviewer-prompt.md",
+      "beforeBlob": "53ffa747ff6af72ed24cc00e2622b2c14dd564a9",
+      "afterBlob": "13a252b2c3cd18522d4c8dc39a7030477037b249",
+      "disposition": "already-covered",
+      "rationale": "Removed warnings against stylistic rewrites and unreachable hypotheticals are covered by the OMS quality lens requiring concrete defects and the reviewer contract requiring reachable paths or observable consequences.",
+      "targets": [
+        "src/core/skills/interrogate/references/code-quality-review.md",
+        "src/core/skills/interrogate/references/reviewer-prompt.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/interrogate/references/rubric.md",
+      "beforeBlob": "04bd4ca6d31a17694071c415c349128a3b404006",
+      "afterBlob": "2d92f1b83e13be03fb10f20cba12639a1406a2da",
+      "disposition": "already-covered",
+      "rationale": "The affirmative direction to trace and show security input paths is equivalent to OMS requiring a traceable source-to-sink path for security claims.",
+      "targets": [
+        "src/core/skills/interrogate/references/rubric.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/SKILL.md",
+      "beforeBlob": "5cec6fb87ac9b578631b121c24a1b4c0421d674d",
+      "afterBlob": "f8ddcae379007d61aefcae39b18bd836a488ee21",
+      "disposition": "already-covered",
+      "rationale": "The changed sentence maps code playbooks, hardest work, and prose/judgment to configurable Cursor roles. OMS's router delegates model selection to runtime-resolved named routes and inherits the host model when no manifest exists; importing these role labels would reduce portability.",
+      "targets": [
+        "src/core/skills/poteto-mode/SKILL.md",
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "tools/model-resolution.mjs"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "beforeBlob": "5456b79489978c20ca846d06104e9990bb0b7c44",
+      "afterBlob": "e92be88a8dfcb0a1f2745e0da7af42d31f1d6606",
+      "disposition": "adopted",
+      "rationale": "The upstream addition requires publishing an owner's rebased branch with git push --force-with-lease after checking the remote tip with ls-remote, and prohibits force-pushing a shared branch. OMS requires first and merge-preparation rebases but does not spell out safe publication of the rewritten owner branch; the bounded lease rule closes that gap.",
+      "targets": [
+        "src/core/skills/autopilot-full/SKILL.md",
+        "tests/autopilot-full-fixture.test.mjs",
+        "upstream/semantic-derivations.json",
+        "upstream/ownership.yaml",
+        "upstream/sources.yaml"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/babysit.md",
+      "beforeBlob": "73eddb732ad9d4a4c27c16e3cc6c41f78becc3e1",
+      "afterBlob": "683cf0ba889789cbe2d880fce667c75349f9ed12",
+      "disposition": "portable-divergence",
+      "rationale": "Upstream lets an Autopilot owner rebase and publish from its babysit loop. OMS keeps babysit from rewriting topology and routes conflicts to the owner; Autopilot Full and Autopilot Stack own their separate rebase authority. Preserve that boundary and state lease-protected publication in Autopilot Full itself.",
+      "targets": [
+        "src/core/skills/babysit/SKILL.md",
+        "src/core/skills/autopilot-full/SKILL.md",
+        "src/core/skills/autopilot-stack/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/bug-fix.md",
+      "beforeBlob": "7deba2c88ebc708a541ad226e904217c3eeceecd",
+      "afterBlob": "eeebc42b7477d435d8ac61d631d84822f908f59c",
+      "disposition": "portable-divergence",
+      "rationale": "Upstream removes a duplicate diff-review sentence and mandatory parallel how/why investigation fanout. OMS assigns reproduction, diagnosis, integration, and final proof to the root and makes one bounded implementation delegate optional; mandatory fanout would contradict the portable ownership model.",
+      "targets": [
+        "src/core/skills/bug-fix/SKILL.md",
+        "src/core/skills/investigation/SKILL.md",
+        "src/core/skills/how/SKILL.md",
+        "src/core/skills/why/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/feature.md",
+      "beforeBlob": "42ca2b572364416a18b2c011a39b289e029095c7",
+      "afterBlob": "79a6bbbe0ce61c3b5ef9af1ee8e3ccdb0557edc6",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes mandatory code delegation and duplicate review instructions. OMS explicitly allows one bounded writer or root implementation, followed by root diff inspection and matching-surface verification.",
+      "targets": [
+        "src/core/skills/feature/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "beforeBlob": "ac92ba53be6498b308b888affb05065fa62c1cec",
+      "afterBlob": "fe006110f6005dcdb746d891e7901a1734a75538",
+      "disposition": "portable-divergence",
+      "rationale": "Upstream replaces a fixed Grok model with the configured swarm-workers model and requires filling a model placeholder. OMS plans require evidence-bearing checks but intentionally do not mandate ten lanes or name a provider model; runtime setup and route resolution supply observed choices.",
+      "targets": [
+        "src/core/skills/multi-phase-plan/SKILL.md",
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "tools/model-resolution.mjs"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "beforeBlob": "a5c65a0959d0c37ebd12d5636710c4e0f91fba88",
+      "afterBlob": "626f376bd64e2e7b04c2575cb8b8f4ba70a6078d",
+      "disposition": "portable-divergence",
+      "rationale": "Upstream coordinates subagent PR cleanup and makes babysitting conditional on Autopilot ownership. OMS treats PR opening as a separately authorized publication workflow and gives Autopilot its lifecycle authority in its own skill; pulling those Cursor-specific subagent cleanup steps into the generic publisher is unnecessary.",
+      "targets": [
+        "src/core/skills/opening-a-pr/SKILL.md",
+        "src/core/skills/autopilot-full/SKILL.md",
+        "src/core/skills/autopilot-stack/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/playbooks/refactoring.md",
+      "beforeBlob": "ee66cdfbe53ee0cade74ac749e08d076ce775c20",
+      "afterBlob": "df2a863b531906c64f92b9f9d8feb62f8c7a8665",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes repeated diff-review and owned-verification clauses. OMS already says the root reviews the diff and runs an equivalence check on the real artifact.",
+      "targets": [
+        "src/core/skills/refactoring/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "beforeBlob": "cdb272750cd649c6d4b6bee6f52409e4eb1a314f",
+      "afterBlob": "6c07f4e903d10332702a2ac4602ada9273e71609",
+      "disposition": "portable-divergence",
+      "rationale": "Upstream changes a fixed-model string check to a nonempty-model placeholder pattern while retaining ten required lanes. OMS has no corresponding check-plan script or ten-lane plan contract; its portable plan and route validation have different contracts.",
+      "targets": [
+        "src/core/skills/multi-phase-plan/SKILL.md",
+        "tools/configure-models.mjs",
+        "tools/model-resolution.mjs"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/principle-guard-the-context-window/SKILL.md",
+      "beforeBlob": "eb2cecc40f9d830dc077009f93a467be69f195a2",
+      "afterBlob": "c4db544909b26981c45eed9caa6591d32885f841",
+      "disposition": "already-covered",
+      "rationale": "Upstream deletes the selective-reading bullet. OMS retains it alongside payload isolation and bounded phase sizing; the deletion removes a repeated source instruction without revealing an OMS gap.",
+      "targets": [
+        "src/core/skills/principle-guard-the-context-window/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/principle-never-block-on-the-human/SKILL.md",
+      "beforeBlob": "46d410715c0f36cc43f6774dac9f89b3404e9aa4",
+      "afterBlob": "11f08b6ef1fd93a3b3e47c57eb84716dc9acbff9",
+      "disposition": "already-covered",
+      "rationale": "Upstream deletes ambiguity-only questions, self-healing, and asynchronous-supervision bullets. OMS retains these behaviors and adds explicit reversible-versus-irreversible boundaries.",
+      "targets": [
+        "src/core/skills/principle-never-block-on-the-human/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/principle-outcome-oriented-execution/SKILL.md",
+      "beforeBlob": "4c2ed4695b4ca15ea5a98468c13bfe5de97f16df",
+      "afterBlob": "c49be0bc74783f0dee013101365ae09b2abb48a2",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes the final-verification sentence. OMS retains it and requires full static and runtime verification at plan completion.",
+      "targets": [
+        "src/core/skills/principle-outcome-oriented-execution/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/principle-prove-it-works/SKILL.md",
+      "beforeBlob": "b596462649a6a6b9f0a2d87e1052678cb0c1a9a6",
+      "afterBlob": "5dc14a3b06f9d579e5c17cd8a7242f432ddb3125",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes the four-step code/integration proof sequence and delegated-artifact check. OMS still contains those steps and tells reviewers to inspect actual delegated artifacts rather than self-reports.",
+      "targets": [
+        "src/core/skills/principle-prove-it-works/SKILL.md",
+        "src/core/skills/bug-fix/SKILL.md",
+        "src/core/skills/refactoring/SKILL.md"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/reflect/SKILL.md",
+      "beforeBlob": "827b5e9cca8c301d42d3e84fedf40c53ea3f240f",
+      "afterBlob": "cb270acc507aeaeab7c37db11fc8130cbb2f93f4",
+      "disposition": "portable-divergence",
+      "rationale": "OMS already has separate tooling, judgment, divergent, and synthesizer routes, with generated runtime-specific routing and inheritance support. Preserve this manifest/native-agent dispatch; do not port static defaults or family-based rejected-slug fallbacks.",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md",
+        "src/core/skills/reflect/skill.json",
+        "src/runtime-resolution/policy.json",
+        "src/runtime-resolution/host-routes.json",
+        "tools/generate.mjs",
+        "tools/configure-models.mjs"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/reflect/references/divergent-reviewer.md",
+      "beforeBlob": "73969d847dd97f2d714df20d27359ce98ad0f7cc",
+      "afterBlob": "de95be3b9cc9c11052596249336dcc328473eb26",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes the 3-5 durable-learning cap. OMS reflect does not impose a finding count cap and instead classifies accepted, rejected, and backlog findings.",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/reflect/references/judgment-reviewer.md",
+      "beforeBlob": "830213aedff81c5b27462988201663e1f0229a72",
+      "afterBlob": "222f02b1c3c6eb3e700fa09a71bad108807d3485",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes the 3-5 durable-learning cap. OMS reflect has no such cap; it has no corresponding per-lens reference prompt file.",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/reflect/references/tooling-reviewer.md",
+      "beforeBlob": "e7fcd9e669c5a10664f4a14d8856af6978f9e535",
+      "afterBlob": "a37e2009d6ef08f535df87e020e52426c6a5fa33",
+      "disposition": "already-covered",
+      "rationale": "Upstream removes the 3-5 durable-learning cap. OMS reflect has no such cap; it has no corresponding per-lens reference prompt file.",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/setup-pstack/SKILL.md",
+      "beforeBlob": "0246157bc06c81155e6ee3fefd0892c5a31e9a80",
+      "afterBlob": "1009e73c6116c8f6c24b5870c8f0600ae144b631",
+      "disposition": "already-covered",
+      "rationale": "Upstream drops obsolete role lines such as how critics and displays the dropped lines for confirmation. OMS does not edit a Cursor rule file; its configurator rejects unknown roles and writes an owned observed-model manifest.",
+      "targets": [
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "tools/configure-models.mjs",
+        "tools/setup-acceptance.mjs",
+        "tests/configure-models.test.mjs"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/show-me-your-work/SKILL.md",
+      "beforeBlob": "e2d8b3be9879ae9ba547aeddd602fea2383c6886",
+      "afterBlob": "d350a150c36ca16382b4aa6d4196b39e67454ad1",
+      "disposition": "adopted",
+      "rationale": "Upstream adds run identity and per-run stretches to shared append-only logs: a later run starts with a start row, identifies the intervening timestamp range and itself, audits only its stretch, and corrects bad rows by appending a superseding row. OMS already preserves history and supports corrections, but does not distinguish rows written by separate conversations or pickups.",
+      "targets": [
+        "src/core/skills/show-me-your-work/SKILL.md",
+        "tests/show-work.test.mjs",
+        "upstream/semantic-derivations.json",
+        "upstream/ownership.yaml",
+        "upstream/sources.yaml"
+      ],
+      "auditor": "drift_delivery"
+    },
+    {
+      "path": "pstack/skills/swarm/SKILL.md",
+      "beforeBlob": "bd308e8f56febdf6f43fea6b13679e762ecd9839",
+      "afterBlob": "a63e09eda94558aa8c7ae6d0653951838a3abd3f",
+      "disposition": "portable-divergence",
+      "rationale": "OMS already selects swarm.workers from the active resolution manifest and supports inherited choices. Do not add static model defaults or family-prefix fallbacks that can silently change an observed route.",
+      "targets": [
+        "src/core/skills/swarm/SKILL.md",
+        "src/runtime-resolution/policy.json",
+        "tools/configure-models.mjs",
+        "tools/generate.mjs"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/tdd/SKILL.md",
+      "beforeBlob": "6f4933ff41e298b0562ea1c1239cd33046634b88",
+      "afterBlob": "ca6f24c963001d9d518db2936dfe3d12f29b4e94",
+      "disposition": "portable-divergence",
+      "rationale": "The removed weak-signal warning is largely redundant with OMS's earlier guidance to skip impractical tests. The removed requirement to explain why before fixing adds disclosure that OMS intentionally retains, so no edit is recommended.",
+      "targets": [
+        "src/core/skills/tdd/SKILL.md"
+      ],
+      "auditor": "drift_core"
+    },
+    {
+      "path": "pstack/skills/why/SKILL.md",
+      "beforeBlob": "79b526077dd843ea3e907dd5d86e470260efbeda",
+      "afterBlob": "daac2c734a8f8fe43d30663054d694066f2b41ec",
+      "disposition": "portable-divergence",
+      "rationale": "OMS already selects why.investigator and why.synthesizer routes with runtime-specific dispatch and inheritance support. Preserve observed model identity and surface rejected routes rather than applying upstream static defaults or family heuristics.",
+      "targets": [
+        "src/core/skills/why/SKILL.md",
+        "src/runtime-resolution/policy.json",
+        "tools/configure-models.mjs",
+        "tools/generate.mjs",
+        "tools/codex-delegation.mjs"
+      ],
+      "auditor": "drift_core"
+    }
+  ],
+  "added": [],
+  "removed": [],
+  "method": "Each before/after Git blob verified against GitHub tree; independent core/delivery audit; adopted bytes pinned in upstream/snapshots.",
+  "boundary": "Portable semantic alignment at frozen revision; does not certify every original runtime or external integration."
+}

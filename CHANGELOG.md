@@ -6,6 +6,17 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.2.1 - 2026-09-28
+
+- Fix Windows repository validation, shell-test execution, npm lifecycle tests,
+  user-scope isolation, and Markdown glob quoting. Pin repository text to LF.
+- Reject symbolic-link outputs in the Claude effort hook on Windows.
+- Adopt upstream run-attribution and exact remote-lease requirements.
+- Record 33 upstream decisions, independent architecture/review acceptance,
+  local Git coordination, traversal measurements, and fishspeech visual checks.
+- Preserve the release-authorized deferral of hosted autopilot, POSIX runtime
+  acceptance, and fishspeech authenticated backend checks.
+
 ## 0.2.0 - 2026-09-26
 
 - First non-beta release with 74 public Skills for Codex, OMP and Claude Code.

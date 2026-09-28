@@ -74,3 +74,8 @@ documents, and license are retained under
 Source hashes and transformed output ownership are recorded in the semantic
 derivation manifest. Runtime bindings, authority, and evidence limitations are
 adapted explicitly; this is not a claim of host-specific feature equivalence.
+
+September 28 semantic reconciliation imports the decision-log and autopilot-full
+reference files from Cursor pstack commit `ecc249f1e306fc64ddf83c7bed16cacf7c2239db`
+under MIT. Immutable files and license are in
+`upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack`.

@@ -1,0 +1,28 @@
+Read all three artifacts completely as UTF-8 and read the frozen rubric. SHA-256 identities computed before scoring:
+
+| Artifact | SHA-256 |
+|---|---|
+| candidate-1.md | `c70347360b226b93828242b65775416558b47f2f9235cbdcd30d334b9be454fb` |
+| candidate-2.md | `4610694a32beaa4fd005accdaF4e8fc8d146e438b14c4b051da61e37a00c18bc` |
+| candidate-3.md | `b8056c3e622b63bcd0522e1028f59f332b141006a2a05cf3cee7825b6fe4c2d2` |
+
+No expected artifact digests were supplied for comparison. Scores assess proposal completeness, **not implementation or execution success**.
+
+| Frozen criterion | Candidate 1 | Candidate 2 | Candidate 3 |
+|---|---|---|---|
+| Windows/POSIX and containment | **2** — Native identities, explicit cross-platform manifest rejection, segment-aware relative containment, separate Markdown handling. | **2** — Canonical keys, explicit drive/UNC/stream rejection, native containment and proposed symlink checks. | **1** — Appropriate boundary, but native-relative rejection uses `../…` without explicitly addressing Windows separators; malformed-key rules remain broad assertions. |
+| Source hashes and credential boundaries | **2** — Raw-buffer hashing and serialized provenance preserved; snapshot exceptions explicitly limited to links/home-path examples. | **1** — Raw hashing preserved, but global `dist`/`coverage` pruning could suppress credential inspection of authored or snapshot content. | **2** — Explicit raw-byte preservation, immutable snapshots, and continued snapshot credential checks. |
+| Avoid dependency/transient traversal | **1** — Precise pre-descent pruning, but explicitly leaves nested dependencies inside source-model directories unsupported. | **1** — Pre-descent pruning specified, but `.tmp` scope is ambiguous and additional exclusions lack justification. | **1** — Pruning proposed, but `.git` is absent and component exclusions versus root-relative exclusions are underspecified. |
+| Small, maintainable caller boundary | **2** — Private helpers preserve `validate(root)`; optional shared traversal predicate leaves default behavior intact. | **1** — Seven operations plus asynchronous construction, new module and model-loader migration expand the frozen scope. | **1** — Three operations are reasonably small, but a new module exceeds the allowed files; `"."` traversal needs an explicit exception to canonical-key rejection. |
+| Positive and malicious/missing-input checks | **2** — Includes wrong-profile/missing evidence, missing authored links, unlisted scripts, hash mutation, scope escapes, credentials and similarly named directory controls. | **1** — Useful malformed-path and missing-file cases; lacks wrong-profile evidence, unlisted-script, authored-link absence and exclusion-boundary regressions. | **1** — Positive paths, escapes and snapshot credentials covered; missing evidence/files, wrong-profile relationships and unlisted scripts are absent. |
+| **Total** | **9/10** | **6/10** | **6/10** |
+
+**Recommend Candidate 1 as the coherent base.** Its native identity model centralizes validation without requiring a repository-path class. Candidates 2 and 3 reject a decentralized native-path approach; that objection does not establish a defect in Candidate 1’s centralized helper.
+
+Graft Candidate 2’s explicit Windows alternate-data-stream rejection and corresponding negative fixture into `manifestFile`. Graft Candidate 3’s explicit CRLF/LF hash-drift fixture. Preserve Candidate 1’s raw-byte provenance, narrow snapshot exceptions, exact root `.tmp` pruning, and unchanged generic generation traversal.
+
+Before acceptance, specify whether nested source-model dependencies are rejected or pruned. Test encoded Markdown escapes and similarly named exclusion directories. Keep symlink hardening outside this bounded change unless separately scoped; lexical containment must not be presented as physical containment.
+
+Candidate 1’s 208-reference hash claim predates the parent’s semantic update and cannot certify current bytes. All three designs still require executable verification on Windows and POSIX.
+
+ROLE_POLICY=independent-frozen-review

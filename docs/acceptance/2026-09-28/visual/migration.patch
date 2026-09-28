@@ -1,0 +1,40 @@
+diff --git a/fishspeech/app/(public-marketing)/[lang]/about/page.tsx b/fishspeech/app/(public-marketing)/[lang]/about/page.tsx
+index d6a8d2960..2e9fa29ce 100644
+--- a/fishspeech/app/(public-marketing)/[lang]/about/page.tsx
++++ b/fishspeech/app/(public-marketing)/[lang]/about/page.tsx
+@@ -12,6 +12,19 @@ import {
+ } from '@/lib/about-page-copy';
+ import { getConfiguredSiteContent } from '@/content/site-content';
+ 
++function AboutHeading({ eyebrow, heading }: { eyebrow: string; heading: string }) {
++  return (
++          <div>
++            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
++              {eyebrow}
++            </p>
++            <h1 className="mt-4 max-w-4xl text-4xl font-light leading-tight text-foreground sm:text-5xl lg:text-6xl">
++              {heading}
++            </h1>
++          </div>
++  );
++}
++
+ export default async function AboutPage({ params }: { params: Promise<{ lang: Locale }> }) {
+   const { lang } = await params;
+   const runtimeBrand = await getRequestRuntimeBrand();
+@@ -53,14 +66,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: Lo
+     <SubpageShell lang={lang} variant="marketing" noContainer>
+       <div className="mx-auto max-w-[1180px] px-5 pb-12 pt-24 sm:px-8 lg:px-10 2xl:px-0">
+         <section className="grid gap-10 pt-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+-          <div>
+-            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+-              {copy.eyebrow}
+-            </p>
+-            <h1 className="mt-4 max-w-4xl text-4xl font-light leading-tight text-foreground sm:text-5xl lg:text-6xl">
+-              {copy.heading}
+-            </h1>
+-          </div>
++          <AboutHeading eyebrow={copy.eyebrow} heading={copy.heading} />
+           <div className="space-y-6 lg:pt-2">
+             <div className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
+               <Image

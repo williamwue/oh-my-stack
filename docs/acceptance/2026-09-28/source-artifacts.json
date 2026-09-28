@@ -1,0 +1,129 @@
+{
+  "base": "df3597a0a0622c5e62e741d02f8209393189d684",
+  "files": [
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "sha256": "d6e679d947fc66291395c6ffd2371e0321602dc0266731ccc899e483221e8ed9"
+    },
+    {
+      "path": "package.json",
+      "sha256": "36949d40f5660cc974c246a85fd8a8bbc57dc1828a5fdcbbe3f35b56d410a5e8"
+    },
+    {
+      "path": "packages/claude-code/scripts/claude-effort-hook.mjs",
+      "sha256": "7937512756d9a5bd57686988c65406ac71b55938a75c0e24959dc621c5dfa0a0"
+    },
+    {
+      "path": "packages/claude-code/skills/autopilot-full/SKILL.md",
+      "sha256": "5d0f58e67d9e1467e7999e4896ccf8ede7173b45663c9f41cac04bee05cc0293"
+    },
+    {
+      "path": "packages/claude-code/skills/show-me-your-work/SKILL.md",
+      "sha256": "a3eba696358a2c2b68cbab8cb7c61858e52406fdf7fb3eb5bbbe0558831f8fcb"
+    },
+    {
+      "path": "packages/codex/skills/autopilot-full/WORKFLOW.md",
+      "sha256": "7dd4583759c2cc9421f83e68340dd16dcb02000ea4205ecc0ad1e9d5fe730c51"
+    },
+    {
+      "path": "packages/codex/skills/show-me-your-work/SKILL.md",
+      "sha256": "80788f980aa663c51840a89a5b3cb43912dd77e841868e1bc3ca80bad0288735"
+    },
+    {
+      "path": "packages/omp/skills/autopilot-full/SKILL.md",
+      "sha256": "334125cf082d9efd992362f425c7efce7a8743d52893f82460af92201bdaee63"
+    },
+    {
+      "path": "packages/omp/skills/show-me-your-work/SKILL.md",
+      "sha256": "0a4f6942a1e431a52a0fa5d9bfab6ed68abbaac29c847e5627915530af79ec31"
+    },
+    {
+      "path": "src/core/skills/autopilot-full/SKILL.md",
+      "sha256": "0e0ca19aee83ea449b613d75544ae0b2b3eefcf797d80dc829df2a7bf98132ce"
+    },
+    {
+      "path": "src/core/skills/show-me-your-work/SKILL.md",
+      "sha256": "c524d97a9d2a63a1930d4fda0b71796ed7ef2b9df07b5eafbcdaefc4dc029180"
+    },
+    {
+      "path": "tests/autonomous-run-fixture.test.mjs",
+      "sha256": "c197688d7d813b60608309cc191a5ba495368c4aa20cde1d0c35ac8b0b2cf58d"
+    },
+    {
+      "path": "tests/claude-effort-hook.test.mjs",
+      "sha256": "506c22885b1a4c85dd9c286c767a3e4905ea25d5732b4fb12afa4122d2952b4f"
+    },
+    {
+      "path": "tests/lifecycle.test.mjs",
+      "sha256": "dd3abe6676ccfd98e14d7393909907e63784822fb84b448ccc00b2453c7c758a"
+    },
+    {
+      "path": "tests/markdown-links.test.mjs",
+      "sha256": "ee7bea4b97cd3ce6d723507d80720863a6ce367bf158947b86052e4172fcce1a"
+    },
+    {
+      "path": "tests/model-resolution.test.mjs",
+      "sha256": "b903b1acf17442884ae60121084aea3f18775f6df6f13d2d45c9fa3c5cf13307"
+    },
+    {
+      "path": "tests/show-work.test.mjs",
+      "sha256": "98de08290ab829189f1e28cdd2c814755524902a88b4bd12691e96c632a43b9e"
+    },
+    {
+      "path": "tools/claude-effort-hook.mjs",
+      "sha256": "7937512756d9a5bd57686988c65406ac71b55938a75c0e24959dc621c5dfa0a0"
+    },
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "19f9db4736b6048f66c410377f7d10a3b0d82858d5dea9fe92a3b32bed5b5ede"
+    },
+    {
+      "path": "tools/validate.mjs",
+      "sha256": "7edf9644b0f822d35e232f87fcd7cfb18a93251f07f7530835f8d4fa8d753278"
+    },
+    {
+      "path": "upstream/semantic-derivations.json",
+      "sha256": "91cc1bdba2c6d696eeab64dc5d4f46733ccce1d19963cdf6b6f7480f57d68664"
+    },
+    {
+      "path": "upstream/sources.yaml",
+      "sha256": "90b06b4f4a41fe51aede05d2a6c050e81fb15258a06bc9684b68e287dbbfae86"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c"
+    },
+    {
+      "path": "tests/git-lease-acceptance.test.mjs",
+      "sha256": "85febe5616fcc6af41082157255de544dcadcdb692ab27d73c48587a13fd9394"
+    },
+    {
+      "path": "tests/helpers/bash.mjs",
+      "sha256": "fde906db96ac06e45987f78312c9bbd1a07df7aad24fc7f0d389c96be925fe25"
+    },
+    {
+      "path": "tests/validator-paths.test.mjs",
+      "sha256": "dcb0977b53059ff26b84600f0ee79cb172a4c22e5506cffd6d4a92ec2067aa4f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/LICENSE",
+      "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/SKILL.md",
+      "sha256": "bcff5f7f9fd23f92c12b251f9cd6b947e9485e1055cfacb6fdd9cae0789d7550"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
+      "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/scripts/log.sh",
+      "sha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e"
+    }
+  ]
+}

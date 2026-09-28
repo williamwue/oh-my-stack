@@ -1,0 +1,100 @@
+- main:
+  - navigation:
+    - link:
+      - /url: /zh
+      - generic: Kitta
+    - button:
+  - paragraph: 关于 Kitta AI
+  - heading [level=1]: 让 AI 内容创作成为一个连贯的工作流程
+  - paragraph: Kitta AI 把音频、图像与视频创作整合到同一个工作空间，帮助创作者和团队选择合适的模型、对比结果，并把灵感逐步变成完整作品。
+  - heading [level=2]: 我们正在构建什么
+  - paragraph: AI 创作正在从单一工具走向跨媒介协作。我们希望建立一个实用的平台，让用户能够为项目中的每个环节选择合适的模型，同时保留统一的素材、项目上下文与迭代流程。
+  - paragraph: Kitta AI 汇集的创作能力
+  - paragraph: 平台把专业创作工具与共享工作空间连接起来，让用户可以在不同内容形式之间自然切换，而不必反复重建项目和素材。
+  - article:
+    - heading [level=3]: AI 音频
+    - paragraph: 生成自然语音、克隆已获授权的声音，并为视频、播客、课程和应用制作旁白与音频内容。
+  - article:
+    - heading [level=3]: AI 图像
+    - paragraph: 使用不同模型、参考图和持续迭代流程生成及编辑视觉概念与成品图片。
+  - article:
+    - heading [level=3]: AI 视频
+    - paragraph: 把文字或图片转化为视频，探索不同运动与视觉风格，并把画面创作与音频制作连接起来。
+  - heading [level=2]: 我们为谁而构建
+  - article:
+    - heading [level=3]: 创作者
+    - paragraph: 从最初构思到可发布作品，完成音频、图像与视频内容的制作。
+  - article:
+    - heading [level=3]: 开发者
+    - paragraph: 通过 API 和模型工具，把内容创作能力接入产品与内部工作流程。
+  - article:
+    - heading [level=3]: 团队
+    - paragraph: 在多种内容格式之间组织项目，并清晰比较模型、成本与生产方案。
+  - heading [level=2]: 我们的原则
+  - article:
+    - heading [level=3]: 有意义的模型选择
+    - paragraph: 模型选择应该帮助用户实现创作目标，并清楚呈现效果、速度与成本之间的差异。
+  - article:
+    - heading [level=3]: 负责任地创作
+    - paragraph: 用户只应上传和使用拥有权利或已获得授权的声音、图像、文字及其他素材。
+  - article:
+    - heading [level=3]: 可持续的生产流程
+    - paragraph: 我们重视生成质量、稳定性、透明成本，以及能够支持持续创作的工作流程。
+  - generic: 产品
+  - generic: 解决方案
+  - generic: 研究
+  - generic: 资源
+  - generic: 公司
+  - link:
+    - /url: /zh
+    - generic: Kitta Audio
+  - text: © 2026 Kitta。保留所有权利。
+  - link:
+    - /url: /zh/about
+    - text: Kitta AI
+  - link:
+    - /url: /zh/privacy
+    - text: 隐私政策
+  - generic: "|"
+  - link:
+    - /url: /zh/terms
+    - text: 服务条款
+  - generic: "|"
+  - link:
+    - /url: mailto:support@example.com?subject=%E4%B8%BE%E6%8A%A5%E6%BB%A5%E7%94%A8
+    - text: 举报滥用
+  - link:
+    - /url: mailto:support@example.com
+    - text: support@example.com
+  - paragraph: Kitta Audio 由 Kitta AI 独立运营，非 Fish Audio 官方服务。
+  - button:
+    - generic: 简体中文
+- region "Notifications alt+T"
+- button "Open Next.js Dev Tools":
+- button:
+- button:
+- button:
+- button:
+- button:
+- button:
+- alert
+- dialog "打开菜单":
+  - heading "打开菜单" [level=2]
+  - link "Kitta":
+    - /url: /zh
+    - generic: Kitta
+  - button "联系销售"
+  - button "关闭菜单" [active]:
+  - button "产品":
+    - generic: 产品
+  - button "API":
+    - generic: API
+  - button "资源":
+    - generic: 资源
+  - link "价格":
+    - /url: /zh/pricing
+    - generic: 价格
+  - button "登录"
+  - button "注册"
+  - button "切换语言":
+  - button "切换到深色模式":

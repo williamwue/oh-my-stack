@@ -43,3 +43,58 @@ test("snapshot path examples remain verbatim while private keys remain forbidden
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("Markdown links allow internal parent paths and reject encoded escapes", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-link-paths-"));
+  try {
+    const document = join(root, "docs", "guide.md");
+    await mkdir(join(root, "docs"), { recursive: true });
+    await writeFile(join(root, "README.md"), "# Home\n");
+    await writeFile(document, "[Home](../README.md)\n");
+    await validateLocalMarkdownLinks(root);
+    await writeFile(document, "[Escape](..%2f..%2fsibling.md)\n");
+    await assert.rejects(validateLocalMarkdownLinks(root), /link escapes repository/);
+    await writeFile(document, "[Bad](%GG)\n");
+    await assert.rejects(validateLocalMarkdownLinks(root), /malformed local link/);
+    await writeFile(document, "[Missing](missing.md)\n");
+    await assert.rejects(validateLocalMarkdownLinks(root), /missing local link/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("only exact snapshots, node_modules, .git, and root .tmp are excluded", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-link-prune-"));
+  try {
+    for (const path of [
+      "upstream/snapshots/source/SKILL.md", "node_modules/package/README.md",
+      ".git/README.md", ".tmp/run/README.md", "docs/node_modules/package/README.md",
+    ]) {
+      const target = join(root, path);
+      await mkdir(join(target, ".."), { recursive: true });
+      await writeFile(target, "[Upstream template](missing.md)\n");
+    }
+    await validateLocalMarkdownLinks(root);
+    for (const path of ["upstream/snapshots-copy/SKILL.md", "docs/node_modules-notes/README.md"]) {
+      const target = join(root, path);
+      await mkdir(join(target, ".."), { recursive: true });
+      await writeFile(target, "[Missing](missing.md)\n");
+      await assert.rejects(validateLocalMarkdownLinks(root), /missing local link/);
+      await rm(target);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("source-model dependencies reject rather than silently reducing hygiene coverage", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-source-deps-"));
+  try {
+    const dependency = join(root, "src", "core", "skills", "example", "node_modules", "secret.md");
+    await mkdir(join(dependency, ".."), { recursive: true });
+    await writeFile(dependency, "secret\n");
+    await assert.rejects(validatePublicHygiene(root), /inside the source model is unsupported/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

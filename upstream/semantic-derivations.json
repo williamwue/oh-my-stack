@@ -349,27 +349,27 @@
     },
     {
       "id": "show-me-your-work-port",
-      "sourceId": "cursor-pstack",
-      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceId": "cursor-pstack-september-28",
+      "sourceRevision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
       "sourceFiles": [
         {
-          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/SKILL.md",
-          "sha256": "831e85ba3f84f38bf338cd03e6af050fea357752e25a825e334c99f59d7f2077"
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/SKILL.md",
+          "sha256": "bcff5f7f9fd23f92c12b251f9cd6b947e9485e1055cfacb6fdd9cae0789d7550"
         },
         {
-          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
           "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
         },
         {
-          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/show-me-your-work/scripts/log.sh",
-          "sha256": "1601bc18f9aba0af3f5d6375e4f2d5dc6102334d1bca935026c0e3547cdadbbf"
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/scripts/log.sh",
+          "sha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e"
         }
       ],
       "outputFiles": [
         {
           "path": "src/core/skills/show-me-your-work/SKILL.md",
           "owner": "derived",
-          "sha256": "d4faf45b15e57103f6867c98f3c549be31499d2d9bc175ba4dc91aedb9e3bb77"
+          "sha256": "c524d97a9d2a63a1930d4fda0b71796ed7ef2b9df07b5eafbcdaefc4dc029180"
         },
         {
           "path": "src/core/skills/show-me-your-work/skill.json",
@@ -397,7 +397,7 @@
           "sha256": "79d26d76d45396bf959f0f9d755dadac85d9ee267eaa2e00666e3ab52dc0c57d"
         }
       ],
-      "transformation": "Runtime-specific transcript paths and mandatory model-family claims were replaced by capability-based evidence access, explicit fallbacks, append-only correction semantics, and independently verifiable model identity."
+      "transformation": "Runtime-specific transcript paths and mandatory model-family claims were replaced by capability-based evidence access, explicit fallbacks, append-only correction semantics, and independently verifiable model identity. September 28 reconciliation retains explicit host-independent authority and adds attributable shared-log run boundaries and overlap-safe correction auditing."
     },
     {
       "id": "shipping-port",
@@ -473,19 +473,19 @@
     },
     {
       "id": "autopilot-full-port",
-      "sourceId": "cursor-pstack-autopilot-full",
-      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceId": "cursor-pstack-september-28",
+      "sourceRevision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
       "sourceFiles": [
         {
-          "path": "upstream/snapshots/cursor-pstack-autopilot-full/53e579f1481697931fc44f5445171397cfa2b24b/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
-          "sha256": "2042a89a0399b5fe700110bc03746899536c10f0df186e9fb15bbd4a2f6dfce5"
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+          "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7"
         }
       ],
       "outputFiles": [
         {
           "path": "src/core/skills/autopilot-full/SKILL.md",
           "owner": "derived",
-          "sha256": "04588da7d7b80e4f45e27933149da9cf4c1d320776c2c890eb18d6623e5d470e"
+          "sha256": "0e0ca19aee83ea449b613d75544ae0b2b3eefcf797d80dc829df2a7bf98132ce"
         },
         {
           "path": "src/core/skills/autopilot-full/skill.json",
@@ -493,7 +493,7 @@
           "sha256": "2cd9a436e3ad3212f9733c6ae7ee8d0756f90f01fcc0d7b1e391421f53ffb792"
         }
       ],
-      "transformation": "Cursor-only cloud agents, provider CLIs, mandatory third-party review and control plugins, fixed terminal loops, and implicit long-running forge access were replaced by provider capabilities, attributable one-owner-per-change lifecycle authority, three revision-bound independent verdict lanes, single-use root countersigns, owner-executed landing, operator-held queue gates, bounded durable audits and wakes, stable-patch rebase rules, and fail-closed fallbacks."
+      "transformation": "Cursor-only cloud agents, provider CLIs, mandatory third-party review and control plugins, fixed terminal loops, and implicit long-running forge access were replaced by provider capabilities, attributable one-owner-per-change lifecycle authority, three revision-bound independent verdict lanes, single-use root countersigns, owner-executed landing, operator-held queue gates, bounded durable audits and wakes, stable-patch rebase rules, and fail-closed fallbacks. September 28 reconciliation retains explicit host-independent authority and adds owner-only rewritten-head publication bound to an explicit expected remote lease; shared-branch force pushes remain forbidden."
     },
     {
       "id": "setup-benny-port",

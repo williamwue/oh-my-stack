@@ -2,7 +2,7 @@
 
 import { createHash } from "node:crypto";
 import { access, readFile } from "node:fs/promises";
-import { basename, dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   filesUnder,
@@ -26,14 +26,42 @@ async function exists(path) {
   }
 }
 
+function within(root, candidate, allowRoot = false) {
+  const difference = relative(root, candidate);
+  return (allowRoot || difference !== "")
+    && difference !== ".." && !difference.startsWith(`..${sep}`) && !isAbsolute(difference);
+}
+
+function manifestFile(root, input, context) {
+  assert(typeof input === "string" && input.length > 0, `${context}: invalid path`);
+  assert(!/[\0\\:]/.test(input) && !input.startsWith("/")
+    && input.split("/").every((part) => part && part !== "." && part !== ".."),
+  `${context}: unsafe path ${input}`);
+  const path = resolve(root, input);
+  assert(within(root, path), `${context}: path escapes repository: ${input}`);
+  return path;
+}
+
+function validationFiles(root, directory, { excludeSnapshots = false } = {}) {
+  const scratch = join(root, ".tmp");
+  const snapshots = join(root, "upstream", "snapshots");
+  const sourceModel = join(root, "src");
+  return filesUnder(directory, {
+    excludeDirectory: (path) => {
+      if (["node_modules", ".git"].includes(basename(path)) && within(sourceModel, path)) {
+        throw new Error(`${relative(root, path)}: nested dependency or metadata directory inside the source model is unsupported`);
+      }
+      return path === scratch || (excludeSnapshots && path === snapshots)
+        || basename(path) === "node_modules" || basename(path) === ".git";
+    },
+  });
+}
+
 export async function validateLocalMarkdownLinks(root) {
   // Immutable third-party snapshots contain upstream links and template URLs.
   // Validate their integrity through provenance hashes, not local link resolution.
-  const snapshotRoot = `${join(root, "upstream", "snapshots")}/`;
-  const markdownFiles = (await filesUnder(root)).filter(
-    (path) => path.endsWith(".md") && !path.includes(`${join(root, "node_modules")}`)
-      && !path.startsWith(snapshotRoot),
-  );
+  const markdownFiles = (await validationFiles(root, root, { excludeSnapshots: true }))
+    .filter((path) => path.endsWith(".md"));
   for (const path of markdownFiles) {
     const text = await readFile(path, "utf8");
     for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
@@ -41,38 +69,43 @@ export async function validateLocalMarkdownLinks(root) {
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;
       const fileTarget = target.replace(/#.*$/, "");
       if (!fileTarget) continue;
-      const resolved = resolve(dirname(path), decodeURIComponent(fileTarget));
-      assert(resolved.startsWith(`${root}/`) || resolved === root, `${relative(root, path)}: link escapes repository`);
+      let decoded;
+      try { decoded = decodeURIComponent(fileTarget); }
+      catch { throw new Error(`${relative(root, path)}: malformed local link ${target}`); }
+      const resolved = resolve(dirname(path), decoded);
+      assert(within(root, resolved, true), `${relative(root, path)}: link escapes repository`);
       assert(await exists(resolved), `${relative(root, path)}: missing local link ${target}`);
     }
   }
 }
 
-async function validateExecutableInventory(root) {
+export async function validateExecutableInventory(root) {
   const inventory = await readJson(join(root, "security", "executables.json"));
   assert(inventory.schemaVersion === 1, "security/executables.json: schemaVersion must be 1");
   const seen = new Set();
   for (const entry of inventory.entries) {
-    assert(!seen.has(entry.path), `duplicate executable inventory entry ${entry.path}`);
-    seen.add(entry.path);
-    assert(await exists(join(root, entry.path)), `missing executable ${entry.path}`);
+    const path = manifestFile(root, entry.path, `executable ${entry.path}`);
+    assert(!seen.has(path), `duplicate executable inventory entry ${entry.path}`);
+    seen.add(path);
+    assert(await exists(path), `missing executable ${entry.path}`);
     assert(typeof entry.network === "boolean", `${entry.path}: network must be explicit`);
     assert(Array.isArray(entry.writes), `${entry.path}: writes must be an array`);
     assert(entry.owner && entry.purpose && entry.uninstallBehavior, `${entry.path}: incomplete inventory entry`);
   }
   const executableRoots = [join(root, "tools"), join(root, "src", "core", "skills")];
   for (const executableRoot of executableRoots) {
-    for (const path of await filesUnder(executableRoot)) {
+    for (const path of await validationFiles(root, executableRoot)) {
       const key = relative(root, path);
-      const isTool = key.startsWith("tools/") && path.endsWith(".mjs");
-      const isSkillScript = key.includes("/scripts/") && /\.(?:mjs|sh)$/.test(path);
+      const isTool = within(join(root, "tools"), path) && path.endsWith(".mjs");
+      const isSkillScript = relative(join(root, "src", "core", "skills"), path)
+        .split(sep).includes("scripts") && /\.(?:mjs|sh)$/.test(path);
       if (!isTool && !isSkillScript) continue;
-      assert(seen.has(key), `${key}: executable is missing from security inventory`);
+      assert(seen.has(path), `${key}: executable is missing from security inventory`);
     }
   }
 }
 
-async function validateSemanticDerivations(root) {
+export async function validateSemanticDerivations(root) {
   const manifest = await readJson(join(root, "upstream", "semantic-derivations.json"));
   assert(manifest.schemaVersion === 1, "upstream/semantic-derivations.json: schemaVersion must be 1");
   assert(Array.isArray(manifest.entries), "upstream/semantic-derivations.json: entries are required");
@@ -90,24 +123,28 @@ async function validateSemanticDerivations(root) {
     assert(entry.transformation, `${entry.id}: transformation rationale is required`);
     assert(Array.isArray(entry.sourceFiles) && entry.sourceFiles.length > 0, `${entry.id}: sourceFiles are required`);
     assert(Array.isArray(entry.outputFiles) && entry.outputFiles.length > 0, `${entry.id}: outputFiles are required`);
-    const snapshotPrefix = `upstream/snapshots/${entry.sourceId}/${entry.sourceRevision}/`;
+    const snapshotRoot = manifestFile(root,
+      `upstream/snapshots/${entry.sourceId}/${entry.sourceRevision}`,
+      `${entry.id}: snapshot root`);
+    const coreRoot = join(root, "src", "core");
     for (const file of entry.sourceFiles) {
-      assert(file.path.startsWith(snapshotPrefix), `${entry.id}: source is outside its immutable snapshot`);
+      const path = manifestFile(root, file.path, `${entry.id}: source`);
+      assert(within(snapshotRoot, path), `${entry.id}: source is outside its immutable snapshot`);
     }
     for (const file of entry.outputFiles) {
-      assert(file.path.startsWith("src/core/"), `${entry.id}: derived output must be under src/core`);
+      const path = manifestFile(root, file.path, `${entry.id}: output`);
+      assert(within(coreRoot, path), `${entry.id}: derived output must be under src/core`);
     }
     for (const file of [...entry.sourceFiles, ...entry.outputFiles]) {
-      assert(typeof file.path === "string" && !file.path.startsWith("/"), `${entry.id}: unsafe absolute path`);
-      const resolved = resolve(root, file.path);
-      assert(resolved.startsWith(`${root}/`), `${entry.id}: path escapes repository: ${file.path}`);
+      const resolved = manifestFile(root, file.path, `${entry.id}: derivation file`);
       assert(await exists(resolved), `${entry.id}: missing derivation file ${file.path}`);
       assert(sha256(await readFile(resolved)) === file.sha256, `${entry.id}: hash drift in ${file.path}`);
     }
     for (const file of entry.outputFiles) {
       assert(["derived", "local-core"].includes(file.owner), `${entry.id}: invalid owner for ${file.path}`);
-      assert(!outputs.has(file.path), `${file.path}: owned by multiple semantic derivations`);
-      outputs.add(file.path);
+      const path = manifestFile(root, file.path, `${entry.id}: output`);
+      assert(!outputs.has(path), `${file.path}: owned by multiple semantic derivations`);
+      outputs.add(path);
     }
   }
 }
@@ -115,7 +152,7 @@ async function validateSemanticDerivations(root) {
 async function validateJsonDocuments(root) {
   const roots = ["src", "packages", "evals", "security"];
   for (const directory of roots) {
-    for (const path of await filesUnder(join(root, directory))) {
+    for (const path of await validationFiles(root, join(root, directory))) {
       if (!path.endsWith(".json")) continue;
       try {
         await readJson(path);
@@ -140,7 +177,7 @@ export async function validatePublicHygiene(root) {
     "upstream",
   ];
   const paths = [];
-  for (const directory of roots) paths.push(...await filesUnder(join(root, directory)));
+  for (const directory of roots) paths.push(...await validationFiles(root, join(root, directory)));
   for (const name of [
     "CHANGELOG.md",
     "CONTRIBUTING.md",
@@ -162,7 +199,7 @@ export async function validatePublicHygiene(root) {
     const macHomePrefix = ["", "Users", ""].join("/");
     // Third-party source is retained byte-for-byte for provenance, including
     // its path examples. It is not part of a generated user-facing Skill.
-    if (!key.startsWith("upstream/snapshots/")) {
+    if (!within(join(root, "upstream", "snapshots"), path)) {
       assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
     }
     assert(!/-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/.test(text), `${key}: contains a private key`);
@@ -171,10 +208,10 @@ export async function validatePublicHygiene(root) {
   }
 }
 
-async function validateRuntimeEvidence(root, model) {
+export async function validateRuntimeEvidence(root, model) {
   const evidenceByPath = new Map();
   const evidenceRoot = join(root, "evals", "evidence");
-  for (const path of await filesUnder(evidenceRoot)) {
+  for (const path of await validationFiles(root, evidenceRoot)) {
     if (!path.endsWith(".json")) continue;
     const document = await readJson(path);
     const key = relative(root, path);
@@ -193,19 +230,24 @@ async function validateRuntimeEvidence(root, model) {
     if (document.result === "pass") {
       assert(document.assertions.every((entry) => entry.status === "pass"), `${key}: passing evidence has a failed assertion`);
     }
-    evidenceByPath.set(key, document);
+    evidenceByPath.set(path, document);
   }
 
-  for (const [key, document] of evidenceByPath) {
+  for (const [evidencePath, document] of evidenceByPath) {
+    const key = relative(root, evidencePath);
     for (const related of document.relatedEvidence ?? []) {
-      assert(evidenceByPath.has(related), `${key}: missing related evidence ${related}`);
+      const path = manifestFile(root, related, `${key}: related evidence`);
+      assert(within(evidenceRoot, path), `${key}: related evidence is outside evals/evidence`);
+      assert(evidenceByPath.has(path), `${key}: missing related evidence ${related}`);
     }
   }
 
   for (const profile of model.profiles.values()) {
     for (const [capability, record] of Object.entries(profile.capabilities)) {
       if (record.evidence === null) continue;
-      const evidence = evidenceByPath.get(record.evidence);
+      const path = manifestFile(root, record.evidence, `${profile.id}.${capability}: evidence`);
+      assert(within(evidenceRoot, path), `${profile.id}.${capability}: evidence is outside evals/evidence`);
+      const evidence = evidenceByPath.get(path);
       assert(evidence, `${profile.id}.${capability}: missing evidence ${record.evidence}`);
       assert(evidence.profile === profile.id, `${profile.id}.${capability}: evidence belongs to ${evidence.profile}`);
       if (record.status === "unsupported") {
@@ -222,7 +264,7 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-async function validateUpstreamState(root) {
+export async function validateUpstreamState(root) {
   const config = await readJson(join(root, "upstream/imports.json"));
   assert(config.schemaVersion === 1, "upstream/imports.json: schemaVersion must be 1");
   const sourcesText = await readFile(join(root, "upstream/sources.yaml"), "utf8");
@@ -233,46 +275,47 @@ async function validateUpstreamState(root) {
     assert(source.baseline_commit === source.verified_commit, `${config.sourceId}: baseline and verified revisions differ`);
   }
 
-  const patchFiles = (await filesUnder(join(root, "upstream/patches", config.sourceId)))
+  const sourceSnapshotRoot = manifestFile(root,
+    `upstream/snapshots/${config.sourceId}/${revision}`,
+    `${config.sourceId}: snapshot root`);
+  const sourceRoot = manifestFile(sourceSnapshotRoot, config.sourceRoot, `${config.sourceId}: sourceRoot`);
+  const coreRoot = join(root, "src", "core");
+  const entries = config.entries.map((entry) => {
+    const target = manifestFile(root, entry.target, `${config.sourceId}: target`);
+    assert(within(coreRoot, target), `${entry.target}: imported target is outside src/core`);
+    const snapshot = manifestFile(sourceRoot, entry.upstreamPath, `${entry.target}: upstreamPath`);
+    return { entry, target, snapshot };
+  });
+  const patchRoot = manifestFile(root, `upstream/patches/${config.sourceId}`, `${config.sourceId}: patch root`);
+  const patchFiles = (await validationFiles(root, patchRoot))
     .filter((path) => path.endsWith(".json"));
   const patches = await Promise.all(patchFiles.map((path) => readJson(path)));
-  const targets = new Set(config.entries.map((entry) => entry.target));
+  const targets = new Set(entries.map(({ target }) => target));
   const matching = patches.filter(
     (patch) => patch.newCommit === revision
-      && targets.size === new Set(patch.outcomes.map((outcome) => outcome.path)).size
-      && patch.outcomes.every((outcome) => targets.has(outcome.path)),
+      && targets.size === new Set(patch.outcomes.map((outcome) =>
+        manifestFile(root, outcome.path, `${config.sourceId}: patch outcome`))).size
+      && patch.outcomes.every((outcome) => targets.has(
+        manifestFile(root, outcome.path, `${config.sourceId}: patch outcome`))),
   );
   assert(matching.length === 1, `${config.sourceId}: expected one complete patch record for ${revision}`);
   const patch = matching[0];
-  const outcomes = new Map(patch.outcomes.map((outcome) => [outcome.path, outcome]));
+  const outcomes = new Map(patch.outcomes.map((outcome) => [
+    manifestFile(root, outcome.path, `${config.sourceId}: patch outcome`), outcome,
+  ]));
   const ownership = await readFile(join(root, "upstream/ownership.yaml"), "utf8");
 
-  const licenseSnapshot = join(
-    root,
-    "upstream/snapshots",
-    config.sourceId,
-    revision,
-    config.sourceRoot,
-    config.licensePath,
-  );
+  const licenseSnapshot = manifestFile(sourceRoot, config.licensePath, `${config.sourceId}: licensePath`);
+  assert(within(sourceRoot, licenseSnapshot), `${config.sourceId}: license is outside source root`);
   assert(await exists(licenseSnapshot), `${config.sourceId}: missing license snapshot for ${revision}`);
 
-  for (const entry of config.entries) {
-    const outcome = outcomes.get(entry.target);
+  for (const { entry, target, snapshot } of entries) {
+    const outcome = outcomes.get(target);
     assert(outcome, `${entry.target}: missing patch outcome for ${revision}`);
-    const target = join(root, entry.target);
     if (["deleted", "already-deleted"].includes(outcome.status)) {
       assert(!(await exists(target)), `${entry.target}: deleted upstream entry still exists`);
       continue;
     }
-    const snapshot = join(
-      root,
-      "upstream/snapshots",
-      config.sourceId,
-      revision,
-      config.sourceRoot,
-      entry.upstreamPath,
-    );
     assert(await exists(snapshot), `${entry.target}: missing immutable source snapshot`);
     const sourceRaw = await readFile(snapshot);
     assert(sha256(sourceRaw) === outcome.sourceSha256, `${entry.target}: source snapshot hash drift`);
@@ -298,6 +341,8 @@ async function validateUpstreamState(root) {
 }
 
 export async function validate(root = repoRoot) {
+  // Keep dependencies out of the source model before loading or packaging it.
+  await validationFiles(root, join(root, "src"));
   const model = await loadModel(root);
   for (const adapter of model.adapters) {
     await validateRenderedTarget(join(root, adapter.packageDir), adapter, model);

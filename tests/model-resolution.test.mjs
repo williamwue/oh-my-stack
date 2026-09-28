@@ -209,7 +209,7 @@ test("the CLI defaults to user scope without touching the real home directory", 
   const packageRoot = join(repoRoot, "packages", "codex");
   const args = [join(packageRoot, "scripts", "configure-models.mjs"),
     "--inventory", inventoryPath, "--preset", "pstack", "--budget", "medium"];
-  const environment = { ...process.env, HOME: root };
+  const environment = { ...process.env, HOME: root, USERPROFILE: root };
   const preview = JSON.parse((await execFileAsync(process.execPath, args, { env: environment })).stdout);
   assert.equal(preview.applied, false);
   assert.ok(preview.writes.every((path) => path.startsWith(join(root, ".codex", "agents"))));

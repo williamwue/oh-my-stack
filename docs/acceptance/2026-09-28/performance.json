@@ -1,0 +1,97 @@
+{
+  "surface": "filesUnder traversal used by Markdown validation, not whole CLI",
+  "workload": "same OMS checkout; alternating order; first warmup pair excluded",
+  "beforeMedianMs": 90.8725,
+  "afterMedianMs": 52.56750000000011,
+  "reductionPercent": 42.15246636771288,
+  "rows": [
+    {
+      "iteration": 0,
+      "before": {
+        "ms": 124.0549,
+        "count": 2812
+      },
+      "after": {
+        "ms": 62.71889999999999,
+        "count": 1122
+      }
+    },
+    {
+      "iteration": 1,
+      "after": {
+        "ms": 64.98170000000002,
+        "count": 1122
+      },
+      "before": {
+        "ms": 102.5974,
+        "count": 2812
+      }
+    },
+    {
+      "iteration": 2,
+      "before": {
+        "ms": 90.8725,
+        "count": 2812
+      },
+      "after": {
+        "ms": 50.63959999999997,
+        "count": 1122
+      }
+    },
+    {
+      "iteration": 3,
+      "after": {
+        "ms": 54.546100000000024,
+        "count": 1122
+      },
+      "before": {
+        "ms": 92.15679999999998,
+        "count": 2812
+      }
+    },
+    {
+      "iteration": 4,
+      "before": {
+        "ms": 86.20119999999997,
+        "count": 2812
+      },
+      "after": {
+        "ms": 57.375999999999976,
+        "count": 1122
+      }
+    },
+    {
+      "iteration": 5,
+      "after": {
+        "ms": 52.56750000000011,
+        "count": 1122
+      },
+      "before": {
+        "ms": 86.06900000000007,
+        "count": 2812
+      }
+    },
+    {
+      "iteration": 6,
+      "before": {
+        "ms": 89.80160000000012,
+        "count": 2812
+      },
+      "after": {
+        "ms": 52.49649999999997,
+        "count": 1122
+      }
+    },
+    {
+      "iteration": 7,
+      "after": {
+        "ms": 52.08699999999999,
+        "count": 1122
+      },
+      "before": {
+        "ms": 91.5900999999999,
+        "count": 2812
+      }
+    }
+  ]
+}

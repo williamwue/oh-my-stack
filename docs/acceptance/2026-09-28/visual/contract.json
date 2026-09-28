@@ -1,0 +1,34 @@
+{
+  "attempt": 2,
+  "url": "http://localhost:30040/zh/about",
+  "revision": "086a0516e658a8a5265870cc9a5012d06e58fd23",
+  "component": "about heading eyebrow and h1",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "deviceScaleFactor": 1,
+  "format": "png",
+  "method": "CDP Page.captureScreenshot with frozen viewport and component rectangle; exact decoded RGBA bytes",
+  "tolerancePixels": 0,
+  "behavior": "heading text and level; responsive navigation still accessible",
+  "priorAttempt": "discarded as invalid harness: screenshot backend returned inconsistent viewport dimensions; no parity claim",
+  "desktopRect": {
+    "height": 186,
+    "width": 583,
+    "x": 162,
+    "y": 136
+  },
+  "mobileRect": {
+    "height": 126,
+    "width": 335,
+    "x": 20,
+    "y": 136
+  }
+}

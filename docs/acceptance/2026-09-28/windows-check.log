@@ -1,0 +1,842 @@
+﻿
+> oh-my-stack@0.2.0 check
+> npm run generate:check && npm run conformance:check && npm run release:check && npm run validate && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.2.0 generate:check
+> node tools/generate.mjs --check
+
+Verified 3 public targets with 74 of 86 source Skill.
+
+> oh-my-stack@0.2.0 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.2.0 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 7 output files.
+
+> oh-my-stack@0.2.0 validate
+> node tools/validate.mjs
+
+Validated 3 targets, 7 profiles, and 86 Skill.
+
+> oh-my-stack@0.2.0 lint:markdown
+> markdownlint-cli2 '**/*.md'
+
+markdownlint-cli2 v0.23.3 (markdownlint v0.41.1)
+Finding: '**/*.md' !.tmp/** !node_modules/** !upstream/snapshots/**
+Linting: 0 files
+Summary: 0 issues in 0 files
+
+> oh-my-stack@0.2.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: poteto-mode routes every admitted alpha outcome without implicit publication
+ok 1 - poteto-mode routes every admitted alpha outcome without implicit publication
+  ---
+  duration_ms: 7.9731
+  type: 'test'
+  ...
+# Subtest: alpha three playbooks preserve their safety boundaries
+ok 2 - alpha three playbooks preserve their safety boundaries
+  ---
+  duration_ms: 4.3456
+  type: 'test'
+  ...
+# Subtest: architecture candidates have one requirements-consistent winner
+ok 3 - architecture candidates have one requirements-consistent winner
+  ---
+  duration_ms: 91.1748
+  type: 'test'
+  ...
+# Subtest: autonomous run advances one verified unit per iteration and stops at its predicate
+ok 4 - autonomous run advances one verified unit per iteration and stops at its predicate
+  ---
+  duration_ms: 52736.2339
+  type: 'test'
+  ...
+# Subtest: autonomous controller rejects an iteration that edits a future unit
+ok 5 - autonomous controller rejects an iteration that edits a future unit
+  ---
+  duration_ms: 2987.4632
+  type: 'test'
+  ...
+# Subtest: autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+ok 6 - autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+  ---
+  duration_ms: 7829.8701
+  type: 'test'
+  ...
+# Subtest: autonomous wake preserves a standalone cron provider through resume and cleanup
+ok 7 - autonomous wake preserves a standalone cron provider through resume and cleanup
+  ---
+  duration_ms: 14103.2487
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an early or mismatched resume without consuming the wake
+ok 8 - autonomous wake rejects an early or mismatched resume without consuming the wake
+  ---
+  duration_ms: 6166.0902
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an expired deadline without consuming the ready event
+ok 9 - autonomous wake rejects an expired deadline without consuming the ready event
+  ---
+  duration_ms: 10049.3153
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an exhausted wake budget before consuming the ready event
+ok 10 - autonomous wake rejects an exhausted wake budget before consuming the ready event
+  ---
+  duration_ms: 4091.3517
+  type: 'test'
+  ...
+# Subtest: autonomous wake falls back to a durable pause without inventing a schedule
+ok 11 - autonomous wake falls back to a durable pause without inventing a schedule
+  ---
+  duration_ms: 673.348
+  type: 'test'
+  ...
+# warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/one.txt', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/two.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: autopilot full keeps verdicts in root while each owner lands its own current change
+ok 12 - autopilot full keeps verdicts in root while each owner lands its own current change
+  ---
+  duration_ms: 60280.9033
+  type: 'test'
+  ...
+# warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/one.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+ok 13 - autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+  ---
+  duration_ms: 3575.0939
+  type: 'test'
+  ...
+# warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/one.txt', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/two.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+ok 14 - autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+  ---
+  duration_ms: 55024.9205
+  type: 'test'
+  ...
+# warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'changes/one.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+ok 15 - autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+  ---
+  duration_ms: 6085.2087
+  type: 'test'
+  ...
+# Subtest: babysit check reports one frozen frontier without mutating it
+ok 16 - babysit check reports one frozen frontier without mutating it
+  ---
+  duration_ms: 31363.6249
+  type: 'test'
+  ...
+# Subtest: babysit drive repairs and pushes one wave without merging
+ok 17 - babysit drive repairs and pushes one wave without merging
+  ---
+  duration_ms: 44906.3094
+  type: 'test'
+  ...
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: Benny stays dormant until thread-safe triage and repro pass end to end
+ok 18 - Benny stays dormant until thread-safe triage and repro pass end to end
+  ---
+  duration_ms: 38252.7441
+  type: 'test'
+  ...
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: Benny compensates a tracker write when its thread-only verdict cannot land
+ok 19 - Benny compensates a tracker write when its thread-only verdict cannot land
+  ---
+  duration_ms: 4513.6529
+  type: 'test'
+  ...
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# warning: in the working copy of 'feature.txt', LF will be replaced by CRLF the next time Git touches it
+# Subtest: Benny refuses missing parents, untrusted markers, and insufficient UI proof
+ok 20 - Benny refuses missing parents, untrusted markers, and insufficient UI proof
+  ---
+  duration_ms: 4230.9972
+  type: 'test'
+  ...
+# Subtest: bug-fix-root starts with the intended failure and passes after the bounded fix
+ok 21 - bug-fix-root starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 1990.0556
+  type: 'test'
+  ...
+# Subtest: bug-fix-delegated starts with the intended failure and passes after the bounded fix
+ok 22 - bug-fix-delegated starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 3785.3978
+  type: 'test'
+  ...
+# Subtest: Claude effort hook records only bounded child identity and effective effort
+ok 23 - Claude effort hook records only bounded child identity and effective effort
+  ---
+  duration_ms: 846.3983
+  type: 'test'
+  ...
+# Subtest: Codex delegation derives explicit parameters and complete role instructions for ordered routes
+ok 24 - Codex delegation derives explicit parameters and complete role instructions for ordered routes
+  ---
+  duration_ms: 193.8184
+  type: 'test'
+  ...
+# Subtest: inheritance becomes explicit and does not silently omit effort
+ok 25 - inheritance becomes explicit and does not silently omit effort
+  ---
+  duration_ms: 2.0885
+  type: 'test'
+  ...
+# Subtest: verification requires matching parent call, child link, and runtime turn context
+ok 26 - verification requires matching parent call, child link, and runtime turn context
+  ---
+  duration_ms: 68.2541
+  type: 'test'
+  ...
+# Subtest: every generated Codex spawning workflow carries the same binding while OMP does not
+ok 27 - every generated Codex spawning workflow carries the same binding while OMP does not
+  ---
+  duration_ms: 41.9605
+  type: 'test'
+  ...
+# Subtest: OMP model output normalizes provider-qualified selectors and reported efforts
+ok 28 - OMP model output normalizes provider-qualified selectors and reported efforts
+  ---
+  duration_ms: 2.2742
+  type: 'test'
+  ...
+# Subtest: Codex model/list normalizes model ids and supported reasoning efforts
+ok 29 - Codex model/list normalizes model ids and supported reasoning efforts
+  ---
+  duration_ms: 0.4323
+  type: 'test'
+  ...
+# Subtest: inventory normalization rejects duplicates and Claude probes require consent
+ok 30 - inventory normalization rejects duplicates and Claude probes require consent
+  ---
+  duration_ms: 1.0222
+  type: 'test'
+  ...
+# Subtest: Claude probe accepts only observed family and reviewed effort policy
+ok 31 - Claude probe accepts only observed family and reviewed effort policy
+  ---
+  duration_ms: 0.8202
+  type: 'test'
+  ...
+# Subtest: setup resolves only observed models into every target-native role format
+ok 32 - setup resolves only observed models into every target-native role format
+  ---
+  duration_ms: 108.6622
+  type: 'test'
+  ...
+# Subtest: setup rejects unobserved choices and modified owned files without touching unrelated files
+ok 33 - setup rejects unobserved choices and modified owned files without touching unrelated files
+  ---
+  duration_ms: 40.9612
+  type: 'test'
+  ...
+# Subtest: project activation previews and writes only native Codex and OMP role directories
+ok 34 - project activation previews and writes only native Codex and OMP role directories
+  ---
+  duration_ms: 37.8618
+  type: 'test'
+  ...
+# Subtest: project activation CLI and safety gate reject symlinks and unowned roles
+ok 35 - project activation CLI and safety gate reject symlinks and unowned roles
+  ---
+  duration_ms: 857.1865
+  type: 'test'
+  ...
+# Subtest: pstack preset creates named workflow routes and ordered native panels on both runtimes
+ok 36 - pstack preset creates named workflow routes and ordered native panels on both runtimes
+  ---
+  duration_ms: 83.6046
+  type: 'test'
+  ...
+# Subtest: OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5
+ok 37 - OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5
+  ---
+  duration_ms: 14.2317
+  type: 'test'
+  ...
+# Subtest: OMP and Codex raise matching OpenAI route efforts to the budget target
+ok 38 - OMP and Codex raise matching OpenAI route efforts to the budget target
+  ---
+  duration_ms: 20.482
+  type: 'test'
+  ...
+# Subtest: uniform high override is explicit, checked against inventory and budget, and reversible
+ok 39 - uniform high override is explicit, checked against inventory and budget, and reversible
+  ---
+  duration_ms: 51.7151
+  type: 'test'
+  ...
+# Subtest: budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+ok 40 - budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+  ---
+  duration_ms: 90.2792
+  type: 'test'
+  ...
+# Subtest: unobserved preset and modified obsolete panel agent fail without partial writes
+ok 41 - unobserved preset and modified obsolete panel agent fail without partial writes
+  ---
+  duration_ms: 57.4333
+  type: 'test'
+  ...
+# Subtest: OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+ok 42 - OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+  ---
+  duration_ms: 110.4032
+  type: 'test'
+  ...
+# Subtest: OMP and Codex generated workflows bind separate source-style slots
+ok 43 - OMP and Codex generated workflows bind separate source-style slots
+  ---
+  duration_ms: 7.2223
+  type: 'test'
+  ...
+# Subtest: conflicting writers fixture requires both owned changes in one file
+ok 44 - conflicting writers fixture requires both owned changes in one file
+  ---
+  duration_ms: 931.0603
+  type: 'test'
+  ...
+# Subtest: same-scenario conformance records are deterministic and semantically aligned
+ok 45 - same-scenario conformance records are deterministic and semantically aligned
+  ---
+  duration_ms: 296.6352
+  type: 'test'
+  ...
+# Subtest: feature-routing starts with absent behavior and passes through the named boundary
+ok 46 - feature-routing starts with absent behavior and passes through the named boundary
+  ---
+  duration_ms: 3514.6599
+  type: 'test'
+  ...
+# Subtest: Codex long direct entries preserve complete procedures outside the injection budget
+ok 47 - Codex long direct entries preserve complete procedures outside the injection budget
+  ---
+  duration_ms: 656.286
+  type: 'test'
+  ...
+# Subtest: OMP delegated workflows describe the current background-job lifecycle
+ok 48 - OMP delegated workflows describe the current background-job lifecycle
+  ---
+  duration_ms: 489.6663
+  type: 'test'
+  ...
+# Subtest: Codex keeps all direct entries with concise metadata and unchanged bodies
+ok 49 - Codex keeps all direct entries with concise metadata and unchanged bodies
+  ---
+  duration_ms: 222.9832
+  type: 'test'
+  ...
+# Subtest: loads eighty-six portable Skills, seven roles, and three adapters
+ok 50 - loads eighty-six portable Skills, seven roles, and three adapters
+  ---
+  duration_ms: 170.518
+  type: 'test'
+  ...
+# Subtest: live profiles cite surface-specific evidence
+ok 51 - live profiles cite surface-specific evidence
+  ---
+  duration_ms: 151.1508
+  type: 'test'
+  ...
+# Subtest: portable core rejects runtime bindings
+ok 52 - portable core rejects runtime bindings
+  ---
+  duration_ms: 0.5007
+  type: 'test'
+  ...
+# Subtest: unsupported requirements need an explicit fallback
+ok 53 - unsupported requirements need an explicit fallback
+  ---
+  duration_ms: 148.6011
+  type: 'test'
+  ...
+# Subtest: rendering is deterministic for every adapter
+ok 54 - rendering is deterministic for every adapter
+  ---
+  duration_ms: 4664.8
+  type: 'test'
+  ...
+# Subtest: explicit invocation renders as target-native policy
+ok 55 - explicit invocation renders as target-native policy
+  ---
+  duration_ms: 3096.4703
+  type: 'test'
+  ...
+# Subtest: writable roles render native write permissions while read-only roles stay constrained
+ok 56 - writable roles render native write permissions while read-only roles stay constrained
+  ---
+  duration_ms: 3500.2697
+  type: 'test'
+  ...
+# Subtest: committed packages match generator output
+ok 57 - committed packages match generator output
+  ---
+  duration_ms: 4741.5746
+  type: 'test'
+  ...
+# Subtest: release packages expose public Skills while probe Skills remain test-only
+ok 58 - release packages expose public Skills while probe Skills remain test-only
+  ---
+  duration_ms: 4039.788
+  type: 'test'
+  ...
+# Subtest: generated manifests identify the public source repository
+ok 59 - generated manifests identify the public source repository
+  ---
+  duration_ms: 3241.6613
+  type: 'test'
+  ...
+# Subtest: source and generated packages satisfy repository validation
+ok 60 - source and generated packages satisfy repository validation
+  ---
+  duration_ms: 3023.0565
+  type: 'test'
+  ...
+# Subtest: an exact branch lease permits the owned rewrite and rejects a concurrent writer
+ok 61 - an exact branch lease permits the owned rewrite and rejects a concurrent writer
+  ---
+  duration_ms: 45254.0967
+  type: 'test'
+  ...
+# Subtest: how-routing fixture proves the documented end-to-end flow
+ok 62 - how-routing fixture proves the documented end-to-end flow
+  ---
+  duration_ms: 1.1639
+  type: 'test'
+  ...
+# Subtest: how preserves staged read-only exploration and root verification
+ok 63 - how preserves staged read-only exploration and root verification
+  ---
+  duration_ms: 4.4754
+  type: 'test'
+  ...
+# Subtest: interrogate fixture contains both intended reachable defects
+ok 64 - interrogate fixture contains both intended reachable defects
+  ---
+  duration_ms: 4.1437
+  type: 'test'
+  ...
+# Subtest: interrogate requires root-verified runtime metadata for model claims
+ok 65 - interrogate requires root-verified runtime metadata for model claims
+  ---
+  duration_ms: 1.7298
+  type: 'test'
+  ...
+# Subtest: arena cross-judge receives complete frozen candidate artifacts
+ok 66 - arena cross-judge receives complete frozen candidate artifacts
+  ---
+  duration_ms: 0.9595
+  type: 'test'
+  ...
+# Subtest: OMP package survives clean npm install, update, and uninstall
+ok 67 - OMP package survives clean npm install, update, and uninstall
+  ---
+  duration_ms: 4163.2518
+  type: 'test'
+  ...
+# Subtest: Codex repo marketplace copy installs, replaces, and removes only the plugin
+ok 68 - Codex repo marketplace copy installs, replaces, and removes only the plugin
+  ---
+  duration_ms: 2049.6682
+  type: 'test'
+  ...
+# Subtest: immutable snapshots may contain upstream template links; published instructions may not
+ok 69 - immutable snapshots may contain upstream template links; published instructions may not
+  ---
+  duration_ms: 20.4581
+  type: 'test'
+  ...
+# Subtest: snapshot path examples remain verbatim while private keys remain forbidden
+ok 70 - snapshot path examples remain verbatim while private keys remain forbidden
+  ---
+  duration_ms: 18.1371
+  type: 'test'
+  ...
+# Subtest: Markdown links allow internal parent paths and reject encoded escapes
+ok 71 - Markdown links allow internal parent paths and reject encoded escapes
+  ---
+  duration_ms: 11.4782
+  type: 'test'
+  ...
+# Subtest: only exact snapshots, node_modules, .git, and root .tmp are excluded
+ok 72 - only exact snapshots, node_modules, .git, and root .tmp are excluded
+  ---
+  duration_ms: 16.5012
+  type: 'test'
+  ...
+# Subtest: source-model dependencies reject rather than silently reducing hygiene coverage
+ok 73 - source-model dependencies reject rather than silently reducing hygiene coverage
+  ---
+  duration_ms: 6.8048
+  type: 'test'
+  ...
+# Subtest: mixed review retains the reachable defect and dismisses the unreachable seed
+ok 74 - mixed review retains the reachable defect and dismisses the unreachable seed
+  ---
+  duration_ms: 1077.4214
+  type: 'test'
+  ...
+# Subtest: user setup is inherited in two projects and a project manifest overrides only its project
+ok 75 - user setup is inherited in two projects and a project manifest overrides only its project
+  ---
+  duration_ms: 229.5944
+  type: 'test'
+  ...
+# Subtest: Claude Code uses native user and project agent scopes without claiming activation
+ok 76 - Claude Code uses native user and project agent scopes without claiming activation
+  ---
+  duration_ms: 2259.2262
+  type: 'test'
+  ...
+# Subtest: Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+ok 77 - Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+  ---
+  duration_ms: 1450.9951
+  type: 'test'
+  ...
+# Subtest: user setup preserves unrelated personal agents and refuses an owned-name collision
+ok 78 - user setup preserves unrelated personal agents and refuses an owned-name collision
+  ---
+  duration_ms: 183.7172
+  type: 'test'
+  ...
+# Subtest: invalid project resolution fails closed and does not silently use the user default
+ok 79 - invalid project resolution fails closed and does not silently use the user default
+  ---
+  duration_ms: 5.0635
+  type: 'test'
+  ...
+# Subtest: the CLI defaults to user scope without touching the real home directory
+ok 80 - the CLI defaults to user scope without touching the real home directory
+  ---
+  duration_ms: 3851.0592
+  type: 'test'
+  ...
+# Subtest: OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+ok 81 - OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+  ---
+  duration_ms: 9594.064
+  type: 'test'
+  ...
+# Subtest: opening-pr fallback fixture has a clean verifiable two-file commit range
+ok 82 - opening-pr fallback fixture has a clean verifiable two-file commit range
+  ---
+  duration_ms: 31775.4227
+  type: 'test'
+  ...
+# Subtest: orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+ok 83 - orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+  ---
+  duration_ms: 36720.7096
+  type: 'test'
+  ...
+# Subtest: orchestrate rejects fan-out before the pilot and integration without a current verdict
+ok 84 - orchestrate rejects fan-out before the pilot and integration without a current verdict
+  ---
+  duration_ms: 3350.2696
+  type: 'test'
+  ...
+# Subtest: prototype-routing compares equivalent variants with a deterministic decision variable
+ok 85 - prototype-routing compares equivalent variants with a deterministic decision variable
+  ---
+  duration_ms: 2435.7942
+  type: 'test'
+  ...
+# Subtest: public Skill matrix verifier requires the exact catalog and headings
+ok 86 - public Skill matrix verifier requires the exact catalog and headings
+  ---
+  duration_ms: 1282.4316
+  type: 'test'
+  ...
+# Subtest: refactoring-routing preserves the pinned behavior while removing duplication
+ok 87 - refactoring-routing preserves the pinned behavior while removing duplication
+  ---
+  duration_ms: 4974.7969
+  type: 'test'
+  ...
+# Subtest: release archives and manifest are byte-reproducible
+ok 88 - release archives and manifest are byte-reproducible
+  ---
+  duration_ms: 18255.8107
+  type: 'test'
+  ...
+# Subtest: Claude plugin bundle exposes the generated package through a native marketplace
+ok 89 - Claude plugin bundle exposes the generated package through a native marketplace
+  ---
+  duration_ms: 27193.968
+  type: 'test'
+  ...
+# Subtest: repository Claude marketplace points at the generated native plugin
+ok 90 - repository Claude marketplace points at the generated native plugin
+  ---
+  duration_ms: 3.1296
+  type: 'test'
+  ...
+# Subtest: Codex plugin bundle exposes the generated package through one local marketplace
+ok 91 - Codex plugin bundle exposes the generated package through one local marketplace
+  ---
+  duration_ms: 4347.4283
+  type: 'test'
+  ...
+# Subtest: all target archives install, update, roll back, and uninstall within their owned directory
+ok 92 - all target archives install, update, roll back, and uninstall within their owned directory
+  ---
+  duration_ms: 9312.1546
+  type: 'test'
+  ...
+# Subtest: release installer rejects checksum drift and non-owned uninstall targets
+ok 93 - release installer rejects checksum drift and non-owned uninstall targets
+  ---
+  duration_ms: 2595.525
+  type: 'test'
+  ...
+# Subtest: release installer CLI consumes the generated manifest
+ok 94 - release installer CLI consumes the generated manifest
+  ---
+  duration_ms: 6009.976
+  type: 'test'
+  ...
+# Subtest: release installer CLI refuses an existing empty unowned directory
+ok 95 - release installer CLI refuses an existing empty unowned directory
+  ---
+  duration_ms: 6360.4945
+  type: 'test'
+  ...
+# Subtest: release installer CLI verifies installed files without mutation or archives
+ok 96 - release installer CLI verifies installed files without mutation or archives
+  ---
+  duration_ms: 19123.4274
+  type: 'test'
+  ...
+# Subtest: tagged release source requires the version tag at clean HEAD
+ok 97 - tagged release source requires the version tag at clean HEAD
+  ---
+  duration_ms: 609.6329
+  type: 'test'
+  ...
+# Subtest: pause checkpoint survives a cold session pickup without redoing completed work
+ok 98 - pause checkpoint survives a cold session pickup without redoing completed work
+  ---
+  duration_ms: 30363.9832
+  type: 'test'
+  ...
+# Subtest: configuration audit is read-only and never promotes files to activation
+ok 99 - configuration audit is read-only and never promotes files to activation
+  ---
+  duration_ms: 73.7708
+  type: 'test'
+  ...
+# Subtest: invalid model and unsupported effort fail before configuration writes on both hosts
+ok 100 - invalid model and unsupported effort fail before configuration writes on both hosts
+  ---
+  duration_ms: 78.4525
+  type: 'test'
+  ...
+# Subtest: setup receipt renders every configured role and route without summarization loss
+ok 101 - setup receipt renders every configured role and route without summarization loss
+  ---
+  duration_ms: 84.9594
+  type: 'test'
+  ...
+# Subtest: installed setup CLIs run through a symlinked package directory
+ok 102 - installed setup CLIs run through a symlinked package directory
+  ---
+  duration_ms: 7894.9892
+  type: 'test'
+  ...
+# Subtest: OMP acceptance requires selected native agent and observed child model/effort
+ok 103 - OMP acceptance requires selected native agent and observed child model/effort
+  ---
+  duration_ms: 203.3208
+  type: 'test'
+  ...
+# Subtest: Claude acceptance links native Agent call and child model but leaves effort unverified
+ok 104 - Claude acceptance links native Agent call and child model but leaves effort unverified
+  ---
+  duration_ms: 523.8558
+  type: 'test'
+  ...
+# Subtest: Codex acceptance verifies explicit spawn without claiming native role activation
+ok 105 - Codex acceptance verifies explicit spawn without claiming native role activation
+  ---
+  duration_ms: 150.5397
+  type: 'test'
+  ...
+# Subtest: setup-live verifier accepts a fully bound dedicated configuration
+ok 106 - setup-live verifier accepts a fully bound dedicated configuration
+  ---
+  duration_ms: 19719.4104
+  type: 'test'
+  ...
+# Subtest: shipping lands only the revision-bound contiguous passing run
+ok 107 - shipping lands only the revision-bound contiguous passing run
+  ---
+  duration_ms: 24997.0528
+  type: 'test'
+  ...
+# Subtest: shipping refuses an upper PR and a verdict whose reviewed head changed
+ok 108 - shipping refuses an upper PR and a verdict whose reviewed head changed
+  ---
+  duration_ms: 4955.5182
+  type: 'test'
+  ...
+# Subtest: shipping accepts a clean PASS without fabricating reviewer notes
+ok 109 - shipping accepts a clean PASS without fabricating reviewer notes
+  ---
+  duration_ms: 1966.9311
+  type: 'test'
+  ...
+# Subtest: shipping preserves a Codex canonical task name as native attribution
+ok 110 - shipping preserves a Codex canonical task name as native attribution
+  ---
+  duration_ms: 1260.5012
+  type: 'test'
+  ...
+# Subtest: decision-log helper creates one header and appends sanitized rows
+ok 111 - decision-log helper creates one header and appends sanitized rows
+  ---
+  duration_ms: 13230.5326
+  type: 'test'
+  ...
+# Subtest: decision-log helper refuses unexpected headers and symbolic links
+ok 112 - decision-log helper refuses unexpected headers and symbolic links
+  ---
+  duration_ms: 1657.6283
+  type: 'test'
+  ...
+# Subtest: decision-log helper initializes an empty file without replacing valid rows
+ok 113 - decision-log helper initializes an empty file without replacing valid rows
+  ---
+  duration_ms: 4963.2714
+  type: 'test'
+  ...
+# Subtest: source records update one pin without rewriting unrelated fields
+ok 114 - source records update one pin without rewriting unrelated fields
+  ---
+  duration_ms: 1.0672
+  type: 'test'
+  ...
+# Subtest: portable Skill transform preserves prose and moves invocation policy out of core
+ok 115 - portable Skill transform preserves prose and moves invocation policy out of core
+  ---
+  duration_ms: 0.7074
+  type: 'test'
+  ...
+# Subtest: portable Skill transform rejects runtime bindings and binary content
+ok 116 - portable Skill transform rejects runtime bindings and binary content
+  ---
+  duration_ms: 0.5099
+  type: 'test'
+  ...
+# Subtest: three-way merge covers clean updates, local forks, and non-overlapping edits
+ok 117 - three-way merge covers clean updates, local forks, and non-overlapping edits
+  ---
+  duration_ms: 2886.8241
+  type: 'test'
+  ...
+# Subtest: three-way merge classifies overlapping edits as a typed conflict
+ok 118 - three-way merge classifies overlapping edits as a typed conflict
+  ---
+  duration_ms: 2711.5508
+  type: 'test'
+  ...
+# Subtest: deletion distinguishes unchanged, missing, modified, and binary local state
+ok 119 - deletion distinguishes unchanged, missing, modified, and binary local state
+  ---
+  duration_ms: 0.4575
+  type: 'test'
+  ...
+# Subtest: atomic apply restores earlier writes when a later target escapes the root
+ok 120 - atomic apply restores earlier writes when a later target escapes the root
+  ---
+  duration_ms: 16.0152
+  type: 'test'
+  ...
+# Subtest: candidate pin advances only after verification succeeds
+ok 121 - candidate pin advances only after verification succeeds
+  ---
+  duration_ms: 16.2828
+  type: 'test'
+  ...
+# Subtest: a sync against the accepted commit is a no-op
+ok 122 - a sync against the accepted commit is a no-op
+  ---
+  duration_ms: 3325.0303
+  type: 'test'
+  ...
+# Subtest: an accepted commit can extend its pinned import set
+ok 123 - an accepted commit can extend its pinned import set
+  ---
+  duration_ms: 1160.6664
+  type: 'test'
+  ...
+# Subtest: sync planning rejects paths that escape configured roots
+ok 124 - sync planning rejects paths that escape configured roots
+  ---
+  duration_ms: 22.2723
+  type: 'test'
+  ...
+# Subtest: slash-form related and profile evidence resolve to native files
+ok 125 - slash-form related and profile evidence resolve to native files
+  ---
+  duration_ms: 33.813
+  type: 'test'
+  ...
+# Subtest: evidence references reject malformed, sibling, and absolute paths
+ok 126 - evidence references reject malformed, sibling, and absolute paths
+  ---
+  duration_ms: 22.4408
+  type: 'test'
+  ...
+# Subtest: semantic derivations use native scope checks and raw-byte hashes
+ok 127 - semantic derivations use native scope checks and raw-byte hashes
+  ---
+  duration_ms: 27.7682
+  type: 'test'
+  ...
+# Subtest: unlisted tool and skill scripts reject while dependency directories are pruned
+ok 128 - unlisted tool and skill scripts reject while dependency directories are pruned
+  ---
+  duration_ms: 14.5346
+  type: 'test'
+  ...
+# Subtest: upstream import source and target fields reject escapes before file reads
+ok 129 - upstream import source and target fields reject escapes before file reads
+  ---
+  duration_ms: 8.8178
+  type: 'test'
+  ...
+# Subtest: writing cleanup rejects slop and accepts a meaning-preserving how-to
+ok 130 - writing cleanup rejects slop and accepts a meaning-preserving how-to
+  ---
+  duration_ms: 542.9355
+  type: 'test'
+  ...
+1..130
+# tests 130
+# suites 0
+# pass 130
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 111575.7965

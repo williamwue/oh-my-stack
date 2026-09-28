@@ -60,6 +60,14 @@ belongs to merge preparation, after verification lanes have started. The owner
 may not review itself, aggregate the swarm, invent a countersign, edit another
 owner's branch, or merge from a head the root did not authorize.
 
+Before publishing a rewritten head, read the remote tip of the owner's branch
+and bind the update to that exact revision. Use a lease-protected replacement
+that fails if the remote changed after the read; stop and reconcile a mismatch
+instead of refreshing the lease and overwriting another writer. Never force-push
+a shared branch. With Git, use `git ls-remote` followed by an explicit expected
+revision in `git push --force-with-lease=<ref>:<expected>`. This requires the
+program's existing publication authority and grants no new push permission.
+
 Count only observable side effects and durable state transitions as progress.
 At every audit boundary, refresh provider state and reconcile each live handle.
 Record a stalled or stale owner before replacement; late output remains stale

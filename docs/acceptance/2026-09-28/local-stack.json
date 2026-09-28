@@ -1,0 +1,51 @@
+{
+  "provider": "local Git only; no forge requests or landing",
+  "base": "df3597a0a0622c5e62e741d02f8209393189d684",
+  "changes": [
+    {
+      "name": "validator",
+      "owner": "/root/validator_implementer",
+      "files": [
+        "tools/validate.mjs",
+        "tools/generate.mjs",
+        "tests/markdown-links.test.mjs",
+        "tests/validator-paths.test.mjs"
+      ],
+      "head": "23bf68d6997ee7cffc7b2cc0b1885356c1cd0655"
+    },
+    {
+      "name": "semantics",
+      "owner": "/root",
+      "files": [
+        "THIRD_PARTY_NOTICES.md",
+        "packages/claude-code/skills/autopilot-full/SKILL.md",
+        "packages/claude-code/skills/show-me-your-work/SKILL.md",
+        "packages/codex/skills/autopilot-full/WORKFLOW.md",
+        "packages/codex/skills/show-me-your-work/SKILL.md",
+        "packages/omp/skills/autopilot-full/SKILL.md",
+        "packages/omp/skills/show-me-your-work/SKILL.md",
+        "src/core/skills/autopilot-full/SKILL.md",
+        "src/core/skills/show-me-your-work/SKILL.md",
+        "upstream/semantic-derivations.json",
+        "upstream/sources.yaml",
+        "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/LICENSE",
+        "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+        "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/SKILL.md",
+        "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
+        "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/scripts/log.sh"
+      ],
+      "head": "7dd27ec0e2c391c29aee29f3aa9d023341b93a66"
+    }
+  ],
+  "rewrittenHead": "c07c9e88bf593eca1eb3a12a978ee3ce67b47839",
+  "stablePatchBefore": "9b73520a330372f427cd12bd33b322246d3bdc30",
+  "stablePatchAfter": "9b73520a330372f427cd12bd33b322246d3bdc30",
+  "headChanged": true,
+  "refreshedCheck": "10/10 focused tests passed on rewritten real OMS checkout",
+  "negative": {
+    "head": "3d2fc0995ef6919b90cefcfa2155f5938c3d070b",
+    "patch": "2664572a3259284e71a32673588e170739fad0c0",
+    "verdict": "rejected: prior head and patch receipt are stale"
+  },
+  "baseUnchanged": true
+}

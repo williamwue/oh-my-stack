@@ -1,0 +1,20 @@
+{
+  "criteria": [
+    "Works on Windows and POSIX without weakening path containment",
+    "Keeps source snapshot hash and credential scanning boundaries",
+    "Avoids traversing dependencies and transient work artifacts",
+    "Small caller-facing boundary and maintainable implementation",
+    "Executable positive and malicious/missing-input rejection checks"
+  ],
+  "pointsPerCriterion": 2,
+  "attemptBudget": 1,
+  "requiredDistinctShapes": 2,
+  "implementationScope": [
+    "tools/validate.mjs",
+    "tools/generate.mjs only if justified by shared traversal callers",
+    "tests/markdown-links.test.mjs",
+    "tests/validator-paths.test.mjs",
+    ".gitattributes"
+  ],
+  "noPublication": true
+}

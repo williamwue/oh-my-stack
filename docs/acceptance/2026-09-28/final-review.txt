@@ -1,0 +1,7 @@
+No findings in the frozen code or decision trail.
+
+The requested six test files passed **15/15**. `.tmp/final-check.log` records **130/130** passing; my Markdown rerun scanned **509 files** with zero issues. The trail preserves the earlier **124/130** test failure and the initial Markdown run that scanned zero files. It also identifies the discarded JPEG attempt, screenshot timeouts, invalid scrollbar capture, and auth API 500 without claiming those paths passed.
+
+The local Git history matches `local-stack.json`: the semantics patch retains stable patch ID `9b73520a…` after rebase; the changed probe produces the recorded `2664572a…` patch ID; the base branch remains at `df3597a…`. The rewritten checkout’s recorded focused run passed **10/10**. The hook’s symbolic-link rejection and Windows test fixes passed within the requested suite. Acceptance remains local and Windows-only; the report does not claim hosted PR, CI, merge, or POSIX verification.
+
+ROLE_POLICY=independent-frozen-review

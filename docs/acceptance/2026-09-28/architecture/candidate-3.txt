@@ -1,0 +1,36 @@
+# Candidate 3 — Explicit repository-path boundary
+
+**Design proposal only; no implementation was made.** Evidence is from the assigned checkout at `df3597a0a0622c5e62e741d02f8209393189d684`. The CRLF failure and subsequent LF-fix result are supplied by the parent run; I did not rerun `npm run check`.
+
+## Problem and preserved constraints
+
+`filesUnder` returns native filesystem paths (`tools/generate.mjs:70–81`), while manifests and cross-file references use slash-separated paths. `validate.mjs` mixes those forms: containment checks append `/` to native roots (`:32–35, 102–105`), executable classification uses slash patterns on `relative()` results (`:65–70`), and runtime evidence keys use native `relative()` values to look up slash references (`:196–209`). Snapshot exclusions in Markdown and public-hygiene checks have the same mismatch (`:32–35, 158–166`). On Windows this can reject valid links and evidence references, skip executable classification, and scan snapshot links or apply non-snapshot hygiene rules to snapshots.
+
+Keep source and imported-result SHA-256 checks over raw bytes (`:277–282`), snapshot bytes immutable, existing inventory and secret rejection rules intact, and manifest paths slash-separated. `.tmp/` is ignored (`.gitignore`); exclude it from recursive Markdown-link validation. Snapshots remain excluded from local-link resolution but remain in public hygiene checks for private-key and token rejection.
+
+## Caller usage
+
+```js
+const repo = new RepositoryPaths(root);
+const key = repo.keyOf(absoluteFile);          // "evals/evidence/run.json"
+const path = repo.resolveKey(record.evidence); // native absolute path
+const files = await repo.filesUnder(".", {
+  excludeDirectories: ["node_modules", ".tmp", "upstream/snapshots"],
+});
+```
+
+Malformed, absolute, escaping, or noncanonical logical keys fail at `resolveKey`; an absolute path outside the root fails at `keyOf`.
+
+## Shape and ownership
+
+Add `tools/repository-paths.mjs`, owning a root-normalized `RepositoryPaths` value with `keyOf(absolutePath)`, `resolveKey(logicalKey)`, and `filesUnder(directoryKey, {excludeDirectories})`. Containment uses `relative(root, candidate)` and rejects `..`, `../…`, and absolute relative results; it does not rely on string-prefix containment. Convert only native separators when creating keys. Excluded directories use exact logical path components.
+
+Migrate validators to this boundary: evidence maps and executable inventory use logical keys; snapshot and `.tmp` rules classify logical keys; semantic-derivation and Markdown-link resolution use contained paths. Keep `validateUpstreamState` joins for filesystem access, but validate manifest-supplied paths through `resolveKey`. Leave hashing, transformation, and security-pattern checks unchanged. `filesUnder` must still traverse snapshots for provenance and public-hygiene validation unless that caller explicitly excludes them.
+
+## Tradeoffs and checks
+
+This makes the native-path/logical-key conversion explicit and validates it once at call boundaries. It adds a small module and migration across callers. A native-path-only design is rejected: it leaves slash-based manifest references to be reimplemented by each caller and makes Windows lookups platform-dependent.
+
+Add executable tests for slash keys on Windows and POSIX; rejection of `../sibling`, absolute and drive-rooted keys, and sibling-prefix escapes; successful nested links and evidence references; exclusion of snapshots, `node_modules`, and `.tmp` from link traversal; and continued private-key/token rejection in snapshots. Verify raw-byte hashes still detect CRLF/LF drift, then run `npm run validate` and `npm run check` on Windows and POSIX.
+
+ROLE_POLICY=independent-read-only-exploration

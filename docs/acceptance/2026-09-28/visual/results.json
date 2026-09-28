@@ -1,0 +1,44 @@
+[
+  {
+    "mode": "desktop",
+    "stage": "control",
+    "changedPixels": 0,
+    "expected": "zero",
+    "pass": true
+  },
+  {
+    "mode": "desktop",
+    "stage": "after",
+    "changedPixels": 0,
+    "expected": "zero",
+    "pass": true
+  },
+  {
+    "mode": "desktop",
+    "stage": "negative",
+    "changedPixels": 25373,
+    "expected": "reject",
+    "pass": true
+  },
+  {
+    "mode": "mobile",
+    "stage": "control",
+    "changedPixels": 0,
+    "expected": "zero",
+    "pass": true
+  },
+  {
+    "mode": "mobile",
+    "stage": "after",
+    "changedPixels": 0,
+    "expected": "zero",
+    "pass": true
+  },
+  {
+    "mode": "mobile",
+    "stage": "negative",
+    "changedPixels": 10959,
+    "expected": "reject",
+    "pass": true
+  }
+]
