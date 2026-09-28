@@ -194,6 +194,14 @@
       "uninstallBehavior": "Library is not installed in target packages."
     },
     {
+      "path": "tools/durable-run-state.mjs",
+      "owner": "local-core",
+      "purpose": "Persist and recover a provider-independent durable run state with atomic, revision-bound, idempotent event appends.",
+      "network": false,
+      "writes": ["explicit caller-selected durable run store"],
+      "uninstallBehavior": "Not installed in target packages; caller-selected run stores remain user-owned."
+    },
+    {
       "path": "evals/fixtures/public-skill-matrix/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",
