@@ -1,7 +1,7 @@
 # Project status
 
 Updated: 2026-09-28. Published baseline:
-[v0.2.0](releases/0.2.0.md).
+[v0.2.1](releases/0.2.1.md).
 The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
@@ -9,13 +9,17 @@ historical evidence for the pre-publication gate.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
-## Prepared local acceptance update
+## Published 0.2.1 acceptance update
 
 The [September 28 acceptance record](upstream-and-project-acceptance-2026-09-28.md)
 reconciles 33 upstream file changes through `ecc249f1`, adopts two semantic
 updates, and records real OMS architecture, review, local Git coordination,
 directory-traversal performance, and fishspeech heading-component visual checks.
-Windows tests pass 130/130. These changes remain unpublished. The record keeps
+The acceptance run passed 130 tests; release preparation added an archive-mode
+regression test, and the final release passed 131/131. Version 0.2.1 is published
+at `9169cfe0b924508e42a57992512fe1f66e260458`. GitHub CI passed; all seven
+downloaded assets matched the tagged build, and all three downloaded runtime
+packages installed and verified. The record keeps
 POSIX execution, hosted autopilot lifecycle, and authenticated application
 verification outside its passing claims.
 

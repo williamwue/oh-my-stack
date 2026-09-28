@@ -1,0 +1,95 @@
+{
+  "version": "0.2.1",
+  "commit": "9169cfe0b924508e42a57992512fe1f66e260458",
+  "assets": [
+    {
+      "name": "SHA256SUMS",
+      "sha256": "3349f475f8d62181d223f8b2b94efcc014e1fbedd5a4055ddbf1ae66133ed584",
+      "verified": true
+    },
+    {
+      "name": "oh-my-stack-claude-code-0.2.1.tar.gz",
+      "sha256": "59e4a87e30b677fef095829e242b0f08040c3ac542ef38c49ff92f6a92f55cd8",
+      "verified": true
+    },
+    {
+      "name": "oh-my-stack-claude-plugin-0.2.1.tar.gz",
+      "sha256": "b9c1eb1242515dc4a486639c455c049a3cbc5cf2b284eb0fde0e4b0130dd0bdf",
+      "verified": true
+    },
+    {
+      "name": "oh-my-stack-codex-0.2.1.tar.gz",
+      "sha256": "09c4e4457381bf5f4192b7a4a4b36acfa3c27bc158844e183eed2dbb72783b74",
+      "verified": true
+    },
+    {
+      "name": "oh-my-stack-codex-plugin-0.2.1.tar.gz",
+      "sha256": "17e58bafc9c7b1580a5e109165d8433ff989bce1c97c10178625d1abf86be709",
+      "verified": true
+    },
+    {
+      "name": "oh-my-stack-omp-0.2.1.tar.gz",
+      "sha256": "2a271930236eceedbdb3a1b8e5c1c43ef94552c2775e6428b52855c8e69cd3e6",
+      "verified": true
+    },
+    {
+      "name": "release-manifest.json",
+      "sha256": "4aed3d10364ea4e364a4031943303de2b2ab62705fedaf4c936111b13204f0da",
+      "verified": true
+    }
+  ],
+  "downloadedInstall": [
+    "omp",
+    "codex",
+    "claude-code"
+  ],
+  "ci": "https://github.com/williamwue/oh-my-stack/actions/runs/36432228253",
+  "release": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.1",
+  "publishedAt": "2026-09-28T13:57:33Z",
+  "isPrerelease": false,
+  "windowsTests": {
+    "passed": 131,
+    "failed": 0,
+    "skipped": 0
+  },
+  "markdownFiles": 510,
+  "lifecycle": [
+    {
+      "target": "codex",
+      "upgrade": "pass",
+      "rollback": "pass",
+      "reupgrade": "pass",
+      "verify": "pass"
+    },
+    {
+      "target": "omp",
+      "upgrade": "pass",
+      "rollback": "pass",
+      "reupgrade": "pass",
+      "verify": "pass"
+    },
+    {
+      "target": "claude-code",
+      "upgrade": "pass",
+      "rollback": "pass",
+      "reupgrade": "pass",
+      "verify": "pass"
+    }
+  ],
+  "omp": {
+    "target": "omp",
+    "version": "0.2.1",
+    "profile": "oms-release-d16f4fdb518c8b41",
+    "preflight": "verified",
+    "isolatedInstall": "verified",
+    "doctor": "verified",
+    "skillLoad": "verified",
+    "cleanup": "verified",
+    "userProfile": "not targeted"
+  },
+  "deferredByUser": [
+    "hosted autopilot acceptance",
+    "full POSIX runtime acceptance",
+    "fishspeech authentication/backend acceptance"
+  ]
+}
