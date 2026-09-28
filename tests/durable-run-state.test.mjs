@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { promisify } from "node:util";
@@ -96,5 +96,35 @@ test("store paths are bounded by the explicit store root", async () => {
     );
   } finally {
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("store paths reject symlinked or junction parents that escape the store root", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "oms-durable-link-root-"));
+  const outside = await mkdtemp(join(tmpdir(), "oms-durable-link-outside-"));
+  const link = join(root, "link");
+  try {
+    try {
+      await symlink(outside, link, process.platform === "win32" ? "junction" : "dir");
+    } catch (error) {
+      if (process.platform === "win32" && ["EACCES", "EPERM", "ENOTSUP", "UNKNOWN"].includes(error.code)) {
+        t.skip(`symlink or junction creation unavailable: ${error.code}`);
+        return;
+      }
+      throw error;
+    }
+
+    const storePath = join(link, "run.json");
+    await assert.rejects(
+      DurableRunState.create({ storeRoot: root, storePath, runId: "run-link", generation: 1 }),
+      (error) => error.code === "PATH_OUTSIDE_STORE",
+    );
+    await assert.rejects(
+      DurableRunState.load({ storeRoot: root, storePath, runId: "run-link", generation: 1 }),
+      (error) => error.code === "PATH_OUTSIDE_STORE",
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+    await rm(outside, { recursive: true, force: true });
   }
 });

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
-import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
+import { lstat, mkdir, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 const SCHEMA_VERSION = 1;
 const TERMINAL_STATUSES = new Set(["completed", "failed"]);
@@ -32,11 +32,43 @@ function isWithin(root, candidate) {
   return difference !== "" && difference !== ".." && !difference.startsWith(`..${sep}`) && !isAbsolute(difference);
 }
 
-function storePaths({ storePath, storeRoot }) {
+function isSameOrWithin(root, candidate) {
+  const difference = relative(root, candidate);
+  return difference === "" || (difference !== ".." && !difference.startsWith(`..${sep}`) && !isAbsolute(difference));
+}
+
+async function existingRealpath(path) {
+  try {
+    return await realpath(path);
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+async function assertStorePathContainment(root, storePath) {
+  const canonicalRoot = (await existingRealpath(root)) ?? root;
+  const components = relative(root, storePath).split(sep).filter(Boolean);
+  let current = root;
+  for (const component of components) {
+    current = join(current, component);
+    const currentStat = await lstat(current).catch((error) => {
+      if (error.code === "ENOENT") return null;
+      throw error;
+    });
+    if (!currentStat) break;
+    assert(!currentStat.isSymbolicLink(), "PATH_OUTSIDE_STORE", "storePath cannot traverse a symlinked parent");
+    const resolvedCurrent = await existingRealpath(current);
+    assert(resolvedCurrent !== null && isSameOrWithin(canonicalRoot, resolvedCurrent), "PATH_OUTSIDE_STORE", "storePath resolves outside storeRoot");
+  }
+}
+
+async function storePaths({ storePath, storeRoot }) {
   assert(typeof storePath === "string" && storePath.length > 0, "INVALID_PATH", "storePath is required");
   const absoluteStorePath = resolve(storePath);
   const root = resolve(storeRoot ?? dirname(absoluteStorePath));
   assert(isWithin(root, absoluteStorePath), "PATH_OUTSIDE_STORE", "storePath must remain inside storeRoot");
+  await assertStorePathContainment(root, absoluteStorePath);
   return { storePath: absoluteStorePath, storeRoot: root };
 }
 
@@ -188,7 +220,7 @@ export class DurableRunState {
   }
 
   static async create({ storePath, storeRoot, runId, generation, metadata = {} }) {
-    const paths = storePaths({ storePath, storeRoot });
+    const paths = await storePaths({ storePath, storeRoot });
     validateId(runId, "runId");
     validateGeneration(generation);
     assertJson(metadata, "metadata", { storeRoot: paths.storeRoot });
@@ -215,7 +247,7 @@ export class DurableRunState {
   }
 
   static async load({ storePath, storeRoot, runId, generation } = {}) {
-    const paths = storePaths({ storePath, storeRoot });
+    const paths = await storePaths({ storePath, storeRoot });
     let raw;
     try {
       raw = await readFile(paths.storePath, "utf8");
