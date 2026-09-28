@@ -47,7 +47,8 @@ export async function packageInventory(root) {
     files.push({
       path: relative(root, path).split(sep).join("/"),
       size: contents.length,
-      mode: info.mode & 0o111 ? "0755" : "0644",
+      mode: (info.mode & 0o111) || (process.platform === "win32"
+        && path.endsWith(".sh") && contents.subarray(0, 2).toString() === "#!") ? "0755" : "0644",
       sha256: sha256(contents),
     });
   }
@@ -167,7 +168,9 @@ export async function extractArchive(archive, expectedRoot, destination) {
 
 export async function verifyInstalledTree(directory, expectedInventory) {
   const actual = await packageInventory(directory);
-  if (JSON.stringify(actual) !== JSON.stringify(expectedInventory)) {
+  const comparable = (files) => process.platform === "win32"
+    ? files.map(({ mode, ...entry }) => entry) : files;
+  if (JSON.stringify(comparable(actual)) !== JSON.stringify(comparable(expectedInventory))) {
     throw new Error(`installed files do not match the release inventory for ${directory}`);
   }
 }

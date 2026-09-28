@@ -157,6 +157,10 @@ node tools/install-release.mjs verify \
 
 This read-only command exits successfully only when file paths, sizes,
 normalized executable modes, and SHA-256 hashes match the manifest inventory.
+On Windows, Unix execute bits are not observable and are excluded from the
+installed-tree comparison; paths, sizes, and hashes are still checked. Archives
+built on Windows mark shell scripts with a shebang as executable. POSIX verification
+also checks normalized executable modes.
 Modified, missing, or additional files cause a nonzero exit. It does not repair
 files, create a missing destination, register plugins, or require the release
 archive. For a marketplace installation, select the actual plugin directory,

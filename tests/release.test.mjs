@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import {
   access,
+  chmod,
   mkdir,
   mkdtemp,
   readFile,
@@ -50,6 +51,25 @@ test("release archives and manifest are byte-reproducible", async () => {
     `oh-my-stack-omp-${version}.tar.gz`,
     "release-manifest.json",
   ]);
+});
+
+test("release inventory preserves shell entrypoints and checks only observable installed modes", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-release-modes-"));
+  try {
+    const script = join(root, "run.sh");
+    await writeFile(script, "#!/bin/sh\nprintf 'ready\\n'\n");
+    await chmod(script, 0o755);
+    const inventory = await packageInventory(root);
+    assert.equal(inventory[0].mode, "0755");
+    await verifyInstalledTree(root, inventory);
+    await chmod(script, 0o644);
+    if (process.platform === "win32") await verifyInstalledTree(root, inventory);
+    else await assert.rejects(verifyInstalledTree(root, inventory), /release inventory/);
+    await writeFile(script, "#!/bin/sh\nprintf 'changed\\n'\n");
+    await assert.rejects(verifyInstalledTree(root, inventory), /release inventory/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("Claude plugin bundle exposes the generated package through a native marketplace", async () => {

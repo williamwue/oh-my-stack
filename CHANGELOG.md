@@ -11,6 +11,8 @@ promise permanent configuration or runtime API compatibility.
 - Fix Windows repository validation, shell-test execution, npm lifecycle tests,
   user-scope isolation, and Markdown glob quoting. Pin repository text to LF.
 - Reject symbolic-link outputs in the Claude effort hook on Windows.
+- Fix Windows verification of Unix-built archives while retaining byte hashes
+  and POSIX mode checks; preserve shell entrypoint modes in Windows-built archives.
 - Adopt upstream run-attribution and exact remote-lease requirements.
 - Record 33 upstream decisions, independent architecture/review acceptance,
   local Git coordination, traversal measurements, and fishspeech visual checks.
