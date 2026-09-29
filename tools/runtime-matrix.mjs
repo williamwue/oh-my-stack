@@ -90,12 +90,17 @@ function validateProbe(probe, index = 0) {
 }
 
 function normalizePayload(payload, probe) {
-  if (payload === undefined) return { status: "passed" };
-  assert(typeof payload === "object" && !Array.isArray(payload), `${probe.id}: malformed probe result`, "MALFORMED_PROBE_RESULT");
+  assert(payload !== undefined, `${probe.id}: missing JSON probe result`, "MALFORMED_PROBE_RESULT");
+  assert(payload && typeof payload === "object" && !Array.isArray(payload), `${probe.id}: malformed probe result`, "MALFORMED_PROBE_RESULT");
   const status = payload.status ?? (payload.result === "pass" ? "passed" : payload.result === "fail" ? "failed" : undefined);
   assert(STATUSES.has(status), `${probe.id}: malformed probe result status`, "MALFORMED_PROBE_RESULT");
   if (status === "passed") assert(payload.ok !== false, `${probe.id}: passed probe reported ok=false`, "MALFORMED_PROBE_RESULT");
-  return { ...payload, status, result: status === "passed" ? "pass" : status === "failed" ? "fail" : status };
+  return {
+    status,
+    result: status === "passed" ? "pass" : status === "failed" ? "fail" : status,
+    ...(Object.hasOwn(payload, "ok") ? { ok: payload.ok } : {}),
+    payload,
+  };
 }
 
 async function executeCommand({ command, cwd, env }) {
@@ -209,7 +214,10 @@ function validateDocument(document) {
     assert(result && typeof result === "object" && STATUSES.has(result.status), "matrix result has invalid status", "MALFORMED_PROBE_RESULT");
     assert(result.revision === document.revision, "result revision differs from matrix revision", "REVISION_MISMATCH");
     assert(result.runtime?.name && result.runtime?.versionCommand, "matrix result is missing exact runtime metadata", "MALFORMED_PROBE_RESULT");
-    assert(result.platform?.class && result.command === null || result.command?.executable, "matrix result is missing exact command metadata", "MALFORMED_PROBE_RESULT");
+    assert(result.platform?.class && result.command && typeof result.command === "object" && !Array.isArray(result.command)
+      && typeof result.command.executable === "string" && result.command.executable.trim().length > 0
+      && Array.isArray(result.command.args) && result.command.args.every((part) => typeof part === "string"),
+    "matrix result is missing exact command metadata", "MALFORMED_PROBE_RESULT");
   }
   return document;
 }
