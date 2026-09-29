@@ -60,6 +60,75 @@ test("identical event appends are idempotent while conflicting IDs are rejected"
   }
 });
 
+test("load accepts an append-compatible history through waiting, continuation, and failure", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-durable-history-valid-"));
+  const storePath = join(root, "run.json");
+  const options = { storePath, storeRoot: root, runId: "run-history", generation: 2 };
+  try {
+    const run = await DurableRunState.create(options);
+    assert.equal((await DurableRunState.load(options)).state.revision, 0);
+    for (const [type, payload] of [
+      ["start", {}],
+      ["checkpoint", { status: "waiting" }],
+      ["continuation", { resumed: true }],
+      ["checkpoint", { step: "retried" }],
+      ["failed", { reason: "unavailable" }],
+    ]) {
+      await run.append({ eventId: `evt-${run.state.revision + 1}`, generation: 2, revision: run.state.revision + 1, type, payload });
+      if (type === "start") {
+        await assert.rejects(
+          run.append({ eventId: "evt-second-start", generation: 2, revision: 2, type: "start", payload: {} }),
+          (error) => error.code === "INVALID_EVENT",
+        );
+        assert.equal(run.state.revision, 1);
+      }
+    }
+    const loaded = await DurableRunState.load(options);
+    assert.equal(loaded.state.status, "failed");
+    assert.deepEqual(loaded.state.events.map((event) => event.type), ["start", "checkpoint", "continuation", "checkpoint", "failed"]);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("load rejects on-disk histories that append could not produce", async (t) => {
+  const cases = [
+    ["duplicate eventId", (document) => { document.events[1].eventId = document.events[0].eventId; }],
+    ["second start", (document) => { document.events[1].type = "start"; }],
+    ["missing initial start", (document) => { document.events[0].type = "continuation"; }],
+    ["event after completed", (document) => {
+      document.events.push({ ...document.events[2], eventId: "evt-late", revision: 4, type: "continuation" });
+      document.revision = 4;
+      document.status = "running";
+    }],
+    ["event after failed", (document) => {
+      document.events[2].type = "failed";
+      document.events.push({ ...document.events[2], eventId: "evt-late", revision: 4, type: "checkpoint" });
+      document.revision = 4;
+      document.status = "running";
+    }],
+  ];
+  for (const [name, corrupt] of cases) {
+    await t.test(name, async () => {
+      const root = await mkdtemp(join(tmpdir(), "oms-durable-history-invalid-"));
+      const storePath = join(root, "run.json");
+      const options = { storePath, storeRoot: root, runId: "run-history", generation: 2 };
+      try {
+        const run = await DurableRunState.create(options);
+        for (const type of ["start", "checkpoint", "completed"]) {
+          await run.append({ eventId: `evt-${run.state.revision + 1}`, generation: 2, revision: run.state.revision + 1, type, payload: {} });
+        }
+        const document = JSON.parse(await readFile(storePath, "utf8"));
+        corrupt(document);
+        await writeFile(storePath, `${JSON.stringify(document)}\n`);
+        await assert.rejects(DurableRunState.load(options), (error) => error.code === "STORE_INVALID");
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    });
+  }
+});
+
 test("stale generations, malformed stores, and paths outside the store fail closed", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-durable-invalid-"));
   try {

@@ -120,23 +120,28 @@ function validateDocument(document, { storeRoot, runId, generation } = {}) {
   assert(Array.isArray(document.events), "STORE_INVALID", "store events must be an array");
   assert(document.events.length === document.revision, "STORE_INVALID", "store revision does not match event count");
   let expectedRevision = 1;
+  const eventIds = new Set();
+  let status = "running";
   for (const event of document.events) {
+    assert(isPlainObject(event), "STORE_INVALID", "store event must be an object");
     validateId(event.eventId, "eventId");
+    assert(!eventIds.has(event.eventId), "STORE_INVALID", "eventIds must be unique");
+    eventIds.add(event.eventId);
     validateGeneration(event.generation);
     assert(event.generation === document.generation, "STORE_INVALID", "event generation does not match run generation");
     assert(event.revision === expectedRevision, "STORE_INVALID", "event revisions must be contiguous");
     assert(EVENT_TYPES.has(event.type), "STORE_INVALID", `unsupported event type ${event.type}`);
+    assert(event.type === "start" ? expectedRevision === 1 : expectedRevision > 1, "STORE_INVALID", "start must be the first and only initial event");
+    assert(!TERMINAL_STATUSES.has(status), "STORE_INVALID", "event follows a terminal run event");
     assertJson(event.payload, `events.${event.eventId}.payload`, { storeRoot });
     assert(typeof event.recordedAt === "string", "STORE_INVALID", "event timestamp is required");
+    status = event.type === "completed" ? "completed"
+      : event.type === "failed" ? "failed"
+        : event.type === "checkpoint" && event.payload?.status === "waiting" ? "waiting"
+          : "running";
     expectedRevision += 1;
   }
-  if (document.events.length > 0) assert(document.events[0].type === "start", "STORE_INVALID", "first event must be start");
-  const lastType = document.events.at(-1)?.type;
-  const expectedStatus = lastType === "completed" ? "completed"
-    : lastType === "failed" ? "failed"
-      : lastType === "checkpoint" && document.events.at(-1).payload?.status === "waiting" ? "waiting"
-        : "running";
-  assert(document.status === expectedStatus, "STORE_INVALID", "store status does not match its event history");
+  assert(document.status === status, "STORE_INVALID", "store status does not match its event history");
   if (runId !== undefined) assert(document.runId === runId, "RUN_MISMATCH", "runId does not match the requested run");
   if (generation !== undefined) assert(document.generation === generation, "STALE_GENERATION", "store generation is stale");
   return document;
@@ -185,7 +190,7 @@ export class DurableRunState {
 
     assert(!TERMINAL_STATUSES.has(this._document.status), "RUN_TERMINAL", "cannot append to a terminal run");
     assert(event.revision === this._document.revision + 1, "REVISION_CONFLICT", "event revision is stale or has a gap");
-    if (event.revision === 1) assert(event.type === "start", "INVALID_EVENT", "first event must be start");
+    assert(event.type === "start" ? event.revision === 1 : event.revision > 1, "INVALID_EVENT", "start must be the first and only initial event");
     const recordedAt = new Date().toISOString();
     const next = clone(this._document);
     next.events.push({
