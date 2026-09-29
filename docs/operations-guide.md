@@ -1,7 +1,6 @@
 # Local operations guide
 
-This guide covers the unreleased source tooling after the published 0.2.1
-baseline. It checks local run state and evidence. It does not operate a hosted
+This guide covers the source tooling introduced in 0.3.0. It checks local run state and evidence. It does not operate a hosted
 service or certify full pstack behavior.
 
 ## Prerequisites and first checks

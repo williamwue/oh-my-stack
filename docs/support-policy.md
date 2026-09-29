@@ -1,8 +1,8 @@
 # Support policy
 
-## Published baseline: 0.2.1
+## Release baseline: 0.3.0
 
-0.2.1 is the current published baseline. It is not a promise of complete Cursor
+0.3.0 is the release baseline. It is not a promise of complete Cursor
 pstack behavioral parity or stable 1.0 APIs. Support is scoped to the observed
 versions and surfaces in the [host matrix](host-compatibility.md). Other
 combinations require a fresh inventory, installation check and bounded worker
@@ -41,10 +41,10 @@ These limitations do not silently disappear with a successful core smoke test.
 Unsupported or missing capabilities must produce an explicit stop or a disclosed
 fallback, not a success claim. See [project status](project-status.md) for gaps.
 
-## Unreleased source operations
+## Source operations in 0.3.0
 
 The source checkout adds local run, evidence, matrix, and read-only doctor
-tooling after 0.2.1. These are not published package commands. Use the
+tooling in 0.3.0. These are source commands, not global plugin commands. Use the
 [operations guide](operations-guide.md) for prerequisites, recovery, and
 diagnostic exit codes. A valid local store and passing doctor report do not
 establish hosted autopilot, POSIX runtime acceptance, authenticated backend

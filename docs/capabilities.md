@@ -78,7 +78,7 @@ are revision-bound and cannot be loaded or replaced under a different source
 revision. The probes use disposable local fixtures and do not require network
 access or external credentials.
 
-The unreleased source [operations doctor](operations-guide.md) reads a
+The 0.3.0 source [operations doctor](operations-guide.md) reads a
 persisted matrix beside a durable run and its verification receipts. Its
 passing result means the local files validate at the current Git commit and
 all recorded probes pass. `unknown`, `unsupported`, failed, missing, or stale
