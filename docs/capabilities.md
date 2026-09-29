@@ -64,6 +64,28 @@ Each capability has one status:
 
 Records also name the provider, permissions, probe, and evidence artifact. Documentation can seed a hypothesis but cannot produce a `pass` observation.
 
+### Cross-runtime probe records
+
+The local runtime matrix harness (`tools/runtime-matrix.mjs`) runs declared
+probes against Node and Bun on the Windows and POSIX capability classes. Each
+record keeps the requested runtime, resolved version command, platform and
+architecture, exact executable and argument list, exit details, and source
+revision. A missing runtime is recorded as `unknown` by default or
+`unsupported` when the declaration explicitly says that no fallback exists;
+neither state is promoted to `passed`. Probe output that is not valid JSON or
+does not contain a recognized status is recorded as `failed`. Persisted records
+are revision-bound and cannot be loaded or replaced under a different source
+revision. The probes use disposable local fixtures and do not require network
+access or external credentials.
+
+The 0.3.0 source [operations doctor](operations-guide.md) reads a
+persisted matrix beside a durable run and its verification receipts. Its
+passing result means the local files validate at the current Git commit and
+all recorded probes pass. `unknown`, `unsupported`, failed, missing, or stale
+records cause a nonzero exit. This is a local diagnostic boundary; it does not
+raise a runtime's delivery or workflow conformance level without independent
+execution evidence on that exact host coordinate.
+
 `coordination.scheduled_wake` is credited only when a later host-scheduled run
 actually re-enters the workflow, validates its durable anchors, re-measures the
 provider, and verifies schedule cleanup at a terminal state. Successfully

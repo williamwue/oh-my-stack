@@ -6,6 +6,17 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.3.0 - 2026-09-30
+
+- Add validated durable local run state, restart recovery, replay protection,
+  cooperative writer locking, and malformed-history rejection.
+- Add a local disposable autopilot provider with revision-bound transitions.
+- Add Node/Bun runtime matrices, bounded probes, and revision-bound evidence.
+- Add a read-only operations doctor and recovery/support documentation.
+- These additions are source-checkout tools, not global plugin commands.
+  Hosted autopilot, native POSIX workflows, and authenticated FishSpeech
+  backend acceptance remain deferred; FishSpeech UI interaction is partial.
+
 ## 0.2.1 - 2026-09-28
 
 - Fix Windows repository validation, shell-test execution, npm lifecycle tests,

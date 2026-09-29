@@ -194,6 +194,30 @@
       "uninstallBehavior": "Library is not installed in target packages."
     },
     {
+      "path": "tools/durable-run-state.mjs",
+      "owner": "local-core",
+      "purpose": "Persist and recover a provider-independent durable run state with atomic, revision-bound, idempotent event appends.",
+      "network": false,
+      "writes": ["explicit caller-selected durable run store"],
+      "uninstallBehavior": "Not installed in target packages; caller-selected run stores remain user-owned."
+    },
+    {
+      "path": "tools/run-evidence.mjs",
+      "owner": "local-core",
+      "purpose": "Record revision-bound verification receipts and report current, unknown, failed, or stale run evidence.",
+      "network": false,
+      "writes": ["explicit caller-selected durable evidence store when recording"],
+      "uninstallBehavior": "Not installed in target packages; caller-selected evidence stores remain user-owned."
+    },
+    {
+      "path": "tools/operations-doctor.mjs",
+      "owner": "local-core",
+      "purpose": "Read local run, evidence, and runtime matrix files against the current Git commit and report actionable health codes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Not installed in target packages; caller-selected stores remain user-owned."
+    },
+    {
       "path": "evals/fixtures/public-skill-matrix/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",
@@ -296,6 +320,24 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Not installed in target packages."
+    },
+    {
+      "path": "tools/autopilot-provider-adapter.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run a provider-independent disposable Git branch, pull-request, CI, approval, retry, and merge state machine for autopilot verification.",
+      "network": false,
+      "writes": ["explicit caller-selected durable run store"],
+      "uninstallBehavior": "Removed with the owning Oh My Stack package."
+    },
+    {
+      "path": "tools/runtime-matrix.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run disposable cross-runtime and platform acceptance probes with explicit evidence statuses.",
+      "network": false,
+      "writes": [
+        "explicit caller-selected evidence/result store"
+      ],
+      "uninstallBehavior": "Removed with the owning Oh My Stack package."
     }
   ]
 }

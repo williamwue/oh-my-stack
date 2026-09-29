@@ -1,7 +1,13 @@
 # Project status
 
-Updated: 2026-09-28. Published baseline:
-[v0.2.1](releases/0.2.1.md).
+Updated: 2026-09-30. Release candidate: [0.3.0](releases/0.3.0.md).
+Previous published baseline: [v0.2.1](releases/0.2.1.md).
+All six local source units passed independent review. The
+[operations guide](operations-guide.md) documents the source CLI and recovery
+procedure. Full pstack equivalence is not established; hosted autopilot,
+POSIX runtime acceptance, and authenticated backend integration remain
+deferred. FishSpeech desktop/mobile rendering was checked, but interaction
+acceptance remains partial.
 The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
