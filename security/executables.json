@@ -304,6 +304,14 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Not installed in target packages."
+    },
+    {
+      "path": "tools/autopilot-provider-adapter.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run a provider-independent disposable Git branch, pull-request, CI, approval, retry, and merge state machine for autopilot verification.",
+      "network": false,
+      "writes": ["explicit caller-selected durable run store"],
+      "uninstallBehavior": "Removed with the owning Oh My Stack package."
     }
   ]
 }
