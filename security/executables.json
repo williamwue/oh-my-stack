@@ -312,6 +312,16 @@
       "network": false,
       "writes": ["explicit caller-selected durable run store"],
       "uninstallBehavior": "Removed with the owning Oh My Stack package."
+    },
+    {
+      "path": "tools/runtime-matrix.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run disposable cross-runtime and platform acceptance probes with explicit evidence statuses.",
+      "network": false,
+      "writes": [
+        "explicit caller-selected evidence/result store"
+      ],
+      "uninstallBehavior": "Removed with the owning Oh My Stack package."
     }
   ]
 }
