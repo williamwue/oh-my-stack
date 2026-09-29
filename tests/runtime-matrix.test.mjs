@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 
 import {
   executeProbe,
@@ -12,6 +14,8 @@ import {
 } from "../tools/runtime-matrix.mjs";
 
 const nodeScript = "process.stdout.write(JSON.stringify({status:'passed', ok:true, fixture:process.env.OMS_FIXTURE}))";
+const execFileAsync = promisify(execFile);
+const defaultNodeExecutable = process.versions.bun ? "node" : process.execPath;
 
 test("positive Node probe records command, runtime, platform, and pass", async () => {
   const result = await executeProbe({
@@ -24,10 +28,39 @@ test("positive Node probe records command, runtime, platform, and pass", async (
   assert.equal(result.result, "pass");
   assert.equal(result.runtime.name, "node");
   assert.match(result.runtime.version, /^v?\d/);
-  assert.equal(result.command.executable, process.execPath);
+  assert.equal(result.command.executable, defaultNodeExecutable);
   assert.equal(result.command.args[0], "-e");
   assert.equal(result.platform.class, process.platform === "win32" ? "windows" : "posix");
   assert.match(result.stdout, /local/);
+});
+
+test("Bun host selects Node for a Node probe while honoring an explicit override", async (t) => {
+  const bun = process.env.OMS_BUN_BINARY || "bun";
+  try {
+    await execFileAsync(bun, ["--version"], { timeout: 5000 });
+  } catch (error) {
+    if (error.code === "ENOENT") return t.skip("Bun is unavailable");
+    throw error;
+  }
+  const probe = {
+    id: "node-from-bun", runtime: "node", platform: ["windows", "posix"],
+    script: "process.stdout.write(JSON.stringify({status:'passed', hostIsBun:Boolean(process.versions.bun)}))",
+  };
+  const moduleUrl = new URL("../tools/runtime-matrix.mjs", import.meta.url).href;
+  const script = `import { executeProbe } from ${JSON.stringify(moduleUrl)};
+    const probe = ${JSON.stringify(probe)};
+    const selected = await executeProbe(probe);
+    const overridden = await executeProbe(probe, { runtimes: { node: process.execPath } });
+    process.stdout.write(JSON.stringify({ hostIsBun: Boolean(process.versions.bun), hostExecutable: process.execPath, selected, overridden }));`;
+  const { stdout } = await execFileAsync(bun, ["-e", script], { timeout: 15000 });
+  const observed = JSON.parse(stdout);
+  assert.equal(observed.hostIsBun, true);
+  assert.equal(observed.selected.status, "passed");
+  assert.equal(observed.selected.command.executable, "node");
+  assert.equal(observed.selected.payload.hostIsBun, false);
+  assert.equal(observed.overridden.status, "passed");
+  assert.equal(observed.overridden.command.executable, observed.hostExecutable);
+  assert.equal(observed.overridden.payload.hostIsBun, true);
 });
 
 test("an unavailable runtime stays unknown or unsupported according to declaration", async () => {
@@ -103,7 +136,7 @@ test("a probe cannot overwrite observed execution metadata", async () => {
   assert.equal(result.status, "passed");
   assert.equal(result.result, "pass");
   assert.equal(result.ok, true);
-  assert.equal(result.command.executable, process.execPath);
+  assert.equal(result.command.executable, defaultNodeExecutable);
   assert.deepEqual(result.command.args.slice(0, 1), ["-e"]);
   assert.equal(result.runtime.name, "node");
   assert.equal(result.platform.class, process.platform === "win32" ? "windows" : "posix");

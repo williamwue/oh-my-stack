@@ -50,7 +50,7 @@ function commandParts(command) {
 function runtimeExecutable(runtime, runtimes = {}) {
   const configured = runtimes[runtime];
   if (configured) return configured;
-  if (runtime === "node") return process.execPath;
+  if (runtime === "node") return process.versions.bun ? "node" : process.execPath;
   return process.env.OMS_BUN_BINARY || "bun";
 }
 
