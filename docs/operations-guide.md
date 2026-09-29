@@ -70,7 +70,7 @@ receipt format and status semantics, see [run evidence](run-evidence.md).
 
 ## Support boundary
 
-The published 0.2.1 packages remain the release baseline. These source
+The 0.3.0 release includes these tools in its source checkout. These source
 commands are local development and operations aids; they do not install a
 daemon, scheduler, credential service, or authenticated provider backend.
 Hosted autopilot, POSIX runtime acceptance, and external PR/CI/merge completion
