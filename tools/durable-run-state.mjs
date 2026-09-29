@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { lstat, mkdir, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { lstat, mkdir, open, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 const SCHEMA_VERSION = 1;
@@ -158,6 +158,41 @@ async function atomicWrite(path, document) {
   }
 }
 
+async function readDocument(path, options) {
+  let raw;
+  try {
+    raw = await readFile(path, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") fail("STORE_MISSING", "durable run store does not exist");
+    throw error;
+  }
+  let document;
+  try {
+    document = JSON.parse(raw);
+  } catch {
+    fail("STORE_INVALID", "durable run store contains malformed JSON");
+  }
+  return validateDocument(document, options);
+}
+
+async function acquireStoreLock(path) {
+  const lockPath = `${path}.lock`;
+  const deadline = Date.now() + 2000;
+  while (true) {
+    try {
+      const handle = await open(lockPath, "wx");
+      return async () => {
+        try { await handle.close(); }
+        finally { await rm(lockPath, { force: true }); }
+      };
+    } catch (error) {
+      if (error.code !== "EEXIST") throw error;
+      if (Date.now() >= deadline) fail("STORE_LOCKED", "durable run store is locked; inspect the lock before manual recovery");
+      await new Promise((resolveDelay) => setTimeout(resolveDelay, 25));
+    }
+  }
+}
+
 export class DurableRunState {
   constructor({ storePath, storeRoot, document }) {
     this.storePath = storePath;
@@ -178,21 +213,36 @@ export class DurableRunState {
     assert(Number.isSafeInteger(event.revision) && event.revision > 0, "INVALID_EVENT", "event revision must be a positive integer");
     assertJson(event.payload, "event.payload", { storeRoot: this.storeRoot });
 
-    const existing = this._document.events.find((entry) => entry.eventId === event.eventId);
+    await assertStorePathContainment(this.storeRoot, this.storePath);
+    const release = await acquireStoreLock(this.storePath);
+    try {
+      await assertStorePathContainment(this.storeRoot, this.storePath);
+      const disk = await readDocument(this.storePath, { storeRoot: this.storeRoot, runId: this._document.runId });
+      assert(disk.generation === this._document.generation && event.generation === disk.generation,
+        "STALE_GENERATION", "event belongs to an older generation");
+      return await this._appendLocked(event, disk);
+    } finally {
+      await release();
+    }
+  }
+
+  async _appendLocked(event, disk) {
+    const existing = disk.events.find((entry) => entry.eventId === event.eventId);
     if (existing) {
       const same = existing.generation === event.generation
         && existing.revision === event.revision
         && existing.type === event.type
         && JSON.stringify(existing.payload) === JSON.stringify(event.payload);
       if (!same) fail("EVENT_CONFLICT", "eventId already exists with a different payload or revision");
+      this._document = disk;
       return { state: this.state, duplicate: true };
     }
 
-    assert(!TERMINAL_STATUSES.has(this._document.status), "RUN_TERMINAL", "cannot append to a terminal run");
-    assert(event.revision === this._document.revision + 1, "REVISION_CONFLICT", "event revision is stale or has a gap");
+    assert(!TERMINAL_STATUSES.has(disk.status), "RUN_TERMINAL", "cannot append to a terminal run");
+    assert(event.revision === disk.revision + 1, "REVISION_CONFLICT", "event revision is stale or has a gap");
     assert(event.type === "start" ? event.revision === 1 : event.revision > 1, "INVALID_EVENT", "start must be the first and only initial event");
     const recordedAt = new Date().toISOString();
-    const next = clone(this._document);
+    const next = clone(disk);
     next.events.push({
       eventId: event.eventId,
       generation: event.generation,
@@ -208,6 +258,7 @@ export class DurableRunState {
           : "running";
     next.updatedAt = recordedAt;
     validateDocument(next, { storeRoot: this.storeRoot });
+    await assertStorePathContainment(this.storeRoot, this.storePath);
     await atomicWrite(this.storePath, next);
     this._document = next;
     return { state: this.state, duplicate: false };
@@ -253,20 +304,7 @@ export class DurableRunState {
 
   static async load({ storePath, storeRoot, runId, generation } = {}) {
     const paths = await storePaths({ storePath, storeRoot });
-    let raw;
-    try {
-      raw = await readFile(paths.storePath, "utf8");
-    } catch (error) {
-      if (error.code === "ENOENT") fail("STORE_MISSING", "durable run store does not exist");
-      throw error;
-    }
-    let document;
-    try {
-      document = JSON.parse(raw);
-    } catch {
-      fail("STORE_INVALID", "durable run store contains malformed JSON");
-    }
-    validateDocument(document, { storeRoot: paths.storeRoot, runId, generation });
+    const document = await readDocument(paths.storePath, { storeRoot: paths.storeRoot, runId, generation });
     return new DurableRunState({ ...paths, document });
   }
 }

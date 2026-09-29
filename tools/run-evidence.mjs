@@ -102,6 +102,7 @@ async function loadEvidence(options, runStore) {
 
 export async function recordReceipt({ runStorePath, evidenceStorePath, storeRoot, receipt, currentSourceCommit }) {
   validateReceipt(receipt);
+  ensure(receipt.receiptId !== "evidence-start", "INVALID_RECEIPT", "receiptId is reserved");
   ensure(typeof currentSourceCommit === "string" && COMMIT.test(currentSourceCommit), "INVALID_SOURCE", "currentSourceCommit must be a full Git commit ID");
   const { run, evidenceOptions, runStore } = await loadContext({ runStorePath, evidenceStorePath, storeRoot, runId: receipt.runId, generation: receipt.generation });
   ensure(receipt.runRevision === run.state.revision, "STALE_REVISION", "receipt run revision differs from the current run");
@@ -128,7 +129,6 @@ export async function recordReceipt({ runStorePath, evidenceStorePath, storeRoot
     ensure(previous.payload?.receipt && sameReceipt(previous.payload.receipt, receipt), "RECEIPT_CONFLICT", "receiptId already belongs to a different receipt");
     return { duplicate: true, receipt: previous.payload.receipt, evidenceRevision: evidence.state.revision };
   }
-  ensure(receipt.receiptId !== "evidence-start", "INVALID_RECEIPT", "receiptId is reserved");
   const appended = await evidence.append({ eventId: receipt.receiptId, generation: receipt.generation, revision: evidence.state.revision + 1, type: "checkpoint", payload: { receipt } });
   return { duplicate: false, receipt, evidenceRevision: appended.state.revision };
 }

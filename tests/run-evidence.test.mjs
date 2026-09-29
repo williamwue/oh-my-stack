@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
@@ -88,6 +88,15 @@ test("a failed command cannot be reported as an all-pass verification", async (t
   await recordReceipt({ ...common, receipt: receipt({ result: { exitCode: 1 }, checks: [{ name: "unit", status: "fail" }] }) });
   const status = await getEvidenceStatus({ ...common, runId: "run-1", generation: 2 });
   assert.equal(status.status, "fail");
+});
+
+test("reserved receipt ID is rejected before an evidence store is created", async (t) => {
+  const paths = await fixture(t);
+  await assert.rejects(
+    recordReceipt({ ...paths, currentSourceCommit: commitA, receipt: receipt({ receiptId: "evidence-start" }) }),
+    (error) => error.code === "INVALID_RECEIPT",
+  );
+  await assert.rejects(stat(paths.evidenceStorePath), (error) => error.code === "ENOENT");
 });
 
 test("source changes make old evidence stale and a fresh receipt restores current status", async (t) => {

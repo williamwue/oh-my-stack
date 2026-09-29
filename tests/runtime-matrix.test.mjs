@@ -65,6 +65,27 @@ test("malformed probe output is a failed result", async () => {
   assert.equal(result.result, "fail");
 });
 
+test("a hanging command is terminated and recorded as a timeout", async () => {
+  const started = Date.now();
+  const result = await executeProbe({
+    id: "hanging-command", runtime: "node", platform: ["windows", "posix"],
+    script: "setInterval(() => {}, 1000)",
+  }, { timeoutMs: 250 });
+  assert.equal(result.status, "failed");
+  assert.equal(result.reason, "command-timeout");
+  assert(Date.now() - started < 4000);
+});
+
+test("excess output is truncated, terminated, and failed", async () => {
+  const result = await executeProbe({
+    id: "output-overload", runtime: "node", platform: ["windows", "posix"],
+    script: "setInterval(() => process.stdout.write('x'.repeat(8192)), 1)",
+  }, { timeoutMs: 3000, maxOutputBytes: 1024 });
+  assert.equal(result.status, "failed");
+  assert.equal(result.reason, "command-output-limit");
+  assert(Buffer.byteLength(result.stdout) <= 1024);
+});
+
 test("a probe cannot overwrite observed execution metadata", async () => {
   const forged = {
     status: "passed", ok: true, fixture: "payload-detail",

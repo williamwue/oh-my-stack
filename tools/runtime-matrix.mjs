@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import { randomUUID } from "node:crypto";
-import { execFile, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { arch, platform } from "node:os";
 import { dirname, resolve } from "node:path";
-import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
-const execFileAsync = promisify(execFile);
 const SCHEMA_VERSION = 1;
+const DEFAULT_TIMEOUT_MS = 5000;
+const DEFAULT_MAX_OUTPUT_BYTES = 65536;
 const RUNTIMES = new Set(["node", "bun"]);
 const PLATFORM_CLASSES = new Set(["windows", "posix"]);
 const STATUSES = new Set(["passed", "failed", "unsupported", "unknown"]);
@@ -54,22 +54,22 @@ function runtimeExecutable(runtime, runtimes = {}) {
   return process.env.OMS_BUN_BINARY || "bun";
 }
 
-async function runtimeMetadata(runtime, executable) {
+async function runtimeMetadata(runtime, executable, limits) {
   const versionCommand = [executable, "--version"];
-  try {
-    const { stdout, stderr } = await execFileAsync(executable, ["--version"], { encoding: "utf8", windowsHide: true });
-    const version = stdout.trim() || stderr.trim();
-    return { name: runtime, executable, version: version || "unknown", versionCommand };
-  } catch (error) {
+  const run = await executeCommand({ command: versionCommand, ...limits });
+  if (run.error || run.timedOut || run.outputLimited || run.exitCode !== 0) {
     return {
       name: runtime,
       executable,
       version: null,
       versionCommand,
-      unavailable: error.code === "ENOENT" || error.code === "EACCES",
-      error: error.code || error.message,
+      unavailable: ["ENOENT", "EACCES"].includes(run.error?.code),
+      failure: run.timedOut ? "runtime-version-timeout" : run.outputLimited ? "runtime-version-output-limit" : "runtime-version-failed",
+      error: run.error?.code || run.error?.message || `exit ${run.exitCode}`,
     };
   }
+  const version = run.stdout.trim() || run.stderr.trim();
+  return { name: runtime, executable, version: version || "unknown", versionCommand };
 }
 
 function validateProbe(probe, index = 0) {
@@ -103,8 +103,15 @@ function normalizePayload(payload, probe) {
   };
 }
 
-async function executeCommand({ command, cwd, env }) {
+function commandLimits({ timeoutMs = DEFAULT_TIMEOUT_MS, maxOutputBytes = DEFAULT_MAX_OUTPUT_BYTES } = {}) {
+  assert(Number.isSafeInteger(timeoutMs) && timeoutMs > 0 && timeoutMs <= 60000, "timeoutMs must be 1..60000");
+  assert(Number.isSafeInteger(maxOutputBytes) && maxOutputBytes > 0 && maxOutputBytes <= 1048576, "maxOutputBytes must be 1..1048576");
+  return { timeoutMs, maxOutputBytes };
+}
+
+async function executeCommand({ command, cwd, env, timeoutMs, maxOutputBytes }) {
   const parts = commandParts(command);
+  const limits = commandLimits({ timeoutMs, maxOutputBytes });
   return new Promise((resolveResult) => {
     const startedAt = now();
     const child = spawn(parts.executable, parts.args, {
@@ -113,19 +120,46 @@ async function executeCommand({ command, cwd, env }) {
       shell: false,
       windowsHide: true,
     });
-    let stdout = "";
-    let stderr = "";
-    child.stdout?.on("data", (chunk) => { stdout += chunk; });
-    child.stderr?.on("data", (chunk) => { stderr += chunk; });
-    child.on("error", (error) => resolveResult({ ...parts, startedAt, endedAt: now(), stdout, stderr, error }));
-    child.on("close", (exitCode, signal) => resolveResult({ ...parts, startedAt, endedAt: now(), stdout, stderr, exitCode, signal }));
+    const stdoutChunks = [];
+    const stderrChunks = [];
+    let outputBytes = 0;
+    let timedOut = false;
+    let outputLimited = false;
+    let spawnError;
+    const terminate = () => {
+      child.stdout?.destroy();
+      child.stderr?.destroy();
+      child.kill("SIGKILL");
+    };
+    const timer = setTimeout(() => { timedOut = true; terminate(); }, limits.timeoutMs);
+    const collect = (stream, chunk) => {
+      const remaining = Math.max(0, limits.maxOutputBytes - outputBytes);
+      const kept = chunk.subarray(0, remaining);
+      outputBytes += chunk.length;
+      if (stream === "stdout") stdoutChunks.push(kept);
+      else stderrChunks.push(kept);
+      if (outputBytes > limits.maxOutputBytes && !outputLimited) {
+        outputLimited = true;
+        terminate();
+      }
+    };
+    child.stdout?.on("data", (chunk) => collect("stdout", chunk));
+    child.stderr?.on("data", (chunk) => collect("stderr", chunk));
+    child.on("error", (error) => { spawnError = error; });
+    child.on("close", (exitCode, signal) => {
+      clearTimeout(timer);
+      resolveResult({ ...parts, startedAt, endedAt: now(),
+        stdout: Buffer.concat(stdoutChunks).toString("utf8"), stderr: Buffer.concat(stderrChunks).toString("utf8"), exitCode, signal,
+        timedOut, outputLimited, error: spawnError });
+    });
   });
 }
 
-async function probeOne(probeInput, { cwd, env, runtimes = {}, actualPlatform = platform(), actualArch = arch() } = {}) {
+async function probeOne(probeInput, { cwd, env, runtimes = {}, actualPlatform = platform(), actualArch = arch(), timeoutMs, maxOutputBytes } = {}) {
   const probe = validateProbe(probeInput);
+  const limits = commandLimits({ timeoutMs: probe.timeoutMs ?? timeoutMs, maxOutputBytes: probe.maxOutputBytes ?? maxOutputBytes });
   const startedAt = now();
-  const runtime = runtimeMetadata(probe.runtime, runtimeExecutable(probe.runtime, runtimes));
+  const runtime = runtimeMetadata(probe.runtime, runtimeExecutable(probe.runtime, runtimes), limits);
   const runtimeInfo = await runtime;
   const command = probe.command ?? { executable: runtimeInfo.executable, args: ["-e", probe.script] };
   const commandMeta = commandParts(command);
@@ -148,12 +182,17 @@ async function probeOne(probeInput, { cwd, env, runtimes = {}, actualPlatform = 
     const status = probe.unavailableStatus ?? "unknown";
     return { ...base, status, result: status, reason: "runtime-unavailable", endedAt: now() };
   }
-  const run = await executeCommand({ command, cwd, env });
+  if (runtimeInfo.failure) {
+    return { ...base, status: "failed", result: "fail", reason: runtimeInfo.failure, endedAt: now() };
+  }
+  const run = await executeCommand({ command, cwd, env, ...limits });
   const result = { ...base, command: { executable: run.executable, args: run.args, display: run.display }, stdout: run.stdout, stderr: run.stderr, exitCode: run.exitCode ?? null,
     signal: run.signal ?? null, endedAt: run.endedAt };
   if (run.error) {
     return { ...result, status: "failed", result: "fail", reason: run.error.code || run.error.message, error: run.error.message };
   }
+  if (run.timedOut) return { ...result, status: "failed", result: "fail", reason: "command-timeout" };
+  if (run.outputLimited) return { ...result, status: "failed", result: "fail", reason: "command-output-limit" };
   if (run.exitCode !== 0) return { ...result, status: "failed", result: "fail", reason: "non-zero-exit" };
   let payload;
   const text = run.stdout.trim();
@@ -173,7 +212,7 @@ export async function executeProbe(probe, options = {}) {
   return probeOne(probe, options);
 }
 
-export async function runRuntimeMatrix({ probes, revision, cwd, env, runtimes, fixture, persistPath, actualPlatform = platform(), actualArch = arch() } = {}) {
+export async function runRuntimeMatrix({ probes, revision, cwd, env, runtimes, fixture, persistPath, actualPlatform = platform(), actualArch = arch(), timeoutMs, maxOutputBytes } = {}) {
   assert(Array.isArray(probes) && probes.length > 0, "probes must be a non-empty array");
   assert(typeof revision === "string" && revision.length > 0, "revision is required", "REVISION_REQUIRED");
   let fixtureRoot = cwd;
@@ -188,7 +227,7 @@ export async function runRuntimeMatrix({ probes, revision, cwd, env, runtimes, f
   const results = [];
   try {
     for (const [index, declaration] of probes.entries()) {
-      results.push({ ...(await probeOne(declaration, { cwd: fixtureRoot, env, runtimes, actualPlatform, actualArch })), revision });
+      results.push({ ...(await probeOne(declaration, { cwd: fixtureRoot, env, runtimes, actualPlatform, actualArch, timeoutMs, maxOutputBytes })), revision });
     }
   } finally {
     if (cleanup) await cleanup();
