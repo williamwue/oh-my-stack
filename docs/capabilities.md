@@ -78,6 +78,14 @@ are revision-bound and cannot be loaded or replaced under a different source
 revision. The probes use disposable local fixtures and do not require network
 access or external credentials.
 
+The unreleased source [operations doctor](operations-guide.md) reads a
+persisted matrix beside a durable run and its verification receipts. Its
+passing result means the local files validate at the current Git commit and
+all recorded probes pass. `unknown`, `unsupported`, failed, missing, or stale
+records cause a nonzero exit. This is a local diagnostic boundary; it does not
+raise a runtime's delivery or workflow conformance level without independent
+execution evidence on that exact host coordinate.
+
 `coordination.scheduled_wake` is credited only when a later host-scheduled run
 actually re-enters the workflow, validates its durable anchors, re-measures the
 provider, and verifies schedule cleanup at a terminal state. Successfully

@@ -1,7 +1,14 @@
 # Project status
 
-Updated: 2026-09-28. Published baseline:
+Updated: 2026-09-30. Published baseline:
 [v0.2.1](releases/0.2.1.md).
+The current development program after 0.2.1 is unreleased. Its local run,
+evidence, runtime-matrix, and read-only diagnostic tools need separate package
+and live-host acceptance before any release claim. The
+[operations guide](operations-guide.md) documents the source CLI and recovery
+procedure. Full pstack equivalence is not established; hosted autopilot,
+POSIX runtime acceptance, and authenticated backend integration remain
+deferred.
 The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains

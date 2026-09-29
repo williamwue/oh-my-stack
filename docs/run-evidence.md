@@ -54,9 +54,12 @@ all current checks must pass for `pass`. Later receipts can update a named
 check while the full event history remains intact.
 
 The first writer creates the evidence store. Replaying an identical receipt ID
-is idempotent; a different payload under that ID is rejected. The store is
-currently **single writer only**. Concurrent writers require coordination or
-compare and swap support in the durable store; that is left to U5. No network
-requests or external actions are made by this tool. The caller remains
-responsible for running the stated command, confirming its source commit, and
-deciding whether its checks justify a broader release claim.
+is idempotent; a different payload under that ID is rejected. The durable
+store serializes individual appends with a lock and rejects stale revisions.
+This does not authorize independent workers to share ownership of one run:
+coordinate one authoritative writer and inspect lock contention before manual
+recovery. No network requests or external actions are made by this tool. The
+caller remains responsible for running the stated command, confirming its
+source commit, and deciding whether its checks justify a broader release
+claim. The read-only [operations doctor](operations-guide.md) checks the saved
+run, evidence, matrix, and lock paths against the current source revision.

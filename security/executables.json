@@ -210,6 +210,14 @@
       "uninstallBehavior": "Not installed in target packages; caller-selected evidence stores remain user-owned."
     },
     {
+      "path": "tools/operations-doctor.mjs",
+      "owner": "local-core",
+      "purpose": "Read local run, evidence, and runtime matrix files against the current Git commit and report actionable health codes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Not installed in target packages; caller-selected stores remain user-owned."
+    },
+    {
       "path": "evals/fixtures/public-skill-matrix/verify.mjs",
       "owner": "oh-my-stack",
       "purpose": "Verify exact public Skill discovery and read-only explicit-load reports against generated package headings.",
