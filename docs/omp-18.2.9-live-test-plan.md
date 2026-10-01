@@ -1,3 +1,5 @@
+> Historical test evidence. The legacy provider plugin mentioned below was retired on 2026-09-30; do not reinstall it to reproduce these tests. Current cloud access uses official provider tools.
+
 # OMP 18.2.9 live acceptance plan
 
 Date: 2026-09-23. This records the first native runs of the unreleased
