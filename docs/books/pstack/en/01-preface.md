@@ -1,0 +1,199 @@
+# Preface
+
+[Contents](README.md) · [Next](02-chapter.md) · [简体中文](../zh-CN/01-preface.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/d4d843) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3dfdf0)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="1">This book is also available in Japanese: <a href="https://zenn.dev/sc30gsw/books/080faba713547b" target="_blank">日本語版</a>.</p>
+</div></aside>
+
+This book is about <strong>widening the scope of work you can delegate to agents</strong>.
+
+It is no longer hard to get an AI agent to write code. The hard part is building a system that lets you trust what it wrote so that you no longer have to watch over the AI.
+
+When an agent says "I fixed it," you do not know whether it really did until you verify. So a human has to sit beside it, watch the screen, read the diff, and run the app to check. With this setup, however many agents you run side by side, the human who checks their work stays the bottleneck.
+
+This book explains "<strong>how to build an environment that gets you out of that situation</strong>."
+
+Its main subject is [pstack](https://github.com/cursor/plugins/tree/main/pstack).
+
+pstack is a Cursor plugin published by Lauren Tan, known as [poteto](https://x.com/poteto), an engineer at Cursor and a member of the React core team.
+
+pstack packages the work procedures and judgment standards that poteto uses every day to build high-quality code at Cursor. These procedures and standards draw on poteto's experience at Meta, Netflix, and Cursor, and pstack organizes them as Playbooks, Principles, and Skills.
+
+poteto's aim is not to have AI write large amounts of code. The aim is a way of working in which you can verify quality, so that you can trust several agents to run in parallel. In September 2026, poteto announced shipping 2,500 PRs to production with pstack in the single month of August.
+
+<span class="embed-block zenn-embedded zenn-embedded-tweet"><iframe data-content="https%3A%2F%2Fx.com%2Fpoteto%2Fstatus%2F2102050467505430555" frameborder="0" id="zenn-embedded__f949b802b4128" scrolling="no" src="https://embed.zenn.studio/tweet#zenn-embedded__f949b802b4128"></iframe></span><https://x.com/poteto/status/2102050467505430555>
+
+However, this book is not a how-to for producing more PRs.  
+One question is at its center.
+
+<strong>Under what conditions can an agent keep doing high-quality work without a human watching?</strong>
+
+pstack is one concrete answer to that question. It contains mechanisms that verify artifacts, the work procedures of experienced engineers, standards for judgment, knowledge and constraints kept in the codebase, and automation built on top of all of these.
+
+This book explains every Playbook, Principle, and Skill in pstack and breaks the answer down into a form you can take back to your own project.
+
+<a id="what-%22delegating-work%22-to-an-agent-means"></a>
+
+
+## What "delegating work" to an agent means
+
+Delegating work to an agent does not mean handing over instructions and waiting for the result. In this book, I call it delegating when you have handed the agent the following three things.
+
+1. <strong>What counts as done</strong>: the finish condition is in a form you can run to get a pass or fail result
+2. <strong>How to proceed</strong>: steps such as investigation, reproduction, fixing, and checking run at the same quality every time
+3. <strong>How to verify</strong>: the agent itself runs the real app or artifact and leaves evidence
+
+If the third is missing, a human still has to act as the checker, even when the other two are in place. For this reason, poteto calls verification the most important foundation. This book starts with verification too.
+
+<a id="what-this-book-covers"></a>
+
+
+## What this book covers
+
+This book has six parts and 39 chapters.
+
+<table class="code-line" data-line="45">
+<thead class="code-line" data-line="45">
+<tr class="code-line" data-line="45">
+<th>Part</th>
+<th>Topic</th>
+<th>Chapters</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="47">
+<tr class="code-line" data-line="47">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace" target="_blank">Part I: The development foundation behind 2,500 PRs a month</a></td>
+<td>What conditions let you delegate work to an agent?</td>
+<td>Chapters 1 to 5</td>
+</tr>
+<tr class="code-line" data-line="48">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d" target="_blank">Part II: What pstack is</a></td>
+<td>With what components does pstack meet the conditions from <a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace" target="_blank">Part I</a>?</td>
+<td>Chapters 6 to 9</td>
+</tr>
+<tr class="code-line" data-line="49">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0d1535" target="_blank">Part III: Moving work forward with Playbooks</a></td>
+<td>pstack's Playbooks in detail</td>
+<td>Chapters 10 to 16</td>
+</tr>
+<tr class="code-line" data-line="50">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d" target="_blank">Part IV: Principles support the agent's judgment</a></td>
+<td>pstack's Principles in detail</td>
+<td>Chapters 17 to 21</td>
+</tr>
+<tr class="code-line" data-line="51">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/fdce40" target="_blank">Part V: Extend what the work can do with Skills</a></td>
+<td>pstack's Skills in detail</td>
+<td>Chapters 22 to 35</td>
+</tr>
+<tr class="code-line" data-line="52">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c2adb6" target="_blank">Part VI: A practical guide to pstack</a></td>
+<td>Where to start in your own project</td>
+<td>Chapters 36 to 39</td>
+</tr>
+</tbody>
+</table>
+
+[Part III](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0d1535) through [Part V](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/fdce40) cover pstack in concrete detail. They explain all 23 Playbooks, 23 Principles, and 24 Skills in pstack as of September 2026. They do more than list names. For each item, they explain what it is for, when you use it, and how it connects to the other items.
+
+[Part VI](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c2adb6) is the practical part. Its main reference is *The Complete Guide to pstack*, which poteto posted on X in two parts, [Part 1](https://x.com/poteto/status/2094457600259842065) and [Part 2](https://x.com/poteto/status/2097732320606507506).  
+[Part VI](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c2adb6) uses the guide to explain how to build a verification skill and how to research, design, and plan with an agent.
+
+<a id="how-to-read-this-book"></a>
+
+
+## How to read this book
+
+On a first read, I recommend that you read the chapters in order. If you first read "why verification comes first" in [Part I](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace), you can see more easily which problem each item solves.
+
+If you have a clear goal, you can also read it in one of the following ways.
+
+- <strong>If you want to install pstack and use it right away</strong>, read [Part II](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d), then go to [Chapter 34](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c37697) on installation and [Chapter 36](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c9901e) on verification skills.
+- <strong>If you will not use pstack but want to design your team's development environment</strong>, focus on [Part I](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace), [Part IV](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d), and [Part VI](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c2adb6). You can apply the Principles and the practical guide without pstack.
+- <strong>If you want to look up a specific Playbook or Skill</strong>, go straight to the right chapter from the chapter list in each part's introduction. I wrote each chapter so that you can read it on its own.
+
+<a id="the-pstack-request-this-book-uses-throughout"></a>
+
+
+## The pstack request this book uses throughout
+
+If you look at pstack's Playbooks, Principles, and Skills one at a time, you do not see how they work together inside a single request. So this book uses the following prompt in [Part II](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d) and [Part IV](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d).
+
+```
+/poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
+```
+
+This request comes from pstack's [bundled guide](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/README.md), where it appears as an example request.
+
+Its first sentence states the symptom. Its second sentence states what counts as done, which is to reproduce, fix, and check. [Part II](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d) and [Part IV](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d) use it as a good example, and each part looks at a different side of it:
+
+- [Part II](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d) looks at which Playbook the entry point, `/poteto-mode`, picks
+- [Part IV](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d) looks at which Principles the agent uses for its decisions during the work, and how
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="86">I have not run this request on a real project myself. The flow this book shows traces the steps written in pstack's files. It includes no run logs or output.</p>
+</div></aside>
+
+<a id="reference-date-and-notation-rules"></a>
+
+
+## Reference date and notation rules
+
+pstack changes often. This book covers pstack as of the following point.
+
+<table class="code-line" data-line="93">
+<thead class="code-line" data-line="93">
+<tr class="code-line" data-line="93">
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="95">
+<tr class="code-line" data-line="95">
+<td>Date checked</td>
+<td>September 24, 2026</td>
+</tr>
+<tr class="code-line" data-line="96">
+<td>Repository</td>
+<td>
+<a href="https://github.com/cursor/plugins/tree/main/pstack" rel="nofollow noopener noreferrer" target="_blank">pstack</a> in cursor/plugins</td>
+</tr>
+<tr class="code-line" data-line="97">
+<td>Version</td>
+<td>0.15.5</td>
+</tr>
+<tr class="code-line" data-line="98">
+<td>commit</td>
+<td>
+<a href="https://github.com/cursor/plugins/pull/422" rel="nofollow noopener noreferrer" target="_blank"><code>12d587d</code></a> (September 23, 2026)</td>
+</tr>
+<tr class="code-line" data-line="99">
+<td>Counts</td>
+<td>23 Playbooks, 23 Principles, 24 Skills</td>
+</tr>
+</tbody>
+</table>
+
+If you use a newer version, compare the list in the [README](https://github.com/cursor/plugins/blob/main/pstack/README.md) with the lists in this book. Some items may have new names, and there may be new items. Values that change often, such as the default model names, carry the note "default as of 0.15.5."
+
+This book separates the kinds of content it presents as follows.
+
+- <strong>pstack's specification</strong> comes with the name of the relevant file or a link.
+- <strong>poteto's views</strong> come with their source, such as the README, *The Complete Guide to pstack*, or the talk. This book presents them as poteto's own views and does not treat them as facts that hold in every environment.
+- <strong>Quotes from the source</strong> are short quotes of the English original, with the source named.
+- <strong>My interpretation and experience</strong> carry explicit markers, such as "This book reads it as …," "I think …," and "In my case."
+
+Let's begin in [Part I](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace) with what lies behind the figure of "2,500 a month."
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Next](02-chapter.md) · [简体中文](../zh-CN/01-preface.md)

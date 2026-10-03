@@ -2,7 +2,8 @@
   "ignores": [
     ".tmp/**",
     "node_modules/**",
-    "upstream/snapshots/**"
+    "upstream/snapshots/**",
+    "upstream/books/**"
   ],
   "overrides": [
     {
@@ -23,6 +24,33 @@
       ],
       "config": {
         "MD029": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/books/pstack/en/*-*.md",
+        "docs/books/pstack/zh-CN/*-*.md"
+      ],
+      "config": {
+        "MD012": false,
+        "MD024": false,
+        "MD029": false,
+        "MD033": false,
+        "MD036": false,
+        "MD040": false,
+        "MD010": false,
+        "MD031": false,
+        "MD051": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/omp-18.2.9-live-test-plan.md"
+      ],
+      "config": {
+        "MD041": false
       },
       "combine": "merge"
     }

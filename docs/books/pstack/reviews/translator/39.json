@@ -1,0 +1,16 @@
+{
+  "chapter": "39",
+  "source_sha256": "174f03e45bd9f458285b4fecd65b8434d1f8805aa92fd130dbc830052e782071",
+  "translation_sha256": "c59abbeeb2ea4d92b584cfcb75d097a49f961b451ec1a56745cdc07a72cbbd0b",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 9,
+  "translated_heading_count": 9,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "root_review_corrections": [
+    "没有随附用于验证 <code>SKILL.md</code> 的脚本工具"
+  ]
+}

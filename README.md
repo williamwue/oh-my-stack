@@ -719,6 +719,13 @@ oh-my-stack/
 
 `packages/` contains committed generator-owned installation trees so Git-based installs remain reviewable. CI regenerates them and rejects drift. `dist/` contains uncommitted release archives and checksums; neither directory is a semantic source of truth.
 
+## Reading
+
+[kaito's pstack book](docs/books/pstack/README.md) includes all 48 entries in
+English and Simplified Chinese, with source snapshots, AI review records and
+an Oh My Stack companion. The complete local candidate is pending human review.
+Reported author permission is recorded separately from the project's MIT license.
+
 ## Attribution
 
 This repository contains mechanically imported and semantically derived

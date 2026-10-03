@@ -1,0 +1,40 @@
+{
+  "base": "52bec251d379799afc56a3eb538ad82e68908020",
+  "method": "local shared clone at base HEAD plus explicit book/closeout-owned overlays; node_modules points to installed lockfile dependencies; security inventory adds only book tools",
+  "overlays": [
+    "docs/books/pstack",
+    "upstream/books/pstack",
+    "tools/books",
+    "tests/pstack-book.test.mjs",
+    "tests/pstack-book-audit.test.py",
+    "tests/markdown-links.test.mjs",
+    "tools/validate.mjs",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "AGENTS.md",
+    "docs/operations/official-cloud-operations.md",
+    ".markdownlint-cli2.jsonc",
+    "package.json",
+    "security/executables.json:book entries only"
+  ],
+  "excluded_concurrent_work": "GitHub provider implementation, tests, policy prototype and related documentation",
+  "checks": [
+    {
+      "command": "npm run check",
+      "exit_code": 0
+    },
+    {
+      "command": "node tools/books/validate-pstack-book.mjs --complete",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 tools/books/audit-source.py",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 tests/pstack-book-audit.test.py",
+      "exit_code": 0
+    }
+  ],
+  "note": "This isolates the book candidate from new unfinished shared-workspace changes. Counts differ because concurrent provider tests are excluded."
+}

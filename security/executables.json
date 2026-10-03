@@ -338,6 +338,42 @@
         "explicit caller-selected evidence/result store"
       ],
       "uninstallBehavior": "Removed with the owning Oh My Stack package."
+    },
+    {
+      "path": "tools/books/import-pstack-book.py",
+      "owner": "oh-my-stack",
+      "purpose": "Archive authorized public Zenn chapter bodies with source hashes.",
+      "network": true,
+      "writes": [
+        "upstream/books/pstack/<snapshot-date>"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/prepare-editions.py",
+      "owner": "oh-my-stack",
+      "purpose": "Assemble attributed English chapters and completed Chinese drafts with matching source receipts.",
+      "network": false,
+      "writes": [
+        "docs/books/pstack"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/validate-pstack-book.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Check book provenance, edition completeness, code fidelity, local links and review evidence offline.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/audit-source.py",
+      "owner": "oh-my-stack",
+      "purpose": "Verify archived chapter hashes, rendered text and exact code against raw source offline.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
     }
   ]
 }

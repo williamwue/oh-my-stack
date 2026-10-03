@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-03",
+  "reviewer": "root using T3 collaborative browser",
+  "renderer": "local Mistune3.1.3 HTML preview with custom responsive CSS; external iframes suppressed, source links retained",
+  "github_hosted_rendering": "not checked; not published",
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "observed": [
+    "01 Chinese desktop and mobile reading, language switch toEnglish",
+    "10 Chinese static diagram loads",
+    "22 source PNG loads after scroll: natural width1400, mobile display width358",
+    "43 Chinese toEnglish navigation succeeds at390px",
+    "47 tables horizontally scroll within390px page; first details disclosure opens and code is visible",
+    "48 Chinese afterword has390px document width; contents link reaches48-entry Chinese index",
+    "46 Chinese static diagram loads with no page overflow at390px; screenshot visually inspected"
+  ],
+  "screenshots": [
+    "screenshots/zh-01-desktop.png",
+    "screenshots/zh-47-mobile-expanded-code.png",
+    "screenshots/zh-46-mobile-diagram.png"
+  ],
+  "limits": [
+    "Representative pages visually inspected; no claim of visual inspection of every page or every SVG.",
+    "All62 SVGs were generated and checked structurally;31 Chinese label/relationship translations reviewed independently.",
+    "External snippets, articles and videos are linked and not fully archived.",
+    "A snapshot immediately after navigation sometimes captured an unpainted frame; repeated settled capture used for visual assessment."
+  ]
+}

@@ -1,0 +1,1865 @@
+$ npm run check
+
+> oh-my-stack@0.3.0 check
+> npm run generate:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.3.0 generate:check
+> node tools/generate.mjs --check
+
+Verified 3 public targets with 74 of 86 source Skill.
+
+> oh-my-stack@0.3.0 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.3.0 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 7 output files.
+
+> oh-my-stack@0.3.0 validate
+> node tools/validate.mjs
+
+Validated 3 targets, 7 profiles, and 86 Skill.
+
+> oh-my-stack@0.3.0 check:books
+> node tools/books/validate-pstack-book.mjs
+
+{
+  "chapters": 48,
+  "ready": 48,
+  "warnings": []
+}
+
+> oh-my-stack@0.3.0 lint:markdown
+> markdownlint-cli2 "**/*.md"
+
+markdownlint-cli2 v0.23.3 (markdownlint v0.41.1)
+Finding: **/*.md !.tmp/** !node_modules/** !upstream/snapshots/** !upstream/books/**
+Linting: 688 files
+Summary: 0 issues in 0 files
+
+> oh-my-stack@0.3.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: poteto-mode routes every admitted alpha outcome without implicit publication
+ok 1 - poteto-mode routes every admitted alpha outcome without implicit publication
+  ---
+  duration_ms: 2.537375
+  type: 'test'
+  ...
+# Subtest: alpha three playbooks preserve their safety boundaries
+ok 2 - alpha three playbooks preserve their safety boundaries
+  ---
+  duration_ms: 4.10075
+  type: 'test'
+  ...
+# Subtest: architecture candidates have one requirements-consistent winner
+ok 3 - architecture candidates have one requirements-consistent winner
+  ---
+  duration_ms: 44.002167
+  type: 'test'
+  ...
+# Subtest: autonomous run advances one verified unit per iteration and stops at its predicate
+ok 4 - autonomous run advances one verified unit per iteration and stops at its predicate
+  ---
+  duration_ms: 1586.119083
+  type: 'test'
+  ...
+# Subtest: autonomous controller rejects an iteration that edits a future unit
+ok 5 - autonomous controller rejects an iteration that edits a future unit
+  ---
+  duration_ms: 431.5305
+  type: 'test'
+  ...
+# Subtest: autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+ok 6 - autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+  ---
+  duration_ms: 423.413125
+  type: 'test'
+  ...
+# Subtest: autonomous wake preserves a standalone cron provider through resume and cleanup
+ok 7 - autonomous wake preserves a standalone cron provider through resume and cleanup
+  ---
+  duration_ms: 435.050416
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an early or mismatched resume without consuming the wake
+ok 8 - autonomous wake rejects an early or mismatched resume without consuming the wake
+  ---
+  duration_ms: 182.651084
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an expired deadline without consuming the ready event
+ok 9 - autonomous wake rejects an expired deadline without consuming the ready event
+  ---
+  duration_ms: 229.825666
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an exhausted wake budget before consuming the ready event
+ok 10 - autonomous wake rejects an exhausted wake budget before consuming the ready event
+  ---
+  duration_ms: 225.302417
+  type: 'test'
+  ...
+# Subtest: autonomous wake falls back to a durable pause without inventing a schedule
+ok 11 - autonomous wake falls back to a durable pause without inventing a schedule
+  ---
+  duration_ms: 170.096584
+  type: 'test'
+  ...
+# Subtest: autopilot full keeps verdicts in root while each owner lands its own current change
+ok 12 - autopilot full keeps verdicts in root while each owner lands its own current change
+  ---
+  duration_ms: 3358.378042
+  type: 'test'
+  ...
+# Subtest: autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+ok 13 - autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+  ---
+  duration_ms: 1129.509875
+  type: 'test'
+  ...
+# Subtest: local provider drives a PR through CI failure, retry, approval, and merge
+ok 14 - local provider drives a PR through CI failure, retry, approval, and merge
+  ---
+  duration_ms: 61.581666
+  type: 'test'
+  ...
+# Subtest: stale revisions fail closed and a blocked merge records a deterministic failure
+ok 15 - stale revisions fail closed and a blocked merge records a deterministic failure
+  ---
+  duration_ms: 22.5855
+  type: 'test'
+  ...
+# Subtest: state recovers across a subprocess boundary without provider credentials
+ok 16 - state recovers across a subprocess boundary without provider credentials
+  ---
+  duration_ms: 52.02475
+  type: 'test'
+  ...
+# Subtest: autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+ok 17 - autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+  ---
+  duration_ms: 2680.667833
+  type: 'test'
+  ...
+# Subtest: autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+ok 18 - autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+  ---
+  duration_ms: 856.357459
+  type: 'test'
+  ...
+# Subtest: babysit check reports one frozen frontier without mutating it
+ok 19 - babysit check reports one frozen frontier without mutating it
+  ---
+  duration_ms: 393.806125
+  type: 'test'
+  ...
+# Subtest: babysit drive repairs and pushes one wave without merging
+ok 20 - babysit drive repairs and pushes one wave without merging
+  ---
+  duration_ms: 1170.119375
+  type: 'test'
+  ...
+# Subtest: Benny stays dormant until thread-safe triage and repro pass end to end
+ok 21 - Benny stays dormant until thread-safe triage and repro pass end to end
+  ---
+  duration_ms: 603.907167
+  type: 'test'
+  ...
+# Subtest: Benny compensates a tracker write when its thread-only verdict cannot land
+ok 22 - Benny compensates a tracker write when its thread-only verdict cannot land
+  ---
+  duration_ms: 304.189125
+  type: 'test'
+  ...
+# Subtest: Benny refuses missing parents, untrusted markers, and insufficient UI proof
+ok 23 - Benny refuses missing parents, untrusted markers, and insufficient UI proof
+  ---
+  duration_ms: 997.852542
+  type: 'test'
+  ...
+# Subtest: bug-fix-root starts with the intended failure and passes after the bounded fix
+ok 24 - bug-fix-root starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 210.772667
+  type: 'test'
+  ...
+# Subtest: bug-fix-delegated starts with the intended failure and passes after the bounded fix
+ok 25 - bug-fix-delegated starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 189.354458
+  type: 'test'
+  ...
+# Subtest: Claude effort hook records only bounded child identity and effective effort
+ok 26 - Claude effort hook records only bounded child identity and effective effort
+  ---
+  duration_ms: 122.847167
+  type: 'test'
+  ...
+# Subtest: Codex delegation derives explicit parameters and complete role instructions for ordered routes
+ok 27 - Codex delegation derives explicit parameters and complete role instructions for ordered routes
+  ---
+  duration_ms: 89.21575
+  type: 'test'
+  ...
+# Subtest: inheritance becomes explicit and does not silently omit effort
+ok 28 - inheritance becomes explicit and does not silently omit effort
+  ---
+  duration_ms: 1.798542
+  type: 'test'
+  ...
+# Subtest: verification requires matching parent call, child link, and runtime turn context
+ok 29 - verification requires matching parent call, child link, and runtime turn context
+  ---
+  duration_ms: 71.225542
+  type: 'test'
+  ...
+# Subtest: every generated Codex spawning workflow carries the same binding while OMP does not
+ok 30 - every generated Codex spawning workflow carries the same binding while OMP does not
+  ---
+  duration_ms: 41.886
+  type: 'test'
+  ...
+# Subtest: OMP model output normalizes provider-qualified selectors and reported efforts
+ok 31 - OMP model output normalizes provider-qualified selectors and reported efforts
+  ---
+  duration_ms: 0.603083
+  type: 'test'
+  ...
+# Subtest: Codex model/list normalizes model ids and supported reasoning efforts
+ok 32 - Codex model/list normalizes model ids and supported reasoning efforts
+  ---
+  duration_ms: 0.110084
+  type: 'test'
+  ...
+# Subtest: inventory normalization rejects duplicates and Claude probes require consent
+ok 33 - inventory normalization rejects duplicates and Claude probes require consent
+  ---
+  duration_ms: 0.23625
+  type: 'test'
+  ...
+# Subtest: Claude probe accepts only observed family and reviewed effort policy
+ok 34 - Claude probe accepts only observed family and reviewed effort policy
+  ---
+  duration_ms: 0.23175
+  type: 'test'
+  ...
+# Subtest: setup resolves only observed models into every target-native role format
+ok 35 - setup resolves only observed models into every target-native role format
+  ---
+  duration_ms: 99.190292
+  type: 'test'
+  ...
+# Subtest: setup rejects unobserved choices and modified owned files without touching unrelated files
+ok 36 - setup rejects unobserved choices and modified owned files without touching unrelated files
+  ---
+  duration_ms: 49.760125
+  type: 'test'
+  ...
+# Subtest: project activation previews and writes only native Codex and OMP role directories
+ok 37 - project activation previews and writes only native Codex and OMP role directories
+  ---
+  duration_ms: 33.7755
+  type: 'test'
+  ...
+# Subtest: project activation CLI and safety gate reject symlinks and unowned roles
+ok 38 - project activation CLI and safety gate reject symlinks and unowned roles
+  ---
+  duration_ms: 55.765709
+  type: 'test'
+  ...
+# Subtest: pstack preset creates named workflow routes and ordered native panels on both runtimes
+ok 39 - pstack preset creates named workflow routes and ordered native panels on both runtimes
+  ---
+  duration_ms: 78.547083
+  type: 'test'
+  ...
+# Subtest: OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5
+ok 40 - OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5
+  ---
+  duration_ms: 12.327625
+  type: 'test'
+  ...
+# Subtest: OMP and Codex raise matching OpenAI route efforts to the budget target
+ok 41 - OMP and Codex raise matching OpenAI route efforts to the budget target
+  ---
+  duration_ms: 21.360583
+  type: 'test'
+  ...
+# Subtest: uniform high override is explicit, checked against inventory and budget, and reversible
+ok 42 - uniform high override is explicit, checked against inventory and budget, and reversible
+  ---
+  duration_ms: 88.333375
+  type: 'test'
+  ...
+# Subtest: budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+ok 43 - budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+  ---
+  duration_ms: 163.007833
+  type: 'test'
+  ...
+# Subtest: unobserved preset and modified obsolete panel agent fail without partial writes
+ok 44 - unobserved preset and modified obsolete panel agent fail without partial writes
+  ---
+  duration_ms: 72.453167
+  type: 'test'
+  ...
+# Subtest: OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+ok 45 - OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+  ---
+  duration_ms: 198.900084
+  type: 'test'
+  ...
+# Subtest: OMP and Codex generated workflows bind separate source-style slots
+ok 46 - OMP and Codex generated workflows bind separate source-style slots
+  ---
+  duration_ms: 4.102041
+  type: 'test'
+  ...
+# Subtest: conflicting writers fixture requires both owned changes in one file
+ok 47 - conflicting writers fixture requires both owned changes in one file
+  ---
+  duration_ms: 106.83425
+  type: 'test'
+  ...
+# Subtest: same-scenario conformance records are deterministic and semantically aligned
+ok 48 - same-scenario conformance records are deterministic and semantically aligned
+  ---
+  duration_ms: 492.431375
+  type: 'test'
+  ...
+# Subtest: durable state survives a process boundary and recovers a completed run
+ok 49 - durable state survives a process boundary and recovers a completed run
+  ---
+  duration_ms: 124.582625
+  type: 'test'
+  ...
+# Subtest: a waiting checkpoint can be continued by a fresh process
+ok 50 - a waiting checkpoint can be continued by a fresh process
+  ---
+  duration_ms: 112.9645
+  type: 'test'
+  ...
+# Subtest: identical event appends are idempotent while conflicting IDs are rejected
+ok 51 - identical event appends are idempotent while conflicting IDs are rejected
+  ---
+  duration_ms: 85.74925
+  type: 'test'
+  ...
+# Subtest: load accepts an append-compatible history through waiting, continuation, and failure
+ok 52 - load accepts an append-compatible history through waiting, continuation, and failure
+  ---
+  duration_ms: 20.147292
+  type: 'test'
+  ...
+# Subtest: load rejects on-disk histories that append could not produce
+    # Subtest: duplicate eventId
+    ok 1 - duplicate eventId
+      ---
+      duration_ms: 10.962
+      type: 'test'
+      ...
+    # Subtest: second start
+    ok 2 - second start
+      ---
+      duration_ms: 14.679625
+      type: 'test'
+      ...
+    # Subtest: missing initial start
+    ok 3 - missing initial start
+      ---
+      duration_ms: 9.471541
+      type: 'test'
+      ...
+    # Subtest: event after completed
+    ok 4 - event after completed
+      ---
+      duration_ms: 15.154834
+      type: 'test'
+      ...
+    # Subtest: event after failed
+    ok 5 - event after failed
+      ---
+      duration_ms: 9.83925
+      type: 'test'
+      ...
+    1..5
+ok 53 - load rejects on-disk histories that append could not produce
+  ---
+  duration_ms: 61.287042
+  type: 'test'
+  ...
+# Subtest: stale generations, malformed stores, and paths outside the store fail closed
+ok 54 - stale generations, malformed stores, and paths outside the store fail closed
+  ---
+  duration_ms: 178.976166
+  type: 'test'
+  ...
+# Subtest: store paths are bounded by the explicit store root
+ok 55 - store paths are bounded by the explicit store root
+  ---
+  duration_ms: 0.894959
+  type: 'test'
+  ...
+# Subtest: store paths reject symlinked or junction parents that escape the store root
+ok 56 - store paths reject symlinked or junction parents that escape the store root
+  ---
+  duration_ms: 3.482
+  type: 'test'
+  ...
+# Subtest: independently loaded writers preserve the first append and reject a stale revision
+ok 57 - independently loaded writers preserve the first append and reject a stale revision
+  ---
+  duration_ms: 33.233
+  type: 'test'
+  ...
+# Subtest: true concurrent subprocess writers cannot erase one another
+ok 58 - true concurrent subprocess writers cannot erase one another
+  ---
+  duration_ms: 78.173375
+  type: 'test'
+  ...
+# Subtest: an existing lock fails closed without changing local or disk state
+ok 59 - an existing lock fails closed without changing local or disk state
+  ---
+  duration_ms: 2019.058042
+  type: 'test'
+  ...
+# Subtest: stale generation and revision plus secret fields never partially write
+ok 60 - stale generation and revision plus secret fields never partially write
+  ---
+  duration_ms: 9.754292
+  type: 'test'
+  ...
+# Subtest: a valid on-disk generation replacement is rejected by a loaded writer
+ok 61 - a valid on-disk generation replacement is rejected by a loaded writer
+  ---
+  duration_ms: 12.665583
+  type: 'test'
+  ...
+# Subtest: append rejects a parent replaced by an escaping junction after load
+ok 62 - append rejects a parent replaced by an escaping junction after load
+  ---
+  duration_ms: 14.201042
+  type: 'test'
+  ...
+# Subtest: feature-routing starts with absent behavior and passes through the named boundary
+ok 63 - feature-routing starts with absent behavior and passes through the named boundary
+  ---
+  duration_ms: 239.184542
+  type: 'test'
+  ...
+# Subtest: Codex long direct entries preserve complete procedures outside the injection budget
+ok 64 - Codex long direct entries preserve complete procedures outside the injection budget
+  ---
+  duration_ms: 994.617875
+  type: 'test'
+  ...
+# Subtest: OMP delegated workflows describe the current background-job lifecycle
+ok 65 - OMP delegated workflows describe the current background-job lifecycle
+  ---
+  duration_ms: 810.788
+  type: 'test'
+  ...
+# Subtest: Codex keeps all direct entries with concise metadata and unchanged bodies
+ok 66 - Codex keeps all direct entries with concise metadata and unchanged bodies
+  ---
+  duration_ms: 307.457375
+  type: 'test'
+  ...
+# Subtest: loads eighty-six portable Skills, seven roles, and three adapters
+ok 67 - loads eighty-six portable Skills, seven roles, and three adapters
+  ---
+  duration_ms: 155.219958
+  type: 'test'
+  ...
+# Subtest: live profiles cite surface-specific evidence
+ok 68 - live profiles cite surface-specific evidence
+  ---
+  duration_ms: 160.293792
+  type: 'test'
+  ...
+# Subtest: portable core rejects runtime bindings
+ok 69 - portable core rejects runtime bindings
+  ---
+  duration_ms: 0.352375
+  type: 'test'
+  ...
+# Subtest: unsupported requirements need an explicit fallback
+ok 70 - unsupported requirements need an explicit fallback
+  ---
+  duration_ms: 157.415834
+  type: 'test'
+  ...
+# Subtest: rendering is deterministic for every adapter
+ok 71 - rendering is deterministic for every adapter
+  ---
+  duration_ms: 1170.072584
+  type: 'test'
+  ...
+# Subtest: explicit invocation renders as target-native policy
+ok 72 - explicit invocation renders as target-native policy
+  ---
+  duration_ms: 509.989917
+  type: 'test'
+  ...
+# Subtest: writable roles render native write permissions while read-only roles stay constrained
+ok 73 - writable roles render native write permissions while read-only roles stay constrained
+  ---
+  duration_ms: 456.052291
+  type: 'test'
+  ...
+# Subtest: committed packages match generator output
+ok 74 - committed packages match generator output
+  ---
+  duration_ms: 514.903667
+  type: 'test'
+  ...
+# Subtest: release packages expose public Skills while probe Skills remain test-only
+ok 75 - release packages expose public Skills while probe Skills remain test-only
+  ---
+  duration_ms: 497.843959
+  type: 'test'
+  ...
+# Subtest: generated manifests identify the public source repository
+ok 76 - generated manifests identify the public source repository
+  ---
+  duration_ms: 407.815708
+  type: 'test'
+  ...
+# Subtest: source and generated packages satisfy repository validation
+ok 77 - source and generated packages satisfy repository validation
+  ---
+  duration_ms: 477.073042
+  type: 'test'
+  ...
+# Subtest: an exact branch lease permits the owned rewrite and rejects a concurrent writer
+ok 78 - an exact branch lease permits the owned rewrite and rejects a concurrent writer
+  ---
+  duration_ms: 1118.762542
+  type: 'test'
+  ...
+# Subtest: how-routing fixture proves the documented end-to-end flow
+ok 79 - how-routing fixture proves the documented end-to-end flow
+  ---
+  duration_ms: 1.432416
+  type: 'test'
+  ...
+# Subtest: how preserves staged read-only exploration and root verification
+ok 80 - how preserves staged read-only exploration and root verification
+  ---
+  duration_ms: 2.372125
+  type: 'test'
+  ...
+# Subtest: interrogate fixture contains both intended reachable defects
+ok 81 - interrogate fixture contains both intended reachable defects
+  ---
+  duration_ms: 7.700041
+  type: 'test'
+  ...
+# Subtest: interrogate requires root-verified runtime metadata for model claims
+ok 82 - interrogate requires root-verified runtime metadata for model claims
+  ---
+  duration_ms: 2.333125
+  type: 'test'
+  ...
+# Subtest: arena cross-judge receives complete frozen candidate artifacts
+ok 83 - arena cross-judge receives complete frozen candidate artifacts
+  ---
+  duration_ms: 0.857458
+  type: 'test'
+  ...
+# Subtest: OMP package survives clean npm install, update, and uninstall
+ok 84 - OMP package survives clean npm install, update, and uninstall
+  ---
+  duration_ms: 889.779083
+  type: 'test'
+  ...
+# Subtest: Codex repo marketplace copy installs, replaces, and removes only the plugin
+ok 85 - Codex repo marketplace copy installs, replaces, and removes only the plugin
+  ---
+  duration_ms: 621.72225
+  type: 'test'
+  ...
+# Subtest: immutable snapshots may contain upstream template links; published instructions may not
+ok 86 - immutable snapshots may contain upstream template links; published instructions may not
+  ---
+  duration_ms: 12.216333
+  type: 'test'
+  ...
+# Subtest: snapshot path examples remain verbatim while private keys remain forbidden
+ok 87 - snapshot path examples remain verbatim while private keys remain forbidden
+  ---
+  duration_ms: 34.614
+  type: 'test'
+  ...
+# Subtest: Markdown links allow internal parent paths and reject encoded escapes
+ok 88 - Markdown links allow internal parent paths and reject encoded escapes
+  ---
+  duration_ms: 16.29425
+  type: 'test'
+  ...
+# Subtest: only exact snapshots, node_modules, .git, and root .tmp are excluded
+ok 89 - only exact snapshots, node_modules, .git, and root .tmp are excluded
+  ---
+  duration_ms: 35.566666
+  type: 'test'
+  ...
+# Subtest: source-model dependencies reject rather than silently reducing hygiene coverage
+ok 90 - source-model dependencies reject rather than silently reducing hygiene coverage
+  ---
+  duration_ms: 12.757459
+  type: 'test'
+  ...
+# Subtest: frozen historical reports keep original paths without exempting changed or copied content
+ok 91 - frozen historical reports keep original paths without exempting changed or copied content
+  ---
+  duration_ms: 29.964375
+  type: 'test'
+  ...
+# Subtest: mixed review retains the reachable defect and dismisses the unreachable seed
+ok 92 - mixed review retains the reachable defect and dismisses the unreachable seed
+  ---
+  duration_ms: 41.642708
+  type: 'test'
+  ...
+# Subtest: user setup is inherited in two projects and a project manifest overrides only its project
+ok 93 - user setup is inherited in two projects and a project manifest overrides only its project
+  ---
+  duration_ms: 424.629
+  type: 'test'
+  ...
+# Subtest: Claude Code uses native user and project agent scopes without claiming activation
+ok 94 - Claude Code uses native user and project agent scopes without claiming activation
+  ---
+  duration_ms: 326.125042
+  type: 'test'
+  ...
+# Subtest: Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+ok 95 - Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+  ---
+  duration_ms: 100.586
+  type: 'test'
+  ...
+# Subtest: user setup preserves unrelated personal agents and refuses an owned-name collision
+ok 96 - user setup preserves unrelated personal agents and refuses an owned-name collision
+  ---
+  duration_ms: 53.468625
+  type: 'test'
+  ...
+# Subtest: invalid project resolution fails closed and does not silently use the user default
+ok 97 - invalid project resolution fails closed and does not silently use the user default
+  ---
+  duration_ms: 1.173042
+  type: 'test'
+  ...
+# Subtest: the CLI defaults to user scope without touching the real home directory
+ok 98 - the CLI defaults to user scope without touching the real home directory
+  ---
+  duration_ms: 164.983542
+  type: 'test'
+  ...
+# Subtest: OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+ok 99 - OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+  ---
+  duration_ms: 2173.595334
+  type: 'test'
+  ...
+# Subtest: opening-pr fallback fixture has a clean verifiable two-file commit range
+ok 100 - opening-pr fallback fixture has a clean verifiable two-file commit range
+  ---
+  duration_ms: 395.634459
+  type: 'test'
+  ...
+# Subtest: healthy local run, receipts, matrix and absent locks pass in human and JSON output
+ok 101 - healthy local run, receipts, matrix and absent locks pass in human and JSON output
+  ---
+  duration_ms: 453.284708
+  type: 'test'
+  ...
+# Subtest: missing and malformed stores report fixed codes without echoing private content
+ok 102 - missing and malformed stores report fixed codes without echoing private content
+  ---
+  duration_ms: 568.786791
+  type: 'test'
+  ...
+# Subtest: stale receipts and matrix revisions fail with actionable codes
+ok 103 - stale receipts and matrix revisions fail with actionable codes
+  ---
+  duration_ms: 306.552833
+  type: 'test'
+  ...
+# Subtest: unknown and unsupported runtimes are explicit failures
+ok 104 - unknown and unsupported runtimes are explicit failures
+  ---
+  duration_ms: 368.679917
+  type: 'test'
+  ...
+# Subtest: tracked source changes fail closed while untracked artifacts do not
+ok 105 - tracked source changes fail closed while untracked artifacts do not
+  ---
+  duration_ms: 307.332541
+  type: 'test'
+  ...
+# Subtest: failed runtime probe takes priority over unknown and unsupported probes
+ok 106 - failed runtime probe takes priority over unknown and unsupported probes
+  ---
+  duration_ms: 221.499167
+  type: 'test'
+  ...
+# Subtest: malformed matrix and a present lock return stable codes without changing files
+ok 107 - malformed matrix and a present lock return stable codes without changing files
+  ---
+  duration_ms: 200.965833
+  type: 'test'
+  ...
+# Subtest: help is read only and bad invocation exits with usage
+ok 108 - help is read only and bad invocation exits with usage
+  ---
+  duration_ms: 66.474
+  type: 'test'
+  ...
+# Subtest: orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+ok 109 - orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+  ---
+  duration_ms: 1928.500042
+  type: 'test'
+  ...
+# Subtest: orchestrate rejects fan-out before the pilot and integration without a current verdict
+ok 110 - orchestrate rejects fan-out before the pilot and integration without a current verdict
+  ---
+  duration_ms: 470.726917
+  type: 'test'
+  ...
+# Subtest: prototype-routing compares equivalent variants with a deterministic decision variable
+ok 111 - prototype-routing compares equivalent variants with a deterministic decision variable
+  ---
+  duration_ms: 91.813875
+  type: 'test'
+  ...
+# Subtest: a valid partial book passes while --complete waits for all 48 ready chapters
+ok 112 - a valid partial book passes while --complete waits for all 48 ready chapters
+  ---
+  duration_ms: 60.239875
+  type: 'test'
+  ...
+# Subtest: missing claimed chapter and missing table-of-contents entry fail
+ok 113 - missing claimed chapter and missing table-of-contents entry fail
+  ---
+  duration_ms: 15.564
+  type: 'test'
+  ...
+# Subtest: missing local link, missing fragment, and path escape fail offline
+ok 114 - missing local link, missing fragment, and path escape fail offline
+  ---
+  duration_ms: 33.613708
+  type: 'test'
+  ...
+# Subtest: changed executable code needs a per-block approval with rationale
+ok 115 - changed executable code needs a per-block approval with rationale
+  ---
+  duration_ms: 20.483458
+  type: 'test'
+  ...
+# Subtest: ready status requires review evidence, and placeholders inside original code are allowed
+ok 116 - ready status requires review evidence, and placeholders inside original code are allowed
+  ---
+  duration_ms: 24.3195
+  type: 'test'
+  ...
+# Subtest: snapshot hashes and cross-edition chapter pairing are checked
+ok 117 - snapshot hashes and cross-edition chapter pairing are checked
+  ---
+  duration_ms: 21.688167
+  type: 'test'
+  ...
+# Subtest: unlabeled code is protected and apostrophes in quoted HTML anchors work
+ok 118 - unlabeled code is protected and apostrophes in quoted HTML anchors work
+  ---
+  duration_ms: 20.0845
+  type: 'test'
+  ...
+# Subtest: independent review evidence cannot survive a prose edit
+ok 119 - independent review evidence cannot survive a prose edit
+  ---
+  duration_ms: 22.561334
+  type: 'test'
+  ...
+# Subtest: English prose remains bound to the frozen author's edition
+ok 120 - English prose remains bound to the frozen author's edition
+  ---
+  duration_ms: 26.315041
+  type: 'test'
+  ...
+# Subtest: code retained in raw HTML is protected from changes
+ok 121 - code retained in raw HTML is protected from changes
+  ---
+  duration_ms: 22.662875
+  type: 'test'
+  ...
+# Subtest: title review binds all manifest titles and emitted headings
+ok 122 - title review binds all manifest titles and emitted headings
+  ---
+  duration_ms: 61.989041
+  type: 'test'
+  ...
+# Subtest: public Skill matrix verifier requires the exact catalog and headings
+ok 123 - public Skill matrix verifier requires the exact catalog and headings
+  ---
+  duration_ms: 97.342125
+  type: 'test'
+  ...
+# Subtest: refactoring-routing preserves the pinned behavior while removing duplication
+ok 124 - refactoring-routing preserves the pinned behavior while removing duplication
+  ---
+  duration_ms: 202.5335
+  type: 'test'
+  ...
+# Subtest: release archives and manifest are byte-reproducible
+ok 125 - release archives and manifest are byte-reproducible
+  ---
+  duration_ms: 2524.974083
+  type: 'test'
+  ...
+# Subtest: release inventory preserves shell entrypoints and checks only observable installed modes
+ok 126 - release inventory preserves shell entrypoints and checks only observable installed modes
+  ---
+  duration_ms: 1.917417
+  type: 'test'
+  ...
+# Subtest: Claude plugin bundle exposes the generated package through a native marketplace
+ok 127 - Claude plugin bundle exposes the generated package through a native marketplace
+  ---
+  duration_ms: 710.302208
+  type: 'test'
+  ...
+# Subtest: repository Claude marketplace points at the generated native plugin
+ok 128 - repository Claude marketplace points at the generated native plugin
+  ---
+  duration_ms: 0.949084
+  type: 'test'
+  ...
+# Subtest: Codex plugin bundle exposes the generated package through one local marketplace
+ok 129 - Codex plugin bundle exposes the generated package through one local marketplace
+  ---
+  duration_ms: 714.73675
+  type: 'test'
+  ...
+# Subtest: all target archives install, update, roll back, and uninstall within their owned directory
+ok 130 - all target archives install, update, roll back, and uninstall within their owned directory
+  ---
+  duration_ms: 1318.473959
+  type: 'test'
+  ...
+# Subtest: release installer rejects checksum drift and non-owned uninstall targets
+ok 131 - release installer rejects checksum drift and non-owned uninstall targets
+  ---
+  duration_ms: 493.000834
+  type: 'test'
+  ...
+# Subtest: release installer CLI consumes the generated manifest
+ok 132 - release installer CLI consumes the generated manifest
+  ---
+  duration_ms: 878.663833
+  type: 'test'
+  ...
+# Subtest: release installer CLI refuses an existing empty unowned directory
+ok 133 - release installer CLI refuses an existing empty unowned directory
+  ---
+  duration_ms: 660.250375
+  type: 'test'
+  ...
+# Subtest: release installer CLI verifies installed files without mutation or archives
+ok 134 - release installer CLI verifies installed files without mutation or archives
+  ---
+  duration_ms: 2112.997
+  type: 'test'
+  ...
+# Subtest: tagged release source requires the version tag at clean HEAD
+ok 135 - tagged release source requires the version tag at clean HEAD
+  ---
+  duration_ms: 164.887334
+  type: 'test'
+  ...
+# Subtest: a recovered terminal run accepts revision-bound receipts and keeps unknown explicit
+ok 136 - a recovered terminal run accepts revision-bound receipts and keeps unknown explicit
+  ---
+  duration_ms: 29.647625
+  type: 'test'
+  ...
+# Subtest: receipt replay is idempotent and a conflicting receipt ID is refused
+ok 137 - receipt replay is idempotent and a conflicting receipt ID is refused
+  ---
+  duration_ms: 35.894875
+  type: 'test'
+  ...
+# Subtest: run identity, generation, revision, source, and secret-bearing fields fail closed
+ok 138 - run identity, generation, revision, source, and secret-bearing fields fail closed
+  ---
+  duration_ms: 19.807125
+  type: 'test'
+  ...
+# Subtest: a failed command cannot be reported as an all-pass verification
+ok 139 - a failed command cannot be reported as an all-pass verification
+  ---
+  duration_ms: 45.100875
+  type: 'test'
+  ...
+# Subtest: reserved receipt ID is rejected before an evidence store is created
+ok 140 - reserved receipt ID is rejected before an evidence store is created
+  ---
+  duration_ms: 18.843542
+  type: 'test'
+  ...
+# Subtest: source changes make old evidence stale and a fresh receipt restores current status
+ok 141 - source changes make old evidence stale and a fresh receipt restores current status
+  ---
+  duration_ms: 33.394417
+  type: 'test'
+  ...
+# Subtest: advancing the recovered run revision makes previous receipts stale
+ok 142 - advancing the recovered run revision makes previous receipts stale
+  ---
+  duration_ms: 15.102
+  type: 'test'
+  ...
+# Subtest: CLI status reports JSON and human status without writing to the evidence store
+ok 143 - CLI status reports JSON and human status without writing to the evidence store
+  ---
+  duration_ms: 241.124084
+  type: 'test'
+  ...
+# Subtest: positive Node probe records command, runtime, platform, and pass
+ok 144 - positive Node probe records command, runtime, platform, and pass
+  ---
+  duration_ms: 51.065167
+  type: 'test'
+  ...
+# Subtest: Bun host selects Node for a Node probe while honoring an explicit override
+ok 145 - Bun host selects Node for a Node probe while honoring an explicit override
+  ---
+  duration_ms: 122.040125
+  type: 'test'
+  ...
+# Subtest: an unavailable runtime stays unknown or unsupported according to declaration
+ok 146 - an unavailable runtime stays unknown or unsupported according to declaration
+  ---
+  duration_ms: 2.693916
+  type: 'test'
+  ...
+# Subtest: malformed probe output is a failed result
+ok 147 - malformed probe output is a failed result
+  ---
+  duration_ms: 49.622125
+  type: 'test'
+  ...
+# Subtest: a hanging command is terminated and recorded as a timeout
+ok 148 - a hanging command is terminated and recorded as a timeout
+  ---
+  duration_ms: 272.079083
+  type: 'test'
+  ...
+# Subtest: excess output is truncated, terminated, and failed
+ok 149 - excess output is truncated, terminated, and failed
+  ---
+  duration_ms: 48.679083
+  type: 'test'
+  ...
+# Subtest: a probe cannot overwrite observed execution metadata
+ok 150 - a probe cannot overwrite observed execution metadata
+  ---
+  duration_ms: 53.266125
+  type: 'test'
+  ...
+# Subtest: successful probes without a JSON payload are failed as malformed
+ok 151 - successful probes without a JSON payload are failed as malformed
+  ---
+  duration_ms: 204.770458
+  type: 'test'
+  ...
+# Subtest: persisted results remain bound to their source revision
+ok 152 - persisted results remain bound to their source revision
+  ---
+  duration_ms: 56.461667
+  type: 'test'
+  ...
+# Subtest: persistence rejects results without an executable and argument list
+ok 153 - persistence rejects results without an executable and argument list
+  ---
+  duration_ms: 56.536833
+  type: 'test'
+  ...
+# Subtest: pause checkpoint survives a cold session pickup without redoing completed work
+ok 154 - pause checkpoint survives a cold session pickup without redoing completed work
+  ---
+  duration_ms: 1438.652666
+  type: 'test'
+  ...
+# Subtest: configuration audit is read-only and never promotes files to activation
+ok 155 - configuration audit is read-only and never promotes files to activation
+  ---
+  duration_ms: 58.235
+  type: 'test'
+  ...
+# Subtest: invalid model and unsupported effort fail before configuration writes on both hosts
+ok 156 - invalid model and unsupported effort fail before configuration writes on both hosts
+  ---
+  duration_ms: 81.574291
+  type: 'test'
+  ...
+# Subtest: setup receipt renders every configured role and route without summarization loss
+ok 157 - setup receipt renders every configured role and route without summarization loss
+  ---
+  duration_ms: 128.084042
+  type: 'test'
+  ...
+# Subtest: installed setup CLIs run through a symlinked package directory
+ok 158 - installed setup CLIs run through a symlinked package directory
+  ---
+  duration_ms: 377.057584
+  type: 'test'
+  ...
+# Subtest: OMP acceptance requires selected native agent and observed child model/effort
+ok 159 - OMP acceptance requires selected native agent and observed child model/effort
+  ---
+  duration_ms: 87.342875
+  type: 'test'
+  ...
+# Subtest: Claude acceptance links native Agent call and child model but leaves effort unverified
+ok 160 - Claude acceptance links native Agent call and child model but leaves effort unverified
+  ---
+  duration_ms: 90.983542
+  type: 'test'
+  ...
+# Subtest: Codex acceptance verifies explicit spawn without claiming native role activation
+ok 161 - Codex acceptance verifies explicit spawn without claiming native role activation
+  ---
+  duration_ms: 80.46925
+  type: 'test'
+  ...
+# Subtest: setup-live verifier accepts a fully bound dedicated configuration
+ok 162 - setup-live verifier accepts a fully bound dedicated configuration
+  ---
+  duration_ms: 855.777417
+  type: 'test'
+  ...
+# Subtest: shipping lands only the revision-bound contiguous passing run
+ok 163 - shipping lands only the revision-bound contiguous passing run
+  ---
+  duration_ms: 1758.50225
+  type: 'test'
+  ...
+# Subtest: shipping refuses an upper PR and a verdict whose reviewed head changed
+ok 164 - shipping refuses an upper PR and a verdict whose reviewed head changed
+  ---
+  duration_ms: 584.573917
+  type: 'test'
+  ...
+# Subtest: shipping accepts a clean PASS without fabricating reviewer notes
+ok 165 - shipping accepts a clean PASS without fabricating reviewer notes
+  ---
+  duration_ms: 420.439541
+  type: 'test'
+  ...
+# Subtest: shipping preserves a Codex canonical task name as native attribution
+ok 166 - shipping preserves a Codex canonical task name as native attribution
+  ---
+  duration_ms: 414.444167
+  type: 'test'
+  ...
+# Subtest: decision-log helper creates one header and appends sanitized rows
+ok 167 - decision-log helper creates one header and appends sanitized rows
+  ---
+  duration_ms: 120.413416
+  type: 'test'
+  ...
+# Subtest: decision-log helper refuses unexpected headers and symbolic links
+ok 168 - decision-log helper refuses unexpected headers and symbolic links
+  ---
+  duration_ms: 26.363208
+  type: 'test'
+  ...
+# Subtest: decision-log helper initializes an empty file without replacing valid rows
+ok 169 - decision-log helper initializes an empty file without replacing valid rows
+  ---
+  duration_ms: 131.190167
+  type: 'test'
+  ...
+# Subtest: source records update one pin without rewriting unrelated fields
+ok 170 - source records update one pin without rewriting unrelated fields
+  ---
+  duration_ms: 1.014417
+  type: 'test'
+  ...
+# Subtest: portable Skill transform preserves prose and moves invocation policy out of core
+ok 171 - portable Skill transform preserves prose and moves invocation policy out of core
+  ---
+  duration_ms: 0.842208
+  type: 'test'
+  ...
+# Subtest: portable Skill transform rejects runtime bindings and binary content
+ok 172 - portable Skill transform rejects runtime bindings and binary content
+  ---
+  duration_ms: 0.341417
+  type: 'test'
+  ...
+# Subtest: three-way merge covers clean updates, local forks, and non-overlapping edits
+ok 173 - three-way merge covers clean updates, local forks, and non-overlapping edits
+  ---
+  duration_ms: 31.037667
+  type: 'test'
+  ...
+# Subtest: three-way merge classifies overlapping edits as a typed conflict
+ok 174 - three-way merge classifies overlapping edits as a typed conflict
+  ---
+  duration_ms: 23.316083
+  type: 'test'
+  ...
+# Subtest: deletion distinguishes unchanged, missing, modified, and binary local state
+ok 175 - deletion distinguishes unchanged, missing, modified, and binary local state
+  ---
+  duration_ms: 0.226458
+  type: 'test'
+  ...
+# Subtest: atomic apply restores earlier writes when a later target escapes the root
+ok 176 - atomic apply restores earlier writes when a later target escapes the root
+  ---
+  duration_ms: 5.767209
+  type: 'test'
+  ...
+# Subtest: candidate pin advances only after verification succeeds
+ok 177 - candidate pin advances only after verification succeeds
+  ---
+  duration_ms: 6.88925
+  type: 'test'
+  ...
+# Subtest: a sync against the accepted commit is a no-op
+ok 178 - a sync against the accepted commit is a no-op
+  ---
+  duration_ms: 184.21675
+  type: 'test'
+  ...
+# Subtest: an accepted commit can extend its pinned import set
+ok 179 - an accepted commit can extend its pinned import set
+  ---
+  duration_ms: 170.561834
+  type: 'test'
+  ...
+# Subtest: sync planning rejects paths that escape configured roots
+ok 180 - sync planning rejects paths that escape configured roots
+  ---
+  duration_ms: 2.568083
+  type: 'test'
+  ...
+# Subtest: slash-form related and profile evidence resolve to native files
+ok 181 - slash-form related and profile evidence resolve to native files
+  ---
+  duration_ms: 20.113667
+  type: 'test'
+  ...
+# Subtest: evidence references reject malformed, sibling, and absolute paths
+ok 182 - evidence references reject malformed, sibling, and absolute paths
+  ---
+  duration_ms: 14.62325
+  type: 'test'
+  ...
+# Subtest: semantic derivations use native scope checks and raw-byte hashes
+ok 183 - semantic derivations use native scope checks and raw-byte hashes
+  ---
+  duration_ms: 14.84175
+  type: 'test'
+  ...
+# Subtest: unlisted tool and skill scripts reject while dependency directories are pruned
+ok 184 - unlisted tool and skill scripts reject while dependency directories are pruned
+  ---
+  duration_ms: 12.5835
+  type: 'test'
+  ...
+# Subtest: upstream import source and target fields reject escapes before file reads
+ok 185 - upstream import source and target fields reject escapes before file reads
+  ---
+  duration_ms: 4.952584
+  type: 'test'
+  ...
+# Subtest: writing cleanup rejects slop and accepts a meaning-preserving how-to
+ok 186 - writing cleanup rejects slop and accepts a meaning-preserving how-to
+  ---
+  duration_ms: 187.519459
+  type: 'test'
+  ...
+1..186
+# tests 191
+# suites 0
+# pass 191
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10683.978875
+
+exit_code=0
+
+$ node tools/books/validate-pstack-book.mjs --complete
+{
+  "chapters": 48,
+  "ready": 48,
+  "warnings": []
+}
+
+exit_code=0
+
+$ python3 tools/books/audit-source.py
+{
+  "chapters": 96,
+  "source_and_markdown_hashes": "pass",
+  "rendered_text": "pass",
+  "source_destinations_and_anchors": "pass",
+  "inventory_coverage": "pass",
+  "code_blocks": 444,
+  "code_body_equality": "pass",
+  "translated_chapters": 48,
+  "translations": [
+    {
+      "chapter": 1,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 2,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 3,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 4,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 5,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 6,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 7,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 8,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 9,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 10,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 11,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 12,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 13,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 14,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 15,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 16,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 17,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 18,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 19,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 20,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 21,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 22,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 23,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 24,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 25,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 26,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 27,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 28,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 29,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 30,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 31,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 32,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 33,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 34,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 35,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 36,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 37,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 38,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 39,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 40,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 41,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 42,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 43,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 44,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 45,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 46,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 47,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 48,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    }
+  ],
+  "tool": "mistune3.1.3 and BeautifulSoup4.14.2",
+  "issues": []
+}
+
+exit_code=0
+
+$ python3 tests/pstack-book-audit.test.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 3.017s
+
+OK
+
+exit_code=0

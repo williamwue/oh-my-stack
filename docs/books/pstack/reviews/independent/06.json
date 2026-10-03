@@ -1,0 +1,13 @@
+{
+  "chapter": 6,
+  "reviewer": "root independent AI review; translator translate_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator.",
+  "source_sha256": "cd3393cdd1e17b1e584befbfa915726ccb01c6b4c9959d9827a940aef11a5700",
+  "translation_sha256": "f21fbcee303684e6fc975add8152f10d759cf2797a6ef6e1647f5bb1b4554b76",
+  "findings_resolved": [
+    "Translated product regression as 产品回归缺陷 for technical precision."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

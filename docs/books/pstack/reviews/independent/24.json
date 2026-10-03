@@ -1,0 +1,11 @@
+{
+  "chapter": 24,
+  "reviewer": "root independent AI review; translator translate_b",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese comparison of 252 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "source_sha256": "45eb1af4368d615004f6f6bd1a37c09391f2111ff336040c6911c4adf3f68c99",
+  "translation_sha256": "3c4ed7dd24638991f49bb80f8396b5dbf277616d16cdb18e09bb4bcb375800b9",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

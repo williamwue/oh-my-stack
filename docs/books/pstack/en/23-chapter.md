@@ -1,0 +1,1145 @@
+# Chapter 18: Architecture: 6 principles for boundaries and dependencies
+
+[Contents](README.md) · [Previous](22-chapter.md) · [Next](24-chapter.md) · [简体中文](../zh-CN/23-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/cdc49b) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers the following six principles.
+
+1. [Model the Domain](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-model-the-domain/SKILL.md)
+2. [Boundary Discipline](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-boundary-discipline/SKILL.md)
+3. [Type System Discipline](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-type-system-discipline/SKILL.md)
+4. [Make Operations Idempotent](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-make-operations-idempotent/SKILL.md)
+5. [Migrate Callers Then Delete Legacy APIs](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md)
+6. [Separate Before Serializing Shared State](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md)
+
+The six belong to the Architecture group of principles. Each one decides <strong>what shape the agent gives the code, such as how it holds state and where it puts verification</strong>. The bundled guide page [`docs/guide/08-principles.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/08-principles.md) sums up the six as principles that decide "where state, validation, and compatibility live."
+
+With the six principles, the agent works as follows.
+
+- It holds state in a state machine, not in a combination of several booleans.
+- It gathers the validation of outside data at the boundary.
+- Once it has moved every caller to the new API, it deletes the old API in that same change.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="18">
+<li class="code-line" data-line="18">
+<strong>State machine.</strong> A way of writing code that fixes in advance the possible states and the moves from one state to another. At any moment, the value is in exactly one of the fixed states.<br/>
+A traffic light, for example, shows only one of green, yellow, or red, and moves in the fixed order green, yellow, red. Green and red are never lit at the same time, and the light never jumps from green to red. A state machine expresses rules like these in code.</li>
+<li class="code-line" data-line="20">
+<strong>Boundary.</strong> A place where data comes in from outside, such as form input or an API response.</li>
+</ul>
+</div></aside>
+
+As in [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863), this chapter explains the six principles one at a time in terms of their rules and their triggers. The chapter ends by reading all six as ways to make the structure itself the instructions for the agent.
+
+The example requests in this chapter are also one-line instructions that include the principle name. [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863) set out the premise that the agent reads and applies a principle on its own when the work matches the trigger, even if you leave out the principle name.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="28">Of the six principles, this chapter gives an example request for only one: "Separate Before Serializing Shared State."</p>
+<p class="code-line" data-line="30">This book limits example requests to the ones that appear in pstack's bundled guide or <a href="https://github.com/cursor/plugins/blob/main/pstack/README.md" rel="nofollow noopener noreferrer" target="_blank">README</a>. If this book made up a request for a principle that has none in the source, it could show a use that pstack does not intend.</p>
+</div></aside>
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter is organized as follows.
+
+- The six principles at a glance
+- "Model the Domain" expresses the domain as structure, not as conditionals
+- "Boundary Discipline" gathers input validation at the outside boundary, and the inside trusts the types
+- "Type System Discipline" uses types to make invalid states impossible to build
+- "Make Operations Idempotent" builds operations that give the same result however many times they run
+- "Migrate Callers Then Delete Legacy APIs" moves every caller and deletes the old API in the same change
+- "Separate Before Serializing Shared State" removes the shared write target first, and a lock is the last resort
+- The six Architecture principles make the structure itself the instructions for the agent
+- Summary
+
+<a id="the-six-principles-at-a-glance"></a>
+
+
+## The six principles at a glance
+
+<table class="code-line" data-line="49">
+<thead class="code-line" data-line="49">
+<tr class="code-line" data-line="49">
+<th>Principle</th>
+<th>One-sentence conclusion</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="51">
+<tr class="code-line" data-line="51">
+<td>"Model the Domain"</td>
+<td>Express the domain as structure, not as scattered conditionals</td>
+</tr>
+<tr class="code-line" data-line="52">
+<td>"Boundary Discipline"</td>
+<td>Gather validation and error handling at the boundary where outside data comes in. Code inside the boundary trusts the types</td>
+</tr>
+<tr class="code-line" data-line="53">
+<td>"Type System Discipline"</td>
+<td>Use type checking to make impossible states impossible to build at compile time</td>
+</tr>
+<tr class="code-line" data-line="54">
+<td>"Make Operations Idempotent"</td>
+<td>Build each operation that changes state so that it ends in the same state, however many times it runs and even when it restarts partway</td>
+</tr>
+<tr class="code-line" data-line="55">
+<td>"Migrate Callers Then Delete Legacy APIs"</td>
+<td>Move the callers to the new API and delete the old API in the same change</td>
+</tr>
+<tr class="code-line" data-line="56">
+<td>"Separate Before Serializing Shared State"</td>
+<td>Remove the shared write target first. Use a lock to make writes wait their turn only when the lock is truly needed</td>
+</tr>
+</tbody>
+</table>
+
+<a id="%22model-the-domain%22-expresses-the-domain-as-structure%2C-not-as-conditionals"></a>
+
+
+## "Model the Domain" expresses the domain as structure, not as conditionals
+
+The principle "Model the Domain" asks you to express the real domain as data structure, not to scatter it across conditionals in many places.  
+When states or branches look likely to grow, <strong>the agent picks a structure that represents the domain before it adds a conditional (if/else)</strong>.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="64">
+<li class="code-line" data-line="64">
+<strong>Domain.</strong> The business or subject the software deals with. For an online shop, that means orders, stock, and shipping.</li>
+<li class="code-line" data-line="65">
+<strong>Data structure.</strong> The fields that data has and the type of value each field takes, such as <code>Order</code> and <code>OrderFlags</code> in the example below.</li>
+<li class="code-line" data-line="66">
+<strong>Structure that represents the domain.</strong> A data structure with the same shape as the real business rules.</li>
+</ul>
+<p class="code-line" data-line="68">A real order, for example, is in exactly one of these states: "awaiting payment," "awaiting shipment," "shipped," or "canceled."</p>
+<p class="code-line" data-line="70">Here is that order data structure written two ways.</p>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="72"><span class="line"><span style="color:#a0aab5">// A structure that represents the domain: the state is exactly one of the four values of status</span></span>
+<span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> Order</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  address</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  status</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "unpaid"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "paid"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "shipped"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "canceled"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#a0aab5">// A structure that does not represent the domain: three booleans</span></span>
+<span class="line"><span style="color:#a0aab5">// It also accepts combinations that never happen, such as isShipped: true with isCanceled: true</span></span>
+<span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> OrderFlags</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  address</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  isPaid</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  isShipped</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  isCanceled</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span></code></pre></div>
+<p class="code-line" data-line="89">Both are data structures, because both fix the fields an order has and the values each field takes.<br/>
+Only <code>Order</code>, which has the same shape as the rules of a real order, is a structure that represents the domain.</p>
+</div></aside>
+
+<a id="scattered-booleans%2C-repeated-assumptions%2C-and-spreading-branches-are-unneeded-complexity"></a>
+
+
+### Scattered booleans, repeated assumptions, and spreading branches are unneeded complexity
+
+The principle calls the following three things complexity that should not be there.
+
+- Scattered booleans
+- The assumption "this data should have this shape," repeated in file after file
+- Branches that spread across files
+
+<a id="code-with-the-three-kinds-of-complexity-can-express-impossible-states"></a>
+
+
+### Code with the three kinds of complexity can express impossible states
+
+Take an online shop that handles orders in two files: one that builds shipping labels and one that builds notification emails.
+
+Code with all three kinds of complexity looks like this.
+
+```
+// order.ts: holds the order state in three booleans (scattered booleans)
+type Order = {
+  address: string;
+  isPaid: boolean;
+  isShipped: boolean;
+  isCanceled: boolean;
+  trackingNo?: string;
+};
+
+// label.ts: builds the shipping label
+function labelText(order: any): string {
+  // Checks the assumption "an order should have an address" here
+  if (!order.address) throw new Error("No address");
+  // Branches on the state
+  if (order.isCanceled) return "Canceled";
+  if (order.isShipped) return "Shipped";
+  if (order.isPaid) return "Awaiting shipment";
+  return "Awaiting payment";
+}
+
+// mail.ts: builds the subject line of the notification email
+function mailSubject(order: any): string {
+  // Checks the same assumption again, in another file
+  if (!order.address) throw new Error("No address");
+  // The same branches repeat across files
+  if (order.isCanceled) return "Your order has been canceled";
+  if (order.isShipped) return "Your item has shipped";
+  if (order.isPaid) return "We have received your payment";
+  return "We are waiting for your payment";
+}
+```
+
+This code lets you write a value where `isShipped` and `isCanceled` are both `true`.  
+That is an <strong>impossible state</strong>. A real order cannot be "shipped" and "canceled" at the same time.  
+The code also lets you write a value where `isShipped` is `true` but the tracking number, `trackingNo`, is missing.
+
+<a id="a-structure-that-represents-the-domain-makes-impossible-states-unwritable-and-cuts-branches"></a>
+
+
+### A structure that represents the domain makes impossible states unwritable and cuts branches
+
+When the agent picks a structure that represents the domain, <strong>nobody can write an impossible state, and the code has fewer conditionals</strong>. Structures that represent the domain include state machines and typed objects with fixed fields.
+
+Here is the same order written with a structure that represents the domain.
+
+```
+// order.ts: fixes the shape of an order and its possible states in one place
+type OrderStatus =
+  | { state: "unpaid" }
+  | { state: "paid" }
+  | { state: "shipped"; trackingNo: string }
+  | { state: "canceled" };
+
+type Order = { address: string; status: OrderStatus };
+
+// Puts the text for each state in one table
+const LABEL_TEXT: Record<OrderStatus["state"], string> = {
+  unpaid: "Awaiting payment",
+  paid: "Awaiting shipment",
+  shipped: "Shipped",
+  canceled: "Canceled",
+};
+
+// label.ts: puts the text for each state in a table, trusts the type, and only looks up the table
+function labelText(order: Order): string {
+  return LABEL_TEXT[order.status.state];
+}
+
+// mail.ts: puts the subject for each state in a table, trusts the type, and only looks up the table
+const MAIL_SUBJECT: Record<OrderStatus["state"], string> = {
+  unpaid: "We are waiting for your payment",
+  paid: "We have received your payment",
+  shipped: "Your item has shipped",
+  canceled: "Your order has been canceled",
+};
+
+function mailSubject(order: Order): string {
+  return MAIL_SUBJECT[order.status.state];
+}
+```
+
+In this code, the three kinds of complexity go away as follows.
+
+- <strong>Scattered booleans.</strong> Instead of three booleans, `OrderStatus` takes exactly one of four states. You cannot write "shipped and canceled." The tracking number exists only in the `shipped` state, and a `shipped` order always has one.
+- <strong>Repeated assumptions.</strong> The `Order` type states the assumption "an order has an address" once. Each file trusts the type and does not check the address again.
+- <strong>Branches across files.</strong> A table lookup decides the text for each state. To add a state, you add one row to the table. If you forget the row, compilation fails.
+
+<a id="pick-the-structure-when-you-write-the-code%2C-not-later"></a>
+
+
+### Pick the structure when you write the code, not later
+
+The agent <strong>picks the structure when it writes the code</strong>. At writing time, picking a structure costs almost nothing.
+
+If the code already uses conditionals, on the other hand, the work to add structure later tends to get delayed.
+
+The work gets delayed because the new structure changes nothing about how the code behaves, so the work counts as refactoring.  
+Refactoring has no visible result the way a new feature does, so developers and agents alike tend to add features first and leave refactoring for later.
+
+Say the conditionals that decide the shipping fee have spread across three files, and you later replace them with a lookup table. The fee amounts stay the same, and so does the screen. So the replacement gets delayed as "work that can wait," and meanwhile every new feature adds more conditionals.
+
+<a id="rule%3A-each-scattered-pattern-has-a-structure-that-replaces-it"></a>
+
+
+### Rule: each scattered pattern has a structure that replaces it
+
+The principle lists these typical replacements.
+
+<table class="code-line" data-line="207">
+<thead class="code-line" data-line="207">
+<tr class="code-line" data-line="207">
+<th>Scattered pattern</th>
+<th>Structure that replaces it</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="209">
+<tr class="code-line" data-line="209">
+<td>Booleans that stand for a state, such as <code>isLoading</code> and <code>isError</code>, and checks of "which stage are we in now" all over the code</td>
+<td>A state machine, which fixes the possible states and the moves between them</td>
+</tr>
+<tr class="code-line" data-line="210">
+<td>Loose arguments passed to functions, with the same assumption "this data should have this field" repeated in many places</td>
+<td>A typed object with fixed fields, such as a <code>User</code> type</td>
+</tr>
+<tr class="code-line" data-line="211">
+<td>The same conditional that splits work by kind, spread across several files</td>
+<td>A map or lookup table, which uses the kind as a key to find the matching value or handler, or a discriminated union, a union of types that a kind field tells apart</td>
+</tr>
+<tr class="code-line" data-line="212">
+<td>State rewritten directly, on the spot, wherever it is needed</td>
+<td>A reducer, a function that computes the next state from the current state and an action</td>
+</tr>
+</tbody>
+</table>
+
+<a id="use-a-state-machine-instead-of-booleans"></a>
+
+
+#### Use a state machine instead of booleans
+
+When booleans hold the state, you can write a contradictory state where `running` and `failed` are both `true`, and compilation does not catch it.  
+When a state machine represents the state, <strong>nobody can write that combination at all</strong>.
+
+```
+// Before: contradictory combinations can be expressed
+type ExportJobFlags = { running: boolean; failed: boolean; retrying: boolean };
+
+// After: each state fixes which data it can hold
+type ExportJob =
+  | { state: "queued" }
+  | { state: "running"; attempt: number }
+  | { state: "failed"; attempt: number; error: string }
+  | { state: "done"; rowCount: number };
+
+// Also fix the moves: only a failed job can go back to running as the next attempt
+function retry(job: ExportJob): ExportJob {
+  if (job.state !== "failed") return job;
+  return { state: "running", attempt: job.attempt + 1 };
+}
+```
+
+<a id="use-a-typed-object-instead-of-loose-arguments"></a>
+
+
+#### Use a typed object instead of loose arguments
+
+Say you pass a member's name, email address, and plan as separate arguments to two functions: one that sends a welcome email and one that creates an invoice. Both functions repeat the same assumption, "a member should have a name, an email address, and a plan," each in its own argument list.
+
+The agent creates one `User` type for a member and changes both functions to take a `User`.  
+After that, to add a field to the member, you change only one place, the `User` type. The `User` type also prevents the mistake of passing the name and the email address in the wrong order.
+
+```
+// Before: each function lists the same three arguments
+function sendWelcomeMail(name: string, email: string, plan: string) { /* ... */ }
+function createInvoice(name: string, email: string, plan: string) { /* ... */ }
+```
+
+```
+// After: write the member's shape once in the User type, and both functions take it
+type User = { name: string; email: string; plan: "free" | "paid" };
+
+function sendWelcomeMail(user: User) { /* ... */ }
+function createInvoice(user: User) { /* ... */ }
+```
+
+<a id="use-a-lookup-table-or-a-discriminated-union-instead-of-spreading-conditionals"></a>
+
+
+#### Use a lookup table or a discriminated union instead of spreading conditionals
+
+Say three files, for the screen, billing, and email, each decide the shipping fee for each kind of order with their own conditionals. The agent creates one lookup table that maps the kind to the fee and changes all three files to look up that table.
+
+After that, for a new kind of order, you do not fix the conditionals in three files. You add one row to the table.
+
+```
+type OrderKind = "standard" | "express" | "pickup";
+declare const order: { kind: OrderKind };
+
+// Before: the same if/else sits in three files, for the screen, billing, and email
+function shippingFee(kind: OrderKind): number {
+  if (kind === "standard") return 500;
+  if (kind === "express") return 1200;
+  return 0;
+}
+
+// After: create a single lookup table from kind to fee, and the three files look it up
+const SHIPPING_FEES: Record<OrderKind, number> = {
+  standard: 500,
+  express: 1200,
+  pickup: 0,
+};
+
+const fee = SHIPPING_FEES[order.kind];
+```
+
+With `Record<OrderKind, number>`, if you add a kind of order to the type `OrderKind` and forget to add its row to the table `SHIPPING_FEES`, compilation fails.
+
+A lookup table fits when each kind maps to one "value."
+
+When each kind <strong>holds different data altogether</strong>, on the other hand, the agent uses a <strong>discriminated union</strong>.
+
+Take three payment methods: "card," "bank transfer," and "cash on delivery." Only a card holds the last four digits of the card number, and only a bank transfer holds the account number to pay into.
+
+If you write these payment methods with a kind field and optional fields, you can also write a value such as "a card with an account number."  
+With a discriminated union, each value of `kind` fixes which fields it can hold, so you cannot write such a value.
+
+```
+// Before: every payment method can hold every field
+type PaymentLoose = { method: "card" | "bank" | "cod"; cardLast4?: string; bankAccount?: string };
+
+// After: each value of kind fixes which fields it can hold
+type Payment =
+  | { kind: "card"; cardLast4: string }
+  | { kind: "bank"; bankAccount: string }
+  | { kind: "cod" };
+
+function paymentLabel(p: Payment): string {
+  switch (p.kind) {
+    case "card":
+      return `Card (ending ${p.cardLast4})`;
+    case "bank":
+      return `Bank transfer (account ${p.bankAccount})`;
+    case "cod":
+      return "Cash on delivery";
+  }
+}
+```
+
+<a id="use-a-reducer-instead-of-rewriting-on-the-spot"></a>
+
+
+#### Use a reducer instead of rewriting on the spot
+
+Say three places rewrite the contents of a shopping cart directly: the product list screen, the product detail screen, and the cart screen. A <strong>reducer</strong> fits this case.  
+Here, to find out where and how the cart contents changed, you have to read all three places.
+
+The agent fixes the cart actions, add and remove, as a type and creates one reducer that "computes the next cart from the current cart and an action." The three places stop rewriting the cart directly and only pass actions to the reducer.  
+After that, <strong>you only need to read the reducer to know how the cart contents change</strong>.
+
+```
+type CartItem = { id: string; price: number };
+type Cart = { items: CartItem[] };
+declare let cart: Cart;
+declare const item: CartItem;
+declare const id: string;
+
+// Before: each of the three screens rewrites the cart directly
+cart.items.push(item);
+cart.items = cart.items.filter((i) => i.id !== id);
+
+// After: fix the actions as a type, and compute the next cart only inside the reducer
+type CartAction =
+  | { type: "add"; item: CartItem }
+  | { type: "remove"; id: string };
+
+function cartReducer(cart: Cart, action: CartAction): Cart {
+  switch (action.type) {
+    case "add":
+      return { items: [...cart.items, action.item] };
+    case "remove":
+      return { items: cart.items.filter((i) => i.id !== action.id) };
+  }
+}
+
+cart = cartReducer(cart, { type: "add", item });
+```
+
+<a id="do-not-force-structure-in"></a>
+
+
+#### Do not force structure in
+
+The principle does not ask you to force structure in, though. If the current code is clear, sits in one place, and nobody expects it to grow, the agent leaves it as plain code.
+
+The agent also <strong>distrusts a shared function or type that only adds one layer between calls and reduces nothing</strong>. A shared function or type that reduces no branches, no duplicated rules, and no impossible states only adds places the reader must open and check.
+
+<a id="trigger-conditions"></a>
+
+
+### Trigger conditions
+
+- When you write logic that holds state
+- When there are many branches
+- When the same assumption, "this data has this field," repeats across several files
+
+If any of the following happens, it is a sign that the agent skipped this principle.
+
+- For a new feature, the agent added one more branch to an existing chain of conditionals.
+- The agent added a second boolean that must always stay in step with an existing boolean.
+
+Say the code has `isLoading` for loading, and you add `isError` for errors. When loading fails, the code must set `isError` to `true` and, at the same time, set `isLoading` back to `false`.
+
+If the code forgets to reset `isLoading`, `isLoading: true` and `isError: true` hold at the same time, and the screen ends up in a contradictory state: "loading, but also an error."
+
+In this way, a second boolean means that every time you change one value, you also have to bring the other into line.
+
+The "[Non-negotiables](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md#non-negotiables)" section of `/poteto-mode` also requires this principle ([Chapter 8](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205)).
+
+"Non-negotiables" asks the agent, whatever code it writes, to first make the shape of the data clear and to pick a structure that follows this principle. <strong>Of the 23 principles, "Model the Domain" is the only one that "Non-negotiables" names</strong>.
+
+<a id="%22boundary-discipline%22-gathers-input-validation-at-the-outside-boundary%2C-and-the-inside-trusts-the-types"></a>
+
+
+## "Boundary Discipline" gathers input validation at the outside boundary, and the inside trusts the types
+
+The principle "Boundary Discipline" asks you to <strong>put input validation, type narrowing, and error handling at the system boundary</strong>. As examples of boundaries, the principle lists CLI arguments, configuration files, external APIs, and data that arrives over the network.
+
+A value checked at the boundary has a type. So the code inside the boundary trusts that values of that type arrive, uses them, and does not repeat the same check.
+
+The principle gathers checks at the boundary because checks scattered all over the code cause two problems.
+
+- You end up writing the same check in many places.
+- Developers and agents alike assume "something must be checking this somewhere." Unless you know which check runs where, you may not notice a path that nothing checks.
+
+The following code is an example of checks scattered all over the code. Only some functions check that the "quantity" from an order form is 1 or more.
+
+```
+let stock = 10; // number of items in stock
+
+// Computes the price: checks that the quantity is 1 or more
+function calcPrice(quantity: number): number {
+  if (quantity < 1) throw new Error("Quantity must be 1 or more");
+  return quantity * 500;
+}
+
+// Reduces stock: checks nothing, assuming "something checks this somewhere"
+function reserveStock(quantity: number) {
+  stock = stock - quantity;
+}
+
+// Order screen: calls calcPrice first, so it checks before reducing stock
+calcPrice(2);
+reserveStock(2);
+
+// Another screen: calls only reserveStock directly
+reserveStock(-3); // stock goes up from 8 to 11
+```
+
+On the order screen path, `calcPrice` does the check, but the path that calls only `reserveStock` has no check at all.  
+So `-3` arrives as is, and the code that should reduce stock increases it.
+
+Here is the same logic written the way the principle says.
+
+```
+let stock = 10; // number of items in stock
+
+// Boundary: checks the value from the form here, once
+function parseQuantity(input: string): number {
+  const quantity = Number(input);
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new Error("Quantity must be an integer of 1 or more");
+  }
+  return quantity;
+}
+
+// Inside: only checked values arrive, so it writes no checks
+function calcPrice(quantity: number): number {
+  return quantity * 500;
+}
+
+function reserveStock(quantity: number) {
+  stock = stock - quantity;
+}
+
+// Every screen passes the form value through parseQuantity before using it
+const quantity = parseQuantity("-3"); // the error happens here, and nothing goes further
+calcPrice(quantity);
+reserveStock(quantity);
+```
+
+The check now lives in one place, `parseQuantity`, and `calcPrice` no longer needs its own check.  
+And because every screen passes the form value through `parseQuantity` before using it, a value like `-3` never reaches `calcPrice` or `reserveStock`.
+
+The principle also asks you to write business logic as pure functions and to keep the shell thin, so that the shell only calls the pure functions (see ["Extract pure functions that the shell only calls"](#extract-pure-functions-that-the-shell-only-calls) for details). When the logic is separate from the framework, <strong>you can test the logic alone without running the framework</strong>.
+
+<a id="rule%3A-validate-outside-data-at-the-boundary"></a>
+
+
+### Rule: validate outside data at the boundary
+
+The agent decides where to put validation with the following two questions.
+
+<a id="check-only-data-that-came-in-from-outside"></a>
+
+
+#### Check only data that came in from outside
+
+The first question is "Is this data crossing the system boundary right now, that is, has it just come in from outside?"  
+<strong>If the data is not crossing the boundary, the check is extra</strong>. The boundary code turns the checked value into a typed value and passes it to the inside functions, and the inside functions trust that type.
+
+Say the function that loads a configuration file checks at load time that `batchSize` is a positive number. Then an inside function that uses `batchSize` does not need to check `batchSize > 0` again. Once the boundary has checked the value, every inside function can rely on it.
+
+```
+type Config = { batchSize: number };
+
+// Boundary: checks once when loading the configuration file, and returns a Config value
+function parseConfig(raw: { batchSize?: unknown }): Config {
+  if (typeof raw.batchSize !== "number" || raw.batchSize <= 0) {
+    throw new Error("batchSize must be a positive number");
+  }
+  return { batchSize: raw.batchSize };
+}
+
+// Inside: trusts the Config type and does not check batchSize > 0 again
+function splitIntoBatches(items: string[], config: Config): string[][] {
+  const batches: string[][] = [];
+  for (let i = 0; i < items.length; i += config.batchSize) {
+    batches.push(items.slice(i, i + config.batchSize));
+  }
+  return batches;
+}
+```
+
+<a id="extract-pure-functions-that-the-shell-only-calls"></a>
+
+
+#### Extract pure functions that the shell only calls
+
+The second question is "Can this logic become a pure function that the shell only calls?"  
+If it can, the agent extracts the logic as a pure function.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="491">
+<li class="code-line" data-line="491">
+<strong>Pure function.</strong> A function that always returns the same value for the same arguments and does not interact with anything outside the program, such as reading or writing the screen or files.</li>
+<li class="code-line" data-line="492">
+<strong>Shell.</strong> The part that handles interaction with the outside of the program, such as the screen, files, the network, and frameworks. It takes values from outside, passes them to pure functions, and sends the results back out.</li>
+</ul>
+</div></aside>
+
+For example, the agent does not write the order total calculation directly inside the button click handler. It extracts the calculation into a function, `calcTotal(items)`, and the button handler only calls it. That way, you can test the total calculation alone without running the screen.
+
+The shell, for its part, has no calculation, so there is almost no room for mistakes in it.
+
+```
+type Item = { price: number; quantity: number };
+declare const button: HTMLButtonElement;
+declare const totalLabel: HTMLElement;
+declare function readItemsFromCart(): Item[];
+
+// Pure function: always returns the same total for the same items. Does not touch the screen
+function calcTotal(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+// Shell: only reads values from the screen, calls the pure function, and writes the result to the screen
+button.addEventListener("click", () => {
+  const items = readItemsFromCart(); // read from the screen
+  const total = calcTotal(items); // leave the calculation to the pure function
+  totalLabel.textContent = `${total} yen`; // write to the screen
+});
+```
+
+<a id="trigger-conditions-1"></a>
+
+
+### Trigger conditions
+
+When you build in input validation or error handling, or when you write an adapter, the part that connects a framework to your own code.
+
+<a id="%22type-system-discipline%22-uses-types-to-make-invalid-states-impossible-to-build"></a>
+
+
+## "Type System Discipline" uses types to make invalid states impossible to build
+
+The principle "Type System Discipline" treats the type checker as a proof assistant, a tool that proves "this value always has this shape."
+
+The agent uses the type checker to <strong>stop contradictory states and unhandled variants as compile errors, instead of finding them after running the code</strong>. An unhandled case that the types miss becomes a runtime error that the compiler could have stopped.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="529">
+<li class="code-line" data-line="529">
+<strong>Variant.</strong> One of the shapes that make up a sum type. In <code>type Status = "success" | "error" | "pending";</code>, for example, each value such as <code>success</code> and <code>error</code> is a variant.</li>
+<li class="code-line" data-line="530">
+<strong>Sum type.</strong> A type for a value that takes exactly one of several shapes. In TypeScript, a sum type is a union type. For example, <code>type FooBar = 'foo' | 'bar'</code> is either foo or bar.</li>
+</ul>
+</div></aside>
+
+<a id="rule%3A-make-invalid-states-unwritable-when-you-define-the-type"></a>
+
+
+### Rule: make invalid states unwritable when you define the type
+
+The main patterns are as follows.
+
+<a id="make-impossible-states-unwritable"></a>
+
+
+#### Make impossible states unwritable
+
+If a task has the type `{ completed: boolean; completedAt?: Date }`, you can also write a meaningless combination: "completed, but with no completion time."
+
+So the agent uses a sum type such as `{ kind: "open" } | { kind: "done"; at: Date }`. With the sum type, the only shape you can write for "done" is one that always has a time.
+
+<strong>A type that makes impossible combinations unwritable from the start is more reliable</strong> than a check afterward that a combination is valid.
+
+<a id="mark-values-that-mean-different-things"></a>
+
+
+#### Mark values that mean different things
+
+The agent makes `UserId` and `OrderId` branded types, so that you cannot swap one for the other even though both hold a string.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="550"><strong>Branded type.</strong> A primitive, meaning a basic value such as a string or number, with a type marker attached. <code>UserId</code> and <code>OrderId</code> in the code example below are branded types.</p>
+</div></aside>
+
+For example, if you pass an order ID to `getUser()`, which needs a user ID, the compiler reports an error. If the two were interchangeable, a mix-up between values that mean different things would still compile.
+
+```
+type UserId = string & { readonly __brand: "UserId" };
+type OrderId = string & { readonly __brand: "OrderId" };
+type User = { id: UserId; name: string };
+
+declare function getUser(id: UserId): Promise<User>;
+declare const orderId: OrderId;
+
+// Both hold a string, but passing an OrderId is a compile error
+await getUser(orderId);
+```
+
+<a id="do-not-lie-to-the-type-system"></a>
+
+
+#### Do not lie to the type system
+
+The agent does not bypass type checking with casts or assertions. Each place that bypasses type checking can crash at runtime.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="572">
+<li class="code-line" data-line="572">
+<strong>Cast.</strong> A way of writing that forces the compiler to treat a value as another type, for example <code>value as unknown as User</code>, which forces a conversion that type checking would not allow.</li>
+<li class="code-line" data-line="573">
+<strong>Assertion.</strong> A way of writing that tells the compiler "this value is definitely this type." In TypeScript, you write it with <code>as</code>, such as <code>as User</code>.</li>
+</ul>
+</div></aside>
+
+For example, if you write `as User` on a value from an API without checking it, the code compiles.  
+But if the real response lacks the `name` field, the code reads on as if `name` were there, and it crashes at runtime where it uses `user.name`.
+
+For facts the compiler cannot prove, the agent proves them itself, by checking the actual value or by narrowing the type with a conditional.
+
+<a id="leave-the-check-for-unhandled-cases-to-the-compiler"></a>
+
+
+#### Leave the check for unhandled cases to the compiler
+
+The agent writes code so that, when a sum type gets a new variant, every branch that does not handle it fails to compile.
+
+For example, when you add `canceled` to the kinds of task, compilation fails if the function that picks the display text does not handle it.  
+So nobody has to search for unhandled cases by hand.
+
+```
+// Added canceled to the kinds of task
+type Task = { kind: "open" } | { kind: "done" } | { kind: "canceled" };
+
+// Before: an unhandled kind falls through to the last return "". It compiles without error
+function labelLoose(task: Task): string {
+  if (task.kind === "open") return "Open";
+  if (task.kind === "done") return "Done";
+  return ""; // a canceled task shows up on screen with empty text
+}
+
+// After: if any kind is unhandled, compilation fails
+function label(task: Task): string {
+  switch (task.kind) {
+    case "open":
+      return "Open";
+    case "done":
+      return "Done";
+    default: {
+      // canceled has no case, so compilation fails on this line
+      const unhandled: never = task;
+      return unhandled;
+    }
+  }
+}
+```
+
+The earlier `labelLoose` compiles even if it forgets to handle `canceled`. So you notice the gap only when empty text shows up on screen.
+
+In the later `label`, `never` is a type that means "no value should ever reach here."
+
+If a `case` handles every kind, no value reaches `default`, so the code compiles.
+
+If the code forgets `canceled`, on the other hand, a `canceled` task reaches `default`, and compilation fails on the line that assigns it to the `never` variable. The place where the error appears is the place to add the `canceled` `case`.
+
+<a id="strengthen-types-only-where-they-proved-too-weak"></a>
+
+
+#### Strengthen types only where they proved too weak
+
+The principle does not aim to make types as detailed as possible, though. According to the principle, the job of a type is not to describe data in as much detail as possible. It is to <strong>show, without gaps, the cases that each place using the type must handle</strong>.
+
+So the agent strengthens a type only where the type proved too weak. The signs are runtime assertions and throw statements that raise an error because something "cannot happen." A place with such a check is a place where the type lets through a case it could have blocked.
+
+For example, a completed task should always have a time. A place that writes `if (!task.completedAt) throw new Error("cannot happen")` is a place where the type allows a value that is "completed, but with no time."
+
+<a id="trigger-conditions-2"></a>
+
+
+### Trigger conditions
+
+- When you design types
+- When you review function signatures, the types of the arguments a function takes and the value it returns
+- When you write code in a statically typed language such as TypeScript, which checks types before the code runs
+
+One of the test questions this principle gives treats a type as instructions for the next agent that touches the code.
+
+> "If a new variant is added next month, will the compiler tell the next agent where to add a case?" If no, the match isn't exhaustive.
+
+When you write exhaustive branches, the compiler tells the next agent where to make the fix. So nobody needs to write in prose, "when you add a new state, fix these three places too."
+
+`/typescript-best-practices` is a Skill that shows this principle as concrete TypeScript patterns ([Chapter 29](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/00dce1)).
+
+<a id="%22make-operations-idempotent%22-builds-operations-that-give-the-same-result-however-many-times-they-run"></a>
+
+
+## "Make Operations Idempotent" builds operations that give the same result however many times they run
+
+The principle "Make Operations Idempotent" asks you to build each operation that changes state so that, however many times it runs and even when it restarts partway, <strong>it converges, which means it settles in the same correct state in the end</strong>.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="650">
+<li class="code-line" data-line="650">
+<strong>Idempotent.</strong> The property that running the same operation any number of times gives the same result as running it once. An operation that sets a setting to 5, for example, leaves the value at 5 however many times it runs.</li>
+</ul>
+</div></aside>
+
+The principle asks for this because <strong>you have to build operations on the assumption that they stop partway</strong>.
+
+Commands, procedures such as startup and shutdown, and loops that repeat work often stop partway or run again because of crashes, restarts, and retries.
+
+Suppose an earlier run stopped partway and left data or files that change the result of the next run. Then after every restart, the developer has to investigate why the result is different this time.
+
+If you build for idempotence, the result is the same however many times the operation runs again, so restarts need no investigation.
+
+<a id="rule%3A-check-convergence-with-three-questions"></a>
+
+
+### Rule: check convergence with three questions
+
+The agent checks whether an operation is idempotent with the following three questions.
+
+1. If the same operation runs twice in a row, what is the result?
+2. If the earlier run stopped partway, what is the result of the next run? Is it the same whether the run stopped at the start, in the middle, or just before the end?
+3. However many times it runs again, does it end in the same state? In other words, does it converge?
+
+If the answer to any one of the three is "it depends on what the earlier run left behind," the operation needs a <strong>reconciliation step</strong>.
+
+Take the second question as an example.
+
+A process writes 1,000 lines to an output file. The next run leaves the earlier file in place and appends to its end, starting again from line 1.
+
+If the earlier run wrote 400 lines and stopped, the file has the 400 lines from that run followed by the 1,000 lines from this run. The earlier 400 lines are the same as the first 400 lines of this run, so the result is a 1,400-line file with duplicate lines. If the earlier run stopped before writing a single line, the file has 1,000 lines.
+
+When the result changes with where the earlier run stopped, you need reconciliation.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="680">
+<li class="code-line" data-line="680">
+<strong>Reconciliation.</strong> A step that checks what the earlier run left behind and brings things to the correct state, whatever is left.</li>
+</ul>
+<p class="code-line" data-line="682">Say a run that stopped partway left an output file with only 400 of 1,000 lines written. If <strong>the next run first finds that file and deletes it before it starts writing</strong>, the result is the same 1,000-line file every time, wherever the earlier run stopped.</p>
+</div></aside>
+
+<a id="trigger-conditions-3"></a>
+
+
+### Trigger conditions
+
+When you design commands that may stop partway or get retried, procedures such as startup and shutdown, and loops that repeat work.
+
+<a id="%22migrate-callers-then-delete-legacy-apis%22-moves-every-caller-and-deletes-the-old-api-in-the-same-change"></a>
+
+
+## "Migrate Callers Then Delete Legacy APIs" moves every caller and deletes the old API in the same change
+
+You use the principle "Migrate Callers Then Delete Legacy APIs" when you have decided that a new internal API is the right design.
+
+The agent leaves no compatibility layer. It moves every caller to the new API and <strong>deletes the old API in that same change</strong>.
+
+If you keep both the old and the new API, there are two ways to call the same thing, cleanup gets delayed, and the code only grows and never shrinks.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="698"><strong>Compatibility layer.</strong> A layer that keeps the old way of calling an API working.</p>
+</div></aside>
+
+In [the talk](https://x.com/poteto/status/2102050467505430555) ([Chapter 4](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd)), poteto says you need to narrow the recommended way of implementing something down to one. This book reads this principle as the procedure that brings an API migration back to one way of implementing it.
+
+<a id="rule%3A-find-and-move-the-callers%2C-and-delete-the-old-api-right-away"></a>
+
+
+### Rule: find and move the callers, and delete the old API right away
+
+The main rules are as follows.
+
+<a id="do-not-treat-remaining-callers-as-a-reason-to-keep-the-old-api"></a>
+
+
+#### Do not treat remaining callers as a reason to keep the old API
+
+The agent finds every caller of the old API, moves them to the new API, and deletes the old API right away.
+
+For example, to replace `getUser(id)` with `fetchUser({ id })`, the agent searches for every place that calls `getUser`, rewrites each to `fetchUser`, and deletes `getUser` in the same set of changes.
+
+When old and new ways of calling sit side by side, readers cannot tell which one to use, and cleanup gets delayed.
+
+<a id="make-a-temporary-bridging-layer-the-exception"></a>
+
+
+#### Make a temporary bridging layer the exception
+
+An adapter, a temporary layer that connects the old way of calling to the new API, is an exception for cases where the agent truly needs one. When the agent adds one, it sets a deadline for removing it. If bridging layers become routine, the code only grows and never shrinks.
+
+For example, suppose the agent keeps the old `getUser(id)` instead of deleting it and cuts its body down to the single line `return fetchUser({ id });`. The old `getUser(id)` is then an adapter.
+
+<a id="align-the-tests-with-the-new-api"></a>
+
+
+#### Align the tests with the new API
+
+The agent rewrites the tests to verify the behavior that the new API promises, and deletes tests that only protect the internal layout of the old implementation.
+
+For example, it keeps a test that checks "does `fetchUser({ id })` return the user with that ID," and deletes a test that only checks "how many times did the old `getUser` call some other function internally."
+
+If tests that protect the old layout remain, the code keeps conforming to the internal layout of an old implementation that should be gone.
+
+<a id="trigger-conditions-4"></a>
+
+
+### Trigger conditions
+
+When you introduce a new internal API while old callers still remain.
+
+<strong>As written, this principle does not apply to an external API, which is a public API with external users</strong>. The principle rests on the following three premises.
+
+1. No external users use the old API.
+2. You can fix, all at once inside the project, every caller that breaks when you delete the old API.
+3. The purpose of the new API is to simplify the code or to refactor.
+
+<a id="%22separate-before-serializing-shared-state%22-removes-the-shared-write-target-first%2C-and-a-lock-is-the-last-resort"></a>
+
+
+## "Separate Before Serializing Shared State" removes the shared write target first, and a lock is the last resort
+
+You use the principle "Separate Before Serializing Shared State" when several actors, such as agents or Workers, may share the same write target.
+
+Before it adds a lock, the agent considers <strong>whether the actors truly need the same write target</strong>. If they do not, it gives each actor its own write target and removes the sharing. The race conditions that concurrent writes cause happen only occasionally and are hard to reproduce, so finding the cause takes a long time.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="746">
+<li class="code-line" data-line="746">
+<strong>Serializing.</strong> Using a lock or a similar mechanism to make writes happen one at a time, in order.</li>
+<li class="code-line" data-line="747">
+<strong>Race condition.</strong> A state where several processes read and write the same data at the same time, so the result depends on the order in which they run.</li>
+</ul>
+<p class="code-line" data-line="749">For example, when two processes, A and B, each add 1 to a counter whose value is 10, the following happens.</p>
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="sequenceDiagram%0A%20%20%20%20participant%20A%20as%20Process%20A%0A%20%20%20%20participant%20C%20as%20Counter%0A%20%20%20%20participant%20B%20as%20Process%20B%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2010%0A%20%20%20%20A-%3E%3EC%3A%20Read%20the%20value%0A%20%20%20%20C--%3E%3EA%3A%2010%0A%20%20%20%20B-%3E%3EC%3A%20Read%20the%20value%0A%20%20%20%20C--%3E%3EB%3A%2010%0A%20%20%20%20A-%3E%3EC%3A%20Write%2010%20%2B%201%20%3D%2011%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2011%0A%20%20%20%20B-%3E%3EC%3A%20Write%2010%20%2B%201%20%3D%2011%2C%20overwriting%20the%20write%20by%20A%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2011%2C%20but%20it%20should%20be%2012" frameborder="0" id="zenn-embedded__5326252b31c4e" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__5326252b31c4e"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 1](../diagrams/en/23-01.svg)
+
+[View diagram 1](../diagrams/en/23-01.md)
+<!-- book-diagram-link:end --><p class="code-line" data-line="767">Each of the two processes added 1, so the value should be 12. But B writes 11 based on 10, the value before A wrote, so the value ends up at 11.</p>
+</div></aside>
+
+<a id="a-lock-does-not-remove-the-sharing%2C-so-serializing-writes-is-the-last-resort"></a>
+
+
+### A lock does not remove the sharing, so serializing writes is the last resort
+
+This principle <strong>treats serializing writes as the last resort, for when you cannot separate the write targets</strong>.
+
+Serializing is the last resort because a lock does not remove the sharing itself.  
+If you separate the write targets, no two actors write to the same place, so race conditions cannot happen at all.
+
+With a lock, on the other hand, the write target stays shared. Every actor must take the lock on every write. If even one piece of code writes without taking the lock, race conditions come back.
+
+Also, if an actor stops partway while holding the lock, nothing releases the lock, and the other actors may never be able to write.
+
+So <strong>when you think "this needs a lock," the principle asks you not to add one right away, but first to recheck whether you truly cannot separate the write targets</strong>.
+
+<a id="even-when-you-cannot-separate%2C-enforce-the-order-with-a-mechanism%2C-not-with-instructions"></a>
+
+
+### Even when you cannot separate, enforce the order with a mechanism, not with instructions
+
+<strong>Even when you truly cannot separate the write targets, the principle asks you to enforce the order with a mechanism such as a lock, not to rely on instructions to people</strong>.
+
+The first paragraph of this principle ends with this sentence.
+
+> Instructions and conventions are not concurrency control.
+
+Applied to agents, the sentence means that a person who writes "do not touch the same file" in a request has not built a mechanism that prevents concurrent writes between agents.
+
+<a id="rule%3A-separate-write-targets-before-you-add-a-lock"></a>
+
+
+### Rule: separate write targets before you add a lock
+
+There are three steps.
+
+<a id="1.-find-the-shared-places-that-several-actors-change"></a>
+
+
+#### 1. Find the shared places that several actors change
+
+Find the shared places, such as files that several actors read and write and branches that several actors push to.
+
+<a id="2.-remove-the-shared-write-target"></a>
+
+
+#### 2. Remove the shared write target
+
+The agent's default response is to remove the shared write target.
+
+First, it considers whether the actors need one authoritative piece of data, or whether each is only writing out its own separate facts.
+
+Then it gives each actor a file, key, or branch that only that actor writes to, and combines the results when someone reads or reports them.
+
+For example, if two Workers each write their own fields to one `state.json`, they share a write target. A split of `state.json` into `indexer-state.json` and `metrics-state.json` ends the sharing.
+
+A diagram of the write targets before and after the split looks like this.
+
+```
+Before the split (the write target is shared)
+WorkerA ─┐
+           ├─→ state.json
+WorkerB ─┘
+
+After the split (each actor has its own write target)
+WorkerA ──→ indexer-state.json
+WorkerB ──→ metrics-state.json
+```
+
+<a id="3.-serialize-writes-only-when-you-cannot-separate"></a>
+
+
+#### 3. Serialize writes only when you cannot separate
+
+Only when the code cannot work correctly without a single write target, add a mechanism that serializes writes, so that they happen one at a time, in order.
+
+Examples are data that every actor must read and write as one shared value to stay correct, such as the remaining stock count or seat reservations.
+
+The principle names the following four mechanisms.
+
+- <strong>Lock file.</strong> Before writing, an actor creates a file that means "writing in progress," and it deletes the file when it finishes. Other actors wait and do not write while that file exists.
+- <strong>Run in stages, in order.</strong> Split the writes into stages, and start each stage only after the one before it finishes. For example, B writes only after A finishes writing.
+- <strong>Hand all writes to one actor.</strong> Allow only one actor to write. Other actors ask that actor, "write this value."
+- <strong>Atomic compare-and-swap.</strong> Change the value only if it has not changed since you read it, as in "if the value is still 10, make it 11." If it has changed, do not write. Read it again and retry. The check and the change happen as one atomic operation, which no other process can interrupt partway.
+
+Applied to the earlier counter example, atomic compare-and-swap looks like this.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="sequenceDiagram%0A%20%20%20%20participant%20A%20as%20Process%20A%0A%20%20%20%20participant%20C%20as%20Counter%0A%20%20%20%20participant%20B%20as%20Process%20B%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2010%0A%20%20%20%20A-%3E%3EC%3A%20Read%20the%20value%0A%20%20%20%20C--%3E%3EA%3A%2010%0A%20%20%20%20B-%3E%3EC%3A%20Read%20the%20value%0A%20%20%20%20C--%3E%3EB%3A%2010%0A%20%20%20%20A-%3E%3EC%3A%20If%20the%20value%20is%20still%2010%2C%20make%20it%2011%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2011%2C%20success%0A%20%20%20%20B-%3E%3EC%3A%20If%20the%20value%20is%20still%2010%2C%20make%20it%2011%0A%20%20%20%20C--%3E%3EB%3A%20Failure%2C%20the%20value%20is%20already%2011%0A%20%20%20%20B-%3E%3EC%3A%20Read%20the%20value%20again%0A%20%20%20%20C--%3E%3EB%3A%2011%0A%20%20%20%20B-%3E%3EC%3A%20If%20the%20value%20is%20still%2011%2C%20make%20it%2012%0A%20%20%20%20Note%20over%20C%3A%20Value%20%3D%2012%2C%20success" frameborder="0" id="zenn-embedded__cf6b0da5e4914" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__cf6b0da5e4914"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 2](../diagrams/en/23-02.svg)
+
+[View diagram 2](../diagrams/en/23-02.md)
+<!-- book-diagram-link:end -->
+
+The first change by B fails, because A has already set the value to 11. B reads 11 again and retries, so the value ends correctly at 12.
+
+<a id="trigger-conditions-5"></a>
+
+
+### Trigger conditions
+
+When several actors that run concurrently may write to the same file, branch, key, or stateful object.
+
+<a id="example-request%3A-give-each-concurrent-attempt-its-own-worktree"></a>
+
+
+### Example request: give each concurrent attempt its own worktree
+
+The bundled guide page [`docs/guide/08-principles.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/08-principles.md) gives the following one-line request for a case where two attempts that run in parallel are about to write to the same branch.
+
+```
+separate before serializing shared state. give each attempt its own worktree, no locks.
+```
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="874">
+<li class="code-line" data-line="874">
+<strong>Worktree.</strong> A Git feature that adds another working directory with a different branch checked out from one repository. You can work on several branches at once, each in its own directory.</li>
+</ul>
+</div></aside>
+
+<a id="the-six-architecture-principles-make-the-structure-itself-the-instructions-for-the-agent"></a>
+
+
+## The six Architecture principles make the structure itself the instructions for the agent
+
+In the talk, poteto says that one way to raise trust in agents is to improve the structure of the codebase itself. The idea is that the agent can tell where it may do what by looking at the lines between folders, types, and processes.
+
+The talk calls this <strong>a design where the structure itself becomes the instructions for the agent</strong>.
+
+Each of the six principles leaves its decision behind as structure, such as types, state machines, and the way files are split. For each principle, the table shows the one question to ask in review and where the decision is left as structure.
+
+<table class="code-line" data-line="885">
+<thead class="code-line" data-line="885">
+<tr class="code-line" data-line="885">
+<th>Principle</th>
+<th>The question to ask in review</th>
+<th>Where the decision is left as structure</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="887">
+<tr class="code-line" data-line="887">
+<td>"Model the Domain"</td>
+<td>"Did a second boolean appear?"</td>
+<td>State machines, discriminated unions, lookup tables</td>
+</tr>
+<tr class="code-line" data-line="888">
+<td>"Boundary Discipline"</td>
+<td>"Is this data crossing the boundary right now, that is, has it just come in from outside?"</td>
+<td>A parse function at each boundary, which validates outside data and turns it into a typed value</td>
+</tr>
+<tr class="code-line" data-line="889">
+<td>"Type System Discipline"</td>
+<td>"If a new variant is added, will the compiler tell us?"</td>
+<td>Sum types, branded types, exhaustiveness checks with <code>never</code>
+</td>
+</tr>
+<tr class="code-line" data-line="890">
+<td>"Make Operations Idempotent"</td>
+<td>"What happens if it runs twice, or stops partway?"</td>
+<td>A reconciliation step</td>
+</tr>
+<tr class="code-line" data-line="891">
+<td>"Migrate Callers Then Delete Legacy APIs"</td>
+<td>"When does the old API go away?"</td>
+<td>The deletion of the old API in the same set of changes that moves the callers</td>
+</tr>
+<tr class="code-line" data-line="892">
+<td>"Separate Before Serializing Shared State"</td>
+<td>"Does only one actor write to this write target?"</td>
+<td>A file, branch, or worktree for each actor</td>
+</tr>
+</tbody>
+</table>
+
+<a id="summary"></a>
+
+
+## Summary
+
+- "Model the Domain" gathers scattered branches and booleans into state machines and lookup tables. The agent applies this principle every time it writes code.
+- "Boundary Discipline" gathers validation at the boundary, and the code inside the boundary trusts the types.
+- "Type System Discipline" makes impossible states impossible to build at compile time.
+- "Make Operations Idempotent" uses three questions to ask for operations that converge on the same final state, even through retries and restarts.
+- "Migrate Callers Then Delete Legacy APIs" finishes moving the callers and deleting the old API in the same set of changes. This book reads it as a principle that keeps the recommended way of implementing something down to one.
+- "Separate Before Serializing Shared State" removes the shared write target itself before serializing with a lock, that is, before making writes happen one at a time, in order.
+- This book reads all six as principles that make the structure itself the instructions for the agent.
+
+The next chapter, [Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914), covers the four Verification principles, which decide what counts as proof that work is finished.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](22-chapter.md) · [Next](24-chapter.md) · [简体中文](../zh-CN/23-chapter.md)

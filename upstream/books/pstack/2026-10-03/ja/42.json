@@ -1,0 +1,30 @@
+{
+  "chapter": {
+    "id": 165584,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "b22889",
+    "body_letters_count": 2243,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-10-01T17:38:51.856+09:00",
+    "filename": null,
+    "position": 42,
+    "path": "/sc30gsw/books/080faba713547b/viewer/b22889",
+    "title": "第6部 pstack実践ガイド",
+    "body_html": "<p data-line=\"0\" class=\"code-line\">第6部は、pstackの作者poteto氏がXに投稿した記事『The Complete Guide to pstack』の<a href=\"https://x.com/poteto/status/2094457600259842065\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 1</a>と<a href=\"https://x.com/poteto/status/2097732320606507506\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 2</a>をもとにした、pstackの実践ガイドです。</p>\n<p data-line=\"2\" class=\"code-line\">「<strong>自分のプロジェクトでpstackを使うとき、何から始め、どの順に進めればよいか</strong>」を扱います。</p>\n<p data-line=\"4\" class=\"code-line\">第6部では、記事の内容を、次の順に解説します。</p>\n<ol data-line=\"6\" class=\"code-line\">\n<li data-line=\"6\" class=\"code-line\">\n<strong>検証スキルを作る</strong>（Part 1、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7081\" target=\"_blank\">第36章</a>）</li>\n<li data-line=\"7\" class=\"code-line\">\n<strong>何が問題なのかを理解させ、過去の作業を引き継がせる</strong>（Part 2、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b4b9a1\" target=\"_blank\">第37章</a>）</li>\n<li data-line=\"8\" class=\"code-line\">\n<strong>ユーザーの使い方から設計を考え、プロトタイプで試す</strong>（Part 2、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7549a7\" target=\"_blank\">第38章</a>）</li>\n<li data-line=\"9\" class=\"code-line\">\n<strong>設計を固めて、実行できる計画に変える</strong>（Part 2、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/166acb\" target=\"_blank\">第39章</a>）</li>\n</ol>\n<p data-line=\"11\" class=\"code-line\">Part 1では、利用者が最初に作るものとして<strong>検証スキル</strong>を挙げ、その作り方と使い方を扱います。</p>\n<p data-line=\"13\" class=\"code-line\">Part 2では、検証スキルができた後に、何を作るかをエージェントと一緒に決める方法を扱います。本書では、Part 2の内容を13の要点に整理し、第37章から第39章の3つの章に分けて解説します。</p>\n<aside class=\"msg message\"><span class=\"msg-symbol\">!</span><div class=\"msg-content\">\n<p data-line=\"16\" class=\"code-line\"><strong>検証スキル</strong>（verification skill）・・・ エージェントが利用者のアプリを起動・操作して、変更が動いたことを確かめるための、プロジェクト専用のSkill（例：設定画面を変更したなら、エージェントが歯車のボタンを押して設定画面を開き、変更した箇所のスクリーンショットを証拠として残す）</p>\n</div></aside>\n<p data-line=\"19\" class=\"code-line\">検証スキルを先に作るのは、<strong>エージェントが自分の変更を検証できないままでは、プロトタイプの良し悪しも、計画が終わったかどうかも、結局は人間が確かめることになる</strong>からです。</p>\n<p data-line=\"21\" class=\"code-line\">そうなると、人間が確かめ終わるまでエージェントの作業が先へ進まないので、人間が作業の流れを止める存在（ボトルネック）のまま残り、一日をエージェントの見張りに使うことになります。</p>\n<h2 id=\"%E7%AC%AC6%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" data-line=\"23\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E7%AC%AC6%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" aria-hidden=\"true\"></a> 第6部で分かること</h2>\n<p data-line=\"25\" class=\"code-line\">第6部を読むと、次のことが分かります。</p>\n<ul data-line=\"27\" class=\"code-line\">\n<li data-line=\"27\" class=\"code-line\">自分のアプリ向けの検証スキルの作り方と、アプリの変更に合わせて最新に保つ方法</li>\n<li data-line=\"28\" class=\"code-line\">何が問題なのかを、エージェントに人間と同じように理解させ、過去のコンテキストを引き継がせる方法</li>\n<li data-line=\"29\" class=\"code-line\">ユーザーの使い方から設計を始め、複数案のプロトタイプから1つを選ぶ方法</li>\n<li data-line=\"30\" class=\"code-line\">実装で分かったことをもとに設計を見直し、小さく検証できるPRに分けた計画に変える方法</li>\n</ul>\n<h2 id=\"%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" data-line=\"32\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" aria-hidden=\"true\"></a> この部の章</h2>\n<p data-line=\"34\" class=\"code-line\">各章で扱うことは次のとおりです。</p>\n<table data-line=\"36\" class=\"code-line\">\n<thead data-line=\"36\" class=\"code-line\">\n<tr data-line=\"36\" class=\"code-line\">\n<th>章</th>\n<th>扱うこと</th>\n<th>対応する記事</th>\n</tr>\n</thead>\n<tbody data-line=\"38\" class=\"code-line\">\n<tr data-line=\"38\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7081\" target=\"_blank\">第36章 ガイド1：検証スキルから始める ― 自分のアプリを動かして確かめる</a></td>\n<td>エージェントが自分の変更を確かめるための、検証スキルを作る</td>\n<td><a href=\"https://x.com/poteto/status/2094457600259842065\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 1</a></td>\n</tr>\n<tr data-line=\"39\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b4b9a1\" target=\"_blank\">第37章 ガイド2：目的と背景を伝え、問題を理解させ、過去の作業を引き継がせる</a></td>\n<td>問題を理解する</td>\n<td>\n<a href=\"https://x.com/poteto/status/2097732320606507506\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 2</a>（要点1〜4）</td>\n</tr>\n<tr data-line=\"40\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7549a7\" target=\"_blank\">第38章 ガイド2：ユーザーの使い方から設計を試す</a></td>\n<td>解決策を試す</td>\n<td>\n<a href=\"https://x.com/poteto/status/2097732320606507506\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 2</a>（要点5〜8）</td>\n</tr>\n<tr data-line=\"41\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/166acb\" target=\"_blank\">第39章 ガイド2：設計を見直し、実行できる計画に変える</a></td>\n<td>解決策を固めて、実行できる計画に変える</td>\n<td>\n<a href=\"https://x.com/poteto/status/2097732320606507506\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 2</a>（要点9〜13）</td>\n</tr>\n</tbody>\n</table>\n<p data-line=\"43\" class=\"code-line\">後ろの章が前の章を前提にしているので、第36章から順に読むことを推奨します。</p>\n",
+    "toc": [
+      {
+        "id": "%E7%AC%AC6%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8",
+        "text": "第6部で分かること",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0",
+        "text": "この部の章",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

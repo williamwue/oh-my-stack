@@ -1,0 +1,13 @@
+{
+  "chapter": 29,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese comparison of 50 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "source_sha256": "36b8882dc8cdbd0e5a5ab9dde23934ae9ef2fcd502e157e83c380a1936397a7a",
+  "translation_sha256": "f12d2f627b570a2ecd9f68faafd5cc14170fb1a8038a3739d4a5e459ea20eb84",
+  "findings_resolved": [
+    "F29-1: restored designing the workflow before executing its verification steps; reviewer rechecked isolated correction."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

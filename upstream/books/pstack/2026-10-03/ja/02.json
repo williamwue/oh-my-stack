@@ -1,0 +1,30 @@
+{
+  "chapter": {
+    "id": 165553,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "86acbc",
+    "body_letters_count": 1653,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-09-29T21:10:48.218+09:00",
+    "filename": null,
+    "position": 2,
+    "path": "/sc30gsw/books/080faba713547b/viewer/86acbc",
+    "title": "第1部 月2.500件のPRを支えた開発基盤",
+    "body_html": "<p data-line=\"0\" class=\"code-line\">第1部では、「<strong>エージェントに仕事を任せられる条件とは何か</strong>」を扱います。</p>\n<p data-line=\"2\" class=\"code-line\">この条件を満たすには、速度を上げる前に、成果を確かめる仕組みや作業手順といった環境を整える必要があります。</p>\n<p data-line=\"4\" class=\"code-line\">具体的には、4つの条件があり、前の項目が、次の項目の前提条件（土台）になります。</p>\n<ol data-line=\"6\" class=\"code-line\">\n<li data-line=\"6\" class=\"code-line\">エージェントが作ったもの（成果物）を、エージェント自身が動かして確かめられること（検証）</li>\n<li data-line=\"7\" class=\"code-line\">検証の仕方と作業の手順が明示され、誰が実行しても一定の品質で再現できること</li>\n<li data-line=\"8\" class=\"code-line\">過去の判断と制約が、次の作業で参照できる形でコードベースに残っていること</li>\n<li data-line=\"9\" class=\"code-line\">この3つの土台を整えてから、自動化すること</li>\n</ol>\n<p data-line=\"11\" class=\"code-line\">月2,500件のPRは、この4つを整えた結果として出てきた数字です。数字だけを目標にして1から3を飛ばし、4に手を付けると、増えるのは成果ではなく<strong>確かめようのない変更</strong>です。</p>\n<h2 id=\"%E7%AC%AC1%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" data-line=\"13\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E7%AC%AC1%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" aria-hidden=\"true\"></a> 第1部で分かること</h2>\n<p data-line=\"15\" class=\"code-line\">第1部を読むと、次のことが分かります。</p>\n<ul data-line=\"17\" class=\"code-line\">\n<li data-line=\"17\" class=\"code-line\">2,500件という数字が、何を意味しないのか</li>\n<li data-line=\"18\" class=\"code-line\">エージェントを信じずに、何を信じればよいのか</li>\n<li data-line=\"19\" class=\"code-line\">検証を一回きりの確認で終わらせず、誰でも再実行できる仕組みにする方法</li>\n<li data-line=\"20\" class=\"code-line\">エージェントの記憶を、会話やメモではなくコードベースに置く理由</li>\n<li data-line=\"21\" class=\"code-line\">自動化を最後に置く理由と、自動化の前にそろえるべき条件</li>\n</ul>\n<p data-line=\"23\" class=\"code-line\">第1部には、pstackの各部品についての具体的な解説はあまりでてきません。扱うのは、pstackを使うかどうかに関係なく通用する考え方です。pstackの各部品は、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a5fb04\" target=\"_blank\">第2部</a>以降でこの考え方に結びつきます。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" data-line=\"25\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" aria-hidden=\"true\"></a> この部の章</h2>\n<table data-line=\"27\" class=\"code-line\">\n<thead data-line=\"27\" class=\"code-line\">\n<tr data-line=\"27\" class=\"code-line\">\n<th>章</th>\n<th>役割</th>\n</tr>\n</thead>\n<tbody data-line=\"29\" class=\"code-line\">\n<tr data-line=\"29\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/74ae41\" target=\"_blank\">第1章 2,500件のPRは目標ではなく、環境が整った結果</a></td>\n<td>2,500件という数字の扱い方を決め、本書の中心テーマを「件数」から「任せられる条件」へ移す</td>\n</tr>\n<tr data-line=\"30\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183\" target=\"_blank\">第2章 信頼するのは、エージェントではなく成果物</a></td>\n<td>信頼の対象をはっきりさせる。検証とは何かを定義する</td>\n</tr>\n<tr data-line=\"31\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a88ea5\" target=\"_blank\">第3章 検証を再現可能な仕組みにする</a></td>\n<td>信頼を増やす3つの方法（直接の検証、作業の型、構造による制約）を扱う</td>\n</tr>\n<tr data-line=\"32\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/dc9141\" target=\"_blank\">第4章 コードベースをエージェントの記憶にする</a></td>\n<td>増やした信頼を、次のエージェントへ引き継ぐ方法を扱う</td>\n</tr>\n<tr data-line=\"33\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b6ac2d\" target=\"_blank\">第5章 自動化は、信頼の土台の上に築く</a></td>\n<td>第2〜4章の条件がそろったときに、何を自動化できるかを扱う</td>\n</tr>\n</tbody>\n</table>\n<p data-line=\"35\" class=\"code-line\"><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183\" target=\"_blank\">第2章</a>から<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b6ac2d\" target=\"_blank\">第5章</a>が、poteto氏の<a href=\"https://x.com/poteto/status/2102050467505430555\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">講演</a>で示された4つの条件に対応する章になっています。後ろの章が前の章を前提にしているので、順に読むことを推奨します。</p>\n",
+    "toc": [
+      {
+        "id": "%E7%AC%AC1%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8",
+        "text": "第1部で分かること",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0",
+        "text": "この部の章",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

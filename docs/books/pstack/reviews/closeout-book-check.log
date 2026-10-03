@@ -1,0 +1,659 @@
+$ node tools/books/validate-pstack-book.mjs --complete
+{
+  "chapters": 48,
+  "ready": 48,
+  "warnings": []
+}
+
+exit_code=0
+
+$ python3 tools/books/audit-source.py
+{
+  "chapters": 96,
+  "source_and_markdown_hashes": "pass",
+  "rendered_text": "pass",
+  "source_destinations_and_anchors": "pass",
+  "inventory_coverage": "pass",
+  "code_blocks": 444,
+  "code_body_equality": "pass",
+  "translated_chapters": 48,
+  "translations": [
+    {
+      "chapter": 1,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 2,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 3,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 4,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 5,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 6,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 7,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 8,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 9,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 10,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 11,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 12,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 13,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 14,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 15,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 16,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 17,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 18,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 19,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 20,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 21,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 22,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 23,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 24,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 25,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 26,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 27,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 28,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 29,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 30,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 31,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 32,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 33,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 34,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 35,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 36,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 37,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 38,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 39,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 40,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 41,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 42,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 43,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 44,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 45,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 46,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 47,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    },
+    {
+      "chapter": 48,
+      "checks": {
+        "source_hash": true,
+        "translation_hash": true,
+        "code": true,
+        "structure": true,
+        "links": true,
+        "anchors": true,
+        "images": true,
+        "embeds": true
+      }
+    }
+  ],
+  "tool": "mistune3.1.3 and BeautifulSoup4.14.2",
+  "issues": []
+}
+
+exit_code=0
+
+$ python3 tests/pstack-book-audit.test.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 3.060s
+
+OK
+
+exit_code=0

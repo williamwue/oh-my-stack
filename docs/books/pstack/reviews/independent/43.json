@@ -1,0 +1,11 @@
+{
+  "chapter": 43,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full comparison of274 visible Japanese/Chinese entries, including all36 table cells, source attribution, article versus pstack0.15.5 paths/frequency, automation prerequisites, code and secrets exfiltration risk qualifiers; all37 hrefs and9 code blocks independently confirmed.",
+  "source_sha256": "2955399c40402cf7376558e74d937973e7911900859bdb6f3e5107bcfaf30dd2",
+  "translation_sha256": "e986eb4a02134387ae346e78200ed9c5086f698089d5fa1785990c016e0242ca",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

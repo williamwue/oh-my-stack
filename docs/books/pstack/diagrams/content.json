@@ -1,0 +1,157 @@
+{
+  "10-01": {
+    "ja": "flowchart TD\n    A[依頼] --> B[\"/poteto-mode\"]\n    B --> C[Principlesの一覧を読む]\n    C --> D{依頼の種類を判定}\n    D -->|調べるだけの質問| E[Investigation]\n    D -->|不具合| F[Bug fix]\n    D -->|新しい振る舞い| G[Feature]\n    D -->|構造だけの変更| H[Refactoring]\n    D -->|測定できる遅さ| I[Perf issue]\n    D -->|大きな作業、該当なし| J[\"/figure-it-out\"]\n    E --> K[検証して報告]\n    F --> K\n    G --> K\n    H --> K\n    I --> K\n    J --> K",
+    "en": "flowchart TD\n    A[Request] --> B[\"/poteto-mode\"]\n    B --> C[Read the list of Principles]\n    C --> D{Classify the kind of request}\n    D -->|Question that only needs investigation| E[Investigation]\n    D -->|Bug| F[Bug fix]\n    D -->|New behavior| G[Feature]\n    D -->|Structure-only change| H[Refactoring]\n    D -->|Measurable slowness| I[Perf issue]\n    D -->|Large work, or no match| J[\"/figure-it-out\"]\n    E --> K[Verify and report]\n    F --> K\n    G --> K\n    H --> K\n    I --> K\n    J --> K",
+    "zh-CN": "flowchart TD\n    A[请求] --> B[\"/poteto-mode\"]\n    B --> C[读取 Principle 清单]\n    C --> D{判断请求类型}\n    D -->|只需调查的问题| E[Investigation]\n    D -->|缺陷| F[Bug fix]\n    D -->|新行为| G[Feature]\n    D -->|仅改变结构| H[Refactoring]\n    D -->|可测量的性能问题| I[Perf issue]\n    D -->|大型工作或无匹配项| J[\"/figure-it-out\"]\n    E --> K[验证并报告]\n    F --> K\n    G --> K\n    H --> K\n    I --> K\n    J --> K"
+  },
+  "22-01": {
+    "ja": "sequenceDiagram\n    participant A as WorkerA\n    participant S as 共有の処理済み件数\n    participant B as WorkerB\n    Note over S: 件数 = 10\n    A->>S: 件数を読む\n    S-->>A: 10\n    B->>S: 件数を読む\n    S-->>B: 10\n    A->>S: 10 + 1 = 11 を書き込む\n    Note over S: 件数 = 11\n    B->>S: 10 + 1 = 11 を書き込む（Aの書き込みを上書き）\n    Note over S: 件数 = 11（本当は12）",
+    "en": "sequenceDiagram\n    participant A as WorkerA\n    participant S as Shared processed count\n    participant B as WorkerB\n    Note over S: count = 10\n    A->>S: Reads the count\n    S-->>A: 10\n    B->>S: Reads the count\n    S-->>B: 10\n    A->>S: Writes 10 + 1 = 11\n    Note over S: count = 11\n    B->>S: Writes 10 + 1 = 11, overwriting A's write\n    Note over S: count = 11, but it should be 12",
+    "zh-CN": "sequenceDiagram\n    participant A as WorkerA\n    participant S as 共享的已处理数量\n    participant B as WorkerB\n    Note over S: 数量 = 10\n    A->>S: 读取数量\n    S-->>A: 10\n    B->>S: 读取数量\n    S-->>B: 10\n    A->>S: 写入 10 + 1 = 11\n    Note over S: 数量 = 11\n    B->>S: 写入 10 + 1 = 11（覆盖 A 的写入）\n    Note over S: 数量 = 11（实际应为 12）"
+  },
+  "23-01": {
+    "ja": "sequenceDiagram\n    participant A as 処理A\n    participant C as カウンタ\n    participant B as 処理B\n    Note over C: 値 = 10\n    A->>C: 値を読む\n    C-->>A: 10\n    B->>C: 値を読む\n    C-->>B: 10\n    A->>C: 10 + 1 = 11 を書き込む\n    Note over C: 値 = 11\n    B->>C: 10 + 1 = 11 を書き込む（Aの書き込みを上書き）\n    Note over C: 値 = 11（本当は12）",
+    "en": "sequenceDiagram\n    participant A as Process A\n    participant C as Counter\n    participant B as Process B\n    Note over C: Value = 10\n    A->>C: Read the value\n    C-->>A: 10\n    B->>C: Read the value\n    C-->>B: 10\n    A->>C: Write 10 + 1 = 11\n    Note over C: Value = 11\n    B->>C: Write 10 + 1 = 11, overwriting the write by A\n    Note over C: Value = 11, but it should be 12",
+    "zh-CN": "sequenceDiagram\n    participant A as 进程 A\n    participant C as 计数器\n    participant B as 进程 B\n    Note over C: 值 = 10\n    A->>C: 读取值\n    C-->>A: 10\n    B->>C: 读取值\n    C-->>B: 10\n    A->>C: 写入 10 + 1 = 11\n    Note over C: 值 = 11\n    B->>C: 写入 10 + 1 = 11（覆盖 A 的写入）\n    Note over C: 值 = 11（实际应为 12）"
+  },
+  "23-02": {
+    "ja": "sequenceDiagram\n    participant A as 処理A\n    participant C as カウンタ\n    participant B as 処理B\n    Note over C: 値 = 10\n    A->>C: 値を読む\n    C-->>A: 10\n    B->>C: 値を読む\n    C-->>B: 10\n    A->>C: 値がまだ10なら11にする\n    Note over C: 値 = 11（成功）\n    B->>C: 値がまだ10なら11にする\n    C-->>B: 失敗（値はもう11）\n    B->>C: 値を読み直す\n    C-->>B: 11\n    B->>C: 値がまだ11なら12にする\n    Note over C: 値 = 12（成功）",
+    "en": "sequenceDiagram\n    participant A as Process A\n    participant C as Counter\n    participant B as Process B\n    Note over C: Value = 10\n    A->>C: Read the value\n    C-->>A: 10\n    B->>C: Read the value\n    C-->>B: 10\n    A->>C: If the value is still 10, make it 11\n    Note over C: Value = 11, success\n    B->>C: If the value is still 10, make it 11\n    C-->>B: Failure, the value is already 11\n    B->>C: Read the value again\n    C-->>B: 11\n    B->>C: If the value is still 11, make it 12\n    Note over C: Value = 12, success",
+    "zh-CN": "sequenceDiagram\n    participant A as 进程 A\n    participant C as 计数器\n    participant B as 进程 B\n    Note over C: 值 = 10\n    A->>C: 读取值\n    C-->>A: 10\n    B->>C: 读取值\n    C-->>B: 10\n    A->>C: 如果值仍为 10，就改为 11\n    Note over C: 值 = 11（成功）\n    B->>C: 如果值仍为 10，就改为 11\n    C-->>B: 失败（值已经是 11）\n    B->>C: 重新读取值\n    C-->>B: 11\n    B->>C: 如果值仍为 11，就改为 12\n    Note over C: 值 = 12（成功）"
+  },
+  "24-01": {
+    "ja": "flowchart TD\n    A[正常と分かっている状態] --> B[変更を1つ入れる]\n    B --> C[チェックを実行する]\n    C --> D{すべて通ったか}\n    D -- 通った --> E[次の単位へ進む]\n    E --> B\n    D -- 落ちた --> F[直前に入れた1つの変更を直す]\n    F --> C",
+    "en": "flowchart TD\n    A[State known to be good] --> B[Make one change]\n    B --> C[Run the checks]\n    C --> D{Did everything pass}\n    D -- passed --> E[Move to the next unit]\n    E --> B\n    D -- failed --> F[Fix the one change just made]\n    F --> C",
+    "zh-CN": "flowchart TD\n    A[已知正常的状态] --> B[加入一项变更]\n    B --> C[运行检查]\n    C --> D{是否全部通过}\n    D -- 通过 --> E[进入下一个单元]\n    E --> B\n    D -- 失败 --> F[修正刚刚加入的那一项变更]\n    F --> C"
+  },
+  "24-02": {
+    "ja": "sequenceDiagram\n    participant E as exportWithRetry\n    participant D as export_rows\n    E->>D: a を書く\n    E->>D: b を書く\n    Note over E: 2行を書いた後で失敗し、再試行する\n    E->>D: a を書く（2回目）\n    E->>D: b を書く（2回目）\n    E->>D: c を書く\n    Note over D: 行 = a, b, a, b, c",
+    "en": "sequenceDiagram\n    participant E as exportWithRetry\n    participant D as export_rows\n    E->>D: write a\n    E->>D: write b\n    Note over E: fails after writing two rows and retries\n    E->>D: write a again\n    E->>D: write b again\n    E->>D: write c\n    Note over D: rows = a, b, a, b, c",
+    "zh-CN": "sequenceDiagram\n    participant E as exportWithRetry\n    participant D as export_rows\n    E->>D: 写入 a\n    E->>D: 写入 b\n    Note over E: 写入两行后失败，开始重试\n    E->>D: 写入 a（第二次）\n    E->>D: 写入 b（第二次）\n    E->>D: 写入 c\n    Note over D: 行 = a, b, a, b, c"
+  },
+  "25-01": {
+    "ja": "sequenceDiagram\n    participant M as 主スレッド\n    participant S as サブエージェント\n    M->>S: 仕様書を読み、注文APIの呼び方だけを返して\n    Note over S: 何百ページの仕様書を読む\n    S-->>M: 注文APIの呼び方の要約（数行）\n    Note over M: 主スレッドに入るのは、依頼の文と数行の要約だけ",
+    "en": "sequenceDiagram\n    participant M as Main thread\n    participant S as Subagent\n    M->>S: Read the specification and return only how to call the order API\n    Note over S: Reads hundreds of pages of specification\n    S-->>M: A few-line summary of how to call the order API\n    Note over M: Only the request and the few-line summary enter the main thread",
+    "zh-CN": "sequenceDiagram\n    participant M as 主线程\n    participant S as 子 Agent\n    M->>S: 阅读规格书，只返回订单 API 的调用方式\n    Note over S: 阅读数百页规格书\n    S-->>M: 订单 API 调用方式的几行摘要\n    Note over M: 进入主线程的只有请求文本和几行摘要"
+  },
+  "25-02": {
+    "ja": "sequenceDiagram\n    participant A as エージェント\n    participant H as 人間\n    Note over A,H: 聞いて待つ場合\n    A->>H: 関数の名前を変えてもいいですか\n    Note over A: 返事が来るまで、後の作業がすべて止まる\n    H-->>A: いいです\n    A->>A: 名前を変え、後の作業を続ける\n    Note over A,H: 進めてから見せる場合\n    A->>A: 名前を変え、後の作業を続ける\n    A->>H: 呼び出し側のコードが読みやすくなるため、名前を変えました\n    H-->>A: （名前が合わなければ）元に戻して",
+    "en": "sequenceDiagram\n    participant A as Agent\n    participant H as Human\n    Note over A,H: Asking and waiting\n    A->>H: May I rename the function?\n    Note over A: All later work stops until the reply comes\n    H-->>A: Yes\n    A->>A: Renames it and continues the later work\n    Note over A,H: Proceeding, then presenting\n    A->>A: Renames it and continues the later work\n    A->>H: I renamed it because it makes the calling code easier to read\n    H-->>A: If the name does not fit, revert it",
+    "zh-CN": "sequenceDiagram\n    participant A as Agent\n    participant H as 人\n    Note over A,H: 先询问，再等待\n    A->>H: 可以修改函数名称吗\n    Note over A: 收到回复前，后续工作全部暂停\n    H-->>A: 可以\n    A->>A: 修改名称，继续后续工作\n    Note over A,H: 先推进，再展示\n    A->>A: 修改名称，继续后续工作\n    A->>H: 为了让调用方代码更易读，我修改了名称\n    H-->>A: 如果名称不合适，就改回去"
+  },
+  "26-01": {
+    "ja": "flowchart TD\n    A[人間の訂正やテストの失敗] --> B{どの種類の訂正か}\n    B -->|一回きり| C[メモに書く]\n    B -->|繰り返す修正| D[Skillかlintのルールにする]\n    B -->|システム全体の問題| E[Principleにする]\n    C --> F[今すぐ適用するか、具体的なtodoを作る]\n    D --> F\n    E --> F",
+    "en": "flowchart TD\n    A[A human correction or a test failure] --> B{What kind of correction is it}\n    B -->|One-off| C[Write it in a note]\n    B -->|Recurring fix| D[Make it a Skill or a lint rule]\n    B -->|System-wide problem| E[Make it a Principle]\n    C --> F[Apply it now or create a concrete todo]\n    D --> F\n    E --> F",
+    "zh-CN": "flowchart TD\n    A[人的纠正或测试失败] --> B{属于哪类纠正}\n    B -->|一次性| C[记录在笔记中]\n    B -->|重复发生的修正| D[写成 Skill 或 lint 规则]\n    B -->|系统性问题| E[写成 Principle]\n    C --> F[立即应用，或创建具体待办事项]\n    D --> F\n    E --> F"
+  },
+  "28-01": {
+    "ja": "flowchart TD\n    A[\"きっかけ：利用者がキャンセルボタンを押す\"] --> B[\"api/runs.ts の cancelRun()\"]\n    B --> C[\"services/runner.ts の stopRun()\"]\n    C --> D[\"データ：runs テーブルの status を cancelled に更新する\"]",
+    "en": "flowchart TD\n    A[\"Trigger: the user presses the cancel button\"] --> B[\"cancelRun in api/runs.ts\"]\n    B --> C[\"stopRun in services/runner.ts\"]\n    C --> D[\"Data: set status in the runs table to cancelled\"]",
+    "zh-CN": "flowchart TD\n    A[\"触发：用户点击取消按钮\"] --> B[\"api/runs.ts 中的 cancelRun()\"]\n    B --> C[\"services/runner.ts 中的 stopRun()\"]\n    C --> D[\"数据：将 runs 表的 status 更新为 cancelled\"]"
+  },
+  "28-02": {
+    "ja": "flowchart TD\n    Q[問い] --> J{単純か、複数のファイルやサービスにまたがるか}\n    J -->|単純| E1[explainer が1回で調べて説明する]\n    J -->|またがる| S[問いを2〜4の切り口に分ける]\n    S --> X1[explorer 1]\n    S --> X2[explorer 2]\n    S --> X3[explorer 3]\n    X1 --> E2[explainer が事実の一覧を統合して説明する]\n    X2 --> E2\n    X3 --> E2",
+    "en": "flowchart TD\n    Q[Question] --> J{Simple, or spans several files or services?}\n    J -->|Simple| E1[The explainer investigates and explains in one pass]\n    J -->|Spans| S[Split the question into two to four angles]\n    S --> X1[explorer 1]\n    S --> X2[explorer 2]\n    S --> X3[explorer 3]\n    X1 --> E2[The explainer combines the fact lists and explains]\n    X2 --> E2\n    X3 --> E2",
+    "zh-CN": "flowchart TD\n    Q[问题] --> J{简单问题，还是跨多个文件或服务}\n    J -->|简单| E1[explainer 一次完成调查与说明]\n    J -->|跨多个范围| S[将问题分成 2～4 个角度]\n    S --> X1[explorer 1]\n    S --> X2[explorer 2]\n    S --> X3[explorer 3]\n    X1 --> E2[explainer 汇总事实清单并说明]\n    X2 --> E2\n    X3 --> E2"
+  },
+  "28-03": {
+    "ja": "sequenceDiagram\n    participant App as アプリ\n    participant DB as データベース\n    App->>DB: 1回目：キャンセルする実行のIDを一覧で返して\n    DB-->>App: 100件分のID\n    loop IDごとに繰り返す（2回目〜101回目）\n        App->>DB: このIDの実行の情報（状態など）を返して\n        DB-->>App: 1件分の情報\n    end",
+    "en": "sequenceDiagram\n    participant App as App\n    participant DB as Database\n    App->>DB: Query 1: return the list of IDs of the runs to cancel\n    DB-->>App: 100 IDs\n    loop Repeat for each ID, queries 2 to 101\n        App->>DB: Return the details of the run with this ID, such as its state\n        DB-->>App: Details for one run\n    end",
+    "zh-CN": "sequenceDiagram\n    participant App as 应用\n    participant DB as 数据库\n    App->>DB: 第一次：返回要取消的运行 ID 列表\n    DB-->>App: 100 个 ID\n    loop 按 ID 逐个重复（第二次到第 101 次）\n        App->>DB: 返回该 ID 对应的运行信息（如状态）\n        DB-->>App: 一条信息\n    end"
+  },
+  "28-04": {
+    "ja": "sequenceDiagram\n    participant App as アプリ\n    participant DB as データベース\n    App->>DB: 1回目：キャンセルする実行のIDを一覧で返して\n    DB-->>App: 100件分のID\n    App->>DB: 2回目：この100件分のIDの実行の情報を、まとめて返して\n    DB-->>App: 100件分の情報",
+    "en": "sequenceDiagram\n    participant App as App\n    participant DB as Database\n    App->>DB: Query 1: return the list of IDs of the runs to cancel\n    DB-->>App: 100 IDs\n    App->>DB: Query 2: return the details of the runs for these 100 IDs together\n    DB-->>App: Details for 100 runs",
+    "zh-CN": "sequenceDiagram\n    participant App as 应用\n    participant DB as 数据库\n    App->>DB: 第一次：返回要取消的运行 ID 列表\n    DB-->>App: 100 个 ID\n    App->>DB: 第二次：批量返回这 100 个 ID 对应的运行信息\n    DB-->>App: 100 条信息"
+  },
+  "28-05": {
+    "ja": "flowchart TD\n    A[\"git blame と gh pr view で、対象の行、コミット、PRを集める\"] -->|集めた手がかりを全員に渡す| B[使えるMCPごとに調査役を1体ずつ起動する]\n    B --> C1[ソース管理]\n    B --> C2[チケット]\n    B --> C3[長文ドキュメント]\n    B --> C4[チャット]\n    B --> C5[インフラ]\n    B --> C6[エラー追跡]\n    B --> C7[プロダクト分析]\n    C1 & C2 & C3 & C4 & C5 & C6 & C7 -->|見つからなかった結果も含めて返す| D[synthesizer が、主張ごとに確かさの段階を付けてまとめる]",
+    "en": "flowchart TD\n    A[\"Collect the target lines, commits, and PRs with git blame and gh pr view\"] -->|Hand the collected leads to every investigator| B[Start one investigator per available MCP]\n    B --> C1[Source control]\n    B --> C2[Tickets]\n    B --> C3[Long-form documents]\n    B --> C4[Chat]\n    B --> C5[Infrastructure]\n    B --> C6[Error tracking]\n    B --> C7[Product analytics]\n    C1 & C2 & C3 & C4 & C5 & C6 & C7 -->|Return results, including what was not found| D[The synthesizer combines them with a confidence level for each claim]",
+    "zh-CN": "flowchart TD\n    A[\"通过 git blame 和 gh pr view 收集相关行、提交与 PR\"] -->|将收集到的线索交给所有人| B[为每个可用 MCP 启动一位调查者]\n    B --> C1[源代码管理]\n    B --> C2[工单]\n    B --> C3[长篇文档]\n    B --> C4[聊天]\n    B --> C5[基础设施]\n    B --> C6[错误追踪]\n    B --> C7[产品分析]\n    C1 & C2 & C3 & C4 & C5 & C6 & C7 -->|返回结果，包括未找到的情况| D[synthesizer 汇总各项主张，并标注确定程度]"
+  },
+  "28-06": {
+    "ja": "flowchart LR\n    UI[画面] --> API",
+    "en": "flowchart LR\n    UI[UI] --> API",
+    "zh-CN": "flowchart LR\n    UI[界面] --> API"
+  },
+  "28-07": {
+    "ja": "flowchart LR\n    UI[画面] --> API --> DB[データベース]",
+    "en": "flowchart LR\n    UI[UI] --> API --> DB[Database]",
+    "zh-CN": "flowchart LR\n    UI[界面] --> API --> DB[数据库]"
+  },
+  "28-08": {
+    "ja": "flowchart LR\n    UI[画面] --> API --> DB[データベース]\n    DB -. 結果 .-> API\n    API -. 結果 .-> UI",
+    "en": "flowchart LR\n    UI[UI] --> API --> DB[Database]\n    DB -. Result .-> API\n    API -. Result .-> UI",
+    "zh-CN": "flowchart LR\n    UI[界面] --> API --> DB[数据库]\n    DB -. 结果 .-> API\n    API -. 结果 .-> UI"
+  },
+  "29-01": {
+    "ja": "flowchart TD\n    H[仮説を立てる] --> C[最小の変更を加える]\n    C --> M[終了条件に照らして、成果物で測る]\n    M --> D{終了条件に近づいたか}\n    D -->|近づいた| K[変更を残し、次の単位へ進む]\n    D -->|近づかなかった| R[変更を元に戻す]\n    R --> H",
+    "en": "flowchart TD\n    H[Form a hypothesis] --> C[Make the smallest change]\n    C --> M[Measure with artifacts against the finish condition]\n    M --> D{Closer to the finish condition?}\n    D -->|Closer| K[Keep the change and move to the next unit]\n    D -->|Not closer| R[Revert the change]\n    R --> H",
+    "zh-CN": "flowchart TD\n    H[提出假设] --> C[做最小变更]\n    C --> M[对照完成条件，用成果物测量]\n    M --> D{是否更接近完成条件}\n    D -->|更接近| K[保留变更，进入下一个单元]\n    D -->|没有更接近| R[撤销变更]\n    R --> H"
+  },
+  "30-01": {
+    "ja": "flowchart TD\n    A[\"A: 採点基準を決め、候補ごとに別の出力先を割り当てる\"] --> B[\"B: 同じプロンプトで候補を同時に起動する\"]\n    B --> C1[\"候補1（Opus）\"]\n    B --> C2[\"候補2（GPT）\"]\n    B --> C3[\"候補3（Grok）\"]\n    C1 --> J[\"C: 判定役が採点する\"]\n    C2 --> J\n    C3 --> J\n    C1 --> R[\"D: 主エージェントが全候補を読んで採点する\"]\n    C2 --> R\n    C3 --> R\n    J --> P[\"D: 判定役の採点と比べて、土台を1つ選ぶ\"]\n    R --> P\n    P --> E[\"E: ほかの候補の良い部分を、土台の設計に合わせて書き直して組み込む\"]\n    E --> F[\"F: 統合した成果物を確かめる\"]\n    F --> O[\"成果物1つと統合メモを返す\"]",
+    "en": "flowchart TD\n    A[\"A: Decide the grading criteria and assign each candidate its own output location\"] --> B[\"B: Start the candidates at the same time with the same prompt\"]\n    B --> C1[\"Candidate 1: Opus\"]\n    B --> C2[\"Candidate 2: GPT\"]\n    B --> C3[\"Candidate 3: Grok\"]\n    C1 --> J[\"C: The judge grades\"]\n    C2 --> J\n    C3 --> J\n    C1 --> R[\"D: The main agent reads and grades every candidate\"]\n    C2 --> R\n    C3 --> R\n    J --> P[\"D: Compare with the judge's grades and pick one base\"]\n    R --> P\n    P --> E[\"E: Rewrite the good parts of the other candidates to fit the base's design and fold them in\"]\n    E --> F[\"F: Verify the merged artifact\"]\n    F --> O[\"Return one artifact and a merge note\"]",
+    "zh-CN": "flowchart TD\n    A[\"A：确定评分标准，为每个候选方案分配独立输出位置\"] --> B[\"B：使用相同提示词同时启动候选方案\"]\n    B --> C1[\"候选方案 1（Opus）\"]\n    B --> C2[\"候选方案 2（GPT）\"]\n    B --> C3[\"候选方案 3（Grok）\"]\n    C1 --> J[\"C：评判者评分\"]\n    C2 --> J\n    C3 --> J\n    C1 --> R[\"D：主 Agent 阅读所有候选方案并评分\"]\n    C2 --> R\n    C3 --> R\n    J --> P[\"D：与评判者评分比较，选择一个基础方案\"]\n    R --> P\n    P --> E[\"E：按基础方案的设计，改写并整合其他候选方案的优点\"]\n    E --> F[\"F：验证整合后的成果物\"]\n    F --> O[\"返回一份成果物及整合说明\"]"
+  },
+  "31-01": {
+    "ja": "sequenceDiagram\n    participant U as 利用者のブラウザ\n    participant S as ローカルのサーバー（送信キーを持つ）\n    participant W as webhook URL\n    participant R as Botのルーティン\n    U->>S: ボタンを押すと、JSONをPOSTする\n    S->>W: 送信キーを付けて、JSONをPOSTする\n    W->>R: ルーティンを起動し、JSONを渡す\n    Note over R: JSONを、指示ではなく外部のデータとして読む",
+    "en": "sequenceDiagram\n    participant U as The user's browser\n    participant S as Local server that holds the sender key\n    participant W as webhook URL\n    participant R as The Bot's routine\n    U->>S: Pressing a button POSTs the JSON\n    S->>W: Adds the sender key and POSTs the JSON\n    W->>R: Starts the routine and passes the JSON\n    Note over R: Reads the JSON as external data, not as instructions",
+    "zh-CN": "sequenceDiagram\n    participant U as 用户的浏览器\n    participant S as 本地服务器（持有发送密钥）\n    participant W as webhook URL\n    participant R as Bot 的例行任务\n    U->>S: 点击按钮后，以 POST 发送 JSON\n    S->>W: 附带发送密钥，以 POST 发送 JSON\n    W->>R: 启动例行任务并传入 JSON\n    Note over R: 将 JSON 视为外部数据，而非指令"
+  },
+  "32-01": {
+    "ja": "flowchart TD\n    A[起動] --> B[Doctor]\n    B --> C[Feature Map の機能を一つ操作]\n    C --> D[証拠を取る]\n    D --> E[片付け]\n    E --> F{どの手順も成功し、片付けの後も証拠が残っているか}\n    F -->|はい| G[利用者に手渡す]\n    F -->|いいえ| H[失敗した箇所を直す]\n    H --> A",
+    "en": "flowchart TD\n    A[\"Launch\"] --> B[\"Doctor\"]\n    B --> C[\"Operate one feature from the Feature Map\"]\n    C --> D[\"Collect evidence\"]\n    D --> E[\"Cleanup\"]\n    E --> F{\"Did every step succeed, and does the evidence remain after cleanup?\"}\n    F -->|yes| G[\"Hand it to the user\"]\n    F -->|no| H[\"Fix the part that failed\"]\n    H --> A",
+    "zh-CN": "flowchart TD\n    A[启动] --> B[Doctor]\n    B --> C[操作 Feature Map 中的一项功能]\n    C --> D[获取证据]\n    D --> E[清理]\n    E --> F{是否每一步都成功，且清理后证据仍然保留}\n    F -->|是| G[交付给用户]\n    F -->|否| H[修正失败的环节]\n    H --> A"
+  },
+  "32-02": {
+    "ja": "flowchart TD\n    subgraph S3[手順3　ソースコードを読む：並列、読み取りだけ]\n        A[サブエージェントA：機能ファイル1]\n        B[サブエージェントB：機能ファイル2]\n        C[サブエージェントC：機能ファイル3]\n    end\n    A -->|ずれている疑いのある箇所| R[手順4　主エージェントが突き合わせる]\n    B -->|ずれている疑いのある箇所| R\n    C -->|ずれている疑いのある箇所| R\n    R --> L[手順5　主エージェントだけがアプリを操作する]",
+    "en": "flowchart TD\n    subgraph S3[\"Step 3: read the source code, in parallel and read-only\"]\n        A[\"Subagent A: feature file 1\"]\n        B[\"Subagent B: feature file 2\"]\n        C[\"Subagent C: feature file 3\"]\n    end\n    A -->|suspected drift| R[\"Step 4: the main agent cross-checks\"]\n    B -->|suspected drift| R\n    C -->|suspected drift| R\n    R --> L[\"Step 5: only the main agent operates the app\"]",
+    "zh-CN": "flowchart TD\n    subgraph S3[步骤 3　阅读源代码：并行，只读]\n        A[子 Agent A：功能文件 1]\n        B[子 Agent B：功能文件 2]\n        C[子 Agent C：功能文件 3]\n    end\n    A -->|疑似不一致的位置| R[步骤 4　主 Agent 进行对照]\n    B -->|疑似不一致的位置| R\n    C -->|疑似不一致的位置| R\n    R --> L[步骤 5　仅由主 Agent 操作应用]"
+  },
+  "33-01": {
+    "ja": "flowchart TD\n    M[主エージェントが、範囲を決め、意図を1段落で書く] -->|同じ指示、意図、評価の観点| R1[レビュアー：Opus]\n    M -->|同じ指示、意図、評価の観点| R2[レビュアー：GPT]\n    M -->|同じ指示、意図、評価の観点| R3[レビュアー：Grok]\n    R1 --> S[主エージェントが、指摘を突き合わせて4つに仕分ける]\n    R2 --> S\n    R3 --> S",
+    "en": "flowchart TD\n    M[The main agent decides the scope and writes the intent in one paragraph] -->|same instructions, intent, and criteria| R1[Reviewer on Opus]\n    M -->|same instructions, intent, and criteria| R2[Reviewer on GPT]\n    M -->|same instructions, intent, and criteria| R3[Reviewer on Grok]\n    R1 --> S[The main agent compares the findings and sorts them into four groups]\n    R2 --> S\n    R3 --> S",
+    "zh-CN": "flowchart TD\n    M[主 Agent 确定范围，并用一段话写明意图] -->|相同指令、意图与评估角度| R1[审查者：Opus]\n    M -->|相同指令、意图与评估角度| R2[审查者：GPT]\n    M -->|相同指令、意图与评估角度| R3[审查者：Grok]\n    R1 --> S[主 Agent 对照意见，并分为四类]\n    R2 --> S\n    R3 --> S"
+  },
+  "36-01": {
+    "ja": "flowchart TD\n    A[不具合を理解する] --> B{手軽に実行できるテストの当てがあるか}\n    B -->|ない| X[スクリプトや再現コマンドなど、最も近い確認手段で確かめる]\n    B -->|ある| C[失敗するテストを先に書く]\n    C --> D[修正前にテストを実行する]\n    D --> E{意図した理由で失敗したか}\n    E -->|いいえ：通った、または別の理由で失敗した| F[テストや再現のほうを直す]\n    F --> D\n    E -->|はい| G[不具合を直す]\n    G --> H[テストを再実行し、通ることを確かめる]",
+    "en": "flowchart TD\n    A[Understand the bug] --> B{Is a cheap test you can run within reach?}\n    B -->|No| X[Verify with the nearest check, such as a script or a reproduction command]\n    B -->|Yes| C[Write the failing test first]\n    C --> D[Run the test before the fix]\n    D --> E{Did it fail for the intended reason?}\n    E -->|No: it passed, or it failed for another reason| F[Fix the test or the reproduction instead]\n    F --> D\n    E -->|Yes| G[Fix the bug]\n    G --> H[Rerun the test and verify that it passes]",
+    "zh-CN": "flowchart TD\n    A[理解缺陷] --> B{是否有成本较低、可执行的测试方案}\n    B -->|没有| X[用脚本或复现命令等最接近的检查手段验证]\n    B -->|有| C[先编写会失败的测试]\n    C --> D[修复前运行测试]\n    D --> E{是否因预期原因失败}\n    E -->|否：通过了，或因其他原因失败| F[修正测试或复现方式]\n    F --> D\n    E -->|是| G[修复缺陷]\n    G --> H[再次运行测试，确认通过]"
+  },
+  "37-01": {
+    "ja": "flowchart TD\n    A[\"/no-comments が Comment Sicko を起動する\"] --> B[\"Comment Sicko がコメントを消し、MUST KILL を報告する\"]\n    B --> C{\"/no-comments が報告を審査する\"}\n    C -->|誤った指摘| D[\"却下する\"]\n    C -->|受け入れた指摘| E[\"根本原因から直す\"]\n    E --> F{\"制約を主張するコメントがあったか\"}\n    F -->|ない| G[\"利用者に報告する\"]\n    F -->|ある| H[\"型、テスト、lint などで表す案を出す\"]\n    H --> I{\"利用者が承認したか\"}\n    I -->|承認した| J[\"制約をコードで表してから、コメントを消す\"]\n    I -->|承認しない| K[\"コメントを消し、制約を未解決として報告する\"]\n    J --> G\n    K --> G",
+    "en": "flowchart TD\n    A[\"/no-comments starts Comment Sicko\"] --> B[\"Comment Sicko deletes comments and reports MUST KILL\"]\n    B --> C{\"/no-comments reviews the report\"}\n    C -->|Wrong finding| D[\"Reject it\"]\n    C -->|Accepted finding| E[\"Fix it at the root cause\"]\n    E --> F{\"Was there a comment that asserts a constraint?\"}\n    F -->|No| G[\"Report to the user\"]\n    F -->|Yes| H[\"Propose expressing it with types, a test, lint, or similar\"]\n    H --> I{\"Did the user approve?\"}\n    I -->|Approved| J[\"Express the constraint in code, then delete the comment\"]\n    I -->|Not approved| K[\"Delete the comment and report the constraint as unresolved\"]\n    J --> G\n    K --> G",
+    "zh-CN": "flowchart TD\n    A[\"/no-comments 启动 Comment Sicko\"] --> B[\"Comment Sicko 删除注释并报告 MUST KILL\"]\n    B --> C{\"/no-comments 审查报告\"}\n    C -->|错误的意见| D[\"驳回\"]\n    C -->|接受的意见| E[\"从根本原因修复\"]\n    E --> F{\"是否存在声明约束的注释\"}\n    F -->|没有| G[\"向用户报告\"]\n    F -->|有| H[\"提出用类型、测试或 lint 等表达约束的方案\"]\n    H --> I{\"用户是否批准\"}\n    I -->|批准| J[\"先用代码表达约束，再删除注释\"]\n    I -->|不批准| K[\"删除注释，并报告该约束尚未解决\"]\n    J --> G\n    K --> G"
+  },
+  "39-01": {
+    "ja": "flowchart TD\n    T[\"会話のトランスクリプト\"] --> J[\"レビュー役（判断）\"]\n    T --> K[\"レビュー役（道具）\"]\n    T --> D[\"レビュー役（発散）\"]\n    J --> S[\"合成役が学びの候補を仕分ける\"]\n    K --> S\n    D --> S\n    S -->|Accepted| C{\"lint やスクリプトで強制できるか\"}\n    S -->|Rejected| R[\"却下する\"]\n    S -->|Backlog| B[\"チームの課題管理に登録する\"]\n    C -->|できる| B\n    C -->|できない| U{\"利用者が承認したか\"}\n    U -->|承認した| E[\"Skillを編集する\"]\n    U -->|承認しない| X[\"編集しない\"]",
+    "en": "flowchart TD\n    T[\"Conversation transcript\"] --> J[\"Reviewer: Judgment\"]\n    T --> K[\"Reviewer: Tooling\"]\n    T --> D[\"Reviewer: Divergent\"]\n    J --> S[\"The synthesizer sorts the candidate lessons\"]\n    K --> S\n    D --> S\n    S -->|Accepted| C{\"Can lint or a script enforce it?\"}\n    S -->|Rejected| R[\"Reject\"]\n    S -->|Backlog| B[\"File it in the team's issue tracker\"]\n    C -->|Yes| B\n    C -->|No| U{\"Did the user approve?\"}\n    U -->|Approved| E[\"Edit the Skill\"]\n    U -->|Not approved| X[\"Do not edit\"]",
+    "zh-CN": "flowchart TD\n    T[\"对话记录\"] --> J[\"审查者（判断）\"]\n    T --> K[\"审查者（工具）\"]\n    T --> D[\"审查者（发散）\"]\n    J --> S[\"综合者分类候选经验\"]\n    K --> S\n    D --> S\n    S -->|Accepted| C{\"能否用 lint 或脚本强制执行\"}\n    S -->|Rejected| R[\"驳回\"]\n    S -->|Backlog| B[\"登记到团队的问题管理系统\"]\n    C -->|能| B\n    C -->|不能| U{\"用户是否批准\"}\n    U -->|批准| E[\"编辑 Skill\"]\n    U -->|不批准| X[\"不编辑\"]"
+  },
+  "40-01": {
+    "ja": "flowchart TD\n    S[\"/setup-pstack\"] -->|書き出す| R[\"~/.cursor/rules/pstack-models.mdc<br>（常に適用されるルール）\"]\n    R -->|各Skillが読む| Q{\"その役割の行があるか\"}\n    Q -->|ある| A[\"ルールに書かれたモデルで動く\"]\n    Q -->|ない| B[\"そのSkillの既定のモデルで動く\"]",
+    "en": "flowchart TD\n    S[\"/setup-pstack\"] -->|writes| R[\"~/.cursor/rules/pstack-models.mdc, a rule that always applies\"]\n    R -->|each Skill reads it| Q{\"Is there a line for the role?\"}\n    Q -->|yes| A[\"Runs on the model in the rule\"]\n    Q -->|no| B[\"Runs on the Skill's default model\"]",
+    "zh-CN": "flowchart TD\n    S[\"/setup-pstack\"] -->|写入| R[\"~/.cursor/rules/pstack-models.mdc<br>（始终应用的规则）\"]\n    R -->|各 Skill 读取| Q{\"是否有该角色对应的行\"}\n    Q -->|有| A[\"使用规则中写明的模型\"]\n    Q -->|没有| B[\"使用该 Skill 的默认模型\"]"
+  },
+  "40-02": {
+    "ja": "flowchart TD\n    D[\"使えるモデルのスラッグを検出する\"] --> L[\"前回の /setup-pstack が書いた<br>ルールファイルがあれば読む\"]\n    L --> B[\"利用者が推論の予算を選ぶ\"]\n    B --> M[\"予算に合わせて、各役割のスラッグを置き換える\"]\n    M --> C[\"全役割とモデルを示し、<br>受け入れるか変えるかを尋ねる\"]\n    C --> K[\"書き出すスラッグが<br>使えるモデルかを確かめる\"]\n    K --> W[\"ルールファイル全体を書き出す\"]\n    W --> N[\"ルールを書いたことと、<br>新しいチャットから適用されることを伝える\"]\n    N --> V{\"本物のアプリを動かして<br>確かめる手段があるか\"}\n    V -->|ない| O[\"検証スキルの作成を一度だけ提案する\"]\n    V -->|ある| E[\"終わる\"]\n    O --> E",
+    "en": "flowchart TD\n    D[\"Detect the slugs of the available models\"] --> L[\"Read the rule file from the previous /setup-pstack run, if there is one\"]\n    L --> B[\"The user chooses a reasoning budget\"]\n    B --> M[\"Replace each role's slug to match the budget\"]\n    M --> C[\"Show all roles and models, and ask whether to accept or change them\"]\n    C --> K[\"Verify that the slugs to write are available models\"]\n    K --> W[\"Write the whole rule file\"]\n    W --> N[\"Report that the rule was written and that it applies from a new chat\"]\n    N --> V{\"Is there a way to run and verify the real app?\"}\n    V -->|no| O[\"Offer once to create a verification skill\"]\n    V -->|yes| E[\"Finish\"]\n    O --> E",
+    "zh-CN": "flowchart TD\n    D[\"检测可用模型的 slug\"] --> L[\"若上次 /setup-pstack 写入的<br>规则文件存在，就读取它\"]\n    L --> B[\"用户选择推理预算\"]\n    B --> M[\"按预算替换各角色的 slug\"]\n    M --> C[\"展示全部角色和模型，<br>询问接受还是修改\"]\n    C --> K[\"确认将要写入的 slug<br>对应可用模型\"]\n    K --> W[\"写入完整规则文件\"]\n    W --> N[\"告知规则已写入，<br>将从新对话开始应用\"]\n    N --> V{\"是否有运行真实应用<br>并进行验证的手段\"}\n    V -->|没有| O[\"仅建议一次创建验证 Skill\"]\n    V -->|有| E[\"结束\"]\n    O --> E"
+  },
+  "45-01": {
+    "ja": "flowchart LR\n    subgraph before[\"分ける前\"]\n        A[\"チュートリアル（手順の途中に、設定項目の一覧表）\"]\n    end\n    subgraph after[\"分けた後\"]\n        B[\"チュートリアル（手順だけ）\"] -->|リンク| C[\"リファレンス（設定項目の一覧表）\"]\n    end\n    before --> after",
+    "en": "flowchart LR\n    subgraph before[\"Before the split\"]\n        A[\"Tutorial with a table of settings in the middle of the steps\"]\n    end\n    subgraph after[\"After the split\"]\n        B[\"Tutorial with only the steps\"] -->|link| C[\"Reference with the table of settings\"]\n    end\n    before --> after",
+    "zh-CN": "flowchart LR\n    subgraph before[\"拆分前\"]\n        A[\"教程（步骤中混入设置项一览表）\"]\n    end\n    subgraph after[\"拆分后\"]\n        B[\"教程（仅包含步骤）\"] -->|链接| C[\"参考手册（设置项一览表）\"]\n    end\n    before --> after"
+  },
+  "46-01": {
+    "ja": "flowchart TD\n    A[\"問題を調べる（/how、/why）\"] --> B[\"骨組みを描く（/arena）\"]\n    B --> B1[\"モデルA → 案A\"]\n    B --> B2[\"モデルB → 案B\"]\n    B --> B3[\"モデルC → 案C\"]\n    B1 --> C[\"判定役が評価し、主エージェントが1つの骨組みに統合する\"]\n    B2 --> C\n    B3 --> C\n    C --> D[\"骨組みに沿って実装する\"]\n    D -->|設計が正しい| E[\"実装を終える\"]\n    D -->|設計が間違っていると分かった| F[\"骨組みを捨てる\"]\n    F --> A",
+    "en": "flowchart TD\n    A[\"Investigate the problem with /how and /why\"] --> B[\"Sketch skeletons with /arena\"]\n    B --> B1[\"Model A → option A\"]\n    B --> B2[\"Model B → option B\"]\n    B --> B3[\"Model C → option C\"]\n    B1 --> C[\"A judge evaluates, and the main agent merges them into one skeleton\"]\n    B2 --> C\n    B3 --> C\n    C --> D[\"Implement against the skeleton\"]\n    D -->|The design is right| E[\"Finish the implementation\"]\n    D -->|The design turns out to be wrong| F[\"Throw the skeleton away\"]\n    F --> A",
+    "zh-CN": "flowchart TD\n    A[\"调查问题（/how、/why）\"] --> B[\"勾勒骨架（/arena）\"]\n    B --> B1[\"模型 A → 方案 A\"]\n    B --> B2[\"模型 B → 方案 B\"]\n    B --> B3[\"模型 C → 方案 C\"]\n    B1 --> C[\"评判者评估，主 Agent 整合成一个骨架\"]\n    B2 --> C\n    B3 --> C\n    C --> D[\"沿着骨架实现\"]\n    D -->|设计正确| E[\"完成实现\"]\n    D -->|发现设计有误| F[\"舍弃骨架\"]\n    F --> A"
+  },
+  "47-01": {
+    "ja": "graph TD\n    R[かんたん注文の設計] --> Q1[Q1 取り消せる期間]\n    R --> Q2[Q2 受け取り可能の知らせ方]\n    Q1 --> Q3[Q3 取り消せる期間の、客への見せ方]\n    Q2 --> Q4[Q4 通知を許可していない客への知らせ方]",
+    "en": "graph TD\n    R[Design of Order Ahead] --> Q1[Q1 Cancellation window]\n    R --> Q2[Q2 How to announce ready for pickup]\n    Q1 --> Q3[Q3 How to show the cancellation window to customers]\n    Q2 --> Q4[Q4 How to tell customers who have not allowed notifications]",
+    "zh-CN": "graph TD\n    R[便捷下单的设计] --> Q1[Q1 可取消的时间范围]\n    R --> Q2[Q2 如何通知可以取餐]\n    Q1 --> Q3[Q3 如何向顾客展示可取消的时间范围]\n    Q2 --> Q4[Q4 如何通知未授权接收通知的顾客]"
+  }
+}

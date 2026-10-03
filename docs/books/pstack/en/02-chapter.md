@@ -1,0 +1,81 @@
+# Part I: The development foundation behind 2,500 PRs a month
+
+[Contents](README.md) · [Previous](01-preface.md) · [Next](03-chapter.md) · [简体中文](../zh-CN/02-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/86acbc) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+Part I covers "<strong>what conditions let you delegate work to an agent</strong>."
+
+To meet these conditions, you need to put an environment in place before you raise the speed: mechanisms that verify results, and working procedures.
+
+Specifically, there are four conditions, and each one is the precondition, the base, for the next.
+
+1. The agent can run the artifact it made and verify that artifact itself. This book calls that step verification.
+2. The way to verify and the working procedure are explicit, so anyone who runs them gets consistent quality.
+3. Past decisions and constraints stay in the codebase in a form the next piece of work can refer to.
+4. You automate only after these three are in place as the base.
+
+The figure of 2,500 PRs a month is the result of putting these four in place. If you make only the number your target, skip 1 through 3, and start on 4, what grows is not results but <strong>changes nobody can verify</strong>.
+
+<a id="what-you-learn-in-part-i"></a>
+
+
+## What you learn in Part I
+
+After you read Part I, you will know the following.
+
+- What the number 2,500 does not mean
+- What to trust, if not the agent
+- How to turn verification from a one-time check into a mechanism anyone can run again
+- Why the agent's memory belongs in the codebase, not in conversations or notes
+- Why automation comes last, and which conditions to meet before you automate
+
+Part I says little about the individual parts of pstack. It covers ideas that hold whether or not you use pstack. From [Part II](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d) on, the book ties each part of pstack to these ideas.
+
+<a id="chapters-in-this-part"></a>
+
+
+## Chapters in this part
+
+<table class="code-line" data-line="27">
+<thead class="code-line" data-line="27">
+<tr class="code-line" data-line="27">
+<th>Chapter</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="29">
+<tr class="code-line" data-line="29">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/15df58" target="_blank">Chapter 1: 2,500 PRs result from a ready environment, not a target</a></td>
+<td>Decides how to treat the number 2,500, and moves the central theme of this book from "the count" to "the conditions for delegating"</td>
+</tr>
+<tr class="code-line" data-line="30">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071" target="_blank">Chapter 2: Trust the artifact, not the agent</a></td>
+<td>Makes clear what you trust. Defines verification</td>
+</tr>
+<tr class="code-line" data-line="31">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c" target="_blank">Chapter 3: Make verification a repeatable mechanism</a></td>
+<td>Covers three ways to raise trust: direct verification, working patterns, and constraints through structure</td>
+</tr>
+<tr class="code-line" data-line="32">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd" target="_blank">Chapter 4: Make the codebase the agent's memory</a></td>
+<td>Covers how to hand the trust you built over to the next agent</td>
+</tr>
+<tr class="code-line" data-line="33">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/aa6858" target="_blank">Chapter 5: Build automation on a foundation of trust</a></td>
+<td>Covers what you can automate once the conditions in Chapters 2 through 4 are in place</td>
+</tr>
+</tbody>
+</table>
+
+[Chapter 2](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071) through [Chapter 5](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/aa6858) correspond to the four conditions that poteto set out in the [talk](https://x.com/poteto/status/2102050467505430555). Each chapter builds on the one before it, so I recommend that you read them in order.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](01-preface.md) · [Next](03-chapter.md) · [简体中文](../zh-CN/02-chapter.md)

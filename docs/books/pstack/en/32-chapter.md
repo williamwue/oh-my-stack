@@ -1,0 +1,520 @@
+# Chapter 26: Build verification and keep it current as the app changes
+
+[Contents](README.md) · [Previous](31-chapter.md) · [Next](33-chapter.md) · [简体中文](../zh-CN/32-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/03ebca) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/9884cb)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers the following two Skills.
+
+1. [`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md)
+2. [`/maintain-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-verification-skill/SKILL.md)
+
+Both Skills exist so that the agent can run the real app and verify its own work. Each takes on the following job.
+
+- <strong>`/create-verification-skill`.</strong> The agent writes a procedure into the project. The agent uses that procedure to start the app, operate it the way a real user does, and collect evidence such as screenshots.
+- <strong>`/maintain-verification-skill`.</strong> The agent periodically checks whether the features and operations in the procedure from `/create-verification-skill` still match the current app. It fixes any drift.
+
+`/create-verification-skill` creates a <strong>verification skill</strong> so that the agent can run the app and verify it the way a real user would. A verification skill is a project-specific Skill that the agent uses to start the app it is working on, operate it, and collect evidence such as screenshots, terminal output, and logs ([Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c)).
+
+Of the two, <strong>the one the user runs first is `/create-verification-skill`, which creates the verification skill</strong>.
+
+This chapter first looks at how the two split the work, who calls them, and why you start with a verification skill. Then it explains each one from four angles: its role, when it is used, its procedure, and how to write a request.
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter has the following sections.
+
+- One Skill creates the verification skill and the other keeps it current
+- `/create-verification-skill` builds a way to run the app along the same path as a user
+- `/maintain-verification-skill` periodically fixes drift between the Feature Map and the current app
+- Summary
+
+<a id="one-skill-creates-the-verification-skill-and-the-other-keeps-it-current"></a>
+
+
+## One Skill creates the verification skill and the other keeps it current
+
+The following table shows the role and the artifact of each Skill.
+
+<table class="code-line" data-line="29">
+<thead class="code-line" data-line="29">
+<tr class="code-line" data-line="29">
+<th>Skill</th>
+<th>Role</th>
+<th>Artifact</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="31">
+<tr class="code-line" data-line="31">
+<td><code>/create-verification-skill</code></td>
+<td>Creates the procedure in the project that starts and operates the app and keeps evidence such as screenshots</td>
+<td>
+<code>.cursor/skills/verify-&lt;app&gt;/</code>, which holds the verification skill and the Feature Map</td>
+</tr>
+<tr class="code-line" data-line="32">
+<td><code>/maintain-verification-skill</code></td>
+<td>Keeps the verification skill and the Feature Map matched to the current app</td>
+<td>At most one PR with fixes that the agent verified by running the app, or only a report</td>
+</tr>
+</tbody>
+</table>
+
+The Feature Map is a document that records, for each feature of the app, what it does, how a user gets to it, how to operate it with the verification skill, and what result you can verify ([Chapter 4](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd)).
+
+The principle "[<strong>Prove It Works</strong>](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md)" in [Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914) asks you to "run the feature and verify it". `/create-verification-skill` and `/maintain-verification-skill` build the means to run and verify features in the project and keep those means working, so that you can run and verify in any task.
+
+<a id="the-two-run-only-when-the-user-or-%2Fsetup-pstack-calls-them-by-name"></a>
+
+
+### The two run only when the user or `/setup-pstack` calls them by name
+
+Both `SKILL.md` files have the setting `disable-model-invocation: true` ([Chapter 25](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e5f103)). The agent never picks a Skill with this setting from the content of the conversation and runs it on its own. So the two run only when the user calls them by name, or when another Skill names them in its procedure.
+
+The following list shows who calls each one.
+
+- <strong>`/create-verification-skill`.</strong> The user calls it by name. `/setup-pstack` also calls it. In the last step of `/setup-pstack`, if `/setup-pstack` finds that the project has no way to run and verify the app, it offers to create one. If the user accepts, `/setup-pstack` calls this Skill.
+- <strong>`/maintain-verification-skill`.</strong> It runs only when the user calls it by name.
+
+<a id="you-create-the-verification-skill-first-so-that-the-agent-can-verify-its-own-work"></a>
+
+
+### You create the verification skill first so that the agent can verify its own work
+
+The user sets up a verification skill first for the following reason. <strong>If the agent cannot verify its own work, a human ends up verifying that work piece by piece at the end, no matter how much work you delegate to the agent. The human then becomes the one who stops the flow of work (the bottleneck)</strong>.
+
+<strong>Once a human becomes the bottleneck, that human spends the whole day looking after the agent</strong>. With a verification skill, the agent runs the app itself, verifies the result, and keeps working until it succeeds. The user only needs to look at results the agent has already verified.
+
+poteto makes this point again and again in *The Complete Guide to pstack* [Part 1](https://x.com/poteto/status/2094457600259842065) and [Part 2](https://x.com/poteto/status/2097732320606507506).
+
+In particular, Part 1 says that with a verification skill, you can also hand off app checks to other Skills and to mechanisms that run automatically. The guide treats the verification skill as the base for other Skills and for recurring work.
+
+For reference, Part 1 gives the following two examples.
+
+- `/swarm` ([Chapter 24](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/2df1db)) has many cloud agents run the verification skill, to verify a performance improvement over enough runs.
+- A Grok Bot routine ([Chapter 25](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e5f103)) has a cloud agent reproduce a bug with the verification skill each time a user report arrives in Slack.
+
+<a id="%2Fcreate-verification-skill-builds-a-way-to-run-the-app-along-the-same-path-as-a-user"></a>
+
+
+## `/create-verification-skill` builds a way to run the app along the same path as a user
+
+<a id="role%3A-build%2C-in-the-project%2C-a-way-to-run-the-real-app-and-prove-its-behavior"></a>
+
+
+### Role: build, in the project, a way to run the real app and prove its behavior
+
+`/create-verification-skill` is a Skill that generates a project-specific verification skill in `.cursor/skills/verify-<app>/`. With the generated verification skill, the agent can <strong>start the real app, operate it the way a user does</strong>, and keep evidence.
+
+The agent writes the verification skill for other agents to read, not for humans. <strong>The reader is an agent that has never seen the app and opens this verification skill in the middle of a task with no background knowledge</strong>. So that the reader does not have to guess, the agent writes the actual commands and selectors that this repository uses directly into the verification skill. A selector is an expression that points at a screen element.
+
+Once the verification skill exists, the user only has to say "verify it in the app". Any agent can then verify without the user teaching it how to start and operate the app ([`docs/guide/06-verify-and-ship.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/06-verify-and-ship.md)).
+
+<a id="when-it-is-used%3A-when-there-is-no-way-to-verify-the-app's-behavior-with-a-script"></a>
+
+
+### When it is used: when there is no way to verify the app's behavior with a script
+
+You use this Skill when the project has no way to verify the app's behavior repeatedly with a script.
+
+For example, the project has neither a script that drives a browser to check the screen nor a script that runs the CLI and checks its output.
+
+`/setup-pstack` sets the models pstack uses. In its last step, it also checks whether the project has a way to run and verify the app, such as a `verify-*` Skill or an existing harness. If the project has none, `/setup-pstack` offers once to create one. If the user accepts, `/setup-pstack` calls `/create-verification-skill` ([Chapter 34](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c37697)).
+
+<a id="procedure%3A-investigate-the-repository%2C-write-the-verification-skill%2C-and-run-it-once-before-handing-it-over"></a>
+
+
+### Procedure: investigate the repository, write the verification skill, and run it once before handing it over
+
+<a id="step-1%3A-find-out-how-to-run-the-app-from-the-repository-before-asking-the-user"></a>
+
+
+#### Step 1: find out how to run the app from the repository before asking the user
+
+<strong>In the first step, the agent finds out how to run the app from the repository's code and configuration before it asks the user</strong>. The source calls this investigation an "interview".
+
+The agent asks the user only about what it cannot observe in the codebase. <strong>Asking the user about things the code already answers adds work for the user, and the task stops while the agent waits for a reply</strong>.
+
+The agent answers the following five questions from the codebase. The five questions collect what goes into the verification skill: what to start and how, how to operate it, and what to keep as evidence.
+
+<table class="code-line" data-line="90">
+<thead class="code-line" data-line="90">
+<tr class="code-line" data-line="90">
+<th>Aspect</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="92">
+<tr class="code-line" data-line="92">
+<td>Surface</td>
+<td>What does the user actually touch, such as a web UI, a CLI, or an API?</td>
+</tr>
+<tr class="code-line" data-line="93">
+<td>Run</td>
+<td>How does the app start locally? (Prefer the repository's own development commands, such as the package scripts, a Makefile, or the quick start in the README.)</td>
+</tr>
+<tr class="code-line" data-line="94">
+<td>Drive</td>
+<td>How can the agent operate the app from a program? First look for mechanisms already in the repository, such as Playwright or Cypress tests, or endpoints you can call with curl. If there are none, pick a general method such as CDP, a PTY or tmux, or raw HTTP</td>
+</tr>
+<tr class="code-line" data-line="95">
+<td>Observe</td>
+<td>What evidence can the agent keep, such as screenshots, terminal recordings, response bodies, logs, exit codes, or database state?</td>
+</tr>
+<tr class="code-line" data-line="96">
+<td>Isolate</td>
+<td>Can two instances of the app run side by side, with separate ports and data directories?</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="99">
+<li class="code-line" data-line="99">
+<strong>CDP.</strong> A mechanism that gives a program the same capabilities as the browser's developer tools. For a web app or an Electron app, the agent connects to the browser over CDP, sends clicks and typed text, and reads the state of the screen</li>
+<li class="code-line" data-line="100">
+<strong>tmux.</strong> A terminal multiplexer that manages several sessions, windows, and split panes on one terminal screen. From outside, a command can also send keystrokes to a session or capture what the screen shows
+<ul class="code-line" data-line="101">
+<li class="code-line" data-line="101">For a CLI or a TUI, the agent starts the app inside a PTY or a tmux session, sends keystrokes, and reads the text shown on the screen</li>
+</ul>
+</li>
+<li class="code-line" data-line="102">
+<strong>Raw HTTP.</strong> The agent sends HTTP requests straight to the app with a tool such as curl, without going through the screen, and checks the responses</li>
+</ul>
+</div></aside>
+
+If two instances cannot run side by side, the agent writes that into the verification skill and instructs that two agents must not operate one instance at the same time. If the agent operates the instance the user is using at the same time, it may break the session the user is working in.
+
+If the code in the repository's current state cannot build or start, the agent deals with that before it generates the verification skill. The agent either fixes the code so that the app builds and starts, or reports exactly what is missing. A verification skill written for an app that cannot build or start passes wrong instructions to the agent that reads it.
+
+<a id="step-2%3A-write-the-six-headings-of-skill.md"></a>
+
+
+#### Step 2: write the six headings of `SKILL.md`
+
+The agent puts the following six headings in the `SKILL.md` it generates. With them, the next agent, which has never seen the app, can work through everything from startup to cleanup in order.
+
+The agent writes the contents only from facts it found in the investigation in [step 1](#step-1%3A-find-out-how-to-run-the-app-from-the-repository-before-asking-the-user), and leaves no placeholders. A placeholder is a temporary string that someone must fill in later. The next agent does not know the app, so it cannot replace a placeholder with the correct value.
+
+The following compares text that still has placeholders with text written from facts found in the investigation.
+
+```
+<!-- Placeholders remain: the next agent does not know what to run or what to click -->
+Launch: run `<start command>`, and the app is ready when `http://localhost:<PORT>` responds
+Drive: click `TODO: selector for the send button`
+
+<!-- Written from facts found in the investigation: the next agent can run it as is -->
+Launch: run `pnpm dev`, and the app is ready when `http://localhost:5173` responds
+Drive: click `getByRole('button', { name: 'Send' })`
+```
+
+<table class="code-line" data-line="127">
+<thead class="code-line" data-line="127">
+<tr class="code-line" data-line="127">
+<th>Heading</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="129">
+<tr class="code-line" data-line="129">
+<td>Launch</td>
+<td>The command that starts the app, how to tell that the app is "ready", for example when a specific log line appears or a port responds, and how to stop it</td>
+</tr>
+<tr class="code-line" data-line="130">
+<td>Doctor</td>
+<td>Read-only checks that confirm "whether operating this instance to verify something makes sense" (whether the process is running, whether the build is correct, whether the instance on that port is the one you started, whether authentication is valid, and so on)</td>
+</tr>
+<tr class="code-line" data-line="131">
+<td>Drive</td>
+<td>Operating steps that use this repository's actual selectors and commands. Use markers that rarely change, such as ARIA labels and data attributes, not screen coordinates or the order in which the Tab key moves focus</td>
+</tr>
+<tr class="code-line" data-line="132">
+<td>Evidence</td>
+<td>What to keep as proof and where to put it</td>
+</tr>
+<tr class="code-line" data-line="133">
+<td>Cleanup</td>
+<td>How to clean up the instances this run created. Do not delete the evidence</td>
+</tr>
+<tr class="code-line" data-line="134">
+<td>Helpers</td>
+<td>How to call the bundled scripts</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="137"><strong>ARIA label.</strong> A name attached to an element such as a button so that screen readers can announce it</p>
+</div></aside>
+
+The following Playwright code compares ways to click, to show what the "markers that rarely change" in Drive mean.
+
+```
+declare const page: {
+  mouse: { click(x: number, y: number): Promise<void> };
+  getByRole(role: "button", options: { name: string }): { click(): Promise<void> };
+  locator(selector: string): { click(): Promise<void> };
+};
+
+// Before: click by screen coordinates. If the button moves, this clicks somewhere else
+async function saveByPosition() {
+  await page.mouse.click(640, 410);
+}
+
+// After: click by ARIA label. Even if the button moves, this clicks the same button
+async function saveByLabel() {
+  await page.getByRole("button", { name: "Save" }).click();
+}
+
+// After: click by data attribute. Even if the button moves, this clicks the same button
+async function saveByDataAttribute() {
+  await page.locator('[data-testid="save"]').click();
+}
+```
+
+Evidence also states the standard of proof. The standard includes the following.
+
+- Operate the real path the user takes, not a test-only shortcut
+- Check side effects such as written files, added rows, and sent messages, not only the screen
+
+A test-only shortcut is, for example, a function that rewrites an internal value directly, or an endpoint that exists only for tests. If the agent verifies through a shortcut, it does not prove that the path the user takes works in the real app.
+
+<a id="step-3%3A-create-the-first-version-of-the-feature-map"></a>
+
+
+#### Step 3: create the first version of the Feature Map
+
+The agent also attaches a Feature Map to the verification skill it generates.
+
+The Feature Map consists of one feature file for each user-facing feature and `features/README.md`, a table of contents that ties them together. At first, the agent finds three to five main features and creates a feature file for each.
+
+The agent looks for main features in the following four places.
+
+- <strong>Routes.</strong> The URL path assigned to each screen of a web app, for example `/settings`.
+- <strong>Commands.</strong> The commands and subcommands a CLI accepts, for example `commit` in `git commit`.
+- <strong>Menus.</strong> The menu items shown on the app's screens.
+- <strong>Documentation.</strong> Documents that describe the app's features, such as the README and usage guides.
+
+[Chapter 36](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c9901e) covers the contents of a feature file and the idea of growing the Feature Map as memory.
+
+> The map is the repo's maintained verification source; a proof that drives one convenient entry point is incomplete when the map lists others.
+
+An entry point here is a way the user gets to the feature, such as a button, a key press, or a command.
+
+If the Feature Map lists several entry points for one feature, the agent can prove that the feature works only after it verifies every entry point. Because of this rule, <strong>the Feature Map is also the list that decides how many entry points you must verify for the proof to count</strong>.
+
+As an example, apply this rule to the bundled Feature Map example. In that example, the feature file for the note search feature, [`search.md`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/references/feature-map-example/search.md), describes how a user gets to the search feature as follows.
+
+> <strong>How to get to it (user POV)</strong>
+>
+> - Choose the `Search` button in the browser toolbar.
+> - Press `/` in the browser while focus is outside an editable field.
+> - Run `notes search <query>` in a terminal.
+
+In this example, the note search feature has three entry points: the `Search` button in the toolbar, the `/` key, and `notes search <query>` in the terminal. If the agent verifies this feature only through the `Search` button, the proof is not enough. The verification becomes a proof only after the agent also verifies the other two entry points.
+
+So if the Feature Map lists several entry points for one feature, the agent must verify all of them.
+
+<a id="step-4%3A-run-the-generated-verification-skill-once-from-start-to-finish"></a>
+
+
+#### Step 4: run the generated verification skill once from start to finish
+
+<strong>Before it hands the verification skill to the user, the agent runs it once from start to finish, exactly as its instructions say</strong>. Operating one feature is enough. The agent can verify the other features in later runs by using the Feature Map.
+
+The following diagram shows the flow of the run.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="flowchart%20TD%0A%20%20%20%20A%5B%22Launch%22%5D%20--%3E%20B%5B%22Doctor%22%5D%0A%20%20%20%20B%20--%3E%20C%5B%22Operate%20one%20feature%20from%20the%20Feature%20Map%22%5D%0A%20%20%20%20C%20--%3E%20D%5B%22Collect%20evidence%22%5D%0A%20%20%20%20D%20--%3E%20E%5B%22Cleanup%22%5D%0A%20%20%20%20E%20--%3E%20F%7B%22Did%20every%20step%20succeed%2C%20and%20does%20the%20evidence%20remain%20after%20cleanup%3F%22%7D%0A%20%20%20%20F%20--%3E%7Cyes%7C%20G%5B%22Hand%20it%20to%20the%20user%22%5D%0A%20%20%20%20F%20--%3E%7Cno%7C%20H%5B%22Fix%20the%20part%20that%20failed%22%5D%0A%20%20%20%20H%20--%3E%20A" frameborder="0" id="zenn-embedded__dba0a62a298b4" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__dba0a62a298b4"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 1](../diagrams/en/32-01.svg)
+
+[View diagram 1](../diagrams/en/32-01.md)
+<!-- book-diagram-link:end -->
+
+The agent runs cleanup even after a failed attempt, so that no process or port from that attempt stays behind.
+
+If no evidence remains after cleanup, the agent fails the run, because a cleanup that deletes the evidence leaves no proof.
+
+Until the agent has run the generated verification skill once, it treats the skill as a draft, not as an artifact. An error in the written procedure stays hidden until someone runs it.
+
+For example, if the port number in Launch is wrong, nobody notices until the skill runs.
+
+Finally, the agent points the user to `/maintain-verification-skill`, which maintains the Feature Map.
+
+<a id="how-to-write-a-request%3A-the-command-alone-is-enough-to-start"></a>
+
+
+### How to write a request: the command alone is enough to start
+
+According to `docs/guide/06-verify-and-ship.md`, you can start to create the Feature Map and the verification skill with only the following command. The agent finds out from the repository how to run the app, so you do not need to prepare an explanation in advance.
+
+```
+/create-verification-skill
+```
+
+[Chapter 36](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c9901e) covers how to create a verification skill and grow it in practice.
+
+<a id="%2Fmaintain-verification-skill-periodically-fixes-drift-between-the-feature-map-and-the-current-app"></a>
+
+
+## `/maintain-verification-skill` periodically fixes drift between the Feature Map and the current app
+
+<a id="role%3A-keep-the-verification-skill-and-the-feature-map-from-disagreeing-with-the-current-app"></a>
+
+
+### Role: keep the verification skill and the Feature Map from disagreeing with the current app
+
+`/maintain-verification-skill` is a Skill that checks whether the verification skill and the Feature Map disagree with the current app, and fixes any drift.
+
+> A feature map rots the moment the app changes.
+
+When the app changes, the Feature Map's descriptions start to drift from the real app from that moment on. So you must keep maintaining the Feature Map after you create it. This Skill does that maintenance.
+
+<a id="when-it-is-used%3A-periodically%2C-after-the-app-changes"></a>
+
+
+### When it is used: periodically, after the app changes
+
+You use this Skill when the app has changed and the Feature Map's descriptions no longer match the current app.
+
+In *The Complete Guide to pstack* [Part 1](https://x.com/poteto/status/2094457600259842065), poteto recommends running it at least once a day, to keep the information the agent uses to operate the app up to date.
+
+So this book also recommends that you run it at least once a day and automate the run with a Routine or a similar mechanism.
+
+<a id="procedure%3A-read-the-source-code-in-parallel%2C-and-let-only-the-main-agent-operate-the-app"></a>
+
+
+### Procedure: read the source code in parallel, and let only the main agent operate the app
+
+<a id="do-not-edit-product-code%2C-and-report-a-regression-instead-of-changing-the-feature-map"></a>
+
+
+#### Do not edit product code, and report a regression instead of changing the Feature Map
+
+<strong>The agent may edit only the verification skill's own directory (`SKILL.md`, `features/`, and the verification skill's scripts)</strong>.
+
+The agent does not edit product code during the check. When the app does not behave as the Feature Map says, the agent decides whether the mismatch is a writing error in the Feature Map or a regression in the product (a feature that used to work is broken). If the mismatch is a writing error, the agent fixes the Feature Map. If the mismatch is a regression, the agent reports the regression to the user.
+
+The agent does not settle a regression by editing the Feature Map. <strong>If the product is broken and you change the Feature Map's description to match the current behavior, you hide the fact that the product is broken</strong>.
+
+<a id="seven-steps%2C-from-tidying-the-index-to-deciding-whether-to-open-a-pr"></a>
+
+
+#### Seven steps, from tidying the index to deciding whether to open a PR
+
+The procedure is as follows.
+
+1. <strong>Find the target.</strong> The main agent finds the verification skill to check, usually in `.cursor/skills/verify-*/`. If it finds none, it stops and points the user to `/create-verification-skill`.
+2. <strong>Tidy the index.</strong> The main agent compares the Feature Map's table of contents (`README`) with the feature files, and fixes missing entries and broken links.
+3. <strong>Read the source code.</strong> The main agent starts one read-only subagent per feature file, in parallel. Each subagent returns the places where the Feature Map's description and the current source code seem to differ, together with the source locations that support each suspicion.
+4. <strong>Cross-check.</strong> The main agent verifies some of the suspected drift found in step 3. It also looks through recent changes for features the Feature Map does not mention.
+5. <strong>Operate the app.</strong> The main agent operates every feature at least once, even if the source code showed no problem.
+6. <strong>Sort.</strong> The main agent sorts the problems it found into the three kinds in the table in ["Sort problems into three kinds, and report one of three results"](#sort-problems-into-three-kinds%2C-and-report-one-of-three-results) below.
+7. <strong>Decide whether to open a PR or stop.</strong> If there are fixes it verified by operating the app, the main agent rereads the changed files and puts them into one PR. If there is nothing to fix, or if it could not finish the check, the main agent does not open a PR and reports the result and the scope it verified.
+
+In step 5, the main agent operates even the features for which the subagents found no drift in step 3. <strong>Reading the source code alone cannot prove that the app behaves as the Feature Map describes</strong>. To prove it, you must run the app and verify the result, as the principle "Prove It Works" in [Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914) says.
+
+<a id="when-several-agents-operate-the-same-app%2C-the-evidence-cannot-be-trusted"></a>
+
+
+#### When several agents operate the same app, the evidence cannot be trusted
+
+Subagents that read the source code in parallel do not interfere with each other's work. By contrast, <strong>when several agents operate the same app at the same time, their states mix</strong>, and nobody can trust the evidence.
+
+For example, if one agent closes a screen that another agent opened, nobody can tell which agent's operation a screenshot shows. So only one agent, the main agent, operates the app.
+
+The following diagram shows how the agents divide steps 3 to 5.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="flowchart%20TD%0A%20%20%20%20subgraph%20S3%5B%22Step%203%3A%20read%20the%20source%20code%2C%20in%20parallel%20and%20read-only%22%5D%0A%20%20%20%20%20%20%20%20A%5B%22Subagent%20A%3A%20feature%20file%201%22%5D%0A%20%20%20%20%20%20%20%20B%5B%22Subagent%20B%3A%20feature%20file%202%22%5D%0A%20%20%20%20%20%20%20%20C%5B%22Subagent%20C%3A%20feature%20file%203%22%5D%0A%20%20%20%20end%0A%20%20%20%20A%20--%3E%7Csuspected%20drift%7C%20R%5B%22Step%204%3A%20the%20main%20agent%20cross-checks%22%5D%0A%20%20%20%20B%20--%3E%7Csuspected%20drift%7C%20R%0A%20%20%20%20C%20--%3E%7Csuspected%20drift%7C%20R%0A%20%20%20%20R%20--%3E%20L%5B%22Step%205%3A%20only%20the%20main%20agent%20operates%20the%20app%22%5D" frameborder="0" id="zenn-embedded__a21a660d7c34b" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__a21a660d7c34b"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 2](../diagrams/en/32-02.svg)
+
+[View diagram 2](../diagrams/en/32-02.md)
+<!-- book-diagram-link:end -->
+
+<a id="the-main-agent-follows-three-rules-while-it-operates-the-app"></a>
+
+
+#### The main agent follows three rules while it operates the app
+
+While it operates the app in step 5, the main agent follows these three rules, whatever failure happens along the way.
+
+- If the instance behaves unexpectedly, it runs the Doctor checks before the next operation and confirms again that the instance can still be operated.
+  > Doctor. Read-only checks that confirm "whether operating this instance to verify something makes sense" (whether the process is running, whether the build is correct, whether the instance on that port is the one you started, whether authentication is valid, and so on)
+- It keeps the evidence it collected and does not delete it during Cleanup.
+  > Cleanup. How to clean up the instances this run created. Do not delete the evidence
+- It cleans up everything it started for the operation and leaves nothing behind.
+
+<a id="sort-problems-into-three-kinds%2C-and-report-one-of-three-results"></a>
+
+
+#### Sort problems into three kinds, and report one of three results
+
+Problems fall into the following three kinds.
+
+<table class="code-line" data-line="320">
+<thead class="code-line" data-line="320">
+<tr class="code-line" data-line="320">
+<th>Kind</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="322">
+<tr class="code-line" data-line="322">
+<td>Documentation drift (the description of a feature from the user's point of view is wrong or missing)</td>
+<td>Fix the Feature Map</td>
+</tr>
+<tr class="code-line" data-line="323">
+<td>Harness gap (the app works correctly, but the verification skill's operating steps or scripts cannot operate it)</td>
+<td>Fix the operating steps or scripts</td>
+</tr>
+<tr class="code-line" data-line="324">
+<td>Product defect (the app's behavior itself is broken)</td>
+<td>Record it for the user. Do not fix it in this PR</td>
+</tr>
+</tbody>
+</table>
+
+The agent reports one of three results. `clean` means there is nothing to fix. `changed` means the verified fixes go into one PR. `blocked` means the agent could not finish the check.
+
+<a id="how-to-write-a-request%3A-the-command-alone-is-enough"></a>
+
+
+### How to write a request: the command alone is enough
+
+`docs/guide/06-verify-and-ship.md` also shows a request that is only the command, as follows.
+
+```
+/maintain-verification-skill
+```
+
+The description in `SKILL.md` says that the following request also starts this Skill.
+
+```
+audit the verify skill
+```
+
+<a id="summary"></a>
+
+
+## Summary
+
+- <strong>`/create-verification-skill`.</strong> It finds out how to start and operate the app from the repository's code and configuration before it asks the user, and generates the verification skill and the Feature Map. It runs everything once from startup to cleanup, confirms that the evidence remains after cleanup, and then hands the verification skill over.
+- <strong>Feature Map.</strong> A document that records, for each feature of the app, what it does, how a user gets to it, how to operate it with the verification skill, and what result you can verify.
+- <strong>`/maintain-verification-skill`.</strong> It edits only the verification skill's directory and reports product regressions without fixing them. It operates every feature in the real app at least once. It ends with one of three results: `clean` when there is nothing to fix, `changed` when the verified fixes go into one PR, or `blocked` when the agent could not finish the check.
+
+The next chapter, [Chapter 27](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e23752), covers two Skills that check what a finished change could break and where the diff is weak: [`/blast-radius`](https://github.com/cursor/plugins/blob/main/pstack/skills/blast-radius/SKILL.md) and [`/interrogate`](https://github.com/cursor/plugins/blob/main/pstack/skills/interrogate/SKILL.md).
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](31-chapter.md) · [Next](33-chapter.md) · [简体中文](../zh-CN/32-chapter.md)

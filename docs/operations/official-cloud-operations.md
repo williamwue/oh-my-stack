@@ -36,7 +36,6 @@ These non-secret coordinates are discovery inputs. Confirm them through the prov
 
 `git remote get-url origin`, `git branch --show-current`, `git rev-parse HEAD`, and `git status --short` establish the checkout. Verify the provider login and then perform only the relevant resource read:
 
-
 Do not run deploy, provisioning, migrations, cleanup, or billable application flows to validate this tooling change. Record live resource reads separately from local checks. Historical `.cloud-ops` operation names and credentials are never execution inputs.
 
 ## Credentials and evidence
