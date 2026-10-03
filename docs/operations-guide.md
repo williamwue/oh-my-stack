@@ -3,6 +3,19 @@
 This guide covers the source tooling introduced in 0.3.0. It checks local run state and evidence. It does not operate a hosted
 service or certify full pstack behavior.
 
+The subsequent [GitHub provider](github-autopilot-provider.md) adds real
+read-only account/repository/PR observation and a separately authorized library
+interface for PR creation, merge and interrupted-operation reconciliation.
+Its CLI remains read only. Hosted write acceptance and strict atomic target
+revision protection are separate from the local tools described below.
+
+The current Codex candidate also bundles a
+[single-PR workflow helper](github-workflow.md), its provider, and durable
+store dependency. Its CLI supports inspection and reconciliation; only the
+library accepts authorized publication or merge. Reconciliation can update
+the private local journal while performing only remote reads. These candidate
+package files do not upgrade the user's existing plugin.
+
 ## Prerequisites and first checks
 
 Use a Git source checkout with Node.js 20 or newer. Run commands from that

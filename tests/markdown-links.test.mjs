@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
@@ -94,6 +94,33 @@ test("source-model dependencies reject rather than silently reducing hygiene cov
     await mkdir(join(dependency, ".."), { recursive: true });
     await writeFile(dependency, "secret\n");
     await assert.rejects(validatePublicHygiene(root), /inside the source model is unsupported/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+
+test("frozen historical reports keep original paths without exempting changed or copied content", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-history-hygiene-"));
+  try {
+    for (const name of [
+      "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE", "README.md",
+      "SECURITY.md", "THIRD_PARTY_NOTICES.md", "package.json", "package-lock.json",
+    ]) await writeFile(join(root, name), "example\n");
+    const relative = "docs/operations/cloud-management-acceptance-2026-10-01.md";
+    const original = await readFile(new URL(`../${relative}`, import.meta.url));
+    const report = join(root, relative);
+    await mkdir(join(report, ".."), { recursive: true });
+    await writeFile(report, original);
+    await validatePublicHygiene(root);
+    await writeFile(report, `${original}\nchanged\n`);
+    await assert.rejects(validatePublicHygiene(root), /historical evidence hash drift/);
+    await writeFile(report, original);
+    const copied = join(root, "docs/copied-report.md");
+    await writeFile(copied, original);
+    await assert.rejects(validatePublicHygiene(root), /absolute macOS home path/);
+    await writeFile(copied, `${"-----BEGIN "}PRIVATE KEY-----\nexample\n`);
+    await assert.rejects(validatePublicHygiene(root), /contains a private key/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

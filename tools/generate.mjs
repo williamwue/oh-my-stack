@@ -498,6 +498,33 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
+  const codexGitHub = adapter.id === "codex" && ["opening-a-pr", "babysit", "shipping"].includes(skill.metadata.name)
+    ? [
+      "## Codex GitHub workflow binding",
+      "",
+      "When the selected provider is explicitly `github.com`, read",
+      "`../../scripts/github-workflow.mjs` and",
+      "`../../docs/github-workflow.md` before using this bounded single-PR adapter.",
+      "Use its `executeGitHubWorkflow(request)` library entry for authorized",
+      "creation or merge. Its CLI exposes only `inspect` and `recover`; recovery",
+      "can append local reconciliation evidence. The request must name this",
+      "workflow, the exact target and account, and any required journal and",
+      "authority records. Caller records assert scope; they do not authenticate",
+      "human consent or reviewer provenance. Select no provider by inference.",
+      ...(skill.metadata.name === "babysit"
+        ? ["This binding supports `check` only. Stop for `drive`, `threads-only`,",
+          "`background`, repair, polling, or merge requests."] : []),
+      ...(skill.metadata.name === "shipping"
+        ? ["This binding accepts one root-countersigned bottom PR only. It does",
+          "not discover or validate stack topology. Strict target CAS stops;",
+          "`server-policy` requires separately scoped authorization and retains",
+          "the GitHub base-revision race boundary."] : []),
+      ...(skill.metadata.name === "opening-a-pr"
+        ? ["This binding creates one ready PR from an already pushed branch;",
+          "it does not push a branch or create a stack."] : []),
+      "",
+    ].join("\n")
+    : "";
   const ompSetup = adapter.id === "omp" && skill.metadata.name === "setup-oh-my-stack"
     ? [
       "## OMP source-style setup",
@@ -601,7 +628,7 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, ompSetup, claudeSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -765,6 +792,11 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+    await mkdir(join(target, "docs"), { recursive: true });
+    await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      await cp(join(model.root, "tools", name), join(target, "scripts", name));
+    }
   }
   if (adapter.id === "claude-code") {
     await cp(join(model.root, "tools", "claude-effort-hook.mjs"), join(target, "scripts", "claude-effort-hook.mjs"));
@@ -845,6 +877,12 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   if (["omp", "codex", "claude-code"].includes(adapter.id)) {
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
+  }
+  if (adapter.id === "codex") {
+    assert(await exists(join(target, "docs", "github-workflow.md")), "codex: GitHub workflow documentation is missing");
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);
+    }
   }
   if (adapter.id === "claude-code") {
     assert(await exists(join(target, "scripts", "claude-effort-hook.mjs")), "Claude Code effort hook is missing");

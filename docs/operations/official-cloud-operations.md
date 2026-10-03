@@ -67,3 +67,11 @@ Existing project gates (paths from the repository root):
 Local instructions and tool routes checked. No product cloud resources were inferred or provisioned for this checkout.
 
 These are control-plane metadata/tool-access checks, not deployment, object-content, business-data, schema or end-to-end production acceptance. Current workstation authentication is not portable to another machine.
+
+## 2026-10-01 管理入口
+
+使用 [管理入口](management-entry.md) 的官方 MCP／CLI／API 和非敏感资源坐标。没有登记的业务云平台保持未启用；不根据模板代码或别的项目账号推断生产绑定。
+
+使用本机维护者正常登录；不新增 IAM 或权限网关。只读元数据读取可按当前任务授权执行。部署、远程推送、迁移、删除、生产配置修改和付费操作遵循具体操作授权与原有发布审核要求。
+
+凭据不进入代码、聊天、命令参数和报告；不读取仓库生产 `.env*`，不导入旧凭据。保留已有修改、历史证据、已执行 SQL 和校验和。

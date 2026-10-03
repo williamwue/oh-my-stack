@@ -29,6 +29,27 @@ function expectedCodexBody(name, sourceText) {
   return body;
 }
 
+test("Codex bundles the bounded GitHub workflow and its dependencies", async () => {
+  const model = await loadModel();
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-github-binding-"));
+  try {
+    const target = await renderTarget(root, model, model.adapters.find((entry) => entry.id === "codex"));
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      assert.equal(await readFile(join(target, "scripts", name), "utf8"),
+        await readFile(join(repoRoot, "tools", name), "utf8"));
+    }
+    assert.equal(await readFile(join(target, "docs", "github-workflow.md"), "utf8"),
+      await readFile(join(repoRoot, "docs", "github-workflow.md"), "utf8"));
+    for (const name of ["opening-a-pr", "babysit", "shipping"]) {
+      const skill = await readFile(join(target, "skills", name, "SKILL.md"), "utf8");
+      const complete = skill.includes("](WORKFLOW.md)")
+        ? await readFile(join(target, "skills", name, "WORKFLOW.md"), "utf8") : skill;
+      assert.match(complete, /Codex GitHub workflow binding/);
+      assert.match(complete, /\.\.\/\.\.\/docs\/github-workflow\.md/);
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test("Codex long direct entries preserve complete procedures outside the injection budget", async () => {
   const model = await loadModel();
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-long-skills-"));

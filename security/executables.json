@@ -199,7 +199,7 @@
       "purpose": "Persist and recover a provider-independent durable run state with atomic, revision-bound, idempotent event appends.",
       "network": false,
       "writes": ["explicit caller-selected durable run store"],
-      "uninstallBehavior": "Not installed in target packages; caller-selected run stores remain user-owned."
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-selected run stores remain user-owned."
     },
     {
       "path": "tools/run-evidence.mjs",
@@ -374,6 +374,28 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/github-autopilot-provider.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Observe explicit GitHub targets through official gh and reconcile scoped authorized PR creation and merge through a local durable journal.",
+      "network": true,
+      "writes": [
+        "explicit local operation journal for library mutations",
+        "GitHub pull requests only with caller-supplied scoped authorization; CLI inspection is read-only"
+      ],
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; operation journals and remote pull requests remain for owner-led reconciliation."
+    },
+    {
+      "path": "tools/github-workflow.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind explicit Codex PR workflow scope, root authority, independent review and target policy to the GitHub provider; expose inspection and reconciliation through a bounded CLI.",
+      "network": true,
+      "writes": [
+        "explicit private operation journal for authorized library mutations and reconciliation",
+        "GitHub pull requests only through scoped authorized library operations; CLI never publishes or merges"
+      ],
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-owned journals and remote PRs remain for reconciliation."
     }
   ]
 }
