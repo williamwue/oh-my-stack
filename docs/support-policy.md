@@ -43,6 +43,26 @@ fallback, not a success claim. See [project status](project-status.md) for gaps.
 
 ## Source operations in 0.3.0
 
+The subsequent [GitHub provider](github-autopilot-provider.md)
+uses official `gh` for real target observation and explicitly authorized
+library mutations. Its journal reconciles uncertain external results without
+blind retries. The command-line interface is read only; unattended operation
+and atomic expected-base protection are not claimed. This addition does not change installed plugin versions or the
+experimental boundaries above.
+
+The current Codex candidate adds packaged bindings and a
+[single-PR workflow helper](github-workflow.md) for `opening-a-pr`, `babysit`
+check and root-authorized `shipping`. Other hosts, babysit drive, automatic
+stack-frontier computation and hosted lifecycle acceptance are not covered
+by this bounded integration. Strict target-revision semantics stop; ordinary
+server-policy behavior needs explicitly bound authority. See the
+[integration acceptance](github-workflow-acceptance-2026-10-03.md).
+
+Separate [hosted acceptance](github-hosted-acceptance-2026-10-03.md) now covers
+real PR creation, CI failure/repair and operator-assisted recovery after a
+client kill. Independent approval, merge and interrupted-merge acceptance
+remain open; this is not full hosted lifecycle acceptance.
+
 The source checkout adds local run, evidence, matrix, and read-only doctor
 tooling in 0.3.0. These are source commands, not global plugin commands. Use the
 [operations guide](operations-guide.md) for prerequisites, recovery, and

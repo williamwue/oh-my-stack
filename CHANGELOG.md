@@ -6,6 +6,20 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.4.0 - 2026-10-03
+
+- Add an official GitHub CLI provider with exact account/target verification,
+  durable mutation intents and readback-based interrupted-operation recovery.
+- Bundle a single-PR GitHub workflow adapter with Codex opening-a-pr,
+  babysit check and root-authorized shipping, including independent review,
+  revision/patch-bound authority and explicit target policy.
+- Reject mutable-request races, empty verification evidence, stale journal
+  writes and branch-name substitution. Strict target CAS stops explicitly.
+- Record real PR creation, CI failure/repair and operator-assisted recovery
+  after SIGKILL. Merge remains unverified without independent GitHub approval.
+- Preserve historical evidence bytes with narrow hash-pinned hygiene checks
+  and repair repository Markdown gates.
+
 ## 0.3.0 - 2026-09-30
 
 - Add validated durable local run state, restart recovery, replay protection,

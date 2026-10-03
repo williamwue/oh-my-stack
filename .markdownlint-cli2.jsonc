@@ -25,6 +25,25 @@
         "MD029": false
       },
       "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/operations/cloud-management-acceptance-2026-10-01.md"
+      ],
+      "config": {
+        "MD060": false,
+        "MD012": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/omp-18.2.9-live-test-plan.md"
+      ],
+      "config": {
+        "MD041": false
+      },
+      "combine": "merge"
     }
   ],
   "config": {

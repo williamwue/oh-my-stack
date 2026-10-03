@@ -5,6 +5,20 @@ description: "Prepare a reviewed pull request; publish only when explicitly requ
 
 # Opening a Pull Request
 
+## Codex GitHub workflow binding
+
+When the selected provider is explicitly `github.com`, read
+`../../scripts/github-workflow.mjs` and
+`../../docs/github-workflow.md` before using this bounded single-PR adapter.
+Use its `executeGitHubWorkflow(request)` library entry for authorized
+creation or merge. Its CLI exposes only `inspect` and `recover`; recovery
+can append local reconciliation evidence. The request must name this
+workflow, the exact target and account, and any required journal and
+authority records. Caller records assert scope; they do not authenticate
+human consent or reviewer provenance. Select no provider by inference.
+This binding creates one ready PR from an already pushed branch;
+it does not push a branch or create a stack.
+
 Use this workflow only when the user explicitly asks to create or publish a pull
 request. Finishing another workflow does not imply publication authority.
 

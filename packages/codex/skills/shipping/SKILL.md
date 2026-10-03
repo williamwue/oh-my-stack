@@ -22,6 +22,22 @@ The persisted spawn message may be encrypted; disclose when its exact
 role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
 
+## Codex GitHub workflow binding
+
+When the selected provider is explicitly `github.com`, read
+`../../scripts/github-workflow.mjs` and
+`../../docs/github-workflow.md` before using this bounded single-PR adapter.
+Use its `executeGitHubWorkflow(request)` library entry for authorized
+creation or merge. Its CLI exposes only `inspect` and `recover`; recovery
+can append local reconciliation evidence. The request must name this
+workflow, the exact target and account, and any required journal and
+authority records. Caller records assert scope; they do not authenticate
+human consent or reviewer provenance. Select no provider by inference.
+This binding accepts one root-countersigned bottom PR only. It does
+not discover or validate stack topology. Strict target CAS stops;
+`server-policy` requires separately scoped authorization and retains
+the GitHub base-revision race boundary.
+
 Use this workflow only when the user explicitly asks to land, merge, or ship an
 existing pull request or stack. A request to make changes merge-ready belongs to
 `babysit`; a green status alone never authorizes or proves safe landing.

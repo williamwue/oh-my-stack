@@ -40,6 +40,10 @@ claims use the separate verification labels documented in the
 
 ## Quick start
 
+The 0.4.0 candidate adds [Codex GitHub workflow bindings](docs/github-workflow.md).
+See the [release scope and gates](docs/releases/0.4.0.md); full pstack parity
+and autonomous hosted merging are not claimed.
+
 ### Build a local release candidate
 
 Requirements: Git, Node.js 20 or newer, and npm.
