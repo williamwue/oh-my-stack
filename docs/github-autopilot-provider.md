@@ -39,6 +39,44 @@ review state. Unknown or incomplete observations cannot establish merge
 readiness. A provider's green checks are not an independent OMS review or
 permission to publish.
 
+## Read-only CI diagnostics in 0.6.0
+
+Version 0.6.0 adds `diagnosePr()` for failure investigation. It creates
+no journal and performs no remote mutation. The earlier 0.5.0 package does not contain this method.
+
+```js
+import { GitHubAutopilotProvider } from './tools/github-autopilot-provider.mjs';
+const provider = new GitHubAutopilotProvider();
+const observation = await provider.diagnosePr({
+  repo: 'OWNER/REPO', account: 'LOGIN', pr: 123,
+  reviewPolicy: 'independent-oms',
+});
+// observation.requiredChecks: app-pinned identities and
+// passed / failed / pending / missing / unknown classifications.
+```
+
+This method shares the authenticated PR collection and policy audit with
+strict inspection. It audits review/protection structure before reporting red
+CI, so a failed check cannot hide an unsupported review policy. Unknown review
+fields and populated bypass/dismissal restrictions stop safely; documented
+empty restriction collections are accepted. Current-head run identities are
+bounded structured data; raw CI logs are not returned or executed. The
+`mergeableState` field distinguishes a concrete `dirty` state from a general
+`blocked` gate, which by itself does not identify a source conflict.
+
+The default `github-review` mode retains its normal review gate; its empty
+`requiredChecks` list does not assert that the repository requires no checks.
+Use explicit `independent-oms` for the audited app-pinned requirement details.
+Strict `inspectPr()` and `mergePullRequest()` still reject unsuccessful
+required checks. A diagnostic result is never repair, push or merge authority.
+The [drive design](github-babysit-drive-design.md) remains a separate unfinished
+implementation; the workflow adapter still rejects drive mode.
+
+Check classifications follow the documented
+[GitHub check states](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-checks),
+while accepted review shapes use the
+[branch-protection API](https://docs.github.com/en/rest/branches/branch-protection).
+
 ## Authorized library operations
 
 Mutation is deliberately a library interface, not a CLI switch. The caller

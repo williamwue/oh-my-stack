@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFile } from "node:fs/promises";
+import { readFile, realpath } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -77,7 +77,16 @@ async function main() {
   console.log(`${options.action === "install" ? "Installed" : options.action === "rollback" ? "Rolled back" : "Updated"} ${options.target} package at ${options.destination}.`);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+async function isCliEntry() {
+  if (!process.argv[1]) return false;
+  try {
+    return await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+
+if (await isCliEntry()) {
   main().catch((error) => {
     console.error(error.message);
     process.exitCode = 1;

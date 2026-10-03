@@ -1,8 +1,8 @@
 # Support policy
 
-## Release baseline: 0.5.0
+## Release baseline: 0.6.0
 
-0.5.0 is the release baseline. It is not a promise of complete Cursor
+0.6.0 is the release baseline. It is not a promise of complete Cursor
 pstack behavioral parity or stable 1.0 APIs. Support is scoped to the observed
 versions and surfaces in the [host matrix](host-compatibility.md). Other
 combinations require a fresh inventory, installation check and bounded worker
@@ -30,8 +30,9 @@ credential authority. Root review and independent verification remain required.
 
 - Live-worker reattachment after coordinator restart; uncontrolled late-result
   races; long-running autonomous convergence and unrestricted multi-writer use.
-- End-to-end PR/CI approvals, merges, scheduled wakeups and authenticated
-  Benny/webhook integrations. Instructions exist but are not certified services.
+- Live independent-GitHub-account approvals, broad autonomous PR/CI lifecycle,
+  scheduled wakeups and authenticated Benny/webhook integrations. Bounded
+  single-maintainer merges have separate acceptance evidence below.
 - Full real-project execution of every Skill, complete cross-host parity and
   every model/provider combination.
 - Windows/Linux interactive compatibility beyond reported observations;
@@ -69,8 +70,10 @@ The source checkout adds local run, evidence, matrix, and read-only doctor
 tooling in 0.3.0. These are source commands, not global plugin commands. Use the
 [operations guide](operations-guide.md) for prerequisites, recovery, and
 diagnostic exit codes. A valid local store and passing doctor report do not
-establish hosted autopilot, POSIX runtime acceptance, authenticated backend
-work, or full pstack equivalence.
+establish hosted autopilot, complete cross-platform host compatibility,
+authenticated backend work, or full pstack equivalence. The
+[post-0.5.0 continuation](checklist-continuation-2026-10-03.md) records fresh
+macOS Node/Bun probes and host-specific activation/recovery boundaries.
 
 ## Updating, rollback and support reports
 

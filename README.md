@@ -40,9 +40,10 @@ claims use the separate verification labels documented in the
 
 ## Quick start
 
-Version 0.5.0 adds explicit single-maintainer review to the
+Version 0.6.0 adds read-only CI diagnostics and fixes installer aliases. It retains
+explicit single-maintainer review in the
 [Codex GitHub workflow bindings](docs/github-workflow.md).
-See the [release scope and gates](docs/releases/0.5.0.md); full pstack parity
+See the [release scope and gates](docs/releases/0.6.0.md); full pstack parity
 and autonomous hosted merging are not claimed.
 
 ### Build a local release candidate

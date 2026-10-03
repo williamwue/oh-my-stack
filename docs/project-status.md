@@ -1,17 +1,20 @@
 # Project status
 
-Updated: 2026-10-03. Release record: [0.5.0](releases/0.5.0.md).
-Previous published baseline: [v0.4.0](releases/0.4.0.md).
+Updated: 2026-10-04. Release record: [0.6.0](releases/0.6.0.md).
+Previous published baseline: [v0.5.0](releases/0.5.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
 procedure. Full pstack equivalence is not established; hosted autopilot,
-POSIX runtime acceptance, and authenticated backend integration remain
+complete cross-platform host acceptance, and authenticated backend integration remain
 deferred. FishSpeech desktop/mobile rendering was checked, but interaction
 acceptance remains partial.
 The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
 historical evidence for the pre-publication gate.
+The [post-0.5.0 checklist continuation](checklist-continuation-2026-10-03.md)
+records the installer fix, preserved workspace and fresh host evidence. These source
+changes are included in 0.6.0; the dated record preserves its pre-release status.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
@@ -92,11 +95,9 @@ the local build after downloading. Downloaded packages passed installation
 checks; Codex/OMP native package smokes passed, and Claude manifest validation
 passed without the waived authenticated test.
 
-Follow-up: the source installer can silently no-op when its script is invoked
-through an aliased absolute macOS path. Use `node tools/install-release.mjs`
-from the source checkout or the canonical script path and check success output.
-The source entrypoint needs a later regression fix; native plugin managers
-are unaffected by that entrypoint.
+Follow-up: the aliased absolute macOS path entrypoint bug is fixed in the
+0.6.0 source with a failing-before regression and independent review. Published 0.5.0 still needs the relative-path or canonical-path
+workaround for its source installer; native plugin managers are unaffected.
 
 The user reported completing the Claude Code manual check on 2026-09-25.
 This closes the requested human check, but no transcript, exact selected
