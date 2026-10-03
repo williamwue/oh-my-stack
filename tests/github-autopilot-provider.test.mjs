@@ -35,7 +35,7 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
   let baseRef = 'main'; let headRef = 'feature'; let protection = { required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
     enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false } };
   let rules = []; let policyError = false; let checksAvailable = true; let graphMissing = false; let checkApp = 123;
-  let reviewList = null;
+  let reviewList = null; let checkRuns = null; let statusResponse = null;
   const pr = () => ({ number: 7, state: 'open', draft, merged, merge_commit_sha: merged ? MERGE : null,
     mergeable: mergeability === 'clean' ? true : null, mergeable_state: mergeability,
     html_url: 'https://github.com/acme/project/pull/7',
@@ -57,10 +57,10 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
     if (path === '/repos/acme/project/pulls/7/reviews?per_page=100')
       return reviewList ?? (reviewState === 'NONE' ? [] : [{ id: 1, user: { login: 'reviewer' }, state: reviewState, commit_id: head }]);
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/check-runs'))
-      return { total_count: checksAvailable ? 1 : 0, check_runs: checksAvailable ? [{ name: 'ci/test', app: { id: checkApp }, head_sha: head,
-        status: checks === 'unknown' ? 'queued' : 'completed', conclusion: checks === 'passed' ? 'success' : 'failure' }] : [] };
+      return checkRuns ?? { total_count: checksAvailable ? 1 : 0, check_runs: checksAvailable ? [{ id: 11, name: 'ci/test', app: { id: checkApp }, head_sha: head,
+        status: checks === 'unknown' ? 'queued' : 'completed', conclusion: checks === 'unknown' ? null : checks === 'passed' ? 'success' : 'failure' }] : [] };
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/status'))
-      return { sha: head, state: 'success', total_count: statusTruncated ? 1 : 0, statuses: [] };
+      return statusResponse ?? { sha: head, state: 'success', total_count: statusTruncated ? 1 : 0, statuses: [] };
     if (path === '/graphql') return { ...(graphErrors ? { errors: [{ message: 'partial' }] } : {}), data: { repository: { pullRequest: { ...(graphMissing ? {} : { reviewDecision: review }),
       reviewThreads: { nodes: [{ isResolved: threads === 'resolved' }], pageInfo: { hasNextPage: threads === 'unknown' } } } } } };
     if (path.startsWith('/repos/acme/project/pulls?')) return created ? [{ ...pr(), body: calls.find((c) => c.path === '/repos/acme/project/pulls' && c.method === 'POST')?.body?.body }] : [];
@@ -74,6 +74,7 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
     reviewState: (v) => { reviewState = v; }, graphErrors: (v) => { graphErrors = v; }, protection: (v) => { protection = v; },
     rules: (v) => { rules = v; }, policyError: (v) => { policyError = v; }, checksAvailable: (v) => { checksAvailable = v; },
     graphMissing: (v) => { graphMissing = v; }, checkApp: (v) => { checkApp = v; }, reviewList: (v) => { reviewList = v; },
+    checkRuns: (v) => { checkRuns = v; }, statusResponse: (v) => { statusResponse = v; },
     baseRef: (v) => { baseRef = v; }, headRef: (v) => { headRef = v; } } };
 }
 
@@ -129,6 +130,154 @@ test('inspect PR reports actual SHAs and conservative gates', async () => {
   assert.equal((await p.inspectPr({ ...target, pr: 7 })).ready, false);
   fake.set.graphErrors(false); fake.set.draft(undefined);
   assert.equal((await p.inspectPr({ ...target, pr: 7 })).ready, false);
+});
+
+test('diagnostic reports bounded current-head required check failure without relaxing inspection or merge', async () => {
+  const fake = fakeGitHub(); fake.set.checks('failed'); fake.set.review(null); fake.set.reviewState('NONE');
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  const diagnostic = await p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' });
+  assert.equal(diagnostic.ready, false);
+  assert.equal(diagnostic.headSha, HEAD);
+  assert.deepEqual(diagnostic.requiredChecks, [{ name: 'ci/test', appId: 123, state: 'failed',
+    runs: [{ id: 11, name: 'ci/test', appId: 123, headSha: HEAD, status: 'completed', conclusion: 'failure' }] }]);
+  assert.equal(diagnostic.gates.checks, 'blocked');
+  assert.equal(diagnostic.mergeableState, 'clean');
+  await assert.rejects(p.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }), (e) => e.code === 'REQUIRED_CHECK_BLOCKED');
+  await withJournal(async ({ provider }) => {
+    await assert.rejects(provider.mergePullRequest({ ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+      review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } }),
+    (e) => e.code === 'REQUIRED_CHECK_BLOCKED');
+  }, fake);
+  assert.equal(fake.calls.filter((c) => !['GET'].includes(c.method) && c.path !== '/graphql').length, 0);
+});
+
+test('diagnostic distinguishes missing, pending, wrong-app, stale, and incomplete check data', async () => {
+  const cases = [
+    [(f) => f.set.checksAvailable(false), 'missing'],
+    [(f) => f.set.checks('unknown'), 'pending'],
+    [(f) => f.set.checkApp(456), 'missing'],
+    [(f) => f.set.checkRuns({ total_count: 1, check_runs: [{ id: 12, name: 'ci/test', app: { id: 123 },
+      head_sha: 'd'.repeat(40), status: 'completed', conclusion: 'success' }] }), 'missing'],
+    [(f) => f.set.checkRuns({ total_count: 2, check_runs: [{ id: 11, name: 'ci/test', app: { id: 123 },
+      head_sha: HEAD, status: 'completed', conclusion: 'success' }] }), 'unknown'],
+    [(f) => f.set.checkRuns({ total_count: 1, check_runs: [{ id: 'bad', name: 'ci/test', app: { id: 123 },
+      head_sha: HEAD, status: 'completed', conclusion: 'success' }] }), 'unknown'],
+    [(f) => f.set.checkRuns({ total_count: 1, check_runs: [{ id: 11, name: 'ci/test', app: { id: 123 },
+      head_sha: HEAD, status: 'completed', conclusion: null }] }), 'unknown'],
+    [(f) => f.set.checkRuns({ total_count: 1, check_runs: [{ id: 11, name: 'ci/test', app: { id: 123 },
+      head_sha: HEAD, status: 'queued', conclusion: 'success' }] }), 'unknown'],
+    [(f) => f.set.statusTruncated(true), 'unknown'],
+    [(f) => f.set.statusResponse({ sha: HEAD, state: 'bogus', total_count: 0, statuses: [] }), 'unknown'],
+  ];
+  for (const [setup, state] of cases) {
+    const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE'); setup(fake);
+    const p = new GitHubAutopilotProvider({ transport: fake.transport });
+    const diagnostic = await p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' });
+    assert.equal(diagnostic.ready, false, state);
+    assert.equal(diagnostic.requiredChecks[0].state, state);
+    assert.equal(fake.calls.some((c) => c.method === 'PUT' || (c.method === 'POST' && c.path !== '/graphql')), false);
+  }
+});
+
+test('null and malformed check observations stay unknown under both review policies', async () => {
+  const cases = [
+    (f) => f.set.checkRuns({ total_count: 1, check_runs: [null] }),
+    (f) => f.set.statusResponse({ sha: HEAD, state: 'success', total_count: 1, statuses: [null] }),
+    (f) => f.set.checkRuns({ total_count: 1, check_runs: [{ id: 'bad', name: null, app: null,
+      head_sha: HEAD, status: 'completed', conclusion: 'success' }] }),
+  ];
+  for (const setup of cases) for (const reviewPolicy of ['github-review', 'independent-oms']) {
+    const fake = fakeGitHub(); setup(fake);
+    const p = new GitHubAutopilotProvider({ transport: fake.transport });
+    const diagnostic = await p.diagnosePr({ ...target, pr: 7, reviewPolicy });
+    assert.equal(diagnostic.ready, false, reviewPolicy);
+    assert.equal(diagnostic.gates.checks, 'unknown');
+    if (reviewPolicy === 'independent-oms') assert.equal(diagnostic.requiredChecks[0].state, 'unknown');
+    assert.equal(fake.calls.some((c) => c.method === 'PUT' || (c.method === 'POST' && c.path !== '/graphql')), false);
+  }
+});
+
+test('independent OMS audits policy before rejecting malformed observations or merging', async () => {
+  const fake = fakeGitHub(); fake.set.checkRuns({ total_count: 1, check_runs: [null] });
+  fake.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+    required_pull_request_reviews: { required_approving_review_count: 0, dismiss_stale_reviews: true,
+      require_code_owner_reviews: false, require_last_push_approval: false, unknown_review_rule: true } });
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  await assert.rejects(p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+    (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+  await assert.rejects(p.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+    (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+  fake.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false } });
+  await withJournal(async ({ provider }) => {
+    await assert.rejects(provider.mergePullRequest({ ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+      review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } }),
+    (e) => e.code === 'REQUIRED_CHECK_BLOCKED' || e.code === 'MERGE_BLOCKED');
+  }, fake);
+  assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
+});
+
+test('diagnostic fails closed on unsafe policy and snapshots caller target before reads', async () => {
+  const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  const input = { ...target, pr: 7, reviewPolicy: 'independent-oms' };
+  const pending = p.diagnosePr(input); input.repo = 'attacker/other'; input.account = 'attacker'; input.pr = 8;
+  const diagnostic = await pending;
+  assert.equal(diagnostic.repo, target.repo); assert.equal(diagnostic.pr, 7); assert.equal(diagnostic.ready, true);
+  assert.equal(diagnostic.requiredChecks[0].state, 'passed');
+  fake.set.review('APPROVED'); fake.set.reviewState('APPROVED');
+  const defaultPolicy = await p.diagnosePr({ ...target, pr: 7 });
+  assert.equal(defaultPolicy.ready, true); assert.deepEqual(defaultPolicy.requiredChecks, []);
+  fake.set.mergeability('dirty');
+  const conflict = await p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' });
+  assert.equal(conflict.mergeableState, 'dirty'); assert.equal(conflict.ready, false);
+  for (const setup of [
+    (f) => f.set.rules([{}]), (f) => f.set.protectedBase(false),
+    (f) => f.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test' }] } }),
+    (f) => f.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+      enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+      required_pull_request_reviews: { required_approving_review_count: 0, require_code_owner_reviews: true } }),
+  ]) {
+    const unsafe = fakeGitHub(); setup(unsafe);
+    await assert.rejects(new GitHubAutopilotProvider({ transport: unsafe.transport }).diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+      (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+    assert.equal(unsafe.calls.some((c) => c.method === 'PUT'), false);
+  }
+});
+
+test('documented empty review restrictions remain auditable; populated bypass restrictions fail closed', async () => {
+  const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+  const reviewRules = { url: 'https://api.github.com/repos/acme/project/branches/main/protection/required_pull_request_reviews',
+    required_approving_review_count: 0, dismiss_stale_reviews: true, require_code_owner_reviews: false,
+    require_last_push_approval: false, dismissal_restrictions: { url: 'https://api.github.com/repos/acme/project/branches/main/protection/dismissal_restrictions',
+      users_url: 'https://api.github.com/repos/acme/project/branches/main/protection/dismissal_restrictions/users',
+      teams_url: 'https://api.github.com/repos/acme/project/branches/main/protection/dismissal_restrictions/teams',
+      users: [], teams: [], apps: [] },
+    bypass_pull_request_allowances: { users: [], teams: [], apps: [] } };
+  const protection = { required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+    required_pull_request_reviews: reviewRules };
+  fake.set.protection(protection);
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  assert.equal((await p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' })).ready, true);
+  fake.set.protection({ ...protection, required_pull_request_reviews: { ...reviewRules,
+    bypass_pull_request_allowances: { users: [{ login: 'someone' }], teams: [], apps: [] } } });
+  await assert.rejects(p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+    (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+});
+
+test('unsafe review policy wins over red CI in diagnostic and strict inspection', async () => {
+  const fake = fakeGitHub(); fake.set.checks('failed');
+  fake.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+    required_pull_request_reviews: { required_approving_review_count: 0, dismiss_stale_reviews: true,
+      require_code_owner_reviews: false, require_last_push_approval: false, unknown_review_rule: true } });
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  for (const action of [p.diagnosePr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+    p.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' })])
+    await assert.rejects(action, (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+  assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
 });
 
 test('create journals intent, readback, deduplicates, and keeps body out of journal', async () => {

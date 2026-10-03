@@ -6,6 +6,27 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.6.0 - 2026-10-04
+
+- Fix the source release installer's silent no-op through file or directory
+  aliases, including the macOS `/tmp` path.
+- Add read-only GitHub CI diagnostics with current-head app-pinned check
+  states, complete policy auditing and unchanged merge authority. Unknown
+  review rules and populated review bypass restrictions stop safely.
+- Record fresh installed-host activation, transcript recovery and bounded
+  macOS Node/Bun evidence; retain explicit authentication and lifecycle gaps.
+
+## 0.5.0 - 2026-10-03
+
+- Add explicit independent OMS review for single-maintainer protected-branch
+  merging while preserving default GitHub approval and actual repository rules.
+- Bind review policy to scoped authority and recovery; validate current-head
+  checks against their GitHub App source and preserve decisive review states.
+- Record normal protected-target merge and operator-assisted recovery after
+  an accepted merge followed by process interruption, with no repeated merge.
+- Publish and verify three runtime packages; broad autonomous queues and
+  atomic expected-base protection remain outside this release.
+
 ## 0.4.0 - 2026-10-03
 
 - Add an official GitHub CLI provider with exact account/target verification,

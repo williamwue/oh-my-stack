@@ -86,6 +86,7 @@ receipt format and status semantics, see [run evidence](run-evidence.md).
 The 0.3.0 release includes these tools in its source checkout. These source
 commands are local development and operations aids; they do not install a
 daemon, scheduler, credential service, or authenticated provider backend.
-Hosted autopilot, POSIX runtime acceptance, and external PR/CI/merge completion
-need separate implementation and live evidence. See the
+Hosted autopilot and complete cross-platform host compatibility need separate
+implementation and live evidence. Bounded external PR/CI/merge and current
+macOS probes have their own [acceptance records](checklist-continuation-2026-10-03.md). See the
 [support policy](support-policy.md) and [project status](project-status.md).

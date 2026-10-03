@@ -45,6 +45,14 @@ omit `pr` to inspect the repository or include it to inspect an existing PR.
 These calls create no journal. An inspection result is current observation,
 not publication or merge authorization.
 
+The 0.6.0 provider also offers a read-only library `diagnosePr()`
+method for structured failed-check evidence. Import
+`GitHubAutopilotProvider` from the bundled `scripts/github-autopilot-provider.mjs`
+and pass an explicit `independent-oms` policy to audit app-pinned required
+checks. It returns bounded `requiredChecks` classifications without relaxing
+strict inspect or shipping gates. This is a drive prerequisite, not a drive
+action: this workflow's accepted modes and read-only CLI remain unchanged.
+
 ## Create one ready PR
 
 The head branch must already be pushed. Replace every sample identity and SHA
