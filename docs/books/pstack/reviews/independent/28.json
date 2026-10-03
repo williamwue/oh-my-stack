@@ -1,0 +1,11 @@
+{
+  "chapter": 28,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese comparison of 250 visible text entries including headings, prose, lists, table cells, conditions, negations, numbers and attribution. Code and embeds checked separately.",
+  "source_sha256": "bb6f3590e4a5cc2212a9a101dacf511d9d4c281ff3fcf36cc271907f3c0731ea",
+  "translation_sha256": "eff836eeec01fb34c870d21f2e5d95fa2039f361a7b525c6c2b35b8c12798958",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

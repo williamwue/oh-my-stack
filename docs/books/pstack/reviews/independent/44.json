@@ -1,0 +1,11 @@
+{
+  "chapter": 44,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full comparison of180 visible Japanese/Chinese entries, including2 tables and50 cells; conditions, negation, numbers and attribution;15 link destinations and4 code blocks. External iframe bodies were not reviewed.",
+  "source_sha256": "1b97b1abe5b0c3cf3b10d3d76f4ba63865cd533bc3249859367916ac1095f3c3",
+  "translation_sha256": "f39fc0310d0c6b83e7a2bd75b7ac5480e3a8f3b873abb01411dc5614f13401d1",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

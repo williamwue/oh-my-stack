@@ -1,0 +1,867 @@
+# Chapter 24: Run agents in parallel and compare designs and artifacts
+
+[Contents](README.md) · [Previous](29-chapter.md) · [Next](31-chapter.md) · [简体中文](../zh-CN/30-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/2ad346) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/2df1db)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers the following three Skills.
+
+1. [`/architect`](https://github.com/cursor/plugins/blob/main/pstack/skills/architect/SKILL.md)
+2. [`/arena`](https://github.com/cursor/plugins/blob/main/pstack/skills/arena/SKILL.md)
+3. [`/swarm`](https://github.com/cursor/plugins/blob/main/pstack/skills/swarm/SKILL.md)
+
+All three run several subagents in parallel. What sets them apart is <strong>what you want to get from the parallel run</strong>.
+
+The three differ as follows.
+
+- <strong>`/architect`.</strong> Before implementation, the agent decides the types and the module boundaries. For example, it decides whether to expose the import process as one function or as three functions that load, validate, and save. To decide, it has several models create design options and compares them. What you get is one design that the implementation follows.
+- <strong>`/arena`.</strong> The agent has several subagents solve the same problem separately, such as the choice of a format for a cache key. It builds on the best option and folds in the good parts of the others. What you get is one best artifact.
+- <strong>`/swarm`.</strong> The agent either splits work across several agents, for example to check every package under `packages/`, or has them compete on the same problem, and then combines the results into one report. What you get is a check with no gaps, or a fast answer.
+
+This chapter first confirms who calls the three Skills. It then explains each one from three angles: its role, when to use it, and its procedure. For Skills whose source files include example requests, I show those requests too.
+
+Finally, I sort out how to choose among the three parallel Skills.
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter is organized as follows.
+
+- `/poteto-mode` calls the three Skills according to its rules and the Playbook procedures
+- `/architect` derives types from how callers use the code, and throws away the skeleton when it is wrong
+- `/arena` has several candidates compete for one best artifact
+- `/swarm` splits work across Workers for coverage or competition and turns the results into one report
+- Choose among the three parallel Skills by what you want to get and by how big and how hard to undo the change is
+- Summary
+
+<a id="%2Fpoteto-mode-calls-the-three-skills-according-to-its-rules-and-the-playbook-procedures"></a>
+
+
+## `/poteto-mode` calls the three Skills according to its rules and the Playbook procedures
+
+<strong>`/poteto-mode` calls `/architect`, `/arena`, and `/swarm` according to the rules in "Non-negotiables" and the Playbook procedures.</strong>
+
+<table class="code-line" data-line="33">
+<thead class="code-line" data-line="33">
+<tr class="code-line" data-line="33">
+<th>Skill</th>
+<th>In one line</th>
+<th>How it runs in parallel</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="35">
+<tr class="code-line" data-line="35">
+<td><code>/architect</code></td>
+<td>Decides how callers use the code, the types, and the module shape before implementation</td>
+<td>Uses <code>/arena</code> internally to compare several design options</td>
+</tr>
+<tr class="code-line" data-line="36">
+<td><code>/arena</code></td>
+<td>Has N candidates, which are subagents, solve the same problem, picks the best candidate as the base, and transplants the good parts of the other candidates</td>
+<td>Every candidate works on the same problem</td>
+</tr>
+<tr class="code-line" data-line="37">
+<td><code>/swarm</code></td>
+<td>Runs N Workers, which are agents that run in parallel, on split or competing work and combines the results into one report</td>
+<td>Each Worker covers a separate range, or all compete on the same problem</td>
+</tr>
+</tbody>
+</table>
+
+The callers of the three Skills are as follows.
+
+- <strong>`/architect`, `/arena`, and `/swarm`.</strong> `/poteto-mode` calls them according to the rules in the section "[Non-negotiables](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md#non-negotiables)" and the Playbook procedures. Other Skills also call them inside their own procedures. `/figure-it-out` and `/no-comments` call `/architect`, and `/architect` and `/blast-radius` call `/arena`. The user can also call them directly by name.
+
+<a id="%2Farchitect-derives-types-from-how-callers-use-the-code%2C-and-throws-away-the-skeleton-when-it-is-wrong"></a>
+
+
+## `/architect` derives types from how callers use the code, and throws away the skeleton when it is wrong
+
+<a id="role%3A-decide-the-design-with-a-code-skeleton%2C-not-with-prose"></a>
+
+
+### Role: decide the design with a code skeleton, not with prose
+
+Before you write code that crosses function boundaries, `/architect` <strong>draws the types, the function signatures, and the module boundaries as a `not-implemented` skeleton with no function bodies</strong>.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="51"><strong>Skeleton.</strong> Code that contains only the types, the function signatures, and the module boundaries, with each function body left as a placeholder such as <code>throw new Error("not implemented")</code>. A function signature is the function name, its parameters, and its return type. In the example below, the skeleton is <code>ImportOptions</code>, <code>ImportResult</code>, and <code>importRows</code>. The placeholder body does no work. When code calls a function with this body, all the function does is throw this error.</p>
+<p class="code-line" data-line="53">For example, consider a skeleton for the import process.</p>
+<p class="code-line" data-line="55">If you write the caller's usage first and derive the types and signatures from it, you get the following.</p>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="57"><span class="line"><span style="color:#a0aab5">// Caller usage: write this first and derive the types from it</span></span>
+<span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> onImportClick</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">file</span><span style="color:#F97583">:</span><span style="color:#B392F0"> File</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> importRows</span><span style="color:#E1E4E8">(file, { onError: </span><span style="color:#9ECBFF">"skip"</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`Imported ${</span><span style="color:#E1E4E8">result</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">imported</span><span style="color:#9ECBFF">} rows and skipped ${</span><span style="color:#E1E4E8">result</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">skipped</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#a0aab5">// Skeleton: write only the types and signatures, not the bodies</span></span>
+<span class="line"><span style="color:#a0aab5">// onError decides what happens on an invalid row: skip the row (skip) or stop the import (stop)</span></span>
+<span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> ImportOptions</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">onError</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "skip"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "stop"</span><span style="color:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> ImportResult</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">imported</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">; </span><span style="color:#FFAB70">skipped</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> importRows</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">file</span><span style="color:#F97583">:</span><span style="color:#B392F0"> File</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">options</span><span style="color:#F97583">:</span><span style="color:#B392F0"> ImportOptions</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">ImportResult</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">  throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"not implemented"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre></div>
+<p class="code-line" data-line="74">The bodies do not exist yet, but the skeleton alone tells you two things. The caller imports by calling <code>importRows</code> once, and the return value tells the caller how many rows <code>importRows</code> imported and how many it skipped.</p>
+</div></aside>
+
+The agent builds the skeleton first because <strong>the skeleton becomes the "contract" the implementation must keep</strong>. The contract is a promise that the implementation follows the skeleton's types and signatures.
+
+With a skeleton in place, two kinds of problems <strong>show up as a diff against the skeleton</strong>. One is an implementation that strays from the types. The other is the need for an escape hatch that bypasses the type checker, such as `any` or a cast like `as User`, which [Chapter 18](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4) covered.
+
+For example, if the skeleton had `importRows(file, options)` and the implementation needs a third parameter halfway through, the signature change appears in the diff.
+
+The agent does not hide such a gap with a fix inside the implementation. It makes the gap visible and asks again whether the skeleton was wrong, whether it missed a requirement, or whether the implementation does more than it needs to. It does so because <strong>such a gap shows an error somewhere in the design, the requirements, or the implementation</strong>.
+
+`/architect` does not settle the skeleton on a single option. It merges options that several models produced. It then fills in the bodies along the skeleton. If the skeleton turns out to be wrong, it throws the skeleton away and designs again.
+
+In *The Complete Guide to pstack* [Part 2](https://x.com/poteto/status/2097732320606507506), poteto writes that planning in code is far more effective, and names prototyping in `/poteto-mode` and `/architect` as the ways to do it.
+
+<a id="when-to-use-it%3A-before-you-write-code-that-crosses-function-boundaries"></a>
+
+
+### When to use it: before you write code that crosses function boundaries
+
+The section "[Non-negotiables](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md#non-negotiables)" of `/poteto-mode` ([Chapter 8](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205)) requires `/architect` for code that crosses function boundaries.
+
+The Playbooks build `/architect` into their procedures to follow this rule. "[Feature](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/feature.md)", which adds a feature, always calls `/architect` in step 2. "[Bug fix](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)", "[Refactoring](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/refactoring.md)", and "[Perf issue](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/perf-issue.md)", which improves performance, call `/architect` when the change crosses function boundaries.
+
+For example, a change that creates a new function and calls it from a function in another file crosses function boundaries. A change that stays inside one function, such as fixing a calculation in one function, does not need `/architect`.
+
+Other Skills call it too. `/figure-it-out` ([Chapter 23](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/ba4cc8)) calls `/architect` for design decisions that cannot be undone. `/no-comments` ([Chapter 31](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/347946)) calls `/architect` once when the fix for a comment finding needs a new code shape.
+
+<a id="procedure%3A-five-phases%2C-from-ground-to-scrap"></a>
+
+
+### Procedure: five phases, from Ground to Scrap
+
+<table class="code-line" data-line="101">
+<thead class="code-line" data-line="101">
+<tr class="code-line" data-line="101">
+<th>Phase</th>
+<th>Name</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="103">
+<tr class="code-line" data-line="103">
+<td>A</td>
+<td>Ground (establish the base)</td>
+<td>Use <code>/how</code> (<a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/031877" target="_blank">Chapter 22</a>) to study the mechanisms the new code touches. A list of the related file names does not count as a study of them, so record the result of tracing the flow, as <code>/how</code> requires. If the design changes which module owns what, or changes the layers, also use <code>/why</code> to find out why the code has its current shape, and make those reasons constraints on the design</td>
+</tr>
+<tr class="code-line" data-line="104">
+<td>B</td>
+<td>Sketch (draw the skeleton)</td>
+<td>Use <code>/arena</code> to produce several design options, then compare and merge them</td>
+</tr>
+<tr class="code-line" data-line="105">
+<td>C</td>
+<td>Agree (reach agreement)</td>
+<td>By default, move to implementation without a human check. Show the design and wait for approval only when the user asks for it</td>
+</tr>
+<tr class="code-line" data-line="106">
+<td>D</td>
+<td>Implement</td>
+<td>Replace the skeleton's <code>not implemented</code> placeholder bodies with real code</td>
+</tr>
+<tr class="code-line" data-line="107">
+<td>E</td>
+<td>Scrap (throw away)</td>
+<td>If workarounds or deviations that do not fit the skeleton keep appearing during implementation, throw the skeleton away and design again</td>
+</tr>
+</tbody>
+</table>
+
+<a id="phase-b%3A-compare-two-or-more-structurally-different-options"></a>
+
+
+#### Phase B: compare two or more structurally different options
+
+Even when the first option looks good enough, <strong>the agent has models produce at least two structurally different designs before it merges them</strong>. If you have a model produce a hard design only once, the design stays in the first shape the model thought of. The bundled guide [`04-design.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/04-design.md) says so.
+
+The agent compares options whose shapes differ, not partial edits within one shape.
+
+For example, an option that renames only the parameters of `importRows` is an edit of the same shape. An option that exposes one function and an option that exposes load, validate, and save as separate functions differ in shape.
+
+Phase B applies the principle "[Exhaust the Design Space](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-exhaust-the-design-space/SKILL.md)" from [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863).
+
+Each candidate that `/arena` starts is a subagent that produces one design option. It follows ten instructions to produce that option. Here I introduce the five main ones.
+
+##### 1. Write the caller's usage first and derive the types from it
+
+Before it writes the types, the candidate writes the code at the call site that uses them. It does so because <strong>how the caller wants to use the code is the specification the design must meet</strong>.
+
+When the usage and the types disagree, the candidate changes the types to fit the usage.
+
+For example, in the code from the skeleton example, I first wrote the call `importRows(file, { onError: "skip" })` inside `onImportClick`, and then decided the `ImportOptions` and `ImportResult` types to fit that call.
+
+```
+// Caller usage: write this first and derive the types from it
+async function onImportClick(file: File) {
+  const result = await importRows(file, { onError: "skip" });
+  console.log(`Imported ${result.imported} rows and skipped ${result.skipped}`);
+}
+
+// Skeleton: write only the types and signatures, not the bodies
+// onError decides what happens on an invalid row: skip the row (skip) or stop the import (stop)
+type ImportOptions = { onError: "skip" | "stop" };
+type ImportResult = { imported: number; skipped: number };
+
+export async function importRows(file: File, options: ImportOptions): Promise<ImportResult> {
+  throw new Error("not implemented");
+}
+```
+
+##### 2. Decide first on a data structure that fits the frequent reads and writes
+
+Before it writes logic, the candidate decides on a data structure that fits the frequent reads and writes, such as a lookup of one user by ID.
+
+The candidate verifies each read and write by tracing, one by one, how the chosen data structure handles it. If the trace ends in the answer "we can add an index or a cache later", the data structure is wrong.
+
+For example, suppose the code often looks up users by ID but stores users in an array.
+
+With an array, every lookup by ID searches the array from the start. When the candidate traces the lookup by ID through this structure, the trace ends in the answer "we can add an index by ID later", so the array is the wrong structure. The candidate therefore picks, from the start, a structure that stores users in a table keyed by ID, which is a map.
+
+```
+type User = { id: string; name: string };
+// The ID of the user to look up
+declare const id: string;
+
+// Before: every lookup by ID searches the array from the start
+const userList: User[] = [];
+const found = userList.find((u) => u.id === id);
+
+// After: store users in a table keyed by ID and look them up directly by ID
+const usersById = new Map<string, User>();
+const user = usersById.get(id);
+```
+
+The data structure that fits depends on the frequent reads and writes, so the candidate picks a structure that fits them before implementation.
+
+##### 3. Expose few functions and hide the work behind them
+
+The candidate keeps the public interface, meaning the functions and types it exposes, few and small, and hides most of the work behind them. It does so because <strong>a small interface reduces what the caller needs to know</strong>.
+
+An interface that exposes little but hides a lot of work behind it is called a "<strong>deep interface</strong>".
+
+For example, here are two ways to write the public interface of the import process.
+
+```
+// Deep: expose only one function, and hide loading, validation, and saving behind it
+type DeepImporter = {
+  importRows(file: File, options: ImportOptions): Promise<ImportResult>;
+};
+
+// Shallow: expose three functions, and the caller must call them in the right order
+type ShallowImporter = {
+  loadRows(file: File): string[][];
+  validateRows(rows: string[][]): string[][];
+  saveRows(rows: string[][]): Promise<void>;
+};
+```
+
+With `DeepImporter`, the caller imports by calling `importRows` once. With `ShallowImporter`, the caller must call three functions in the right order.
+
+##### 4. Express conditions that must always hold in types where you can
+
+The candidate expresses an invariant in types first. When types cannot express it, the candidate uses a runtime check. It writes a comment only when a runtime check is not possible either.
+
+For example, here is the invariant "a shipped order always has a tracking number" written three ways.
+
+```
+// In types: a shipped order can only be written in a shape that has trackingNo
+type Order =
+  | { state: "paid" }
+  | { state: "shipped"; trackingNo: string };
+
+// Runtime check: types cannot prevent the problem, so it shows up only when the code runs
+type LooseOrder = { state: "paid" | "shipped"; trackingNo?: string };
+
+function assertTrackingNo(order: LooseOrder): void {
+  if (order.state === "shipped" && !order.trackingNo) {
+    throw new Error("Order is shipped but has no tracking number");
+  }
+}
+
+// Comment: whether anyone keeps it depends on the person who reads the comment
+type CommentedOrder = {
+  state: "paid" | "shipped";
+  // When state is "shipped", always set trackingNo
+  trackingNo?: string;
+};
+```
+
+If types express the invariant, the compiler tells you the moment you write code that breaks it. For that reason, the candidate expresses invariants in types wherever it can.
+
+##### 5. Validate outside values once at the entry point, and do not re-check them inside
+
+At the boundary, where values come in from outside, the candidate validates the value once and gives the validated value a type. A function that receives a file or an API response is an example of a boundary. Code inside uses the typed value without checking it again. It does so because <strong>once you check at the entry point, you do not need to write the same check again and again inside</strong>.
+
+For example, in the import process, `importRows` checks that the ID is not empty right after it reads each row of the file. The saving code inside receives only rows that passed the check, so it does not check again whether the ID is empty.
+
+This instruction follows the principle "[Boundary Discipline](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-boundary-discipline/SKILL.md)" from [Chapter 18](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4).
+
+##### Attach a rationale to the design, with the rejected alternatives and the reasons
+
+Each candidate attaches a one-page rationale to its design. In the rationale, it writes the usage from the caller's side, which the source calls Usage, before the types, and it always writes the rejected alternatives and the reasons for rejecting them.
+
+When it compares alternatives, the candidate looks beyond whether an implementation is easy. It compares the complexity shown to the caller and the complexity hidden inside. For example, with `DeepImporter` the caller needs to know one function, and with `ShallowImporter` the caller needs to know three. So `DeepImporter` shows the caller less complexity.
+
+##### Inspect for four red flags before merging
+
+Before it merges the candidates, the agent inspects every candidate for four red flags. A red flag is a structural trait that gives the agent a reason to fix or reject the design.
+
+The four red flags are as follows.
+
+- <strong>Shallow module.</strong> A module that exposes many functions and types but hides little work behind them.
+- <strong>Information leakage.</strong> Other modules also assume a decision that only one module should own, such as the shape the data takes. If you change that decision, you must fix every module that assumes it at the same time.
+- <strong>Temporal decomposition.</strong> A structure that splits modules in the order the work runs, such as load, then validate, then save. When you split in that order, every module passes the same data shape along, so more modules depend on that shape. The SKILL.md recommends that work that handles the same data go into one module, even when it runs at different times.
+- <strong>Pass-through method.</strong> A method whose only job is to pass the arguments it receives to another method, in the same shape.
+
+For example, a skeleton of the import process that contains all four red flags looks like this.
+
+```
+// load.ts: read the CSV and turn each row into an array of strings (shallow module)
+export function loadRows(file: File): string[][] {
+  throw new Error("not implemented");
+}
+
+// validate.ts: assume column 0 is the ID and remove rows with an empty ID (shallow module, information leakage)
+export function validateRows(rows: string[][]): string[][] {
+  throw new Error("not implemented");
+}
+
+// save.ts: assume column 0 is the ID and save with the ID as the key (shallow module, information leakage)
+export function saveRows(rows: string[][]): Promise<void> {
+  throw new Error("not implemented");
+}
+
+// importer.ts
+export class Importer {
+  // Only passes the received rows to saveRows in the same shape (pass-through method)
+  save(rows: string[][]): Promise<void> {
+    return saveRows(rows);
+  }
+}
+
+// Caller: cannot import without calling the three in the right order (temporal decomposition)
+async function onImportClick(file: File) {
+  const rows = validateRows(loadRows(file));
+  await new Importer().save(rows);
+}
+```
+
+In this code, the four red flags appear as follows.
+
+- <strong>Shallow module.</strong> The three files, `load.ts`, `validate.ts`, and `save.ts`, each expose one function, and each function does one small job. One reads, one removes rows, and one saves. They hide little work compared to the number of functions they expose, so they are shallow modules. As a result, to finish one import, the caller must combine and call the three functions itself. The SKILL.md also says that a caller that must combine several functions for one operation is a sign of a shallow module.
+- <strong>Information leakage.</strong> Both `validate.ts` and `save.ts` assume that "each row is an array of strings, and column 0 is the ID". Column 0 is the first element of the array. Suppose the column order in the CSV changes and the ID moves to column 2. Then you must fix both `validate.ts` and `save.ts` at the same time.
+- <strong>Temporal decomposition.</strong> The files follow the order of the work: `load.ts` loads, `validate.ts` validates, and `save.ts` saves. The three files hand the row data along in turn, so all three must know the same shape, "each row is an array of strings". A change to the row shape therefore means a fix in all three files.
+- <strong>Pass-through method.</strong> `Importer.save` passes the `rows` it receives to `saveRows` in the same shape, does nothing else, and hides nothing.
+
+When several modules share a decision, each change to that decision adds more places to fix. So a decision must stay inside one module.
+
+With the `importRows(file, options)` skeleton shown earlier, the caller calls only one function. The decisions about how to represent a row and which column is the ID stay inside the `importRows` module.
+
+<a id="phase-c%3A-by-default%2C-move-to-implementation-without-a-human-check"></a>
+
+
+#### Phase C: by default, move to implementation without a human check
+
+<strong>By default, the agent moves to implementation without a human check.</strong>
+
+The agent proceeds without waiting for a human reply, and the human corrects the direction later. This way of working follows the same idea as the principle "[Never Block on the Human](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-never-block-on-the-human/SKILL.md)" ([Chapter 20](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0ec4d6)).
+
+If a human objects to the shape of the design, the agent treats the objection as new input for Phase A, studies the code again, and redoes Phase B.
+
+To examine the design's weak points closely before implementation, the agent runs `/interrogate` from [Chapter 27](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e23752) on the merged skeleton.
+
+<a id="phase-e%3A-deciding-to-throw-away-the-skeleton"></a>
+
+
+#### Phase E: deciding to throw away the skeleton
+
+<strong>The agent decides whether to throw away the skeleton based on a repeating pattern, not on a one-time event.</strong>
+
+The signs include the following.
+
+1. Workarounds of the same shape keep appearing in unrelated code. For example, separate screens that call `importRows` each write the same preprocessing themselves before the call.
+2. The code needs an escape hatch, such as `any` or a cast, to compile.
+3. A caller cannot use a shared function or type without knowing its internal rules. For example, the caller must always call a separate setup function before it calls `importRows`.
+4. The same kind of deviation from the skeleton happens in two or more separate places. For example, two functions each need a parameter that the skeleton does not have.
+
+For example, an implementation that shows all four signs looks like this.
+
+```
+type Row = { id: string; name: string };
+
+// A function that sets up the database connection used for importing ahead of time
+declare function initImporter(): Promise<void>;
+
+// The skeleton had parseRows(text: string): Row[]
+// Sign 4: the implementation needed a tenantId parameter (which customer the data belongs to) that the skeleton did not have
+declare function parseRows(text: string, tenantId: string): Row[];
+
+// The skeleton had saveRows(rows: Row[]): Promise<void>
+// Sign 4: the implementation needed a tenantId parameter (which customer the data belongs to) that the skeleton did not have
+declare function saveRows(rows: Row[], tenantId: string): Promise<void>;
+
+// Settings screen
+async function onUploadFromSettings(file: File) {
+  // Sign 3: importRows fails unless you call this first. The type of importRows does not show this rule
+  await initImporter();
+
+  // Sign 1: removes the first line of the CSV (the header row) itself before calling importRows
+  const lines = (await file.text()).split("\n");
+  const body = new File([lines.slice(1).join("\n")], file.name);
+
+  // Sign 2: casts to any to read reasons (why rows were skipped), which the skeleton's ImportResult does not have
+  const result = (await importRows(body, { onError: "skip" })) as any;
+  console.log(result.reasons);
+}
+
+// Dashboard: a screen unrelated to the settings screen, yet it writes the same Sign 1 preprocessing and Sign 3 setup
+async function onUploadFromDashboard(file: File) {
+  // Sign 3 setup
+  await initImporter();
+  // Sign 1 preprocessing
+  const lines = (await file.text()).split("\n");
+  const body = new File([lines.slice(1).join("\n")], file.name);
+  await importRows(body, { onError: "stop" });
+}
+```
+
+A need to handle a few rare inputs or situations, called edge cases, is not a reason to reject the whole design. Extra branches that come from complex data are not a reason to throw away the skeleton either.
+
+For example, when address formats differ by country and the branches multiply, the cause is complex data, not a wrong design.
+
+When it throws away the skeleton, the agent runs `/how` again on what it has built so far to study the mechanisms again. It then designs again from Phase B. It does not add fixes to the old skeleton. It treats the new constraints it learned during implementation as premises from the start.
+
+Before it adds anything to the new skeleton, the agent first deletes what is no longer needed, such as functions that nothing uses anymore, or duplicate validation. Deletion before addition follows the principle "[Subtract Before You Add](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-subtract-before-you-add/SKILL.md)" ([Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863)). As a result, the new skeleton is smaller than the old one before any features go back in.
+
+<a id="how-to-write-the-request%3A-say-what-you-care-about-most"></a>
+
+
+### How to write the request: say what you care about most
+
+The bundled guide [`04-design.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/04-design.md) has the following example request.
+
+```
+/architect design the import pipeline before writing any code. i care most about how callers use it.
+```
+
+To add a check in Phase C, the user asks like this.
+
+```
+/architect with checkpoint. stop and show me before implementing.
+```
+
+[Chapter 38](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/006bc8) and [Chapter 39](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/f87769) cover the practice of designing from usage and the practice of reviewing a design.
+
+<a id="%2Farena-has-several-candidates-compete-for-one-best-artifact"></a>
+
+
+## `/arena` has several candidates compete for one best artifact
+
+<a id="role%3A-have-n-candidates-solve-the-same-problem"></a>
+
+
+### Role: have N candidates solve the same problem
+
+A <strong>candidate</strong> is a subagent that produces one design option.  
+`/arena` is <strong>a Skill that has several candidates solve a problem, picks the best artifact, and folds the good ideas from the other artifacts into the best one</strong>.
+
+<a id="when-to-use-it%3A-artifacts-that-are-expensive-to-fix-later"></a>
+
+
+### When to use it: artifacts that are expensive to fix later
+
+The user or the agent uses `/arena` for an artifact such as the format of a cache key. A single attempt would likely settle on the first shape the model thought of, and a later change to the artifact is expensive.
+
+Within `/poteto-mode` work, there are two main occasions to call `/arena`.
+
+The first is when `/architect` has models produce several design options in Phase B.  
+The second is step 4 of the "Feature" Playbook. When the implementation could take several reasonable shapes, for example in how to handle errors or how to structure the tests, the main agent calls `/arena` and hands the coding to its candidates.
+
+<a id="playbooks-and-other-skills-also-call-%2Farena"></a>
+
+
+#### Playbooks and other Skills also call `/arena`
+
+Every Playbook and Skill that calls `/arena` uses it <strong>where an answer one model produced in one attempt would leave bias or gaps</strong>. The occasion and the reason for each caller are as follows.
+
+##### `/architect`: do not settle the design on one option
+
+`/architect` calls `/arena` in Phase B and has several models produce design options. If you have a model produce a hard design only once, the design stays in the first shape the model thought of. For details, see ["Phase B: compare two or more structurally different options"](#phase-b%3A-compare-two-or-more-structurally-different-options) in this chapter.
+
+##### The "Eval" Playbook: measure the effect of a Skill change with several models and blind grading
+
+"[Eval](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/eval.md)" is a Playbook that measures how a change to a Skill or a prompt changes the agent's behavior ([Chapter 13](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3f7768)).
+
+"Eval" does not call `/arena` directly, but its definition has the work follow the `/arena` procedure.
+
+In "Eval", several models solve the same request separately in an environment with the change applied. Another model then grades the outputs without knowing which model produced each one.  
+In other words, "Eval" proceeds the same way as `/arena`. Several candidates solve the same problem, and another model grades them.
+
+##### The "Orchestrate" Playbook: compare irreversible decisions before the work starts
+
+"[Orchestrate](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/orchestrate.md)" is a Playbook that manages a project that lasts for days and runs many PRs and subagents ([Chapter 16](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3b2bef)).
+
+In its first step, Frame, "Orchestrate" runs `/arena` on contested ways to split the work and on irreversible decisions, before it test-runs the first unit of work. It does so because <strong>an irreversible decision cannot be fixed once the project is under way</strong>.
+
+##### `/blast-radius`: have several models study the impact of a large change
+
+When `/blast-radius` ([Chapter 27](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e23752)) studies a large change or a change with a wide impact, it uses `/arena` to give several models the same question and merges their answers. According to the `SKILL.md` of `/blast-radius`, the reason is that <strong>different models find different bugs</strong>.
+
+<a id="procedure%3A-six-phases%2C-from-frame-to-verify"></a>
+
+
+### Procedure: six phases, from Frame to Verify
+
+<table class="code-line" data-line="427">
+<thead class="code-line" data-line="427">
+<tr class="code-line" data-line="427">
+<th>Phase</th>
+<th>Name</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="429">
+<tr class="code-line" data-line="429">
+<td>A</td>
+<td>Frame (define the problem)</td>
+<td>Decide the artifact each candidate produces and three to six grading criteria, and assign each candidate its own output location. Separate output locations keep candidates from overwriting each other's artifacts</td>
+</tr>
+<tr class="code-line" data-line="430">
+<td>B</td>
+<td>Fan out (start them all at once)</td>
+<td>Start N subagents at the same time. The default is three models: Opus, GPT, and Grok</td>
+</tr>
+<tr class="code-line" data-line="431">
+<td>C</td>
+<td>Cross-judge (another model grades)</td>
+<td>After every candidate has finished writing, have the <strong>judge</strong> model, also called the cross-judge, grade them. Where possible, pick a judge from a different model family than the <strong>main agent</strong>, which is the agent that started the candidates</td>
+</tr>
+<tr class="code-line" data-line="432">
+<td>D</td>
+<td>Pick (choose the base)</td>
+<td>The main agent reads every candidate to the end, grades each one against each criterion, and decides the base by comparing its choice with the base the judge recommends. If the two agree, the agreement supports the choice. If they disagree, suspect bias in the main agent or the judge, or vague grading criteria</td>
+</tr>
+<tr class="code-line" data-line="433">
+<td>E</td>
+<td>Graft (transplant)</td>
+<td>Look for valuable parts in the losing candidates. Do not paste them in mechanically. Rewrite them to fit the base's design and fold them in, because the artifact must stay consistent with one way of thinking</td>
+</tr>
+<tr class="code-line" data-line="434">
+<td>F</td>
+<td>Verify</td>
+<td>Verify that the merged artifact actually works, with the same rigor as any other artifact, following the principle "<a href="https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md" rel="nofollow noopener noreferrer" target="_blank">Prove It Works</a>" (<a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914" target="_blank">Chapter 19</a>)</td>
+</tr>
+</tbody>
+</table>
+
+The six phases flow as follows.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="flowchart%20TD%0A%20%20%20%20A%5B%22A%3A%20Decide%20the%20grading%20criteria%20and%20assign%20each%20candidate%20its%20own%20output%20location%22%5D%20--%3E%20B%5B%22B%3A%20Start%20the%20candidates%20at%20the%20same%20time%20with%20the%20same%20prompt%22%5D%0A%20%20%20%20B%20--%3E%20C1%5B%22Candidate%201%3A%20Opus%22%5D%0A%20%20%20%20B%20--%3E%20C2%5B%22Candidate%202%3A%20GPT%22%5D%0A%20%20%20%20B%20--%3E%20C3%5B%22Candidate%203%3A%20Grok%22%5D%0A%20%20%20%20C1%20--%3E%20J%5B%22C%3A%20The%20judge%20grades%22%5D%0A%20%20%20%20C2%20--%3E%20J%0A%20%20%20%20C3%20--%3E%20J%0A%20%20%20%20C1%20--%3E%20R%5B%22D%3A%20The%20main%20agent%20reads%20and%20grades%20every%20candidate%22%5D%0A%20%20%20%20C2%20--%3E%20R%0A%20%20%20%20C3%20--%3E%20R%0A%20%20%20%20J%20--%3E%20P%5B%22D%3A%20Compare%20with%20the%20judge's%20grades%20and%20pick%20one%20base%22%5D%0A%20%20%20%20R%20--%3E%20P%0A%20%20%20%20P%20--%3E%20E%5B%22E%3A%20Rewrite%20the%20good%20parts%20of%20the%20other%20candidates%20to%20fit%20the%20base's%20design%20and%20fold%20them%20in%22%5D%0A%20%20%20%20E%20--%3E%20F%5B%22F%3A%20Verify%20the%20merged%20artifact%22%5D%0A%20%20%20%20F%20--%3E%20O%5B%22Return%20one%20artifact%20and%20a%20merge%20note%22%5D" frameborder="0" id="zenn-embedded__6a1cbf85818d8" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__6a1cbf85818d8"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 1](../diagrams/en/30-01.svg)
+
+[View diagram 1](../diagrams/en/30-01.md)
+<!-- book-diagram-link:end -->
+
+<a id="start-the-judge-after-every-candidate-has-finished-writing"></a>
+
+
+#### Start the judge after every candidate has finished writing
+
+The judge's grading and the main agent's reading of all candidates run in parallel after every candidate has finished writing. The main agent does not start the judge while candidates are still writing.
+
+<a id="give-the-candidates-the-same-prompt%2C-state-the-artifact-in-it%2C-and-do-not-show-the-grading-criteria"></a>
+
+
+#### Give the candidates the same prompt, state the artifact in it, and do not show the grading criteria
+
+Every candidate receives the same prompt, so <strong>what each candidate produces depends only on what the prompt says</strong>. For that reason, in Phase A the main agent states in the prompt the artifact each candidate produces, such as a proposed format for the cache key and its rationale.
+
+The main agent uses the grading criteria when it picks the base in Phase D. It therefore shows the candidates only the problem, not the criteria.
+
+<a id="pick-as-the-base-the-candidate-that-is-easiest-to-extend"></a>
+
+
+#### Pick as the base the candidate that is easiest to extend
+
+The main agent picks as the base the candidate that a future maintainer could most easily add features to without breaking its invariants.
+
+If every candidate arrives at the same shape, the main agent treats this agreement between separately produced answers as strong support and adopts that shape without grafting.
+
+<a id="if-the-candidates'-shapes-differ-widely%2C-define-the-problem-again"></a>
+
+
+#### If the candidates' shapes differ widely, define the problem again
+
+If the candidates' shapes differ widely, the main agent concludes that the problem was not defined well enough. It goes back to Phase A, defines the problem again, and starts over.
+
+For example, when all three candidates propose different formats for the cache key, the main agent does not build an in-between format that takes a little from each. It does so because <strong>an in-between format is consistent with none of the candidates' ways of thinking</strong>.
+
+<a id="finally%2C-return-the-merged-artifact-and-a-merge-note"></a>
+
+
+#### Finally, return the merged artifact and a merge note
+
+At the end, the main agent returns one merged artifact and a short merge note. The merge note contains the following.
+
+- The candidate picked as the base, why the main agent picked it, and the judge's conclusion
+- The parts taken from other candidates, and which candidate each came from
+- The parts considered but not taken, and why
+- Any candidates that dropped out without producing an artifact. The main agent continues the merge with the remaining candidates and records the dropout in the note
+- The result of actually running and verifying the merged artifact in Phase F, Verify
+
+<a id="how-to-write-the-request%3A-give-the-number-of-candidates"></a>
+
+
+### How to write the request: give the number of candidates
+
+`04-design.md` has an example that sets the number of candidates.
+
+```
+/arena this, 5 candidates. the cache key format is expensive to change later.
+```
+
+The bundled guide [`10-recipes-and-pitfalls.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/10-recipes-and-pitfalls.md) also lists a request for a second opinion on the current design before a decision that is expensive to change later.
+
+In this use, the main agent treats the design the user and the agent are working on as one candidate and compares it with the other candidates.
+
+```
+ask /arena for a second opinion on this thread and our approach
+```
+
+<a id="%2Fswarm-splits-work-across-workers-for-coverage-or-competition-and-turns-the-results-into-one-report"></a>
+
+
+## `/swarm` splits work across Workers for coverage or competition and turns the results into one report
+
+<a id="role%3A-run-cloud-agents-in-parallel"></a>
+
+
+### Role: run Cloud Agents in parallel
+
+`/swarm` is <strong>a Skill that runs N agents, called Workers, in the cloud at the same time, collects the results, and returns one report</strong>. `/arena` produces "one best answer". `/swarm` produces "a check with no gaps" or "a fast answer".
+
+In *The Complete Guide to pstack* [Part 1](https://x.com/poteto/status/2094457600259842065), poteto describes how he runs verification skills on many Cloud Agents, which are agents that run in Cursor's cloud. He uses them to confirm a performance improvement with a large enough sample, or to fuzz an app.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="514"><strong>Fuzzing.</strong> A test that feeds a program large amounts of random or broken input to find bugs.</p>
+</div></aside>
+
+<a id="when-to-use-it%3A-coverage%2C-competition%2C-gauntlets%2C-and-split-searches"></a>
+
+
+### When to use it: coverage, competition, gauntlets, and split searches
+
+The occasions are as follows.
+
+- <strong>Coverage.</strong> The main agent assigns several ranges to Workers and checks them with no gaps. For example, the Workers check every package under `packages/`.
+- <strong>Competition.</strong> The main agent has several Workers compete on the same problem. For example, several Workers try to reproduce the same bug.
+- <strong>Gauntlet.</strong> The main agent lines up many checks for one change and requires the change to pass all of them. The box below gives an example.
+- <strong>Split search.</strong> The main agent splits the places to search and has each Worker examine one. For example, to find the cause of a bug, the main agent assigns one Worker to each suspect module.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="527"><strong>Gauntlet</strong> is not a term that pstack's files define. In this book, a gauntlet means a series of checks that a change must pass one after another.</p>
+<p class="code-line" data-line="529">You can infer how pstack uses it from the phrase "gauntlet lanes" in the bundled guide <code>04-design.md</code> and from the Playbooks that use <code>/swarm</code>.</p>
+<p class="code-line" data-line="531">For example, the plan document that the Playbook "<a href="https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md" rel="nofollow noopener noreferrer" target="_blank">Multi-phase or multi-PR plan</a>" (<a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3b2bef" target="_blank">Chapter 16</a>) produces works like this. When a PR is ready for review, and each time someone pushes a change after that, <code>/swarm</code> runs lanes in parallel against the PR's latest commit at that point. <strong>The PR passes only when every lane reports PASS</strong>. The lanes are as follows.</p>
+<ul class="code-line" data-line="533">
+<li class="code-line" data-line="533">One lane that reruns the checks, such as tests and lint, on that latest commit</li>
+<li class="code-line" data-line="534">Ten lanes that verify in the real UI or CLI</li>
+<li class="code-line" data-line="535">One lane that measures performance</li>
+<li class="code-line" data-line="536">Two or more lanes that read the diff and the run logs and inspect the PR description with suspicion</li>
+</ul>
+</div></aside>
+
+In its section "Non-negotiables", `/poteto-mode` requires `/swarm` when work splits into parallel parts, such as coverage, competition, gauntlets, and split searches. In particular, the Playbooks from [Chapter 16](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3b2bef) that move forward and verify many PRs use `/swarm` to decide whether a PR may merge.
+
+For example, "[Autopilot-full](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/autopilot-full.md)" is a procedure in which an owner for each PR takes it from creation to merge. In it, the coordinator agent, which manages the whole job, runs independent verifiers in parallel with `/swarm` and combines their results into one verdict. Each PR's owner does not merge the PR until the verdict says there is no problem.
+
+<a id="procedure%3A-four-phases%2C-from-frame-to-report"></a>
+
+
+### Procedure: four phases, from Frame to Report
+
+`/swarm` proceeds in the following four phases.
+
+1. <strong>Frame.</strong> The main agent defines the exit condition and the report to return. The exit condition is a verifiable condition that says what must hold for the work to be done. The main agent also decides the shape and the number of Workers. The shape is partition, race, or mixed, as the table below shows. If the user gives a number in the request, the main agent uses it. Otherwise it decides the number from the shape.
+2. <strong>Fan out.</strong> The main agent starts all Workers in the cloud at the same time. Each Worker reports `PASS`, `ISSUES` if it found problems, or `BLOCKED` if it could not verify, with evidence such as the SHA of the commit it verified and the check output.
+3. <strong>Aggregate.</strong> The main agent collects the results. For a race, it applies the selection rule it declared in Frame to pick the result.
+4. <strong>Report.</strong> The main agent combines a table of results, the problems with their evidence, the gaps, and the dropouts into one report. Gaps are ranges that produced no result, and dropouts are Workers that dropped out partway.
+
+There are three shapes to choose from in Frame.
+
+<table class="code-line" data-line="554">
+<thead class="code-line" data-line="554">
+<tr class="code-line" data-line="554">
+<th>Shape</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="556">
+<tr class="code-line" data-line="556">
+<td>Partition</td>
+<td>Split the work into non-overlapping ranges, and each Worker takes one. For example, one Worker takes each package</td>
+</tr>
+<tr class="code-line" data-line="557">
+<td>Race</td>
+<td>Give N Workers the same instructions and have them compete. For example, several Workers try to reproduce the same bug</td>
+</tr>
+<tr class="code-line" data-line="558">
+<td>Mixed</td>
+<td>Combine partition and race. Several Workers compete on each range</td>
+</tr>
+</tbody>
+</table>
+
+For the race and mixed shapes, the main agent declares which selection rule it uses before it starts the Workers. The three selection rules are as follows.
+
+- "first pass" takes the first result that passes.
+- "rank all" ranks every result.
+- "best-of" takes the best result.
+
+The main agent discards a result that lacks the records the instructions asked for, such as the SHA of the verified commit or the measurement method. The measurement method includes how many times to measure. It reruns the Worker that produced that result once. It does so because <strong>when you cannot tell which commit a result checked and how, you cannot judge whether the result applies to the current code</strong>.
+
+If the records are missing again on the second run, the main agent records that range as a gap. <strong>A gap does not count as a pass.</strong>
+
+For example, if 9 of 10 Workers report `PASS` and one is missing, the report says "9 passed, 1 gap", not "9 passed".
+
+<a id="how-to-write-the-request%3A-one-sentence-each-for-the-check%2C-the-shape-and-count%2C-and-what-to-return"></a>
+
+
+### How to write the request: one sentence each for the check, the shape and count, and what to return
+
+The [README](https://github.com/cursor/plugins/blob/main/pstack/README.md) and the bundled guide have the following example request.
+
+```
+/swarm check every package under packages/ against its check.sh. one worker per package. one report.
+```
+
+This request <strong>gives one sentence each</strong> to three things. The check is `check.sh`, the shape and count are one Worker per package, and what to return is one report. The main agent decides these three things in Frame. When the request states them, the main agent builds Frame from them.
+
+<a id="choose-among-the-three-parallel-skills-by-what-you-want-to-get-and-by-how-big-and-how-hard-to-undo-the-change-is"></a>
+
+
+## Choose among the three parallel Skills by what you want to get and by how big and how hard to undo the change is
+
+Choose as follows.
+
+- <strong>To design a change that crosses function boundaries, such as a new function that a function in another file calls.</strong> Use `/architect`, which uses `/arena` internally.
+- <strong>To get one artifact at the end, such as one settled format for a cache key.</strong> Use `/arena`.
+- <strong>To combine the results of checks on many ranges into one table, such as the check results for every package under `packages/`.</strong> Use `/swarm`.
+
+<a id="decide-how-much-design-effort-to-spend-by-the-size-of-the-change-and-how-hard-it-is-to-undo"></a>
+
+
+### Decide how much design effort to spend by the size of the change and how hard it is to undo
+
+Not every change needs design work. `04-design.md` gives the following guide.
+
+<table class="code-line" data-line="594">
+<thead class="code-line" data-line="594">
+<tr class="code-line" data-line="594">
+<th>Situation</th>
+<th>What to use</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="596">
+<tr class="code-line" data-line="596">
+<td>A small, finished change that you are unsure about</td>
+<td>
+<code>/interrogate</code> only</td>
+</tr>
+<tr class="code-line" data-line="597">
+<td>A change that crosses function boundaries or moves ownership, meaning which module is responsible</td>
+<td>
+<code>/architect</code>, which also uses <code>/arena</code> internally</td>
+</tr>
+<tr class="code-line" data-line="598">
+<td>A single decision, such as a name or an algorithm</td>
+<td>
+<code>/arena</code> directly</td>
+</tr>
+<tr class="code-line" data-line="599">
+<td>An exhaustive check per range, parallel checks, or a race with a declared selection rule</td>
+<td><code>/swarm</code></td>
+</tr>
+<tr class="code-line" data-line="600">
+<td>A contested design that is expensive to undo</td>
+<td>
+<code>/architect</code>, then <code>/interrogate</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+`/poteto-mode` applies this guide itself and calls `/architect` for work that crosses function boundaries even when nobody asks. The user therefore calls these Skills directly only to check more carefully, or more briefly, than the default.
+
+<a id="%2Farena-and-%2Fswarm-aim-for-different-results"></a>
+
+
+### /arena and /swarm aim for different results
+
+<table class="code-line" data-line="607">
+<thead class="code-line" data-line="607">
+<tr class="code-line" data-line="607">
+<th>Item</th>
+<th><code>/arena</code></th>
+<th><code>/swarm</code></th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="609">
+<tr class="code-line" data-line="609">
+<td>Purpose</td>
+<td>Produce one best artifact</td>
+<td>Cover everything, or get a fast answer through competition</td>
+</tr>
+<tr class="code-line" data-line="610">
+<td>Instructions to each subagent</td>
+<td>The same problem for everyone</td>
+<td>Separate ranges for a partition, the same instructions for a race</td>
+</tr>
+<tr class="code-line" data-line="611">
+<td>How results are combined</td>
+<td>Pick a base, then rewrite the good parts of the losing candidates to fit the base's design and transplant them</td>
+<td>Combine into a table. For a race, pick by the declared rule</td>
+</tr>
+<tr class="code-line" data-line="612">
+<td>Output</td>
+<td>One merged artifact and a merge note</td>
+<td>One report in the chat</td>
+</tr>
+</tbody>
+</table>
+
+<strong>A common mistake is to use `/arena` for coverage</strong>, according to `10-recipes-and-pitfalls.md`. `/arena` gives every candidate the same problem, so it does not check separate ranges.
+
+For coverage, the user uses `/swarm`, which splits the ranges and combines the results into one report. `/swarm` does not pick a base and transplant parts the way `/arena` does.
+
+<a id="summary"></a>
+
+
+## Summary
+
+- <strong>How the three Skills divide the work.</strong> `/poteto-mode` calls `/architect`, `/arena`, and `/swarm` according to the rules in "Non-negotiables" and the Playbook procedures.
+- <strong>`/architect`.</strong> Before code that crosses function boundaries, it derives the types from the caller's usage and builds a skeleton with no function bodies. If workarounds of the same shape or type escape hatches such as `any` or casts keep appearing, it throws the skeleton away and designs again.
+- <strong>`/arena`.</strong> It has several models produce an artifact that is expensive to fix later, such as the format of a cache key, and picks the best candidate as the base. It rewrites the good parts of the other candidates to fit the base's design before it transplants them.
+- <strong>`/swarm`.</strong> It runs Workers in parallel for coverage, such as a check of every package, or competition, and combines the results into one report. A range whose records, such as the verified commit, are still missing after one rerun does not count as a pass. The report lists it as a gap.
+- <strong>Choosing among the three.</strong> Use `/architect` for a change that crosses function boundaries, `/arena` for one artifact, and `/swarm` for a table of coverage results.
+
+The next chapter, [Chapter 25](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e5f103), covers two Skills that extend pstack to the user's own way of working and to Grok Bot: [`/automate-me`](https://github.com/cursor/plugins/blob/main/pstack/skills/automate-me/SKILL.md) and [`/make-bot-ui`](https://github.com/cursor/plugins/blob/main/pstack/skills/make-bot-ui/SKILL.md).
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](29-chapter.md) · [Next](31-chapter.md) · [简体中文](../zh-CN/30-chapter.md)

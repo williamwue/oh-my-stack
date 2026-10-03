@@ -1,5 +1,21 @@
 # Third-party notices
 
+## The pstack book by kaito
+
+The Chinese chapters under `docs/books/pstack/zh-CN/` are translated from
+[kaito's Japanese book](https://zenn.dev/sc30gsw/books/080faba713547b), with the
+[author's English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04) used
+for comparison and archived under `docs/books/pstack/en/`. Source snapshots
+are retained under `upstream/books/pstack/`. Original author: kaito. Translation preparation: Oh My Stack,
+with AI assistance. The full translation has AI review records and is pending human review.
+
+The maintainer reports the author's verbal permission to publish Chinese and
+English editions. The [authorization record](docs/books/pstack/AUTHORIZATION.md)
+documents that report and its scope. The book is not designated MIT-licensed;
+the pstack plugin's MIT license does not establish the license of the book.
+Source chapter URLs and translation status are in
+[`source-manifest.json`](docs/books/pstack/source-manifest.json).
+
 ## Cursor pstack
 
 The `principle-*`, `tdd`, `technical-writing`, `unslop`, `how`,

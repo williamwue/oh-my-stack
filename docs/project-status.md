@@ -1,6 +1,6 @@
 # Project status
 
-Updated: 2026-10-03. Release candidate: [0.4.0](releases/0.4.0.md).
+Updated: 2026-10-03. Release record: [0.4.0](releases/0.4.0.md).
 Previous published baseline: [v0.3.0](releases/0.3.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery

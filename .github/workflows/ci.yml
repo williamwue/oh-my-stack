@@ -27,3 +27,11 @@ jobs:
 
       - name: Run offline checks
         run: npm run check
+
+      - name: Audit bilingual book sources
+        run: |
+          python3 -m venv .tmp/book-audit-env
+          .tmp/book-audit-env/bin/python -m pip install -r tools/books/requirements.txt
+          node tools/books/validate-pstack-book.mjs --complete
+          .tmp/book-audit-env/bin/python tools/books/audit-source.py
+          .tmp/book-audit-env/bin/python tests/pstack-book-audit.test.py

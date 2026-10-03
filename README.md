@@ -40,7 +40,7 @@ claims use the separate verification labels documented in the
 
 ## Quick start
 
-The 0.4.0 candidate adds [Codex GitHub workflow bindings](docs/github-workflow.md).
+Version 0.4.0 adds [Codex GitHub workflow bindings](docs/github-workflow.md).
 See the [release scope and gates](docs/releases/0.4.0.md); full pstack parity
 and autonomous hosted merging are not claimed.
 
@@ -722,6 +722,13 @@ oh-my-stack/
 ```
 
 `packages/` contains committed generator-owned installation trees so Git-based installs remain reviewable. CI regenerates them and rejects drift. `dist/` contains uncommitted release archives and checksums; neither directory is a semantic source of truth.
+
+## Reading
+
+[kaito's pstack book](docs/books/pstack/README.md) includes all 48 entries in
+English and Simplified Chinese, with source snapshots, AI review records and
+an Oh My Stack companion. The complete local candidate is pending human review.
+Reported author permission is recorded separately from the project's MIT license.
 
 ## Attribution
 

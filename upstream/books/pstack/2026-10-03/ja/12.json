@@ -1,0 +1,68 @@
+{
+  "chapter": {
+    "id": 165563,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "6b7496",
+    "body_letters_count": 3859,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-10-02T10:19:39.940+09:00",
+    "filename": null,
+    "position": 12,
+    "path": "/sc30gsw/books/080faba713547b/viewer/6b7496",
+    "title": "第9章 pstackが必要なものだけを読み込む理由",
+    "body_html": "<p data-line=\"0\" class=\"code-line\"><strong>pstackは、Playbook、Principle、Skillのすべてを最初に読み込むわけではありません。先に読むのは、<code>/poteto-mode</code> の本体とPrincipleの索引だけ</strong>です。</p>\n<p data-line=\"2\" class=\"code-line\">Playbookは依頼に合う1冊だけを、Principleの本文は条件に該当したときにそのPrincipleを、SkillはPlaybookの手順がその場面に来たときに読み込みます。</p>\n<p data-line=\"4\" class=\"code-line\">部品の呼ばれ方は<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4fda7d\" target=\"_blank\">第7章</a>と<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d\" target=\"_blank\">第8章</a>で見ました。この章では、読み込むものを4つのレイヤーに分ける設計と、その元にある考え方、設計の利点と弱点を解説します。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90\" data-line=\"6\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90\" aria-hidden=\"true\"></a> この章の構成</h2>\n<p data-line=\"8\" class=\"code-line\">この章の構成は次のとおりです。</p>\n<ul data-line=\"10\" class=\"code-line\">\n<li data-line=\"10\" class=\"code-line\">pstackは、読むものを4つのレイヤーに分けている</li>\n<li data-line=\"11\" class=\"code-line\">この設計は、原則『Guard the Context Window』と同じ線引きをしている</li>\n<li data-line=\"12\" class=\"code-line\">この設計には3つの利点があり、弱点は途中の点検で補う</li>\n<li data-line=\"13\" class=\"code-line\">まとめ</li>\n</ul>\n<h2 id=\"pstack%E3%81%AF%E3%80%81%E8%AA%AD%E3%82%80%E3%82%82%E3%81%AE%E3%82%924%E3%81%A4%E3%81%AE%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AB%E5%88%86%E3%81%91%E3%81%A6%E3%81%84%E3%82%8B\" data-line=\"15\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#pstack%E3%81%AF%E3%80%81%E8%AA%AD%E3%82%80%E3%82%82%E3%81%AE%E3%82%924%E3%81%A4%E3%81%AE%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AB%E5%88%86%E3%81%91%E3%81%A6%E3%81%84%E3%82%8B\" aria-hidden=\"true\"></a> pstackは、読むものを4つのレイヤーに分けている</h2>\n<p data-line=\"17\" class=\"code-line\">pstackが読むものは、<strong>入口、手順、判断、能力の4つのレイヤー</strong>に分かれており、常に読むのは入口だけです。</p>\n<table data-line=\"19\" class=\"code-line\">\n<thead data-line=\"19\" class=\"code-line\">\n<tr data-line=\"19\" class=\"code-line\">\n<th>レイヤー</th>\n<th>読むもの</th>\n<th>読むタイミング</th>\n</tr>\n</thead>\n<tbody data-line=\"21\" class=\"code-line\">\n<tr data-line=\"21\" class=\"code-line\">\n<td>第1レイヤー：入口</td>\n<td>\n<a href=\"https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><code>/poteto-mode</code></a> の<code>SKILL.md</code>全体</td>\n<td>\n<code>/poteto-mode</code> を呼んだとき</td>\n</tr>\n<tr data-line=\"22\" class=\"code-line\">\n<td>第2レイヤー：手順</td>\n<td>依頼に合うPlaybookのファイル1冊</td>\n<td>依頼をPlaybookに照らし合わせたとき</td>\n</tr>\n<tr data-line=\"23\" class=\"code-line\">\n<td>第3レイヤー：判断</td>\n<td>条件に該当したPrincipleの<code>SKILL.md</code>\n</td>\n<td>今の作業が索引の条件に該当したとき</td>\n</tr>\n<tr data-line=\"24\" class=\"code-line\">\n<td>第4レイヤー：能力</td>\n<td>Playbookの手順や <code>Non-negotiables</code> が求めるSkillの<code>SKILL.md</code>\n</td>\n<td>Playbookの手順がその場面に来たとき</td>\n</tr>\n</tbody>\n</table>\n<p data-line=\"26\" class=\"code-line\">第1レイヤーの<code>SKILL.md</code>には、Playbookの本文もPrincipleの本文も入っていません。あるのは、<code>Non-negotiables</code> や返答の書き方のような、どの作業にも共通する決まりと、Playbookの1行の説明とファイルの場所、Principleの一覧（索引）と適用条件です。<strong>第1レイヤーは、「何があり、いつ使うか」を知らせる目次と、共通の決まりでできています</strong>。</p>\n<p data-line=\"28\" class=\"code-line\">4つのレイヤーとは別に、常に適用される小さなファイルが1つあります。<code>/setup-pstack</code> が書き出すモデル設定のルール <code>~/.cursor/rules/pstack-models.mdc</code> です。1行に1つの役割を書く短いファイルなので、常に適用されても、コンテキストに占める量は小さく済みます。詳しくは<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/8487f0\" target=\"_blank\">第34章</a>で扱います。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AF%E3%80%81%E5%8E%9F%E5%89%87%E3%80%8Eguard-the-context-window%E3%80%8F%E3%81%A8%E5%90%8C%E3%81%98%E7%B7%9A%E5%BC%95%E3%81%8D%E3%82%92%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B\" data-line=\"30\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AF%E3%80%81%E5%8E%9F%E5%89%87%E3%80%8Eguard-the-context-window%E3%80%8F%E3%81%A8%E5%90%8C%E3%81%98%E7%B7%9A%E5%BC%95%E3%81%8D%E3%82%92%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B\" aria-hidden=\"true\"></a> この設計は、原則『Guard the Context Window』と同じ線引きをしている</h2>\n<p data-line=\"32\" class=\"code-line\">pstackの読み込みの設計は、原則『<a href=\"https://github.com/cursor/plugins/blob/main/pstack/skills/principle-guard-the-context-window/SKILL.md\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><strong>Guard the Context Window</strong></a>』が<strong>エージェントに求めるのと同じ線引き</strong>をしています。</p>\n<h3 id=\"%E6%AF%8E%E5%9B%9E%E4%BD%BF%E3%81%86%E3%82%82%E3%81%AE%E3%81%AF%E4%B8%AD%E3%81%AB%E3%80%81%E6%9D%A1%E4%BB%B6%E4%BB%98%E3%81%8D%E3%81%AE%E3%82%82%E3%81%AE%E3%81%AF%E5%A4%96%E3%81%AB%E7%BD%AE%E3%81%8F\" data-line=\"34\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E6%AF%8E%E5%9B%9E%E4%BD%BF%E3%81%86%E3%82%82%E3%81%AE%E3%81%AF%E4%B8%AD%E3%81%AB%E3%80%81%E6%9D%A1%E4%BB%B6%E4%BB%98%E3%81%8D%E3%81%AE%E3%82%82%E3%81%AE%E3%81%AF%E5%A4%96%E3%81%AB%E7%BD%AE%E3%81%8F\" aria-hidden=\"true\"></a> 毎回使うものは中に、条件付きのものは外に置く</h3>\n<p data-line=\"36\" class=\"code-line\">この原則では、<strong>コンテキストウィンドウは有限で、すべてのトークンがコストに見合うべき</strong>、と定めています。コンテキストウィンドウが占有されると推論の質が落ちるからです。</p>\n<p data-line=\"38\" class=\"code-line\">同原則には、毎回使う参照はSkillのファイルの中に置く、という項目があります。pstackでも、毎回使うPrincipleの索引と <code>Non-negotiables</code> は<code>SKILL.md</code>の中に、条件に該当したときだけ使う本文は別ファイルにしてあります。<strong>毎回使うものは中に、ときどき使うものは外に</strong>、という線引きがされています。</p>\n<h3 id=\"%E3%82%B5%E3%83%96%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%B8%E3%81%AE%E6%B8%A1%E3%81%97%E6%96%B9%E3%82%82%E3%80%81%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%92%E7%AF%80%E7%B4%84%E3%81%99%E3%82%8B\" data-line=\"40\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%82%B5%E3%83%96%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%B8%E3%81%AE%E6%B8%A1%E3%81%97%E6%96%B9%E3%82%82%E3%80%81%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%92%E7%AF%80%E7%B4%84%E3%81%99%E3%82%8B\" aria-hidden=\"true\"></a> サブエージェントへの渡し方も、コンテキストを節約する</h3>\n<p data-line=\"42\" class=\"code-line\"><code>SKILL.md</code>の節『Subagents』は、サブエージェントには<strong>コンテキストを書き写さず、ファイルの場所を渡すことを既定にしています</strong>（<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4f8911\" target=\"_blank\">第35章</a>）。サブエージェントは必要なファイルを自分で開くので、主エージェントが長いコンテキストを積み上げて渡さずに済みます。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AB%E3%81%AF3%E3%81%A4%E3%81%AE%E5%88%A9%E7%82%B9%E3%81%8C%E3%81%82%E3%82%8A%E3%80%81%E5%BC%B1%E7%82%B9%E3%81%AF%E9%80%94%E4%B8%AD%E3%81%AE%E7%82%B9%E6%A4%9C%E3%81%A7%E8%A3%9C%E3%81%86\" data-line=\"44\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AB%E3%81%AF3%E3%81%A4%E3%81%AE%E5%88%A9%E7%82%B9%E3%81%8C%E3%81%82%E3%82%8A%E3%80%81%E5%BC%B1%E7%82%B9%E3%81%AF%E9%80%94%E4%B8%AD%E3%81%AE%E7%82%B9%E6%A4%9C%E3%81%A7%E8%A3%9C%E3%81%86\" aria-hidden=\"true\"></a> この設計には3つの利点があり、弱点は途中の点検で補う</h2>\n<p data-line=\"46\" class=\"code-line\">この設計の利点は、次の3つです。</p>\n<ol data-line=\"48\" class=\"code-line\">\n<li data-line=\"48\" class=\"code-line\">\n<strong>トークンとコストの節約</strong>・・・ 使わない手順や判断基準がコンテキストを占めず、コンテキストウィンドウがあふれるまでの余裕が残ります。poteto氏も『The Complete Guide to pstack』<a href=\"https://x.com/poteto/status/2097732320606507506\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 2</a>で、Playbookを1冊ずつ読み込む理由をトークン効率だと説明しています。</li>\n<li data-line=\"49\" class=\"code-line\">\n<strong>作業の一貫性</strong>・・・ どの部品も、必要になった時点で完全な本文を読むので、エージェントの記憶や言い換えに頼らずに済みます。</li>\n<li data-line=\"50\" class=\"code-line\">\n<strong>覚えることの少なさ</strong>・・・ 利用者は70件の名前と使いどころを覚えず、<code>/poteto-mode</code> を覚えるだけで済みます。</li>\n</ol>\n<h3 id=\"%E5%BC%B1%E7%82%B9%EF%BC%9A%E6%9D%A1%E4%BB%B6%E3%81%AE%E5%88%A4%E5%AE%9A%E3%81%8C%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E4%BB%BB%E3%81%9B%E3%81%AB%E3%81%AA%E3%82%8B\" data-line=\"52\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E5%BC%B1%E7%82%B9%EF%BC%9A%E6%9D%A1%E4%BB%B6%E3%81%AE%E5%88%A4%E5%AE%9A%E3%81%8C%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E4%BB%BB%E3%81%9B%E3%81%AB%E3%81%AA%E3%82%8B\" aria-hidden=\"true\"></a> 弱点：条件の判定がエージェント任せになる</h3>\n<p data-line=\"54\" class=\"code-line\">この設計の弱点は、どのPrincipleやPlaybookに該当するかの判定が、<strong>エージェントに任されていること</strong>です。判定を誤れば、読むべき本文が読まれないこともありえます。</p>\n<p data-line=\"56\" class=\"code-line\">本書では、pstackの次の仕組みが、これを途中の点検で補うものだと読みます。</p>\n<table data-line=\"58\" class=\"code-line\">\n<thead data-line=\"58\" class=\"code-line\">\n<tr data-line=\"58\" class=\"code-line\">\n<th>仕組み</th>\n<th>利用者が点検できること</th>\n</tr>\n</thead>\n<tbody data-line=\"60\" class=\"code-line\">\n<tr data-line=\"60\" class=\"code-line\">\n<td>飛ばした手順が <code>skip: &lt;理由&gt;</code> でTODOリストに残る</td>\n<td>どの手順を、なぜやらなかったか</td>\n</tr>\n<tr data-line=\"61\" class=\"code-line\">\n<td>判断を変えたPrincipleを返答で名前で挙げる（挙げてよいのは本文を読んだPrincipleだけ）</td>\n<td>どの基準を読み、どの選択に効かせたか</td>\n</tr>\n<tr data-line=\"62\" class=\"code-line\">\n<td>Principleの名前を一言返すだけで方向を変えられる</td>\n<td>ずれた判定を、その場で直せる</td>\n</tr>\n</tbody>\n</table>\n<aside class=\"msg message\"><span class=\"msg-symbol\">!</span><div class=\"msg-content\">\n<p data-line=\"65\" class=\"code-line\"><strong>TODOリスト</strong>・・・ エージェントが作業の始めに作る、その作業でやることの一覧（計画）です。Cursorでは、チャットの画面に表示されます。利用者は、この一覧を見て、エージェントがどの手順を進め、どの手順を飛ばしたか（<code>skip: &lt;理由&gt;</code>）を確かめられます<br>\n（同梱ガイド <a href=\"https://github.com/cursor/plugins/blob/main/pstack/docs/guide/01-setup.md\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><code>01-setup.md</code></a>）。</p>\n</div></aside>\n<h2 id=\"%E3%81%BE%E3%81%A8%E3%82%81\" data-line=\"69\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%BE%E3%81%A8%E3%82%81\" aria-hidden=\"true\"></a> まとめ</h2>\n<ul data-line=\"71\" class=\"code-line\">\n<li data-line=\"71\" class=\"code-line\">\n<strong>4つのレイヤー</strong>・・・ pstackは、入口、手順、判断、能力の4つのレイヤーを、必要な時点で読み込みます。常に読むのは入口の <code>SKILL.md</code>（目次と索引、共通の決まり）だけです。</li>\n<li data-line=\"72\" class=\"code-line\">\n<strong>設計の元にある考え方</strong>・・・ 原則『<strong>Guard the Context Window</strong>』と同じく、毎回使う索引は中に、条件付きで使う本文は外に置いています。</li>\n<li data-line=\"73\" class=\"code-line\">\n<strong>利点と弱点</strong>・・・ 利点はトークン効率、一貫性、覚えやすさです。判定がエージェント任せになる弱点は、TODOリストと返答で点検します。</li>\n</ul>\n<p data-line=\"75\" class=\"code-line\"><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a5fb04\" target=\"_blank\">第2部</a>では、pstackが何を解決し、入口の <code>/poteto-mode</code> がどう依頼を振り分け、3つの部品がどう分担し、それらがどう読み込まれるかを見てきました。次の<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/72f8ee\" target=\"_blank\">第3部</a>からは、23件のPlaybookを一つずつ見ていきます。最初の<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/ea525d\" target=\"_blank\">第10章</a>では、コードを変えずに問題を調べ、診断するためのPlaybookを扱います。</p>\n",
+    "toc": [
+      {
+        "id": "%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90",
+        "text": "この章の構成",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "pstack%E3%81%AF%E3%80%81%E8%AA%AD%E3%82%80%E3%82%82%E3%81%AE%E3%82%924%E3%81%A4%E3%81%AE%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AB%E5%88%86%E3%81%91%E3%81%A6%E3%81%84%E3%82%8B",
+        "text": "pstackは、読むものを4つのレイヤーに分けている",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AF%E3%80%81%E5%8E%9F%E5%89%87%E3%80%8Eguard-the-context-window%E3%80%8F%E3%81%A8%E5%90%8C%E3%81%98%E7%B7%9A%E5%BC%95%E3%81%8D%E3%82%92%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B",
+        "text": "この設計は、原則『Guard the Context Window』と同じ線引きをしている",
+        "level": 2,
+        "children": [
+          {
+            "id": "%E6%AF%8E%E5%9B%9E%E4%BD%BF%E3%81%86%E3%82%82%E3%81%AE%E3%81%AF%E4%B8%AD%E3%81%AB%E3%80%81%E6%9D%A1%E4%BB%B6%E4%BB%98%E3%81%8D%E3%81%AE%E3%82%82%E3%81%AE%E3%81%AF%E5%A4%96%E3%81%AB%E7%BD%AE%E3%81%8F",
+            "text": "毎回使うものは中に、条件付きのものは外に置く",
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "%E3%82%B5%E3%83%96%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%B8%E3%81%AE%E6%B8%A1%E3%81%97%E6%96%B9%E3%82%82%E3%80%81%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%92%E7%AF%80%E7%B4%84%E3%81%99%E3%82%8B",
+            "text": "サブエージェントへの渡し方も、コンテキストを節約する",
+            "level": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "%E3%81%93%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AB%E3%81%AF3%E3%81%A4%E3%81%AE%E5%88%A9%E7%82%B9%E3%81%8C%E3%81%82%E3%82%8A%E3%80%81%E5%BC%B1%E7%82%B9%E3%81%AF%E9%80%94%E4%B8%AD%E3%81%AE%E7%82%B9%E6%A4%9C%E3%81%A7%E8%A3%9C%E3%81%86",
+        "text": "この設計には3つの利点があり、弱点は途中の点検で補う",
+        "level": 2,
+        "children": [
+          {
+            "id": "%E5%BC%B1%E7%82%B9%EF%BC%9A%E6%9D%A1%E4%BB%B6%E3%81%AE%E5%88%A4%E5%AE%9A%E3%81%8C%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E4%BB%BB%E3%81%9B%E3%81%AB%E3%81%AA%E3%82%8B",
+            "text": "弱点：条件の判定がエージェント任せになる",
+            "level": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "%E3%81%BE%E3%81%A8%E3%82%81",
+        "text": "まとめ",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

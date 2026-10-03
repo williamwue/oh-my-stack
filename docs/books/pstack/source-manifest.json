@@ -1,0 +1,1168 @@
+{
+  "author": "kaito",
+  "catalog_observed_on": "2026-10-03",
+  "primary_language": "ja",
+  "cross_check_language": "en",
+  "japanese_book_url": "https://zenn.dev/sc30gsw/books/080faba713547b",
+  "english_book_url": "https://zenn.dev/sc30gsw/books/7ff701b9811d04",
+  "authorization_record": "AUTHORIZATION.md",
+  "pstack_reference": {
+    "checked_on": "2026-09-24",
+    "version": "0.15.5",
+    "commit": "12d587dfb20741cafc376c42c696c5f6e2a64487"
+  },
+  "chapters": [
+    {
+      "order": 1,
+      "title_ja": "はじめに",
+      "title_en": "Preface",
+      "title_zh_cn": "开篇",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/d4d843",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3dfdf0",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/01-preface.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T09:08:33.198+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/01.md",
+        "ja_sha256": "ae6760ef8669079b51f3fd15a69266b579b72e2094f41ff20b5a9e124645eebc",
+        "en_file": "upstream/books/pstack/2026-10-03/en/01.md",
+        "en_sha256": "f7739db5324d0f586b0b16e135d7853f69ec41fb772394eb266c7caeccc8ad33"
+      },
+      "english_status": "ready",
+      "english_file": "en/01-preface.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/01.json"
+      }
+    },
+    {
+      "order": 2,
+      "title_ja": "第1部 月2.500件のPRを支えた開発基盤",
+      "title_en": "Part I: The development foundation behind 2,500 PRs a month",
+      "title_zh_cn": "第一部分：支撑每月 2,500 个 PR 的开发基础",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/86acbc",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/02-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-29T21:10:48.218+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/02.md",
+        "ja_sha256": "f435a12afab4780aa55b34712c4a8a1dcf18603b851b901f8c603567392f6390",
+        "en_file": "upstream/books/pstack/2026-10-03/en/02.md",
+        "en_sha256": "503ba3906f3deaefa30363e430edb30214af831f4adf8a1dce5d647f0a7bdadd"
+      },
+      "english_status": "ready",
+      "english_file": "en/02-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/02.json"
+      }
+    },
+    {
+      "order": 3,
+      "title_ja": "第1章 2,500件のPRは目標ではなく、環境が整った結果",
+      "title_en": "Chapter 1: 2,500 PRs result from a ready environment, not a target",
+      "title_zh_cn": "第 1 章：2,500 个 PR 是环境完善后的结果，而非目标",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/74ae41",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/15df58",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/03-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-28T04:20:36.021+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/03.md",
+        "ja_sha256": "083ccf0615d34b2c9be66b0de77d6c93f6b003494a8207540eb17cc22f1ae627",
+        "en_file": "upstream/books/pstack/2026-10-03/en/03.md",
+        "en_sha256": "8101d9512127b78169d7ffd6e5df7f090a60ee7d149fea1bc7508d58eed82987"
+      },
+      "english_status": "ready",
+      "english_file": "en/03-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/03.json"
+      }
+    },
+    {
+      "order": 4,
+      "title_ja": "第2章 信頼するのは、エージェントではなく成果物",
+      "title_en": "Chapter 2: Trust the artifact, not the agent",
+      "title_zh_cn": "第 2 章：信任成果物，而不是 Agent",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/04-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:43:00.216+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/04.md",
+        "ja_sha256": "be0c6af0cee976034fa2183e31db595661fb9bcb2a5898f0bcf77cb47f8a9a59",
+        "en_file": "upstream/books/pstack/2026-10-03/en/04.md",
+        "en_sha256": "19ffbcbe99f97716e182c184b702a36106b237c8772c9edf4f65663333cbca46"
+      },
+      "english_status": "ready",
+      "english_file": "en/04-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/04.json"
+      }
+    },
+    {
+      "order": 5,
+      "title_ja": "第3章 検証を再現可能な仕組みにする",
+      "title_en": "Chapter 3: Make verification a repeatable mechanism",
+      "title_zh_cn": "第 3 章：让验证成为可重复的机制",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a88ea5",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/05-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:43:18.963+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/05.md",
+        "ja_sha256": "4c6854fb7689351e2e1bf525948c40e1b2eef1486b9260d61de2e49a43e0df89",
+        "en_file": "upstream/books/pstack/2026-10-03/en/05.md",
+        "en_sha256": "b53fc065a8cab0c74d3990caeaedee9bd46b49c428573647a5bc2f4459a7b65e"
+      },
+      "english_status": "ready",
+      "english_file": "en/05-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/05.json"
+      }
+    },
+    {
+      "order": 6,
+      "title_ja": "第4章 コードベースをエージェントの記憶にする",
+      "title_en": "Chapter 4: Make the codebase the agent's memory",
+      "title_zh_cn": "第 4 章：让代码库成为 Agent 的记忆",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/dc9141",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/06-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:43:37.828+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/06.md",
+        "ja_sha256": "cd3393cdd1e17b1e584befbfa915726ccb01c6b4c9959d9827a940aef11a5700",
+        "en_file": "upstream/books/pstack/2026-10-03/en/06.md",
+        "en_sha256": "dd63d04e66cc73068ea0a82f2dfee0598345c2aeed688968154f36a795ab6e84"
+      },
+      "english_status": "ready",
+      "english_file": "en/06-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/06.json"
+      }
+    },
+    {
+      "order": 7,
+      "title_ja": "第5章 自動化は、信頼の土台の上に築く",
+      "title_en": "Chapter 5: Build automation on a foundation of trust",
+      "title_zh_cn": "第 5 章：在信任的基础上建立自动化",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b6ac2d",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/aa6858",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/07-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:05:17.596+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/07.md",
+        "ja_sha256": "e8dc86b6d03716331216527c085149e79323aca8339b98f612d9393c53cb9267",
+        "en_file": "upstream/books/pstack/2026-10-03/en/07.md",
+        "en_sha256": "00cbce710f9aa1e74b31208e735c8c783e9c6fd8be92ceb5ef6cb7c4294a02dd"
+      },
+      "english_status": "ready",
+      "english_file": "en/07-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/07.json"
+      }
+    },
+    {
+      "order": 8,
+      "title_ja": "第2部 pstackとは何か",
+      "title_en": "Part II: What pstack is",
+      "title_zh_cn": "第二部分：什么是 pstack",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a5fb04",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/08-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-29T21:10:57.969+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/08.md",
+        "ja_sha256": "cccdf5b503c76670a815923562a9035b03df389da91477dc9cc0dd55597ce30e",
+        "en_file": "upstream/books/pstack/2026-10-03/en/08.md",
+        "en_sha256": "5c59b64ec228e0a7547e71ac7d66fb3006c4f248132d3d57434bc94fd59069ec"
+      },
+      "english_status": "ready",
+      "english_file": "en/08-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/08.json"
+      }
+    },
+    {
+      "order": 9,
+      "title_ja": "第6章 pstackは何を解決するのか",
+      "title_en": "Chapter 6: What problem pstack solves",
+      "title_zh_cn": "第 6 章：pstack 解决什么问题",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/33f073",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3a7791",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/09-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-01T12:21:52.348+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/09.md",
+        "ja_sha256": "f73d55bd800b89e1d39f6968b43e9d9cefd6044ba51cd48c53cd33a768d5a5cf",
+        "en_file": "upstream/books/pstack/2026-10-03/en/09.md",
+        "en_sha256": "f72460e2e8e87515d26eeb421ac033230882c4244c7071a0574a807ccebade29"
+      },
+      "english_status": "ready",
+      "english_file": "en/09-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/09.json"
+      }
+    },
+    {
+      "order": 10,
+      "title_ja": "第7章 /poteto-mode ― 依頼を適切な進め方につなぐ入口",
+      "title_en": "Chapter 7: /poteto-mode, the entry point that routes each request",
+      "title_zh_cn": "第 7 章：/poteto-mode，让请求进入合适工作流的入口",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4fda7d",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/55bbdb",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/10-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T10:19:25.955+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/10.md",
+        "ja_sha256": "166759a1a70463a44a82f4f52754aadfaf30eaec8a7254b3506d7880c1c6ad65",
+        "en_file": "upstream/books/pstack/2026-10-03/en/10.md",
+        "en_sha256": "93b0625a633544332b4f44d0ce9f7a2b40567ec1eaebe689cae23db4480e1bc9"
+      },
+      "english_status": "ready",
+      "english_file": "en/10-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/10.json"
+      }
+    },
+    {
+      "order": 11,
+      "title_ja": "第8章 Playbook・Skill・Principleは何を担うのか",
+      "title_en": "Chapter 8: What do Playbooks, Skills, and Principles each handle?",
+      "title_zh_cn": "第 8 章：Playbook、Skill 与 Principle 各自负责什么",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/11-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:44:00.655+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/11.md",
+        "ja_sha256": "c61e00b4d4623ce9bf18e39902d49f24613ccdcd4471196cd15dd5917edc5140",
+        "en_file": "upstream/books/pstack/2026-10-03/en/11.md",
+        "en_sha256": "06b968554653908be213677e8d9eddd3aab74cd372ab00438bc49e28dba4646b"
+      },
+      "english_status": "ready",
+      "english_file": "en/11-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/11.json"
+      }
+    },
+    {
+      "order": 12,
+      "title_ja": "第9章 pstackが必要なものだけを読み込む理由",
+      "title_en": "Chapter 9: Why pstack loads only what it needs",
+      "title_zh_cn": "第 9 章：为什么 pstack 只加载需要的内容",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/6b7496",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/84aa6e",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/12-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T10:19:39.940+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/12.md",
+        "ja_sha256": "fd56e37efc97aa7073df565e8f5356db259b50d49ea3f5a08cc771e8999b7a5d",
+        "en_file": "upstream/books/pstack/2026-10-03/en/12.md",
+        "en_sha256": "c6a31011768a1650ae15e69b851710f82b2d48b06dbe3c87a4d462fe27890c01"
+      },
+      "english_status": "ready",
+      "english_file": "en/12-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/12.json"
+      }
+    },
+    {
+      "order": 13,
+      "title_ja": "第3部 Playbookで作業を進める",
+      "title_en": "Part III: Moving work forward with Playbooks",
+      "title_zh_cn": "第三部分：用 Playbook 推进工作",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/72f8ee",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0d1535",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/13-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:03:49.357+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/13.md",
+        "ja_sha256": "3c945f9b8ac433f393e6b34234dd8fd75b00ca80531dc6a4f7e8190da9e3334c",
+        "en_file": "upstream/books/pstack/2026-10-03/en/13.md",
+        "en_sha256": "13b96a22ac7ed236e84dbff53a3f703a7e1ce3a305db30625bb868584686dc6f"
+      },
+      "english_status": "ready",
+      "english_file": "en/13-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/13.json"
+      }
+    },
+    {
+      "order": 14,
+      "title_ja": "第10章 問題を調べ、再現する",
+      "title_en": "Chapter 10: Investigate and reproduce problems",
+      "title_zh_cn": "第 10 章：调查并复现问题",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/ea525d",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/b77ae2",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/14-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:44:33.694+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/14.md",
+        "ja_sha256": "d5cf8a0db9ed9be26e9340f79f541c3f2f7cf720712b080bb10956edf9d9f297",
+        "en_file": "upstream/books/pstack/2026-10-03/en/14.md",
+        "en_sha256": "eed48efcae140e81ad04c3bde4d99fc16adfe3c1415afc5eb5026d0387480678"
+      },
+      "english_status": "ready",
+      "english_file": "en/14-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/14.json"
+      }
+    },
+    {
+      "order": 15,
+      "title_ja": "第11章 不具合を直し、性能を改善する",
+      "title_en": "Chapter 11: Fix bugs and improve performance",
+      "title_zh_cn": "第 11 章：修复缺陷，改善性能",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/6fcb42",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/ff12ce",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/15-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:06:40.978+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/15.md",
+        "ja_sha256": "afbe97580f600cc39e9a176c2346f887d274aec1528cdf7efd6d57a00511e27a",
+        "en_file": "upstream/books/pstack/2026-10-03/en/15.md",
+        "en_sha256": "e513b099e3c942fda1c053551e2b7e370c0eb82f8b53cd4e36ab58a589bd965a"
+      },
+      "english_status": "ready",
+      "english_file": "en/15-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/15.json"
+      }
+    },
+    {
+      "order": 16,
+      "title_ja": "第12章 機能・構造・見た目をつくり直す",
+      "title_en": "Chapter 12: Rebuild features, structure, and appearance",
+      "title_zh_cn": "第 12 章：重新设计功能、结构与外观",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/f1e85b",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/4f3e0a",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/16-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:08:23.792+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/16.md",
+        "ja_sha256": "f5085511a3dc4c1266fc6e729cce81e439be735feb3ba2b78190df9e43c9dbbb",
+        "en_file": "upstream/books/pstack/2026-10-03/en/16.md",
+        "en_sha256": "93fc297a5339ab408702ce51ed0c97ea8081bbe2efe962e8f0940158acc0e06d"
+      },
+      "english_status": "ready",
+      "english_file": "en/16-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/16.json"
+      }
+    },
+    {
+      "order": 17,
+      "title_ja": "第13章 Skillを作り、評価する",
+      "title_en": "Chapter 13: Write Skills and evaluate them",
+      "title_zh_cn": "第 13 章：编写与评估 Skill",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/8263c0",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3f7768",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/17-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:09:32.500+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/17.md",
+        "ja_sha256": "3d38f6c00650421a8088aa972f76b3d786943a8bc8328575c188560a12226831",
+        "en_file": "upstream/books/pstack/2026-10-03/en/17.md",
+        "en_sha256": "718259397c70bf3baed59db3fc1039e0973606acd5e9215982d597e6d7b0d462"
+      },
+      "english_status": "ready",
+      "english_file": "en/17-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/17.json"
+      }
+    },
+    {
+      "order": 18,
+      "title_ja": "第14章 PRを作成し、検証済みの変更をマージする",
+      "title_en": "Chapter 14: Open PRs and merge verified changes",
+      "title_zh_cn": "第 14 章：创建 PR，合并已验证的变更",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/45a56e",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8f6c25",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/18-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:42:41.719+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/18.md",
+        "ja_sha256": "a26e9de6cb7c04207dc9fe02674d7e92b41d00434ab573663a718da038f07442",
+        "en_file": "upstream/books/pstack/2026-10-03/en/18.md",
+        "en_sha256": "ff1780eb7470083b808e4ff615e62f42e0101454f12763a0512cb2041efbbab4"
+      },
+      "english_status": "ready",
+      "english_file": "en/18-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/18.json"
+      }
+    },
+    {
+      "order": 19,
+      "title_ja": "第15章 長時間の作業をエージェントに任せる",
+      "title_en": "Chapter 15: Delegate long-running work to the agent",
+      "title_zh_cn": "第 15 章：把长时间任务交给 Agent",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7609",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/305f88",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/19-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:13:27.730+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/19.md",
+        "ja_sha256": "3af1fcb03bca5ff924298dda353e3ff280573113faecceecc371f8c93cadd83b",
+        "en_file": "upstream/books/pstack/2026-10-03/en/19.md",
+        "en_sha256": "93fa079ea8bff5011934fa13797cc9ae2939d90460a705ebe881145135235843"
+      },
+      "english_status": "ready",
+      "english_file": "en/19-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/19.json"
+      }
+    },
+    {
+      "order": 20,
+      "title_ja": "第16章 多数のPRを計画し、複数のエージェントで運用する",
+      "title_en": "Chapter 16: Plan many PRs and run them with multiple agents",
+      "title_zh_cn": "第 16 章：规划大量 PR，组织多个 Agent 执行",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/8a8dd5",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3b2bef",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/20-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:30:24.737+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/20.md",
+        "ja_sha256": "73058005da113d75737c14260a7e4a20ab62cae24922e3daa21ad14df6f42717",
+        "en_file": "upstream/books/pstack/2026-10-03/en/20.md",
+        "en_sha256": "81bad8ac4e2e65a3df5d8ad01794d776a3c6b1bb99461124f49b499534843170"
+      },
+      "english_status": "ready",
+      "english_file": "en/20-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/20.json"
+      }
+    },
+    {
+      "order": 21,
+      "title_ja": "第4部 Principleがエージェントの判断を支える",
+      "title_en": "Part IV: Principles support the agent's judgment",
+      "title_zh_cn": "第四部分：用 Principle 支持 Agent 的判断",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4b3166",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/df0d7d",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/21-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:04:08.236+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/21.md",
+        "ja_sha256": "bcb71d33a5daeb358806e533999f2a5350ff7e43e122289f305cff81ac0e3bee",
+        "en_file": "upstream/books/pstack/2026-10-03/en/21.md",
+        "en_sha256": "c25b4a498828ebc00d39377774af11ba372b072d111b098e3cc663d7f8d58a4d"
+      },
+      "english_status": "ready",
+      "english_file": "en/21-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/21.json"
+      }
+    },
+    {
+      "order": 22,
+      "title_ja": "第17章 Core ― 作業の進め方を決める10の原則",
+      "title_en": "Chapter 17: Core: ten principles that decide how work proceeds",
+      "title_zh_cn": "第 17 章：Core，决定工作方式的十条原则",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a8e80b",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/22-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:01:18.074+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/22.md",
+        "ja_sha256": "c21c554e6ffc2fc41cb46fc4bb10c2bdd7bb8826c1507107be35cb7e1146b359",
+        "en_file": "upstream/books/pstack/2026-10-03/en/22.md",
+        "en_sha256": "87e46b2783d794d1042289d89bf2ff03a9604672a1c6dd57a4e4d9c2d9c921b0"
+      },
+      "english_status": "ready",
+      "english_file": "en/22-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/22.json"
+      }
+    },
+    {
+      "order": 23,
+      "title_ja": "第18章 Architecture ― 境界と依存を設計する6つの原則",
+      "title_en": "Chapter 18: Architecture: 6 principles for boundaries and dependencies",
+      "title_zh_cn": "第 18 章：Architecture，设计边界与依赖的六条原则",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/cdc49b",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/23-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:09:35.190+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/23.md",
+        "ja_sha256": "8ac038f5bef8f7331d268ab74250dca70b1970bbf57a615e536a519a75240381",
+        "en_file": "upstream/books/pstack/2026-10-03/en/23.md",
+        "en_sha256": "0defb03d88f8614512b4548bc0df1e0aff8ac28470a60e27d5f623d33450e1d1"
+      },
+      "english_status": "ready",
+      "english_file": "en/23-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/23.json"
+      }
+    },
+    {
+      "order": 24,
+      "title_ja": "第19章 Verification ― 実際の挙動で確かめる4つの原則",
+      "title_en": "Chapter 19: Verification: four principles that check real behavior",
+      "title_zh_cn": "第 19 章：Verification，通过实际行为验证的四条原则",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/1fb019",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/24-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:46:46.788+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/24.md",
+        "ja_sha256": "45eb1af4368d615004f6f6bd1a37c09391f2111ff336040c6911c4adf3f68c99",
+        "en_file": "upstream/books/pstack/2026-10-03/en/24.md",
+        "en_sha256": "6d1cdb6f67df709018d3663a358c669866b8ba419e86b9486bdb1289958a3a8f"
+      },
+      "english_status": "ready",
+      "english_file": "en/24-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/24.json"
+      }
+    },
+    {
+      "order": 25,
+      "title_ja": "第20章 Delegation ―委任と並列化を扱う2つの原則",
+      "title_en": "Chapter 20: Delegation: two principles for delegated and parallel work",
+      "title_zh_cn": "第 20 章：Delegation，处理委派与并行工作的两条原则",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/c155cc",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0ec4d6",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/25-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-29T21:03:17.859+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/25.md",
+        "ja_sha256": "6a59dea3a22523a0da14752fd3e7f3bb583540c2e1ae212a8b1c3b71ebefd7ac",
+        "en_file": "upstream/books/pstack/2026-10-03/en/25.md",
+        "en_sha256": "3ad381e3749276557e7f58b1f0b32cfb4336d0d5c222359556054163b2d53fcc"
+      },
+      "english_status": "ready",
+      "english_file": "en/25-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/25.json"
+      }
+    },
+    {
+      "order": 26,
+      "title_ja": "第21章 Meta ― 仕組み自体を改善する原則",
+      "title_en": "Chapter 21: Meta: the principle that improves the system itself",
+      "title_zh_cn": "第 21 章：Meta，改进机制本身的原则",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/dd2d9f",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/10f4b3",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/26-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T07:43:23.439+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/26.md",
+        "ja_sha256": "1a05ee0e4377556809a7145333dee8d2872312f5131c6053769378b4b13b8dc4",
+        "en_file": "upstream/books/pstack/2026-10-03/en/26.md",
+        "en_sha256": "7f728fd688417178e2956456443aba46d7b415f63689724a88812cddae3a2df4"
+      },
+      "english_status": "ready",
+      "english_file": "en/26-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/26.json"
+      }
+    },
+    {
+      "order": 27,
+      "title_ja": "第5部 Skillで仕事の能力を広げる",
+      "title_en": "Part V: Extend what the work can do with Skills",
+      "title_zh_cn": "第五部分：用 Skill 扩展工作能力",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/2a4af5",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/fdce40",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/27-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T06:04:51.643+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/27.md",
+        "ja_sha256": "4883789b7c792b4bc62faded79d7d12a061fb5410c26021e0bd0293b33238c4e",
+        "en_file": "upstream/books/pstack/2026-10-03/en/27.md",
+        "en_sha256": "39699e5ef62d7c5b886e862f0912444822d53c31993719123bd1a119490dcc93"
+      },
+      "english_status": "ready",
+      "english_file": "en/27-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/27.json"
+      }
+    },
+    {
+      "order": 28,
+      "title_ja": "第22章 コードベースと過去の作業を理解する",
+      "title_en": "Chapter 22: Understand the codebase and past work",
+      "title_zh_cn": "第 22 章：理解代码库与过去的工作",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/788746",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/031877",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/28-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:47:11.924+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/28.md",
+        "ja_sha256": "bb6f3590e4a5cc2212a9a101dacf511d9d4c281ff3fcf36cc271907f3c0731ea",
+        "en_file": "upstream/books/pstack/2026-10-03/en/28.md",
+        "en_sha256": "b42604142f740c03fcee841d6b7518addb705489c4fd1dcbe66cd8b0b8aaa4ec"
+      },
+      "english_status": "ready",
+      "english_file": "en/28-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/28.json"
+      }
+    },
+    {
+      "order": 29,
+      "title_ja": "第23章 依頼に合うPlaybookが存在しない作業のPlaybookを設計する",
+      "title_en": "Chapter 23: Design a Playbook for work that no Playbook fits",
+      "title_zh_cn": "第 23 章：为现有 Playbook 无法覆盖的任务设计 Playbook",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/3ce2b2",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/ba4cc8",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/29-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:10:17.778+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/29.md",
+        "ja_sha256": "36b8882dc8cdbd0e5a5ab9dde23934ae9ef2fcd502e157e83c380a1936397a7a",
+        "en_file": "upstream/books/pstack/2026-10-03/en/29.md",
+        "en_sha256": "6553a0c803491c12ce6587d987e5c24658c55f9264e4a06896a7666829907fc1"
+      },
+      "english_status": "ready",
+      "english_file": "en/29-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/29.json"
+      }
+    },
+    {
+      "order": 30,
+      "title_ja": "第24章 複数のエージェントを並列に動かし、設計と成果物を比べる",
+      "title_en": "Chapter 24: Run agents in parallel and compare designs and artifacts",
+      "title_zh_cn": "第 24 章：并行运行多个 Agent，比较设计与成果物",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/2ad346",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/2df1db",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/30-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:47:49.753+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/30.md",
+        "ja_sha256": "3d82dc914f503e2761d77e163c87211bfaaf24009bdf23b655e9950f35d975f9",
+        "en_file": "upstream/books/pstack/2026-10-03/en/30.md",
+        "en_sha256": "e380a4772df784aae3d1dfee1b4903919752782c55ebc101acead8dbf2d27ee1"
+      },
+      "english_status": "ready",
+      "english_file": "en/30-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/30.json"
+      }
+    },
+    {
+      "order": 31,
+      "title_ja": "第25章 pstackを自分の流儀とGrok Botに広げる",
+      "title_en": "Chapter 25: Extend pstack to your own way of working and to Grok Bot",
+      "title_zh_cn": "第 25 章：把 pstack 扩展到自己的工作方式与 Grok Bot",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/46bd1f",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e5f103",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/31-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:48:09.278+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/31.md",
+        "ja_sha256": "c21b95f892460397b2838ebd8637052abd75cef8807d10e1c02ac3571aa82908",
+        "en_file": "upstream/books/pstack/2026-10-03/en/31.md",
+        "en_sha256": "c73d5399d7c98d2e8bf8e04a7068a11e70b0550ef4ebc04a1665391ac12797b4"
+      },
+      "english_status": "ready",
+      "english_file": "en/31-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/31.json"
+      }
+    },
+    {
+      "order": 32,
+      "title_ja": "第26章 検証の仕組みを作り、アプリに合わせ続ける",
+      "title_en": "Chapter 26: Build verification and keep it current as the app changes",
+      "title_zh_cn": "第 26 章：建立验证机制，并随应用变化持续维护",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/03ebca",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/9884cb",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/32-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:48:39.516+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/32.md",
+        "ja_sha256": "10bcb242543fcc370640329a6a4aa5795634070dd57788985d5041cdaf328437",
+        "en_file": "upstream/books/pstack/2026-10-03/en/32.md",
+        "en_sha256": "1b32e0f99ff34e1a323256efbe4c7a3187bb44c4b68cf5cecaf47e1912c9b0c3"
+      },
+      "english_status": "ready",
+      "english_file": "en/32-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/32.json"
+      }
+    },
+    {
+      "order": 33,
+      "title_ja": "第27章 変更が壊しうるものと、差分の弱点を確かめる",
+      "title_en": "Chapter 27: Check what a change could break and where the diff is weak",
+      "title_zh_cn": "第 27 章：检查变更可能破坏的部分及差异中的薄弱点",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/997880",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e23752",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/33-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T05:58:56.185+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/33.md",
+        "ja_sha256": "371ddfd499d461b3f0f1a7384a4f6d910676828b212cbc68875285991263c6d5",
+        "en_file": "upstream/books/pstack/2026-10-03/en/33.md",
+        "en_sha256": "63fe07ce5912a548d760754c0e1e1f2cde220a5677c6822fd9b546a966c24d52"
+      },
+      "english_status": "ready",
+      "english_file": "en/33-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/33.json"
+      }
+    },
+    {
+      "order": 34,
+      "title_ja": "第28章 判断を記録し、エージェントの長時間作業を証拠でたどれるようにする",
+      "title_en": "Chapter 28: Record decisions and leave evidence for long agent runs",
+      "title_zh_cn": "第 28 章：记录决策，用证据追踪 Agent 的长时间工作",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/724887",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/6638a6",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/34-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:49:04.323+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/34.md",
+        "ja_sha256": "8aa6fd18216f1b6468444305c5f3ecc37370df4a5db95920f9785a0d89d89f7a",
+        "en_file": "upstream/books/pstack/2026-10-03/en/34.md",
+        "en_sha256": "9730e12e137a0b7ac76feeadecaa3a05c2589f3fa1cbc77dc2e052693aa764c8"
+      },
+      "english_status": "ready",
+      "english_file": "en/34-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/34.json"
+      }
+    },
+    {
+      "order": 35,
+      "title_ja": "第29章 TypeScriptの16の規則で、コードの品質を保つ",
+      "title_en": "Chapter 29: Keep code quality with 16 TypeScript rules",
+      "title_zh_cn": "第 29 章：用十六条 TypeScript 规则维护代码质量",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4f9a46",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/00dce1",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/35-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:49:28.889+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/35.md",
+        "ja_sha256": "c978716a46c9ed67696223b7e0c76568a6803600097ae51cf071ed2729b62bca",
+        "en_file": "upstream/books/pstack/2026-10-03/en/35.md",
+        "en_sha256": "1bedf3de4922df36870cafc00617c6822aafa7ad4fcf0562a7ed28ad283e324c"
+      },
+      "english_status": "ready",
+      "english_file": "en/35-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/35.json"
+      }
+    },
+    {
+      "order": 36,
+      "title_ja": "第30章 【TDD】修正前に失敗するテストで確かめる",
+      "title_en": "Chapter 30: TDD: verify with a failing test before the fix",
+      "title_zh_cn": "第 30 章：TDD，用修复前失败的测试验证修复",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/ad5727",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/32928b",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/36-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-30T08:12:05.706+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/36.md",
+        "ja_sha256": "d9d536c6960ef8a8480e986896f657ed65f13cec01002be82afb2a7a8dd811ab",
+        "en_file": "upstream/books/pstack/2026-10-03/en/36.md",
+        "en_sha256": "dc599ef31c949a34c9be4d99eb8238fe827754a873ed73e650efd14b82f53c91"
+      },
+      "english_status": "ready",
+      "english_file": "en/36-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/36.json"
+      }
+    },
+    {
+      "order": 37,
+      "title_ja": "第31章 コメントを消し、コードベースを整備する",
+      "title_en": "Chapter 31: Remove comments and tidy the codebase",
+      "title_zh_cn": "第 31 章：移除注释，整理代码库",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/8960d3",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/347946",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/37-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-09-29T20:45:16.447+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/37.md",
+        "ja_sha256": "43acd15d4d2d729ad9f30b12521fc75642dd9920025b72c44c6b5151c5f724cb",
+        "en_file": "upstream/books/pstack/2026-10-03/en/37.md",
+        "en_sha256": "29a5ad914c385e24f88ca395a88c94af74bf3c28ed334bb7b8fbf358d326bde4"
+      },
+      "english_status": "ready",
+      "english_file": "en/37-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/37.json"
+      }
+    },
+    {
+      "order": 38,
+      "title_ja": "第32章 文章の品質を保つ",
+      "title_en": "Chapter 32: Keep writing quality high",
+      "title_zh_cn": "第 32 章：保持写作质量",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/44857b",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c22a83",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/38-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:50:03.039+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/38.md",
+        "ja_sha256": "b7b7dd0191d4ae54d7ef4179a2a69a57b5ebfb3be46b7dac7b735bddc0c4debb",
+        "en_file": "upstream/books/pstack/2026-10-03/en/38.md",
+        "en_sha256": "f96d53c7133da9fbcf3857bf3b7f473ad3ec989a88124965115a8a6a063bf61d"
+      },
+      "english_status": "ready",
+      "english_file": "en/38-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/38.json"
+      }
+    },
+    {
+      "order": 39,
+      "title_ja": "第33章 作業の学びを振り返り、反映する",
+      "title_en": "Chapter 33: Reflect on what the work taught you and apply it",
+      "title_zh_cn": "第 33 章：回顾工作中的经验并落实改进",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/f70847",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/7c5f9e",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/39-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:50:23.796+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/39.md",
+        "ja_sha256": "174f03e45bd9f458285b4fecd65b8434d1f8805aa92fd130dbc830052e782071",
+        "en_file": "upstream/books/pstack/2026-10-03/en/39.md",
+        "en_sha256": "4bbe37fd285977e1a315e28d5a9b01b9d36283202639f19fd01c25115b86b1e0"
+      },
+      "english_status": "ready",
+      "english_file": "en/39-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/39.json"
+      }
+    },
+    {
+      "order": 40,
+      "title_ja": "第34章 pstackを導入し、役割ごとのモデルを決める",
+      "title_en": "Chapter 34: Install pstack and choose a model for each role",
+      "title_zh_cn": "第 34 章：安装 pstack，为各角色选择模型",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/8487f0",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c37697",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/40-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:50:44.105+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/40.md",
+        "ja_sha256": "8e16dff60782185da41168cd8b2e3fa488b6f2a5b7037e526ceef9ee65610130",
+        "en_file": "upstream/books/pstack/2026-10-03/en/40.md",
+        "en_sha256": "544f1b703c2024ea2dead6e9c9a3159d79a18c327082ca43d2aa0ae7642d0033"
+      },
+      "english_status": "ready",
+      "english_file": "en/40-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/40.json"
+      }
+    },
+    {
+      "order": 41,
+      "title_ja": "第35章 /poteto-mode ― pstackのRouter",
+      "title_en": "Chapter 35: /poteto-mode is pstack's Router",
+      "title_zh_cn": "第 35 章：/poteto-mode，pstack 的路由器",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4f8911",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/9cd5c1",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/41-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:51:36.101+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/41.md",
+        "ja_sha256": "cc2943b11fa46debb09d5b8913d53f413da5fba1e8308d23887ef06ffdd115cb",
+        "en_file": "upstream/books/pstack/2026-10-03/en/41.md",
+        "en_sha256": "0f7ccfb0eaa60695728cb21ce9b0e4c4f9a3bc191aece720477c2890f6b2e540"
+      },
+      "english_status": "ready",
+      "english_file": "en/41-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/41.json"
+      }
+    },
+    {
+      "order": 42,
+      "title_ja": "第6部 pstack実践ガイド",
+      "title_en": "Part VI: A practical guide to pstack",
+      "title_zh_cn": "第六部分：pstack 实践指南",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b22889",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c2adb6",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/42-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-01T17:38:51.856+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/42.md",
+        "ja_sha256": "d874650e4a7185918d3612a5deef53e21ad1a5169452a00453696c24af558740",
+        "en_file": "upstream/books/pstack/2026-10-03/en/42.md",
+        "en_sha256": "0b87cd717ac9c54f6e28cd033bdeb0bcfebc14d737c2aa244e5f03e6a7d12040"
+      },
+      "english_status": "ready",
+      "english_file": "en/42-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/42.json"
+      }
+    },
+    {
+      "order": 43,
+      "title_ja": "第36章 ガイド1：検証スキルから始める ― 自分のアプリを動かして確かめる",
+      "title_en": "Chapter 36: Guide 1: start with a verification skill for your own app",
+      "title_zh_cn": "第 36 章：指南一，从验证 Skill 开始，运行并检查自己的应用",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7081",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c9901e",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/43-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:52:04.310+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/43.md",
+        "ja_sha256": "2955399c40402cf7376558e74d937973e7911900859bdb6f3e5107bcfaf30dd2",
+        "en_file": "upstream/books/pstack/2026-10-03/en/43.md",
+        "en_sha256": "62cf0cf99a87f79329d8709ce2e3ec2164d5d0dd68b621aac777bb28fd7aa1df"
+      },
+      "english_status": "ready",
+      "english_file": "en/43-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/43.json"
+      }
+    },
+    {
+      "order": 44,
+      "title_ja": "第37章 ガイド2：目的と背景を伝え、問題と過去の文脈をそろえる",
+      "title_en": "Chapter 37: Guide 2: share the goal, then align on problem and history",
+      "title_zh_cn": "第 37 章：指南二，说明目标与背景，对齐问题和历史上下文",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b4b9a1",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/6a59d6",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/44-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:52:32.631+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/44.md",
+        "ja_sha256": "1b97b1abe5b0c3cf3b10d3d76f4ba63865cd533bc3249859367916ac1095f3c3",
+        "en_file": "upstream/books/pstack/2026-10-03/en/44.md",
+        "en_sha256": "2cb0a14c3ca74136c092662b690410e3a81fe350604f6d87d2460a588f0f46b7"
+      },
+      "english_status": "ready",
+      "english_file": "en/44-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/44.json"
+      }
+    },
+    {
+      "order": 45,
+      "title_ja": "第38章 ガイド2：利用者の使い方から設計を試す",
+      "title_en": "Chapter 38: Guide 2: test a design from how the user will use it",
+      "title_zh_cn": "第 38 章：指南二，从用户的使用方式出发检验设计",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7549a7",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/006bc8",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/45-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T18:01:23.180+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/45.md",
+        "ja_sha256": "4cf9a9267fab6cbb55470f83cc95d609a1a974653f6c09b89ca72d5a3777853d",
+        "en_file": "upstream/books/pstack/2026-10-03/en/45.md",
+        "en_sha256": "d8c4f68e52dea7d82e6bb2fc7792e3104f09dcb1226219313ef2257b8cbacc7f"
+      },
+      "english_status": "ready",
+      "english_file": "en/45-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/45.json"
+      }
+    },
+    {
+      "order": 46,
+      "title_ja": "第39章 ガイド2：設計を見直し、実行できる計画に変える",
+      "title_en": "Chapter 39: Guide 2: revise the design into an executable plan",
+      "title_zh_cn": "第 39 章：指南二，重新审视设计，形成可执行计划",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/166acb",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/f87769",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/46-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-03T06:53:51.066+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/46.md",
+        "ja_sha256": "55a4da4aa43b980b9a57405a8fb7752da48cf0c5458c2afa24e7fbb66c92cf2a",
+        "en_file": "upstream/books/pstack/2026-10-03/en/46.md",
+        "en_sha256": "1adf16a99d831248ed27ec9d969900e1334d68153738a518312746d227fb6d03"
+      },
+      "english_status": "ready",
+      "english_file": "en/46-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/46.json"
+      }
+    },
+    {
+      "order": 47,
+      "title_ja": "付録 README with Grill 駆動開発（RGDD）",
+      "title_en": "Appendix: README-driven with Grill Driven Development (RGDD)",
+      "title_zh_cn": "附录：README with Grill 驱动开发（RGDD）",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/80691b",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/58a03b",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/47-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T21:54:23.702+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/47.md",
+        "ja_sha256": "6d1ca50158843d2dbfea118ddd7e5d6a5016b7abcdec408e5c00c97b510ab59f",
+        "en_file": "upstream/books/pstack/2026-10-03/en/47.md",
+        "en_sha256": "66729558cda9ea7c777a43e2fc12c50910710ff5591d55b7aefc0f385c53a8fe"
+      },
+      "english_status": "ready",
+      "english_file": "en/47-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/47.json"
+      }
+    },
+    {
+      "order": 48,
+      "title_ja": "おわりに",
+      "title_en": "Afterword",
+      "title_zh_cn": "后记",
+      "source_ja": "https://zenn.dev/sc30gsw/books/080faba713547b/viewer/f903e4",
+      "source_en": "https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/a465a5",
+      "translation_status": "ready",
+      "translation_file": "zh-CN/48-chapter.md",
+      "source_body_observed_on": "2026-10-03",
+      "source_updated_on": "2026-10-02T22:19:39.549+09:00",
+      "source_snapshot": {
+        "ja_file": "upstream/books/pstack/2026-10-03/ja/48.md",
+        "ja_sha256": "89b6f7a468e0a4fa327577e450e30454a58c501f25182e699dfb921f0da77dc6",
+        "en_file": "upstream/books/pstack/2026-10-03/en/48.md",
+        "en_sha256": "6f20783cd19722e3d9df6d16f1751ffa85de6effb2bf1a53ce3591a09c346a35"
+      },
+      "english_status": "ready",
+      "english_file": "en/48-chapter.md",
+      "review": {
+        "status": "reviewed",
+        "report": "docs/books/pstack/reviews/independent/48.json"
+      }
+    }
+  ]
+}

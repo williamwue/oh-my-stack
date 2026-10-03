@@ -1,0 +1,20 @@
+{
+  "chapter": "15",
+  "source_sha256": "afbe97580f600cc39e9a176c2346f887d274aec1528cdf7efd6d57a00511e27a",
+  "translation_sha256": "98f4454efb34086986bb3e11e4f010d1ebf99dad579c9fa7205761c3c16f0306",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 15,
+  "translated_heading_count": 15,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "english_crosscheck_notes": [
+    "The English Hillclimb callout defines only harness; Japanese also defines memoization and worktree. The Chinese translation follows Japanese."
+  ],
+  "root_review_corrections": [
+    "演讲中提到",
+    "/control-app 是文章中创建的验证 Skill 的名称"
+  ]
+}

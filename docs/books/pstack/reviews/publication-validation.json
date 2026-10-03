@@ -1,0 +1,30 @@
+{
+  "base": "bbb8fce0a8d8ff694ca21ee1cf20498057c0b14c",
+  "branch": "docs/pstack-book-publication",
+  "scope": "Book and source archive, book-specific checks/CI and current documentation formatting; excludes concurrent GitHub provider work and obsolete local history exceptions.",
+  "verification": {
+    "npm_run_check": {
+      "exit_code": 0,
+      "node_passed": 190,
+      "node_failed": 0
+    },
+    "python_audit_tests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "source_audit": {
+      "source_entries": 96,
+      "translations": 48,
+      "code_blocks": 444,
+      "issues": []
+    },
+    "complete_book": {
+      "ready": 48,
+      "warnings": []
+    }
+  },
+  "source_inventory_sha256": "96202f1a3bea48130f50338e1020b7b09d467781b27cab6731b73a45c217ad27",
+  "human_review": false,
+  "publication_status": "candidate prepared for authorized commit, PR and merge; hosted reading QA follows",
+  "previous_evidence": "Earlier closeout files record the old52bec baseline and are retained as historical receipts."
+}

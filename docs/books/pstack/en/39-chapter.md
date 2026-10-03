@@ -1,0 +1,231 @@
+# Chapter 33: Reflect on what the work taught you and apply it
+
+[Contents](README.md) · [Previous](38-chapter.md) · [Next](40-chapter.md) · [简体中文](../zh-CN/39-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/f70847) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/7c5f9e)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers [`/reflect`](https://github.com/cursor/plugins/blob/main/pstack/skills/reflect/SKILL.md).
+
+`/reflect` is a Skill that pulls lessons out of the conversation that will still help in the next piece of work. The Skill keeps only the lessons the user approves, for example by adding them to an existing Skill.
+
+Two kinds of subagents pull out the lessons: reviewers, which read the conversation from three perspectives, and a synthesizer, which combines their results. The user decides whether a lesson goes into a Skill.
+
+This chapter explains `/reflect` from four angles: its role, when to use it, its procedure, and how to write the request.
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+The chapter has the following five sections.
+
+- Role: narrow the conversation down to lessons that last
+- When to use it: right after work that taught something, when the user calls `/reflect`
+- Procedure: collect lessons from three perspectives and apply them only after approval
+- How to write the request: say what happened and what you want to keep
+- Summary
+
+<a id="role%3A-narrow-the-conversation-down-to-lessons-that-last"></a>
+
+
+## Role: narrow the conversation down to lessons that last
+
+[Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c) covered the idea that a lesson from a user's correction should not end with the conversation. The lesson should stay in the codebase, in automated checks such as lint, or in Skills. `/reflect` handles the part that goes into Skills.
+
+However, as the principle "[Encode Lessons in Structure](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-encode-lessons-in-structure/SKILL.md)" from [Chapter 21](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/10f4b3) says, readers easily miss written instructions. If you add a sentence to a Skill and the next agent does not notice it, nothing changes.
+
+For that reason, this book treats three of the steps in this Skill's [procedure](#procedure%3A-collect-lessons-from-three-perspectives-and-apply-them-only-after-approval), steps 3 to 5, <strong>as steps that narrow the lessons down, not steps that add more</strong>.
+
+- The synthesizer <strong>rejects lessons that would not change how future agents act</strong>.
+- The agent does not turn lessons that lint or a script can enforce into Skill text. It moves them to the Backlog, a list of items it files in the issue tracker the team uses.
+- The user picks which of the remaining lessons go into Skills.
+
+Because of this narrowing, <strong>only lessons that change how the next agent acts</strong> end up in Skills.
+
+<a id="when-to-use-it%3A-right-after-work-that-taught-something%2C-when-the-user-calls-%2Freflect"></a>
+
+
+## When to use it: right after work that taught something, when the user calls `/reflect`
+
+The bundled guide [`docs/guide/09-make-it-yours.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/09-make-it-yours.md) recommends that you call `/reflect` right after work that taught you something. The `SKILL.md` of `/reflect` says to use this Skill when the user says "reflect" or "/reflect".
+
+The agent does not use this Skill in the following cases.
+
+- The conversation was trivial
+- The conversation strayed from the main topic
+- The agent did the work correctly by following an existing Skill
+
+The reason for the last case is that work that went correctly under an existing Skill is evidence that the Skill is already correct.
+
+The agent also <strong>does not treat a one-time event as a lesson</strong>.
+
+This Skill has the setting `disable-model-invocation: true` ([Chapter 25](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e5f103)), so the agent does not pick this Skill on its own after reading the word "reflect". To run this Skill, the user calls it by name with `/reflect`.
+
+<a id="procedure%3A-collect-lessons-from-three-perspectives-and-apply-them-only-after-approval"></a>
+
+
+## Procedure: collect lessons from three perspectives and apply them only after approval
+
+The procedure is as follows.
+
+1. <strong>Find the transcript.</strong> The agent looks for the transcript file of the current conversation. It looks only in the `agent-transcripts/` directory of the current workspace. If it searched other projects' directories, it would read private conversations from unrelated projects. If it finds no file, it writes a summary of the conversation and gives the summary to the reviewers in place of the file.
+2. <strong>Start the reviewers for the three perspectives at the same time.</strong> The agent starts three reviewers at the same time. Each reviewer reads the conversation from one perspective: Judgment, Tooling, or Divergent. The default model is `claude-opus-5-5-max` for Judgment and Divergent, and `gpt-5.6-sol-max` for Tooling. You can change them with `/setup-pstack` ([Chapter 34](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c37697)). The subsection ["Each of the three reviewers looks for a different kind of lesson"](#each-of-the-three-reviewers-looks-for-a-different-kind-of-lesson) explains which lessons each perspective looks for.
+3. <strong>The synthesizer sorts.</strong> The synthesizer sorts the candidate lessons from the three reviewers into three groups: Accepted, Rejected, and Backlog.
+4. <strong>Move what lint or a script can enforce to the Backlog.</strong> From Accepted, the agent moves to the Backlog anything that a lint rule, a script, a metadata flag, or a runtime check can enforce, instead of writing it as Skill text. A written instruction works only if the reader notices it and follows it. Lint and scripts enforce the rule even when nobody notices it.
+5. <strong>Apply the Skill edits only after the user approves.</strong> The agent shows the user the whole result of the synthesizer's sorting, and the user picks which Accepted items to apply. The user can also change where a lesson goes, meaning which Skill it goes into. The agent applies only the edits the user picked. Only Accepted items wait for approval. The agent files Backlog items in the issue tracker without waiting.
+6. <strong>Report briefly to the user.</strong> The agent lists, one line each, the edits it applied, the Skills it created, what it moved to the Backlog, and what it rejected, with the reason for each rejection.
+
+Steps 2 to 5 look like this as a diagram.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="flowchart%20TD%0A%20%20%20%20T%5B%22Conversation%20transcript%22%5D%20--%3E%20J%5B%22Reviewer%3A%20Judgment%22%5D%0A%20%20%20%20T%20--%3E%20K%5B%22Reviewer%3A%20Tooling%22%5D%0A%20%20%20%20T%20--%3E%20D%5B%22Reviewer%3A%20Divergent%22%5D%0A%20%20%20%20J%20--%3E%20S%5B%22The%20synthesizer%20sorts%20the%20candidate%20lessons%22%5D%0A%20%20%20%20K%20--%3E%20S%0A%20%20%20%20D%20--%3E%20S%0A%20%20%20%20S%20--%3E%7CAccepted%7C%20C%7B%22Can%20lint%20or%20a%20script%20enforce%20it%3F%22%7D%0A%20%20%20%20S%20--%3E%7CRejected%7C%20R%5B%22Reject%22%5D%0A%20%20%20%20S%20--%3E%7CBacklog%7C%20B%5B%22File%20it%20in%20the%20team's%20issue%20tracker%22%5D%0A%20%20%20%20C%20--%3E%7CYes%7C%20B%0A%20%20%20%20C%20--%3E%7CNo%7C%20U%7B%22Did%20the%20user%20approve%3F%22%7D%0A%20%20%20%20U%20--%3E%7CApproved%7C%20E%5B%22Edit%20the%20Skill%22%5D%0A%20%20%20%20U%20--%3E%7CNot%20approved%7C%20X%5B%22Do%20not%20edit%22%5D" frameborder="0" id="zenn-embedded__d7073eabe51a2" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__d7073eabe51a2"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 1](../diagrams/en/39-01.svg)
+
+[View diagram 1](../diagrams/en/39-01.md)
+<!-- book-diagram-link:end -->
+
+Only lessons that stay in Accepted and that the user approves lead to a Skill edit.
+
+<a id="each-of-the-three-reviewers-looks-for-a-different-kind-of-lesson"></a>
+
+
+### Each of the three reviewers looks for a different kind of lesson
+
+The three perspectives and the lessons each one looks for are as follows.
+
+- <strong>Judgment.</strong> Looks for lasting principles behind individual events. An example is the principle behind a correction from the user.
+- <strong>Tooling.</strong> Looks for concrete details that the next agent would have to look up again: tools, commands, paths, and flags. Examples are a command flag the agent found by trial and error, or a way to reproduce a failed run locally. The Tooling reviewer also lists information the user handed over manually that the agent could have fetched itself through MCP. An example is a ticket ID the user pasted into the conversation.
+- <strong>Divergent.</strong> Looks for what the other two perspectives miss. Examples are a decision that worked for the wrong reason, a decision that survived only because a test happened to pass, and a verification the agent skipped.
+
+For each lesson, every one of the three reviewers returns the following three things.
+
+- <strong>Principle.</strong> The lesson, written in one sentence, that will still hold in the next piece of work
+- <strong>Evidence.</strong> The moment in the conversation where the lesson came from
+- <strong>Destination.</strong> The Skill the lesson goes into
+
+The destination must be a Skill that the conversation actually used. For a Skill that would have helped but was not used, the reviewer proposes a fix to its description. The reviewer discards a lesson that fits neither case.
+
+<a id="the-synthesizer-narrows-the-lessons-with-eight-criteria"></a>
+
+
+### The synthesizer narrows the lessons with eight criteria
+
+The instructions for the synthesizer are in `references/synthesizer.md`. According to them, the synthesizer applies the following eight criteria to each candidate lesson.
+
+<table class="code-line" data-line="100">
+<thead class="code-line" data-line="100">
+<tr class="code-line" data-line="100">
+<th>Criterion</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="102">
+<tr class="code-line" data-line="102">
+<td>Durability</td>
+<td>Is it still correct six months later, after file paths and tool versions change?</td>
+</tr>
+<tr class="code-line" data-line="103">
+<td>Specificity</td>
+<td>Is it broad enough to apply to other work, and concrete enough to show when to use it?</td>
+</tr>
+<tr class="code-line" data-line="104">
+<td>Existing-skill-first</td>
+<td>Can an addition to an existing Skill cover it, without creating a new Skill?</td>
+</tr>
+<tr class="code-line" data-line="105">
+<td>Convergence</td>
+<td>Did more than one reviewer raise it?</td>
+</tr>
+<tr class="code-line" data-line="106">
+<td>Decision-changing</td>
+<td>Would writing it down change what the next agent does?</td>
+</tr>
+<tr class="code-line" data-line="107">
+<td>Structural-mechanism check</td>
+<td>Could lint or a script enforce it instead?</td>
+</tr>
+<tr class="code-line" data-line="108">
+<td>Skill-was-used</td>
+<td>Does it go into a Skill the conversation actually used?</td>
+</tr>
+<tr class="code-line" data-line="109">
+<td>Already-covered</td>
+<td>Does the destination Skill already say the same thing?</td>
+</tr>
+</tbody>
+</table>
+
+For example, the synthesizer's instructions give the following line as an example of a lesson to discard.
+
+> linter at SHA `bd91aa7` uses chars/4 heuristic
+
+`bd91aa7` is a SHA. This line only states a fact: "in the code at commit `bd91aa7`, the linter behaved this way". If a later commit rewrites the linter, the fact stops being true.
+
+For that reason, the synthesizer rejects this line under the Durability criterion.
+
+<a id="apply-skill-edits-only-after-the-user's-explicit-approval"></a>
+
+
+### Apply Skill edits only after the user's explicit approval
+
+A change to a Skill affects every future agent in the organization. For that reason, <strong>the agent does not apply Skill edits automatically. It waits for the user's explicit approval</strong>.
+
+The agent handles each approved edit by its size, as follows.
+
+- <strong>Small edits, such as adding one line or correcting an outdated fact.</strong> The agent edits the Skill directly.
+- <strong>Large edits of more than about ten lines, such as adding a new section.</strong> The agent hands the edit to `create-skill`, a Skill built into Cursor for writing Skills, and `create-skill` drafts, tests, and revises the edit in a loop.
+- <strong>A Skill exists, but the agent did not use it where it should have.</strong> The agent has `create-skill` fix that Skill's description.
+- <strong>No existing Skill fits the addition.</strong> The agent has `create-skill` create a new Skill.
+
+In an environment that has a validator for `SKILL.md`, the agent runs it on every Skill it edited before it finishes the work.
+
+The bundled guide recommends that the user approve only proposals that change future agents' decisions. The same page also says that "an odd thing that happened once is a coincidence, not a rule".
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="135"><strong>Examples of <code>SKILL.md</code> validators</strong></p>
+<p class="code-line" data-line="137">A <code>SKILL.md</code> validator mainly checks that the frontmatter at the top is written correctly. Examples include the following.</p>
+<ul class="code-line" data-line="139">
+<li class="code-line" data-line="139">
+<a href="https://github.com/agentskills/agentskills/tree/main/skills-ref" rel="nofollow noopener noreferrer" target="_blank"><code>skills-ref validate</code></a> is a command from the reference library in the repository that publishes the Agent Skills specification. You run it with a Skill directory, as in <code>skills-ref validate path/to/skill</code>.</li>
+<li class="code-line" data-line="140">
+<a href="https://github.com/anthropics/skills/blob/main/skills/skill-creator/scripts/quick_validate.py" rel="nofollow noopener noreferrer" target="_blank"><code>quick_validate.py</code></a> is a script that comes with skill-creator, the Skill for creating Skills, in Anthropic's <a href="https://github.com/anthropics/skills" rel="nofollow noopener noreferrer" target="_blank"><code>anthropics/skills</code></a> repository. It checks that <code>SKILL.md</code> exists, that the frontmatter is valid YAML, that <code>name</code> and <code>description</code> are present, and that no disallowed fields appear.</li>
+</ul>
+<p class="code-line" data-line="142">pstack itself does not include a script that validates <code>SKILL.md</code>.<br/>
+Instead, in pstack, the "<a href="https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/authoring-a-skill.md" rel="nofollow noopener noreferrer" target="_blank">Authoring or modifying a skill</a>" Playbook for writing Skills (<a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3f7768" target="_blank">Chapter 13</a>) does the validator's job, even in an environment without a validator.</p>
+<p class="code-line" data-line="145">This Playbook requires the agent to check that the frontmatter has <code>name</code> and <code>description</code>, that the referenced files exist, and that links to other Skills resolve.</p>
+</div></aside>
+
+<a id="how-to-write-the-request%3A-say-what-happened-and-what-you-want-to-keep"></a>
+
+
+## How to write the request: say what happened and what you want to keep
+
+The bundled guide gives the following example request to send right after work that taught you something.
+
+```
+/reflect that took way too long. capture what we learned so the next run doesn't repeat it.
+```
+
+In this request, the user writes what happened, which is that the work took far too long. The user also writes what they want to keep, which is the lessons that stop the next run from repeating it.
+
+<a id="summary"></a>
+
+
+## Summary
+
+- <strong>How lessons are collected.</strong> The reviewers collect lessons from three perspectives: Judgment, Tooling, and Divergent. The synthesizer narrows the lessons with criteria such as whether a lesson is still correct six months later.
+- <strong>Backlog.</strong> Lessons that lint or a script can enforce do not become Skill text. They go to the team's issue tracker.
+- <strong>How lessons are kept.</strong> After the user approves, the agent adds to or rewrites the `SKILL.md` of an existing Skill.
+
+The next chapter, [Chapter 34](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c37697), covers [`/setup-pstack`](https://github.com/cursor/plugins/blob/main/pstack/skills/setup-pstack/SKILL.md), which installs pstack and decides which model each role uses.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](38-chapter.md) · [Next](40-chapter.md) · [简体中文](../zh-CN/39-chapter.md)

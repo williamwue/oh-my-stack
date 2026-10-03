@@ -1,0 +1,17 @@
+{
+  "chapter": "38",
+  "source_sha256": "b7b7dd0191d4ae54d7ef4179a2a69a57b5ebfb3be46b7dac7b735bddc0c4debb",
+  "translation_sha256": "197f7b92e7efd85254e36caaa26eb70e2831554c03de04c0c41b94e1accb7ee6",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 43,
+  "translated_heading_count": 43,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "root_review_corrections": [
+    "因此，仍然可以说：「The hottest programming language is English」。",
+    "写文档、RFC（提出设计方案的文档）、README、PR 描述"
+  ]
+}

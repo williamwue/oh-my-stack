@@ -1,0 +1,13 @@
+{
+  "chapter": 16,
+  "reviewer": "root independent AI review; translator translate_b",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator.",
+  "source_sha256": "f5085511a3dc4c1266fc6e729cce81e439be735feb3ba2b78190df9e43c9dbbb",
+  "translation_sha256": "6c6ab709c4858c599f5dd9bc70ce056cb3b2b95727e8baee6f7661796c293766",
+  "findings_resolved": [
+    "确定数据形态并写下吞吐量检查点，必须将实现工作交给另一位 Agent。"
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

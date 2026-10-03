@@ -1,0 +1,43 @@
+{
+  "status": "book and closeout candidate passes isolated full checks; shared workspace has new unrelated unfinished link",
+  "complete_gate": {
+    "chapters": 48,
+    "ready": 48,
+    "warnings": []
+  },
+  "node_book_tests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "python_audit_tests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "book_markdownlint": {
+    "files": 172,
+    "issues": 0
+  },
+  "repository_tests": {
+    "passed": 191,
+    "failed": 0,
+    "scope": "isolated book and closeout candidate; concurrent provider tests excluded"
+  },
+  "repository_markdownlint": {
+    "files": 688,
+    "issues": 0,
+    "scope": "isolated book and closeout candidate"
+  },
+  "full_check_exit_code": 0,
+  "human_review": false,
+  "publication": "not committed, pushed or published",
+  "base_commit": "52bec251d379799afc56a3eb538ad82e68908020",
+  "review_model_identity": "Child runtime model identities unverified; prepared delegation configs are not runtime proof.",
+  "closeout": "closeout-summary.json",
+  "full_check_scope": "isolated local clone with explicit owned-file overlays",
+  "shared_workspace_current": {
+    "validate_exit_code": 1,
+    "reason": "new concurrent docs/github-target-policy-prototype-2026-10-03.md references missing github-workflow.md",
+    "log": "closeout-shared-validation.log"
+  },
+  "isolated_report": "closeout-isolated-summary.json"
+}

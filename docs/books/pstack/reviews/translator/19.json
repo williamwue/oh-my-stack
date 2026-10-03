@@ -1,0 +1,17 @@
+{
+  "chapter": "19",
+  "source_sha256": "3af1fcb03bca5ff924298dda353e3ff280573113faecceecc371f8c93cadd83b",
+  "translation_sha256": "f604293c4c1dd063fd9c4301d7024a2ea2be0ec71079cb048571328ceb256779",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 32,
+  "translated_heading_count": 32,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "root_review_corrections": [
+    "終了条件 means completion condition, not baseline.",
+    "再開地点 means resumption point, not current state."
+  ]
+}
