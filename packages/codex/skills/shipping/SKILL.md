@@ -36,7 +36,9 @@ human consent or reviewer provenance. Select no provider by inference.
 This binding accepts one root-countersigned bottom PR only. It does
 not discover or validate stack topology. Strict target CAS stops;
 `server-policy` requires separately scoped authorization and retains
-the GitHub base-revision race boundary.
+the GitHub base-revision race boundary. Review defaults to `github-review`;
+`independent-oms` must be explicitly authorized and still honors
+the repository's actual GitHub approval requirements.
 
 Use this workflow only when the user explicitly asks to land, merge, or ship an
 existing pull request or stack. A request to make changes merge-ready belongs to

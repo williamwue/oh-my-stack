@@ -23,12 +23,19 @@ const auth = (input, action) => ({ approved: true, action, operationId: input.op
   ...(input.pr ? { pr: input.pr } : {}) });
 const receipt = { ...target, pr: 7, base: 'main', head: 'feature', baseSha: BASE, headSha: HEAD,
   owner: 'maintainer', reviewer: 'reviewer', verdict: 'passed' };
+const omsReview = { ...receipt, writerSession: 'writer-1', reviewerSession: 'reviewer-1', patchId: 'patch-abc',
+  verdict: 'PASS', verification: [{ command: 'node --test', status: 'passed', observed: 'tests passed' }] };
+const omsAuth = { ...auth(mergeInput, 'merge'), actorSession: 'root-1', rootSession: 'root-1',
+  ownerSession: 'writer-1', reviewPolicy: 'independent-oms', targetPolicy: 'server-policy', patchId: 'patch-abc' };
 
 function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
   const calls = []; let created = false; let merged = false; let head = HEAD; let base = BASE;
   let draft = false; let checks = 'passed'; let threads = 'resolved'; let review = 'APPROVED'; let mergeability = 'clean';
   let protectedBase = true; let sourceDeleted = false; let statusTruncated = false; let reviewState = 'APPROVED'; let graphErrors = false;
-  let baseRef = 'main'; let headRef = 'feature';
+  let baseRef = 'main'; let headRef = 'feature'; let protection = { required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false } };
+  let rules = []; let policyError = false; let checksAvailable = true; let graphMissing = false; let checkApp = 123;
+  let reviewList = null;
   const pr = () => ({ number: 7, state: 'open', draft, merged, merge_commit_sha: merged ? MERGE : null,
     mergeable: mergeability === 'clean' ? true : null, mergeable_state: mergeability,
     html_url: 'https://github.com/acme/project/pull/7',
@@ -44,15 +51,17 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
       if (sourceDeleted) throw Error('deleted'); return { object: { sha: head } };
     }
     if (path === '/repos/acme/project/branches/main') return { name: 'main', commit: { sha: base }, protected: protectedBase };
+    if (path === '/repos/acme/project/branches/main/protection') { if (policyError) throw Error('403'); return protection; }
+    if (path === '/repos/acme/project/rules/branches/main?per_page=100') return rules;
     if (path === '/repos/acme/project/pulls/7') return pr();
     if (path === '/repos/acme/project/pulls/7/reviews?per_page=100')
-      return [{ id: 1, user: { login: 'reviewer' }, state: reviewState, commit_id: head }];
+      return reviewList ?? (reviewState === 'NONE' ? [] : [{ id: 1, user: { login: 'reviewer' }, state: reviewState, commit_id: head }]);
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/check-runs'))
-      return { total_count: 1, check_runs: [{ head_sha: head, status: checks === 'unknown' ? 'queued' : 'completed',
-        conclusion: checks === 'passed' ? 'success' : 'failure' }] };
+      return { total_count: checksAvailable ? 1 : 0, check_runs: checksAvailable ? [{ name: 'ci/test', app: { id: checkApp }, head_sha: head,
+        status: checks === 'unknown' ? 'queued' : 'completed', conclusion: checks === 'passed' ? 'success' : 'failure' }] : [] };
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/status'))
       return { sha: head, state: 'success', total_count: statusTruncated ? 1 : 0, statuses: [] };
-    if (path === '/graphql') return { ...(graphErrors ? { errors: [{ message: 'partial' }] } : {}), data: { repository: { pullRequest: { reviewDecision: review,
+    if (path === '/graphql') return { ...(graphErrors ? { errors: [{ message: 'partial' }] } : {}), data: { repository: { pullRequest: { ...(graphMissing ? {} : { reviewDecision: review }),
       reviewThreads: { nodes: [{ isResolved: threads === 'resolved' }], pageInfo: { hasNextPage: threads === 'unknown' } } } } } };
     if (path.startsWith('/repos/acme/project/pulls?')) return created ? [{ ...pr(), body: calls.find((c) => c.path === '/repos/acme/project/pulls' && c.method === 'POST')?.body?.body }] : [];
     if (method === 'POST' && path === '/repos/acme/project/pulls') { created = true; if (createAmbiguous) throw Error('timeout secret-credential'); return pr(); }
@@ -62,7 +71,9 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
   return { transport, calls, set: { head: (v) => { head = v; }, base: (v) => { base = v; }, draft: (v) => { draft = v; },
     checks: (v) => { checks = v; }, threads: (v) => { threads = v; }, review: (v) => { review = v; }, mergeability: (v) => { mergeability = v; },
     protectedBase: (v) => { protectedBase = v; }, sourceDeleted: (v) => { sourceDeleted = v; }, statusTruncated: (v) => { statusTruncated = v; },
-    reviewState: (v) => { reviewState = v; }, graphErrors: (v) => { graphErrors = v; },
+    reviewState: (v) => { reviewState = v; }, graphErrors: (v) => { graphErrors = v; }, protection: (v) => { protection = v; },
+    rules: (v) => { rules = v; }, policyError: (v) => { policyError = v; }, checksAvailable: (v) => { checksAvailable = v; },
+    graphMissing: (v) => { graphMissing = v; }, checkApp: (v) => { checkApp = v; }, reviewList: (v) => { reviewList = v; },
     baseRef: (v) => { baseRef = v; }, headRef: (v) => { headRef = v; } } };
 }
 
@@ -237,6 +248,139 @@ test('unprotected base branch blocks normal shipping merge', async () => {
     await assert.rejects(provider.mergePullRequest({ ...mergeInput, authorization: auth(mergeInput, 'merge'), reviewReceipt: receipt }),
       (e) => e.code === 'SERVER_POLICY_UNKNOWN');
     assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
+  }, fake);
+});
+
+test('independent OMS policy permits an unreviewed PR only with bound review and audited server policy', async () => {
+  const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+  await withJournal(async ({ provider }) => {
+    assert.equal((await provider.inspectPr({ ...target, pr: 7 })).ready, false);
+    assert.equal((await provider.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' })).ready, true);
+    const input = { ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth, review: omsReview,
+      frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } };
+    const result = await provider.mergePullRequest(input);
+    assert.equal(result.status, 'merged');
+    assert.equal(fake.calls.filter((c) => c.method === 'PUT').length, 1);
+  }, fake);
+});
+
+test('provider independently rejects bad OMS authority and evidence before PUT', async () => {
+  for (const edit of [
+    (x) => { x.authorization.reviewPolicy = 'github-review'; },
+    (x) => { x.authorization.targetPolicy = 'strict'; },
+    (x) => { x.authorization.actorSession = 'child-1'; },
+    (x) => { x.review.reviewerSession = 'writer-1'; },
+    (x) => { x.review.patchId = 'other'; },
+    (x) => { x.review.headSha = 'd'.repeat(40); },
+    (x) => { x.review.verification = []; },
+    (x) => { x.frontier.bottomPr = 8; },
+  ]) {
+    const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+    await withJournal(async ({ provider }) => {
+      const input = structuredClone({ ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+        review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } });
+      edit(input);
+      await assert.rejects(provider.mergePullRequest(input));
+      assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
+    }, fake);
+  }
+});
+
+test('independent OMS policy respects required GitHub reviews and fails closed on policy uncertainty', async () => {
+  const required = { required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+    required_pull_request_reviews: { required_approving_review_count: 1, dismiss_stale_reviews: true,
+      require_code_owner_reviews: false, require_last_push_approval: false } };
+  for (const setup of [
+    (f) => f.set.protection(required), (f) => f.set.protectedBase(false),
+    (f) => f.set.policyError(true), (f) => f.set.rules([{}]),
+    (f) => f.set.protection({ ...required, enforce_admins: null }),
+    (f) => f.set.checksAvailable(false), (f) => f.set.reviewState('CHANGES_REQUESTED'),
+    (f) => f.set.graphMissing(true),
+    (f) => f.set.protection({ ...required, required_status_checks: { strict: true, contexts: [], checks: [{ context: 'ci/test', app_id: 456 }] }, required_pull_request_reviews: { required_approving_review_count: 0 } }),
+    (f) => f.set.protection({ ...required, required_pull_request_reviews: { required_approving_review_count: 0, require_code_owner_reviews: true } }),
+  ]) {
+    const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE'); setup(fake);
+    await withJournal(async ({ provider }) => {
+      await assert.rejects(provider.mergePullRequest({ ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+        review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } }));
+      assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
+    }, fake);
+  }
+});
+
+test('independent OMS rejects required checks without a pinned GitHub app', async () => {
+  const valid = { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] };
+  for (const checks of [
+    [], [{ context: 'ci/test' }], [{ context: 'ci/test', app_id: null }],
+    [{ context: 'ci/test', app_id: -1 }], [{ context: 'ci/test', app_id: 0 }],
+    [{ context: 'other', app_id: 123 }],
+  ]) {
+    const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+    fake.set.protection({ required_status_checks: { ...valid, checks }, enforce_admins: { enabled: true },
+      allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false } });
+    await withJournal(async ({ provider }) => {
+      const input = { ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+        review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } };
+      await assert.rejects(provider.mergePullRequest(input), (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+      assert.equal(fake.calls.some((c) => c.method === 'PUT'), false);
+    }, fake);
+  }
+});
+
+test('valid remote review policy blocks insufficient approvals and accepts current-head approval', async () => {
+  for (const count of [2, 1]) {
+    const fake = fakeGitHub();
+    fake.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'],
+      checks: [{ context: 'ci/test', app_id: 123 }] }, enforce_admins: { enabled: true },
+      allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+      required_pull_request_reviews: { required_approving_review_count: count, dismiss_stale_reviews: true,
+        require_code_owner_reviews: false, require_last_push_approval: false } });
+    await withJournal(async ({ provider }) => {
+      const input = { ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+        review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } };
+      if (count === 2) await assert.rejects(provider.mergePullRequest(input), (e) => e.code === 'MERGE_BLOCKED');
+      else assert.equal((await provider.mergePullRequest(input)).status, 'merged');
+      assert.equal(fake.calls.filter((c) => c.method === 'PUT').length, count === 1 ? 1 : 0);
+    }, fake);
+  }
+});
+
+test('later comments cannot erase a requested change or a current-head approval', async () => {
+  const fake = fakeGitHub();
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  fake.set.review(null);
+  fake.set.reviewList([{ id: 1, user: { login: 'reviewer' }, state: 'CHANGES_REQUESTED', commit_id: HEAD },
+    { id: 2, user: { login: 'reviewer' }, state: 'COMMENTED', commit_id: HEAD }]);
+  assert.equal((await p.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' })).gates.review, 'blocked');
+  fake.set.review('APPROVED');
+  fake.set.reviewList([{ id: 1, user: { login: 'reviewer' }, state: 'APPROVED', commit_id: HEAD },
+    { id: 2, user: { login: 'reviewer' }, state: 'PENDING', commit_id: HEAD }]);
+  assert.deepEqual((await p.inspectPr({ ...target, pr: 7 })).approvedReviewers, ['reviewer']);
+});
+
+test('unknown no-review rule flags do not authorize a null decision', async () => {
+  const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+  fake.set.protection({ required_status_checks: { strict: true, contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] },
+    enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+    required_pull_request_reviews: { required_approving_review_count: 0, require_code_owner_reviews: 'false' } });
+  const p = new GitHubAutopilotProvider({ transport: fake.transport });
+  await assert.rejects(p.inspectPr({ ...target, pr: 7, reviewPolicy: 'independent-oms' }),
+    (e) => e.code === 'SERVER_POLICY_UNKNOWN');
+});
+
+test('direct provider snapshots independent review, authority, and frontier before asynchronous reads', async () => {
+  const fake = fakeGitHub(); fake.set.review(null); fake.set.reviewState('NONE');
+  await withJournal(async ({ provider, storePath }) => {
+    const input = structuredClone({ ...mergeInput, reviewPolicy: 'independent-oms', authorization: omsAuth,
+      review: omsReview, frontier: { ...omsReview, bottomPr: 7, frozen: true, countersignedBy: 'root-1' } });
+    const pending = provider.mergePullRequest(input);
+    input.authorization.actorSession = 'child-1'; input.review.pr = 8;
+    input.frontier.bottomPr = 8; input.review.verification[0].status = 'failed';
+    assert.equal((await pending).status, 'merged');
+    const saved = JSON.parse(await readFile(storePath, 'utf8'));
+    assert.equal(saved.events[0].payload.intent.reviewPolicy, 'independent-oms');
+    assert.equal(fake.calls.filter((c) => c.method === 'PUT').length, 1);
   }, fake);
 });
 

@@ -20,10 +20,12 @@ target branch. The caller must verify landing before considering another PR.
 These records are caller assertions. Passing validation does not authenticate
 human consent, root or reviewer session provenance, stable patch calculation,
 or GitHub permissions. Preserve the selected workflow's approval and review
-gates. The separate `reviewReceipt` asserts a current GitHub reviewer approval;
-the provider checks that reviewer against live GitHub review state. The OMS
-`review` packet represents an independent agent review and cannot substitute
-for that GitHub approval.
+gates. The default `reviewPolicy: "github-review"` uses a separate
+`reviewReceipt` asserting a current GitHub reviewer approval; the provider
+checks that reviewer against live GitHub state. The explicit
+`reviewPolicy: "independent-oms"` supports one maintainer with an independent
+OMS review session. It never substitutes for GitHub approval required by the
+repository's actual rules.
 
 The entrypoint takes a complete synchronous snapshot before validation or
 asynchronous work. Later edits to the caller's request cannot retarget an
@@ -98,10 +100,44 @@ the writer session, and only `actorSession === rootSession` may merge. The
 provider independently requires live checks, GitHub approval, resolved
 threads, mergeability, exact PR revisions, and a protected base branch.
 
+## Explicit single-maintainer review
+
+Set `reviewPolicy: "independent-oms"` on both a merge request and its
+`authorization`. Keep the complete `review`, `frontier`, `targetPolicy`,
+journal and revision pins from the merge example. The independent OMS packet
+replaces the default mode's GitHub `reviewReceipt`; it does not remove review
+or allow the writer to approve its own patch. Only the root may merge.
+
+For inspection, set the same `reviewPolicy` on the top-level request. An
+inspection's readiness means remote prerequisites are satisfied; it does not
+validate an OMS verdict or grant merge authority.
+
+The new mode audits classic branch protection with strict required checks,
+requires a positive GitHub App ID for each named check, requires protection to apply
+to administrators, and rejects force pushes or deletion permission. It also
+reads effective branch rules. Unpinned or legacy-status-only checks stop safely.
+The initial audited shape requires no active rulesets; code-owner and
+last-push approval policies are unsupported and stop safely. Unknown, incomplete
+or unsupported policy stops before a merge. The mode does not create or change protection settings.
+
+A null GitHub `reviewDecision` is acceptable only with complete review/thread
+observations and an audited rule configuration requiring no GitHub approval.
+If actual rules require approval, GitHub approval must still be satisfied.
+Changes requested, unresolved threads, stale revisions, missing checks, and
+API failures remain blocking conditions. Missing `reviewPolicy` retains the
+existing GitHub-review behavior; there is no automatic fallback.
+
+The lower-level provider validates the OMS evidence and scoped authority too.
+Its policy is bound into the operation fingerprint, so recovery cannot change
+the review policy for a recorded merge. Neither policy authenticates caller
+session identities, supplies atomic target-SHA compare-and-swap, nor grants
+permission for unattended `autopilot-full` landing.
+
 ## Reconcile an interrupted operation
 
 Use the same `workflow`, `provider`, `target`, `operationId`, and journal
-identity. Change `action` to `recover` and journal `mode` to `load`; the create
+identity and the original `reviewPolicy` (including explicit `independent-oms`).
+Change `action` to `recover` and journal `mode` to `load`; the create
 prose or merge review records are unnecessary. The adapter checks the journal
 intent's action and frozen target before the provider makes remote reads. A
 pending operation must be reconciled under its original ID; no new POST/PUT or

@@ -10,8 +10,8 @@ Neither provider is an unattended service or a complete pstack parity claim.
 The current Codex candidate bundles this provider with the
 [single-PR workflow adapter](github-workflow.md) for `opening-a-pr`, `babysit`
 and `shipping`. Use that adapter to carry workflow authority and independent
-OMS review into provider calls. This is local candidate integration, not a
-release or an upgrade of an existing installed plugin.
+OMS review into provider calls. The original binding shipped in 0.4.0. New behavior is available only
+when the installed package includes the corresponding policy implementation.
 
 ## Inspect a target
 
@@ -63,8 +63,10 @@ workers or malicious local processes.
   an independent passing review receipt and fresh provider gates. Inputs,
   authorization and review receipts all bind both branch names and SHAs;
   equal SHAs do not make two target branches interchangeable. The named
-  reviewer must also have a current GitHub approval on that head; a local
-  reviewer session alone does not satisfy this adapter's GitHub approval gate.
+  reviewer must also have a current GitHub approval on that head under the
+  default `github-review` policy. Explicit `independent-oms` uses a bound OMS
+  review, root authorization and frozen frontier, while preserving any actual
+  GitHub approval requirement. See the [policy binding](github-workflow.md).
   It does not fabricate approval, bypass checks or enable delayed auto-merge.
 - Inspect the exported methods and executable examples in
   [the provider tests](../tests/github-autopilot-provider.test.mjs) for the
@@ -112,8 +114,11 @@ become stale between the read and merge request.
 `strictTargetCas: true` is unsupported and stops before mutation. Ordinary
 shipping requires the caller to explicitly accept this boundary through
 `acceptServerPolicyBoundary: true` and requires the current base branch to
-report `protected: true`. This observes the protection flag rather than
-auditing every effective rule or administrator permission. GitHub remains
+report `protected: true`. The default `github-review` mode observes this
+flag rather than auditing every effective rule or administrator permission.
+The new `independent-oms` mode additionally audits supported classic protection,
+required check sources, administrator enforcement and active branch rules;
+unsupported or unreadable rules block it. GitHub remains
 responsible for enforcing the configured rules at merge time. This does not
 satisfy an `autopilot-full` contract requiring
 the target to remain exactly unchanged after the root countersign. Do not
@@ -128,7 +133,10 @@ read-only repository inspection verifies the current login and target only.
 
 The [hosted acceptance](github-hosted-acceptance-2026-10-03.md) now verifies real
 PR creation, CI failure/repair and operator-assisted interrupted-create recovery
-on an explicitly authorized disposable repository. Independent GitHub review,
-authorized merge and interrupted-merge recovery remain unverified. Full
+on an explicitly authorized disposable repository. The subsequent
+[single-maintainer acceptance](github-single-maintainer-acceptance-2026-10-03.md)
+verifies protected-target merge and operator-assisted interrupted-merge recovery
+with the explicit OMS review policy. The default independent-GitHub-account
+approval path remains unverified against live GitHub. Full
 autonomous queue acceptance, scheduled recovery, Benny/webhook
 integration and live-worker reattachment remain separate work.

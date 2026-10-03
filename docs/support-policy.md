@@ -1,8 +1,8 @@
 # Support policy
 
-## Release baseline: 0.3.0
+## Release baseline: 0.5.0
 
-0.3.0 is the release baseline. It is not a promise of complete Cursor
+0.5.0 is the release baseline. It is not a promise of complete Cursor
 pstack behavioral parity or stable 1.0 APIs. Support is scoped to the observed
 versions and surfaces in the [host matrix](host-compatibility.md). Other
 combinations require a fresh inventory, installation check and bounded worker
@@ -47,10 +47,10 @@ The subsequent [GitHub provider](github-autopilot-provider.md)
 uses official `gh` for real target observation and explicitly authorized
 library mutations. Its journal reconciles uncertain external results without
 blind retries. The command-line interface is read only; unattended operation
-and atomic expected-base protection are not claimed. This addition does not change installed plugin versions or the
-experimental boundaries above.
+and atomic expected-base protection are not claimed. An installed plugin must be upgraded to receive source changes. The
+experimental boundaries above remain scoped by the acceptance records below.
 
-The current Codex candidate adds packaged bindings and a
+The Codex package includes bindings and a
 [single-PR workflow helper](github-workflow.md) for `opening-a-pr`, `babysit`
 check and root-authorized `shipping`. Other hosts, babysit drive, automatic
 stack-frontier computation and hosted lifecycle acceptance are not covered
@@ -60,8 +60,10 @@ server-policy behavior needs explicitly bound authority. See the
 
 Separate [hosted acceptance](github-hosted-acceptance-2026-10-03.md) now covers
 real PR creation, CI failure/repair and operator-assisted recovery after a
-client kill. Independent approval, merge and interrupted-merge acceptance
-remain open; this is not full hosted lifecycle acceptance.
+client kill. The [single-maintainer acceptance](github-single-maintainer-acceptance-2026-10-03.md)
+adds protected-target merge and operator-assisted interrupted-merge recovery
+under explicit independent OMS review. Live independent-GitHub-account
+approval and full unattended hosted lifecycle acceptance remain open.
 
 The source checkout adds local run, evidence, matrix, and read-only doctor
 tooling in 0.3.0. These are source commands, not global plugin commands. Use the

@@ -518,7 +518,9 @@ function renderSkillDocument(skill, adapter) {
         ? ["This binding accepts one root-countersigned bottom PR only. It does",
           "not discover or validate stack topology. Strict target CAS stops;",
           "`server-policy` requires separately scoped authorization and retains",
-          "the GitHub base-revision race boundary."] : []),
+          "the GitHub base-revision race boundary. Review defaults to `github-review`;",
+          "`independent-oms` must be explicitly authorized and still honors",
+          "the repository's actual GitHub approval requirements."] : []),
       ...(skill.metadata.name === "opening-a-pr"
         ? ["This binding creates one ready PR from an already pushed branch;",
           "it does not push a branch or create a stack."] : []),
