@@ -20,6 +20,9 @@ The 2026-10-03 ebooks contain all 48 entries, expanded code examples, and bundle
 diagrams. PDFs include a linked contents page and bookmarks; EPUBs support
 reflowable text and include fonts for offline reading.
 
+The [2026-10-03 ebook release](https://github.com/williamwue/oh-my-stack/releases/tag/pstack-book-2026-10-03)
+provides all four files and SHA-256 checksums as downloadable attachments.
+
 | Edition | PDF | EPUB |
 | --- | --- | --- |
 | Simplified Chinese | [538 pages](../../../output/pdf/pstack-zh-CN.pdf) | [Download EPUB](../../../output/epub/pstack-zh-CN.epub) |

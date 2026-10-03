@@ -19,4 +19,8 @@
 - 使用 Poppler 与 MuPDF 交叉渲染。字体子集保留原始 glyph IDs，避免 CFF 字体在部分渲染器中漏字。
 - 未进行 Apple Books、Kindle 等阅读器实机验收；协作浏览器未能连接本地预览服务。
 
-完整记录见 [ebooks-validation.json](ebooks-validation.json)，校验值见 [SHA256SUMS.txt](SHA256SUMS.txt)。这些文件尚未作为 GitHub Release 附件发布。
+完整记录见 [ebooks-validation.json](ebooks-validation.json)，校验值见 [SHA256SUMS.txt](SHA256SUMS.txt)。
+
+## 下载
+
+[2026-10-03 电子书发布页](https://github.com/williamwue/oh-my-stack/releases/tag/pstack-book-2026-10-03)提供四份电子书与校验附件。电子书使用独立的日期标签，不改变 Oh My Stack 插件的版本号或 Latest 发布。
