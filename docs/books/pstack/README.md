@@ -14,6 +14,24 @@ English editions; see the [authorization record](AUTHORIZATION.md).
 - [Oh My Stack companion](companion/README.md): project-specific workflows and runtime boundaries.
 - [Translation standards](TRANSLATION.md) and [maintenance workflow](MAINTENANCE.md).
 
+## PDF and EPUB
+
+The 2026-10-03 ebooks contain all 48 entries, expanded code examples, and bundled
+diagrams. PDFs include a linked contents page and bookmarks; EPUBs support
+reflowable text and include fonts for offline reading.
+
+| Edition | PDF | EPUB |
+| --- | --- | --- |
+| Simplified Chinese | [538 pages](../../../output/pdf/pstack-zh-CN.pdf) | [Download EPUB](../../../output/epub/pstack-zh-CN.epub) |
+| Author's English | [622 pages](../../../output/pdf/pstack-en.pdf) | [Download EPUB](../../../output/epub/pstack-en.epub) |
+
+Both EPUBs passed EPUBCheck 5.4.0 with no errors or warnings. The PDFs passed
+text-boundary checks and representative visual inspection. Native ebook reader
+testing and human editorial review of the Chinese translation remain pending.
+See the [ebook notes and checksums](../../../output/README.md).
+
+## Source and attribution
+
 The source has 39 numbered chapters and 48 table-of-contents entries, including
 the preface, part introductions, appendix, and afterword. The
 [source manifest](source-manifest.json) records both language URLs and the
