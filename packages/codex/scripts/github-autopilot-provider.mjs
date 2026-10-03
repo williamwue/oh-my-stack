@@ -38,6 +38,30 @@ function scopedAuthorization(authorization, intent) {
     && (intent.pr === null || authorization.pr === intent.pr),
   'UNAUTHORIZED', 'scoped authorization is required');
 }
+const REVIEW_POLICIES = ['github-review', 'independent-oms'];
+function reviewPolicyOf(value) {
+  check(value === undefined || REVIEW_POLICIES.includes(value), 'INVALID_REVIEW_POLICY', 'review policy must be explicit and supported');
+  return value ?? 'github-review';
+}
+function omsEvidence(review, frontier, authorization, intent) {
+  const pins = ['repo', 'account', 'pr', 'base', 'head', 'baseSha', 'headSha'];
+  check(authorization?.reviewPolicy === 'independent-oms' && authorization.actorSession === authorization.rootSession
+    && ID.test(authorization.rootSession ?? '') && ID.test(authorization.ownerSession ?? '')
+    && authorization.targetPolicy === 'server-policy' && typeof authorization.patchId === 'string'
+    && authorization.patchId.length > 0 && authorization.patchId.length <= 256,
+  'UNAUTHORIZED', 'root authorization must bind the independent review policy and patch');
+  check(review && pins.every((key) => review[key] === intent[key]) && review.writerSession === authorization.ownerSession
+    && ID.test(review.writerSession ?? '') && ID.test(review.reviewerSession ?? '')
+    && review.reviewerSession !== review.writerSession && review.patchId === authorization.patchId
+    && ['PASS', 'PASS+NOTES'].includes(review.verdict) && Array.isArray(review.verification)
+    && review.verification.length > 0 && review.verification.length <= 256
+    && review.verification.every((v) => typeof v?.command === 'string' && v.command.length > 0 && v.command.length <= 2000
+      && v.status === 'passed' && typeof v.observed === 'string' && v.observed.length > 0 && v.observed.length <= 2000),
+  'INDEPENDENT_REVIEW_REQUIRED', 'bound independent OMS review and successful verification are required');
+  check(frontier && pins.every((key) => frontier[key] === intent[key]) && frontier.bottomPr === intent.pr
+    && frontier.frozen === true && frontier.countersignedBy === authorization.rootSession && frontier.patchId === review.patchId,
+  'FRONTIER_REQUIRED', 'root-countersigned frozen current bottom PR is required');
+}
 
 /** Official gh API transport. No shell, repository cwd, env file, verbose output, or raw error propagation. */
 export function createGhTransport({ executable = 'gh', timeoutMs = 15_000, maxOutputBytes = MAX_OUTPUT } = {}) {
@@ -102,7 +126,44 @@ export class GitHubAutopilotProvider {
     validateSha(ref?.object?.sha, 'remote ref SHA');
     return ref.object.sha;
   }
-  async inspectPr({ repo, account, pr } = {}) {
+  async _serverPolicy(repo, base, baseSha, runs, contexts) {
+    const branch = await this._api('GET', `/repos/${repo}/branches/${encoded(base)}`);
+    check(branch?.name === base && branch?.commit?.sha === baseSha && branch.protected === true,
+      'SERVER_POLICY_UNKNOWN', 'base branch protection is absent or unknown');
+    const policy = await this._api('GET', `/repos/${repo}/branches/${encoded(base)}/protection`);
+    const rules = await this._api('GET', `/repos/${repo}/rules/branches/${encoded(base)}?per_page=100`);
+    check(Array.isArray(rules) && rules.length < 100 && rules.length === 0,
+      'SERVER_POLICY_UNKNOWN', 'active rulesets are not supported by this audited merge policy');
+    const required = policy?.required_status_checks;
+    check(required?.strict === true && Array.isArray(required.contexts) && Array.isArray(required.checks)
+      && policy?.enforce_admins?.enabled === true && policy?.allow_force_pushes?.enabled === false
+      && policy?.allow_deletions?.enabled === false, 'SERVER_POLICY_UNKNOWN', 'classic protection is incomplete or unsafe');
+    const entries = required.checks;
+    const validContext = (context) => typeof context === 'string' && context.length > 0 && context.length <= 200;
+    check(entries.length > 0 && entries.length < 100 && required.contexts.length < 100
+      && entries.every((e) => validContext(e?.context) && Number.isSafeInteger(e.app_id) && e.app_id > 0)
+      && required.contexts.every((context) => validContext(context)
+        && entries.some((entry) => entry.context === context)),
+    'SERVER_POLICY_UNKNOWN', 'required checks must be bounded and pinned to a known GitHub app');
+    check(Array.isArray(runs) && Array.isArray(contexts), 'SERVER_POLICY_UNKNOWN', 'current checks are unavailable');
+    for (const entry of entries) {
+      const matchingRuns = runs.filter((r) => r.name === entry.context && r.app?.id === entry.app_id);
+      check(matchingRuns.length > 0 && matchingRuns.every((r) => r.status === 'completed' && r.conclusion === 'success'),
+      'REQUIRED_CHECK_BLOCKED', 'required current-head check is missing or unsuccessful');
+    }
+    const approvals = policy.required_pull_request_reviews;
+    check(approvals === undefined || approvals === null || (Number.isSafeInteger(approvals.required_approving_review_count)
+      && approvals.required_approving_review_count >= 0 && approvals.required_approving_review_count <= 6
+      && typeof approvals.dismiss_stale_reviews === 'boolean' && typeof approvals.require_code_owner_reviews === 'boolean'
+      && typeof approvals.require_last_push_approval === 'boolean'),
+    'SERVER_POLICY_UNKNOWN', 'required review policy is malformed');
+    check(approvals?.require_code_owner_reviews !== true && approvals?.require_last_push_approval !== true,
+      'SERVER_POLICY_UNKNOWN', 'code-owner and last-push review policy cannot be audited here');
+    return { requiredApprovals: approvals?.required_approving_review_count ?? 0,
+      githubApprovalRequired: (approvals?.required_approving_review_count ?? 0) > 0 };
+  }
+  async inspectPr({ repo, account, pr, reviewPolicy } = {}) {
+    reviewPolicy = reviewPolicyOf(reviewPolicy);
     await this.inspectRepository({ repo, account }); validatePr(pr);
     const raw = await this._api('GET', `/repos/${repo}/pulls/${pr}`);
     check(raw?.number === pr && raw?.base?.repo?.full_name?.toLowerCase() === repo.toLowerCase(), 'TARGET_MISMATCH', 'PR does not belong to exact repository');
@@ -113,7 +174,8 @@ export class GitHubAutopilotProvider {
     const statuses = await this._api('GET', `/repos/${repo}/commits/${headSha}/status?per_page=100`);
     const reviews = await this._api('GET', `/repos/${repo}/pulls/${pr}/reviews?per_page=100`);
     const graph = await this._api('POST', '/graphql', { query: `query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){pullRequest(number:$number){reviewDecision reviewThreads(first:100){nodes{isResolved} pageInfo{hasNextPage}}}}}`, variables: { owner: repo.split('/')[0], name: repo.split('/')[1], number: pr } });
-    const gpr = Array.isArray(graph?.errors) && graph.errors.length ? null : graph?.data?.repository?.pullRequest;
+    const gpr = graph && (!Object.hasOwn(graph, 'errors') || (Array.isArray(graph.errors) && graph.errors.length === 0))
+      ? graph?.data?.repository?.pullRequest : null;
     const runs = checks?.check_runs;
     const contexts = statuses?.statuses;
     const state = raw.merged === true ? 'merged' : raw.state === 'open' ? 'open' : 'closed';
@@ -125,29 +187,46 @@ export class GitHubAutopilotProvider {
       && runs.every((r) => r.head_sha === headSha && r.status === 'completed' && ['success', 'neutral', 'skipped'].includes(r.conclusion))
       && contexts.every((s) => s.state === 'success');
     const threads = gpr?.reviewThreads;
-    const reviewsKnown = gpr?.reviewDecision === 'APPROVED' && Array.isArray(threads?.nodes)
-      && threads.pageInfo?.hasNextPage === false && threads.nodes.length <= 100;
-    const reviewThreadsResolved = reviewsKnown && threads.nodes.every((t) => t.isResolved === true);
+    const threadsKnown = Array.isArray(threads?.nodes) && threads.pageInfo?.hasNextPage === false
+      && threads.nodes.length < 100 && threads.nodes.every((t) => typeof t?.isResolved === 'boolean');
+    const reviewThreadsResolved = threadsKnown && threads.nodes.every((t) => t.isResolved === true);
     const reviewsComplete = Array.isArray(reviews) && reviews.length < 100 && reviews.every((r) =>
-      Number.isSafeInteger(r?.id) && LOGIN.test(r?.user?.login ?? '') && typeof r.state === 'string');
+      Number.isSafeInteger(r?.id) && LOGIN.test(r?.user?.login ?? '')
+      && ['APPROVED', 'CHANGES_REQUESTED', 'COMMENTED', 'DISMISSED', 'PENDING'].includes(r.state));
     const latestByReviewer = new Map();
     if (reviewsComplete) for (const review of reviews) {
       const login = review.user.login.toLowerCase();
-      if (!latestByReviewer.has(login) || latestByReviewer.get(login).id < review.id) latestByReviewer.set(login, review);
+      if (['APPROVED', 'CHANGES_REQUESTED', 'DISMISSED'].includes(review.state)
+        && (!latestByReviewer.has(login) || latestByReviewer.get(login).id < review.id)) latestByReviewer.set(login, review);
     }
     const approvedReviewers = reviewsComplete ? [...latestByReviewer.entries()]
       .filter(([, r]) => r.state === 'APPROVED' && r.commit_id === headSha)
       .map(([login]) => login) : [];
+    let policy = null;
+    if (reviewPolicy === 'independent-oms') {
+      try { policy = await this._serverPolicy(repo, raw.base.ref, baseSha, checkComplete ? runs : null, checkComplete ? contexts : null); }
+      catch (error) { if (error instanceof GitHubProviderError) throw error; fail('SERVER_POLICY_UNKNOWN', 'server policy audit failed'); }
+    }
+    const decisionKnown = gpr && Object.hasOwn(gpr, 'reviewDecision')
+      && ['APPROVED', 'CHANGES_REQUESTED', 'REVIEW_REQUIRED', null].includes(gpr.reviewDecision);
+    const changesRequested = reviewsComplete && [...latestByReviewer.values()].some((r) => r.state === 'CHANGES_REQUESTED');
+    const reviewGate = !decisionKnown || !reviewsComplete ? 'unknown'
+      : changesRequested || gpr.reviewDecision === 'CHANGES_REQUESTED' ? 'blocked'
+      : gpr.reviewDecision === 'APPROVED' ? 'approved'
+      : reviewPolicy === 'independent-oms' && policy?.githubApprovalRequired === false && gpr.reviewDecision === null ? 'not-required'
+      : gpr.reviewDecision === null ? 'unknown' : 'blocked';
     const gates = {
       checks: !checkComplete ? 'unknown' : allChecks ? 'passed' : 'blocked',
-      review: !gpr || !threads || threads.pageInfo?.hasNextPage !== false || !reviewsComplete ? 'unknown' : gpr.reviewDecision === 'APPROVED' ? 'approved' : gpr.reviewDecision == null ? 'unknown' : 'blocked',
-      threads: !reviewsKnown ? 'unknown' : reviewThreadsResolved ? 'resolved' : 'blocked',
+      review: reviewGate,
+      threads: !threadsKnown ? 'unknown' : reviewThreadsResolved ? 'resolved' : 'blocked',
       mergeability: raw.mergeable === true && raw.mergeable_state === 'clean' ? 'clean' : raw.mergeable == null || raw.mergeable_state === 'unknown' ? 'unknown' : 'blocked',
     };
     return { repo, account, pr, state, draft: raw.draft === true, sameRepo, base: raw.base.ref, head: raw.head.ref,
       baseSha, headSha, currentHead, url: raw.html_url ?? null, merged: raw.merged === true,
-      mergeSha: raw.merge_commit_sha ?? null, approvedReviewers, gates,
-      ready: state === 'open' && raw.draft === false && sameRepo && currentHead === headSha && Object.values(gates).every((v) => ['passed', 'approved', 'resolved', 'clean'].includes(v)) };
+      mergeSha: raw.merge_commit_sha ?? null, approvedReviewers, gates, reviewPolicy,
+      requiredApprovals: policy?.requiredApprovals ?? null,
+      ready: state === 'open' && raw.draft === false && sameRepo && currentHead === headSha
+        && Object.values(gates).every((v) => ['passed', 'approved', 'not-required', 'resolved', 'clean'].includes(v)) };
   }
   async _append(payload) {
     check(this.run, 'JOURNAL_REQUIRED', 'writes require a durable journal');
@@ -249,15 +328,26 @@ export class GitHubAutopilotProvider {
     });
   }
   async mergePullRequest({ operationId, repo, account, pr, base, head, baseSha, headSha, authorization, reviewReceipt,
-    strictTargetCas = false, acceptServerPolicyBoundary = false } = {}) {
+    review, frontier, reviewPolicy, strictTargetCas = false, acceptServerPolicyBoundary = false } = {}) {
+    // Caller evidence is a scoped assertion, not a signature. Freeze it before the first await.
+    try { ({ authorization, reviewReceipt, review, frontier } = clone({ authorization, reviewReceipt, review, frontier })); }
+    catch { fail('INVALID_INPUT', 'merge evidence must be JSON-cloneable'); }
+    reviewPolicy = reviewPolicyOf(reviewPolicy);
     validateOp(operationId); validateTarget(repo, account); validatePr(pr); validateBranch(base, 'base'); validateBranch(head, 'head');
     validateSha(baseSha, 'baseSha'); validateSha(headSha, 'headSha');
     check(strictTargetCas === false, 'UNSUPPORTED_TARGET_CAS', 'GitHub merge API cannot atomically guard target base SHA');
     check(acceptServerPolicyBoundary === true, 'SERVER_POLICY_BOUNDARY', 'explicit acceptance of GitHub server policy boundary is required');
+    const inputHash = reviewPolicy === 'github-review'
+      ? hash({ operationId, repo, account, pr, base, head, baseSha, headSha, reviewReceipt, authorization, acceptServerPolicyBoundary })
+      : hash({ operationId, repo, account, pr, base, head, baseSha, headSha,
+        reviewPolicy, review, frontier, authorization, acceptServerPolicyBoundary });
     const intent = { operationId, action: 'merge', repo, account, pr, base, head, baseSha, headSha,
-      inputHash: hash({ operationId, repo, account, pr, base, head, baseSha, headSha, reviewReceipt, authorization, acceptServerPolicyBoundary }) };
+      reviewPolicy, inputHash };
     scopedAuthorization(authorization, intent);
-    check(reviewReceipt?.repo === repo && reviewReceipt?.pr === pr && reviewReceipt?.base === base && reviewReceipt?.head === head
+    if (reviewPolicy === 'independent-oms') omsEvidence(review, frontier, authorization, intent);
+    else check((authorization?.reviewPolicy === undefined ? 'github-review' : authorization.reviewPolicy) === 'github-review',
+      'UNAUTHORIZED', 'review policy differs from authority');
+    if (reviewPolicy === 'github-review') check(reviewReceipt?.repo === repo && reviewReceipt?.pr === pr && reviewReceipt?.base === base && reviewReceipt?.head === head
       && reviewReceipt?.baseSha === baseSha && reviewReceipt?.headSha === headSha
       && reviewReceipt?.verdict === 'passed' && LOGIN.test(reviewReceipt?.owner ?? '')
       && LOGIN.test(reviewReceipt?.reviewer ?? '') && reviewReceipt.owner.toLowerCase() !== reviewReceipt.reviewer.toLowerCase()
@@ -270,14 +360,31 @@ export class GitHubAutopilotProvider {
         await this.inspectRepository({ repo, account });
         return old.status === 'completed' ? clone(old.result) : this._recoverMerge(old.intent);
       }
-      const current = await this.inspectPr({ repo, account, pr });
+      const current = await this.inspectPr({ repo, account, pr, reviewPolicy });
       check(current.ready && current.baseSha === baseSha && current.headSha === headSha
         && current.base === base && current.head === head, 'MERGE_BLOCKED', 'PR drifted or remote gates are blocked/unknown');
-      check(current.approvedReviewers.includes(reviewReceipt.reviewer.toLowerCase()), 'INDEPENDENT_REVIEW_REQUIRED', 'reviewer has no current GitHub approval on head SHA');
+      if (reviewPolicy === 'github-review') check(current.approvedReviewers.includes(reviewReceipt.reviewer.toLowerCase()),
+        'INDEPENDENT_REVIEW_REQUIRED', 'reviewer has no current GitHub approval on head SHA');
+      if (reviewPolicy === 'independent-oms' && current.requiredApprovals > 0)
+        check(current.gates.review === 'approved' && current.approvedReviewers.filter((login) => login !== account.toLowerCase()).length >= current.requiredApprovals,
+          'MERGE_BLOCKED', 'required GitHub approval has no current-head reviewer');
       check(await this._ref(repo, current.base) === baseSha, 'BASE_DRIFT', 'base branch changed');
-      const protectedBase = await this._api('GET', `/repos/${repo}/branches/${encoded(current.base)}`);
-      check(protectedBase?.name === current.base && protectedBase?.commit?.sha === baseSha && protectedBase.protected === true,
-        'SERVER_POLICY_UNKNOWN', 'base branch protection is absent or unknown');
+      // Re-audit the server policy and all current-head checks after the last ref read.
+      const fresh = await this.inspectPr({ repo, account, pr, reviewPolicy });
+      check(fresh.ready && fresh.baseSha === baseSha && fresh.headSha === headSha && fresh.base === base && fresh.head === head,
+        'MERGE_BLOCKED', 'PR or gates changed before mutation');
+      if (reviewPolicy === 'independent-oms' && fresh.requiredApprovals > 0)
+        check(fresh.gates.review === 'approved' && fresh.approvedReviewers.filter((login) => login !== account.toLowerCase()).length >= fresh.requiredApprovals,
+          'MERGE_BLOCKED', 'required GitHub approval changed before mutation');
+      if (reviewPolicy === 'github-review') check(fresh.approvedReviewers.includes(reviewReceipt.reviewer.toLowerCase()),
+        'INDEPENDENT_REVIEW_REQUIRED', 'reviewer approval changed before mutation');
+      check(await this._ref(repo, base) === baseSha && await this._ref(repo, head) === headSha,
+        'REF_DRIFT', 'base or head changed before mutation');
+      if (reviewPolicy === 'github-review') {
+        const protectedBase = await this._api('GET', `/repos/${repo}/branches/${encoded(base)}`);
+        check(protectedBase?.name === base && protectedBase?.commit?.sha === baseSha && protectedBase.protected === true,
+          'SERVER_POLICY_UNKNOWN', 'base branch protection is absent or unknown');
+      }
       await this._begin(intent);
       await this._api('PUT', `/repos/${repo}/pulls/${pr}/merge`, { sha: headSha, merge_method: 'merge' });
       return this._recoverMerge(intent);

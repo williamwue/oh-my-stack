@@ -1,7 +1,7 @@
 # Project status
 
-Updated: 2026-10-03. Release record: [0.4.0](releases/0.4.0.md).
-Previous published baseline: [v0.3.0](releases/0.3.0.md).
+Updated: 2026-10-03. Release record: [0.5.0](releases/0.5.0.md).
+Previous published baseline: [v0.4.0](releases/0.4.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
 procedure. Full pstack equivalence is not established; hosted autopilot,
@@ -24,9 +24,10 @@ login, exact account/repository checks, a read-only inspection CLI and a
 durable journal around explicitly authorized library mutations. Full hosted
 autopilot acceptance remains open: the GitHub merge API provides a head SHA
 guard but no atomic expected-base guard, and local tests do not certify remote
-publication or merge. This is a source change, not a plugin upgrade or release.
+publication or merge. The original bounded interface shipped in 0.4.0;
+0.5.0 adds the explicit single-maintainer policy described below.
 
-The next bounded unit adds [Codex workflow bindings](github-workflow.md) and a
+The 0.4.0 bounded unit added [Codex workflow bindings](github-workflow.md) and a
 packaged helper for one PR. It keeps independent OMS review separate from
 GitHub approval and binds the merge policy to root authority. The
 [concurrency experiment](github-target-policy-prototype-2026-10-03.md) confirms
@@ -37,19 +38,25 @@ the complete local gate separately from hosted and installed-runtime evidence.
 The subsequent [hosted run](github-hosted-acceptance-2026-10-03.md) created a real
 PR in the user-selected private acceptance repository, observed failing then
 passing CI, and recovered creation after an actual client kill. No independent
-approval account was available, so the PR remains open and unmerged.
+approval account was available, so that private fixture PR remains unmerged.
+The subsequent [single-maintainer run](github-single-maintainer-acceptance-2026-10-03.md)
+used a separately authorized public protected target. Normal merge and
+operator-assisted interrupted-merge recovery passed through an installed
+candidate package, with one merge PUT per scenario. The new explicit policy
+requires an independent OMS session and audits supported server protections;
+it never replaces GitHub approval configured by repository rules.
 
 | Priority | Remaining pstack parity task | Current boundary |
 | --- | --- | --- |
 | P0 | Repository gate | The baseline gate now passes with immutable historical-report hashes; integrated candidate checks are recorded in the continuation acceptance. |
-| P0 | Provider workflow integration | Current candidate covers opening a PR, babysit check and one root-authorized merge on Codex. Drive, stacks and other hosts need separate integration. |
+| P0 | Provider workflow integration | The packaged adapter covers opening a PR, babysit check and one root-authorized merge on Codex. Drive, stacks and other hosts need separate integration. |
 | P1 | Target concurrency policy | Experiment complete: strict stops; server-policy requires explicit authority and permits target movement after the final read. |
-| P1 | Hosted PR and interruption acceptance | [Real PR creation, CI failure/repair and operator-assisted recovery after SIGKILL passed](github-hosted-acceptance-2026-10-03.md). PR 1 remains unmerged: independent approval, protected-target merge and interrupted-merge acceptance remain open. |
+| P1 | Hosted PR and interruption acceptance | [Real PR creation, CI failure/repair and operator-assisted recovery after SIGKILL passed](github-hosted-acceptance-2026-10-03.md). [Protected-target merge and interrupted-merge recovery passed under independent OMS review](github-single-maintainer-acceptance-2026-10-03.md). Live independent-GitHub-account approval remains unverified. |
 | P1 | Bounded autonomous queue | Not established by the single-PR helper. |
 | P1 | Host lifecycle and recovery | Retain existing bounded wake/cancel evidence; broad restart, late result and worker reattachment behavior remains open. |
 | P2 | Per-workflow acceptance matrix | Catalog coverage and local fixtures do not prove all workflows end to end. |
 | P2 | Authenticated Benny and webhooks | Real authenticated delivery remains open. |
-| P2 | Release and installed-plugin acceptance | Local candidate packages require separate publication and active host upgrade acceptance. |
+| P2 | Release and installed-plugin acceptance | Release publication, downloaded artifacts and active host upgrades have separate version-specific receipts. |
 
 ## Published 0.2.1 acceptance update
 

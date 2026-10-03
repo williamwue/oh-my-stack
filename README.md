@@ -40,8 +40,9 @@ claims use the separate verification labels documented in the
 
 ## Quick start
 
-Version 0.4.0 adds [Codex GitHub workflow bindings](docs/github-workflow.md).
-See the [release scope and gates](docs/releases/0.4.0.md); full pstack parity
+Version 0.5.0 adds explicit single-maintainer review to the
+[Codex GitHub workflow bindings](docs/github-workflow.md).
+See the [release scope and gates](docs/releases/0.5.0.md); full pstack parity
 and autonomous hosted merging are not claimed.
 
 ### Build a local release candidate

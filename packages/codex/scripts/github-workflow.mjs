@@ -11,6 +11,7 @@ const BRANCH = /^[A-Za-z0-9][A-Za-z0-9._/-]{0,199}$/;
 const SHA = /^[a-f0-9]{40}$/i;
 const pairs = { 'opening-a-pr': ['inspect', 'create', 'recover'], babysit: ['inspect'], shipping: ['inspect', 'merge', 'recover'] };
 const requiredPins = ['repo', 'account', 'base', 'head', 'baseSha', 'headSha'];
+const reviewPolicyOf = (request) => request.reviewPolicy === undefined ? 'github-review' : request.reviewPolicy;
 
 export class GitHubWorkflowError extends Error {
   constructor(code, message) { super(message); this.name = 'GitHubWorkflowError'; this.code = code; }
@@ -44,6 +45,8 @@ function authority(request, mutation) {
     check(a.actorSession === a.rootSession, 'ROOT_REQUIRED', 'only the root session may merge');
     check(a.targetPolicy === request.targetPolicy && a.patchId === request.review?.patchId,
       'UNAUTHORIZED', 'policy and patch identity must be bound into merge authority');
+    check((a.reviewPolicy === undefined ? 'github-review' : a.reviewPolicy) === reviewPolicyOf(request),
+      'UNAUTHORIZED', 'review policy must be bound into merge authority');
   }
 }
 function shippingEvidence(request) {
@@ -59,7 +62,7 @@ function shippingEvidence(request) {
     && f.countersignedBy === a.rootSession && f.patchId === r.patchId,
   'FRONTIER_REQUIRED', 'root-countersigned frozen single bottom PR is required');
   const receipt = request.reviewReceipt;
-  check(receipt && receipt !== r && matchPins(receipt, t, { pr: true })
+  if (reviewPolicyOf(request) === 'github-review') check(receipt && receipt !== r && matchPins(receipt, t, { pr: true })
     && receipt.verdict === 'passed' && LOGIN.test(receipt.owner ?? '')
     && LOGIN.test(receipt.reviewer ?? '') && receipt.owner.toLowerCase() === t.account.toLowerCase()
     && receipt.owner.toLowerCase() !== receipt.reviewer.toLowerCase() && receipt.revoked !== true,
@@ -87,6 +90,7 @@ function validate(request) {
   check(['create', 'load'].includes(request.journal.mode), 'INVALID_JOURNAL', 'journal mode must be create or load');
   if (merge) check(request.targetPolicy === 'server-policy', 'UNSUPPORTED_TARGET_CAS',
     'strict target CAS is the default; explicit server-policy boundary is required for GitHub merge');
+  if (merge) check(['github-review', 'independent-oms'].includes(reviewPolicyOf(request)), 'INVALID_REVIEW_POLICY', 'unsupported review policy');
   authority(request, request.action);
   if (request.action === 'create') {
     check(bounded(request.title, 200) && typeof (request.body ?? '') === 'string' && (request.body ?? '').length <= 30_000,
@@ -114,7 +118,7 @@ export async function executeGitHubWorkflow(request, { transport } = {}) {
   const { action, workflow, target: t } = request;
   if (action === 'inspect') {
     const provider = new GitHubAutopilotProvider({ transport });
-    return t.pr === undefined ? provider.inspectRepository(t) : provider.inspectPr(t);
+    return t.pr === undefined ? provider.inspectRepository(t) : provider.inspectPr({ ...t, reviewPolicy: request.reviewPolicy });
   }
   const { journal: j } = request;
   const options = { storePath: j.storePath, storeRoot: j.storeRoot, runId: j.runId, generation: j.generation, transport };
@@ -123,7 +127,8 @@ export async function executeGitHubWorkflow(request, { transport } = {}) {
   if (action === 'recover') {
     const old = operations.get(request.operationId);
     const expected = workflow === 'shipping' ? 'merge' : 'create';
-    check(old?.intent.action === expected && matchPins(old.intent, t, { pr: expected === 'merge' }),
+    check(old?.intent.action === expected && matchPins(old.intent, t, { pr: expected === 'merge' })
+      && (expected !== 'merge' || (old.intent.reviewPolicy === undefined ? 'github-review' : old.intent.reviewPolicy) === reviewPolicyOf(request)),
       'OPERATION_MISMATCH', 'journal operation does not match workflow and frozen target');
     return provider.recoverOperation({ operationId: request.operationId, repo: t.repo, account: t.account });
   }
@@ -132,7 +137,8 @@ export async function executeGitHubWorkflow(request, { transport } = {}) {
     'PENDING_OPERATION', 'reconcile pending operation before a new mutation');
   const inputs = { operationId: request.operationId, ...t, authorization: request.authorization };
   if (action === 'create') return provider.createPullRequest({ ...inputs, title: request.title, body: request.body ?? '' });
-  return provider.mergePullRequest({ ...inputs, reviewReceipt: request.reviewReceipt,
+  return provider.mergePullRequest({ ...inputs, reviewReceipt: request.reviewReceipt, review: request.review,
+    frontier: request.frontier, reviewPolicy: reviewPolicyOf(request),
     strictTargetCas: false, acceptServerPolicyBoundary: true });
 }
 

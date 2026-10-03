@@ -16,7 +16,7 @@ const review = { ...target, writerSession: 'writer-1', reviewerSession: 'reviewe
 const reviewReceipt = { ...target, owner: 'maintainer', reviewer: 'reviewer', verdict: 'passed' };
 const frontier = { ...target, bottomPr: 7, frozen: true, countersignedBy: 'root-1', patchId: 'patch-abc' };
 
-function fake({ ambiguousCreate = false, ambiguousMerge = false } = {}) {
+function fake({ ambiguousCreate = false, ambiguousMerge = false, noGithubReview = false } = {}) {
   const calls = []; let created = false, merged = false;
   const pr = () => ({ number: 7, state: 'open', merged, draft: false, mergeable: true, mergeable_state: 'clean',
     merge_commit_sha: merged ? MERGE : null, html_url: 'https://github.com/acme/project/pull/7',
@@ -29,11 +29,17 @@ function fake({ ambiguousCreate = false, ambiguousMerge = false } = {}) {
     if (path === '/repos/acme/project/git/ref/heads/main') return { object: { sha: BASE } };
     if (path === '/repos/acme/project/git/ref/heads/feature') return { object: { sha: HEAD } };
     if (path === '/repos/acme/project/branches/main') return { name: 'main', commit: { sha: BASE }, protected: true };
+    if (path === '/repos/acme/project/branches/main/protection') return { required_status_checks: { strict: true,
+      contexts: ['ci/test'], checks: [{ context: 'ci/test', app_id: 123 }] }, enforce_admins: { enabled: true },
+      allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false },
+      required_pull_request_reviews: { required_approving_review_count: noGithubReview ? 0 : 1,
+        dismiss_stale_reviews: true, require_code_owner_reviews: false, require_last_push_approval: false } };
+    if (path === '/repos/acme/project/rules/branches/main?per_page=100') return [];
     if (path === '/repos/acme/project/pulls/7') return pr();
-    if (path === '/repos/acme/project/pulls/7/reviews?per_page=100') return [{ id: 1, user: { login: 'reviewer' }, state: 'APPROVED', commit_id: HEAD }];
-    if (path.endsWith('/check-runs?per_page=100')) return { total_count: 1, check_runs: [{ head_sha: HEAD, status: 'completed', conclusion: 'success' }] };
+    if (path === '/repos/acme/project/pulls/7/reviews?per_page=100') return noGithubReview ? [] : [{ id: 1, user: { login: 'reviewer' }, state: 'APPROVED', commit_id: HEAD }];
+    if (path.endsWith('/check-runs?per_page=100')) return { total_count: 1, check_runs: [{ name: 'ci/test', app: { id: 123 }, head_sha: HEAD, status: 'completed', conclusion: 'success' }] };
     if (path.endsWith('/status?per_page=100')) return { sha: HEAD, state: 'success', total_count: 0, statuses: [] };
-    if (path === '/graphql') return { data: { repository: { pullRequest: { reviewDecision: 'APPROVED', reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } } } } } };
+    if (path === '/graphql') return { data: { repository: { pullRequest: { reviewDecision: noGithubReview ? null : 'APPROVED', reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } } } } } };
     if (path.startsWith('/repos/acme/project/pulls?')) return created ? [{ ...pr(), body: calls.find((x) => x.method === 'POST' && x.path === '/repos/acme/project/pulls').body.body }] : [];
     if (method === 'POST' && path === '/repos/acme/project/pulls') { created = true; if (ambiguousCreate) throw Error('timeout'); return pr(); }
     if (method === 'PUT' && path === '/repos/acme/project/pulls/7/merge') { merged = true; if (ambiguousMerge) throw Error('timeout'); return { merged: true, sha: MERGE }; }
@@ -82,6 +88,21 @@ test('independent root shipping requires server policy and recovers ambiguous me
   assert.equal(result.status, 'merged');
   await assert.rejects(executeGitHubWorkflow({ ...request, action: 'recover', target: { ...target, headSha: 'd'.repeat(40) },
     journal: { ...journal, mode: 'load' } }, { transport: f.transport }), (e) => e.code === 'OPERATION_MISMATCH');
+  assert.equal(f.calls.filter((c) => c.method === 'PUT').length, 1);
+}));
+
+test('explicit OMS policy merges without GitHub reviewer and binds recovery to that policy', async () => context(async (journal) => {
+  const f = fake({ noGithubReview: true, ambiguousMerge: true });
+  const request = { workflow: 'shipping', provider: 'github.com', action: 'merge', target, operationId: 'oms-merge', journal,
+    authorization: { ...auth('shipping', 'merge', 'oms-merge'), reviewPolicy: 'independent-oms' },
+    review, frontier, reviewPolicy: 'independent-oms', targetPolicy: 'server-policy' };
+  await assert.rejects(executeGitHubWorkflow({ ...request, reviewPolicy: 'github-review' }, { transport: f.transport }),
+    (e) => e.code === 'UNAUTHORIZED');
+  await assert.rejects(executeGitHubWorkflow(request, { transport: f.transport }), (e) => e.code === 'API_ERROR');
+  const recovery = { ...request, action: 'recover', journal: { ...journal, mode: 'load' } };
+  await assert.rejects(executeGitHubWorkflow({ ...recovery, reviewPolicy: 'github-review' }, { transport: f.transport }),
+    (e) => e.code === 'OPERATION_MISMATCH');
+  assert.equal((await executeGitHubWorkflow(recovery, { transport: f.transport })).status, 'merged');
   assert.equal(f.calls.filter((c) => c.method === 'PUT').length, 1);
 }));
 
