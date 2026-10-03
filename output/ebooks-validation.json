@@ -1,0 +1,846 @@
+{
+  "zh-CN": {
+    "pages": 538,
+    "bookmarks": 382,
+    "pdf_links": 2604,
+    "epub_local_links": 886,
+    "epub_link_errors": [],
+    "outside_page_text": [],
+    "replacement_character_pages": [],
+    "sparse_pages": [],
+    "chapters": 48,
+    "code_blocks": 222,
+    "source_revision": "8fa4f6531d3af142467e322f17e7806a5ecf515b",
+    "files": {
+      "pdf": {
+        "bytes": 4178552,
+        "sha256": "46852bfbc7b3b8278e7ebf8536496c10332c4abfa2ca7e77657d68d8b6b612ab"
+      },
+      "epub": {
+        "bytes": 4586433,
+        "sha256": "6e6d2782de42476cb1f4de66ff1c27194b832ccccf49c25d782dfa873b84a389"
+      }
+    },
+    "epubcheck": {
+      "version": "5.4.0",
+      "errors": 0,
+      "warnings": 0
+    },
+    "visual_qa": {
+      "renderers": [
+        "Poppler",
+        "MuPDF"
+      ],
+      "method": "Representative PDF pages and book contact sheets; cover, contents, tables, code, landscape diagrams, split diagrams and ending pages inspected."
+    },
+    "reader_app_testing": "Not performed. Collaborative browser could not reach local preview server.",
+    "preservation": [
+      {
+        "order": 1,
+        "edition_file": "docs/books/pstack/zh-CN/01-preface.md",
+        "edition_sha256": "f07fac84049ce8425bd8b181072daa89d4c58e2475f7fac60ef5ca33d3c4054e",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 2,
+        "edition_file": "docs/books/pstack/zh-CN/02-chapter.md",
+        "edition_sha256": "ed1953a453b620fd0fbe6225c8c8029c40dc39dc81e3616b6ed915212a8919f8",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 3,
+        "edition_file": "docs/books/pstack/zh-CN/03-chapter.md",
+        "edition_sha256": "b5bde7df3128bea9dee7ce95fb0f891e80d17013c7a95ef7e1d907f68f5941b3",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 4,
+        "edition_file": "docs/books/pstack/zh-CN/04-chapter.md",
+        "edition_sha256": "91fc380e3dcdfc5291ba5bad70aae4b0c1a73f84e84b5286a4c5d3ee6f2cc530",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 5,
+        "edition_file": "docs/books/pstack/zh-CN/05-chapter.md",
+        "edition_sha256": "f4ce6aa7bfe97f71daf1ab9f7a3fa12bfded7918460ea26a804e49e7b829652b",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 6,
+        "edition_file": "docs/books/pstack/zh-CN/06-chapter.md",
+        "edition_sha256": "c086cb447f1dba951d53e191af2cd0ed193b14a93c7a1cae4b4f02768cfd52e2",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 7,
+        "edition_file": "docs/books/pstack/zh-CN/07-chapter.md",
+        "edition_sha256": "e2acc687a6911b393082225cfcea743085e54a7dd06cb63225f9151ea8bda8b2",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 8,
+        "edition_file": "docs/books/pstack/zh-CN/08-chapter.md",
+        "edition_sha256": "bcf4c6517c6dad7541c83b4867928635d6229eab301f6745591500b1b8ca9d8d",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 9,
+        "edition_file": "docs/books/pstack/zh-CN/09-chapter.md",
+        "edition_sha256": "c8808298933cca73535faf899c6c89c34a9c85e950ec40ade881284bb3db1288",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 10,
+        "edition_file": "docs/books/pstack/zh-CN/10-chapter.md",
+        "edition_sha256": "b6ce776a9c3594c11fe9b4a6f0256ed448353967efd19d598c7ebf66a5f0d3cc",
+        "code_blocks": 8,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 11,
+        "edition_file": "docs/books/pstack/zh-CN/11-chapter.md",
+        "edition_sha256": "f5fb78f65fa2760ef84c4bb80a98530f42bd0b1d9c1baf0aa8018b5ad1640bbd",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 12,
+        "edition_file": "docs/books/pstack/zh-CN/12-chapter.md",
+        "edition_sha256": "21a5b7e2927a9582fa824b4acb45b44540b3be7f14259478effa77d6acbf4807",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 13,
+        "edition_file": "docs/books/pstack/zh-CN/13-chapter.md",
+        "edition_sha256": "d8bb05d9d8a955004d56fce3b3b56bd9a7c1d6ade1b38e03a518887e85ae0e74",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 14,
+        "edition_file": "docs/books/pstack/zh-CN/14-chapter.md",
+        "edition_sha256": "ef670e0eb738472a09931fa8cb1aea56eeafcc786c44af67c2ab7bc8e98ce2f7",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 15,
+        "edition_file": "docs/books/pstack/zh-CN/15-chapter.md",
+        "edition_sha256": "6a499fc25e0e5024e89f712ed8386880c043d230d3498c6a895987909b8909a4",
+        "code_blocks": 3,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 16,
+        "edition_file": "docs/books/pstack/zh-CN/16-chapter.md",
+        "edition_sha256": "ce05a8c768a5039a0806c42089f13bda22bf934129a4f798fae677653d9c5f8a",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 17,
+        "edition_file": "docs/books/pstack/zh-CN/17-chapter.md",
+        "edition_sha256": "384df92bba580606dbc2caa48f6ad3b80c7cd75fe84772275d27f3e3296485f5",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 18,
+        "edition_file": "docs/books/pstack/zh-CN/18-chapter.md",
+        "edition_sha256": "fc00106eae7285c342fb885e65a8ed754b85a2a69ae2fb1f61dd47f2432a689e",
+        "code_blocks": 8,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 19,
+        "edition_file": "docs/books/pstack/zh-CN/19-chapter.md",
+        "edition_sha256": "fd8b7f16f6bb4d654af1caa08d6806acd474fad5259d50873da0328b9cd7a330",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 20,
+        "edition_file": "docs/books/pstack/zh-CN/20-chapter.md",
+        "edition_sha256": "544a4308821c2b50e08165631f004837272a41c8417b317a768facfcc3fba7dd",
+        "code_blocks": 5,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 21,
+        "edition_file": "docs/books/pstack/zh-CN/21-chapter.md",
+        "edition_sha256": "3f42b102abb5d17c88e8341c10674a45e2671527c6d6454d95a36774a33ce52a",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 22,
+        "edition_file": "docs/books/pstack/zh-CN/22-chapter.md",
+        "edition_sha256": "afc195178632e643ac05193bbc534dfdd60630c22744a0d938da480205534e27",
+        "code_blocks": 11,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 23,
+        "edition_file": "docs/books/pstack/zh-CN/23-chapter.md",
+        "edition_sha256": "cb51a08ab34736162c6998bdd5256be173085c00d2d7e759b99a3526c2cd80f3",
+        "code_blocks": 17,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 24,
+        "edition_file": "docs/books/pstack/zh-CN/24-chapter.md",
+        "edition_sha256": "a0ac72d6be52a248f42953d1b8c41dc80a7a0322f1b12d297265a4e4cdceea79",
+        "code_blocks": 19,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 25,
+        "edition_file": "docs/books/pstack/zh-CN/25-chapter.md",
+        "edition_sha256": "82da8f6dcf727df2eb70f0f6f760aaa51878fa619639ba8b68ac3660a7e1b735",
+        "code_blocks": 1,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 26,
+        "edition_file": "docs/books/pstack/zh-CN/26-chapter.md",
+        "edition_sha256": "9a9d9334ace7cba0f2373831a5171ff8dcf2950ad109e53594094534e303569f",
+        "code_blocks": 8,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 27,
+        "edition_file": "docs/books/pstack/zh-CN/27-chapter.md",
+        "edition_sha256": "685cf972e4cccc46cf66169bc7245774e8ad11f504db3e4a57069513f4f2212c",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 28,
+        "edition_file": "docs/books/pstack/zh-CN/28-chapter.md",
+        "edition_sha256": "0115600e97d30ec5f688e71f278e8c522bbd5fd22ba84911208eb3a7979e9282",
+        "code_blocks": 7,
+        "images": 8,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 29,
+        "edition_file": "docs/books/pstack/zh-CN/29-chapter.md",
+        "edition_sha256": "f13dfc5963093532291b58f5ac379a4bcd8a3edcd1d822c23ad349c188a613c8",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 30,
+        "edition_file": "docs/books/pstack/zh-CN/30-chapter.md",
+        "edition_sha256": "7f31eea67e56008173b6248a1d6fb112df9c517480af830c10ce47baff5719a4",
+        "code_blocks": 12,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 31,
+        "edition_file": "docs/books/pstack/zh-CN/31-chapter.md",
+        "edition_sha256": "bd5b5a1d33aa3f1febf78349ccd4955d1d596fe3faa2923117823ae9fa0e2bc5",
+        "code_blocks": 2,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 32,
+        "edition_file": "docs/books/pstack/zh-CN/32-chapter.md",
+        "edition_sha256": "75133828b5a8f7e20cab8e30a4fe09f3cd0b1f684e7504eb0013da714b0edb7a",
+        "code_blocks": 5,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 33,
+        "edition_file": "docs/books/pstack/zh-CN/33-chapter.md",
+        "edition_sha256": "7cc214aa4fc0a91b2d4f61e7a0b3c1f03f549c4de702cbd415f9ea86d720e2d7",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 34,
+        "edition_file": "docs/books/pstack/zh-CN/34-chapter.md",
+        "edition_sha256": "db12aa6dc8fdfc292f0f4a92e7070fd1fc7f6ceb403828f9b0472b3de4a823a9",
+        "code_blocks": 10,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 35,
+        "edition_file": "docs/books/pstack/zh-CN/35-chapter.md",
+        "edition_sha256": "627d72b32339ab71e5daf1e733660d360d06cc04b1f3131537ae9c7ca118ec22",
+        "code_blocks": 16,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 36,
+        "edition_file": "docs/books/pstack/zh-CN/36-chapter.md",
+        "edition_sha256": "c8d98646d3e10491203bdfeee43113f54fcfc20818dc231ec5563877649f0964",
+        "code_blocks": 5,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 37,
+        "edition_file": "docs/books/pstack/zh-CN/37-chapter.md",
+        "edition_sha256": "5cdbe700c4e4f62a85cf94c77a496cd3985b2d6c8f082272f9ba429e981628d3",
+        "code_blocks": 6,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 38,
+        "edition_file": "docs/books/pstack/zh-CN/38-chapter.md",
+        "edition_sha256": "cab0e206f75b4c1de463bdd48af1bff55e461b9050dd1c8fe8c610c5bdb98bec",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 39,
+        "edition_file": "docs/books/pstack/zh-CN/39-chapter.md",
+        "edition_sha256": "00e53f7d4ae46f9293a55fce08d7e1b042a797e29929dc6461cd0f420d657f7d",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 40,
+        "edition_file": "docs/books/pstack/zh-CN/40-chapter.md",
+        "edition_sha256": "667290dda3741aca2a8015d5204ec21efff2a40323c5a1d5f32c438cb6b07dbe",
+        "code_blocks": 4,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 41,
+        "edition_file": "docs/books/pstack/zh-CN/41-chapter.md",
+        "edition_sha256": "08b5f7cee648af93a0d0b62db0bf19eb01f5001421ff12925d0d2e9216488bcd",
+        "code_blocks": 6,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 42,
+        "edition_file": "docs/books/pstack/zh-CN/42-chapter.md",
+        "edition_sha256": "ae4fdc5c05e22ce464f463c7827c3b5f7943d89631b8462a9e12a223cf14cd38",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 43,
+        "edition_file": "docs/books/pstack/zh-CN/43-chapter.md",
+        "edition_sha256": "cc30ca7d5622ad1f730960f94fe0ec64045d2ec11eb59b18d72b5f21700a9012",
+        "code_blocks": 9,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 44,
+        "edition_file": "docs/books/pstack/zh-CN/44-chapter.md",
+        "edition_sha256": "c6dcbb0bd4690b8438a92dfdff1de2bc8f4d308e6fcd7c5681fc5ce5a70f4ca0",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 45,
+        "edition_file": "docs/books/pstack/zh-CN/45-chapter.md",
+        "edition_sha256": "2b78b88e9cdd9351a5225ba1aaa1aa22e72d1f724efa963333cbc0ea07c86226",
+        "code_blocks": 3,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 46,
+        "edition_file": "docs/books/pstack/zh-CN/46-chapter.md",
+        "edition_sha256": "8238e6889d81fee03f3232bb85420fd2252657cea463a6ea945363e0083e3c9d",
+        "code_blocks": 21,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 47,
+        "edition_file": "docs/books/pstack/zh-CN/47-chapter.md",
+        "edition_sha256": "9deeaabcd9fe3e5ebcdea66dc9c2c024c7ba7a2fae93b45e7daca6e4a3834338",
+        "code_blocks": 7,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 48,
+        "edition_file": "docs/books/pstack/zh-CN/48-chapter.md",
+        "edition_sha256": "14a39e9c3cbb8e67b2583e3269feff37b31baad79992f9f9fc6eb356a1ebb66b",
+        "code_blocks": 3,
+        "images": 0,
+        "text_and_code_preserved": true
+      }
+    ]
+  },
+  "en": {
+    "pages": 622,
+    "bookmarks": 380,
+    "pdf_links": 2422,
+    "epub_local_links": 883,
+    "epub_link_errors": [],
+    "outside_page_text": [],
+    "replacement_character_pages": [],
+    "sparse_pages": [],
+    "chapters": 48,
+    "code_blocks": 222,
+    "source_revision": "8fa4f6531d3af142467e322f17e7806a5ecf515b",
+    "files": {
+      "pdf": {
+        "bytes": 4229370,
+        "sha256": "fbb4c034293506d2e0b621ecd876dff31b3a75e3b7963a492380012a21da8ba8"
+      },
+      "epub": {
+        "bytes": 3278694,
+        "sha256": "a58f578a65abca429e42de7cb2e769bf3d600561a27467343e1e4d728033bb8c"
+      }
+    },
+    "epubcheck": {
+      "version": "5.4.0",
+      "errors": 0,
+      "warnings": 0
+    },
+    "visual_qa": {
+      "renderers": [
+        "Poppler",
+        "MuPDF"
+      ],
+      "method": "Representative PDF pages and book contact sheets; cover, contents, tables, code, landscape diagrams, split diagrams and ending pages inspected."
+    },
+    "reader_app_testing": "Not performed. Collaborative browser could not reach local preview server.",
+    "preservation": [
+      {
+        "order": 1,
+        "edition_file": "docs/books/pstack/en/01-preface.md",
+        "edition_sha256": "2b8394df05ef11a33cc30bb0b24d037af5983b50e0d90f91a7223a10f89b5342",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 2,
+        "edition_file": "docs/books/pstack/en/02-chapter.md",
+        "edition_sha256": "16acb9d1a02d029272ba9f0f31464615e32933cea68a6fc77357789873833bd4",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 3,
+        "edition_file": "docs/books/pstack/en/03-chapter.md",
+        "edition_sha256": "3471efcbda65f9e91c67b1a1fd84a6fd22024d5fbe35a88a7a65b7cf003fd33c",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 4,
+        "edition_file": "docs/books/pstack/en/04-chapter.md",
+        "edition_sha256": "7cab13fe34ad4ffb634daec6e397d4e121c1c04b324d6568fbf26cf50c81b3f7",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 5,
+        "edition_file": "docs/books/pstack/en/05-chapter.md",
+        "edition_sha256": "6eff3ead2b6a3b75ff2d2cbc488eccd9c14006a9977179ec8b633b6529b41c61",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 6,
+        "edition_file": "docs/books/pstack/en/06-chapter.md",
+        "edition_sha256": "8ae20b10977128166c2f6480e59687b8dfac421fac721f2bb8bb7caa01cbfd63",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 7,
+        "edition_file": "docs/books/pstack/en/07-chapter.md",
+        "edition_sha256": "36f4ad68fc34f4599f594bfa7135b507a63bcfae8c72320f77292ba6fc78234f",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 8,
+        "edition_file": "docs/books/pstack/en/08-chapter.md",
+        "edition_sha256": "3f49b33a18dd256d2056a093a98d6baf27236e6ff798383617876b26f1d5847a",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 9,
+        "edition_file": "docs/books/pstack/en/09-chapter.md",
+        "edition_sha256": "26e322ef3aa997182827263c7e7556f0c2f9d266b5f095fc7542d2164a4fe5a7",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 10,
+        "edition_file": "docs/books/pstack/en/10-chapter.md",
+        "edition_sha256": "2c75ed03d7334b5b08d3e6bc15fd850182f4a777457fcebe57a6254a055ce1e2",
+        "code_blocks": 8,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 11,
+        "edition_file": "docs/books/pstack/en/11-chapter.md",
+        "edition_sha256": "468c37e9099837dbbfe77418e5d228ffbf6e87e238ccbefc1f16fca0847b69a7",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 12,
+        "edition_file": "docs/books/pstack/en/12-chapter.md",
+        "edition_sha256": "2e5b1cbeb24304f7eb9785a1f4bf3fbfed736a9e422d5ed6bf6b8ef3598c3d3a",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 13,
+        "edition_file": "docs/books/pstack/en/13-chapter.md",
+        "edition_sha256": "be251bdb5f654e191bcdb687135cefd80b8259985cbeeb50af4774a6a6e41f32",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 14,
+        "edition_file": "docs/books/pstack/en/14-chapter.md",
+        "edition_sha256": "b7206bdc2567bdb059b7a95dda1f66bf3bcd93ef32b3e6052c561726ef82a679",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 15,
+        "edition_file": "docs/books/pstack/en/15-chapter.md",
+        "edition_sha256": "d57490d1b5207ca744a2fb2283099eab8e83d69ac7aa540054dfb0bf61c6dd97",
+        "code_blocks": 3,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 16,
+        "edition_file": "docs/books/pstack/en/16-chapter.md",
+        "edition_sha256": "445b33f1defa6735e3b02c38b81a34e89fe4c4fc4ad4edec324620e8719003ea",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 17,
+        "edition_file": "docs/books/pstack/en/17-chapter.md",
+        "edition_sha256": "642991a7db4f2b2e4589035c0512d5bf7bde0e0cff18172acc6d7355d23dedd7",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 18,
+        "edition_file": "docs/books/pstack/en/18-chapter.md",
+        "edition_sha256": "b4caf01e13e064b0a9a7be0768d96bb26614dabb2eb74a015d3964925af815b0",
+        "code_blocks": 8,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 19,
+        "edition_file": "docs/books/pstack/en/19-chapter.md",
+        "edition_sha256": "105e00c2ffdc254d7c7c375c0e7156b0614a54b8f97a5a4eae39106084f268ef",
+        "code_blocks": 2,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 20,
+        "edition_file": "docs/books/pstack/en/20-chapter.md",
+        "edition_sha256": "033cb9ec83752a03fbba80548725b293d1cf08a05d0087fc11d3605c4c9eabaf",
+        "code_blocks": 5,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 21,
+        "edition_file": "docs/books/pstack/en/21-chapter.md",
+        "edition_sha256": "b09b26cd7c01bc7f74eba470a5853b197dd595df9ac74f959a2480459a8e409c",
+        "code_blocks": 1,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 22,
+        "edition_file": "docs/books/pstack/en/22-chapter.md",
+        "edition_sha256": "fd3599f34c6ad88ee70b4bb9b76df7bf5c39be9adec1ca3b7df7caa7def09c9a",
+        "code_blocks": 11,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 23,
+        "edition_file": "docs/books/pstack/en/23-chapter.md",
+        "edition_sha256": "82db6d197ee048152c69cf6faccdc42d542524f08022c6f60218f3e90df70e40",
+        "code_blocks": 17,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 24,
+        "edition_file": "docs/books/pstack/en/24-chapter.md",
+        "edition_sha256": "e6ba1d3137d18efaaa22ebf4fcef99c50b8ef62fd23b4646a2299d10338bf97d",
+        "code_blocks": 19,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 25,
+        "edition_file": "docs/books/pstack/en/25-chapter.md",
+        "edition_sha256": "93222baf5d9fe655942a8fa4f367f20668d59946021f4dd23a9e95d2f31c1e71",
+        "code_blocks": 1,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 26,
+        "edition_file": "docs/books/pstack/en/26-chapter.md",
+        "edition_sha256": "2093341271667ad9b63099c8d00f1a78e66935b9f4ce8138067fff28866460ed",
+        "code_blocks": 8,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 27,
+        "edition_file": "docs/books/pstack/en/27-chapter.md",
+        "edition_sha256": "f14a9032c83ca0db5055bef767189fb6aab806d92320495b603adc17aa006dba",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 28,
+        "edition_file": "docs/books/pstack/en/28-chapter.md",
+        "edition_sha256": "4844550469c999b6d6589637f62ca4367eca524ec674b8d817e8627a8483d3e0",
+        "code_blocks": 7,
+        "images": 8,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 29,
+        "edition_file": "docs/books/pstack/en/29-chapter.md",
+        "edition_sha256": "cd96b7ac34f4c7708b444dd90541af32a3837591e09c1fa58f8b69307cae7022",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 30,
+        "edition_file": "docs/books/pstack/en/30-chapter.md",
+        "edition_sha256": "d680a03de3bc1630e304dcb9191a8191fb1f3f71be071a540986858c4cc54674",
+        "code_blocks": 12,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 31,
+        "edition_file": "docs/books/pstack/en/31-chapter.md",
+        "edition_sha256": "b17127947e543ea1725f13c93f360a1811cba78dea745631791f2b68fe3d22fb",
+        "code_blocks": 2,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 32,
+        "edition_file": "docs/books/pstack/en/32-chapter.md",
+        "edition_sha256": "843b78a09d1ce42fcfba2c0289fc14049f86524a369c76ec43e1fc653d8d8c79",
+        "code_blocks": 5,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 33,
+        "edition_file": "docs/books/pstack/en/33-chapter.md",
+        "edition_sha256": "ddef0b5c17a1ef9e5fd583c9c3ec99880e9e9da0c66a71868577d322e33d69f1",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 34,
+        "edition_file": "docs/books/pstack/en/34-chapter.md",
+        "edition_sha256": "2ab84c8383155d5811c55ab3429b76bae502c409d8a7e6cf53f5166c8869a203",
+        "code_blocks": 10,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 35,
+        "edition_file": "docs/books/pstack/en/35-chapter.md",
+        "edition_sha256": "bd80b8cf5d01b624bc772696ae4c171bbdaed3730961d788797702df35209e98",
+        "code_blocks": 16,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 36,
+        "edition_file": "docs/books/pstack/en/36-chapter.md",
+        "edition_sha256": "0fb3af404469028fdfde05ad5a096f334542f553d454b880d7c7a4937c87aba1",
+        "code_blocks": 5,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 37,
+        "edition_file": "docs/books/pstack/en/37-chapter.md",
+        "edition_sha256": "be2a8fa4f5a0c701629b37daefc4bc73e12b1b4691e2e056c23f0022225c2436",
+        "code_blocks": 6,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 38,
+        "edition_file": "docs/books/pstack/en/38-chapter.md",
+        "edition_sha256": "0dd2312371fed43e4d249b2f457fcdb6275eb0545ff3a889b33885c9af15c5ee",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 39,
+        "edition_file": "docs/books/pstack/en/39-chapter.md",
+        "edition_sha256": "ded1a27733f90c20f0506af567890cfc715379934db4b8c2b5cbf68b61c5990e",
+        "code_blocks": 1,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 40,
+        "edition_file": "docs/books/pstack/en/40-chapter.md",
+        "edition_sha256": "21d3e150ab7d6e4b0ddacd656a401410d963fbdb8a9625961b63cfcf3bc18cb6",
+        "code_blocks": 4,
+        "images": 2,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 41,
+        "edition_file": "docs/books/pstack/en/41-chapter.md",
+        "edition_sha256": "2f39677b86fb68176b8cc8290b86f8ea0ebf2319e90fea06d1992a7721268fac",
+        "code_blocks": 6,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 42,
+        "edition_file": "docs/books/pstack/en/42-chapter.md",
+        "edition_sha256": "d83ecd93a1008558e681db566e44284984a5c4c964878c5fbb673d91be173c99",
+        "code_blocks": 0,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 43,
+        "edition_file": "docs/books/pstack/en/43-chapter.md",
+        "edition_sha256": "b10d1cd9348901cc7ae593be4732d117e69ed558aa6b9dfda2d66e61c83c2247",
+        "code_blocks": 9,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 44,
+        "edition_file": "docs/books/pstack/en/44-chapter.md",
+        "edition_sha256": "f34347392ab953d92e5e60910530a52fc2cea1ccbaaa2318d62df13ff0f58eb8",
+        "code_blocks": 4,
+        "images": 0,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 45,
+        "edition_file": "docs/books/pstack/en/45-chapter.md",
+        "edition_sha256": "2d06f3eb12ab4499eaeff44af75477b13d0a0cac31d899b63f97ef14c83ab1b5",
+        "code_blocks": 3,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 46,
+        "edition_file": "docs/books/pstack/en/46-chapter.md",
+        "edition_sha256": "fc6e97e0f55a9ee97302f9e372bc6153dbc7e62abca7f13733d316d39d386a5b",
+        "code_blocks": 21,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 47,
+        "edition_file": "docs/books/pstack/en/47-chapter.md",
+        "edition_sha256": "bac7c01699b4c0e82e771b2fad269f1ff15a2e6fe8dcdfe8ad42a7a1392d0ed7",
+        "code_blocks": 7,
+        "images": 1,
+        "text_and_code_preserved": true
+      },
+      {
+        "order": 48,
+        "edition_file": "docs/books/pstack/en/48-chapter.md",
+        "edition_sha256": "365ee66640ef6a6dd39945718d69b9bf232b29baf5503db88e8bef44c7b14f47",
+        "code_blocks": 3,
+        "images": 0,
+        "text_and_code_preserved": true
+      }
+    ]
+  }
+}
