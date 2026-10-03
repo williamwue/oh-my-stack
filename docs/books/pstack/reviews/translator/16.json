@@ -1,0 +1,19 @@
+{
+  "chapter": "16",
+  "source_sha256": "f5085511a3dc4c1266fc6e729cce81e439be735feb3ba2b78190df9e43c9dbbb",
+  "translation_sha256": "6c6ab709c4858c599f5dd9bc70ce056cb3b2b95727e8baee6f7661796c293766",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 35,
+  "translated_heading_count": 35,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "english_crosscheck_notes": [
+    "The Japanese rebase callout also describes reordering and combining commits; the paired English callout only states replaying commits on a new base. The Chinese translation follows Japanese."
+  ],
+  "root_review_corrections": [
+    "确定数据形态并写下吞吐量检查点，必须将实现工作交给另一位 Agent。"
+  ]
+}

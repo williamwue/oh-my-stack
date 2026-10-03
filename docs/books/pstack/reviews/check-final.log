@@ -1,0 +1,24 @@
+
+> oh-my-stack@0.3.0 check
+> npm run generate:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.3.0 generate:check
+> node tools/generate.mjs --check
+
+Verified 3 public targets with 74 of 86 source Skill.
+
+> oh-my-stack@0.3.0 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.3.0 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 7 output files.
+
+> oh-my-stack@0.3.0 validate
+> node tools/validate.mjs
+
+docs/operations/cloud-management-acceptance-2026-10-01.md: contains an absolute macOS home path

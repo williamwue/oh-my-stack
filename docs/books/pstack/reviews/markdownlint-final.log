@@ -1,0 +1,20 @@
+
+> oh-my-stack@0.3.0 lint:markdown
+> markdownlint-cli2 "**/*.md"
+
+markdownlint-cli2 v0.23.3 (markdownlint v0.41.1)
+Finding: **/*.md !.tmp/** !node_modules/** !upstream/snapshots/** !upstream/books/**
+Linting: 689 files
+Summary: 12 issues in 4 files
+AGENTS.md:2 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "## Official cloud operations"]
+docs/omp-18.2.9-live-test-plan.md:1 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "> Historical test evidence. Th..."]
+docs/operations/cloud-management-acceptance-2026-10-01.md:15:5 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:15:9 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:15:13 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:15:17 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:16:11 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:16:39 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:16:62 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:16:71 error MD060/table-column-style Table column style [Table pipe does not align with header for style "aligned"]
+docs/operations/cloud-management-acceptance-2026-10-01.md:20 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 2]
+docs/operations/official-cloud-operations.md:39 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 2]

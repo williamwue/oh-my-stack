@@ -1,0 +1,42 @@
+{
+  "chapter": {
+    "id": 165554,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "74ae41",
+    "body_letters_count": 1823,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-09-28T04:20:36.021+09:00",
+    "filename": null,
+    "position": 3,
+    "path": "/sc30gsw/books/080faba713547b/viewer/74ae41",
+    "title": "第1章 2,500件のPRは目標ではなく、環境が整った結果",
+    "body_html": "<p data-line=\"0\" class=\"code-line\">月2,500件のPRは、目指して出した数字ではありません。<strong>エージェントに安心して任せられる環境を整えた結果、あとからついてきた数字</strong>です。</p>\n<p data-line=\"2\" class=\"code-line\">この章では、「なぜ件数を目標にしてはいけないのか」そして「件数が本当は何を表しているのか」を見ていきます。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90\" data-line=\"4\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90\" aria-hidden=\"true\"></a> この章の構成</h2>\n<p data-line=\"6\" class=\"code-line\">この章の構成は次のとおりです。</p>\n<ul data-line=\"8\" class=\"code-line\">\n<li data-line=\"8\" class=\"code-line\">なぜ件数を目標にしてはいけないのか</li>\n<li data-line=\"9\" class=\"code-line\">件数が表していること</li>\n<li data-line=\"10\" class=\"code-line\">まとめ：件数から「任せられる条件」へ視点を移す</li>\n</ul>\n<h2 id=\"%E3%81%AA%E3%81%9C%E4%BB%B6%E6%95%B0%E3%82%92%E7%9B%AE%E6%A8%99%E3%81%AB%E3%81%97%E3%81%A6%E3%81%AF%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%8B\" data-line=\"12\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%AA%E3%81%9C%E4%BB%B6%E6%95%B0%E3%82%92%E7%9B%AE%E6%A8%99%E3%81%AB%E3%81%97%E3%81%A6%E3%81%AF%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%8B\" aria-hidden=\"true\"></a> なぜ件数を目標にしてはいけないのか</h2>\n<p data-line=\"14\" class=\"code-line\">理由は2つあります。</p>\n<p data-line=\"16\" class=\"code-line\">1つ目は件数だけを増やすと、<strong>増えるのは成果ではなく、確かめていない変更だから</strong>です。</p>\n<p data-line=\"18\" class=\"code-line\">エージェントが書いた変更を、人が一つずつ差分を読み、アプリを触って確かめているうちは、件数の上限は人が確認できる量で決まります。</p>\n<p data-line=\"20\" class=\"code-line\">この状態で「今月はPRを倍にしよう」と決めても、エージェントに依頼を投げる回数が倍になるだけです。確認する人の手は増えないので、倍になった分は確かめられないまま積み上がります。</p>\n<p data-line=\"22\" class=\"code-line\"><strong>どれが正しくてどれが壊れているかは、あとで誰かが一つずつ確かめるまで分かりません</strong>。</p>\n<p data-line=\"24\" class=\"code-line\">もう一つの理由は、<strong>件数が簡単に動かせる数字だから</strong>です。<br>\n同じ機能追加でも、1つの大きなPRにまとめれば1件、5つに分ければ5件です。</p>\n<p data-line=\"27\" class=\"code-line\">件数を目標にすると、変更の中身が同じでも、PRを細かく分けるだけで数字を良く見せられてしまいます。</p>\n<h2 id=\"%E4%BB%B6%E6%95%B0%E3%81%8C%E8%A1%A8%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%81%93%E3%81%A8\" data-line=\"29\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E4%BB%B6%E6%95%B0%E3%81%8C%E8%A1%A8%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%81%93%E3%81%A8\" aria-hidden=\"true\"></a> 件数が表していること</h2>\n<p data-line=\"31\" class=\"code-line\">私は、件数が本当に表しているのは、<strong>人の手を離れて、エージェント側で行われた確認の量</strong>だと考えています。</p>\n<p data-line=\"33\" class=\"code-line\">前節で見たとおり、人がすべてを確かめているなら、件数は人の確認能力を超えられません。逆に言えば、件数が人の確認能力を大きく超えているなら、確認の大部分を人以外が担っているはずです。</p>\n<p data-line=\"35\" class=\"code-line\">poteto氏も『The Complete Guide to pstack』<a href=\"https://x.com/poteto/status/2094457600259842065\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Part 1</a>で、検証（verification）を「<strong>エージェントが自分の仕事を確かめられること</strong>」と定義し、それによって人がボトルネックにならずに済むと書いています。</p>\n<p data-line=\"37\" class=\"code-line\">では、確認を人の手から離すには何が必要なのでしょうか。</p>\n<p data-line=\"39\" class=\"code-line\">それは、次の4つで、poteto氏の<a href=\"https://x.com/poteto/status/2102050467505430555\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">講演</a>の構成テーマとなっていたものです。</p>\n<ol data-line=\"41\" class=\"code-line\">\n<li data-line=\"41\" class=\"code-line\">信頼</li>\n<li data-line=\"42\" class=\"code-line\">信頼を高める方法</li>\n<li data-line=\"43\" class=\"code-line\">コードベースを記憶として扱うこと</li>\n<li data-line=\"44\" class=\"code-line\">自動化</li>\n</ol>\n<p data-line=\"46\" class=\"code-line\">特に重要なのは、この4つは独立したTipsではなく、前の項目が次の項目の前提条件（土台）となっていることです。</p>\n<p data-line=\"48\" class=\"code-line\">つまり、まず成果物を検証できる状態を作り、そこで得た知識をコードベースに残し、その土台の上で自動化を進める、という順番が守られる必要があります。</p>\n<p data-line=\"50\" class=\"code-line\">月2,500件という数字は、この4つを順に整えた結果です。本書の<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183\" target=\"_blank\">第2章</a>から<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b6ac2d\" target=\"_blank\">第5章</a>は、この4つを1章ずつ扱います。</p>\n<h2 id=\"%E3%81%BE%E3%81%A8%E3%82%81%EF%BC%9A%E4%BB%B6%E6%95%B0%E3%81%8B%E3%82%89%E3%80%8C%E4%BB%BB%E3%81%9B%E3%82%89%E3%82%8C%E3%82%8B%E6%9D%A1%E4%BB%B6%E3%80%8D%E3%81%B8%E8%A6%96%E7%82%B9%E3%82%92%E7%A7%BB%E3%81%99\" data-line=\"52\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%BE%E3%81%A8%E3%82%81%EF%BC%9A%E4%BB%B6%E6%95%B0%E3%81%8B%E3%82%89%E3%80%8C%E4%BB%BB%E3%81%9B%E3%82%89%E3%82%8C%E3%82%8B%E6%9D%A1%E4%BB%B6%E3%80%8D%E3%81%B8%E8%A6%96%E7%82%B9%E3%82%92%E7%A7%BB%E3%81%99\" aria-hidden=\"true\"></a> まとめ：件数から「任せられる条件」へ視点を移す</h2>\n<ul data-line=\"54\" class=\"code-line\">\n<li data-line=\"54\" class=\"code-line\">\n<strong>件数を目標にしてはいけない理由</strong>・・・ 確認する人の手が増えないまま件数を増やしても、増えるのは確かめていない変更だからです。件数はPRの切り方でも簡単に動きます。</li>\n<li data-line=\"55\" class=\"code-line\">\n<strong>件数が表しているもの</strong>・・・ 人の手を離れて、エージェント側で行われた確認の量です。その裏には、信頼、信頼を高める方法、記憶としてのコードベース、自動化の4つがそろった状態があります。</li>\n</ul>\n<p data-line=\"57\" class=\"code-line\">次の<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183\" target=\"_blank\">第2章</a>では、4つのうち最初の「信頼」を扱います。講演では、信頼する対象はエージェントではなく、エージェントが作った成果物だとされています。この考えをpstackがどう形にしているかを見ていきます。</p>\n",
+    "toc": [
+      {
+        "id": "%E3%81%93%E3%81%AE%E7%AB%A0%E3%81%AE%E6%A7%8B%E6%88%90",
+        "text": "この章の構成",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%AA%E3%81%9C%E4%BB%B6%E6%95%B0%E3%82%92%E7%9B%AE%E6%A8%99%E3%81%AB%E3%81%97%E3%81%A6%E3%81%AF%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%8B",
+        "text": "なぜ件数を目標にしてはいけないのか",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E4%BB%B6%E6%95%B0%E3%81%8C%E8%A1%A8%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%81%93%E3%81%A8",
+        "text": "件数が表していること",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%BE%E3%81%A8%E3%82%81%EF%BC%9A%E4%BB%B6%E6%95%B0%E3%81%8B%E3%82%89%E3%80%8C%E4%BB%BB%E3%81%9B%E3%82%89%E3%82%8C%E3%82%8B%E6%9D%A1%E4%BB%B6%E3%80%8D%E3%81%B8%E8%A6%96%E7%82%B9%E3%82%92%E7%A7%BB%E3%81%99",
+        "text": "まとめ：件数から「任せられる条件」へ視点を移す",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "chapter": 30,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese comparison of 298 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "source_sha256": "3d82dc914f503e2761d77e163c87211bfaaf24009bdf23b655e9950f35d975f9",
+  "translation_sha256": "11a62dbfa3caed06fb59afc985e9ac422b843f57ab4d3378e054445a429e7412",
+  "findings_resolved": [
+    "F30-1: restored zero-based column index2 rather than second column; reviewer rechecked isolated correction."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

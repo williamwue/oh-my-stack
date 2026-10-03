@@ -1,0 +1,30 @@
+{
+  "chapter": {
+    "id": 169412,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "367ace",
+    "body_letters_count": 3036,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-10-03T08:52:34.492+09:00",
+    "filename": null,
+    "position": 2,
+    "path": "/sc30gsw/books/7ff701b9811d04/viewer/367ace",
+    "title": "Part I: The development foundation behind 2,500 PRs a month",
+    "body_html": "<p data-line=\"0\" class=\"code-line\">Part I covers \"<strong>what conditions let you delegate work to an agent</strong>.\"</p>\n<p data-line=\"2\" class=\"code-line\">To meet these conditions, you need to put an environment in place before you raise the speed: mechanisms that verify results, and working procedures.</p>\n<p data-line=\"4\" class=\"code-line\">Specifically, there are four conditions, and each one is the precondition, the base, for the next.</p>\n<ol data-line=\"6\" class=\"code-line\">\n<li data-line=\"6\" class=\"code-line\">The agent can run the artifact it made and verify that artifact itself. This book calls that step verification.</li>\n<li data-line=\"7\" class=\"code-line\">The way to verify and the working procedure are explicit, so anyone who runs them gets consistent quality.</li>\n<li data-line=\"8\" class=\"code-line\">Past decisions and constraints stay in the codebase in a form the next piece of work can refer to.</li>\n<li data-line=\"9\" class=\"code-line\">You automate only after these three are in place as the base.</li>\n</ol>\n<p data-line=\"11\" class=\"code-line\">The figure of 2,500 PRs a month is the result of putting these four in place. If you make only the number your target, skip 1 through 3, and start on 4, what grows is not results but <strong>changes nobody can verify</strong>.</p>\n<h2 id=\"what-you-learn-in-part-i\" data-line=\"13\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#what-you-learn-in-part-i\" aria-hidden=\"true\"></a> What you learn in Part I</h2>\n<p data-line=\"15\" class=\"code-line\">After you read Part I, you will know the following.</p>\n<ul data-line=\"17\" class=\"code-line\">\n<li data-line=\"17\" class=\"code-line\">What the number 2,500 does not mean</li>\n<li data-line=\"18\" class=\"code-line\">What to trust, if not the agent</li>\n<li data-line=\"19\" class=\"code-line\">How to turn verification from a one-time check into a mechanism anyone can run again</li>\n<li data-line=\"20\" class=\"code-line\">Why the agent's memory belongs in the codebase, not in conversations or notes</li>\n<li data-line=\"21\" class=\"code-line\">Why automation comes last, and which conditions to meet before you automate</li>\n</ul>\n<p data-line=\"23\" class=\"code-line\">Part I says little about the individual parts of pstack. It covers ideas that hold whether or not you use pstack. From <a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d\" target=\"_blank\">Part II</a> on, the book ties each part of pstack to these ideas.</p>\n<h2 id=\"chapters-in-this-part\" data-line=\"25\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#chapters-in-this-part\" aria-hidden=\"true\"></a> Chapters in this part</h2>\n<table data-line=\"27\" class=\"code-line\">\n<thead data-line=\"27\" class=\"code-line\">\n<tr data-line=\"27\" class=\"code-line\">\n<th>Chapter</th>\n<th>Role</th>\n</tr>\n</thead>\n<tbody data-line=\"29\" class=\"code-line\">\n<tr data-line=\"29\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/15df58\" target=\"_blank\">Chapter 1: 2,500 PRs result from a ready environment, not a target</a></td>\n<td>Decides how to treat the number 2,500, and moves the central theme of this book from \"the count\" to \"the conditions for delegating\"</td>\n</tr>\n<tr data-line=\"30\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071\" target=\"_blank\">Chapter 2: Trust the artifact, not the agent</a></td>\n<td>Makes clear what you trust. Defines verification</td>\n</tr>\n<tr data-line=\"31\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c\" target=\"_blank\">Chapter 3: Make verification a repeatable mechanism</a></td>\n<td>Covers three ways to raise trust: direct verification, working patterns, and constraints through structure</td>\n</tr>\n<tr data-line=\"32\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd\" target=\"_blank\">Chapter 4: Make the codebase the agent's memory</a></td>\n<td>Covers how to hand the trust you built over to the next agent</td>\n</tr>\n<tr data-line=\"33\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/aa6858\" target=\"_blank\">Chapter 5: Build automation on a foundation of trust</a></td>\n<td>Covers what you can automate once the conditions in Chapters 2 through 4 are in place</td>\n</tr>\n</tbody>\n</table>\n<p data-line=\"35\" class=\"code-line\"><a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071\" target=\"_blank\">Chapter 2</a> through <a href=\"https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/aa6858\" target=\"_blank\">Chapter 5</a> correspond to the four conditions that poteto set out in the <a href=\"https://x.com/poteto/status/2102050467505430555\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">talk</a>. Each chapter builds on the one before it, so I recommend that you read them in order.</p>\n",
+    "toc": [
+      {
+        "id": "what-you-learn-in-part-i",
+        "text": "What you learn in Part I",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "chapters-in-this-part",
+        "text": "Chapters in this part",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

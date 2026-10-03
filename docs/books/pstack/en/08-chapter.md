@@ -1,0 +1,73 @@
+# Part II: What pstack is
+
+[Contents](README.md) · [Previous](07-chapter.md) · [Next](09-chapter.md) · [简体中文](../zh-CN/08-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a5fb04) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/8c629d)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+Part II explains, through pstack's design, "<strong>which parts pstack uses to meet the conditions from [Part I](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/367ace)</strong>."
+
+In short, pstack meets these conditions with <strong>a design that has a single entry point and reads the contents only when needed, and only as much as needed</strong>.
+
+As a rule, the only entry point the user has to remember is [`/poteto-mode`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md).
+
+`/poteto-mode` looks at the kind of request and picks one Playbook. The Playbook decides the order of work and calls the Skills each step needs. Meanwhile, the Principles act as the criteria for judgments such as "should I take this step" and "is the work not finished yet."
+
+pstack does not load everything up front. It opens only the one Playbook that fits the request. For Principles, it first reads only the list, and it reads a principle's body when that principle's conditions apply. This design is what lets pstack <strong>follow procedures strictly and still use tokens efficiently</strong>.
+
+<a id="what-you-learn-in-part-ii"></a>
+
+
+## What you learn in Part II
+
+After you read Part II, you will know the following.
+
+- The problem pstack tries to solve, and what it was built to achieve
+- What happens when you hand a request to `/poteto-mode`, and how to write a good request
+- What Playbooks, Skills, and Principles each handle, and how they differ
+- The mechanism that "calls up procedures and criteria when needed," and its benefits
+
+[Part III](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0d1535) through [Part V](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/fdce40) go into detail on every item in pstack. Part II is the map for reading those details. Once you grasp how the parts divide the work, you can read each item without confusion about "which part it belongs to, and which role it plays there."
+
+<a id="chapters-in-this-part"></a>
+
+
+## Chapters in this part
+
+<table class="code-line" data-line="23">
+<thead class="code-line" data-line="23">
+<tr class="code-line" data-line="23">
+<th>Chapter</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="25">
+<tr class="code-line" data-line="25">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3a7791" target="_blank">Chapter 6: What problem pstack solves</a></td>
+<td>The overall picture and purpose of pstack. What it treats as the problem and what it aims for</td>
+</tr>
+<tr class="code-line" data-line="26">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/55bbdb" target="_blank">Chapter 7: /poteto-mode, the entry point that routes each request</a></td>
+<td>How to use the entry point. How <code>/poteto-mode</code> routes requests to Playbooks, and how to write a request</td>
+</tr>
+<tr class="code-line" data-line="27">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205" target="_blank">Chapter 8: What do Playbooks, Skills, and Principles each handle?</a></td>
+<td>The roles of the three parts and how they differ. Where subagents fit</td>
+</tr>
+<tr class="code-line" data-line="28">
+<td><a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/84aa6e" target="_blank">Chapter 9: Why pstack loads only what it needs</a></td>
+<td>The loading design. Why pstack does not make the agent read everything all the time</td>
+</tr>
+</tbody>
+</table>
+
+[Chapter 6](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3a7791) covers "what it is for," [Chapter 7](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/55bbdb) covers "how to use it," and [Chapter 8](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205) and [Chapter 9](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/84aa6e) cover "how it works inside." In [Chapter 8](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205), the duplicate-row request introduced in the [Preface](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3dfdf0) returns as an example. The request goes to the "[Bug fix](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)" Playbook, and the chapter traces where Skills and Principles come into play. I recommend that you read the chapters in order.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](07-chapter.md) · [Next](09-chapter.md) · [简体中文](../zh-CN/08-chapter.md)

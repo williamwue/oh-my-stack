@@ -1,0 +1,16 @@
+{
+  "chapter": "17",
+  "source_sha256": "3d38f6c00650421a8088aa972f76b3d786943a8bc8328575c188560a12226831",
+  "translation_sha256": "248b1932d12b37335ced687607d81ebc5c17e4408c2a145b1f06586156bbf621",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 16,
+  "translated_heading_count": 16,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "root_review_corrections": [
+    "评审 Agent 在不知道"
+  ]
+}

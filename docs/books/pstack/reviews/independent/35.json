@@ -1,0 +1,13 @@
+{
+  "chapter": 35,
+  "reviewer": "root independent AI review; translator translate_c",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese comparison of 153 visible entries including headings, paragraphs, lists, table cells, conditions, numbers, negations and attribution. Code and embeds checked separately.",
+  "source_sha256": "c978716a46c9ed67696223b7e0c76568a6803600097ae51cf071ed2729b62bca",
+  "translation_sha256": "267eb470ddbc08144296e650d781b7c6222ef5957cad8ae7a774bb304f4fcb7d",
+  "findings_resolved": [
+    "Restored universal quantifier: every array operation must return a result for all inputs, rather than one operation."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}
