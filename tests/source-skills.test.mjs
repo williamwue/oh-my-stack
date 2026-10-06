@@ -10,6 +10,11 @@ import { loadSourceSkills } from "../tools/source-skills.mjs";
 test("all selected AIHero originals ship every resource and their invocation modes on every host", async () => {
   const model = await loadModel();
   const expected = {
+    "research": { invocation: "automatic", dependencies: [] },
+    "to-questionnaire": { invocation: "explicit", dependencies: [] },
+    "setup-matt-pocock-skills": { invocation: "explicit", dependencies: [] },
+    "to-spec": { invocation: "explicit", dependencies: [] },
+    "to-tickets": { invocation: "explicit", dependencies: [] },
     "codebase-design": { invocation: "automatic", dependencies: [] },
     "domain-modeling": { invocation: "automatic", dependencies: [] },
     "grilling": { invocation: "automatic", dependencies: [] },

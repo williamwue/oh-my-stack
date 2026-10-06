@@ -13,9 +13,26 @@
         "packages/*/skills/grilling/**/*.md",
         "packages/*/skills/grill-me/**/*.md",
         "packages/*/skills/grill-with-docs/**/*.md",
-        "packages/*/skills/improve-codebase-architecture/**/*.md"
+        "packages/*/skills/improve-codebase-architecture/**/*.md",
+        "packages/*/skills/research/**/*.md",
+        "packages/*/skills/setup-matt-pocock-skills/**/*.md"
       ],
       "config": { "MD040": false, "MD041": false, "MD049": false },
+      "combine": "merge"
+    },
+    {
+      "filter": ["packages/*/skills/to-questionnaire/**/*.md"],
+      "config": { "MD012": false, "MD033": false, "MD041": false },
+      "combine": "merge"
+    },
+    {
+      "filter": ["packages/*/skills/to-spec/**/*.md"],
+      "config": { "MD029": false, "MD033": false, "MD041": false },
+      "combine": "merge"
+    },
+    {
+      "filter": ["packages/*/skills/to-tickets/**/*.md"],
+      "config": { "MD025": false, "MD033": false },
       "combine": "merge"
     },
     {

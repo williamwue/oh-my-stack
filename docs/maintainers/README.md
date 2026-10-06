@@ -13,6 +13,11 @@ Dated records below establish only their named version, tool, and bounded task.
 - [Security](../security.md) and [evidence policy](../evidence-policy.md)
 - [GitHub workflow adapter](../github-workflow.md)
 
+## Current source candidate
+
+- [AIHero 0.10.0 imports, dependencies, and verification gates](aihero-imports-0.10.0.md)
+- [Unreleased 0.10.0 changes](../releases/0.10.0.md)
+
 ## Historical snapshots
 
 - [README before the user-documentation reorganization](readme-0.9.0.md)
@@ -24,6 +29,8 @@ Dated records below establish only their named version, tool, and bounded task.
 - [Historical host compatibility records](../host-compatibility.md)
 
 ## Selected acceptance records
+
+- [AIHero 0.10.0 unreleased source fixture observations](../aihero-original-0.10.0-acceptance.md)
 
 - [AIHero 0.9.0 original-skill fixtures](../aihero-original-0.9.0-acceptance.md)
 - [AIHero 0.8.0 design fixtures and review](../aihero-original-acceptance-2026-10-06.md)

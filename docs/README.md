@@ -19,7 +19,9 @@
 - [Third-party sources and adaptations](../THIRD_PARTY_NOTICES.md)
 - [Release notes](releases/0.9.1.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
 
-The current user instructions describe the released package. Dated acceptance
+The AIHero guide and generated directory also cover the **unreleased 0.10.0
+source candidate**; they mark the five new originals separately. The latest
+published release remains 0.9.1. Dated acceptance
 records describe only the versions and tools named in those records.
 
 ## Contribute or inspect the implementation

@@ -2,9 +2,13 @@
 
 [English](aihero-original-skills.md) | [简体中文](zh-CN/guides/aihero.md)
 
-Oh My Stack includes six selected original skills from Matt Pocock's
+Oh My Stack includes eleven selected original skills from Matt Pocock's
 [skills repository](https://github.com/mattpocock/skills). Select one directly
 when you want its original process. You do not need to enter `poteto-mode` first.
+
+The five research, questionnaire, setup, spec, and ticket entries below are
+new in the **unreleased 0.10.0 source candidate**. The latest published release
+remains 0.9.1; updating a released installation does not yet add these five.
 
 ## Choose a capability
 
@@ -16,10 +20,15 @@ when you want its original process. You do not need to enter `poteto-mode` first
 | Compare module interfaces | `codebase-design` | Shared design vocabulary and principles, with references for deepening a module and comparing alternative designs. |
 | Sharpen domain terminology | `domain-modeling` | Consistent terms in glossaries and architectural decision records, using the original formats. |
 | Interview through a design's decisions | `grilling` | Questions in rounds whose prerequisites are settled; waits for answers and shared understanding. |
+| Research a technical question | `research` | A background agent reads primary sources and saves a cited Markdown note in the project. |
+| Ask another person for missing facts | `to-questionnaire` | Two short exchanges about the recipient and needed answers, then a questionnaire file you can send yourself. |
+| Configure original engineering skills for a project | `setup-matt-pocock-skills` | A draft of the tracker and domain-doc settings; waits for confirmation before editing project instructions and configuration. |
+| Capture an agreed feature as a spec | `to-spec` | Synthesizes existing context, confirms testing seams, then writes to the configured tracker. |
+| Split a spec into executable work | `to-tickets` | Proposes vertical slices and blockers; publishes one ticket per item only after you approve. |
 
-`grill-me`, `grill-with-docs`, and `improve-codebase-architecture` require explicit
-user invocation. The other three can also be invoked by the agent, including
-as dependencies of those workflows. All six remain separately selectable.
+`codebase-design`, `domain-modeling`, `grilling`, and `research` can also be
+invoked by the agent. The other seven require explicit user invocation.
+All eleven remain separately selectable.
 
 ## Start an interview
 
@@ -85,17 +94,78 @@ with distinct constraints, then a comparison and recommendation. That process
 can use multiple agent calls. It does not automatically enter OMS `architect`,
 `arena`, or `refactoring`.
 
+## Research and ask someone else
+
+Select `oh-my-stack:research` in Codex or use this Claude Code command:
+
+```text
+/oh-my-stack:research Check the documented cancellation guarantees of the API we use. Use primary sources, cite every finding, and save a Markdown note under our research directory.
+```
+
+The original delegates to a background agent. It needs access to the relevant
+sources and permission to write the resulting note. Follow the reported path
+and citations to inspect the result.
+
+For decisions held by a colleague or customer, select `to-questionnaire`:
+
+```text
+/oh-my-stack:to-questionnaire Prepare a discovery questionnaire about our launch requirements for the customer operations lead.
+```
+
+Expect one exchange about the recipient and one about the facts or decisions
+you need back. The result is `to-questionnaire-<slug>.md` in the current
+directory. Sending the document is a separate user action.
+
+## Prepare a spec and tickets
+
+Run `setup-matt-pocock-skills` once in the target project. It proposes the
+tracker and domain documentation layout, shows a draft, and waits before
+writing. For a local trial:
+
+```text
+/oh-my-stack:setup-matt-pocock-skills Configure this project to use local Markdown issues. Show the draft and wait for my confirmation before writing.
+```
+
+It prefers an existing `CLAUDE.md`, otherwise an existing `AGENTS.md`, and asks
+which to create if neither exists. It preserves surrounding sections and writes
+`docs/agents/issue-tracker.md` and `docs/agents/domain.md`. The original `triage`
+skill is not included in this selection, so its optional label-configuration
+section is skipped; the spec and ticket workflows still use `ready-for-agent`.
+
+Then use the agreed conversation to create a specification:
+
+```text
+/oh-my-stack:to-spec Turn our agreed cancellation design into a spec. Confirm the testing seam with me before writing it to the configured local tracker.
+```
+
+This synthesizes existing decisions; it does not start a new requirements
+interview. It can ask you to confirm the testing seam. Local specs live at
+`.scratch/<feature-slug>/spec.md`; a remote tracker configuration instead
+creates an issue. Missing tracker or label context leads to a setup request.
+
+Next, pass the actual spec path to `to-tickets`:
+
+```text
+/oh-my-stack:to-tickets .scratch/partial-cancellation/spec.md
+```
+
+Expect a proposed numbered breakdown with deliveries and blocking edges,
+followed by a pause for approval. After approval, local tickets live separately
+at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, with acceptance criteria,
+blockers, and `ready-for-agent` status. Remote tracker publication creates real
+issues and blocking relationships where supported. These original capabilities
+do not automatically run an OMS implementation or release workflow.
+
 ## Included source and support
 
-The six original directories, references, and UI metadata retain their upstream
+The eleven original directories, references, and UI metadata retain their upstream
 bytes at revision `6fd947921b935b7e1e69293a200400f0fdd5c15f`, with MIT licensing.
 OMS packaging adds attribution and source receipts without inserting model
 routing or replacing original dependencies with OMS workflows.
 
-This selection does not include original `to-spec`, `to-tickets`,
-`setup-matt-pocock-skills`, `wayfinder`, or `research`. See the
+This selection does not include original `wayfinder` or `triage`. See the
 [Skill directory](skill-directory.md) for what is installed and the
 [support policy](support-policy.md) for tested tools and remaining limits.
 
 Source hashes, dependency closure, and the reviewed update procedure are in the
-[maintainer import record](maintainers/aihero-imports-0.9.0.md).
+[current import record](maintainers/aihero-imports-0.10.0.md).

@@ -119,3 +119,7 @@ The generated packages retain original source instructions and resources.
 Each selected skill includes the upstream MIT license and a `SOURCE.json`
 coordinate. Runtime verification is recorded separately; importing or packaging
 a skill does not establish behavioral parity.
+
+The unreleased 0.10.0 source candidate adds original `research`,
+`to-questionnaire`, `setup-matt-pocock-skills`, `to-spec`, and `to-tickets`
+from the same pinned revision. All resources and UI metadata are retained.
