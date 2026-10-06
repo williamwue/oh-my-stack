@@ -20,6 +20,12 @@ control harness is a prerequisite or named risk, never a fictional test lane.
 
 Choose the later execution owner explicitly: a bounded stack, separately
 landed queue, or standing program. State who may integrate, merge, and publish.
+For a standing execution program, name the verified scheduler, bounded wake
+budget, and audit cadence, defaulting to one hour unless the task specifies
+another interval. Describe durable pause behavior when that capability is
+absent. The plan neither arms a wake nor starts execution. Reconcile progress
+by side effects and report newly tracked changes rather than unchanged status.
+
 Identify concurrent work only across non-overlapping ownership and capture
 its base revisions. Use a checklist whose boxes require concrete evidence such
 as a file, result, screenshot, or commit. Include prototypes, alternatives,

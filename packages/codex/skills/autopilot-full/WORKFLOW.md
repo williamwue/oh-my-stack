@@ -22,6 +22,19 @@ The persisted spawn message may be encrypted; disclose when its exact
 role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
 
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
 Use this workflow only when the operator explicitly grants full autonomy over a
 bounded queue, including landing after independent verification. A request for
 the protocol or a plan does not start execution. Use `autopilot-stack` when the
@@ -134,6 +147,26 @@ identity and issue a new countersign.
 After the provider reports merged, confirm the landed revision is present in the
 target before assigning the owner another item. Never pre-authorize a later
 merge or let a clean status stand in for the root countersign.
+
+## Preserve owner handoffs and progress
+
+Use [the handoff contract](../poteto-mode/references/subagent-handoff.md)
+for each new queue item, repair round, retry, and owner replacement. Preserve
+role ownership in durable state; fresh agents receive prior findings, every
+later directive, and unresolved objections. Reuse only for required costly
+live state and only when the host permits it. Fence the old writer first.
+
+Persist a checkpoint after each verifiable unit. Push a snapshot only when the
+program already authorizes that remote mutation and required local gates pass.
+This preserves progress without turning local work into publication authority.
+
+Default the audit cadence to one hour unless the operator or task contract
+specifies another interval. Use a verified host scheduler with a bounded wake
+count and deadline, never a source-host command or an untracked sleep loop.
+At each tick, record side effects, reconcile live handles, and preserve a
+revision-bound decision row. Notify the operator of newly tracked changes;
+do not repeat unchanged tables or blockers. Required safety or user-requested
+updates still apply. With no verified wake, persist the pause and name the gap.
 
 ## Audit, wake, and stop
 

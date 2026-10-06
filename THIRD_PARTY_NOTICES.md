@@ -95,3 +95,12 @@ September 28 semantic reconciliation imports the decision-log and autopilot-full
 reference files from Cursor pstack commit `ecc249f1e306fc64ddf83c7bed16cacf7c2239db`
 under MIT. Immutable files and license are in
 `upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack`.
+
+## pstack 0.15.13 semantic update
+
+Source: <https://github.com/cursor/plugins/tree/2cbf58508f40de470d7490b55c51d71241928fa2/pstack>.
+Revision: `2cbf58508f40de470d7490b55c51d71241928fa2`.
+License: MIT; the exact license and changed files are retained under
+`upstream/snapshots/cursor-pstack-october-06/`.
+This update adds four portable Skills and adapts workflow and guide changes.
+Original source snapshots and dated acceptance records remain historical.

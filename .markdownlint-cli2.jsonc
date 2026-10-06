@@ -7,6 +7,18 @@
   ],
   "overrides": [
     {
+      // Preserve complete attributable agent outputs without editorial changes.
+      "filter": [
+        "docs/acceptance/2026-10-06/review/reviewer-*.md",
+        "docs/acceptance/2026-10-06/review/synthesis.md"
+      ],
+      "config": {
+        "MD041": false,
+        "MD036": false
+      },
+      "combine": "merge"
+    },
+    {
       "filter": [
         "src/core/skills/principle-*/**/*.md",
         "packages/*/skills/principle-*/**/*.md"

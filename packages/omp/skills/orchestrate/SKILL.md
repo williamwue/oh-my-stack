@@ -27,6 +27,19 @@ Do not assume the deprecated `hub` tool exists. If safe cancellation
 is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
 Use this workflow only for a program that outlives one worker or one bounded
 session: multiple dependent units, sustained delegation, durable handoff, and
 repeated integration. Route a single checkable task to `autonomous-run`, even
@@ -67,6 +80,18 @@ Maintain a store outside worker-owned implementation paths with:
 Every state artifact has one writer. Owners publish facts; the coordinator
 aggregates them at drain time. Never infer liveness from transcript age or treat
 a child summary as current provider state.
+
+For each new unit or repair round, apply
+[the handoff contract](../poteto-mode/references/subagent-handoff.md). Preserve
+roles in the store and start fresh agents with consolidated scope. The bound
+standby-to-execution continuation above retains its required native identity;
+it is not permission to reuse the same session for unrelated work.
+
+Record an audit cadence, defaulting to one hour unless the program specifies
+another interval. Arm only an authorized verified host wake, bounded by the
+program's deadline and wake budget. Log each tick and report newly tracked
+changes without repeating unchanged status. If no wake is available, retain
+the durable stop behavior instead of inventing a background monitor.
 
 ## Pilot before scale
 

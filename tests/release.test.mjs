@@ -142,7 +142,7 @@ test("Codex plugin bundle exposes the generated package through one local market
     const packagedSkills = codexArtifact.files
       .map((file) => file.path)
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
-    assert.equal(packagedSkills.length, 74);
+    assert.equal(packagedSkills.length, 78);
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),

@@ -38,6 +38,11 @@ details are tracked in [capabilities](docs/capabilities.md), while release
 claims use the separate verification labels documented in the
 [release process](docs/release-process.md).
 
+The 0.7.0 source candidate adds four public Skills and reviews pstack 0.15.13.
+See the [upstream update guide](docs/upstream-pstack-0.15.13.md) and
+[candidate scope](docs/releases/0.7.0.md). This source candidate is separate from
+the published 0.6.0 release and currently installed personal plugins.
+
 ## Quick start
 
 Version 0.6.0 adds read-only CI diagnostics and fixes installer aliases. It retains
@@ -360,13 +365,13 @@ codex plugin add oh-my-stack@oh-my-stack
 ```
 
 Start a new Codex task after installation so its bundled Skills are loaded.
-The current bundle exposes 74 public Skills, including the 25
+The current bundle exposes 78 public Skills, including the 25
 upstream entries added after alpha.4. Their full real-project acceptance
 remains in progress.
 Invoke a Skill directly, such as `$how`, `$interrogate`, or `$tdd`, or use
 `$poteto-mode` to select a workflow. Full instructions load when a Skill is used.
 Short Codex descriptions reduce discovery metadata without hiding entrypoints.
-The current [Skill directory](docs/skill-directory.md) groups 51 workflows and 23
+The current [Skill directory](docs/skill-directory.md) groups 54 workflows and 24
 principles. Codex display names and generated catalog metadata mark the same
 categories; invocation names remain unchanged. These labels do not require
 native grouped menus. Internal probes remain test-only.
@@ -468,7 +473,7 @@ three workload classes to one model, so every generated role correctly records
 that model diversity was not established. The published Claude beta.3 package
 predates the authenticated local two-model setup acceptance described above.
 
-The canonical Skill catalog now separates 74 public workflows and principles
+The canonical Skill catalog now separates 78 public workflows and principles
 from 12 internal `check-*` runtime probes. The previous 49-Skill matrix passes
 on OMP 18.2.8 and Codex CLI 0.155.1: every Skill is discovered and explicitly
 loaded exactly once, its canonical name and first heading match the generated

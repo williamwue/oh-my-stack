@@ -10,8 +10,12 @@ description: "Check or repair a pull request; require separate merge authorizati
 When the selected provider is explicitly `github.com`, read
 `../../scripts/github-workflow.mjs` and
 `../../docs/github-workflow.md` before using this bounded single-PR adapter.
-Use its `executeGitHubWorkflow(request)` library entry for authorized
-creation or merge. Its CLI exposes only `inspect` and `recover`; recovery
+For authorized operations supported by a host-owned PR tool, use that
+tool first and preserve the host's task association requirements.
+Use `executeGitHubWorkflow(request)` only as the bounded fallback for
+creation or merge that the host-owned tool does not support. Tool choice
+does not expand the workflow's authorization or target gates.
+Its CLI exposes only `inspect` and `recover`; recovery
 can append local reconciliation evidence. The request must name this
 workflow, the exact target and account, and any required journal and
 authority records. Caller records assert scope; they do not authenticate

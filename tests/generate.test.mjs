@@ -92,8 +92,8 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 51);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 23);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 54);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 24);
   let originalLength = 0;
   let generatedLength = 0;
   for (const name of model.skillCatalog.public) {
@@ -116,9 +116,9 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
 });
 
-test("loads eighty-six portable Skills, seven roles, and three adapters", async () => {
+test("loads ninety portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 86);
+  assert.equal(model.skills.length, 90);
   assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
     "architect",
     "arena",
@@ -128,6 +128,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "autopilot-full",
     "autopilot-stack",
     "babysit",
+    "benchmark-checklist",
     "blast-radius",
     "bro",
     "bug-fix",
@@ -143,6 +144,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
+    "correct",
     "create-verification-skill",
     "eval",
     "feature",
@@ -159,6 +161,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "orchestrate",
     "pause-safely",
     "perf-issue",
+    "poteto-help",
     "poteto-mode",
     "principle-attack-the-premise",
     "principle-boundary-discipline",
@@ -166,6 +169,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "principle-encode-lessons-in-structure",
     "principle-exhaust-the-design-space",
     "principle-experience-first",
+    "principle-explain-the-number",
     "principle-fix-root-causes",
     "principle-foundational-thinking",
     "principle-guard-the-context-window",
@@ -214,7 +218,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 74);
+  assert.equal(model.skillCatalog.public.length, 78);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)

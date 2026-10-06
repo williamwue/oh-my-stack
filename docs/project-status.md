@@ -1,6 +1,9 @@
 # Project status
 
-Updated: 2026-10-04. Release record: [0.6.0](releases/0.6.0.md).
+Updated: 2026-10-06. Published release: [0.6.0](releases/0.6.0.md).
+Source candidate: [0.7.0](releases/0.7.0.md), with 78 public Skills and the
+[pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Candidate validation
+and native-host evidence are recorded separately from publication.
 Previous published baseline: [v0.5.0](releases/0.5.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
@@ -116,8 +119,8 @@ user-level setup or complete workflow acceptance.
   gates and bounded Claude collaboration evidence are in the release notes.
 
 - All 25 originally missing upstream entries are implemented: 16 main entries
-  and nine extracted playbooks. The public catalog has 74 directly selectable
-  Skills: 51 workflows and 23 principles. See the
+  and nine extracted playbooks. The public catalog has 78 directly selectable
+  Skills: 54 workflows and 24 principles. See the
   [completion plan](upstream-completion-plan.md) for preserved contracts.
 - Codex and OMP user-level setup, complete project overrides, named workflow
   routes and ordered panels, and shared reasoning-budget targets are implemented.
