@@ -6,8 +6,10 @@ Source: `mattpocock/skills@6fd947921b935b7e1e69293a200400f0fdd5c15f`.
 
 The original skill, both references, and UI metadata remain byte-identical
 in all three generated packages. No OMS workflow or model-routing instructions
-are inserted. Original source coordinates, resource hashes, and MIT license
-are included in the package. See the [usage and update guide](aihero-original-skills.md).
+are inserted. Original source coordinates and the MIT license are included
+in each generated package. Original resource hashes are recorded in the
+repository's `upstream/source-skills.json` and checked during package validation.
+See the [usage and update guide](aihero-original-skills.md).
 
 ## Bounded live results
 
