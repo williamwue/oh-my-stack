@@ -396,6 +396,14 @@
         "GitHub pull requests only through scoped authorized library operations; CLI never publishes or merges"
       ],
       "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-owned journals and remote PRs remain for reconciliation."
+    },
+    {
+      "path": "tools/source-skills.mjs",
+      "owner": "local-core",
+      "purpose": "Validate pinned original source skills, dependency closure, and resource hashes for packaging.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository library; removed with the checkout."
     }
   ]
 }

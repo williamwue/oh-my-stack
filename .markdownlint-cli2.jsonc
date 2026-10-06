@@ -7,6 +7,11 @@
   ],
   "overrides": [
     {
+      "filter": ["packages/*/skills/codebase-design/**/*.md"],
+      "config": { "MD040": false, "MD049": false },
+      "combine": "merge"
+    },
+    {
       // Preserve complete attributable agent outputs without editorial changes.
       "filter": [
         "docs/acceptance/2026-10-06/review/reviewer-*.md",

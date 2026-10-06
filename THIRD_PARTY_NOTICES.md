@@ -104,3 +104,16 @@ License: MIT; the exact license and changed files are retained under
 `upstream/snapshots/cursor-pstack-october-06/`.
 This update adds four portable Skills and adapts workflow and guide changes.
 Original source snapshots and dated acceptance records remain historical.
+
+## AIHero / Matt Pocock Skills
+
+Selected original skills from [mattpocock/skills](https://github.com/mattpocock/skills)
+are pinned at `6fd947921b935b7e1e69293a200400f0fdd5c15f`. Copyright (c) 2026
+Matt Pocock. License: MIT. The original license and complete selected resources
+are retained in the revision-bound `upstream/snapshots/aihero/` directory.
+`upstream/source-skills.json` records every imported file hash and dependency.
+
+The generated packages retain original source instructions and resources.
+Each selected skill includes the upstream MIT license and a `SOURCE.json`
+coordinate. Runtime verification is recorded separately; importing or packaging
+a skill does not establish behavioral parity.
