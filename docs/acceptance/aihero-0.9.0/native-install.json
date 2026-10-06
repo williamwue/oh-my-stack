@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "historical-release-observation",
+  "release": "0.9.0",
+  "commit": "b8a9eda1f645de4820360cd4eaca4b7cea3f271c",
+  "host": "Codex CLI",
+  "hostVersion": "0.160.1",
+  "platform": "macOS",
+  "installationSurface": "native user plugin",
+  "summary": {
+    "installedVersion": "0.9.0",
+    "enabled": true,
+    "cachedTreeMatchesReleaseManifest": true,
+    "nativeInstalledSmoke": "passed",
+    "cliVersion": "0.160.1",
+    "nativeDiscoveryInWorkspaceAndFreshFixture": true,
+    "publicEntriesDiscovered": 84,
+    "originalEntriesDiscovered": 6,
+    "structuredSkillInput": true,
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "boundedNativeEntries": [
+      "grill-me",
+      "grill-with-docs"
+    ],
+    "loadedOriginalDependencies": [
+      "domain-modeling/GLOSSARY-FORMAT.md",
+      "domain-modeling/SKILL.md",
+      "grilling/SKILL.md"
+    ],
+    "originalQuestionRoundsAndWaitingVerified": true,
+    "resolvedTermsGlossaryWritten": true,
+    "implementationFilesUnchanged": true,
+    "boundary": "Two installed native initial question rounds; no full interview, Desktop UI, or installed architecture-report flow claim."
+  },
+  "observations": [
+    {
+      "entry": "grill-me",
+      "startedAt": "2026-10-06T15:55:58+00:00",
+      "status": "passed",
+      "turnStatus": "completed",
+      "dependencies": [
+        {
+          "resource": "grilling/SKILL.md",
+          "sha256": "10ff989e7498b23b5acb49d5048f11dcd906757d2f79c5cdf8a00001381296f2",
+          "completeReadObserved": true
+        }
+      ],
+      "sourceReceiptSha256": "4eac05286c38dd3a080bbf529ef1f0cedf985a8284bc0aa05f2e8ff84dbf53c2"
+    },
+    {
+      "entry": "grill-with-docs",
+      "startedAt": "2026-10-06T15:56:54+00:00",
+      "status": "passed",
+      "turnStatus": "completed",
+      "dependencies": [
+        {
+          "resource": "grilling/SKILL.md",
+          "sha256": "10ff989e7498b23b5acb49d5048f11dcd906757d2f79c5cdf8a00001381296f2",
+          "completeReadObserved": true
+        },
+        {
+          "resource": "domain-modeling/SKILL.md",
+          "sha256": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+          "completeReadObserved": true
+        },
+        {
+          "resource": "domain-modeling/GLOSSARY-FORMAT.md",
+          "sha256": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+          "completeReadObserved": true
+        }
+      ],
+      "sourceReceiptSha256": "521247aa729e6817baafd4afd7ef69dfcaf94d5fa3666102f4837ad135e7abf6",
+      "glossary": "# Ordering\n\nThe ordering context describes customer purchases and the products and quantities within them.\n\n## Language\n\n**Order**:\nThe customer purchase containing one or more Order Lines.\n_Avoid_: Purchase, transaction\n\n**Order Line**:\nOne product and quantity within an Order.\n_Avoid_: Line item, item\n"
+    }
+  ],
+  "boundaries": [
+    "No Desktop picker interaction claim",
+    "No OMP live behavior claim",
+    "No complete interview or cross-host parity claim",
+    "Architecture report created; OS automatic opening failed in fixture environment"
+  ],
+  "rawEvidence": "Private release verification records; this summary omits local paths and native thread identifiers."
+}

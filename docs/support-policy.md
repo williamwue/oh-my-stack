@@ -1,91 +1,71 @@
 # Support policy
 
-## Release baseline: 0.6.0
+Current user instructions describe the 0.9.1 release. Support is limited to the
+observed tools, installation surfaces, and tasks below. Entry discovery and
+intact source files do not certify every workflow on every model.
 
-0.6.0 is the release baseline. It is not a promise of complete Cursor
-pstack behavioral parity or stable 1.0 APIs. Support is scoped to the observed
-versions and surfaces in the [host matrix](host-compatibility.md). Other
-combinations require a fresh inventory, installation check and bounded worker
-test.
+## Tested tools and surfaces
 
-## Supported core
+| Tool | Recorded observation | Limits |
+| --- | --- | --- |
+| Codex CLI 0.160.1 on macOS | Native user plugin installed and enabled at 0.9.0; public entries and all six originals discovered. Explicit initial rounds for `grill-me` and `grill-with-docs` loaded original dependencies; the latter wrote confirmed glossary terms. | Two installed initial rounds, not complete interviews or all original workflows. |
+| Codex CLI 0.160.1 on macOS | Four fresh project-local AIHero fixtures: interviews, terminology and an ADR, and architecture report creation. | Project-local loading differs from the installed native plugin. Automatic report opening failed in the fixture. |
+| Claude Code 2.1.287 on macOS | Four fresh session-plugin AIHero fixtures, including native user slash invocation of explicit entries. | Session-plugin fixtures do not certify every persistent installation scope or full interviews. |
+| OMP 18.3.0 | Earlier profile-gated core observations and verified original-file packaging. | The five originals added in 0.9.0 have not received live OMP acceptance. |
 
-- All 74 public Skill entries remain directly selectable: 51 workflows and
-  23 principles. Entry availability is not exhaustive execution certification.
-- Deterministic runtime packages, integrity verification, owned-directory
-  installation, update, rollback and uninstall.
-- Explicit setup preview and apply; user defaults and project overrides;
-  named routes and panels; model/effort validation from observed inventories.
-- Bounded workflow execution and worker-result auditing on tested hosts.
-  Codex uses explicit model/effort dispatch, not a claim that generated custom
-  role files are natively activated. OMP and Claude use their native role paths.
-- Recovery uses validated repository/branch/HEAD checkpoints. Do not repeat
-  completed work or replace a writer until old work is terminal or isolated.
+These are recorded tool versions, not minimum-version requirements.
+See the [native Codex release observation](acceptance/aihero-0.9.0/native-install.json),
+[AIHero fixture acceptance](aihero-original-0.9.0-acceptance.md), and
+[historical host matrix](host-compatibility.md). The native summary records the
+completed release checks; this documentation change does not rerun those model tasks.
 
-Model access, authentication, provider pricing and host delegation APIs are
-controlled by their providers. Setup never grants merge, deployment or
-credential authority. Root review and independent verification remain required.
+The Codex desktop Skill picker has not received a separate interaction check.
+Its documented selection is a user entry; native CLI structured selection is
+the observed explicit invocation. Linux offline CI checks do not establish
+Linux interactive behavior. Windows interactive behavior is not certified.
 
-## Experimental or unverified behavior
+## What the package provides
 
-- Live-worker reattachment after coordinator restart; uncontrolled late-result
-  races; long-running autonomous convergence and unrestricted multi-writer use.
-- Live independent-GitHub-account approvals, broad autonomous PR/CI lifecycle,
-  scheduled wakeups and authenticated Benny/webhook integrations. Bounded
-  single-maintainer merges have separate acceptance evidence below.
-- Full real-project execution of every Skill, complete cross-host parity and
-  every model/provider combination.
-- Windows/Linux interactive compatibility beyond reported observations;
-  Ubuntu offline CI is not interactive runtime certification.
+- Direct Skill selection, with current entries and invocation modes in the
+  [generated directory](skill-directory.md).
+- Release archives, integrity receipts, and tool-specific installation guidance.
+- Optional setup preview and apply, scoped defaults, role mappings, and review
+  panels for the pstack-derived workflows that use them.
+- Six selected AIHero originals with their original dependencies and resources.
+  They do not receive inserted OMS model-routing instructions.
 
-These limitations do not silently disappear with a successful core smoke test.
-Unsupported or missing capabilities must produce an explicit stop or a disclosed
-fallback, not a success claim. See [project status](project-status.md) for gaps.
+Model access, authentication, pricing, and delegation APIs belong to the host
+and provider. Inventory discovery does not establish a successful worker call.
+User and project configuration remain separate from plugin installation.
+Read [model configuration](model-configuration.md) before changing those choices.
 
-## Source operations in 0.3.0
+## Remaining limits
 
-The subsequent [GitHub provider](github-autopilot-provider.md)
-uses official `gh` for real target observation and explicitly authorized
-library mutations. Its journal reconciles uncertain external results without
-blind retries. The command-line interface is read only; unattended operation
-and atomic expected-base protection are not claimed. An installed plugin must be upgraded to receive source changes. The
-experimental boundaries above remain scoped by the acceptance records below.
+Complete pstack parity, full real-project execution of every Skill, and every
+model/provider combination are not verified. Long-running autonomous work,
+reattachment after coordinator restart, concurrent writers, independent GitHub
+account approvals, and unattended hosted lifecycle remain bounded or unverified.
 
-The Codex package includes bindings and a
-[single-PR workflow helper](github-workflow.md) for `opening-a-pr`, `babysit`
-check and root-authorized `shipping`. Other hosts, babysit drive, automatic
-stack-frontier computation and hosted lifecycle acceptance are not covered
-by this bounded integration. Strict target-revision semantics stop; ordinary
-server-policy behavior needs explicitly bound authority. See the
-[integration acceptance](github-workflow-acceptance-2026-10-03.md).
+GitHub workflow helpers require explicit target and operation authority,
+independent OMS review, and the applicable remote repository policy. A Skill
+invocation or model configuration does not by itself authorize publication,
+merge, deployment, or credential access. See the
+[GitHub integration guide](github-workflow.md) and its dated acceptance records.
 
-Separate [hosted acceptance](github-hosted-acceptance-2026-10-03.md) now covers
-real PR creation, CI failure/repair and operator-assisted recovery after a
-client kill. The [single-maintainer acceptance](github-single-maintainer-acceptance-2026-10-03.md)
-adds protected-target merge and operator-assisted interrupted-merge recovery
-under explicit independent OMS review. Live independent-GitHub-account
-approval and full unattended hosted lifecycle acceptance remain open.
+Use the [maintainer index](maintainers/README.md) for older evidence and
+implementation gaps. The [previous support policy](maintainers/support-policy-0.9.0.md)
+is a historical snapshot; its older release baselines are not current instructions.
 
-The source checkout adds local run, evidence, matrix, and read-only doctor
-tooling in 0.3.0. These are source commands, not global plugin commands. Use the
-[operations guide](operations-guide.md) for prerequisites, recovery, and
-diagnostic exit codes. A valid local store and passing doctor report do not
-establish hosted autopilot, complete cross-platform host compatibility,
-authenticated backend work, or full pstack equivalence. The
-[post-0.5.0 continuation](checklist-continuation-2026-10-03.md) records fresh
-macOS Node/Bun probes and host-specific activation/recovery boundaries.
+## Updating and reporting problems
 
-## Updating, rollback and support reports
+Keep the prior trusted archive and installation source before upgrading.
+Follow [updates and removal](guides/update-and-uninstall.md); review newer
+configuration separately before a downgrade. Removing the plugin does not
+remove personal or project model configuration.
 
-Retain the previous trusted archives and release manifest before upgrading.
-Plugin files and model setup are separate: an upgrade must not reset personal
-choices, and uninstalling a plugin does not delete setup files. Use the
-[release procedure](release-process.md) for integrity checks and rollback.
-Pre-1.0 configuration changes will be documented; do not assume a downgrade
-can interpret configuration newly written by a later version.
-
-For a bug report, provide the plugin version, host version/platform, selected
-Skill, expected/actual outcome, effective setup scope and redacted runtime
-evidence. Never attach credentials or unredacted provider/account logs.
-Use [GitHub Issues](https://github.com/williamwue/oh-my-stack/issues);
-security reports follow [SECURITY.md](../SECURITY.md).
+For a bug report, include the plugin version, tool version and platform,
+selected Skill, invocation method, expected result, actual result, and redacted
+evidence. Report ordinary issues through
+[GitHub Issues](https://github.com/williamwue/oh-my-stack/issues), and follow
+[SECURITY.md](../SECURITY.md) for security reports. Do not include credentials
+or unredacted account logs.

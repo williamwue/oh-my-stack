@@ -72,7 +72,7 @@ node tools/install-release.mjs plan \
 ```
 
 `plan` is read-only and does not register a plugin or update model settings.
-Use the [setup receipt](../README.md) to inspect the configuration selected by
+Use the [model configuration guide](model-configuration.md) to inspect the configuration selected by
 the current project; package version and model configuration are distinct.
 Retain the previous trusted release manifest and archives. To roll back an
 owned directory, run `plan` with that previous manifest, then:
