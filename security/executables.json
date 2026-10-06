@@ -414,6 +414,18 @@
         "docs/skill-directory.md (generation only; check is read-only)"
       ],
       "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/stable-marketplace.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Build a stable Git marketplace only from verified published assets; optionally advance its one pinned GitHub branch after clean-tag rebuild and CI gates.",
+      "network": true,
+      "writes": [
+        "explicit new evidence directory",
+        "temporary isolated Git checkout",
+        "williamwue/oh-my-stack refs/heads/stable only with --publish"
+      ],
+      "uninstallBehavior": "Maintainer tool is not installed in plugin packages. Evidence and stable branch remain independently managed."
     }
   ]
 }
