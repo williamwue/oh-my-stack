@@ -1,5 +1,7 @@
 # Oh My Stack
 
+![Oh My Stack — 面向 Codex、Claude Code 和 OMP 的可移植、可验证工程工作流](assets/social/oh-my-stack-social-preview-2026-10-07.png)
+
 [English](README.md) | [简体中文](README.zh-CN.md)
 
 在 Codex 和 Claude Code 中使用基于 pstack 的工程工作流，以及 Matt Pocock 的精选 AIHero 原版技能。

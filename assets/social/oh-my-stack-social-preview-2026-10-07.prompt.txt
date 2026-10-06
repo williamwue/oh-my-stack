@@ -1,0 +1,10 @@
+Use case: ads-marketing.
+Asset type: GitHub repository Social preview banner, final target 1280 by 640 pixels, exactly 2:1 landscape.
+Create a polished, memorable social sharing cover for the open-source project oh-my-stack, a portable framework for verifiable engineering workflows derived from pstack, supporting Codex, Claude Code and OMP.
+Art direction: premium developer-tool launch graphic. Deep charcoal navy solid background, sophisticated vivid cyan and soft violet illumination. On the right, a sculptural stack of three translucent glass-like layers floating above a subtle technical grid, with precise glowing edges, restrained depth and visual rhythm suggesting portable workflows. Left half is calm negative space with huge crisp white typographic hierarchy. Tasteful modern editorial layout, generous margins, simple legible typography, readable as a small X link thumbnail.
+Exact text only:
+"oh-my-stack" as the very large main title, kept on one line.
+"Portable, verifiable" then "engineering workflows." as two smaller subtitle lines.
+"Codex  /  Claude Code  /  OMP" as a clear bottom line.
+"github.com/williamwue/oh-my-stack" as a discreet footer.
+Constraints: all text correctly spelled, no additional text, no unverifiable claims, no star counts, no version numbers, no third-party logos or mascots, no browser frames. No tiny decorative code. Keep essential elements at least 60 pixels from edges. No transparency. Beautiful finished graphic, not a website screenshot.
