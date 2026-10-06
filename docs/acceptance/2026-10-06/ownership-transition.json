@@ -1,0 +1,73 @@
+{
+  "fromSourceManifestSha256": "91cc1bdba2c6d696eeab64dc5d4f46733ccce1d19963cdf6b6f7480f57d68664",
+  "priorManifest": "docs/acceptance/2026-10-06/prior-semantic-derivations.json",
+  "newEntry": "pstack-october-06-port",
+  "movedOutputs": [
+    {
+      "path": "src/core/skills/poteto-mode/SKILL.md",
+      "priorEntry": "alpha3-router-playbooks-port",
+      "priorSourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "priorSha256": "8338d6c77c8391ff6f0548a1bf92fc718b779caecb17c20393cca05cc7c89068"
+    },
+    {
+      "path": "src/core/skills/opening-a-pr/SKILL.md",
+      "priorEntry": "alpha3-router-playbooks-port",
+      "priorSourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "priorSha256": "27a3d039523ed6eda45646afdbe6e42c3edc4aa7676cdb889b91cc1a278f2745"
+    },
+    {
+      "path": "src/core/skills/orchestrate/SKILL.md",
+      "priorEntry": "orchestrate-port",
+      "priorSourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "priorSha256": "9c6b1e67a673a77dcd5152e3b6a019c5d7119ee2ea109f0f7e22249542b0316c"
+    },
+    {
+      "path": "src/core/skills/autopilot-stack/SKILL.md",
+      "priorEntry": "autopilot-stack-port",
+      "priorSourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "priorSha256": "7cfbd67d2ac7d39b730ff4fbd0aad7e597fb06fddb9b8bed02522816a7d3c5ce"
+    },
+    {
+      "path": "src/core/skills/autopilot-full/SKILL.md",
+      "priorEntry": "autopilot-full-port",
+      "priorSourceRevision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "priorSha256": "0e0ca19aee83ea449b613d75544ae0b2b3eefcf797d80dc829df2a7bf98132ce"
+    },
+    {
+      "path": "src/core/skills/architect/references/design-contract.md",
+      "priorEntry": "discovery-design-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "196ea5791ab1f2d9211101e59eebbb122890f0c28c8962c9d0206aa86a71a167"
+    },
+    {
+      "path": "src/core/skills/swarm/SKILL.md",
+      "priorEntry": "discovery-design-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "9e92a0dcacd0444bdaaca6f950ae266b5d53b767980e1d650b434a8ca5f06156"
+    },
+    {
+      "path": "src/core/skills/hillclimb/SKILL.md",
+      "priorEntry": "remaining-main-and-playbooks-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "03a1dc987793f545745e081b02d01798cfe344a673dd05e779a19f71b159e3df"
+    },
+    {
+      "path": "src/core/skills/multi-phase-plan/SKILL.md",
+      "priorEntry": "remaining-main-and-playbooks-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "5842b3717e5a3fa07502a8557a23469ae64b620aa1aabdae4dceffcb83fd979c"
+    },
+    {
+      "path": "src/core/skills/perf-issue/SKILL.md",
+      "priorEntry": "remaining-main-and-playbooks-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "426e38116106ffbcb9790bd289af7cf12f1ddd31ebb11783aaa948f38359e20f"
+    },
+    {
+      "path": "src/core/skills/typescript-best-practices/SKILL.md",
+      "priorEntry": "remaining-main-and-playbooks-port",
+      "priorSourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "priorSha256": "7a8b9a45f8daaefa0d73074366b2f8be167db453f47e70e3554a587a3f4ede85"
+    }
+  ]
+}

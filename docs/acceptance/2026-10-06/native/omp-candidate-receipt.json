@@ -1,0 +1,44 @@
+{
+  "runtime": "omp 18.3.2",
+  "candidate": "0.7.0",
+  "gate": {
+    "target": "omp",
+    "version": "0.7.0",
+    "profile": "oms-release-86a3da2f6e41b122",
+    "preflight": "verified",
+    "isolatedInstall": "verified",
+    "doctor": "verified",
+    "skillLoad": "verified",
+    "cleanup": "verified",
+    "userProfile": "not targeted"
+  },
+  "skills": [
+    {
+      "name": "correct",
+      "loaded": true,
+      "readSha256": "7319d02580d0b5985040ecc11dcd1f8c6c03dece17a23a52edeb4f63375bfbf1"
+    },
+    {
+      "name": "poteto-help",
+      "loaded": true,
+      "readSha256": "f664d3cce3cadfe9c311920da8eb94dbc0c9dd66aba3e63192aebb60c41fc51d"
+    },
+    {
+      "name": "benchmark-checklist",
+      "loaded": true,
+      "readSha256": "6c4afe4592b41044d579206c718ff1030d3de9a80f0280b3fc250947f7a73e3f"
+    },
+    {
+      "name": "principle-explain-the-number",
+      "loaded": true,
+      "readSha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c"
+    }
+  ],
+  "modelBehavior": {
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "Working...\n445929 | ` + `Use /login, set an API key environment variable, or create ${dr()}\n445930 | \n445931 | ` + \"Then use /model to select a model.\");\n445932 |       }\n445933 |       const r = await this.#ue.getApiKey(this.model, this.sessionId);\n445934 |         throw new Error(`No API key found for ${this.model.provider}.\n                       ^\nerror: No API key found for openai-codex.\n\nUse /login, set an API key environment variable, or create <user-home>/.omp/profiles/oms-release-86a3da2f6e41b122/agent/agent.db\n      at #Oo (/$bunfs/root/omp-darwin-arm64:445934:15)\n      at async #Cn (/$bunfs/root/omp-darwin-arm64:445717:25)\n\n"
+  },
+  "profileAuth": "Isolated profile; no credentials copied or login performed",
+  "priorAttempt": "omp-round-1-receipt.json: harness left stdin open; this attempt closes stdin before waiting"
+}

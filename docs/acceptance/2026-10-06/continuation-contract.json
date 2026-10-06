@@ -1,0 +1,36 @@
+{
+  "inheritedScopeSha256": "ee2de3dd9f6c390bd08e376a26da19ba4de2d31a9b584be612ffb7e4490147b5",
+  "exitPredicate": "Native OMP loads exact candidate poteto-help, reads owning correct and catalog, recommends correct with one prompt/source, uses only read actions and leaves disposable project and personal plugin registration unchanged. Then prepare release-ready handoff without external publication.",
+  "budget": {
+    "nativeModelAttempts": 2,
+    "secondsPerAttempt": 90,
+    "totalMinutes": 15
+  },
+  "mutations": [
+    "new disposable fixture",
+    "dated sanitized acceptance receipts",
+    "release handoff documents"
+  ],
+  "notAuthorizedByGenericContinuation": [
+    "remote push",
+    "PR publication",
+    "merge",
+    "release upload",
+    "personal plugin replacement",
+    "credential import or token copying"
+  ],
+  "wakeStrategy": "ready local work only; no recurring scheduler",
+  "authObservation": {
+    "openaiCodex": "native OMP existing OAuth disabled: refresh_token_invalidated",
+    "cursor": "native OMP usage report available; advertised model catalog inspected"
+  },
+  "resumeWorkflow": "session-pickup",
+  "pendingWorkflow": "autonomous-run",
+  "inheritedCompleted": [
+    "241 passing tests",
+    "three-host lifecycle",
+    "Codex/Claude native behavior",
+    "independent source and repair review"
+  ],
+  "redoReason": "OMP native model was previously blocked in an unauthenticated isolated profile; exercise a session-only candidate package through already configured native authentication instead."
+}

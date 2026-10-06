@@ -1,0 +1,7 @@
+Use **correct**. Its [installed procedure](/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/codex-help/.agents/skills/correct/SKILL.md) targets repeated repository mistakes: identify at least two attributable occurrences, prevent recurrence through architecture, types, or checks, and prove the constraint rejects a real past mistake.
+
+Select **correct** in the Skill picker, then use:
+
+> Find repeated mistakes in this repository and prevent them structurally. Cite the occurrences, prove each new constraint rejects a real past mistake and passes after correction, and report any evidence gaps.
+
+I only read the installed sources; I did not execute the workflow.

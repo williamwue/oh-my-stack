@@ -1,0 +1,19 @@
+The frozen repair scope is accepted: no unresolved defects or objections remain.
+
+All three repair reviewers independently agree that the corrections resolve:
+
+- Missing handoff instructions for optional `perf-issue` and `hillclimb` delegates across three hosts.
+- Conflicting PR instructions, now giving supported host-owned tools precedence while preserving bounded fallback and authorization gates.
+- The stale Skill count, now correctly stating 78.
+
+The original implementation findings came from reviewer 1; the count finding came from reviewer 3. Reviewer 2’s original absence of findings did not contradict them.
+
+**Act on:** None remaining within this repair scope.
+**Consider / Dismissed:** None.
+**Noted:** All three repair reviewers report 20 matching file hashes before and after review, six passing focused tests, and passing generated-package checks for scope `5d5c3c4a98cebce03ec6b77cc1f6df5b1a5334edd46fbeac22026e05ea1f0865`.
+
+These results establish acceptance of the bounded repairs. Full regression, external provenance verification, and native three-host acceptance remain separate gates. The original `verified_commit: null` limitation is not resolved by these findings. The root-reported Markdown lint exemptions for four verbatim review artifacts are outside this repair scope and have not been independently assessed here. Publishing and personal installation changes remain unauthorized.
+
+Only the supplied frozen evidence was read; no implementation files were inspected or modified.
+
+ROLE_POLICY=frozen-findings-synthesis

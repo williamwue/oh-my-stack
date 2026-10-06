@@ -23,6 +23,13 @@ steps that duplicates invariants; pass-through methods adding no policy or
 adaptation. Prefer short call chains and a coherent domain owner. Do not reject
 necessary complexity simply to minimize file count.
 
+Also reject split state ownership, multiple supported paths for the same task,
+externally importable internals, and hand-synced lists. Give state one owner,
+migrate callers to one supported path, enforce module boundaries with the build,
+and derive lists or fail when they disagree. Assume a contributor copies the
+nearest example without opening the whole repository. Prefer a design where a
+locally plausible change preserves global invariants.
+
 The parent appends a synthesis decision after arena: selected base, criterion
 scores and judge verdict, grafts with candidate attribution, rejected ideas and
 reasons, and checks on the final synthesized design. Candidate authors do not

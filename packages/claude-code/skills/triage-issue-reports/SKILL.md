@@ -6,6 +6,19 @@ disable-model-invocation: true
 
 # Triage issue reports
 
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
 Classify one Slack report and post one useful verdict in its source thread. Create a tracker issue only for a clear, new bug. Do not reproduce or fix it here.
 
 Load the external Benny configuration supplied by the automation. If the config is missing, malformed, or incomplete, stop without posting or writing to the tracker.

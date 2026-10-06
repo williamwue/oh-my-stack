@@ -1,0 +1,15 @@
+{
+  "runtime": "Claude Code 2.1.287",
+  "candidate": "0.7.0",
+  "exitCode": 0,
+  "isError": false,
+  "result": "**Use `correct`.** Its own description is \"Eliminate repeated repository mistakes through architecture, types, diagnostic checks, and behavior tests, with proof against real past failures.\" I read `skills/correct/SKILL.md` in full, and it is listed in `SKILL_CATALOG.json`.\n\nHow it works:\n- **Finds the classes.** It reads scoped commits, reverts, review comments, repo instructions and workaround comments. A class counts as repeated only with at least two attributable occurrences. If history is missing, it reports the gap instead of inventing occurrences.\n- **Fixes at the highest useful level.** The order is architecture, then types or lint/CI checks, then behavior tests, then documentation. Documentation is for judgment calls a check can't enforce.\n- **Proves the fix.** The new constraint must fail on a real past mistake and then pass on the correction. If no real failing example exists, the proof is marked incomplete.\n\n**Which workflow to pick:**\n- `correct` changes the repository so the mistake can't recur.\n- `reflect` is for proposing corrections to Skills, based on a conversation or work run.\n- `authoring-a-skill` is for editing a Skill.\n\n**One prompt** (adapted from `references/recipes.md`, \"Repeated mistakes\"):\n\n> /oh-my-stack:correct Find repeated mistakes in this repository and prevent them structurally. Prove each new constraint rejects a real past mistake.\n\n**Sources:**\n- `<candidate>/packages/claude-code/skills/correct/SKILL.md`\n- `<candidate>/packages/claude-code/skills/poteto-help/references/recipes.md`\n- `<candidate>/packages/claude-code/SKILL_CATALOG.json`\n\nThese are local files from the unpublished candidate. I didn't check for a public copy, so I'm not linking one.\n\nI did not run the recommendation. I also did not run the Python harness script pasted after the question, because a help turn doesn't authorize that. It would have written files and launched a nested `claude` session. Plan mode is on and I made no edits.",
+  "sessionId": "5edfe63c-4859-4125-a563-fa51d3115737",
+  "observedModels": [
+    "claude-sonnet-5-5"
+  ],
+  "project": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/claude-help",
+  "projectUnchanged": true,
+  "rawLocalOnly": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/claude-help-raw.json",
+  "prompt": "/oh-my-stack:poteto-help Which Oh My Stack workflow prevents repeated repository mistakes? This is a help question only. Read the owning installed procedure, give at most one usable prompt and a real source, and do not execute the recommendation."
+}

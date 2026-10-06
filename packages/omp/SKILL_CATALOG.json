@@ -51,6 +51,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "benchmark-checklist",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "blast-radius",
       "audience": "public",
       "category": "workflow",
@@ -67,6 +73,12 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "automatic"
+    },
+    {
+      "name": "correct",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
     },
     {
       "name": "create-verification-skill",
@@ -165,6 +177,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "poteto-help",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "poteto-mode",
       "audience": "public",
       "category": "workflow",
@@ -202,6 +220,12 @@
     },
     {
       "name": "principle-experience-first",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-explain-the-number",
       "audience": "public",
       "category": "principle",
       "invocation": "explicit"

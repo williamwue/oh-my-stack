@@ -1,0 +1,374 @@
+{
+  "sourceId": "cursor-pstack-october-06",
+  "repository": "https://github.com/cursor/plugins",
+  "base": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+  "head": "2cbf58508f40de470d7490b55c51d71241928fa2",
+  "files": [
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/.cursor-plugin/plugin.json",
+      "sha256": "a9b159535686ae6540778094b39f6af9bf4cd1f00e8f3efc0f9283547b9e09b7",
+      "gitBlob": "5dfdc65372ddb21322a19fe9da41edf422b49565"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/LICENSE",
+      "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e",
+      "gitBlob": "6b5400237fdf6545be0b8fae370d6f2fcff8fb25"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/README.md",
+      "sha256": "c16e2c9ec18d35effa03dc3c6ee559578c5e9644f2a0f7994647335b1bfebf59",
+      "gitBlob": "d1c357e2d4a133526c8646b2a27449bedf345565"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/agents/poteto-agent.md",
+      "sha256": "abe41c169ecbfe65641f1725f4188d568e046c0dec7fd2dc271abb594c299201",
+      "gitBlob": "f9d79a75560520cbb2f939c587ce00fa7e33037a"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/01-setup.md",
+      "sha256": "6d1f73090752058b0a42a23395a09b57ac50be4a4ad6bf8d85e22764b8ad1cb3",
+      "gitBlob": "054ddbdfeb5da092fbfd5cc48c91606b2a08d5a0"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/02-poteto-mode.md",
+      "sha256": "979f61ca3d44cb8e68affda40327d32797e93fa9cc53ced7444c15e2600897e1",
+      "gitBlob": "8341604aebe418077003b10a894ebcaff2a9ce0d"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/03-understand.md",
+      "sha256": "0090afa9b8670adf175466a2a973ff4349e95ed67d2aa8cebdfc55ff4b7382c9",
+      "gitBlob": "e15bea0520eff6e03df789a22cd4224daee04bd6"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/04-design.md",
+      "sha256": "333683f203fa9c5428002430834a04cc2bdcf6df4be6cb89f4145b92b304d700",
+      "gitBlob": "b0cf10f1329c337d954031b7953217577ae6af2b"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/05-build-and-clean.md",
+      "sha256": "a93cc7771f7b35c7b54d0120b6f66e8367794ce6791237e889a30e7585c190fa",
+      "gitBlob": "fc48a46df4f3e7f980522d40571367d4b809733b"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/06-verify-and-ship.md",
+      "sha256": "3ef0eed5ea084dfbbaf1b1ae9e08d84f2c8a2b536ffb3ef5226710bf105f70e6",
+      "gitBlob": "007ea2cab45724e48e0ab8f52e52bf7957f694f2"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/07-overnight.md",
+      "sha256": "d7bd33a3d880768688dff4c1c2b5481ca9f0f194f5d97e44b65c9f96624d3ff0",
+      "gitBlob": "cbad0672355927da4aa86547c5e5e108b354a4e2"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/08-principles.md",
+      "sha256": "73c3db659d356d4aa6d7674d30d0db46fab2bdd60152fca717c2d1772a042bdc",
+      "gitBlob": "0aaec930c3e6ca6a014087194d519048dd52b764"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/09-make-it-yours.md",
+      "sha256": "157e0c20ad3c657857c2fbbea3afd26895b71b8f68475bc56f4c382dcdd0e118",
+      "gitBlob": "321caaf9169aba31c69996fcf0de9c9423b24188"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/10-recipes-and-pitfalls.md",
+      "sha256": "c652474764b08da4a6364d85f5d03cf1fc1cf35e9d7c549348fb66e2d09f7b1f",
+      "gitBlob": "68751e7c02bde6e7b0620b9469c0e10b5e022168"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/docs/guide/README.md",
+      "sha256": "49d92cfe91e01c04bd1150e5b000ee4fd4dfda8ce789b66a9dda98f7e5456e00",
+      "gitBlob": "627bfb222f5a6b0f544809de2ef43ec056ee684f"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/architect/SKILL.md",
+      "sha256": "741901140ee382ebf93263a7ed03c6ee3719e578416d81afcd195876fa16c496",
+      "gitBlob": "2bd58a7d46f1899f107f3c502f6ddcfbd6717f99"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/architect/references/design-red-flags.md",
+      "sha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce",
+      "gitBlob": "f8503c9595b289c607ff5088f82b21197edf94ec"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/benchmark-checklist/SKILL.md",
+      "sha256": "6a767e788a60428fa14e645ee10fe2e49896e514ff654f668b1d824deb9038e8",
+      "gitBlob": "c02adb78929d0c1218fba554a31c423d65deb24d"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/correct/SKILL.md",
+      "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
+      "gitBlob": "c09f486e32935a154dd98daa13aa8187856600fe"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-help/SKILL.md",
+      "sha256": "5fc65e4c30c52edcde690d18904e3a8cf6ba6c2424c672d1a5cb6d29ab28645c",
+      "gitBlob": "f1f10bbf1edbdd1341b4f14999597130898b9aca"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-help/references/prompting.md",
+      "sha256": "463f450c44a60afd001a2f69fdf8a5dea174351f339369b12ec3c41515e564d3",
+      "gitBlob": "6b72b2e6081fdb78a3261bd77cf7334596d1ee20"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-help/references/recipes.md",
+      "sha256": "1872323419a3e5c7783b1933f7a180ca26c25a6e1f4ec83bd65e091ebbfb812b",
+      "gitBlob": "73118e2a2d2d025938d7b53b541b37cb1fe9c449"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/SKILL.md",
+      "sha256": "404c0ef4a78e93451b2ab555ca532e7197b5cf87de29205b6f7109dbee5d9c4d",
+      "gitBlob": "90bfebeecd3b8344eee39d08803a3e2a0f09e3c9"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "05ca30a16242c19d0c78ba1e88cca66f858d75252cb154fd740099fe292de802",
+      "gitBlob": "d5a68c339e25ac016ffad9c51d858f0f6c37937a"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "sha256": "007c0a3b12011954a224f54773ef4ad7b75918be0a311914c1b51ad4e794c1e5",
+      "gitBlob": "750a7547235ae8eb340285684b9be7c36dff323a"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/hillclimb.md",
+      "sha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
+      "gitBlob": "c6441b92d30a71489d88eae5bfa8dc457da55cb1"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "sha256": "27d310e3fc3937a60b8fcbe1318f9d249a7477a722907bf85b3e4eb3dc436b11",
+      "gitBlob": "f8ed78a6533cc5d738d3a3ec106bf2577d3f98ca"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "sha256": "ab40de7163c1c6e274f46ee559b2e53ef45673703f601f13f4931c199e6fb90f",
+      "gitBlob": "4e25989729174580e48ce36e265f298231c6de7f"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/playbooks/perf-issue.md",
+      "sha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
+      "gitBlob": "405c7a4362bedbd4194a5ef234553adf0dff78c9"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
+      "gitBlob": "d242f28eb801e781ccc2f2ba93b700b263a77816"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/principle-explain-the-number/SKILL.md",
+      "sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c",
+      "gitBlob": "9c22351d1fbe1ffcf277e61aef9fdb7816306fa7"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/swarm/SKILL.md",
+      "sha256": "bdcee4168e22428036e93d7cdeec3f391dbc4132f927f6db2540328c22db0273",
+      "gitBlob": "db22b8787966abc61216052d9f3142018404cab8"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/technical-writing/SKILL.md",
+      "sha256": "f5c512ffeec70bc4e0dee50f7bb4c26742e1be77967a6e8b15d1921e1c209ceb",
+      "gitBlob": "5eef4fc494a059eb740cb621dadb4a7a81af23e4"
+    },
+    {
+      "revision": "2cbf58508f40de470d7490b55c51d71241928fa2",
+      "path": "pstack/skills/typescript-best-practices/references/patterns.md",
+      "sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
+      "gitBlob": "c21d876b71b9c7afa897f2f6d982ead07db8f104"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/.cursor-plugin/plugin.json",
+      "sha256": "0fc91a08dab312d166a11f2c2cb8b699f19627415f001e641fcfa7aea9ba5836",
+      "gitBlob": "6ebc34b96f65088d695e3c3038eb412d750c8bdb"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/README.md",
+      "sha256": "16262f32aa041d857f2936f3ad6c589648f8e7b5d23e03c3c0a8c76ef99fd08c",
+      "gitBlob": "b7cdef8aeb15da88a8f9cdd82904d884552395b7"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/agents/poteto-agent.md",
+      "sha256": "c3850be1b97bc97cec0568ed8b26d04e7693c4e07868137c58fe546d37f288e9",
+      "gitBlob": "91d53b85918f842c703758e66352b956ee80feb7"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/01-setup.md",
+      "sha256": "bbac20e25fb097029e2676ecf3212f4a72f566eaf2b1031b56317aa1e4fdf490",
+      "gitBlob": "1e602f61c81eb1902150b849682b92b8e583fa7c"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/02-poteto-mode.md",
+      "sha256": "379a1b2c9cd2ba54032b2b142563328d0f3d65039f067863d19b1d4c008737f5",
+      "gitBlob": "403cbe8cc9dbc5204c6f9399abcced228f8e76f7"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/03-understand.md",
+      "sha256": "16f3fe0f7df092a5c69dac90971ef57e63a8a9ae926eed851285c7bfddc0f3fd",
+      "gitBlob": "af985988c2ac9babbabf6e9b4447c2f22a346ee7"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/04-design.md",
+      "sha256": "21e820ff73c0b70682aa570a967ede446b4d7caf62e8f391d0dd733ccb74874c",
+      "gitBlob": "681d39cff22438b4feb3d40a8d97017af026bc3d"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/05-build-and-clean.md",
+      "sha256": "6bd421b43a3cf9fec3cd201fd40ce65fd8c657264eac48b0c9a175b6afd7c252",
+      "gitBlob": "c38bc44a39fe5e6ace2cd228f631c7eb57ecccf3"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/06-verify-and-ship.md",
+      "sha256": "c93cd50c0359ce875a82b3f7d64eab102a4b0815dbbecdb8e0e5e910bd2d18e9",
+      "gitBlob": "d96c76612c647bfd33270d510440991946c508ed"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/07-overnight.md",
+      "sha256": "5033d61e8b4b6fb0b2304b2132f26bf0b6aee685aa4ed53a76a73cf0ac1c3557",
+      "gitBlob": "9ff66b7706041179ff3661213939a961eb196212"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/08-principles.md",
+      "sha256": "3ede7c9cf74d9631142aec016a01843d97c1e20469387144b70c2660d50fa96f",
+      "gitBlob": "be1102d678a9748b396f829e29fb3dfdd60ba205"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/09-make-it-yours.md",
+      "sha256": "b98588a232a38ca7acebbeecb95ac771df1981aed662dcb45c96b4b66ed20ec0",
+      "gitBlob": "6723069b5108f586575fe5353272ee6567a49b02"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/10-recipes-and-pitfalls.md",
+      "sha256": "a4662cd98870f08c6abe117a832abe37670ee84f8ed25dcbe7e99ef4eb8e05e0",
+      "gitBlob": "da0af5e6f7984d24818ef1cd28f518d0014da788"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/docs/guide/README.md",
+      "sha256": "0db8dd72e832c06638ca2f43489e8597d44dc0ea8da3b5088e4382ea26d904c5",
+      "gitBlob": "b8b1b079456d6f2b2c536937d21180ba5c21f733"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/architect/SKILL.md",
+      "sha256": "691cd39f52c7b613866e6baf9ea0b05451ffa21a6a9b4102f166418b89178fde",
+      "gitBlob": "afa6eead878d2a7b8d22b8eb99e6cf0c6ee0ad69"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/architect/references/design-red-flags.md",
+      "sha256": "905066f9bbac81c573c2b325be47751d2c0f9325e0a0772bd4384e82dafe9336",
+      "gitBlob": "32cb24083f308fd67ab4c431b44e1d7d3563435a"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/SKILL.md",
+      "sha256": "7645c9ee27ef9798c48a84060b6df409f8593d1058c7c25cbec28dce976195f9",
+      "gitBlob": "f8ddcae379007d61aefcae39b18bd836a488ee21"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7",
+      "gitBlob": "e92be88a8dfcb0a1f2745e0da7af42d31f1d6606"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "sha256": "f626f4ed17725de5ea96ac22597a1c298c46c36015e844bf86a68f6d38d57fbf",
+      "gitBlob": "810a70fff72ae49a9387b5ea41dcb13f890c83c0"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/hillclimb.md",
+      "sha256": "41980da135de2579bb38570e4b3373e015029148734ab5dc7d6103417b499af6",
+      "gitBlob": "582555e826675068ceaea08e6134a44ba0ea4511"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "sha256": "8f8603f97aa57bce07a4c29e83e24e84db62a1fbd1fa5b3f639e1e74ea3c9da9",
+      "gitBlob": "fe006110f6005dcdb746d891e7901a1734a75538"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "sha256": "1c0281f84348aa5dc6f10defbcdd8357f4b0786d874f340ba34bfc169dc6c26f",
+      "gitBlob": "626f376bd64e2e7b04c2575cb8b8f4ba70a6078d"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/playbooks/perf-issue.md",
+      "sha256": "bb957907426666b7aa599aed3f6ddebf423364a1428f93790b5cb9e15c878e7e",
+      "gitBlob": "688d483d4d4a6c58efa515558c822e11f621540f"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "sha256": "1f9e788ce90a13a9973e35e8c3a52737857c375e057bdccc13c8510a9af30f04",
+      "gitBlob": "6c07f4e903d10332702a2ac4602ada9273e71609"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/swarm/SKILL.md",
+      "sha256": "e28057fbbd1113257b2e953c6e891c41f535dbb01400b6bfd3eb9a85a2ab861f",
+      "gitBlob": "a63e09eda94558aa8c7ae6d0653951838a3abd3f"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/technical-writing/SKILL.md",
+      "sha256": "10c74685e1639cc4f8ff096007e5405b25ca0e824b65aaa17105c238faf6a1e8",
+      "gitBlob": "1cd44cf2595a5caeda1f702aacd4f8a25aa8166a"
+    },
+    {
+      "revision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "path": "pstack/skills/typescript-best-practices/references/patterns.md",
+      "sha256": "62e9cd32d2fa066a35d0d1349aac22dce31a48ad7d5eaf142570770cfe707384",
+      "gitBlob": "f44d22ffe9130c5340d55a2fa57028c6959479cb"
+    }
+  ]
+}

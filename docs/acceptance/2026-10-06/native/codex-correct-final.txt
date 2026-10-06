@@ -1,0 +1,23 @@
+Fixed only [tools/install-release.mjs](/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/codex-correct/tools/install-release.mjs:81) using the installed `correct` workflow.
+
+The recurring class was raw-path entry-point comparison: both `installer.mjs` and `source/tools/install-release.mjs` silently skipped the CLI. The original checksum matched `history.json`’s recorded revision.
+
+Ran this exact verifier before and after the fix:
+
+```sh
+node <candidate>/evals/fixtures/pstack-01513/verify-correct.mjs /var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/codex-correct
+```
+
+Before: exit **1**, reporting `installer.mjs: silently skipped the CLI`. Separately reproduced the directory occurrence with:
+
+```sh
+node source/tools/install-release.mjs inspect --target codex --destination "$PWD/owned-package"
+```
+
+It exited **0** with empty output. Both aliases also silently accepted `unknown-action`.
+
+After: the verifier exited **0**; both aliases produced inspect output, rejected malformed actions, and imports remained quiet.
+
+The enforcement level is **architecture, at the entry-point boundary**: canonical filesystem paths now determine whether to run the single CLI implementation. Resolving both paths handles file and directory aliases uniformly. Types cannot establish filesystem identity at runtime; documentation cannot enforce it.
+
+Checks confirmed inspect output and import behavior, and that all candidate Skills and the verifier remained unchanged. Historical attribution comes from the supplied history and matching checksum; this disposable repository contains no Git history or referenced historical document. No commits, publication, plugins, delegation, or external services were used.

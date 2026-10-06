@@ -1,0 +1,1119 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "alpha3-router-playbooks-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/SKILL.md",
+          "sha256": "b3c505602b82fb3641a3983e9c46fb974881faa12ece1af804fae27afb7be532"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/investigation.md",
+          "sha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/feature.md",
+          "sha256": "430dae0fd736554ff7dffc3ef0644c9f0c845e25742f69e598c35b9b89660301"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/refactoring.md",
+          "sha256": "53bac1f1fe886600dd1991b5511b7975e6a206168038f9d282d88e45408e93cf"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/prototype.md",
+          "sha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+          "sha256": "b173ff9638ff62f91f6813c1a0ed3417cdf9f6545a659be0c1fb1f42130e0e66"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/babysit.md",
+          "sha256": "51be21872152f97612d37258273269b88212b6696432d25d678cac30f02f4157"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/poteto-mode/SKILL.md",
+          "owner": "derived",
+          "sha256": "8338d6c77c8391ff6f0548a1bf92fc718b779caecb17c20393cca05cc7c89068"
+        },
+        {
+          "path": "src/core/skills/poteto-mode/skill.json",
+          "owner": "local-core",
+          "sha256": "20468fb3d0180b80fcf5d2e8d1f89e223efaa2b3fcc78529aecc4ee53de034f0"
+        },
+        {
+          "path": "src/core/skills/investigation/SKILL.md",
+          "owner": "derived",
+          "sha256": "834a556133b055010b0691e7e718fed19c7852491bdd9007e5071f743d9fcb46"
+        },
+        {
+          "path": "src/core/skills/investigation/skill.json",
+          "owner": "local-core",
+          "sha256": "1dd11d7b5993ea0fcd75f0dbcee951921b41ef0dbd044021ec97ef5edc9c5167"
+        },
+        {
+          "path": "src/core/skills/feature/SKILL.md",
+          "owner": "derived",
+          "sha256": "1c3ae2f965fc3b7cea6dd93580c7a56e8848643593cd1bddfa724de3a0959bf1"
+        },
+        {
+          "path": "src/core/skills/feature/skill.json",
+          "owner": "local-core",
+          "sha256": "537f9438d29e232b91c223b9677d1270c698a678e81342f02d3751e9ae207a15"
+        },
+        {
+          "path": "src/core/skills/refactoring/SKILL.md",
+          "owner": "derived",
+          "sha256": "6f5b5a238dab6142e65913ad2de29151260b6426067523e0537b7ee996ed09ab"
+        },
+        {
+          "path": "src/core/skills/refactoring/skill.json",
+          "owner": "local-core",
+          "sha256": "21ab84a68932b1a49c7141820d3e99a6253760577e7872b5a9d085a8930107d5"
+        },
+        {
+          "path": "src/core/skills/prototype/SKILL.md",
+          "owner": "derived",
+          "sha256": "1fbd2ca3d08085401c7e69eaca903658748b0dbf14a39a6ea4273bd452804863"
+        },
+        {
+          "path": "src/core/skills/prototype/skill.json",
+          "owner": "local-core",
+          "sha256": "b77737bc986db441405614292efbd31999c43ed9be0aa79f47ec850e11e4d726"
+        },
+        {
+          "path": "src/core/skills/opening-a-pr/SKILL.md",
+          "owner": "derived",
+          "sha256": "27a3d039523ed6eda45646afdbe6e42c3edc4aa7676cdb889b91cc1a278f2745"
+        },
+        {
+          "path": "src/core/skills/opening-a-pr/skill.json",
+          "owner": "local-core",
+          "sha256": "49814ab612bec491a28551dfa9d806821c01e83c613078e85468a8e0f1c559ab"
+        },
+        {
+          "path": "src/core/skills/babysit/SKILL.md",
+          "owner": "derived",
+          "sha256": "ee56646b97ba3340e7facb1a15a0a32c582e99daa620d3e70d96ee2d9ff5253f"
+        },
+        {
+          "path": "src/core/skills/babysit/skill.json",
+          "owner": "local-core",
+          "sha256": "e2814f105f37334d8afd21eee55101177cd707a87276d6e6861161ec2d8c04c9"
+        }
+      ],
+      "transformation": "The source mode's broad trigger set, mandatory publication, fixed providers and models, and source-host task syntax were reduced to an explicit intent router and independently graduated portable playbooks. Babysit separates read-only and mutating authority, while the router now admits separately defined pause, pickup, and bounded autonomous-run workflows. Root ownership, observable routing, writer isolation, same-surface verification, and explicit authorization for external publication replace host-specific automation."
+    },
+    {
+      "id": "session-lifecycle-port",
+      "sourceId": "cursor-pstack-session-lifecycle",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-session-lifecycle/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/session-pickup.md",
+          "sha256": "1604fb463f7c7410d43fa024ca76c1c1824c166a01fd69d61f073d06fdca2a47"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-session-lifecycle/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/pause-safely.md",
+          "sha256": "7d5fc10e144265f1b35f8157926541e738c1de64b6a85b3e61b51cf268c3dffd"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/pause-safely/SKILL.md",
+          "owner": "derived",
+          "sha256": "d540fa196db43efa343f608b10d3a1cdf17a851661310dfd14a87d8eb8723124"
+        },
+        {
+          "path": "src/core/skills/pause-safely/skill.json",
+          "owner": "local-core",
+          "sha256": "7a6506f2026ac6fb287735e49f3fe2293b923baeedff55ee44c1c94b0166da18"
+        },
+        {
+          "path": "src/core/skills/session-pickup/SKILL.md",
+          "owner": "derived",
+          "sha256": "b401e5b163b4d63b476f0c9b67250c6a8d44c573de298a81c354f36c10d8655a"
+        },
+        {
+          "path": "src/core/skills/session-pickup/skill.json",
+          "owner": "local-core",
+          "sha256": "de9a6b4da1147e8588dc4fe9cabdec107f67df5da4355621c84bd4b2469d2119"
+        }
+      ],
+      "transformation": "Cursor-specific transcript paths, cloud-agent assumptions, implicit subagent parsing, and prose-only resume notes were replaced by workspace-scoped trails, an off-worktree structured checkpoint with exact Git anchors, stale-state refusal, inherited-versus-redone accounting, and fresh authorization for every mutation or publication. Pause and pickup remain separate explicit workflows so unattended continuation cannot be misread as a request to stop."
+    },
+    {
+      "id": "autonomous-run-port",
+      "sourceId": "cursor-pstack-autonomous-run",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-autonomous-run/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/autonomous-run.md",
+          "sha256": "15e54ad3ac92565613980772d8708de6e19cc4690bfd4bb3fb8836522407377b"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autonomous-run/SKILL.md",
+          "owner": "derived",
+          "sha256": "967aca9d0bbd2504ec604f9a910c253cfca75c7bd41e45b1770996d32e12b30f"
+        },
+        {
+          "path": "src/core/skills/autonomous-run/skill.json",
+          "owner": "local-core",
+          "sha256": "e34ceb3600980d106d2e4134cfe47605f28a181701d7968a2274b19ccdcf6dc0"
+        }
+      ],
+      "transformation": "Cursor's unbounded loop command, implicit watcher behavior, and never-stop language were replaced by a fixed predicate, explicit iteration or time budget, capability-gated host wake, anchored cold-start checkpoint, runtime-issued wake identifier, pre-measurement terminal-state validation, non-overlapping recurrence, bounded wake count or deadline, verified disarm, durable pause fallback, per-iteration evidence, strict advancement or discard, and named terminal stop conditions. Continuous ready work and future external waits are separate branches so missing wake support cannot turn into busy polling, while a queued stale run cannot re-measure a completed provider."
+    },
+    {
+      "id": "how-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/SKILL.md",
+          "sha256": "06b714dbd830bc829bfb89e33a1c39daf6d72ea412e488ea9d65f5f33b885a0c"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/references/explainer-prompt.md",
+          "sha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/how/references/explorer-prompt.md",
+          "sha256": "3a6965276d23be7d8da6c305bfd5d7bf29d2aef09e5dae4119463ac72022a02d"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/how/SKILL.md",
+          "owner": "derived",
+          "sha256": "9321598a420351b313dc5cb22dac1b046f8de903a2a15bb0db73455490255fee"
+        },
+        {
+          "path": "src/core/skills/how/skill.json",
+          "owner": "local-core",
+          "sha256": "f0664b85b96b6034fe9a0c4b0f6892a02f1f7b295a978c987b7fbc09a8ce370d"
+        },
+        {
+          "path": "src/core/skills/how/references/explainer.md",
+          "owner": "derived",
+          "sha256": "346491afe3acc14b308b06c0b9cd2db2b51a70bb3d23214bb27c90fc3a21c539"
+        },
+        {
+          "path": "src/core/skills/how/references/explorer.md",
+          "owner": "derived",
+          "sha256": "f747870d65889b1417465501fde94520b5eb08a850a8ed71d045f5be515b504b"
+        },
+        {
+          "path": "src/core/roles/explorer/instructions.md",
+          "owner": "local-core",
+          "sha256": "800567a8dfd86f3742f8342675180dc633908abf0ab71ceb02ebfb8e95e6152e"
+        },
+        {
+          "path": "src/core/roles/explorer/role.json",
+          "owner": "local-core",
+          "sha256": "e83b316c1e9be11905eb42741b096d82d58bac8d6937e8f331f434f49d188c86"
+        },
+        {
+          "path": "src/core/roles/explainer/instructions.md",
+          "owner": "local-core",
+          "sha256": "13c93cde5416f93fff2c78fd14fa10c5a28094e7d4a06d355f591d0963ab3a28"
+        },
+        {
+          "path": "src/core/roles/explainer/role.json",
+          "owner": "local-core",
+          "sha256": "cab4e3a587d7a438eb9872f8c646d15e41849e3b7eaaafeebf8c88b4665f4104"
+        }
+      ],
+      "transformation": "Fixed models, source-host task syntax, and an unverified handoff were replaced by runtime-resolved read-only explorer and explainer roles, frozen attributable findings, explicit concurrency and delegation fallbacks, evidence qualification, and independent root verification."
+    },
+    {
+      "id": "interrogate-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/SKILL.md",
+          "sha256": "2867910309e81411123ae4edca68ffca5795e66521d3f3bc0876f6213b542fb9"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/code-quality-review.md",
+          "sha256": "623d3d8122d075c303b562783b471a732992e84166b318f85ab6d6c118b13304"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/lead-judgment.md",
+          "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/reviewer-prompt.md",
+          "sha256": "a397cc61102add709803d917fb23d726920525bf23e7c06dc4ed0b5cbeb00e54"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/interrogate/references/rubric.md",
+          "sha256": "59e9b7cc4556e735e1b859a7dd1f7637b013a2426a84825ac1c51979942c158a"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/interrogate/SKILL.md",
+          "owner": "derived",
+          "sha256": "474464561dd52a4a3c10bdbf3e66e5a7e7dae12ce18384011fa4f3f8519c302d"
+        },
+        {
+          "path": "src/core/skills/interrogate/skill.json",
+          "owner": "local-core",
+          "sha256": "e62fccc371c97630287d7a15d4c1391ffce8f3263f26c950b4d6473cec4f855e"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/code-quality-review.md",
+          "owner": "derived",
+          "sha256": "24fdc9cba3aec0f169471aa7a41af11369b6911d42219453c4b3393e2783d6bb"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/lead-judgment.md",
+          "owner": "derived",
+          "sha256": "2eb7266b8aa77a74784fb2dca568a3227151b6d6c3c33a5bd081329436ff65dd"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
+          "owner": "derived",
+          "sha256": "4589d329256f4bdfaa76646486366fceddbfa780c440d07c1cf96aec56f825c3"
+        },
+        {
+          "path": "src/core/skills/interrogate/references/rubric.md",
+          "owner": "derived",
+          "sha256": "948913fd38c9f27af5a68bd7be01bc579da8a38abd1f56c8cbb75a84f2a4b971"
+        },
+        {
+          "path": "src/core/roles/reviewer/role.json",
+          "owner": "local-core",
+          "sha256": "64bad4ecd334843113c984602793cc2af1c70bb0078bca6a5203f07e9e717ec4"
+        },
+        {
+          "path": "src/core/roles/reviewer/instructions.md",
+          "owner": "local-core",
+          "sha256": "4f9d1fa3a5edd080631a33fe047b85324a9fe5a8bd66f21c80956097ffac8139"
+        },
+        {
+          "path": "src/core/roles/synthesizer/role.json",
+          "owner": "local-core",
+          "sha256": "194fb4c00cc7294ac941ff41c134d5bd0d38277ba048965646166ec802d9628b"
+        },
+        {
+          "path": "src/core/roles/synthesizer/instructions.md",
+          "owner": "local-core",
+          "sha256": "6594bc8923081c8ad534a1d49b00dd7d088cfb693678acd6f068d10711ddb5fd"
+        }
+      ],
+      "transformation": "Fixed model lists, source-host task syntax, private configuration paths, and direct aggregation were replaced by runtime-resolved reviewer roles, fail-closed root-verified model attribution, explicit diversity disclosure, identical frozen packets, a new synthesis session, immutable result boundaries, and independent root judgment."
+    },
+    {
+      "id": "bug-fix-port",
+      "sourceId": "cursor-pstack",
+      "sourceRevision": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack/6ed0f7a9504f577d7529064103cecce9be7dfc5e/pstack/skills/poteto-mode/playbooks/bug-fix.md",
+          "sha256": "e2ca6e217c8414409d3b51c64bb2743afa2256d98f643e104f8c4b52a1951883"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/bug-fix/SKILL.md",
+          "owner": "derived",
+          "sha256": "26db3d1ce4a0e00a00fa7f0147f5859b2e34a3b57fe9d201fb097a8d02901e5f"
+        },
+        {
+          "path": "src/core/skills/bug-fix/skill.json",
+          "owner": "local-core",
+          "sha256": "a8575d6f13d92d50adfd28780e1b2c54353d0e52ad1f9c62eb4bcc6e780d8b6d"
+        },
+        {
+          "path": "src/core/roles/implementer/role.json",
+          "owner": "local-core",
+          "sha256": "339ea3ac18115d99c5f9193bdf3b416cdf622096899e732eb561fb5cec1af2bb"
+        },
+        {
+          "path": "src/core/roles/implementer/instructions.md",
+          "owner": "local-core",
+          "sha256": "e2313054099f07b2afd8003b140156596675522de77c8ca2215dceba1d26fc49"
+        }
+      ],
+      "transformation": "The mandatory parallel fan-out, concrete model, host loop command, forced history shape, and unconditional change-request step were replaced by a bounded root-owned workflow with optional single-worker delegation, capability fallbacks, same-surface verification, and user-governed external mutations."
+    },
+    {
+      "id": "show-me-your-work-port",
+      "sourceId": "cursor-pstack-september-28",
+      "sourceRevision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/SKILL.md",
+          "sha256": "bcff5f7f9fd23f92c12b251f9cd6b947e9485e1055cfacb6fdd9cae0789d7550"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/references/decision-log-template.tsv",
+          "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/show-me-your-work/scripts/log.sh",
+          "sha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/show-me-your-work/SKILL.md",
+          "owner": "derived",
+          "sha256": "c524d97a9d2a63a1930d4fda0b71796ed7ef2b9df07b5eafbcdaefc4dc029180"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/skill.json",
+          "owner": "local-core",
+          "sha256": "264669da2e8efb2cc86c98122002cdfbca8310ad70dd2ed97b0b3275a0689fe6"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/references/decision-log-template.tsv",
+          "owner": "derived",
+          "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+        },
+        {
+          "path": "src/core/skills/show-me-your-work/scripts/log.sh",
+          "owner": "derived",
+          "sha256": "cbe24ce55b218d6677033e30b2bb39bb286eb1d6d5f1ea48f3c4c54841f04210"
+        },
+        {
+          "path": "src/core/roles/trail-reviewer/role.json",
+          "owner": "local-core",
+          "sha256": "3233d7989b0981675aa6244217b0e8f8fb623d47ac152d17ad08dfc4cd5a0038"
+        },
+        {
+          "path": "src/core/roles/trail-reviewer/instructions.md",
+          "owner": "local-core",
+          "sha256": "79d26d76d45396bf959f0f9d755dadac85d9ee267eaa2e00666e3ab52dc0c57d"
+        }
+      ],
+      "transformation": "Runtime-specific transcript paths and mandatory model-family claims were replaced by capability-based evidence access, explicit fallbacks, append-only correction semantics, and independently verifiable model identity. September 28 reconciliation retains explicit host-independent authority and adds attributable shared-log run boundaries and overlap-safe correction auditing."
+    },
+    {
+      "id": "shipping-port",
+      "sourceId": "cursor-pstack-shipping",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-shipping/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/shipping.md",
+          "sha256": "c301902136e0a9a0a55403c35374f6f5738e501aee66c27458dc197b87557550"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/shipping/SKILL.md",
+          "owner": "derived",
+          "sha256": "4241d13c81d14dc134335665c62bd59cd131952f3ac32d46e7eb5d0090aaae13"
+        },
+        {
+          "path": "src/core/skills/shipping/skill.json",
+          "owner": "local-core",
+          "sha256": "aa8edfa253ac0a4afa567784bc70706a5acabc47b32cf1d336cc6f23532564e3"
+        }
+      ],
+      "transformation": "Provider-specific CLIs, mandatory cloud reviewers, control-driver dependencies, queue polling, and implicit retargeting were replaced by provider capabilities, distinct read-only reviewer sessions, revision and stable-patch binding, a contiguous bottom-up frontier, one-at-a-time root landing, authoritative refresh after each merge, and explicit stop fallbacks when independent review or merge capability is unavailable."
+    },
+    {
+      "id": "orchestrate-port",
+      "sourceId": "cursor-pstack-orchestrate",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-orchestrate/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/orchestrate.md",
+          "sha256": "d42b4375f1bd4ce23da0b575a198571a2117df7eea10c3c9fc6d92ae1053f7be"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/orchestrate/SKILL.md",
+          "owner": "derived",
+          "sha256": "9c6b1e67a673a77dcd5152e3b6a019c5d7119ee2ea109f0f7e22249542b0316c"
+        },
+        {
+          "path": "src/core/skills/orchestrate/skill.json",
+          "owner": "local-core",
+          "sha256": "4cd496bc39420ca41ad4cb47663ebe4e7168d80a0384e6ae4eda9ac2ac332d22"
+        }
+      ],
+      "transformation": "Source-host cloud placement, fixed nesting depth, provider-specific stack commands, one store path, native task syntax, and unbounded fleet language were replaced by capability-gated delegation, a single-writer durable program store, generation-bound briefs and results, a mandatory end-to-end pilot, bounded rolling work, drain-time state transitions, revision-bound verification, continuous safe-frontier integration, bounded retry and stale-result reconciliation, and explicit stop fallbacks when delegation, persistence, isolation, or provider mutation is unavailable."
+    },
+    {
+      "id": "autopilot-stack-port",
+      "sourceId": "cursor-pstack-autopilot-stack",
+      "sourceRevision": "640ea3abfbdef74aad432b58d8586e4bf645f42d",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-autopilot-stack/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+          "sha256": "60e0d997f7b369004a02089c71b9091d3f8e9bc0b4a3c1142598380faa7722fd"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autopilot-stack/SKILL.md",
+          "owner": "derived",
+          "sha256": "7cfbd67d2ac7d39b730ff4fbd0aad7e597fb06fddb9b8bed02522816a7d3c5ce"
+        },
+        {
+          "path": "src/core/skills/autopilot-stack/skill.json",
+          "owner": "local-core",
+          "sha256": "3bfb542802cb66411ed4bf66022d1dde94ba82988f94e11421bae289f60dbcc3"
+        }
+      ],
+      "transformation": "Cursor-cloud owners, provider-specific commands, fixed loop mechanics, mandatory external plugins, and implicit forge availability were replaced by capability-gated attributable owners, a bounded durable audit and wake contract, revision-bound independent reviewer lanes, one root topology writer, stable-patch preservation with rewritten-head refresh, lease-protected provider mutation, explicit no-landing authority, and fail-closed fallbacks."
+    },
+    {
+      "id": "autopilot-full-port",
+      "sourceId": "cursor-pstack-september-28",
+      "sourceRevision": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+          "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/autopilot-full/SKILL.md",
+          "owner": "derived",
+          "sha256": "0e0ca19aee83ea449b613d75544ae0b2b3eefcf797d80dc829df2a7bf98132ce"
+        },
+        {
+          "path": "src/core/skills/autopilot-full/skill.json",
+          "owner": "local-core",
+          "sha256": "2cd9a436e3ad3212f9733c6ae7ee8d0756f90f01fcc0d7b1e391421f53ffb792"
+        }
+      ],
+      "transformation": "Cursor-only cloud agents, provider CLIs, mandatory third-party review and control plugins, fixed terminal loops, and implicit long-running forge access were replaced by provider capabilities, attributable one-owner-per-change lifecycle authority, three revision-bound independent verdict lanes, single-use root countersigns, owner-executed landing, operator-held queue gates, bounded durable audits and wakes, stable-patch rebase rules, and fail-closed fallbacks. September 28 reconciliation retains explicit host-independent authority and adds owner-only rewritten-head publication bound to an explicit expected remote lease; shared-branch force pushes remain forbidden."
+    },
+    {
+      "id": "setup-benny-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/setup-benny/SKILL.md",
+          "sha256": "5a3cbe63360c9f6373b6cb6c79a1eaf7e0eba181bfaa1577e2e6431af3407282"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/configuration.example.yaml",
+          "sha256": "13e24b4ce9b9a0913916e85fe3b080b88d45f8e55dccfe8ae38e0751a997b6f5"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/reproduce-automation-prompt.md",
+          "sha256": "71ec574f1844e379394ae4ef14c48d7df10afbaa319d395c788d7f856f0e6899"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/templates/triage-automation-prompt.md",
+          "sha256": "e0bba594547834f013ec805915610eb597e7929efe3ffbe85ae00339ee16d474"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/setup-benny/SKILL.md",
+          "owner": "derived",
+          "sha256": "157cdadc92fed99d20e7703ab6d89a5d2a702a2915284a5058ef2ba4deb3255f"
+        },
+        {
+          "path": "src/core/skills/setup-benny/skill.json",
+          "owner": "local-core",
+          "sha256": "28a50e0d6769b39cfc49cb668cc3494e87f41e0c498ba08a6fe63e2d034f0857"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/configuration.example.yaml",
+          "owner": "derived",
+          "sha256": "40ea1a77d8d154b705dd9a2a90d903fd540f45d3d5c5521e4299b7a15b6f3d8a"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/reproduce-automation-prompt.md",
+          "owner": "derived",
+          "sha256": "199c0a4e9dd2e1c234941af2df8403eefc2990038e0fd6a3a7af99dae12b7e54"
+        },
+        {
+          "path": "src/core/skills/setup-benny/references/triage-automation-prompt.md",
+          "owner": "derived",
+          "sha256": "43ee9db9fab0acdd63752d179ac1956bde0db6e8cf6ea91e0c7b20c76d4640ae"
+        }
+      ],
+      "transformation": "Cursor automation paths, runtime links, concrete model slugs, and immediate enablement were replaced by a host-neutral configuration contract, runtime-derived role inventory, reviewed native automation prompts, explicit capability checks, dormant-by-default installation, and fail-closed activation."
+    },
+    {
+      "id": "triage-issue-reports-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/triage-issue-reports/SKILL.md",
+          "sha256": "216a758b8711e64d19a55e6032c496527daac6364d010611040f3c04ef1a448f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/triage-issue-reports/references/routing.example.md",
+          "sha256": "e5e53013692568cf69da8e8b302fff929fe2fbc9aec1a4651fd7997e2c7a4025"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/triage-issue-reports/SKILL.md",
+          "owner": "derived",
+          "sha256": "66264c5302ee2e26b1f4639dd8118e3cd666bf772efea1655ff3a13afe953071"
+        },
+        {
+          "path": "src/core/skills/triage-issue-reports/skill.json",
+          "owner": "local-core",
+          "sha256": "db4687cd256ffe6b9f41959edbdb2e0c7f4f510b863943591ded7639d20c55e8"
+        },
+        {
+          "path": "src/core/skills/triage-issue-reports/references/routing.example.md",
+          "owner": "derived",
+          "sha256": "c7192dcd69ed83c6cf58b60beb46a2b9619d1409cbb3bf629b4bd5880c8588c6"
+        }
+      ],
+      "transformation": "Slack- and tracker-specific operations were replaced by communication-thread and issue-lifecycle capabilities, frozen source coordinates, exact trusted markers, cause-aware routing, deduplication, and a compensating rollback when the required thread-only verdict cannot be written."
+    },
+    {
+      "id": "reproduce-and-fix-issues-port",
+      "sourceId": "cursor-pstack-benny",
+      "sourceRevision": "53e579f1481697931fc44f5445171397cfa2b24b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/SKILL.md",
+          "sha256": "1363cc07343fe86aab42853b1bd4563288cbcbdf12f1c265b3b3b1afa25c09cb"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/control-adapter.md",
+          "sha256": "58b0615d2fca895f9a20df83266e280042b0d585b5f2fd324e2094a682fd846b"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+          "sha256": "1e5c7c8522daec3e43fcc2e73ceb97289ded65b552949ce65a11cc8eb3d2b6ee"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-benny/53e579f1481697931fc44f5445171397cfa2b24b/pstack/automations/benny/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+          "sha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/SKILL.md",
+          "owner": "derived",
+          "sha256": "aa0b5e3e0bf1c3cb0cade613dbe5a8509237d3de6efc44f1abc39df44ac6c04f"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/skill.json",
+          "owner": "local-core",
+          "sha256": "4f23c8d0f171b5f102d9383f4b21a5a4da38859a161df7ab6cf7b2b11b363911"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/control-adapter.md",
+          "owner": "derived",
+          "sha256": "9215dd178e9c3dbf4f9f2410a57426c043854270ab71610b35bf7687b3fc6308"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+          "owner": "derived",
+          "sha256": "6ea18488deeca59a46b3d0f7c529cb3064ed83384aaca91b18f6aaa3acbe63af"
+        },
+        {
+          "path": "src/core/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+          "owner": "derived",
+          "sha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+        }
+      ],
+      "transformation": "Cursor app-control and provider bindings were replaced by a configured control-adapter contract, trusted triage-marker gate, repeated before-and-after UI proof, independent media review, bounded local change authority, and draft-only pull-request publication with no merge or deployment authority."
+    },
+    {
+      "id": "discovery-design-port",
+      "sourceId": "cursor-pstack-discovery-design",
+      "sourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/LICENSE",
+          "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/architect/SKILL.md",
+          "sha256": "897a59beaa3cab107d98c256206e062cc4a5e9421a45b9d462fbded19291fea5"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/architect/references/design-red-flags.md",
+          "sha256": "905066f9bbac81c573c2b325be47751d2c0f9325e0a0772bd4384e82dafe9336"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/architect/references/rationale-template.md",
+          "sha256": "0cedfccdc7b47fc881febd5a8293eecbc542c20f8df825639904a8102d2eb5d3"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/architect/references/runner-prompt.md",
+          "sha256": "983bf2820cc14ed8ecab6e448e1033e5cfe6031967d0a9287b48c7fa9c33d925"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/arena/SKILL.md",
+          "sha256": "8d431f7b1aa19daf6300366fc876c4d1aadac06417ec5502407345ffaf4e90d9"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/swarm/SKILL.md",
+          "sha256": "d578d877c3b8b9de7163f52579c4683337a940acc0fbe4496a498f5d3b27df30"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/teach/SKILL.md",
+          "sha256": "bd286e5a6290673be2cd28aef7af2ec7f1fb138e6bce156ea657368c7e7fc8a4"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/SKILL.md",
+          "sha256": "222b93789754ba6ee901835137184acdca667f7e47c523bcc85aca86675fb249"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/epistemics.md",
+          "sha256": "fcc0f559c072832c869a5ada72434b4849320a637ae63c09e8ee14f7ad787059"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/investigator-prompt.md",
+          "sha256": "6892956a7ab0b5ee6c4babaf4f793703abe89b350ea7cb9463b4a56eea1c8266"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/source-playbook.md",
+          "sha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/code-archaeology.md",
+          "sha256": "8c14aa382f0de40829b2668d43e3f54814480bb93a486c9282ada4003f6b9dbd"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/databricks.md",
+          "sha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/datadog.md",
+          "sha256": "ebe9c07bac28e47757ee7f16fb93b0c01d427a08c501957d047f395a2f37b7e7"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/incident-postmortem.md",
+          "sha256": "a899470f05f86029630a13a2696491cc708ca7b56a6e822a69ff6e954d6ff8cf"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/linear.md",
+          "sha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/notion.md",
+          "sha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/sentry.md",
+          "sha256": "6f292bc4fb1548e956f95e1900b9481abf5134254419f1cd9edec95428c82d73"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/sources/slack.md",
+          "sha256": "58fee61d024b3700b407e7acbed367944720ff05adfddb6954d36c88368f3ba7"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-discovery-design/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/why/references/synthesizer-prompt.md",
+          "sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/why/SKILL.md",
+          "sha256": "1bdbccc3ad9ec1f03c8476b25d2f808791156b234575e621c15198835ebfe653",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/why/references/evidence.md",
+          "sha256": "e059225a6207f853f46460dfa8e0828d93696d546d1d9888012a4375d41c608d",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/why/references/sources.md",
+          "sha256": "30deffe0396353e7801c206cd28b3e1c567d067ec2ba6b656d57bfd562a778c8",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/why/skill.json",
+          "sha256": "a7a81be77b9bb097f4e42817ed65554e005d7e35c44984e9a5cb75ef3bd56e5b",
+          "owner": "local-core"
+        },
+        {
+          "path": "src/core/skills/architect/SKILL.md",
+          "sha256": "33218c4b6777aa443ed802b0f6accd5fce330af741586b10ab4a78367477fb18",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/architect/references/design-contract.md",
+          "sha256": "196ea5791ab1f2d9211101e59eebbb122890f0c28c8962c9d0206aa86a71a167",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/architect/skill.json",
+          "sha256": "e3be6c89436b2565648a95529e8aec5d849d09cb72f825bec5813593d71920f9",
+          "owner": "local-core"
+        },
+        {
+          "path": "src/core/skills/arena/SKILL.md",
+          "sha256": "e9c32a6016d42dc88763a2bee7ce3bf0e5b2307aac2940e57e9b2a3d4ca3f255",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/arena/skill.json",
+          "sha256": "06fd41d6c6b7a1795507f4980c09a4c6487bbfedca5d340cd8ce855d11550763",
+          "owner": "local-core"
+        },
+        {
+          "path": "src/core/skills/swarm/SKILL.md",
+          "sha256": "9e92a0dcacd0444bdaaca6f950ae266b5d53b767980e1d650b434a8ca5f06156",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/swarm/skill.json",
+          "sha256": "e3fbf9e31e108fb7011261b29d779c9ab9d778e6ab3dc737a838290ccb892768",
+          "owner": "local-core"
+        },
+        {
+          "path": "src/core/skills/teach/SKILL.md",
+          "sha256": "2fddd35faf451ed9db5fa4cf7dbd9db15f47ce916962a8afca8895bb2df8392a",
+          "owner": "derived"
+        },
+        {
+          "path": "src/core/skills/teach/skill.json",
+          "sha256": "16e7a02ffcce461b13032fd823b579a96fe6f73ce925124976273e32866e5c42",
+          "owner": "local-core"
+        }
+      ],
+      "transformation": "Five explicit-only upstream workflows retain rationale confidence tiers and seven-source coverage, caller-first architecture with distinct alternatives and implementation/redesign, arena cross-judgment/base/graft/final verification, bounded swarm selection and complete drainage, and teach composition of how/why. Arena cross-judgment now explicitly requires complete frozen candidate artifacts rather than root-written summaries after a Claude Code probe exposed that gap. Fixed model/provider/cloud bindings become observed runtime configuration; unsupported delegation, independence, isolation, evidence access, and verification remain disclosed gaps. Design-only and explanation requests never authorize edits or publication. Upstream mandatory image generation is optional when unavailable or unnecessary. Full source references are frozen; portable reference contracts condense their relevant semantics. The existing router admits these five explicit intent routes without promoting their live-validation status."
+    },
+    {
+      "id": "remaining-main-and-playbooks-port",
+      "sourceId": "cursor-pstack-completion",
+      "sourceRevision": "86ecc82055e4d3cb567e72c56f390800a4978c9b",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/LICENSE",
+          "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/automate-me/SKILL.md",
+          "sha256": "1510979b0b71b54284427a19c09918f8b1fdfc168f9b7f9e30098793a5ec88ef"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/blast-radius/SKILL.md",
+          "sha256": "20cb2945f5fe62055166f745107274af5f19428ca033e53a9b8bc69650d3ded1"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/bro/SKILL.md",
+          "sha256": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/create-verification-skill/SKILL.md",
+          "sha256": "644f2551403c1bca01a2855b34611b6e7be0ce0dc5b204514c376c0f6a6e6ac4"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/create-verification-skill/references/feature-map-example/README.md",
+          "sha256": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/create-verification-skill/references/feature-map-example/create-note.md",
+          "sha256": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/create-verification-skill/references/feature-map-example/search.md",
+          "sha256": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/figure-it-out/SKILL.md",
+          "sha256": "e041c64a39f1084a20e60ee99762c4dbd3ec8be56ed33fd68ea867b8bd8bd3e4"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/maintain-verification-skill/SKILL.md",
+          "sha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/make-bot-ui/SKILL.md",
+          "sha256": "3624c8ef16cf2e48deb2a4049e72c6962a9431c8d6c6af90e7bd7ea0375224ec"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/no-comments/SKILL.md",
+          "sha256": "5c5b0882297d704c3a9720c52b7a793c68b013eaf717989f0945624efdfe2b05"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/authoring-a-skill.md",
+          "sha256": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/eval.md",
+          "sha256": "b862bfa2fae2399abf047a8e80d3e3dddb64003af96fb1cebb625216131e36bb"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/hillclimb.md",
+          "sha256": "4637fb1537288f6c26c69425045f01b725bb6fa8a7b444bf98b6eaa9a1e9fb5f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+          "sha256": "b823e05b64bbef84ae5169717c5fab1d9ab5079625996271e3aa7abcdce7b8ad"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/perf-issue.md",
+          "sha256": "dd81d608d6ab19b3d9c900004fd71e9b2e46b3f1b3c2c88f80ef256268717524"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/runtime-forensics.md",
+          "sha256": "594f02c40c243a346e1f57b688ecf2ed5e882f21b3d24ed2204d1ac6f1c24a8a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/trace-forensics.md",
+          "sha256": "137ce3984fb96e45971fdff4d3c79fa4ccc647c5b30ae4945783b9fb23f8cec7"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/visual-parity.md",
+          "sha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/poteto-mode/playbooks/worktree-cleanup.md",
+          "sha256": "fc464dc4121926df1704f483c5feca83717c0a40b4651d3e11bd3aedd89441b6"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/recall/SKILL.md",
+          "sha256": "d265b0e5b6dc5b89c0407f3387d24462c988e1990a37d5359735137908128c5a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/reflect/SKILL.md",
+          "sha256": "6a4d4ccaace9ce88c3e268fcbedf3cfd40e527162a5e5aad6de8edbaf5e2b83f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/reflect/references/divergent-reviewer.md",
+          "sha256": "7da0334ce282e6d8d7349c0cff14ffbd10a91a756c0b5c3ccc97291f57b8bed6"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/reflect/references/judgment-reviewer.md",
+          "sha256": "917bb2ad21240a42b440aeb2a17766092e09f70d0982417b2f4caa6d74f27164"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/reflect/references/synthesizer.md",
+          "sha256": "2f76c847eb45b182dc6fbcbf7d96c8ee7e2986ecfd9e0d640fec44e3cc5a617c"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/reflect/references/tooling-reviewer.md",
+          "sha256": "8c74ebf7811801d634db7ab609b097d77ea00ab77bb4b258d69bd96e671cfa39"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/typescript-best-practices/SKILL.md",
+          "sha256": "28f9e61710e205f6f3c5476f333483cff0e988f6a5b639e2faad536344b40c5e"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-completion/86ecc82055e4d3cb567e72c56f390800a4978c9b/pstack/skills/typescript-best-practices/references/patterns.md",
+          "sha256": "62e9cd32d2fa066a35d0d1349aac22dce31a48ad7d5eaf142570770cfe707384"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/authoring-a-skill/SKILL.md",
+          "owner": "derived",
+          "sha256": "036002492856330f4068d4fa49dd4ef2432321311fa7e5521a0ce40647b77bbc"
+        },
+        {
+          "path": "src/core/skills/authoring-a-skill/skill.json",
+          "owner": "local-core",
+          "sha256": "28e54009fe91e5150e87f06e0b1a95719313d270f86de7f52617a098f788516f"
+        },
+        {
+          "path": "src/core/skills/automate-me/SKILL.md",
+          "owner": "derived",
+          "sha256": "87e7ea63ab1c27e63a5d61aa2f39c37cb643ce8a944ea40f20c1d41e131b2d44"
+        },
+        {
+          "path": "src/core/skills/automate-me/skill.json",
+          "owner": "local-core",
+          "sha256": "4d01efcbf28d2c1a662bcdce951663bf989da646ccc533945cda1e13ec87210a"
+        },
+        {
+          "path": "src/core/skills/blast-radius/SKILL.md",
+          "owner": "derived",
+          "sha256": "0cb19e06db8f05a432881b26d9a1bce5c98e2660f6bd4af1bdcc782c966d71b3"
+        },
+        {
+          "path": "src/core/skills/blast-radius/skill.json",
+          "owner": "local-core",
+          "sha256": "cb95cbfdfaed52d8c984ec339212e9ba1716a1dc565f1f989efd4642f4ae2f4c"
+        },
+        {
+          "path": "src/core/skills/bro/SKILL.md",
+          "owner": "derived",
+          "sha256": "e5ec7f4414da6e51ea9c165b0a969e47b6b1fb8ab9a94a3edb3017b39808a835"
+        },
+        {
+          "path": "src/core/skills/bro/skill.json",
+          "owner": "local-core",
+          "sha256": "7fe6bdbe1373fd4bd8e3c6f166ef505e85ef03d75bd15069d5fba32ed5e75203"
+        },
+        {
+          "path": "src/core/skills/create-verification-skill/SKILL.md",
+          "owner": "derived",
+          "sha256": "f2810d2d08b5980e1cbf04b2bac24cd66f2e8aae84d12054961008eb288cda23"
+        },
+        {
+          "path": "src/core/skills/create-verification-skill/skill.json",
+          "owner": "local-core",
+          "sha256": "be99dfd2ef79ec66f64b92c632174f0cd45d934ec819f2513336f8c4211c4536"
+        },
+        {
+          "path": "src/core/skills/eval/SKILL.md",
+          "owner": "derived",
+          "sha256": "0578bd73542a56d80781892614dc8ad35398777b062465927289c1420ab634b5"
+        },
+        {
+          "path": "src/core/skills/eval/skill.json",
+          "owner": "local-core",
+          "sha256": "375ebff45e8e9146543e5731b170eec8f2265ccc7a0c709b3837b0b54db2b015"
+        },
+        {
+          "path": "src/core/skills/figure-it-out/SKILL.md",
+          "owner": "derived",
+          "sha256": "91ff20665df9f1d1be8da2951be2afc09da39527edfeb6ae4858d4a4d6b2908b"
+        },
+        {
+          "path": "src/core/skills/figure-it-out/skill.json",
+          "owner": "local-core",
+          "sha256": "29d0c9241c996f131a1514b4d4d5a30f98b8d35d5e5808d709b19a719e308c70"
+        },
+        {
+          "path": "src/core/skills/hillclimb/SKILL.md",
+          "owner": "derived",
+          "sha256": "03a1dc987793f545745e081b02d01798cfe344a673dd05e779a19f71b159e3df"
+        },
+        {
+          "path": "src/core/skills/hillclimb/skill.json",
+          "owner": "local-core",
+          "sha256": "2754c13eebd1bbfa57f4c31b2389485dbfeb925381df5ca70440f12b6382eaa9"
+        },
+        {
+          "path": "src/core/skills/maintain-verification-skill/SKILL.md",
+          "owner": "derived",
+          "sha256": "5cf5f049159d7e87f9068ab1f05902db37db6cfc8ed93e238463d38ba91e1dc0"
+        },
+        {
+          "path": "src/core/skills/maintain-verification-skill/skill.json",
+          "owner": "local-core",
+          "sha256": "484426a9ebcc98c94e6f5d59303d601c044be5160452c479c00700a48bf43449"
+        },
+        {
+          "path": "src/core/skills/make-bot-ui/SKILL.md",
+          "owner": "derived",
+          "sha256": "9e1194d3515095b55a322c25c92c55626a1b11993ac5018309587eafce10910c"
+        },
+        {
+          "path": "src/core/skills/make-bot-ui/skill.json",
+          "owner": "local-core",
+          "sha256": "8d32dbf57c9ae31981e271521a1bf1b1df2829484703fe54678dbf7a525759f7"
+        },
+        {
+          "path": "src/core/skills/multi-phase-plan/SKILL.md",
+          "owner": "derived",
+          "sha256": "5842b3717e5a3fa07502a8557a23469ae64b620aa1aabdae4dceffcb83fd979c"
+        },
+        {
+          "path": "src/core/skills/multi-phase-plan/skill.json",
+          "owner": "local-core",
+          "sha256": "2e26bf7bfd99757cb3ff664ef328d2b3dbc364d5a9a43469b8b4a9fd8ef25fcb"
+        },
+        {
+          "path": "src/core/skills/no-comments/SKILL.md",
+          "owner": "derived",
+          "sha256": "2aa2ceaf6159db1083e7cfd7fb04ef31295486f893d88e553ec7cc436c13376f"
+        },
+        {
+          "path": "src/core/skills/no-comments/skill.json",
+          "owner": "local-core",
+          "sha256": "b55e55052ccaaa4f10066843b36dc3b65a96dc52006c70e75dd0265a1b1be873"
+        },
+        {
+          "path": "src/core/skills/perf-issue/SKILL.md",
+          "owner": "derived",
+          "sha256": "426e38116106ffbcb9790bd289af7cf12f1ddd31ebb11783aaa948f38359e20f"
+        },
+        {
+          "path": "src/core/skills/perf-issue/skill.json",
+          "owner": "local-core",
+          "sha256": "232687d4fc1dcba73e3ac4da17580b9f0698903ac1a1c03a91d5651248504a3f"
+        },
+        {
+          "path": "src/core/skills/recall/SKILL.md",
+          "owner": "derived",
+          "sha256": "8b762d4cabb44133c34263225ca27bc2efb3de260e199a2f58913728a6aace5a"
+        },
+        {
+          "path": "src/core/skills/recall/skill.json",
+          "owner": "local-core",
+          "sha256": "f6fb87bd6e06459d23bb4f1d38780a04a38fd2add5d512559882cf48d0c694dc"
+        },
+        {
+          "path": "src/core/skills/reflect/SKILL.md",
+          "owner": "derived",
+          "sha256": "69570f822ce09154970a16a6415087988cd4cbe54f0baa8905607ba00491713c"
+        },
+        {
+          "path": "src/core/skills/reflect/skill.json",
+          "owner": "local-core",
+          "sha256": "9d7b819ddd7e17528525ee1d1349d90a4db5fc3a9aa499fc42e009854f401dac"
+        },
+        {
+          "path": "src/core/skills/runtime-forensics/SKILL.md",
+          "owner": "derived",
+          "sha256": "4294e4d7214866055d011bfc7eb8a28f088caf98a89e9f8f84059fc3e39f3591"
+        },
+        {
+          "path": "src/core/skills/runtime-forensics/skill.json",
+          "owner": "local-core",
+          "sha256": "8283ed0e6f43ae761db4b55dfd4aca0c7b81e9b0d72fbd312c23baf7d2c73892"
+        },
+        {
+          "path": "src/core/skills/trace-forensics/SKILL.md",
+          "owner": "derived",
+          "sha256": "204530e89139a16082a8917e7709fb46662c9a92a2ce6117873505bcaecda2d0"
+        },
+        {
+          "path": "src/core/skills/trace-forensics/skill.json",
+          "owner": "local-core",
+          "sha256": "98174e88bf2dcd1c4c5727be346a64dba31f48194559ab0d38ab6eab8e8ac5fb"
+        },
+        {
+          "path": "src/core/skills/typescript-best-practices/SKILL.md",
+          "owner": "derived",
+          "sha256": "7a8b9a45f8daaefa0d73074366b2f8be167db453f47e70e3554a587a3f4ede85"
+        },
+        {
+          "path": "src/core/skills/typescript-best-practices/skill.json",
+          "owner": "local-core",
+          "sha256": "061c882ca85017d34a58cd4e408bf2261c8f8d510040a2ce62be2d428d2abdbb"
+        },
+        {
+          "path": "src/core/skills/visual-parity/SKILL.md",
+          "owner": "derived",
+          "sha256": "b10fa3fab3a503522d466703af81d7c0624c3a57a3b743a0c61320c1b457fac4"
+        },
+        {
+          "path": "src/core/skills/visual-parity/skill.json",
+          "owner": "local-core",
+          "sha256": "fd2f344b6631ca6236395a62ab691bb0d509d6d5db6a1bf962d87e142790c846"
+        },
+        {
+          "path": "src/core/skills/worktree-cleanup/SKILL.md",
+          "owner": "derived",
+          "sha256": "d8b7f9d35ed45b5553c91f53cd6cf1c6b673c6845b2d944cbc7b5647dd7b135d"
+        },
+        {
+          "path": "src/core/skills/worktree-cleanup/skill.json",
+          "owner": "local-core",
+          "sha256": "cdee1577017e3190fcc43333ebe6583cb7e85198d6d8d710119c3c2b037b2b0a"
+        }
+      ],
+      "transformation": "Eleven upstream main entries and nine nested playbooks become twenty directly invocable portable Skills. Preserve safety proofs, auditable work, verification drivers, scoped history, TypeScript discipline, blind evals, measured performance, trace diagnosis, visual parity, and deletion gates. Replace source-host model IDs, transcript paths, webhook credential cards, mandatory cloud lanes, forced PRs and broad destructive cleanup with runtime capability checks and bounded fallbacks. The webhook capability remains unknown until authenticated runtime verification. All source documents and linked references are frozen with hashes; the portable documents are semantic adaptations."
+    }
+  ]
+}

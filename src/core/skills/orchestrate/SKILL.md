@@ -46,6 +46,18 @@ Every state artifact has one writer. Owners publish facts; the coordinator
 aggregates them at drain time. Never infer liveness from transcript age or treat
 a child summary as current provider state.
 
+For each new unit or repair round, apply
+[the handoff contract](../poteto-mode/references/subagent-handoff.md). Preserve
+roles in the store and start fresh agents with consolidated scope. The bound
+standby-to-execution continuation above retains its required native identity;
+it is not permission to reuse the same session for unrelated work.
+
+Record an audit cadence, defaulting to one hour unless the program specifies
+another interval. Arm only an authorized verified host wake, bounded by the
+program's deadline and wake budget. Log each tick and report newly tracked
+changes without repeating unchanged status. If no wake is available, retain
+the durable stop behavior instead of inventing a background monitor.
+
 ## Pilot before scale
 
 Send one representative unit through the full path: complete brief, isolated

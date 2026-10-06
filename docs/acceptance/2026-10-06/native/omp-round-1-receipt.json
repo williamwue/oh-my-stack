@@ -1,0 +1,44 @@
+{
+  "runtime": "omp 18.3.2",
+  "candidate": "0.7.0",
+  "gate": {
+    "target": "omp",
+    "version": "0.7.0",
+    "profile": "oms-release-779432bc36668fcb",
+    "preflight": "verified",
+    "isolatedInstall": "verified",
+    "doctor": "verified",
+    "skillLoad": "verified",
+    "cleanup": "verified",
+    "userProfile": "not targeted"
+  },
+  "skills": [
+    {
+      "name": "correct",
+      "loaded": true,
+      "readSha256": "7319d02580d0b5985040ecc11dcd1f8c6c03dece17a23a52edeb4f63375bfbf1"
+    },
+    {
+      "name": "poteto-help",
+      "loaded": true,
+      "readSha256": "f664d3cce3cadfe9c311920da8eb94dbc0c9dd66aba3e63192aebb60c41fc51d"
+    },
+    {
+      "name": "benchmark-checklist",
+      "loaded": true,
+      "readSha256": "6c4afe4592b41044d579206c718ff1030d3de9a80f0280b3fc250947f7a73e3f"
+    },
+    {
+      "name": "principle-explain-the-number",
+      "loaded": true,
+      "readSha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c"
+    }
+  ],
+  "modelBehavior": {
+    "exitCode": 143,
+    "stdout": "",
+    "stderr": "Reading prompt from piped stdin (waiting for EOF; ctrl+c to abort)…\nStill starting after 10s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 20s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 30s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 40s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 50s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\n",
+    "message": "Command failed: omp --profile oms-release-779432bc36668fcb --cwd /var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-omp-gate-fAl7CT --model openai-codex/gpt-6-sol --thinking high --tools read --no-lsp --no-extensions --no-rules --no-session --no-title --max-time 45s -p Help only. Read skill://poteto-help and recommend the workflow for repeated repository installer mistakes. Do not execute, install, delegate, probe models, or write files.\nReading prompt from piped stdin (waiting for EOF; ctrl+c to abort)…\nStill starting after 10s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 20s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 30s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 40s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\nStill starting after 50s — phase: readPipedInput\n  logs: <user-home>/.omp/profiles/oms-release-779432bc36668fcb/logs/omp.2026-10-06.53642.log · re-run with PI_DEBUG_STARTUP=1 for streaming phase markers\n"
+  },
+  "profileAuth": "Isolated profile; no credentials copied or login performed"
+}

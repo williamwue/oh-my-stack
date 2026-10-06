@@ -458,7 +458,8 @@ function renderSkillDocument(skill, adapter) {
   if (skill.metadata.invocation === "explicit" && adapter.id !== "codex") {
     frontmatter.push("disable-model-invocation: true");
   }
-  const codexDelegation = adapter.id === "codex" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name))
+  const delegates = skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name);
+  const codexDelegation = adapter.id === "codex" && delegates
     ? [
       "## Codex delegation binding",
       "",
@@ -505,8 +506,12 @@ function renderSkillDocument(skill, adapter) {
       "When the selected provider is explicitly `github.com`, read",
       "`../../scripts/github-workflow.mjs` and",
       "`../../docs/github-workflow.md` before using this bounded single-PR adapter.",
-      "Use its `executeGitHubWorkflow(request)` library entry for authorized",
-      "creation or merge. Its CLI exposes only `inspect` and `recover`; recovery",
+      "For authorized operations supported by a host-owned PR tool, use that",
+      "tool first and preserve the host's task association requirements.",
+      "Use `executeGitHubWorkflow(request)` only as the bounded fallback for",
+      "creation or merge that the host-owned tool does not support. Tool choice",
+      "does not expand the workflow's authorization or target gates.",
+      "Its CLI exposes only `inspect` and `recover`; recovery",
       "can append local reconciliation evidence. The request must name this",
       "workflow, the exact target and account, and any required journal and",
       "authority records. Caller records assert scope; they do not authenticate",
@@ -599,7 +604,7 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const ompDelegation = adapter.id === "omp" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name) || skill.metadata.name === "poteto-mode")
+  const ompDelegation = adapter.id === "omp" && (delegates || skill.metadata.name === "poteto-mode")
     ? [
       "## OMP model routing",
       "",
@@ -630,7 +635,36 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
+  const handoffBinding = delegates
+    ? [
+      "## Child session handoff",
+      "",
+      "Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).",
+      "New tasks, repair rounds, retries, and queue items use fresh child sessions",
+      "with the original brief, every later directive, prior findings and responses,",
+      "and unresolved objections. Reuse only for required costly live state, and",
+      "only when the host allows it. Stop and fence active writers before replacement.",
+      "A host-owned orchestrator's model catalog, workspace binding, child tools,",
+      "and review-round rules take precedence over the native binding above.",
+      "Keep its task handles and attribution receipts. Do not use a backing child",
+      "conversation as a new delegated review, or claim native-record verification",
+      "for a host-owned child. Report attribution evidence gaps explicitly.",
+      "",
+    ].join("\n")
+    : "";
+  const helpBinding = skill.metadata.name === "poteto-help"
+    ? [
+      "## Installed catalog",
+      "",
+      "Read [the generated Skill catalog](../../SKILL_CATALOG.json) for this package.",
+      "Use the host's actual Skill picker or supported invocation syntax. Do not",
+      "assume typing a Skill name as plain text selected its structured input.",
+      "For setup and installation, read this package's setup Skill and the verified",
+      "operations documentation for the current host before giving exact commands.",
+      "",
+    ].join("\n")
+    : "";
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "benchmark-checklist",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": [
+    "commands.run",
+    "workspace.inspect"
+  ],
+  "fallbacks": {}
+}

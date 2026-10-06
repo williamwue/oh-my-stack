@@ -11,11 +11,19 @@ reproduces the complaint, one metric and direction, and a stop condition with
 minimum attempts or independent confirmation. If no workload reproduces the
 problem, fix the measurement before changing code.
 
-Build a harness that distinguishes target and easier cases. Freeze its command,
+Build a harness that distinguishes target and easier cases. Vet it with
+[benchmark-checklist](../benchmark-checklist/SKILL.md) before freezing it. Make
+the command emit error counts and actual work counts as well as the metric.
+Freeze its command,
 inputs, sampling, and noise rule. Record baseline and passing correctness gates
 before edits. Use [show-me-your-work](../show-me-your-work/SKILL.md) for an
 append-only attempt log: hypothesis, change, baseline, result, noise, tests,
 verdict. Preserve each failed attempt's evidence.
+
+For a performance metric, order hypotheses using the strategies in
+[perf-issue](../perf-issue/SKILL.md), but retain this workflow's declared
+minimum attempts, independent confirmation, and stop condition. Reaching one
+attempt's target does not waive the frozen sustained-run contract.
 
 One attempt tests one mechanism. Give writers isolated ownership or use a
 single writer. Root reviews the actual diff, runs the frozen measurement and

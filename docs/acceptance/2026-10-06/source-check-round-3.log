@@ -1,0 +1,47 @@
+
+> oh-my-stack@0.7.0 check
+> npm run generate:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.7.0 generate:check
+> node tools/generate.mjs --check
+
+Verified 3 public targets with 78 of 90 source Skill.
+
+> oh-my-stack@0.7.0 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.7.0 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 7 output files.
+
+> oh-my-stack@0.7.0 validate
+> node tools/validate.mjs
+
+Validated 3 targets, 7 profiles, and 90 Skill.
+
+> oh-my-stack@0.7.0 check:books
+> node tools/books/validate-pstack-book.mjs
+
+{
+  "chapters": 48,
+  "ready": 48,
+  "warnings": []
+}
+
+> oh-my-stack@0.7.0 lint:markdown
+> markdownlint-cli2 "**/*.md"
+
+markdownlint-cli2 v0.23.3 (markdownlint v0.41.1)
+Finding: **/*.md !.tmp/** !node_modules/** !upstream/snapshots/** !upstream/books/**
+Linting: 746 files
+Summary: 6 issues in 4 files
+docs/acceptance/2026-10-06/review/reviewer-1.md:1 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "1. **warning** — `tools/genera..."]
+docs/acceptance/2026-10-06/review/reviewer-2.md:1 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "No findings in the frozen impl..."]
+docs/acceptance/2026-10-06/review/reviewer-3.md:1 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "Scope reviewed: `63cb1e0be7913..."]
+docs/acceptance/2026-10-06/review/synthesis.md:1 error MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "Synthesis applies to the 110-f..."]
+docs/acceptance/2026-10-06/review/synthesis.md:3 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Act on — three distinct findin..."]
+docs/acceptance/2026-10-06/review/synthesis.md:15 error MD036/no-emphasis-as-heading Emphasis used instead of a heading [Context: "Noted — evidence and acceptanc..."]

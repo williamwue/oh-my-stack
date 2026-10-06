@@ -1,0 +1,30 @@
+{
+  "receiptSha256": "9946c87eecf67fbd2fc70226673f128cdbed3dce60f4a999d0562602f280c239",
+  "cases": [
+    {
+      "id": "failed_requests",
+      "verdict": "inconclusive",
+      "reason": "Synthetic medians are 100 → 5 ms, with five samples per side and ranges 99–102 → 5–6 ms. The after receipt reports 1000 errors, zero completed items, and incorrect output; its shorter time measures failed requests. No independent limiter profile is recorded."
+    },
+    {
+      "id": "skipped_work",
+      "verdict": "inconclusive",
+      "reason": "Synthetic medians are 100 → 1 ms, with five samples per side and ranges 99–102 → 1–1 ms. The after timer covers constructing a generator that was never iterated, and workCompleted is zero. outputCorrect=true does not establish that the requested work happened. No independent limiter profile is recorded."
+    },
+    {
+      "id": "unawaited_work",
+      "verdict": "inconclusive",
+      "reason": "Synthetic medians are 100 → 2 ms, with five samples per side and ranges 99–102 → 2–2 ms. The after timer stops before awaiting the promises, and workCompleted is zero; the requested work is not measured through completion. No independent limiter profile is recorded."
+    },
+    {
+      "id": "untuned_side",
+      "verdict": "inconclusive",
+      "reason": "Synthetic medians are 100 → 50 ms, with five alternating samples per side and ranges 99–102 → 49–51 ms. Batch size changes from 100 to 1000, so the receipt compares different configurations without establishing equivalent production tuning. No independent limiter profile explains the difference."
+    },
+    {
+      "id": "overlapping_noise",
+      "verdict": "no measurable difference",
+      "reason": "Both synthetic medians are 100 ms across five alternating samples per side; ranges are 99–102 and 98–103 ms. The receipt reports matching configurations, zero errors, correct outputs, and all work awaited, but the samples show no timing gap beyond variation. No independent limiter profile is recorded, so this does not establish why performance is unchanged or that a change is useless."
+    }
+  ]
+}

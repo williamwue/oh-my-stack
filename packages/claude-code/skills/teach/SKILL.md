@@ -6,6 +6,19 @@ disable-model-invocation: true
 
 # Teach
 
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
 Help the person understand what something is, how it works, and why it has that
 shape. Do not change implementation or external state as part of teaching.
 

@@ -1,0 +1,5 @@
+No findings in the frozen repair scope. The three prior defects are resolved: optional `perf-issue` and `hillclimb` delegates receive the handoff contract on all three hosts; generated Codex PR instructions give supported host-owned tools precedence and retain the bounded adapter’s fallback gates; the directory count agrees with its 78 entries.
+
+All 20 scoped file hashes matched before and after review. Focused tests passed 6/6, and `generate:check` passed. External provenance and native three-host acceptance remain separate, unverified gates.
+
+ROLE_POLICY=independent-frozen-review

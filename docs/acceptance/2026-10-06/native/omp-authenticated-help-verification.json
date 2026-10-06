@@ -1,0 +1,49 @@
+{
+  "result": "pass",
+  "actionCount": 4,
+  "onlyReadActions": true,
+  "allReadsSucceeded": true,
+  "candidateInputs": [
+    {
+      "path": "packages/omp/skills/poteto-help/SKILL.md",
+      "readMatchesCompleteCandidate": true,
+      "sha256": "f664d3cce3cadfe9c311920da8eb94dbc0c9dd66aba3e63192aebb60c41fc51d"
+    },
+    {
+      "path": "packages/omp/skills/correct/SKILL.md",
+      "readMatchesCompleteCandidate": true,
+      "sha256": "7319d02580d0b5985040ecc11dcd1f8c6c03dece17a23a52edeb4f63375bfbf1"
+    }
+  ],
+  "observedRuntimeModels": [
+    {
+      "provider": "cursor",
+      "model": "claude-4.5-sonnet"
+    }
+  ],
+  "effort": "requested high; effective effort not independently attested",
+  "projectUnchanged": true,
+  "personalPluginRegistrationUnchanged": true,
+  "recommendation": "correct",
+  "promptCount": 1,
+  "source": "packages/omp/skills/correct/SKILL.md",
+  "actions": [
+    {
+      "tool": "read",
+      "path": "skill://poteto-help"
+    },
+    {
+      "tool": "read",
+      "path": "<candidate>/packages/omp/SKILL_CATALOG.json"
+    },
+    {
+      "tool": "read",
+      "path": "<candidate>/packages/omp/skills/correct/SKILL.md"
+    },
+    {
+      "tool": "read",
+      "path": "<candidate>/packages/omp/SKILL_CATALOG.json:raw:1+480"
+    }
+  ],
+  "priorAttempt": "The earlier authenticated invocation exited0 but read only old Skills; failed behavior, not accepted."
+}

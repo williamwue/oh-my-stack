@@ -1,10 +1,10 @@
 # Skill directory
 
-All 74 public Skills remain directly invocable. In Codex, select a Skill with
+All 78 public Skills remain directly invocable. In Codex, select a Skill with
 `$` or use `poteto-mode` to choose a workflow. Names below are unchanged.
 Categories are documentation and display labels, not separate installations.
 
-## Workflows (51)
+## Workflows (54)
 
 | Skill | Scope |
 | --- | --- |
@@ -45,6 +45,9 @@ Categories are documentation and display labels, not separate installations.
 | [opening-a-pr](../src/core/skills/opening-a-pr/SKILL.md) | Prepare a reviewed pull request; publish only when explicitly requested. |
 | [orchestrate](../src/core/skills/orchestrate/SKILL.md) | Coordinate ongoing engineering work with bounded tasks and independent checks. |
 | [pause-safely](../src/core/skills/pause-safely/SKILL.md) | Checkpoint in-flight work when the user requests a pause. |
+| [poteto-help](../src/core/skills/poteto-help/SKILL.md) | Answer help questions with a usable prompt and verified source. |
+| [correct](../src/core/skills/correct/SKILL.md) | Prevent repeated repository mistakes and prove enforcement on historical failures. |
+| [benchmark-checklist](../src/core/skills/benchmark-checklist/SKILL.md) | Vet performance claims, including errors, work counts, noise, and tuning. |
 | [poteto-mode](../src/core/skills/poteto-mode/SKILL.md) | Route an engineering request to the appropriate Oh My Stack workflow. |
 | [prototype](../src/core/skills/prototype/SKILL.md) | Test a design decision with an isolated throwaway experiment. |
 | [prove-it-works](../src/core/skills/prove-it-works/SKILL.md) | Check Skill loading and workspace facts without changing files. |
@@ -60,7 +63,7 @@ Categories are documentation and display labels, not separate installations.
 | [triage-issue-reports](../src/core/skills/triage-issue-reports/SKILL.md) | Benny triage automation only: assess Slack reports and deduplicate tickets. |
 | [unslop](../src/core/skills/unslop/SKILL.md) | Remove AI writing patterns when editing prose. |
 
-## Principles (23)
+## Principles (24)
 
 | Skill | Scope |
 | --- | --- |
@@ -68,6 +71,7 @@ Categories are documentation and display labels, not separate installations.
 | [principle-boundary-discipline](../src/core/skills/principle-boundary-discipline/SKILL.md) | Validate external boundaries and keep internal logic simple. |
 | [principle-build-the-lever](../src/core/skills/principle-build-the-lever/SKILL.md) | Use reusable tools for nontrivial edits, migrations, and checks. |
 | [principle-encode-lessons-in-structure](../src/core/skills/principle-encode-lessons-in-structure/SKILL.md) | Turn recurring corrections into executable rules. |
+| [principle-explain-the-number](../src/core/skills/principle-explain-the-number/SKILL.md) | Establish what a measured number means before trusting it. |
 | [principle-exhaust-the-design-space](../src/core/skills/principle-exhaust-the-design-space/SKILL.md) | Compare prototypes for unfamiliar UI or architecture decisions. |
 | [principle-experience-first](../src/core/skills/principle-experience-first/SKILL.md) | Prioritize polished user experience in product and scope decisions. |
 | [principle-fix-root-causes](../src/core/skills/principle-fix-root-causes/SKILL.md) | Reproduce a defect and repair its cause instead of hiding symptoms. |
