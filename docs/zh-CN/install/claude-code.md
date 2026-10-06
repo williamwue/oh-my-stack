@@ -5,6 +5,8 @@
 通过 Claude Code 插件管理器，从本仓库的 marketplace 安装。
 以下终端命令安装到用户范围。
 
+也可以[复制提示词，让 agent 完成安装](with-agent.md#为-claude-code-安装)。
+
 ## 安装插件
 
 在终端执行：

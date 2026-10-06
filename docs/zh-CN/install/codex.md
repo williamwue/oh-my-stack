@@ -5,6 +5,8 @@
 使用正式发布的 Codex 插件压缩包。以下命令面向 macOS 终端和 Codex CLI 插件管理器。
 此方式无需构建源码或安装 Node.js。[支持范围](../../support-policy.md)说明已测试的工具和限制。
 
+也可以[复制提示词，让 agent 完成安装](with-agent.md#为-codex-安装)。
+
 ## 下载并校验同一版本
 
 1. 为此次安装创建一个新目录。

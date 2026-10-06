@@ -5,6 +5,7 @@
 ## Start using Oh My Stack
 
 - [Complete your first task](getting-started.md).
+- [Copy a prompt and let an agent install it](install/with-agent.md).
 - Install for [Codex](install/codex.md), [Claude Code](install/claude-code.md), or [OMP](install/omp.md).
 - [Choose an entry for a common task](guides/common-tasks.md).
 - [Use the selected AIHero originals](aihero-original-skills.md).

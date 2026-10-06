@@ -5,6 +5,8 @@
 Use Claude Code's plugin manager to install from this repository's marketplace.
 The terminal commands below install at user scope.
 
+[Install with an agent](with-agent.md#install-for-claude-code) if you prefer a copyable prompt.
+
 ## Install the plugin
 
 Run in a terminal:

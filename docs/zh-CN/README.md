@@ -5,6 +5,7 @@
 ## 开始使用
 
 - [完成第一个任务](getting-started.md)。
+- [复制提示词，让 agent 帮你安装](install/with-agent.md)。
 - 为 [Codex](install/codex.md)、[Claude Code](install/claude-code.md) 或 [OMP](install/omp.md) 安装插件。
 - [按常见任务选择入口](guides/common-tasks.md)。
 - [使用精选 AIHero 原版技能](guides/aihero.md)。

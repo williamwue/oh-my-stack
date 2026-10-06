@@ -12,6 +12,8 @@ OMP 使用[独立 profile 安装指南](install/omp.md)。
 
 此示例无需先配置模型。没有 Oh My Stack 模型映射时，agent 继续使用它的模型。
 
+想直接复制提示词？可以[让 agent 帮你安装](install/with-agent.md)。
+
 ## 2. 确认 Skill 已加载
 
 在 Codex 输入 `$`，选择 `oh-my-stack:prove-it-works`，再发送：

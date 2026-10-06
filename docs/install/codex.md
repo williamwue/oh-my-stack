@@ -6,6 +6,8 @@ Use the published Codex plugin archive. The commands below use a macOS shell
 and the Codex CLI plugin manager. No source build or Node.js installation is
 required for this method. See [tested tools and limits](../support-policy.md).
 
+[Install with an agent](with-agent.md#install-for-codex) if you prefer a copyable prompt.
+
 ## Download and verify one release
 
 1. Create a new folder for the version you are installing.
