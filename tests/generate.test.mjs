@@ -92,13 +92,17 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 54);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 54 + model.sourceSkills.length);
   assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 24);
   let originalLength = 0;
   let generatedLength = 0;
   for (const name of model.skillCatalog.public) {
     const source = model.skills.find((skill) => skill.metadata.name === name);
     const document = await readFile(join(repoRoot, "packages/codex/skills", name, "SKILL.md"), "utf8");
+    if (source.source) {
+      assert.equal(document, source.text, `${name}: preserve original frontmatter and instructions`);
+      continue;
+    }
     const description = JSON.parse(document.match(/^description: (.+)$/m)[1]);
     assert.ok(description.length <= 120, name);
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
@@ -118,8 +122,9 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
 
 test("loads ninety portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 90);
-  assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+  assert.equal(model.coreSkills.length, 90);
+  assert.equal(model.skills.length, 90 + model.sourceSkills.length);
+  assert.deepEqual(model.coreSkills.map((skill) => skill.metadata.name), [
     "architect",
     "arena",
     "authoring-a-skill",
@@ -218,7 +223,8 @@ test("loads ninety portable Skills, seven roles, and three adapters", async () =
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 78);
+  assert.equal(model.coreSkillCatalog.public.length, 78);
+  assert.equal(model.skillCatalog.public.length, 78 + model.sourceSkills.length);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)

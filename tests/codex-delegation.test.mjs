@@ -118,6 +118,13 @@ test("every generated Codex spawning workflow carries the same binding while OMP
   const catalog = JSON.parse(await readFile(join(bundleRoot, "SKILL_CATALOG.json"), "utf8"));
   let checked = 0;
   for (const skill of catalog.skills) {
+    if (skill.source) {
+      const source = JSON.parse(await readFile(join(repoRoot, "packages/codex/skills", skill.name, "SOURCE.json"), "utf8"));
+      assert.equal(source.id, skill.source.id);
+      const original = await readFile(join(repoRoot, "upstream/snapshots", source.id, source.revision, source.path, "SKILL.md"), "utf8");
+      assert.equal(await readFile(join(repoRoot, "packages/codex/skills", skill.name, "SKILL.md"), "utf8"), original);
+      continue;
+    }
     const metadata = JSON.parse(await readFile(join(repoRoot, "src", "core", "skills", skill.name, "skill.json"), "utf8"));
     if (!metadata.requires.includes("agents.spawn")) continue;
     const codexSkill = await readFile(join(bundleRoot, "skills", skill.name, "SKILL.md"), "utf8");

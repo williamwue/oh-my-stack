@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { codexSkillDescriptions } from "./codex-skill-descriptions.mjs";
+import { loadSourceSkills, sourceCoordinate, validateSourceTarget } from "./source-skills.mjs";
 
 import {
   access,
@@ -358,8 +359,17 @@ export async function loadModel(root = repoRoot) {
     skills.push({ directory, metadata, text, frontmatter });
   }
   assert(skills.length > 0, "portable core has no skills");
-  const skillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
-  validateSkillCatalog(skillCatalog, skills.map((skill) => skill.metadata.name));
+  const coreSkillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
+  validateSkillCatalog(coreSkillCatalog, skills.map((skill) => skill.metadata.name));
+  const coreSkills = [...skills];
+  const sourceSkills = await loadSourceSkills(root, parseSkillFrontmatter, registry);
+  for (const skill of sourceSkills) {
+    assert(!skills.some((entry) => entry.metadata.name === skill.metadata.name), `source Skill conflicts with existing name: ${skill.metadata.name}`);
+    skills.push(skill);
+  }
+  skills.sort((left, right) => left.metadata.name.localeCompare(right.metadata.name));
+  const skillCatalog = { ...coreSkillCatalog,
+    public: [...coreSkillCatalog.public, ...sourceSkills.map((skill) => skill.metadata.name)].sort() };
 
   const roles = [];
   const roleRoot = join(root, "src", "core", "roles");
@@ -409,11 +419,11 @@ export async function loadModel(root = repoRoot) {
     for (const skill of skills) validateRequirementSupport(skill, targetProfiles);
   }
 
-  assert(JSON.stringify(Object.keys(codexSkillDescriptions).sort()) === JSON.stringify(skillCatalog.public), "Codex descriptions must cover exactly the public catalog");
+  assert(JSON.stringify(Object.keys(codexSkillDescriptions).sort()) === JSON.stringify(coreSkillCatalog.public), "Codex descriptions must cover exactly the core public catalog");
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, skillCatalog, roles };
+  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -433,6 +443,7 @@ function codexSkillMetadata(skill) {
 }
 
 function renderSkillDocument(skill, adapter) {
+  if (skill.source) return skill.text;
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
   if (["omp", "codex"].includes(adapter.id) && skill.metadata.name === "reflect") {
     body = body.replace(
@@ -743,7 +754,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   for (const skill of skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
-    await rm(join(skillTarget, "skill.json"));
+    if (!skill.source) await rm(join(skillTarget, "skill.json"));
     const document = renderSkillDocument(skill, adapter);
     if (adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
@@ -755,7 +766,13 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       await writeText(join(skillTarget, "SKILL.md"), document);
     }
     if (adapter.id === "codex") {
-      await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
+      if (!skill.source) await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
+    }
+    if (skill.source) {
+      await cp(skill.source.licenseFile, join(skillTarget, "LICENSE"));
+      await writeJson(join(skillTarget, "SOURCE.json"), sourceCoordinate(skill.source));
+      await mkdir(join(target, "licenses", skill.source.id), { recursive: true });
+      await cp(skill.source.licenseFile, join(target, "licenses", skill.source.id, "LICENSE"));
     }
   }
 
@@ -771,6 +788,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       audience: audiences.get(skill.metadata.name),
       category: skill.metadata.name.startsWith("check-") ? "probe" : skill.metadata.name.startsWith("principle-") ? "principle" : "workflow",
       invocation: skill.metadata.invocation,
+      ...(skill.source ? { source: sourceCoordinate(skill.source) } : {}),
     })),
   });
 
@@ -883,6 +901,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
 
   for (const skill of skills) {
     const skillPath = join(target, adapter.skillsDir, skill.metadata.name, "SKILL.md");
+    await validateSourceTarget(target, skill);
     const frontmatter = parseSkillFrontmatter(await readFile(skillPath, "utf8"), skillPath);
     assert(frontmatter.name === skill.metadata.name, `${adapter.id}: generated skill name drift`);
     if (adapter.id === "codex") {

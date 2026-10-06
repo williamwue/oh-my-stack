@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "aihero",
+      "name": "AIHero / Matt Pocock Skills",
+      "repository": "https://github.com/mattpocock/skills",
+      "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+      "snapshot": "upstream/snapshots/aihero/6fd947921b935b7e1e69293a200400f0fdd5c15f",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        {
+          "path": "skills/engineering/codebase-design/SKILL.md",
+          "sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2"
+        },
+        {
+          "path": "skills/engineering/codebase-design/DEEPENING.md",
+          "sha256": "f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1"
+        },
+        {
+          "path": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+          "sha256": "52b52e75655a27aea59c6966b410bac82448968ad46ef1ebb9f07c274e3ae010"
+        },
+        {
+          "path": "skills/engineering/codebase-design/agents/openai.yaml",
+          "sha256": "edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f"
+        }
+      ],
+      "skills": [
+        {
+          "path": "skills/engineering/codebase-design",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "resources.relative_paths",
+            "agents.spawn",
+            "agents.spawn_parallel"
+          ],
+          "dependencies": []
+        }
+      ],
+      "adaptations": []
+    }
+  ]
+}
