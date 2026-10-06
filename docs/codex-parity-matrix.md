@@ -66,7 +66,7 @@ See [capability definitions](capabilities.md) for the full requirements.
 
 | Upstream entry | Local implementation | Strongest relevant evidence and boundary |
 | --- | --- | --- |
-| All 23 `principle-*` entries | Same-name entries; full list in [directory](skill-directory.md#principles-23) | [Public matrix](../evals/evidence/codex-cli-0.155.1/public-skill-matrix.json) verifies loading, not adherence in every task |
+| All 23 `principle-*` entries | Same-name entries; full list in [directory](skill-directory.md#principles) | [Public matrix](../evals/evidence/codex-cli-0.155.1/public-skill-matrix.json) verifies loading, not adherence in every task |
 | `poteto-mode` | Explicit router | [Installed alpha.4 acceptance](releases/0.2.0-alpha.4-acceptance.md): investigation/how route; not every branch |
 | `how` | Read-only explanation with staged delegation | [W3 fixture](../evals/evidence/codex-cli-0.155.1/how-routing.json); installed explicit invocation also observed |
 | `interrogate` | Frozen review packets and independent root judgment | [W3 fixture](../evals/evidence/codex-cli-0.155.1/interrogate.json); model diversity not proven |

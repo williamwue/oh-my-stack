@@ -1,67 +1,61 @@
-# Contributing to Oh My Stack
+# Contribute to Oh My Stack
 
-Thanks for helping improve portable engineering workflows across agent
-runtimes. Contributions should preserve portability, explicit capability
-boundaries, and independently checkable evidence.
+For installation and everyday use, start with the [user documentation](docs/README.md).
 
-## Development setup
+## Build and check a change
 
-Oh My Stack requires Node.js 20 or newer and npm.
+Use Git, Node.js 20 or newer, and npm. From the repository root, run:
 
 ```bash
 npm ci --ignore-scripts
+npm run generate
+npm run docs:generate
 npm run check
 ```
 
-The complete check is offline. It validates generated drift, schemas, local
-links, executable inventory, provenance, deterministic release output, and the
-test suite.
+`npm run generate` updates generator-owned packages. `npm run docs:generate`
+updates the public Skill directory from the generated catalog.
+Edit source instructions under `src/` or reviewed source selection records
+under `upstream/`. Generated package files are build outputs.
 
-## Source and generated files
+For documentation changes, keep terminal commands separate from prompts sent
+to the agent. Explain expected output and file changes. Keep the English and
+Chinese README and first-task instructions consistent. Preserve original
+third-party Skill text and dated evidence.
 
-Edit canonical workflow content under `src/core/`, runtime adapters under
-`src/adapters/`, and release configuration under `src/packaging/`. Do not edit
-generated files under `packages/` directly. Regenerate them with:
+## Find the owning files
 
-```bash
-npm run generate
-```
+| Change | Files |
+| --- | --- |
+| User entry and guides | `README.md`, `README.zh-CN.md`, and `docs/` |
+| Portable workflows and roles | `src/core/` |
+| Tool-specific packaging | `src/adapters/` and `src/packaging/` |
+| Reviewed upstream imports | `upstream/` and `tools/source-skills.mjs` |
+| Tests and behavior evidence | `tests/` and `evals/` |
 
-Commit canonical and generated changes together. Run `npm run check` before
-opening a pull request.
+The [architecture guide](docs/architecture.md) and
+[design decisions](docs/decisions/0001-portable-core.md) explain these boundaries.
 
-## Contribution expectations
+## Verify a change
 
-- Keep portable core instructions free of runtime-specific names and paths.
-- Put host-specific behavior in adapters or capability profiles.
-- Preserve the distinction between static validation, discovery, lifecycle,
-  and end-to-end evidence.
-- Do not broaden a claim from one runtime surface to another.
-- Add or update focused tests for behavior changes.
-- Keep user configuration additive and preserve unrelated files.
-- Follow the [public evidence policy](docs/evidence-policy.md) for fixtures and
-  runtime observations.
+`npm run check` checks generated packages, generated documentation, local
+links, Markdown formatting, release reproducibility, book metadata, and tests.
+Run the affected live tool checks when behavior changes. Offline checks do not
+establish native Skill selection or complete workflow behavior.
 
-Imported or derived third-party content also requires a pinned source revision,
-license record, ownership declaration, and transformation or derivation record.
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
-[docs/prior-art.md](docs/prior-art.md) before adding upstream material.
+For book source changes, follow the existing [book documentation](docs/books/pstack/README.md)
+and the complete audit commands in [CI](.github/workflows/ci.yml).
 
-## Pull requests
+## Publish an authorized release
 
-Keep each pull request focused and include:
+Follow the [release process](docs/release-process.md). It requires independent
+review, current CI, clean tagged builds, and downloaded-asset checks.
+Local checks and a documentation edit do not authorize publishing or merging.
+Cloud operations follow [AGENTS.md](AGENTS.md) and the
+[official operations instructions](docs/operations/official-cloud-operations.md).
 
-- the problem and intended behavior;
-- the affected runtime surfaces;
-- commands used for verification;
-- known limitations or deferred live checks;
-- provenance changes, when third-party material is involved.
+## Inspect prior decisions and evidence
 
-Runtime credentials are not required for ordinary contributions. A change may
-ship with a live check explicitly deferred when the package, schema, and
-offline lifecycle remain verifiable and the limitation is documented.
-
-## Security reports
-
-Do not open a public issue for a suspected vulnerability. Follow
-[SECURITY.md](SECURITY.md) instead.
+The [maintainer index](docs/maintainers/README.md) links historical acceptance,
+implementation plans, and the archived README. Preserve dates, version scopes,
+and evidence checksums when adding new records.

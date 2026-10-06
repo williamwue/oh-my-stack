@@ -404,6 +404,16 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Repository library; removed with the checkout."
+    },
+    {
+      "path": "tools/generate-skill-directory.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Generate or check the user Skill directory from the packaged public catalog and descriptions.",
+      "network": false,
+      "writes": [
+        "docs/skill-directory.md (generation only; check is read-only)"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
     }
   ]
 }
