@@ -17,7 +17,7 @@ OMS 不需要后台更新进程。更新后新开会话。
 
 ```text
 将本机现有 Codex 的 Oh My Stack 更新到 williamwue/oh-my-stack 最新正式稳定版本。
-先阅读 https://github.com/williamwue/oh-my-stack/blob/main/docs/guides/update-and-uninstall.md 和 docs/install/codex.md。
+先阅读 https://github.com/williamwue/oh-my-stack/blob/main/docs/guides/update-and-uninstall.md 和 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md。
 检查 Codex CLI 帮助、OMS marketplace 注册来源、启用状态、实际安装版本和缓存信息。保留其他插件、模型映射、项目文件和旧版发布文件。
 官方 stable Git 来源：只升级 oh-my-stack marketplace，然后对 oh-my-stack@oh-my-stack 执行 plugin add。本地解压来源：从同一正式版本下载 Codex 插件压缩包及 SHA256SUMS，放入新的持久版本目录，先校验再解压，只替换 OMS 的注册来源；不要对本地解压来源执行 Git marketplace upgrade。保持现有来源类型，不静默迁移。
 已是最新版时只验证，不重复安装。自定义、固定提交或来源不明确时，先说明，再决定如何处理。校验或版本不匹配时停止，保留回退来源。

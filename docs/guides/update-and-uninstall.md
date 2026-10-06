@@ -18,7 +18,7 @@ To update Codex, copy:
 
 ```text
 Update my existing Oh My Stack installation for Codex on this machine to the latest published stable release from williamwue/oh-my-stack.
-Read https://github.com/williamwue/oh-my-stack/blob/main/docs/guides/update-and-uninstall.md and docs/install/codex.md first.
+Read https://github.com/williamwue/oh-my-stack/blob/main/docs/guides/update-and-uninstall.md and https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md first.
 Inspect Codex CLI help, the registered OMS marketplace source, enabled state, actual installed version, and cache metadata. Preserve other plugins, model mappings, project files, and old release files.
 For the official stable Git source, upgrade only the oh-my-stack marketplace, then run plugin add for oh-my-stack@oh-my-stack. For an extracted local source, download the new Codex plugin archive and SHA256SUMS from the same published release into a new persistent version directory, verify the archive before extraction, and replace only the OMS marketplace registration. Do not run Git marketplace upgrade on an extracted local source. Keep the current source type; do not migrate it silently.
 If already current, report that and verify it without reinstalling. If the source is custom, pinned, or ambiguous, explain it before changing the source. Stop on integrity or version mismatch and retain the rollback source.
