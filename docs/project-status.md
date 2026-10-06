@@ -1,10 +1,10 @@
 # Project status
 
-Updated: 2026-10-06. Source version: [0.8.0](releases/0.8.0.md), with 79 public Skills and the
+Updated: 2026-10-06. Source version: [0.9.0](releases/0.9.0.md), with 84 public Skills and the
 [pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Local validation and native-host evidence are recorded separately from
 publication. [GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
 record the actual published version; native managers record installed versions.
-Previous published baseline for this update: [0.7.0](releases/0.7.0.md).
+Previous published baseline for this update: [0.8.0](releases/0.8.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
 procedure. Full pstack equivalence is not established; hosted autopilot,
@@ -21,17 +21,19 @@ changes are included in 0.6.0; the dated record preserves its pre-release status
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
 
-## Local candidate: AIHero original skills
+## AIHero original skills
 
-The October 6 source continuation imports original `codebase-design`, pinned
-with all references, UI metadata and its MIT license. All three generated
-targets preserve the original bytes. [Usage and update instructions](aihero-original-skills.md)
-and [bounded live acceptance](aihero-original-acceptance-2026-10-06.md) are available.
-Codex project-local discovery and Claude session-plugin invocation completed
-one three-agent design scenario each. Native Codex plugin selection and OMP
-live acceptance remain unverified for this addition. This candidate has not
-been published or installed globally. Further original imports follow their
-complete dependency closures; no pstack/AIHero workflow fusion is included.
+The 0.9.0 source adds complete original `grill-me`, `grilling`,
+`domain-modeling`, `grill-with-docs`, and `improve-codebase-architecture` to
+original `codebase-design`, with their original references, UI metadata,
+invocation modes, dependency closure and MIT license. All three generated
+targets preserve the original bytes and prior skill files.
+[Usage instructions](aihero-original-skills.md),
+[bounded live acceptance](aihero-original-0.9.0-acceptance.md), and
+[release gates](acceptance/aihero-0.9.0/README.md) separate source validation,
+CLI behavior, publication and personal installation. Desktop UI and live OMP
+behavior are separate acceptance lanes. No pstack/AIHero workflow fusion or
+model-routing instructions are inserted in these originals.
 
 ## Source continuation: GitHub provider
 

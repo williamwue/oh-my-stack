@@ -7,25 +7,57 @@ import test from "node:test";
 import { loadModel, parseSkillFrontmatter, renderTarget, repoRoot, validateRenderedTarget } from "../tools/generate.mjs";
 import { loadSourceSkills } from "../tools/source-skills.mjs";
 
-test("AIHero codebase-design ships the complete original skill and references on every host", async () => {
+test("all selected AIHero originals ship every resource and their invocation modes on every host", async () => {
   const model = await loadModel();
-  const skill = model.skills.find((entry) => entry.metadata.name === "codebase-design");
-  assert.ok(skill?.source, "AIHero source skill is missing");
-  assert.equal(skill.source.id, "aihero");
+  const expected = {
+    "codebase-design": { invocation: "automatic", dependencies: [] },
+    "domain-modeling": { invocation: "automatic", dependencies: [] },
+    "grilling": { invocation: "automatic", dependencies: [] },
+    "grill-me": { invocation: "explicit", dependencies: ["grilling"] },
+    "grill-with-docs": { invocation: "explicit", dependencies: ["grilling", "domain-modeling"] },
+    "improve-codebase-architecture": { invocation: "explicit", dependencies: ["codebase-design", "grilling", "domain-modeling"] },
+  };
+  assert.deepEqual(model.sourceSkills.map((skill) => skill.metadata.name).sort(), Object.keys(expected).sort());
   const stage = await mkdtemp(join(tmpdir(), "oms-aihero-original-"));
   try {
     for (const adapter of model.adapters) {
       const target = await renderTarget(stage, model, adapter);
-      for (const name of ["SKILL.md", "DEEPENING.md", "DESIGN-IT-TWICE.md"]) {
-        assert.equal(await readFile(join(target, "skills/codebase-design", name), "utf8"),
-          await readFile(join(skill.directory, name), "utf8"), `${adapter.id}/${name}: original changed`);
+      const catalog = JSON.parse(await readFile(join(target, "SKILL_CATALOG.json"), "utf8"));
+      for (const skill of model.sourceSkills) {
+        const name = skill.metadata.name;
+        for (const file of skill.source.files) {
+          const relative = file.path.slice(skill.source.path.length + 1);
+          assert.deepEqual(await readFile(join(target, "skills", name, relative)),
+            await readFile(join(skill.directory, relative)), `${adapter.id}/${name}/${relative}: original changed`);
+        }
+        const entry = catalog.skills.find((entry) => entry.name === name);
+        assert.equal(entry.source.id, "aihero");
+        assert.equal(entry.invocation, expected[name].invocation);
+        assert.deepEqual(entry.source.dependencies, expected[name].dependencies);
+        assert.deepEqual(entry.source.adaptations, []);
       }
       assert.equal(await readFile(join(target, "licenses/aihero/LICENSE"), "utf8"),
-        await readFile(skill.source.licenseFile, "utf8"));
-      const catalog = JSON.parse(await readFile(join(target, "SKILL_CATALOG.json"), "utf8"));
-      assert.equal(catalog.skills.find((entry) => entry.name === "codebase-design").source.id, "aihero");
+        await readFile(model.sourceSkills[0].source.licenseFile, "utf8"));
     }
   } finally { await rm(stage, { recursive: true, force: true }); }
+});
+
+test("a workflow cannot ship when an original invoked dependency is omitted", async () => {
+  const model = await loadModel();
+  const root = await mkdtemp(join(tmpdir(), "oms-aihero-incomplete-"));
+  try {
+    const manifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
+    const source = manifest.sources[0];
+    await cp(join(repoRoot, source.snapshot), join(root, source.snapshot), { recursive: true });
+    await mkdir(join(root, "upstream"), { recursive: true });
+    for (const dependency of ["grilling", "domain-modeling", "codebase-design"]) {
+      const selected = source.skills;
+      source.skills = selected.filter((skill) => !skill.path.endsWith(`/${dependency}`));
+      await writeFile(join(root, "upstream/source-skills.json"), JSON.stringify(manifest));
+      await assert.rejects(loadSourceSkills(root, parseSkillFrontmatter, model.registry), /source dependency is missing/);
+      source.skills = selected;
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
 test("a packaged original cannot silently change after generation", async () => {

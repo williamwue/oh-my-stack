@@ -47,13 +47,15 @@ its installed version; source version and personal installation are separate.
 
 ## Quick start
 
-Version 0.8.0 adds Matt Pocock's complete original `codebase-design`.
+Version 0.9.0 adds Matt Pocock's original `grill-me`, `grilling`,
+`domain-modeling`, `grill-with-docs`, and `improve-codebase-architecture`
+to the existing original `codebase-design`.
 See the [AIHero usage guide](docs/aihero-original-skills.md) and
-[bounded original-skill acceptance](docs/aihero-original-acceptance-2026-10-06.md).
+[bounded original-skill acceptance](docs/aihero-original-0.9.0-acceptance.md).
 It retains 0.7.0 correction, workflow help, and performance-claim checks, plus
 explicit single-maintainer review in the
 [Codex GitHub workflow bindings](docs/github-workflow.md).
-See the [release scope and gates](docs/releases/0.8.0.md); full pstack parity
+See the [release scope and gates](docs/releases/0.9.0.md); full pstack parity
 and autonomous hosted merging are not claimed.
 
 ### Build a local release candidate

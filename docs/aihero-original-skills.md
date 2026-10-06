@@ -1,25 +1,59 @@
 # AIHero original skills in Oh My Stack
 
-The first integration provides Matt Pocock's original `codebase-design` skill.
-It is selected from [mattpocock/skills](https://github.com/mattpocock/skills),
-pinned at `6fd947921b935b7e1e69293a200400f0fdd5c15f`, and distributed under its
-original MIT license. The 0.8.0 release candidate builds on the 0.7.0 source baseline.
-Publication status is recorded in the
-[GitHub release](https://github.com/williamwue/oh-my-stack/releases/tag/v0.8.0);
+Version 0.9.0 provides six complete original skills from
+[mattpocock/skills](https://github.com/mattpocock/skills), pinned at
+`6fd947921b935b7e1e69293a200400f0fdd5c15f` under the original MIT license.
+It adds five skills to the released 0.8.0 `codebase-design` baseline:
+`grill-me`, `grilling`, `domain-modeling`, `grill-with-docs`, and
+`improve-codebase-architecture`.
+
+The [0.9.0 acceptance record](aihero-original-0.9.0-acceptance.md) separates
+original-byte checks, bounded live behavior, and unverified surfaces.
+[The first design acceptance](aihero-original-acceptance-2026-10-06.md)
+remains historical evidence for its earlier source baseline.
+Publication status is recorded by [GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest);
 installed versions require fresh native-manager checks.
-The first bounded design acceptance was collected on the earlier 0.6.0 baseline.
-The [acceptance record](aihero-original-acceptance-2026-10-06.md) separates
-original-byte checks, bounded live behavior, and unverified entry points.
 
 ## Use the original capability
 
-After installing a candidate package through the normal package lifecycle:
+After installing through the normal package lifecycle, select the corresponding
+`oh-my-stack:<name>` in Codex's skill picker or invoke `/oh-my-stack:<name>`
+directly in Claude Code. In particular, `grill-me`, `grill-with-docs`, and
+`improve-codebase-architecture` are user-invoked originals; asking Claude's
+model to call their Skill tool is not the same entry and is rejected by the
+host. `grilling`, `domain-modeling`, and `codebase-design` retain their original
+model-invocable behavior.
 
-- Codex: select `oh-my-stack:codebase-design` in the skill picker. A project-local
-  copy under `.agents/skills/codebase-design/` is also available for a disposable
-  CLI acceptance run; that route is tested separately from native plugin selection.
-- Claude Code: invoke `/oh-my-stack:codebase-design`. A session-only candidate can
-  be loaded with `claude --plugin-dir /absolute/path/to/candidate-plugin`.
+- `grill-me` loads original `grilling`: ask design questions in dependency-aware
+  rounds with recommended answers, then wait. It does not implement before
+  shared understanding is confirmed.
+- `grill-with-docs` loads original `grilling` and `domain-modeling`: interview
+  while recording resolved domain terms and offering important ADRs.
+- `domain-modeling` sharpens domain language and maintains `GLOSSARY.md`,
+  contextual glossaries, and ADRs using both original reference formats.
+- `improve-codebase-architecture` loads original `codebase-design`, then scans
+  for deepening opportunities, writes a visual HTML report to the OS temp
+  directory, and waits for a candidate selection. Its later conversation loads
+  original `grilling` and `domain-modeling`; it does not implement the refactor.
+
+Original dependency names resolve to the selected skills on the observed
+Codex project-local and Claude plugin surfaces; no text adaptation or OMS
+workflow substitution is applied. Native Codex plugin dependency resolution
+is a separate release-install gate. OMP original-file packaging is verified;
+these five workflows have not received live OMP acceptance.
+
+Example Claude commands (select the same names in Codex):
+
+```text
+/oh-my-stack:grill-me Plan partial cancellation of an Order Line.
+/oh-my-stack:grill-with-docs Clarify Order cancellation and retain agreed domain terms.
+/oh-my-stack:improve-codebase-architecture Inspect the checkout module for deepening opportunities.
+```
+
+The HTML report uses the author's Tailwind and Mermaid CDN dependencies;
+viewing it fully styled requires network access. The report is written outside
+the repository, but domain-modeling can write glossaries and ADRs inside it.
+These are original effects, not an OMS automatic implementation or shipping flow.
 
 Example request:
 
@@ -38,13 +72,13 @@ Oh My Stack's `architect`, `arena`, or `refactoring` workflows.
 
 ## Original content and packaging
 
-The original `SKILL.md`, both reference documents, and `agents/openai.yaml`
-are copied byte for byte into each generated target. Original automatic
-invocation is preserved. No OMS model routing or delegation instructions are
+Every selected original `SKILL.md`, reference document, and `agents/openai.yaml`
+is copied byte for byte into each generated target. Original explicit or
+automatic invocation is preserved. No OMS model routing or delegation instructions are
 inserted. Each skill receives an additional `LICENSE` and `SOURCE.json`; the
 package also contains `licenses/aihero/LICENSE`. The catalog identifies the
 source repository, revision, resource path, dependencies, and adaptations.
-The adaptation list is empty for this first skill.
+The adaptation list is empty for all six selected skills.
 
 [The source manifest](../upstream/source-skills.json) records every source file
 hash. The loader rejects changed originals, missing dependencies, unrecorded
@@ -74,21 +108,15 @@ represented as original-byte equivalence.
 This is a reviewed source update procedure. There is no automatic upstream
 promotion or claim that unchanged packaging proves changed workflow behavior.
 
-## Next selected capabilities
+## Selection boundary
 
-`domain-modeling` is the next candidate. Its complete dependency set includes
-`GLOSSARY-FORMAT.md` and `ADR-FORMAT.md`. It maintains domain terms and records
-decisions during a session; it is separate from the existing pstack domain
-principle.
+The manifest includes the complete invoked dependency closure. `grill-me`
+depends on `grilling`; `grill-with-docs` depends on `grilling` and
+`domain-modeling`; `improve-codebase-architecture` depends on `codebase-design`,
+`grilling`, and `domain-modeling`. Complete original directories include
+`GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, and `HTML-REPORT.md` where required.
 
-`grill-with-docs` depends on the original `grilling` and `domain-modeling`
-skills. `improve-codebase-architecture` depends on `codebase-design`, `grilling`,
-and `domain-modeling`, plus `HTML-REPORT.md`. The latter skills explicitly call
-the host's Skill tool and include interaction/document-writing behavior.
-Their import needs a source-faithful dependency invocation binding on Codex and
-OMP, and plugin-qualified resolution checks on Claude Code. They are not
-included in this first candidate; packaging unresolved dependencies would make
-the original ability incomplete.
-
-Future OMS combinations will have their own names and opt-in entry points.
-Original source entries remain separately usable.
+No original `to-spec`, `to-tickets`, `setup-matt-pocock-skills`, `wayfinder`,
+or `research` is included in 0.9.0. Those need their own selection and host
+acceptance. Future OMS combinations will have their own names and opt-in
+entry points. Original source entries remain separately usable.
