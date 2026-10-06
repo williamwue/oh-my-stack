@@ -1,0 +1,7 @@
+{
+  "command": "npm run check",
+  "exitCode": 0,
+  "elapsedSeconds": 20.89,
+  "log": "source-check-final.log",
+  "rawLocalOnly": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/full-acceptance/source-check-final.log"
+}

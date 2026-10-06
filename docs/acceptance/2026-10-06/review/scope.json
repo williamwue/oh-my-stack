@@ -1,0 +1,446 @@
+{
+  "base": "d64afa5a4509dde49182db5a1c8387bd060de867",
+  "scopeSha256": "63cb1e0be791386cc0560f1d08684da42ce71539e940548f16c37b5df2e12d3f",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "d342552f3b92345b303268d64eddc596f84553d6e45510e17a0246718023a731"
+    },
+    {
+      "path": "docs/acceptance/2026-10-06/upstream-decisions.json",
+      "sha256": "29cc72b6a8b583445b8fa870b843adc415ae7b932639df8415b7f9febe1147bf"
+    },
+    {
+      "path": "docs/acceptance/2026-10-06/upstream-files.json",
+      "sha256": "42af6c6b45938f412123ae1c4b98a20e2706fdd1f197ade803a2c1e2a29b6488"
+    },
+    {
+      "path": "docs/project-status.md",
+      "sha256": "5cd8a7780e75d88f0103c873462f9b9aedb423409db74e949c8aa235a629888b"
+    },
+    {
+      "path": "docs/release-process.md",
+      "sha256": "5dce9a1081d195ac7ff1894312fc0afe9b025294b71be264b03dad3c289dd8f0"
+    },
+    {
+      "path": "docs/releases/0.7.0.md",
+      "sha256": "aaf70c008e5128472427f5c9e8245ccc2838d049c039c36269d0ff3796420d3d"
+    },
+    {
+      "path": "docs/skill-directory.md",
+      "sha256": "a6fcb0ba8021030cf89f20142543b0a2813937ce78b727347aad991f165097c8"
+    },
+    {
+      "path": "docs/upstream-pstack-0.15.13.md",
+      "sha256": "f15ca5f3253fc4b1de1164afd2d2d856a1aadfc096b8f32842eee0742cb5e94c"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/README.md",
+      "sha256": "167a419d469caa498ef215d7aa01af6b35aed3e09f8e2bc6eafc0a8ee68b0aac"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/historical/install-release.mjs",
+      "sha256": "89a1f531c8cefee1d2f146b1bb66aa7a2ad4fae5842260c1fb44dd9eb6ed1b72"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/historical/source.json",
+      "sha256": "a734ab72a7b6abda93d6564be34c6f44034d4949a98827a832702292538626df"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/measurements.json",
+      "sha256": "9946c87eecf67fbd2fc70226673f128cdbed3dce60f4a999d0562602f280c239"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/setup-correct.mjs",
+      "sha256": "4cd44a5a51427cacc75781bcf706bb97102731bf5c3386763b1dbe5398210ea6"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/verify-correct.mjs",
+      "sha256": "771d36bcb610fe977adc04939b5aac86636ce662aff323be425e23b37817aecf"
+    },
+    {
+      "path": "evals/fixtures/pstack-01513/verify-measurements.mjs",
+      "sha256": "ba355c1a7c0c17d46e3bf48549e95b02a6971f17ff784a4afd6d6963783213bf"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "92a6d7e94e991cfb7cd3bef57e27bf9b37b6862e8172ef70338326f56042790c"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4bcb3a2e0d529bde511b782d3e9f54da89c0c3ca3f2bd086d3e2e71824ab280e"
+    },
+    {
+      "path": "src/core/project.json",
+      "sha256": "80f44fcea95d4da6138783889741fdb6913bdd36f345446dcda689d69594b657"
+    },
+    {
+      "path": "src/core/skill-catalog.json",
+      "sha256": "f1977907147e6a2ac161cdd5535b91566828f232465b2bdf56aee61059352433"
+    },
+    {
+      "path": "src/core/skills/architect/references/design-contract.md",
+      "sha256": "4f499ed86c68c709a5c9b2f3ac08e0ee16d9cf3620f797fd568107850d816331"
+    },
+    {
+      "path": "src/core/skills/autopilot-full/SKILL.md",
+      "sha256": "170ab9a42abcf4a6d4df74941c09594fc67dda840ddb328d9b09f53261e06bdb"
+    },
+    {
+      "path": "src/core/skills/autopilot-stack/SKILL.md",
+      "sha256": "b44d9f3800f12dfb5bda21c2e5d17ecc4d7a08ff1340bac9812066a949156488"
+    },
+    {
+      "path": "src/core/skills/benchmark-checklist/SKILL.md",
+      "sha256": "1852a3a27b2408a1c5f3e2be10c89a2437efc12165a3c6e317ed3a7ce3a9fc66"
+    },
+    {
+      "path": "src/core/skills/benchmark-checklist/skill.json",
+      "sha256": "19fe373efa3721e49b3c726ddc2402da951f661ab689e5ea5b6e87725dbccb10"
+    },
+    {
+      "path": "src/core/skills/correct/SKILL.md",
+      "sha256": "6267cd8f621d002a3574d708131353364f48a927c7934b0a79c3cfdf8308f81a"
+    },
+    {
+      "path": "src/core/skills/correct/skill.json",
+      "sha256": "fe31ccf9ced504340cdd6748639a44e7709c36fd6dd31d1cb8dce23a0b3d1880"
+    },
+    {
+      "path": "src/core/skills/hillclimb/SKILL.md",
+      "sha256": "b3b71d0f65c4b9823954b3553d773f5475a16df844b65ed44fa32ebb093afab6"
+    },
+    {
+      "path": "src/core/skills/multi-phase-plan/SKILL.md",
+      "sha256": "c4f318611c95dca6ebc7aab36117e15c8cc71b4b00fc0628bfed63c5365d5836"
+    },
+    {
+      "path": "src/core/skills/opening-a-pr/SKILL.md",
+      "sha256": "73b8de93ddc0c0ada4d7cf849c142a0ed4a7a54f6797ce8e9f30204a2fa197ba"
+    },
+    {
+      "path": "src/core/skills/orchestrate/SKILL.md",
+      "sha256": "c98309902fc3232d47c635186313ffec313590f032d8eb01bbf4654d796ce8d7"
+    },
+    {
+      "path": "src/core/skills/perf-issue/SKILL.md",
+      "sha256": "a5f4bd9d04157214b28e7b0a6bfc51477f9a76db5608b92f4e34c35a7859c83c"
+    },
+    {
+      "path": "src/core/skills/poteto-help/SKILL.md",
+      "sha256": "a3c748136ea5f83de47816ddf5e3ba1e9a558b49b0aee8bd67ef9a523e0a6008"
+    },
+    {
+      "path": "src/core/skills/poteto-help/references/prompting.md",
+      "sha256": "e0017eb953e7adc5a58d18e208de5eff575bdb139740afa78c7a8b21afaf75e9"
+    },
+    {
+      "path": "src/core/skills/poteto-help/references/recipes.md",
+      "sha256": "318c633e0913c85fe6e9bc39a49613584d9c86989aa695e08de62381d2136ec5"
+    },
+    {
+      "path": "src/core/skills/poteto-help/skill.json",
+      "sha256": "018eb26c45d1125708f264d74980c3243cee27bc59400c874021ffc9e7457976"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/SKILL.md",
+      "sha256": "72cee0ff628d5e4de2ce05e2d69a5bb018b9efcb659ed3dc1a76df2e65ae48fc"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/references/subagent-handoff.md",
+      "sha256": "2ac1f382082f29ef32b45aa940f0c0aa79600755cd28c2316042aed4d5925a60"
+    },
+    {
+      "path": "src/core/skills/principle-explain-the-number/SKILL.md",
+      "sha256": "0a5cb3579a30e4da9d1635f5ceb11f773e551ec8626ac9c38b5db3985d3ac26b"
+    },
+    {
+      "path": "src/core/skills/principle-explain-the-number/skill.json",
+      "sha256": "9da61e941d00df7201c914ca97cf033cbb18be30cde9040e23f4397f786faff2"
+    },
+    {
+      "path": "src/core/skills/swarm/SKILL.md",
+      "sha256": "a5861754e60d580e2064d60f74d57b5e98cbf5be7b502081dd3239a9d120d27f"
+    },
+    {
+      "path": "src/core/skills/typescript-best-practices/SKILL.md",
+      "sha256": "bc3e44032fc28f32ad8aaac308867be7a92ecb9c951c84b3555883d1a51e8e04"
+    },
+    {
+      "path": "tests/generate.test.mjs",
+      "sha256": "e6dc86f30ff57d15c61b3e35a96ca2fe5c6326b124227edff80b81850e4bd6cb"
+    },
+    {
+      "path": "tests/pstack-01513.test.mjs",
+      "sha256": "f99be135839bd12bd41ff8853cc018f363921ea09eb5848c630b7d8e6e4977bc"
+    },
+    {
+      "path": "tests/public-skill-matrix.test.mjs",
+      "sha256": "ff8ca16be72cf3680ebeaf843716eff9e0683b48edb587831f3c20b992cff635"
+    },
+    {
+      "path": "tests/release.test.mjs",
+      "sha256": "17c6521a56f0531e8ba38458cc3feb1a895acfcf844fd5e1f1cf89836fa8fcf2"
+    },
+    {
+      "path": "tools/codex-skill-descriptions.mjs",
+      "sha256": "f60d680b7087cf7b5b48f802fc3bbee716268501e0ab77b80f1b52b06df9a1e5"
+    },
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "c353980ed086511cd4ce1690b23b96a7fd0cd20c25468b03bc19e00a0c65bf56"
+    },
+    {
+      "path": "upstream/semantic-derivations.json",
+      "sha256": "59a22814bbbf0602e954f54540a8e2014d1d2c43003f8b5c4a14f42be4f30183"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/.cursor-plugin/plugin.json",
+      "sha256": "a9b159535686ae6540778094b39f6af9bf4cd1f00e8f3efc0f9283547b9e09b7"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/LICENSE",
+      "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/README.md",
+      "sha256": "c16e2c9ec18d35effa03dc3c6ee559578c5e9644f2a0f7994647335b1bfebf59"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/agents/poteto-agent.md",
+      "sha256": "abe41c169ecbfe65641f1725f4188d568e046c0dec7fd2dc271abb594c299201"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/01-setup.md",
+      "sha256": "6d1f73090752058b0a42a23395a09b57ac50be4a4ad6bf8d85e22764b8ad1cb3"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/02-poteto-mode.md",
+      "sha256": "979f61ca3d44cb8e68affda40327d32797e93fa9cc53ced7444c15e2600897e1"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/03-understand.md",
+      "sha256": "0090afa9b8670adf175466a2a973ff4349e95ed67d2aa8cebdfc55ff4b7382c9"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/04-design.md",
+      "sha256": "333683f203fa9c5428002430834a04cc2bdcf6df4be6cb89f4145b92b304d700"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/05-build-and-clean.md",
+      "sha256": "a93cc7771f7b35c7b54d0120b6f66e8367794ce6791237e889a30e7585c190fa"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/06-verify-and-ship.md",
+      "sha256": "3ef0eed5ea084dfbbaf1b1ae9e08d84f2c8a2b536ffb3ef5226710bf105f70e6"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/07-overnight.md",
+      "sha256": "d7bd33a3d880768688dff4c1c2b5481ca9f0f194f5d97e44b65c9f96624d3ff0"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/08-principles.md",
+      "sha256": "73c3db659d356d4aa6d7674d30d0db46fab2bdd60152fca717c2d1772a042bdc"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/09-make-it-yours.md",
+      "sha256": "157e0c20ad3c657857c2fbbea3afd26895b71b8f68475bc56f4c382dcdd0e118"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/10-recipes-and-pitfalls.md",
+      "sha256": "c652474764b08da4a6364d85f5d03cf1fc1cf35e9d7c549348fb66e2d09f7b1f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/docs/guide/README.md",
+      "sha256": "49d92cfe91e01c04bd1150e5b000ee4fd4dfda8ce789b66a9dda98f7e5456e00"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/architect/SKILL.md",
+      "sha256": "741901140ee382ebf93263a7ed03c6ee3719e578416d81afcd195876fa16c496"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/architect/references/design-red-flags.md",
+      "sha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/benchmark-checklist/SKILL.md",
+      "sha256": "6a767e788a60428fa14e645ee10fe2e49896e514ff654f668b1d824deb9038e8"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/correct/SKILL.md",
+      "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-help/SKILL.md",
+      "sha256": "5fc65e4c30c52edcde690d18904e3a8cf6ba6c2424c672d1a5cb6d29ab28645c"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-help/references/prompting.md",
+      "sha256": "463f450c44a60afd001a2f69fdf8a5dea174351f339369b12ec3c41515e564d3"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-help/references/recipes.md",
+      "sha256": "1872323419a3e5c7783b1933f7a180ca26c25a6e1f4ec83bd65e091ebbfb812b"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/SKILL.md",
+      "sha256": "404c0ef4a78e93451b2ab555ca532e7197b5cf87de29205b6f7109dbee5d9c4d"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "05ca30a16242c19d0c78ba1e88cca66f858d75252cb154fd740099fe292de802"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "sha256": "007c0a3b12011954a224f54773ef4ad7b75918be0a311914c1b51ad4e794c1e5"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/hillclimb.md",
+      "sha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "sha256": "27d310e3fc3937a60b8fcbe1318f9d249a7477a722907bf85b3e4eb3dc436b11"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "sha256": "ab40de7163c1c6e274f46ee559b2e53ef45673703f601f13f4931c199e6fb90f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/playbooks/perf-issue.md",
+      "sha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/principle-explain-the-number/SKILL.md",
+      "sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/swarm/SKILL.md",
+      "sha256": "bdcee4168e22428036e93d7cdeec3f391dbc4132f927f6db2540328c22db0273"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/technical-writing/SKILL.md",
+      "sha256": "f5c512ffeec70bc4e0dee50f7bb4c26742e1be77967a6e8b15d1921e1c209ceb"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/2cbf58508f40de470d7490b55c51d71241928fa2/pstack/skills/typescript-best-practices/references/patterns.md",
+      "sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/.cursor-plugin/plugin.json",
+      "sha256": "0fc91a08dab312d166a11f2c2cb8b699f19627415f001e641fcfa7aea9ba5836"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/README.md",
+      "sha256": "16262f32aa041d857f2936f3ad6c589648f8e7b5d23e03c3c0a8c76ef99fd08c"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/agents/poteto-agent.md",
+      "sha256": "c3850be1b97bc97cec0568ed8b26d04e7693c4e07868137c58fe546d37f288e9"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/01-setup.md",
+      "sha256": "bbac20e25fb097029e2676ecf3212f4a72f566eaf2b1031b56317aa1e4fdf490"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/02-poteto-mode.md",
+      "sha256": "379a1b2c9cd2ba54032b2b142563328d0f3d65039f067863d19b1d4c008737f5"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/03-understand.md",
+      "sha256": "16f3fe0f7df092a5c69dac90971ef57e63a8a9ae926eed851285c7bfddc0f3fd"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/04-design.md",
+      "sha256": "21e820ff73c0b70682aa570a967ede446b4d7caf62e8f391d0dd733ccb74874c"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/05-build-and-clean.md",
+      "sha256": "6bd421b43a3cf9fec3cd201fd40ce65fd8c657264eac48b0c9a175b6afd7c252"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/06-verify-and-ship.md",
+      "sha256": "c93cd50c0359ce875a82b3f7d64eab102a4b0815dbbecdb8e0e5e910bd2d18e9"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/07-overnight.md",
+      "sha256": "5033d61e8b4b6fb0b2304b2132f26bf0b6aee685aa4ed53a76a73cf0ac1c3557"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/08-principles.md",
+      "sha256": "3ede7c9cf74d9631142aec016a01843d97c1e20469387144b70c2660d50fa96f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/09-make-it-yours.md",
+      "sha256": "b98588a232a38ca7acebbeecb95ac771df1981aed662dcb45c96b4b66ed20ec0"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/10-recipes-and-pitfalls.md",
+      "sha256": "a4662cd98870f08c6abe117a832abe37670ee84f8ed25dcbe7e99ef4eb8e05e0"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/docs/guide/README.md",
+      "sha256": "0db8dd72e832c06638ca2f43489e8597d44dc0ea8da3b5088e4382ea26d904c5"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/architect/SKILL.md",
+      "sha256": "691cd39f52c7b613866e6baf9ea0b05451ffa21a6a9b4102f166418b89178fde"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/architect/references/design-red-flags.md",
+      "sha256": "905066f9bbac81c573c2b325be47751d2c0f9325e0a0772bd4384e82dafe9336"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/SKILL.md",
+      "sha256": "7645c9ee27ef9798c48a84060b6df409f8593d1058c7c25cbec28dce976195f9"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "sha256": "f626f4ed17725de5ea96ac22597a1c298c46c36015e844bf86a68f6d38d57fbf"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/hillclimb.md",
+      "sha256": "41980da135de2579bb38570e4b3373e015029148734ab5dc7d6103417b499af6"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "sha256": "8f8603f97aa57bce07a4c29e83e24e84db62a1fbd1fa5b3f639e1e74ea3c9da9"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "sha256": "1c0281f84348aa5dc6f10defbcdd8357f4b0786d874f340ba34bfc169dc6c26f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/playbooks/perf-issue.md",
+      "sha256": "bb957907426666b7aa599aed3f6ddebf423364a1428f93790b5cb9e15c878e7e"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "sha256": "1f9e788ce90a13a9973e35e8c3a52737857c375e057bdccc13c8510a9af30f04"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/swarm/SKILL.md",
+      "sha256": "e28057fbbd1113257b2e953c6e891c41f535dbb01400b6bfd3eb9a85a2ab861f"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/technical-writing/SKILL.md",
+      "sha256": "10c74685e1639cc4f8ff096007e5405b25ca0e824b65aaa17105c238faf6a1e8"
+    },
+    {
+      "path": "upstream/snapshots/cursor-pstack-october-06/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack/skills/typescript-best-practices/references/patterns.md",
+      "sha256": "62e9cd32d2fa066a35d0d1349aac22dce31a48ad7d5eaf142570770cfe707384"
+    },
+    {
+      "path": "upstream/sources.yaml",
+      "sha256": "3fc31e9cef20473fda5fa439b8cee6dfc76f09d338d06592ff4b151dda747b78"
+    }
+  ]
+}

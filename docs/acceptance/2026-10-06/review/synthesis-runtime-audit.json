@@ -1,0 +1,36 @@
+[
+  {
+    "task": "oms01513_synthesis",
+    "exitCode": 0,
+    "result": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a10e61-023b-7032-a69b-48ee78f22f13",
+      "childId": "01a10e7e-b82a-7ec0-99b9-0e602c8aa5a2",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "synthesizer",
+      "route": null,
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  },
+  {
+    "task": "oms01513_repair_synthesis",
+    "exitCode": 0,
+    "result": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a10e61-023b-7032-a69b-48ee78f22f13",
+      "childId": "01a10e83-b4b8-7902-b30f-fc3cb1489a75",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "synthesizer",
+      "route": null,
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "command": "npm run check",
+  "exitCode": 1,
+  "durationSeconds": 21.93,
+  "log": "docs/acceptance/2026-10-06/source-check.log"
+}

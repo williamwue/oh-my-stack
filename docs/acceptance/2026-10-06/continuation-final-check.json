@@ -1,0 +1,29 @@
+{
+  "inheritedImplementationFilesVerified": 241,
+  "inheritedArchivesVerified": 5,
+  "implementationAndArchiveContentUnchanged": true,
+  "checks": [
+    {
+      "command": "node tools/validate.mjs",
+      "exitCode": 0,
+      "output": "Validated 3 targets, 7 profiles, and 90 Skill.\n"
+    },
+    {
+      "command": "npm run lint:markdown",
+      "exitCode": 0,
+      "output": "\n> oh-my-stack@0.7.0 lint:markdown\n> markdownlint-cli2 \"**/*.md\"\n\nmarkdownlint-cli2 v0.23.3 (markdownlint v0.41.1)\nFinding: **/*.md !.tmp/** !node_modules/** !upstream/snapshots/** !upstream/books/**\nLinting: 749 files\nSummary: 0 issues in 0 files\n"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "newBookPythonTests": 5,
+  "OMPAuthenticatedBehavior": "pass",
+  "redo": [
+    "OMP native invocation repeated once after whitelist discovery failure"
+  ],
+  "stopReason": "local completion predicate met; external publication and personal update scope pending",
+  "receiptFormatRepair": "Prepared PR body retained as .txt because its future PR links are repository-root-relative; handoff links to the actual .txt. No implementation or test rerun."
+}

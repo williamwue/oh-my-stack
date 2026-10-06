@@ -1,0 +1,35 @@
+{
+  "notes": "The final renderer repairs change optional perf/hillclimb delegation and PR binding; the four new entries and Codex router exercised by native cases remain byte-identical. OMP native four-Skill reads occurred after those repairs. Claude help used the candidate plugin directory; detailed tool events were not captured in JSON result mode.",
+  "codex": [
+    {
+      "skill": "correct",
+      "exercisedCodexSkillSha256": "cd483e34acfca853b3cfd1491c1314f394e7c36a843f1d53d7df8dd988d2b649",
+      "finalSkillSha256": "cd483e34acfca853b3cfd1491c1314f394e7c36a843f1d53d7df8dd988d2b649",
+      "unchanged": true
+    },
+    {
+      "skill": "poteto-help",
+      "exercisedCodexSkillSha256": "3433fcf71efe96025520fc9a065633d2864e7cf487114974541481e0d2ffd762",
+      "finalSkillSha256": "3433fcf71efe96025520fc9a065633d2864e7cf487114974541481e0d2ffd762",
+      "unchanged": true
+    },
+    {
+      "skill": "benchmark-checklist",
+      "exercisedCodexSkillSha256": "3921c03be91acf5906cf2cf175148722c5e775b4d9f3c524234b9229d2b3d830",
+      "finalSkillSha256": "3921c03be91acf5906cf2cf175148722c5e775b4d9f3c524234b9229d2b3d830",
+      "unchanged": true
+    },
+    {
+      "skill": "principle-explain-the-number",
+      "exercisedCodexSkillSha256": "ae2189ac685b7a0704e918ec26fc422731bf6b56eee202e91582873e2548c7fc",
+      "finalSkillSha256": "ae2189ac685b7a0704e918ec26fc422731bf6b56eee202e91582873e2548c7fc",
+      "unchanged": true
+    },
+    {
+      "skill": "poteto-mode",
+      "exercisedCodexSkillSha256": "c70cef2cc38b52d2e3b4a34ee040a5ac91b6f672e225c39674ad9918efc27748",
+      "finalSkillSha256": "c70cef2cc38b52d2e3b4a34ee040a5ac91b6f672e225c39674ad9918efc27748",
+      "unchanged": true
+    }
+  ]
+}

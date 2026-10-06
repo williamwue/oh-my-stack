@@ -1,0 +1,20 @@
+{
+  "runtime": "OMP 18.3.2",
+  "candidateVersion": "0.7.0",
+  "modelRequested": "cursor/claude-4.5-sonnet",
+  "reasoningRequested": "high",
+  "exitCode": 0,
+  "elapsedSeconds": 50.22,
+  "projectUnchanged": true,
+  "before": {
+    "keep.txt": "2308a3647cd4e1f0fcd9251b608211feb93b7f77db7b00baa1ce18b44d0a1932"
+  },
+  "after": {
+    "keep.txt": "2308a3647cd4e1f0fcd9251b608211feb93b7f77db7b00baa1ce18b44d0a1932"
+  },
+  "personalPluginRegistrationUnchanged": true,
+  "rawLocalOnly": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/omp-authenticated-help-events.jsonl",
+  "stderrLocalOnly": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/omp-authenticated-help-stderr.txt",
+  "candidateHelpSha256": "f664d3cce3cadfe9c311920da8eb94dbc0c9dd66aba3e63192aebb60c41fc51d",
+  "auth": "existing native OMP Cursor authentication; no credential copies or new login"
+}

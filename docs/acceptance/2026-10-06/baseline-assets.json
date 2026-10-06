@@ -1,0 +1,7 @@
+{
+  "source": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.6.0",
+  "directory": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/published-0.6.0",
+  "exitCode": 0,
+  "checksumExitCode": 0,
+  "checksumOutput": "oh-my-stack-omp-0.6.0.tar.gz: OK\noh-my-stack-codex-0.6.0.tar.gz: OK\noh-my-stack-claude-code-0.6.0.tar.gz: OK\noh-my-stack-codex-plugin-0.6.0.tar.gz: OK\noh-my-stack-claude-plugin-0.6.0.tar.gz: OK\nrelease-manifest.json: OK\n"
+}

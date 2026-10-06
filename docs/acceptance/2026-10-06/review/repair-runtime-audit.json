@@ -1,0 +1,53 @@
+[
+  {
+    "reviewer": 1,
+    "exitCode": 0,
+    "result": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a10e61-023b-7032-a69b-48ee78f22f13",
+      "childId": "01a10e81-20e3-72c2-b3e9-15b87760891c",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "reviewer",
+      "route": "interrogate.reviewers",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  },
+  {
+    "reviewer": 2,
+    "exitCode": 0,
+    "result": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a10e61-023b-7032-a69b-48ee78f22f13",
+      "childId": "01a10e81-4c0f-71b0-b7dd-6e905df26b58",
+      "model": "gpt-6-sol",
+      "reasoningEffort": "high",
+      "role": "reviewer",
+      "route": "interrogate.reviewers",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  },
+  {
+    "reviewer": 3,
+    "exitCode": 0,
+    "result": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a10e61-023b-7032-a69b-48ee78f22f13",
+      "childId": "01a10e81-7775-7911-9f32-69c468a65728",
+      "model": "gpt-6-luna",
+      "reasoningEffort": "high",
+      "role": "reviewer",
+      "route": "interrogate.reviewers",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  }
+]
