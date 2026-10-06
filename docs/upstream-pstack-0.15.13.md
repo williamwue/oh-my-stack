@@ -1,10 +1,12 @@
 # Use the pstack 0.15.13 additions in Oh My Stack
 
-The 0.7.0 source candidate adds four directly invocable Skills. It reviews all
+The 0.7.0 source adds four directly invocable Skills. It reviews all
 33 pstack files changed between `ecc249f1` (0.15.5) and `2cbf5850` (0.15.13).
 The [decision receipt](acceptance/2026-10-06/upstream-decisions.json) records
 each source file, target, and retained difference. This is a scoped semantic
-update, not full Cursor workflow parity or a published release.
+update; full Cursor workflow parity is not established. The
+[GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+record the actual publication state.
 
 ## Ask for help without starting the work
 

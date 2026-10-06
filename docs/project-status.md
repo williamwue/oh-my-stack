@@ -1,10 +1,10 @@
 # Project status
 
-Updated: 2026-10-06. Published release: [0.6.0](releases/0.6.0.md).
-Source candidate: [0.7.0](releases/0.7.0.md), with 78 public Skills and the
-[pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Candidate validation
-and native-host evidence are recorded separately from publication.
-Previous published baseline: [v0.5.0](releases/0.5.0.md).
+Updated: 2026-10-06. Source version: [0.7.0](releases/0.7.0.md), with 78 public Skills and the
+[pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Local validation and native-host evidence are recorded separately from
+publication. [GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+record the actual published version; native managers record installed versions.
+Previous published baseline for this update: [0.6.0](releases/0.6.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
 procedure. Full pstack equivalence is not established; hosted autopilot,

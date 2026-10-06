@@ -38,17 +38,20 @@ details are tracked in [capabilities](docs/capabilities.md), while release
 claims use the separate verification labels documented in the
 [release process](docs/release-process.md).
 
-The 0.7.0 source candidate adds four public Skills and reviews pstack 0.15.13.
+Version 0.7.0 adds four public Skills and reviews pstack 0.15.13.
 See the [upstream update guide](docs/upstream-pstack-0.15.13.md) and
-[candidate scope](docs/releases/0.7.0.md). This source candidate is separate from
-the published 0.6.0 release and currently installed personal plugins.
+[version scope](docs/releases/0.7.0.md). The
+[GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+record the current published version. Inspect each native plugin manager for
+its installed version; source version and personal installation are separate.
 
 ## Quick start
 
-Version 0.6.0 adds read-only CI diagnostics and fixes installer aliases. It retains
+Version 0.7.0 adds correction, workflow help, and performance-claim checks.
+It retains the 0.6.0 read-only CI diagnostics, installer alias fixes, and
 explicit single-maintainer review in the
 [Codex GitHub workflow bindings](docs/github-workflow.md).
-See the [release scope and gates](docs/releases/0.6.0.md); full pstack parity
+See the [release scope and gates](docs/releases/0.7.0.md); full pstack parity
 and autonomous hosted merging are not claimed.
 
 ### Build a local release candidate
