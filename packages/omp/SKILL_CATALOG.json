@@ -102,6 +102,21 @@
       "invocation": "explicit"
     },
     {
+      "name": "domain-modeling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/domain-modeling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "eval",
       "audience": "public",
       "category": "workflow",
@@ -120,6 +135,56 @@
       "invocation": "explicit"
     },
     {
+      "name": "grill-me",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grill-me",
+        "license": "MIT",
+        "dependencies": [
+          "grilling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grill-with-docs",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/grill-with-docs",
+        "license": "MIT",
+        "dependencies": [
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grilling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grilling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "hillclimb",
       "audience": "public",
       "category": "workflow",
@@ -130,6 +195,25 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/improve-codebase-architecture",
+        "license": "MIT",
+        "dependencies": [
+          "codebase-design",
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
     },
     {
       "name": "interrogate",

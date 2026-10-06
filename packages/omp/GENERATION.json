@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
   "target": "omp",
-  "sourceVersion": "0.8.0",
+  "sourceVersion": "0.9.0",
   "profiles": [
     "omp-default",
     "omp-interactive"
   ],
   "skills": {
     "audience": "public",
-    "included": 79,
+    "included": 84,
     "omittedProbes": 12
   },
   "claims": {

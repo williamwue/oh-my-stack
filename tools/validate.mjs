@@ -63,7 +63,21 @@ export async function validateLocalMarkdownLinks(root) {
   const markdownFiles = (await validationFiles(root, root, { excludeSnapshots: true }))
     .filter((path) => path.endsWith(".md"));
   for (const path of markdownFiles) {
-    const text = await readFile(path, "utf8");
+    // Fenced examples are literal templates, not links in the rendered document.
+    let fence = null;
+    const text = (await readFile(path, "utf8")).split(/\r?\n/).filter((line) => {
+      const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+      if (fence) {
+        if (marker && marker[1][0] === fence.character
+          && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
+        return false;
+      }
+      if (marker && !(marker[1][0] === "`" && marker[2].includes("`"))) {
+        fence = { character: marker[1][0], length: marker[1].length };
+        return false;
+      }
+      return true;
+    }).join("\n");
     for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
       const target = match[1];
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;

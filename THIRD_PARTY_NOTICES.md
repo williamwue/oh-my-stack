@@ -113,6 +113,8 @@ Matt Pocock. License: MIT. The original license and complete selected resources
 are retained in the revision-bound `upstream/snapshots/aihero/` directory.
 `upstream/source-skills.json` records every imported file hash and dependency.
 
+Version 0.9.0 selects original `codebase-design`, `grill-me`, `grilling`,
+`domain-modeling`, `grill-with-docs`, and `improve-codebase-architecture`.
 The generated packages retain original source instructions and resources.
 Each selected skill includes the upstream MIT license and a `SOURCE.json`
 coordinate. Runtime verification is recorded separately; importing or packaging
