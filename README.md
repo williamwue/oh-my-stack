@@ -1,5 +1,7 @@
 # Oh My Stack
 
+![Oh My Stack — portable, verifiable engineering workflows for Codex, Claude Code, and OMP](assets/social/oh-my-stack-social-preview-2026-10-07.png)
+
 [English](README.md) | [简体中文](README.zh-CN.md)
 
 Engineering workflows for Codex and Claude Code, based on pstack and including
