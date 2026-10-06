@@ -15,8 +15,8 @@
 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
 
 1. 检查本机系统、Codex 版本、插件管理命令，以及已有 Oh My Stack 安装和 marketplace 来源。保留其他插件、模型映射和项目文件。
-2. 确认最新正式发布版本，将该版本的 Codex 插件包和 SHA256SUMS 下载到项目外的持久、版本专属目录。解压前必须确认该插件包与同一版本的校验值匹配；失败时停止并报告。
-3. 按文档使用原生插件管理器注册 marketplace 并安装。保留解压目录，注册会引用它。已有相同版本时复用；需要更新时保留旧来源供回退，并按实际安装类型执行更新步骤。
+2. 确认最新正式版本。新安装优先注册 williamwue/oh-my-stack 的 stable Git marketplace，按指南安装并检查来源回执和实际缓存版本；如果渠道版本落后，报告差异并使用已校验的同版本压缩包。压缩包下载到项目外持久的版本专属目录，使用同版本 SHA256SUMS，先校验再解压；失败时停止。现有安装按原来源更新，不静默迁移。
+3. 按文档使用原生插件管理器注册 marketplace 并安装。走压缩包方式时，保留注册引用的解压目录。已有相同版本时复用；需要更新时保留旧来源供回退，并按实际安装类型执行更新步骤。
 4. 从原生插件列表检查实际安装版本与启用状态，与选定发布版本比较。版本不一致时报告差异。
 5. 条件允许时，在我的项目中新开 Codex 会话，显式选择 oh-my-stack:prove-it-works，执行只读的加载与工作区检查。无法操作新会话时，给出我需要选择的 Skill 和下一条提示词，并将加载验证标为待完成。
 6. 最后报告发布标签、实际安装版本、持久安装来源路径、完整性和安装检查结果、加载检查结果，以及我的下一步。
@@ -24,8 +24,8 @@ https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
 如果缺少 CLI、登录、目标机器访问能力或受支持的命令，说明具体阻碍与最少的手动步骤。保持现有模型配置；可选模型搭建在安装完成、预览方案并确认后再执行。
 ```
 
-该提示词沿用本项目的正式发布包安装方式。Codex 官方
-[插件文档](https://developers.openai.com/plugins/build/plugins)说明本地 marketplace
+指南提供 stable Git 来源和正式发布包回退方式。Codex 官方
+[插件文档](https://developers.openai.com/plugins/build/plugins)说明 Git 和本地 marketplace
 注册；[OMS 安装指南](codex.md)提供本项目已观察到的安装步骤与限制。
 执行前以本机 CLI 的帮助信息核对命令。
 
@@ -61,3 +61,5 @@ marketplace、安装范围和会话加载；[OMS 安装指南](claude-code.md)�
 AIHero 的项目任务系统配置也属于单独的项目写入流程，见 [AIHero 指南](../guides/aihero.md)。
 
 OMP 按[独立 profile 安装指南](omp.md)操作；以上两个提示词不覆盖其原生隔离验收步骤。
+
+已有安装可[复制检查和更新提示词](../guides/update-and-uninstall.md#让-agent-检查或更新)。

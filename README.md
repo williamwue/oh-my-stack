@@ -42,12 +42,18 @@ For manual installation, use the guide for your tool. Each tool needs its own in
 
 | Your tool | Installation guide |
 | --- | --- |
-| Codex | [Released plugin archive](docs/install/codex.md); no source build required. |
+| Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
 | Claude Code | [Marketplace installation](docs/install/claude-code.md). |
 | OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
 
 Start a new session after installation. See [support](docs/support-policy.md)
 for tested tools and limitations.
+
+## Update an existing installation
+
+[Copy an update prompt or use the native commands](docs/guides/update-and-uninstall.md).
+The guide detects the existing source and scope, preserves model configuration,
+and separates a read-only update check from an authorized update.
 
 ## Quick start
 

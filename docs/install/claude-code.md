@@ -3,7 +3,7 @@
 [English](claude-code.md) | [简体中文](../zh-CN/install/claude-code.md)
 
 Use Claude Code's plugin manager to install from this repository's marketplace.
-The terminal commands below install at user scope.
+The terminal commands below install published payloads from `stable` at user scope.
 
 [Install with an agent](with-agent.md#install-for-claude-code) if you prefer a copyable prompt.
 
@@ -12,7 +12,7 @@ The terminal commands below install at user scope.
 Run in a terminal:
 
 ```bash
-claude plugin marketplace add williamwue/oh-my-stack
+claude plugin marketplace add https://github.com/williamwue/oh-my-stack.git#stable
 claude plugin install oh-my-stack@oh-my-stack --scope user
 claude plugin list --json
 ```
@@ -45,8 +45,9 @@ failed. [The AIHero guide](../aihero-original-skills.md) explains their entries.
 
 Follow [updates and removal](../guides/update-and-uninstall.md).
 Read [the support policy](../support-policy.md) for acceptance boundaries.
-The 0.9.0 original-workflow fixtures used a session plugin on Claude Code CLI;
-they do not establish every persistent-install or future-update combination.
+The user-scope Git update from 0.9.0 to 0.9.1 is recorded in
+[dated acceptance](../acceptance/2026-10-07/stable-marketplace.md). Future versions,
+other scopes, and automatic-update UI behavior need their own verification.
 
 ## Test a package for one session
 

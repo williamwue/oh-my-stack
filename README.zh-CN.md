@@ -36,11 +36,16 @@
 
 | 使用的工具 | 安装指南 |
 | --- | --- |
-| Codex | [正式发布的插件包](docs/zh-CN/install/codex.md)，无需构建源码。 |
+| Codex | [stable Git marketplace 或正式发布包](docs/zh-CN/install/codex.md)，无需构建源码。 |
 | Claude Code | [Marketplace 安装](docs/zh-CN/install/claude-code.md)。 |
 | OMP | [通过独立 profile 检查安装](docs/zh-CN/install/omp.md)。不同工作流的实测范围不同。 |
 
 安装后新开会话。[支持范围](docs/support-policy.md)说明已测试的工具和当前限制。
+
+## 更新现有安装
+
+[复制更新提示词或使用原生命令](docs/zh-CN/guides/update-and-uninstall.md)。
+按现有来源和安装范围更新，保留模型配置；“检查更新”只读，“执行更新”完成实际更新。
 
 ## 完成第一个任务
 
