@@ -6,9 +6,9 @@ Oh My Stack includes eleven selected original skills from Matt Pocock's
 [skills repository](https://github.com/mattpocock/skills). Select one directly
 when you want its original process. You do not need to enter `poteto-mode` first.
 
-The five research, questionnaire, setup, spec, and ticket entries below are
-new in the **unreleased 0.10.0 source candidate**. The latest published release
-remains 0.9.1; updating a released installation does not yet add these five.
+The five research, questionnaire, setup, spec, and ticket entries below require
+**0.10.0 or later**. Check the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+and your actual installed version before using them.
 
 ## Choose a capability
 

@@ -42,7 +42,7 @@ export async function generateSkillDirectory({ root = repoRoot, check = false } 
     `${entries.length} public entries: ${workflows.length} workflows and ${principles.length} principles.`, "",
     "This directory reflects the generated source packages. Released installations may differ;",
     "see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)",
-    "and the [AIHero guide](aihero-original-skills.md) for unreleased additions.", "",
+    "and the [AIHero guide](aihero-original-skills.md) for version requirements.", "",
     "For a first task, start with [the walkthrough](getting-started.md) or",
     "[common task examples](guides/common-tasks.md). You do not need to learn every entry.", "",
     "## Invocation and sources", "",

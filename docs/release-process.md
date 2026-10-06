@@ -8,7 +8,7 @@ SHA-256 checksums, and explicit verification maturity.
 The Codex plugin bundle is a fourth archive rooted at
 `oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. All 89 current source-candidate public Skills remain discoverable
+`.agents/plugins/marketplace.json`. All 89 current public Skills remain discoverable
 and directly invocable. Codex descriptions are concise; full instructions and
 resources load on demand. Catalog categories distinguish 65 workflows and
 24 principles without moving either group outside the discovery directory.
@@ -333,6 +333,7 @@ stop promotion; after the release checks complete, retry by manual dispatch.
 This automation is available only after its implementation has landed on
 `main`; a local workflow file alone does not activate it on GitHub.
 
-The initial stable channel is bootstrapped from published v0.9.1. The local
-0.10.0 source candidate remains unreleased and is not eligible for promotion.
+The initial stable channel was bootstrapped from published v0.9.1. Subsequent
+versions become eligible only after formal publication and the same gates;
+local candidates are never eligible for promotion.
 See [observed native manager upgrades and limits](acceptance/2026-10-07/stable-marketplace.md).

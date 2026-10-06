@@ -18,10 +18,10 @@
 - [可选模型配置](model-configuration.md)
 - [当前支持范围，英文](../support-policy.md)
 - [第三方来源和适配声明，英文](../../THIRD_PARTY_NOTICES.md)
-- [发布说明，英文](../releases/0.9.1.md)与[已发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)
+- [发布说明，英文](../releases/0.10.0.md)与[已发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)
 
-AIHero 指南与技能目录也说明 **0.10.0 未发布源码候选版** 的五项新增能力。
-当前已发布版本仍为 0.9.1；带日期的验收记录只说明当时命名的版本和工具。
+新增的五项调研与规划原版能力需要 0.10.0 或更高版本。使用前核对正式发布版本和实际安装版本。
+带日期的验收记录只说明当时命名的版本和工具。
 
 ## 参与开发或查看实现
 

@@ -1,7 +1,9 @@
 # Project status
 
-Current source candidate: [0.10.0](releases/0.10.0.md), unreleased, with 89 public
-Skills and eleven original AIHero entries. Latest published version: 0.9.1.
+Current source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
+eleven original AIHero entries. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+for publication status and the [release checklist](acceptance/aihero-0.10.0/release-checklist.md)
+for gates and version-specific acceptance.
 See the [current import record](maintainers/aihero-imports-0.10.0.md).
 The dated records below describe their original baselines.
 

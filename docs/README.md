@@ -18,12 +18,12 @@
 - [Optional model configuration](model-configuration.md)
 - [Current support policy](support-policy.md)
 - [Third-party sources and adaptations](../THIRD_PARTY_NOTICES.md)
-- [Release notes](releases/0.9.1.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+- [Release notes](releases/0.10.0.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
 
-The AIHero guide and generated directory also cover the **unreleased 0.10.0
-source candidate**; they mark the five new originals separately. The latest
-published release remains 0.9.1. Dated acceptance
-records describe only the versions and tools named in those records.
+The five research and planning originals require 0.10.0 or later. Check the
+[published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+and your installed version. Dated acceptance records describe only the
+versions and tools named in those records.
 
 ## Contribute or inspect the implementation
 
