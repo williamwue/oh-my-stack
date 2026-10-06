@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Typescript Best Practices"
+  short_description: "Apply type and boundary guidance to TS or TSX work."
+  default_prompt: "Use $typescript-best-practices for this task."
+policy:
+  allow_implicit_invocation: false

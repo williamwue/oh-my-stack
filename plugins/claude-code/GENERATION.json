@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/generate.mjs",
+  "target": "claude-code",
+  "sourceVersion": "0.9.1",
+  "profiles": [
+    "claude-code-default"
+  ],
+  "skills": {
+    "audience": "public",
+    "included": 84,
+    "omittedProbes": 12
+  },
+  "claims": {
+    "delivery": "D0",
+    "workflow": "W0"
+  }
+}

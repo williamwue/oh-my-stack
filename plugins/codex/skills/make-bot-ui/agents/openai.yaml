@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Make Bot Ui"
+  short_description: "Build a local control page for an authenticated webhook."
+  default_prompt: "Use $make-bot-ui for this task."
+policy:
+  allow_implicit_invocation: false

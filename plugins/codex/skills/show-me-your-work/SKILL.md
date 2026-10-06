@@ -1,0 +1,125 @@
+---
+name: show-me-your-work
+description: "Record an append-only decision trail for long or delegated work."
+---
+
+# Show Me Your Work
+
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
+the nearest project manifest first, then the user manifest. Supply the named
+route/panel entry where configured; otherwise supply the canonical role
+and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
+Keep one canonical decision log. Use it for work with multiple phases, delegated
+sessions, important pivots, or verification that a reviewer will inspect later.
+Do not turn routine commands into noise.
+
+When a log spans runs, append a `start` row for each run with its attributable
+session or run identity and starting revision. Record its ending timestamp or
+checkpoint in a later row. Audit the rows between those boundaries against that
+run's evidence; a later run's success does not validate an earlier run's claims.
+If runs overlap, include the run identity in each row's evidence pointer rather
+than treating all intervening rows as one run. Preserve earlier rows, including
+incorrect ones, and supersede them with a later correction that cites the
+original row and resolvable evidence.
+
+## Start the log
+
+Copy `references/decision-log-template.tsv` to `decisions.tsv` in the working
+directory, or to `.audit/<task-slug>.tsv` when several efforts run at once.
+Treat it as a working artifact by default. Commit it only when the user or the
+review contract requires the trail to travel with the result.
+
+The columns are:
+
+- `ts`: an ISO 8601 timestamp;
+- `phase`: the phase or workstream;
+- `decision`: the concrete choice or action;
+- `why`: the reason in plain language;
+- `evidence`: a short, resolvable pointer such as a revision, command output,
+  file location, trace, or screenshot;
+- `result`: the observed state, including `open` or `INCONCLUSIVE` when the
+  evidence is not final.
+
+Use `scripts/log.sh <logfile> <phase> <decision> <why> <evidence> <result>` to
+append a row. The helper creates the header, keeps cells on one line, and
+neutralizes spreadsheet formulas. If packaged-script execution is unavailable,
+append the same six columns using another safe workspace-writing mechanism and
+disclose that fallback.
+
+## What to log
+
+Append one row for a decision or checkpoint that changes how a reviewer should
+understand the work:
+
+- choosing one implementation path over another;
+- completing a bounded unit and recording its verification;
+- rejecting, reverting, or superseding earlier work;
+- surfacing a blocker or changing a gate;
+- accepting or rejecting a delegated result.
+
+The log is append-only. Correct a bad row with a later row that identifies what
+it supersedes. Never rewrite or delete history to make the run look cleaner.
+Evidence is a pointer, not a paragraph, and a claim without resolvable evidence
+must remain open or inconclusive.
+
+## Audit before handoff
+
+Walk every row against the best evidence available from the current run.
+
+1. Confirm that every row maps to an action that actually occurred.
+2. Resolve each evidence pointer and confirm it supports the stated result.
+3. Append missing pivots, abandoned approaches, verification failures, or
+   superseding decisions that affected the outcome.
+4. Append corrections for inaccurate rows; do not edit the earlier rows.
+5. Remove no history. If a trivial row is distracting, append a note explaining
+   that it is non-material.
+
+When the runtime exposes an attributable transcript, include it in the audit.
+When transcript access is absent, incomplete, encrypted, or external, audit the
+visible messages, tool evidence, repository state, and other resolvable
+pointers instead, and state the limitation. Never search unrelated private
+sessions to fill that gap.
+
+## Independent trail review
+
+For consequential work, ask one new read-only reviewer session to inspect the
+frozen log and the attributable evidence. A different model family is preferred
+when the runtime can select and prove it, but model diversity is not a condition
+for truth. If a distinct model or reviewer session is unavailable, perform the
+review in the root session and disclose that it was not independent.
+
+The review checks for weak evidence, unverified success claims, risky pivots,
+missing failures, and gaps between the log and the observable run. Freeze the
+review before final reporting. The root coordinator then resolves or reports
+each flag and independently verifies the final workspace state.
+
+Finish with an `Attention` section that names the review boundary and lists
+specific flagged rows or says `No flags`. Report the resolved model identity
+only when runtime-produced evidence establishes it; otherwise say that the
+model identity was not verified.

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "oh-my-stack",
+  "description": "Portable, verifiable engineering workflows for Codex.",
+  "license": "MIT",
+  "author": {
+    "name": "Oh My Stack contributors",
+    "url": "https://github.com/williamwue/oh-my-stack"
+  },
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": "https://github.com/williamwue/oh-my-stack",
+  "version": "0.9.1"
+}

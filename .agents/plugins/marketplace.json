@@ -1,0 +1,20 @@
+{
+  "name": "oh-my-stack",
+  "interface": {
+    "displayName": "Oh My Stack"
+  },
+  "plugins": [
+    {
+      "name": "oh-my-stack",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

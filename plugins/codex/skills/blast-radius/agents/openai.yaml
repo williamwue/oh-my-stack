@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Blast Radius"
+  short_description: "Prove the safety assumptions and downstream risks of a change."
+  default_prompt: "Use $blast-radius for this task."
+policy:
+  allow_implicit_invocation: false

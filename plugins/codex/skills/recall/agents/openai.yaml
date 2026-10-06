@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Recall"
+  short_description: "Rebuild recent work context from history and live state."
+  default_prompt: "Use $recall for this task."
+policy:
+  allow_implicit_invocation: false

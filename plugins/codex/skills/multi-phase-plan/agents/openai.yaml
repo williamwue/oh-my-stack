@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Multi Phase Plan"
+  short_description: "Write a dependency plan with verifiable units and live checks."
+  default_prompt: "Use $multi-phase-plan for this task."
+policy:
+  allow_implicit_invocation: false

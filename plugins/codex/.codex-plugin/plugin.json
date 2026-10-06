@@ -1,0 +1,30 @@
+{
+  "name": "oh-my-stack",
+  "description": "Portable, verifiable engineering workflows for Codex.",
+  "author": {
+    "name": "Oh My Stack contributors",
+    "url": "https://github.com/williamwue/oh-my-stack"
+  },
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": "https://github.com/williamwue/oh-my-stack",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "engineering-workflows",
+    "verification"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Oh My Stack",
+    "shortDescription": "Portable engineering workflows for Codex.",
+    "longDescription": "Generate and verify portable engineering workflows with native Codex packaging.",
+    "developerName": "Oh My Stack contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "websiteURL": "https://github.com/williamwue/oh-my-stack",
+    "defaultPrompt": [
+      "Use $prove-it-works to verify this installation."
+    ]
+  },
+  "version": "0.9.1"
+}

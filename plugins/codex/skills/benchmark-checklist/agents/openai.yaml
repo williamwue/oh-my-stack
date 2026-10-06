@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Benchmark Checklist"
+  short_description: "Vet performance measurements before reporting or acting on them."
+  default_prompt: "Use $benchmark-checklist for this task."
+policy:
+  allow_implicit_invocation: false

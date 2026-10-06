@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/generate.mjs",
+  "target": "codex",
+  "sourceVersion": "0.9.1",
+  "profiles": [
+    "codex-desktop",
+    "codex-cli",
+    "codex-cli-interactive",
+    "codex-ide"
+  ],
+  "skills": {
+    "audience": "public",
+    "included": 84,
+    "omittedProbes": 12
+  },
+  "claims": {
+    "delivery": "D0",
+    "workflow": "W0"
+  }
+}

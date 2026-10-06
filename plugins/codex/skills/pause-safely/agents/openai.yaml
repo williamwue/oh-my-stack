@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Pause Safely"
+  short_description: "Checkpoint in-flight work when the user requests a pause."
+  default_prompt: "Use $pause-safely for this task."
+policy:
+  allow_implicit_invocation: false

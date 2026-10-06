@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Perf Issue"
+  short_description: "Fix one performance issue with before and after traces."
+  default_prompt: "Use $perf-issue for this task."
+policy:
+  allow_implicit_invocation: false

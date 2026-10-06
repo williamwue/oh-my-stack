@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Automate Me"
+  short_description: "Capture a user's recurring work conventions in a personal Skill."
+  default_prompt: "Use $automate-me for this task."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: No Comments"
+  short_description: "Review comments, remove redundancy, and encode real constraints."
+  default_prompt: "Use $no-comments for this task."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Correct"
+  short_description: "Prevent repeated repository mistakes with structural checks and "
+  default_prompt: "Use $correct for this task."
+policy:
+  allow_implicit_invocation: false

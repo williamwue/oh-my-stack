@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Runtime Forensics"
+  short_description: "Diagnose a live process using runtime evidence."
+  default_prompt: "Use $runtime-forensics for this task."
+policy:
+  allow_implicit_invocation: false

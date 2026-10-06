@@ -1,0 +1,573 @@
+{
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "skills": [
+    {
+      "name": "architect",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "arena",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "authoring-a-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "automate-me",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "autonomous-run",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "autopilot-full",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "autopilot-stack",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "babysit",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "benchmark-checklist",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "blast-radius",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "bro",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "bug-fix",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic"
+    },
+    {
+      "name": "codebase-design",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/codebase-design",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "correct",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "create-verification-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "domain-modeling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/domain-modeling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "eval",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "feature",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "figure-it-out",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "grill-me",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grill-me",
+        "license": "MIT",
+        "dependencies": [
+          "grilling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grill-with-docs",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/grill-with-docs",
+        "license": "MIT",
+        "dependencies": [
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grilling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grilling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "hillclimb",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "how",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/improve-codebase-architecture",
+        "license": "MIT",
+        "dependencies": [
+          "codebase-design",
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "interrogate",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "investigation",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "maintain-verification-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "make-bot-ui",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "multi-phase-plan",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "no-comments",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "opening-a-pr",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "orchestrate",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "pause-safely",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "perf-issue",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "poteto-help",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "poteto-mode",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-attack-the-premise",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-boundary-discipline",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-build-the-lever",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-encode-lessons-in-structure",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-exhaust-the-design-space",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-experience-first",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-explain-the-number",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-fix-root-causes",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-foundational-thinking",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-guard-the-context-window",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-laziness-protocol",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-make-operations-idempotent",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-migrate-callers-then-delete-legacy-apis",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-minimize-reader-load",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-model-the-domain",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-never-block-on-the-human",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-outcome-oriented-execution",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-prove-it-works",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-redesign-from-first-principles",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-separate-before-serializing-shared-state",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-sequence-verifiable-units",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-subtract-before-you-add",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-test-behavior-not-implementation",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-type-system-discipline",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "prototype",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "prove-it-works",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic"
+    },
+    {
+      "name": "recall",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "refactoring",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "reflect",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "reproduce-and-fix-issues",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "runtime-forensics",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "session-pickup",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "setup-benny",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "setup-oh-my-stack",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "shipping",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "show-me-your-work",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "swarm",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "tdd",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "teach",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "technical-writing",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "trace-forensics",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "triage-issue-reports",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "typescript-best-practices",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "unslop",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "visual-parity",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "why",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "worktree-cleanup",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    }
+  ]
+}

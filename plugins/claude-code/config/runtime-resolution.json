@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "workloads": {
+    "fast": {
+      "reasoningPreference": "low"
+    },
+    "balanced": {
+      "reasoningPreference": "medium"
+    },
+    "deep": {
+      "reasoningPreference": "high"
+    }
+  },
+  "roles": [
+    {
+      "name": "evidence-reader",
+      "workload": "fast",
+      "constraints": [
+        "read_only",
+        "independent_session"
+      ],
+      "writes": false
+    },
+    {
+      "name": "explainer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": false
+    },
+    {
+      "name": "explorer",
+      "workload": "balanced",
+      "constraints": [
+        "read_only",
+        "independent_session"
+      ],
+      "writes": false
+    },
+    {
+      "name": "implementer",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
+      "name": "reviewer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required",
+        "model_diversity_preferred"
+      ],
+      "writes": false
+    },
+    {
+      "name": "synthesizer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": false
+    },
+    {
+      "name": "trail-reviewer",
+      "workload": "deep",
+      "constraints": [
+        "read_only",
+        "independent_session",
+        "reasoning_required",
+        "model_diversity_preferred"
+      ],
+      "writes": false
+    }
+  ],
+  "routes": {
+    "code.delegates": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "judgment.prose": {
+      "kind": "single",
+      "role": "explainer",
+      "workload": "deep"
+    },
+    "hardest.tasks": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
+    },
+    "how.explorer": {
+      "kind": "single",
+      "role": "explorer",
+      "workload": "fast"
+    },
+    "how.explainer": {
+      "kind": "single",
+      "role": "explainer",
+      "workload": "deep"
+    },
+    "why.investigator": {
+      "kind": "single",
+      "role": "explorer",
+      "workload": "fast"
+    },
+    "why.synthesizer": {
+      "kind": "single",
+      "role": "synthesizer",
+      "workload": "deep"
+    },
+    "reflect.tooling": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "reflect.judgment": {
+      "kind": "single",
+      "role": "reviewer",
+      "workload": "deep"
+    },
+    "swarm.workers": {
+      "kind": "single",
+      "role": "implementer",
+      "workload": "balanced"
+    },
+    "arena.runners": {
+      "kind": "panel",
+      "role": "implementer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "arena.cross-judge-pool": {
+      "kind": "panel",
+      "role": "reviewer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "architect.runners": {
+      "kind": "panel",
+      "role": "explorer",
+      "workload": "deep",
+      "defaultCount": 3
+    },
+    "interrogate.reviewers": {
+      "kind": "panel",
+      "role": "reviewer",
+      "workload": "deep",
+      "defaultCount": 3
+    }
+  },
+  "presets": {
+    "pstack-openai-codex": null,
+    "pstack": null
+  },
+  "adapter": {
+    "format": "yaml",
+    "modelField": "model",
+    "reasoningField": "effort"
+  }
+}
