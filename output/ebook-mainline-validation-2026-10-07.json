@@ -55,5 +55,16 @@
     "released": false,
     "pluginVersionChanged": false
   },
-  "independentReview": "pending; recorded separately after this frozen unit is reviewed"
+  "independentReview": {
+    "receipt": "ebook-mainline-review-2026-10-07.json",
+    "reviewedCodeHead": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+    "result": "No remaining flags or blockers"
+  },
+  "toolingFollowUp": {
+    "revision": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+    "changes": "POSIX archive/resource/URL paths; dated validation instructions",
+    "windowsPathRegressionTests": 2,
+    "nativeWindowsBuildTested": false,
+    "artifactsUnchangedFromRecordedBuild": true
+  }
 }

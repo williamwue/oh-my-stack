@@ -28,6 +28,8 @@
 - 微信读书实际阅读验收按维护者本轮要求留后；本地检查不代表阅读器兼容性验收。
 
 本轮记录见 [ebook-mainline-validation-2026-10-07.json](ebook-mainline-validation-2026-10-07.json)，
+独立复核见 [ebook-mainline-review-2026-10-07.json](ebook-mainline-review-2026-10-07.json)。
+复核发现的 Windows EPUB 路径和历史验证文件说明问题均已修正；原生 Windows 构建尚未验收。
 当前文件校验值见 [SHA256SUMS.txt](SHA256SUMS.txt)。
 原 [ebooks-validation.json](ebooks-validation.json) 保留为历史验证记录。
 
