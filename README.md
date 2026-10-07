@@ -1,6 +1,6 @@
 # Oh My Stack
 
-![Oh My Stack — pstack engineering workflows, ported to Codex and Claude Code](assets/social/oh-my-stack-pstack-social-preview-2026-10-07.jpg)
+![Oh My Stack — pstack engineering workflows, ported to Codex and Claude Code](assets/social/oh-my-stack-brand-social-preview-2026-10-07.jpg)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
