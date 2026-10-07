@@ -1,0 +1,224 @@
+{
+  "observedAt": "2026-10-07T13:59:18.243530+00:00",
+  "status": "local source candidate; not published",
+  "sourceBase": "v0.11.0 / ddaa164a6e779e787ecd5bc5c91c183c8c5cd75c",
+  "sourceHashes": {
+    "src/core/skills/setup-oh-my-stack/SKILL.md": "5eaa16523835fdf55c6ddc06c354af9c0e6c0790254850a613e5cf219dab2728",
+    "packages/codex/skills/setup-oh-my-stack/WORKFLOW.md": "3bee50749f0a6cf463ba15adf52123d938b16bd95ba833509f77b8fde305b6d0"
+  },
+  "offlineChecks": {
+    "command": "npm run check",
+    "passed": true,
+    "testsPassed": 265,
+    "testsFailed": 0,
+    "skillCreatorValidation": "passed via uv with pyyaml"
+  },
+  "defaultModeFallback": {
+    "runtime": "codex-cli 0.160.1",
+    "nativeChoiceFeatureEnabled": false,
+    "structuredChoiceRequests": 0,
+    "projectUnchanged": true,
+    "userRouting": null,
+    "assistant": [
+      "我会先查找并读取 `setup-oh-my-stack` 技能，确认它要求执行的设置步骤。",
+      "当前自动路由处于手动模式（默认设置，未发现项目覆盖）。请选择路由模式；选择启用或禁用后，再选择保存范围。\n- 启用自动路由（推荐）：自动匹配 OMS 工程工作流\n- 禁用自动路由：使用显式工作流入口\n- 保持当前设置：不修改路由配置",
+      "已读取 `setup-oh-my-stack` 的完整流程。当前自动路由为手动模式，未发现项目覆盖。\n\n请选择：**启用自动路由（推荐）**、**禁用自动路由**或**保持当前设置**。目前尚未修改配置。"
+    ],
+    "observation": "Default-mode run offered explicit text choices and waited without writing routing configuration. It did not demonstrate native controls."
+  },
+  "nativeChoiceRun": {
+    "nativeChoiceFeature": "default_mode_request_user_input enabled only in disposable app-server process",
+    "runtime": "codex-cli 0.160.1",
+    "fixture": "isolated explicit generated Skill input; no plugin installation",
+    "cases": [
+      {
+        "name": "unanswered",
+        "questions": [
+          {
+            "id": "routing_mode",
+            "header": "自动路由",
+            "question": "你希望如何设置 OMS 自动路由？",
+            "isOther": true,
+            "isSecret": false,
+            "options": [
+              {
+                "label": "启用自动路由 (Recommended)",
+                "description": "将普通工程任务自动匹配到 OMS 工作流；接下来选择保存范围。"
+              },
+              {
+                "label": "禁用自动路由",
+                "description": "通过显式工作流入口使用 OMS；接下来选择保存范围。"
+              },
+              {
+                "label": "保持当前设置",
+                "description": "保持 manual 模式，不写入路由配置。"
+              }
+            ]
+          }
+        ],
+        "commands": [
+          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . /Users/williamwue/.agents/skills $FIXTURE/codex-home/skills\"",
+          "/bin/zsh -lc \"ls -la; rg --files --hidden $FIXTURE /Users/williamwue/.agents | rg 'setup-oh-my-stack|AGENTS.md|SKILL.md'\"",
+          "/bin/zsh -lc 'cat $FIXTURE/package/skills/setup-oh-my-stack/SKILL.md'",
+          "/bin/zsh -lc 'cat $FIXTURE/package/skills/setup-oh-my-stack/WORKFLOW.md'",
+          "/bin/zsh -lc 'node $FIXTURE/package/scripts/routing.mjs status'"
+        ],
+        "assistant": [
+          "我会先查找并阅读 `setup-oh-my-stack` 技能，确认它的设置流程和适用选项。",
+          "当前自动路由未启用，有效模式为 `manual`，没有项目覆盖配置。自动路由可将普通工程任务匹配到 OMS 工作流；选择模式和保存范围后，会保存相应设置。"
+        ],
+        "responses": [],
+        "methods": {
+          "remoteControl/status/changed": 1,
+          "account/updated": 1,
+          "thread/started": 1,
+          "warning": 1,
+          "mcpServer/startupStatus/updated": 3,
+          "thread/settings/updated": 1,
+          "thread/status/changed": 2,
+          "turn/started": 1,
+          "item/started": 9,
+          "item/completed": 9,
+          "item/agentMessage/delta": 74,
+          "thread/tokenUsage/updated": 5,
+          "account/rateLimits/updated": 5,
+          "item/tool/requestUserInput": 1
+        },
+        "stoppedAtUnansweredChoice": true,
+        "userRouting": null,
+        "projectUnchanged": true
+      },
+      {
+        "name": "enable-user-with-project-override",
+        "questions": [
+          {
+            "id": "routing_mode",
+            "header": "自动路由",
+            "question": "当前项目有覆盖设置，自动路由已关闭（manual）。你希望如何设置？选择启用或关闭后，还会选择保存范围。",
+            "isOther": true,
+            "isSecret": false,
+            "options": [
+              {
+                "label": "启用自动路由（推荐）",
+                "description": "让普通工程任务自动匹配 OMS 工作流。"
+              },
+              {
+                "label": "关闭自动路由",
+                "description": "使用显式工作流入口。"
+              },
+              {
+                "label": "保持当前设置",
+                "description": "不修改任何路由配置。"
+              }
+            ]
+          },
+          {
+            "id": "routing_scope",
+            "header": "保存范围",
+            "question": "选择范围后会保存自动路由设置。当前项目为 $FIXTURE/project；要保存到哪里？",
+            "isOther": true,
+            "isSecret": false,
+            "options": [
+              {
+                "label": "跨项目默认（推荐）",
+                "description": "保存到本次 CODEX_HOME；当前项目的关闭覆盖仍优先。"
+              },
+              {
+                "label": "仅此项目",
+                "description": "将当前项目覆盖改为启用，不改变个人默认。"
+              }
+            ]
+          },
+          {
+            "id": "next_step",
+            "header": "后续设置",
+            "question": "路由设置已保存。是否继续配置 OMS 工作流的模型和推理预算？",
+            "isOther": true,
+            "isSecret": false,
+            "options": [
+              {
+                "label": "完成设置（推荐）",
+                "description": "结束设置，保留现有模型配置。"
+              },
+              {
+                "label": "配置模型和推理预算",
+                "description": "读取实时模型清单并展示配置方案供你选择。"
+              }
+            ]
+          }
+        ],
+        "commands": [
+          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . /Users/williamwue/.agents/skills $FIXTURE/codex-home/skills\"",
+          "/bin/zsh -lc 'ls -la; find $FIXTURE /Users/williamwue/.agents/skills -name SKILL.md -o -name AGENTS.md'",
+          "/bin/zsh -lc 'cat ../package/skills/setup-oh-my-stack/SKILL.md'",
+          "/bin/zsh -lc 'cat ../package/skills/setup-oh-my-stack/WORKFLOW.md'",
+          "/bin/zsh -lc 'node ../package/scripts/routing.mjs status'",
+          "/bin/zsh -lc 'cat ../package/docs/automatic-routing.md; node ../package/scripts/routing.mjs set --scope user --mode auto'",
+          "/bin/zsh -lc 'node ../package/scripts/routing.mjs set --scope user --mode auto --apply'"
+        ],
+        "assistant": [
+          "我会先查找并读取 `setup-oh-my-stack` 技能，确认它的设置流程和可选项。",
+          "已将本次 CODEX_HOME 的跨项目默认保存为自动路由。当前项目的 `manual` 覆盖仍优先，因此本项目实际仍关闭自动路由。启用后的验证步骤是通过原生 `/hooks` 界面审阅并信任 OMS hook，再启动新会话；保存设置本身不能证明 hook 已执行。",
+          "已保存跨项目默认为自动路由，但当前项目仍因 `manual` 覆盖而关闭自动路由。\n\n- 保存位置：[routing.json]($FIXTURE/codex-home/oh-my-stack/routing.json)\n- 模型配置与原生 hook 信任设置未修改。\n- hook 执行尚未验证；请通过 `/hooks` 审阅并信任 OMS hook，再启动新会话验证。"
+        ],
+        "responses": [
+          {
+            "routing_mode": {
+              "answers": [
+                "启用自动路由（推荐）"
+              ]
+            }
+          },
+          {
+            "routing_scope": {
+              "answers": [
+                "跨项目默认（推荐）"
+              ]
+            }
+          },
+          {
+            "next_step": {
+              "answers": [
+                "完成设置（推荐）"
+              ]
+            }
+          }
+        ],
+        "methods": {
+          "remoteControl/status/changed": 1,
+          "account/updated": 1,
+          "thread/started": 1,
+          "warning": 1,
+          "mcpServer/startupStatus/updated": 3,
+          "thread/settings/updated": 1,
+          "thread/status/changed": 8,
+          "turn/started": 1,
+          "item/started": 11,
+          "item/completed": 11,
+          "item/agentMessage/delta": 224,
+          "thread/tokenUsage/updated": 11,
+          "account/rateLimits/updated": 11,
+          "item/tool/requestUserInput": 3,
+          "serverRequest/resolved": 3,
+          "turn/completed": 1
+        },
+        "turnStatus": "completed",
+        "userRouting": {
+          "schemaVersion": 1,
+          "owner": "oh-my-stack",
+          "target": "codex",
+          "mode": "auto"
+        },
+        "projectUnchanged": true
+      }
+    ],
+    "requestedModelFromNativeInventory": "gpt-6.1-sol"
+  },
+  "boundaries": [
+    "The default_mode_request_user_input flag was enabled only for the disposable app-server test, not the maintainer installation.",
+    "Generated Skill input was explicit; this is not plugin installation or native discovery evidence.",
+    "Structured question requests were observed through app-server; no Desktop, IDE, TUI rendering or automatic engineering routing claim.",
+    "Fixture configurations and temporary local authentication copy were removed after each run."
+  ],
+  "fixturePathsNormalized": true
+}
