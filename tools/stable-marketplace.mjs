@@ -203,6 +203,8 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
   try {
     await mkdir(checkout);
     await git("init", "--quiet");
+    await git("config", "core.autocrlf", "false");
+    await git("config", "core.eol", "lf");
     await git("config", "user.name", "Oh My Stack release");
     await git("config", "user.email", "release@users.noreply.github.com");
     requireThat(await head(remote, checkout) === expectedHead, "stable branch changed since planning");

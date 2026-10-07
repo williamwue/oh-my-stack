@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { execFile, spawnSync } from 'node:child_process';
+import childProcess from 'node:child_process';
+import { syncBuiltinESMExports } from 'node:module';
 import { chmod, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { promisify } from 'node:util';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { GitHubAutopilotProvider, createGhTransport } from '../tools/github-autopilot-provider.mjs';
 
 const exec = promisify(execFile);
@@ -613,19 +615,28 @@ test('CLI offers reads only and refuses mutation commands', async () => {
 
 test('stdin module import is a library import when argv[1] is not a path', () => {
   const child = spawnSync(process.execPath, ['--input-type=module', '-'], {
-    input: `import { GitHubAutopilotProvider } from ${JSON.stringify(join(dirname(fileURLToPath(import.meta.url)), '../tools/github-autopilot-provider.mjs'))};\nprocess.stdout.write(typeof GitHubAutopilotProvider);`,
+    input: `import { GitHubAutopilotProvider } from ${JSON.stringify(pathToFileURL(tool).href)};\nprocess.stdout.write(typeof GitHubAutopilotProvider);`,
     encoding: 'utf8',
   });
   assert.equal(child.status, 0, child.stderr);
   assert.equal(child.stdout, 'function');
 });
 
-test('gh transport passes shell-like content as inert JSON stdin and bounds stderr', async () => {
+test('gh transport passes shell-like content as inert JSON stdin and bounds stderr', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'oms-gh-transport-'));
+  const originalSpawn = childProcess.spawn;
   try {
     const executable = join(root, 'fake-gh');
     await writeFile(executable, `#!/usr/bin/env node\nlet input='';process.stdin.on('data',c=>input+=c);process.stdin.on('end',()=>{const body=JSON.parse(input);if(body.mode==='error'){process.stderr.write('raw-secret-credential');process.exit(1)}if(body.mode==='flood'){process.stderr.write('x'.repeat(1000));process.exit(1)}process.stdout.write(JSON.stringify({args:process.argv.slice(2),body,cwd:process.cwd()}))});\n`);
     await chmod(executable, 0o700);
+    if (process.platform === 'win32') {
+      t.mock.method(childProcess, 'spawn', (binary, args, options) => {
+        assert.equal(binary, executable);
+        assert.equal(options.shell, false);
+        return originalSpawn(process.execPath, [executable, ...args], options);
+      });
+      syncBuiltinESMExports();
+    }
     const transport = createGhTransport({ executable, maxOutputBytes: 500 });
     const result = await transport({ method: 'POST', path: '/graphql', body: { text: '$(touch /tmp/never-run) `uname`', mode: 'ok' } });
     assert.equal(result.body.text, '$(touch /tmp/never-run) `uname`');
@@ -636,5 +647,9 @@ test('gh transport passes shell-like content as inert JSON stdin and bounds stde
       (e) => e.code === 'API_ERROR' && !e.message.includes('raw-secret-credential'));
     await assert.rejects(transport({ method: 'POST', path: '/graphql', body: { mode: 'flood' } }),
       (e) => e.code === 'OUTPUT_LIMIT');
-  } finally { await rm(root, { recursive: true, force: true }); }
+  } finally {
+    t.mock.restoreAll();
+    syncBuiltinESMExports();
+    await rm(root, { recursive: true, force: true });
+  }
 });

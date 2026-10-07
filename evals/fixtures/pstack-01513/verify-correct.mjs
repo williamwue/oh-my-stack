@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const root = resolve(process.argv[2]);
 const destination = join(root, "owned-package");
@@ -28,7 +29,7 @@ for (const cli of aliases) {
   outcomes.push({ alias: cli === aliases[0] ? "file" : "directory", inspect: "pass", malformed: "rejected" });
 }
 const imported = spawnSync(process.execPath,
-  ["--input-type=module", "-e", `await import(${JSON.stringify(join(root, "tools", "install-release.mjs"))});`],
+  ["--input-type=module", "-e", `await import(${JSON.stringify(pathToFileURL(join(root, "tools", "install-release.mjs")).href)});`],
   { encoding: "utf8" });
 assert.equal(imported.status, 0, imported.stderr);
 assert.equal(imported.stdout, "");

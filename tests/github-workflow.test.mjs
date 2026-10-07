@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { executeGitHubWorkflow } from '../tools/github-workflow.mjs';
 
 const BASE = 'a'.repeat(40), HEAD = 'b'.repeat(40), MERGE = 'c'.repeat(40);
@@ -156,7 +157,7 @@ test('in-flight caller edits cannot change the independently reviewed PR or auth
 }));
 
 test('CLI only accepts help and read-only inspect or recover grammar', () => {
-  const tool = new URL('../tools/github-workflow.mjs', import.meta.url).pathname;
+  const tool = fileURLToPath(new URL('../tools/github-workflow.mjs', import.meta.url));
   assert.equal(spawnSync(process.execPath, [tool, '--help'], { encoding: 'utf8' }).status, 0);
   for (const args of [['merge', '--request', 'x'], ['inspect', '--request', 'x', '--extra'], ['recover', '--request', 'x', '--merge']])
     assert.equal(spawnSync(process.execPath, [tool, ...args], { encoding: 'utf8' }).status, 1);
