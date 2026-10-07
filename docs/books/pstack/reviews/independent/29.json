@@ -1,13 +1,32 @@
 {
   "chapter": 29,
-  "reviewer": "/root/review_a",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese comparison of 50 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "36b8882dc8cdbd0e5a5ab9dde23934ae9ef2fcd502e157e83c380a1936397a7a",
-  "translation_sha256": "f12d2f627b570a2ecd9f68faafd5cc14170fb1a8038a3739d4a5e459ea20eb84",
+  "translation_sha256": "215c7fe032e269fbb860975d4e24614e3d6fae55e2f5aa74baf4f91df1aa5d59",
   "findings_resolved": [
-    "F29-1: restored designing the workflow before executing its verification steps; reviewer rechecked isolated correction."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 29,
+    "reviewer": "/root/review_a",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese comparison of 50 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+    "source_sha256": "36b8882dc8cdbd0e5a5ab9dde23934ae9ef2fcd502e157e83c380a1936397a7a",
+    "translation_sha256": "f12d2f627b570a2ecd9f68faafd5cc14170fb1a8038a3739d4a5e459ea20eb84",
+    "findings_resolved": [
+      "F29-1: restored designing the workflow before executing its verification steps; reviewer rechecked isolated correction."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

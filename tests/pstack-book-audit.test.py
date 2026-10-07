@@ -77,6 +77,78 @@ class AuditTests(unittest.TestCase):
         for key in ['anchors', 'images', 'embeds']:
             self.assertNotEqual(original[key], changed[key], key)
 
+    def make_comment_correction(self):
+        import re
+        book = self.root / module.BOOK
+        manifest = json.loads((book / 'source-manifest.json').read_text())
+        chapter = manifest['chapters'][3]
+        path = book / chapter['translation_file']
+        original = path.read_text()
+        source = (self.root / module.SNAPSHOT / 'ja/04.md').read_text()
+        original_code = module.BeautifulSoup(module.RENDER(source), 'html.parser').select('pre code')[0].get_text()
+        corrected_code = original_code.replace('このコマンドにJSON出力を加えて。', '给这个命令添加 JSON 输出。')
+        changed = re.sub(r'(```[^\n]*\n)([\s\S]*?)(\n```)',
+                         lambda match: match[1] + corrected_code.rstrip('\n') + match[3], original, count=1)
+        self.assertNotEqual(original, changed)
+        path.write_text(changed)
+        body = re.search(r'<!-- book-body:start -->\n([\s\S]*?)<!-- book-body:end -->', changed)[1]
+        receipt = json.loads((book / 'reviews/translator/04.json').read_text())
+        code = module.BeautifulSoup(module.RENDER(body), 'html.parser').select('pre code')[0].get_text()
+        report_path = book / 'reviews/ebook-comment-translations.json'
+        report = json.loads(report_path.read_text()) if report_path.exists() else {'chapters': []}
+        entry = {'order': 4, 'before_body_sha256': receipt['translation_sha256'],
+                 'after_body_sha256': module.digest(body.encode()),
+                 'rendered_code_changes': [{'block': 1, 'before_sha256': module.digest(original_code.encode()),
+                                           'after_sha256': module.digest(code.encode()),
+                                           'rationale': 'Translate explanatory comment'}]}
+        report['chapters'] = [item for item in report['chapters'] if item['order'] != 4] + [entry]
+        report_path.write_text(json.dumps(report))
+        review_path = self.root / chapter['review']['report']
+        review = json.loads(review_path.read_text())
+        review['translation_sha256'] = module.digest(body.encode())
+        review_path.write_text(json.dumps(review))
+        return path, report_path, report, review_path, review
+
+    def test_hash_bound_comment_correction_preserves_historical_receipt(self):
+        receipt = self.root / module.BOOK / 'reviews/translator/04.json'
+        before = receipt.read_bytes()
+        self.make_comment_correction()
+        self.assertEqual(module.audit(self.root)['issues'], [])
+        self.assertEqual(receipt.read_bytes(), before)
+
+    def test_unrecorded_code_change_is_rejected_after_body_hash_refresh(self):
+        import re
+        path, report_path, report, review_path, review = self.make_comment_correction()
+        changed = path.read_text().replace('/poteto-mode add json output', '/poteto-mode delete json output')
+        path.write_text(changed)
+        body = re.search(r'<!-- book-body:start -->\n([\s\S]*?)<!-- book-body:end -->', changed)[1]
+        next(item for item in report['chapters'] if item['order'] == 4)['after_body_sha256'] = module.digest(body.encode())
+        review['translation_sha256'] = module.digest(body.encode())
+        report_path.write_text(json.dumps(report))
+        review_path.write_text(json.dumps(review))
+        with self.assertRaisesRegex(ValueError, '"kind": "code"'):
+            module.audit(self.root)
+
+    def test_note_markup_cannot_hide_code_or_link_changes(self):
+        import re
+        path, report_path, report, review_path, review = self.make_comment_correction()
+        corrected = path.read_text()
+        for addition, kind in [
+            ('```js\ndeleteAllRecords();\n```', 'code'),
+            ('[Unexpected destination](https://example.invalid/unreviewed)', 'links'),
+        ]:
+            with self.subTest(kind=kind):
+                changed = corrected.replace('<!-- book-body:end -->',
+                    '<!-- book-code-note:start -->\n' + addition + '\n<!-- book-code-note:end -->\n<!-- book-body:end -->')
+                path.write_text(changed)
+                body = re.search(r'<!-- book-body:start -->\n([\s\S]*?)<!-- book-body:end -->', changed)[1]
+                next(item for item in report['chapters'] if item['order'] == 4)['after_body_sha256'] = module.digest(body.encode())
+                review['translation_sha256'] = module.digest(body.encode())
+                report_path.write_text(json.dumps(report))
+                review_path.write_text(json.dumps(review))
+                with self.assertRaisesRegex(ValueError, '"kind": "' + kind + '"'):
+                    module.audit(self.root)
+
 
 if __name__ == '__main__':
     unittest.main()

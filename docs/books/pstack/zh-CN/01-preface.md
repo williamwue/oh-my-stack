@@ -129,7 +129,7 @@ pstack 是对这个问题的一种具体回答。其内容包括验证成果物�
 
 ```
 /poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
-// 再試行が実行の途中に入ると、エクスポートが重複した行を書き出す。まず再現して、それから直して、確かめて。
+// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。
 ```
 
 这段请求以 pstack [随附指南](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/README.md)中列出的请求示例为基础，原书作者为其添加了日文翻译。

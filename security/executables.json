@@ -426,6 +426,38 @@
         "williamwue/oh-my-stack refs/heads/stable only with --publish"
       ],
       "uninstallBehavior": "Maintainer tool is not installed in plugin packages. Evidence and stable branch remain independently managed."
+    },
+    {
+      "path": "tools/books/build-pstack-ebooks.py",
+      "owner": "local-core",
+      "purpose": "Build reviewed local PDF and EPUB editions and their build reports.",
+      "network": false,
+      "writes": [
+        "output/pdf/",
+        "output/epub/",
+        ".tmp/ebook-build/"
+      ],
+      "uninstallBehavior": "Removed with the checkout; generated artifacts and caller-supplied assets remain separately owned."
+    },
+    {
+      "path": "tools/books/validate-pstack-ebooks.py",
+      "owner": "local-core",
+      "purpose": "Validate EPUB content, source receipts, links and physical row order.",
+      "network": false,
+      "writes": [
+        "Explicit --report path when supplied"
+      ],
+      "uninstallBehavior": "Removed with the checkout; generated artifacts and caller-supplied assets remain separately owned."
+    },
+    {
+      "path": "tools/books/render-pstack-svg.cjs",
+      "owner": "local-core",
+      "purpose": "Rasterize a local book diagram with a supplied local font.",
+      "network": false,
+      "writes": [
+        "Explicit output PNG path"
+      ],
+      "uninstallBehavior": "Removed with the checkout; generated artifacts and caller-supplied assets remain separately owned."
     }
   ]
 }

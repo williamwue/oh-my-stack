@@ -1,13 +1,32 @@
 {
   "chapter": 35,
-  "reviewer": "root independent AI review; translator translate_c",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese comparison of 153 visible entries including headings, paragraphs, lists, table cells, conditions, numbers, negations and attribution. Code and embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "c978716a46c9ed67696223b7e0c76568a6803600097ae51cf071ed2729b62bca",
-  "translation_sha256": "267eb470ddbc08144296e650d781b7c6222ef5957cad8ae7a774bb304f4fcb7d",
+  "translation_sha256": "53dd391a996c7cae1b4554079f7978ea33d188e444ef23812bb0a196523a8f0c",
   "findings_resolved": [
-    "Restored universal quantifier: every array operation must return a result for all inputs, rather than one operation."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 35,
+    "reviewer": "root independent AI review; translator translate_c",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese comparison of 153 visible entries including headings, paragraphs, lists, table cells, conditions, numbers, negations and attribution. Code and embeds checked separately.",
+    "source_sha256": "c978716a46c9ed67696223b7e0c76568a6803600097ae51cf071ed2729b62bca",
+    "translation_sha256": "267eb470ddbc08144296e650d781b7c6222ef5957cad8ae7a774bb304f4fcb7d",
+    "findings_resolved": [
+      "Restored universal quantifier: every array operation must return a result for all inputs, rather than one operation."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

@@ -169,12 +169,12 @@ Agent 开始工作时，会制作一份照 Playbook 步骤编写的 TODO 列表�
 
 ```
 .cursor/skills/verify-atlas/
-├─ SKILL.md（起動から片付けまでの手順）
-├─ control-atlas.mjs（アプリを操作するCLI）
+├─ SKILL.md（从启动到清理的步骤）
+├─ control-atlas.mjs（操作应用的 CLI）
 └─ features/（Feature Map）
-   ├─ README.md（Feature Mapの目次。機能ごとのファイルへのリンク）
-   ├─ <機能A>.md
-   └─ <機能B>.md
+   ├─ README.md（Feature Map 目录，链接到各功能文件）
+   ├─ <功能A>.md
+   └─ <功能B>.md
 ```
 
 `SKILL.md` 的内容已在[第 26 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/03ebca)介绍；这里重点看文章详细讨论的 <strong>CLI</strong> 和 <strong>Feature Map</strong>。
@@ -564,7 +564,7 @@ Dr Eggbot 是 poteto（Lauren Tan）制作的 Bot，用于设计并制作 Grok B
 
 ```
 /poteto-mode build <description of feature, any useful context>. use /control-app to verify your changes and show me a video and screenshots as proof
-// <機能の説明と、役に立つコンテキスト>を作って。/control-app で変更を確かめて。証拠として動画とスクリーンショットを見せて。
+// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。
 ```
 
 这个请求在功能说明之外，还明确了使用哪种验证 Skill（`/control-app`），以及证据形式（视频和截图）。
@@ -573,7 +573,7 @@ Dr Eggbot 是 poteto（Lauren Tan）制作的 Bot，用于设计并制作 Grok B
 
 ```
 spawn a cloud agent to use /poteto-mode to build <description of feature, any useful context>. use /control-app to verify your changes and show me a video and screenshots as proof
-// クラウドエージェントを起動して、/poteto-mode で<機能の説明と、役に立つコンテキスト>を作らせて。/control-app で変更を確かめて。証拠として動画とスクリーンショットを見せて。
+// 启动云端 Agent，让它用 /poteto-mode 创建<功能说明和有用的上下文>；用 /control-app 验证改动，并展示视频和截图作为证据。
 ```
 
 <strong>poteto 不让 Bot 亲自做，是因为将工作交给云端 Agent 后，Bot 可以继续处理其他工作，其上下文窗口也不会被执行记录填满</strong>。
@@ -587,7 +587,7 @@ spawn a cloud agent to use /poteto-mode to build <description of feature, any us
 
 ```
 spawn a cloud agent to use /poteto-mode to improve the initial loading time of our app. first use /control-app to take a trace of the status quo, and identify opportunities for improvement. then do a targeted fix and use /control-app + a /swarm to confirm the win
-// クラウドエージェントを起動して、/poteto-mode でアプリの初回読み込み時間を改善させて。まず /control-app で現状のトレースを取り、改善の余地を見つけて。それから狙いを絞って直し、/control-app と /swarm で改善を確かめて。
+// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，最后用 /control-app 和 /swarm 验证改进。
 ```
 
 <strong>该请求明确要求修复前用 `/control-app` 取得现状 trace</strong>。「[<strong>Perf issue</strong>](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/perf-issue.md)」Playbook 也要求第一步取得改动前的基准 trace，并在报告中写出改动前后的数值及差异。

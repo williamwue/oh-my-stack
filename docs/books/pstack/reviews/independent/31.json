@@ -1,11 +1,30 @@
 {
   "chapter": 31,
-  "reviewer": "root independent AI review; translator translate_c",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese comparison of 72 visible text entries including headings, prose, lists, table cells, conditions, negations, numbers and attribution. Code and embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "c21b95f892460397b2838ebd8637052abd75cef8807d10e1c02ac3571aa82908",
-  "translation_sha256": "daf77488d1dc8507b6892870e917603261c51fd22f85337891b2bbd328d3f7c3",
-  "findings_resolved": [],
+  "translation_sha256": "2671c0692672692c3a2a2addd2ffd31675adb9a226dff642646f0b1bb178ba6a",
+  "findings_resolved": [
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
+  ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 31,
+    "reviewer": "root independent AI review; translator translate_c",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese comparison of 72 visible text entries including headings, prose, lists, table cells, conditions, negations, numbers and attribution. Code and embeds checked separately.",
+    "source_sha256": "c21b95f892460397b2838ebd8637052abd75cef8807d10e1c02ac3571aa82908",
+    "translation_sha256": "daf77488d1dc8507b6892870e917603261c51fd22f85337891b2bbd328d3f7c3",
+    "findings_resolved": [],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

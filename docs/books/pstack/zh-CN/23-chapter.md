@@ -121,14 +121,14 @@
 </ul>
 <p class="code-line" data-line="68">例如，真实订单只会处于「待付款」「待发货」「已发货」「已取消」四种状态之一。</p>
 <p class="code-line" data-line="70">上述订单数据可用以下两种结构表达。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="72"><span class="line"><span style="color:#a0aab5">// ドメインを表す構造：状態は、status の4つのうちどれか一つだけを取る</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="72"><span class="line"><span style="color:#a0aab5">// 表达领域的结构：状态只能取 status 的四种值之一</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> Order</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#FFAB70">  address</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#FFAB70">  status</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "unpaid"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "paid"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "shipped"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "canceled"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#E1E4E8">};</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// ドメインを表していない構造：3つの真偽値で持つ</span></span>
-<span class="line"><span style="color:#a0aab5">// isShipped: true と isCanceled: true のような、実際にはない組み合わせも取れてしまう</span></span>
+<span class="line"><span style="color:#a0aab5">// 未表达领域的结构：用三个布尔值保存状态</span></span>
+<span class="line"><span style="color:#a0aab5">// 甚至能出现 isShipped: true 与 isCanceled: true 这样现实中不存在的组合</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> OrderFlags</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#FFAB70">  address</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#FFAB70">  isPaid</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8">;</span></span>
@@ -161,7 +161,7 @@
 包含上述三种复杂性的代码如下。
 
 ```
-// order.ts：注文の状態を、3つの真偽値で持つ（散らばった真偽値）
+// order.ts：用三个布尔值保存订单状态（分散的布尔值）
 type Order = {
   address: string;
   isPaid: boolean;
@@ -170,28 +170,33 @@ type Order = {
   trackingNo?: string;
 };
 
-// label.ts：発送ラベルを作る
+// label.ts：生成发货标签
 function labelText(order: any): string {
-  // 「注文には住所があるはず」という前提を、ここで確かめる
+  // 在这里验证「订单应当有地址」这一前提
   if (!order.address) throw new Error("住所がありません");
-  // 状態の分岐
+  // 按状态分支
   if (order.isCanceled) return "キャンセル済み";
   if (order.isShipped) return "発送済み";
   if (order.isPaid) return "発送待ち";
   return "支払い待ち";
 }
 
-// mail.ts：お知らせメールの件名を作る
+// mail.ts：生成通知邮件的主题
 function mailSubject(order: any): string {
-  // 同じ前提を、別のファイルでもう一度確かめる
+  // 在另一个文件中再次验证相同前提
   if (!order.address) throw new Error("住所がありません");
-  // 同じ分岐が、ファイルをまたいで繰り返される
+  // 同样的分支逻辑在多个文件中重复
   if (order.isCanceled) return "ご注文をキャンセルしました";
   if (order.isShipped) return "商品を発送しました";
   if (order.isPaid) return "お支払いを確認しました";
   return "お支払いをお待ちしています";
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：示例中的日文字符串是程序输出：地址缺失时抛出「没有地址」；发货标签依次使用「已取消」「已发货」「待发货」「待付款」；邮件主题依次表达「订单已取消」「商品已发货」「已确认付款」「等待付款」。这些原值会影响示例的输出。
+<!-- book-code-note:end -->
+
 
 这段代码允许 `isShipped` 和 `isCanceled` 同时为 `true`。  
 这是<strong>不可能的状态</strong>：真实订单不可能同时「已发货」和「已取消」。  
@@ -207,7 +212,7 @@ Agent 选择表达领域的结构后，<strong>不可能的状态根本无法写
 用表达领域的结构改写同一订单，如下所示。
 
 ```
-// order.ts：注文の形と、取りうる状態を一か所で決める
+// order.ts：集中定义订单结构与可能的状态
 type OrderStatus =
   | { state: "unpaid" }
   | { state: "paid" }
@@ -216,7 +221,7 @@ type OrderStatus =
 
 type Order = { address: string; status: OrderStatus };
 
-// 状態ごとの文言を、一つの表にまとめる
+// 将每种状态对应的文字集中到一张表中
 const LABEL_TEXT: Record<OrderStatus["state"], string> = {
   unpaid: "支払い待ち",
   paid: "発送待ち",
@@ -224,12 +229,12 @@ const LABEL_TEXT: Record<OrderStatus["state"], string> = {
   canceled: "キャンセル済み",
 };
 
-// label.ts：状態ごとの文言を表にまとめ、型を信じて表を引くだけにする
+// label.ts：把各状态的文字集中到表中，信任类型并直接查表
 function labelText(order: Order): string {
   return LABEL_TEXT[order.status.state];
 }
 
-// mail.ts：状態ごとの件名を表にまとめ、型を信じて表を引くだけにする
+// mail.ts：把各状态的邮件主题集中到表中，信任类型并直接查表
 const MAIL_SUBJECT: Record<OrderStatus["state"], string> = {
   unpaid: "お支払いをお待ちしています",
   paid: "お支払いを確認しました",
@@ -241,6 +246,11 @@ function mailSubject(order: Order): string {
   return MAIL_SUBJECT[order.status.state];
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：状态映射和邮件主题中的日文是实际输出值：未付款、已付款、已发货、已取消对应的标签分别是「待付款」「待发货」「已发货」「已取消」；邮件主题分别表示「等待付款」「已确认付款」「商品已发货」「订单已取消」。
+<!-- book-code-note:end -->
+
 
 在这段代码中，三种复杂性分别被消除。
 
@@ -307,17 +317,17 @@ Agent 应<strong>在编写代码时选择结构</strong>。在这个阶段作出
 改用状态机后，<strong>这种组合根本无法表示</strong>。
 
 ```
-// 前：矛盾した組み合わせが表現できてしまう
+// 修改前：可以表示相互矛盾的状态组合
 type ExportJobFlags = { running: boolean; failed: boolean; retrying: boolean };
 
-// 後：状態ごとに持てるデータが決まる
+// 修改后：每种状态可携带的数据由类型决定
 type ExportJob =
   | { state: "queued" }
   | { state: "running"; attempt: number }
   | { state: "failed"; attempt: number; error: string }
   | { state: "done"; rowCount: number };
 
-// 移り方も決める：失敗したジョブだけが、次の試行として running に戻れる
+// 同时定义状态转换：只有失败的任务才能作为下一次尝试回到 running 状态
 function retry(job: ExportJob): ExportJob {
   if (job.state !== "failed") return job;
   return { state: "running", attempt: job.attempt + 1 };
@@ -335,13 +345,13 @@ Agent 应创建一个表示会员的 `User` 类型，让两个函数都接收 `U
 这样，增加会员字段时只需修改 `User` 类型；也不会误把姓名和邮箱以相反顺序传入。
 
 ```
-// 前：同じ3つの引数を、関数ごとに並べている
+// 修改前：两个函数各自列出相同的三个参数
 function sendWelcomeMail(name: string, email: string, plan: string) { /* ... */ }
 function createInvoice(name: string, email: string, plan: string) { /* ... */ }
 ```
 
 ```
-// 後：会員の形を User 型に一度だけ書き、2つの関数はこれを受け取る
+// 修改后：只定义一次 User 类型，两个函数都接收它
 type User = { name: string; email: string; plan: "free" | "paid" };
 
 function sendWelcomeMail(user: User) { /* ... */ }
@@ -361,14 +371,14 @@ function createInvoice(user: User) { /* ... */ }
 type OrderKind = "standard" | "express" | "pickup";
 declare const order: { kind: OrderKind };
 
-// 前：画面、請求、メールの3つのファイルに、同じ if/else がある
+// 修改前：页面、计费和邮件三个文件中都有相同的 if/else
 function shippingFee(kind: OrderKind): number {
   if (kind === "standard") return 500;
   if (kind === "express") return 1200;
   return 0;
 }
 
-// 後：種類から送料を引く参照表を一つだけ作り、3つのファイルはこれを引く
+// 修改后：只建立一张按类别查运费的表，三个文件都查询它
 const SHIPPING_FEES: Record<OrderKind, number> = {
   standard: 500,
   express: 1200,
@@ -390,10 +400,10 @@ const fee = SHIPPING_FEES[order.kind];
 使用 discriminated union 后，`kind` 的值决定允许哪些字段，因此无法写出这类值。
 
 ```
-// 前：どの支払い方法でも、すべての項目を持ててしまう
+// 修改前：任何支付方式都可以包含全部字段
 type PaymentLoose = { method: "card" | "bank" | "cod"; cardLast4?: string; bankAccount?: string };
 
-// 後：kind の値ごとに、持てる項目が決まる
+// 修改后：kind 的值决定可以包含哪些字段
 type Payment =
   | { kind: "card"; cardLast4: string }
   | { kind: "bank"; bankAccount: string }
@@ -410,6 +420,11 @@ function paymentLabel(p: Payment): string {
   }
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：三种支付方式的原始输出依次是「卡片（末尾四位数字）」「银行转账（账户号码）」和「货到付款」。这些日文显示值会影响示例输出，因此保留。
+<!-- book-code-note:end -->
+
 
 <a id="%E3%81%9D%E3%81%AE%E5%A0%B4%E3%81%AE%E6%9B%B8%E3%81%8D%E6%8F%9B%E3%81%88%E3%81%AE%E4%BB%A3%E3%82%8F%E3%82%8A%E3%81%AB%E3%80%81reducer-%E3%82%92%E4%BD%BF%E3%81%86"></a>
 
@@ -429,11 +444,11 @@ declare let cart: Cart;
 declare const item: CartItem;
 declare const id: string;
 
-// 前：3つの画面で、それぞれ直接書き換えている
+// 修改前：三个页面分别直接修改购物车
 cart.items.push(item);
 cart.items = cart.items.filter((i) => i.id !== id);
 
-// 後：操作を型で決め、次のかごの計算は reducer の中だけで行う
+// 修改后：用类型定义操作，下一步购物车状态只在 reducer 中计算
 type CartAction =
   | { type: "add"; item: CartItem }
   | { type: "remove"; id: string };
@@ -500,26 +515,31 @@ Agent 还应<strong>质疑只在调用之间插入一层、却没有减少任何
 下面的代码展示了检查分散在各处的情况：来自订单表单的「数量」是否至少为一，只有部分函数会验证。
 
 ```
-let stock = 10; // 在庫の数
+let stock = 10; // 库存数量
 
-// 値段を計算する：数量が1以上かを確かめる
+// 计算价格：检查数量是否至少为 1
 function calcPrice(quantity: number): number {
   if (quantity < 1) throw new Error("数量は1以上にしてください");
   return quantity * 500;
 }
 
-// 在庫を減らす：「どこかで確かめているはず」として、何も確かめない
+// 减少库存：假定「其他地方已经验证过」，此处不做检查
 function reserveStock(quantity: number) {
   stock = stock - quantity;
 }
 
-// 注文画面：calcPrice を先に呼ぶので、確かめてから在庫を減らす
+// 订单页面：先调用 calcPrice，验证后再减少库存
 calcPrice(2);
 reserveStock(2);
 
-// 別の画面：reserveStock だけを直接呼ぶ
-reserveStock(-3); // 在庫が 8 から 11 に増えてしまう
+// 另一个页面：直接调用 reserveStock
+reserveStock(-3); // 库存从 8 意外增加到 11
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息要求数量至少为 1；原文作为抛出的错误内容保留。
+<!-- book-code-note:end -->
+
 
 订单页面的路径通过 `calcPrice` 进行了检查，但只调用 `reserveStock` 的路径完全没有检查。  
 因此，`-3` 直接传入，本应减少库存的处理反而增加了库存。
@@ -527,9 +547,9 @@ reserveStock(-3); // 在庫が 8 から 11 に増えてしまう
 按这条 Principle 改写相同处理，结果如下。
 
 ```
-let stock = 10; // 在庫の数
+let stock = 10; // 库存数量
 
-// 境界：フォームから届いた値を、ここで一度だけ確かめる
+// 边界：在这里对表单传来的值只验证一次
 function parseQuantity(input: string): number {
   const quantity = Number(input);
   if (!Number.isInteger(quantity) || quantity < 1) {
@@ -538,7 +558,7 @@ function parseQuantity(input: string): number {
   return quantity;
 }
 
-// 内側：確かめた値だけが届くので、確認を書かない
+// 内部：只会收到已验证的值，因此不重复验证
 function calcPrice(quantity: number): number {
   return quantity * 500;
 }
@@ -547,11 +567,16 @@ function reserveStock(quantity: number) {
   stock = stock - quantity;
 }
 
-// どの画面も、フォームの値を parseQuantity に通してから使う
-const quantity = parseQuantity("-3"); // ここでエラーになり、先へ進まない
+// 所有页面都先让表单值经过 parseQuantity，再使用它
+const quantity = parseQuantity("-3"); // 这里会报错，执行不会继续
 calcPrice(quantity);
 reserveStock(quantity);
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息要求数量是至少为 1 的整数；原文作为抛出的错误内容保留。
+<!-- book-code-note:end -->
+
 
 现在只有 `parseQuantity` 一处负责检查，`calcPrice` 内的检查也不再需要。  
 所有页面都会先让表单值经过 `parseQuantity`，因此 `-3` 等值不会传到 `calcPrice` 或 `reserveStock`。
@@ -578,7 +603,7 @@ Agent 用以下两个问题判断应在哪里进行验证。
 ```
 type Config = { batchSize: number };
 
-// 境界：設定ファイルを読み込むときに一度だけ確かめ、Config 型の値にする
+// 边界：读取配置文件时只验证一次，并转成 Config 类型的值
 function parseConfig(raw: { batchSize?: unknown }): Config {
   if (typeof raw.batchSize !== "number" || raw.batchSize <= 0) {
     throw new Error("batchSize は正の数にしてください");
@@ -586,7 +611,7 @@ function parseConfig(raw: { batchSize?: unknown }): Config {
   return { batchSize: raw.batchSize };
 }
 
-// 内側：Config 型を信じ、batchSize > 0 を確かめ直さない
+// 内部：信任 Config 类型，不再重复检查 batchSize > 0
 function splitIntoBatches(items: string[], config: Config): string[][] {
   const batches: string[][] = [];
   for (let i = 0; i < items.length; i += config.batchSize) {
@@ -595,6 +620,11 @@ function splitIntoBatches(items: string[], config: Config): string[][] {
   return batches;
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息要求 batchSize 为正数；原文作为抛出的错误内容保留。
+<!-- book-code-note:end -->
+
 
 <a id="%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8C%E5%91%BC%E3%81%B6%E3%81%A0%E3%81%91%E3%81%AE%E7%B4%94%E7%B2%8B%E9%96%A2%E6%95%B0%E3%81%AB%E5%88%87%E3%82%8A%E5%87%BA%E3%81%99"></a>
 
@@ -623,18 +653,22 @@ declare const button: HTMLButtonElement;
 declare const totalLabel: HTMLElement;
 declare function readItemsFromCart(): Item[];
 
-// 純粋関数：同じ items には、いつも同じ合計を返す。画面には触らない
+// 纯函数：相同的 items 总返回相同的总价，不访问页面
 function calcTotal(items: Item[]): number {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
-// シェル：画面から値を読み、純粋関数を呼び、結果を画面に書くだけ
+// 外壳：只从页面读取值、调用纯函数，并把结果写回页面
 button.addEventListener("click", () => {
-  const items = readItemsFromCart(); // 画面から読む
-  const total = calcTotal(items); // 計算は純粋関数に任せる
-  totalLabel.textContent = `${total}円`; // 画面に書く
+  const items = readItemsFromCart(); // 从页面读取
+  const total = calcTotal(items); // 把计算交给纯函数
+  totalLabel.textContent = `${total}円`; // 写入页面
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：页面文字末尾的「円」表示日元，是原示例的实际显示值。
+<!-- book-code-note:end -->
 
 <a id="%E7%99%BA%E7%81%AB%E6%9D%A1%E4%BB%B6-1"></a>
 
@@ -702,7 +736,7 @@ type User = { id: UserId; name: string };
 declare function getUser(id: UserId): Promise<User>;
 declare const orderId: OrderId;
 
-// 中身はどちらも文字列だが、OrderId を渡すとコンパイルでエラーになる
+// 两者内部都是字符串，但传入 OrderId 会导致编译错误
 await getUser(orderId);
 ```
 
@@ -738,17 +772,17 @@ Agent 应使联合类型增加新 variant 时，未处理它的分支产生编�
 这样，就无须靠人逐处查找遗漏。
 
 ```
-// タスクの種類に canceled を追加した
+// 已给任务类型添加 canceled
 type Task = { kind: "open" } | { kind: "done" } | { kind: "canceled" };
 
-// 前：扱っていない種類は、最後の return "" に流れる。コンパイルはエラーにならない
+// 修改前：未处理的类型会落到最后的 return ""，编译不会报错
 function labelLoose(task: Task): string {
   if (task.kind === "open") return "未完了";
   if (task.kind === "done") return "完了";
-  return ""; // canceled のタスクは、文言が空のまま画面に出る
+  return ""; // canceled 类型的任务在页面上显示为空文字
 }
 
-// 後：扱っていない種類があると、コンパイルがエラーになる
+// 修改后：漏掉任何类型都会导致编译错误
 function label(task: Task): string {
   switch (task.kind) {
     case "open":
@@ -756,13 +790,17 @@ function label(task: Task): string {
     case "done":
       return "完了";
     default: {
-      // canceled を case で扱っていないので、この行でコンパイルがエラーになる
+      // 因为没有用 case 处理 canceled，编译会在此行报错
       const unhandled: never = task;
       return unhandled;
     }
   }
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：`open` 和 `done` 的日文显示值分别表示「未完成」与「已完成」；它们是函数实际返回的文字，因此保留原值。
+<!-- book-code-note:end -->
 
 原来的 `labelLoose` 即使忘记处理 `canceled` 也能编译通过，直到界面显示空文本，才会发现遗漏。
 
@@ -1017,12 +1055,12 @@ Agent 应以消除共享写入为基本处理方式。
 拆分写入目标前后的示意如下。
 
 ```
-分ける前（書き込み先を共有している）
+拆分前（各主体共享同一个写入位置）
 WorkerA ─┐
            ├─→ state.json
 WorkerB ─┘
 
-分けた後（書き込み先が主体ごとに分かれている）
+拆分后（各主体分别拥有自己的写入位置）
 WorkerA ──→ indexer-state.json
 WorkerB ──→ metrics-state.json
 ```
@@ -1071,7 +1109,7 @@ B 第一次试图改值时，A 已将其改为 11，因此失败。B 重新读�
 
 ```
 separate before serializing shared state. give each attempt its own worktree, no locks.
-// separate before serializing shared state で。試行ごとに専用の worktree を与えて。ロックは使わないで。
+// 使用 separate before serializing shared state。给每次尝试分配专用 worktree，不要加锁。
 ```
 
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">

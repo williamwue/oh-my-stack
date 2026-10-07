@@ -143,7 +143,7 @@
 
 ```
 /poteto-mode repro the duplicate write first. if there's a cheap test path, /tdd it. then fix and rerun.
-// まず重複書き込みを再現して。手軽に書けるテストがあれば /tdd で進めて。それから直して、もう一度流して。
+// 先复现重复写入。如果能方便地编写测试，就使用 /tdd。然后修复并重新运行。
 ```
 
 与其勉强使用脆弱的 mock（替代真实组件的假组件）来编写测试，<strong>运行真实命令更能准确证明问题已修复</strong>。步骤 5 允许省略编写费时的测试，原因就在这里。
@@ -235,14 +235,14 @@
 
 ```
 /poteto-mode startup takes 1.8s on this fixture. trace it, fix the measured cause, show me before and after.
-// このフィクスチャ（計測に使う決まった入力）で起動に1.8秒かかる。トレースして、測った原因を直して、前後を見せて。
+// 使用这个固定的测试输入，启动需要 1.8 秒。采集追踪，修复测得的原因，并展示修改前后的结果。
 ```
 
 若还要确认改善确实可靠，可在请求中要求通过 `/swarm` 并行运行验证 Skill（像用户一样操作应用并检查结果的 Skill，见[第 3 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a88ea5)）。「The Complete Guide to pstack」[Part 1](https://x.com/poteto/status/2094457600259842065) 的示例如下。
 
 ```
 spawn a cloud agent to use /poteto-mode to improve the initial loading time of our app. first use /control-app to take a trace of the status quo, and identify opportunities for improvement. then do a targeted fix and use /control-app + a /swarm to confirm the win
-// クラウドエージェントを起動して、/poteto-mode でアプリの初回読み込み時間を改善させて。まず /control-app で現状のトレースを取り、改善の余地を見つけて。それから狙いを絞って直し、/control-app と /swarm で改善を確かめて。
+// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，最后用 /control-app 和 /swarm 验证改进。
 ```
 
 `/control-app` 是文章中创建的验证 Skill 的名称（见[第 36 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7081)）。`/swarm`（见[第 24 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/2ad346)）是并行运行 Workers（多个 Agent）并汇总为一份报告的 Skill。让多个 Agent 运行验证 Skill，便能用足够的样本量确认改善，避免把单次测量的波动误判为改善。

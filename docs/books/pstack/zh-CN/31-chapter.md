@@ -117,7 +117,7 @@ pstack 的 `/poteto-mode` 和其他 Skill 无法涵盖所有使用场景。
 
 ```
 /automate-me update my mode skill with everything since its last edit
-// 前回の編集以降のすべてを使って、私の mode のSkillを更新して
+// 利用上次编辑以来的所有信息，更新我的 mode Skill。
 ```
 
 <a id="%2Fmake-bot-ui-%E3%81%AF%E3%80%81%E9%80%81%E4%BF%A1%E3%82%AD%E3%83%BC%E3%82%92%E5%A4%96%E3%81%AB%E5%87%BA%E3%81%95%E3%81%9A%E3%81%AB%E3%80%81grok-bot-%E3%82%92%E3%83%9C%E3%82%BF%E3%83%B3%E3%81%A7%E8%B5%B7%E5%8B%95%E3%81%99%E3%82%8B%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%9C%E3%82%8B"></a>

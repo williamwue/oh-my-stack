@@ -95,14 +95,14 @@
 <p class="code-line" data-line="51"><strong>骨架</strong>……只写类型、函数签名（名称、参数、返回类型）和模块边界，函数主体暂用 <code>throw new Error("not implemented")</code> 等占位实现（下例中的 <code>ImportOptions</code>、<code>ImportResult</code>、<code>importRows</code>）。<code>not implemented</code> 表示「尚未实现」；占位主体被调用时只抛出这个错误，不执行实际处理。</p>
 <p class="code-line" data-line="53">以下以导入操作的骨架为例。</p>
 <p class="code-line" data-line="55">先写调用方如何使用，再由此确定类型和签名，结果如下。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="57"><span class="line"><span style="color:#a0aab5">// 呼び出し側の使い方：これを先に書き、ここから型を決める</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="57"><span class="line"><span style="color:#a0aab5">// 调用方的用法：先写用法，再据此确定类型</span></span>
 <span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> onImportClick</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">file</span><span style="color:#F97583">:</span><span style="color:#B392F0"> File</span><span style="color:#E1E4E8">) {</span></span>
 <span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> importRows</span><span style="color:#E1E4E8">(file, { onError: </span><span style="color:#9ECBFF">"skip"</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`${</span><span style="color:#E1E4E8">result</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">imported</span><span style="color:#9ECBFF">}件を取り込み、${</span><span style="color:#E1E4E8">result</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">skipped</span><span style="color:#9ECBFF">}件を飛ばしました`</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 骨組み：型とシグネチャだけを書き、中身は書かない</span></span>
-<span class="line"><span style="color:#a0aab5">// onError は、不正な行があったときに、その行を飛ばすか（skip）、取り込みを止めるか（stop）</span></span>
+<span class="line"><span style="color:#a0aab5">// 骨架：只写类型和函数签名，暂不写实现</span></span>
+<span class="line"><span style="color:#a0aab5">// onError 决定遇到无效行时跳过该行（skip）还是停止导入（stop）</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> ImportOptions</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">onError</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "skip"</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> "stop"</span><span style="color:#E1E4E8"> };</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> ImportResult</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">imported</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">; </span><span style="color:#FFAB70">skipped</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> };</span></span>
 <span class="line"></span>
@@ -110,6 +110,12 @@
 <span class="line"><span style="color:#F97583">  throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"not implemented"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span></code></pre></div>
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：console.log 模板中的日文表示「导入了若干条，跳过了若干条」；它是示例运行时输出，故保留。
+<!-- book-code-note:end -->
+
+
 <p class="code-line" data-line="74">即使还没有实现，只看骨架也能知道：调用方只需调用一次 <code>importRows</code> 就能完成导入，返回值会说明导入和跳过了多少条。</p>
 </div></aside>
 
@@ -206,14 +212,14 @@ Phase B 的做法具体落实了[第 17 章](https://zenn.dev/sc30gsw/books/080f
 例如在前面的骨架示例中，先在 `onImportClick` 中写下 `importRows(file, { onError: "skip" })` 这一调用，再据此确定 `ImportOptions` 和 `ImportResult` 的类型。
 
 ```
-// 呼び出し側の使い方：これを先に書き、ここから型を決める
+// 调用方的用法：先写用法，再据此确定类型
 async function onImportClick(file: File) {
   const result = await importRows(file, { onError: "skip" });
   console.log(`${result.imported}件を取り込み、${result.skipped}件を飛ばしました`);
 }
 
-// 骨組み：型とシグネチャだけを書き、中身は書かない
-// onError は、不正な行があったときに、その行を飛ばすか（skip）、取り込みを止めるか（stop）
+// 骨架：只写类型与函数签名，暂不写实现
+// onError 决定遇到无效行时是跳过该行（skip），还是停止导入（stop）
 type ImportOptions = { onError: "skip" | "stop" };
 type ImportResult = { imported: number; skipped: number };
 
@@ -221,6 +227,11 @@ export async function importRows(file: File, options: ImportOptions): Promise<Im
   throw new Error("not implemented");
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：console.log 模板中的日文表示「导入了若干条，跳过了若干条」；该字符串是示例运行时输出，故保留原值。
+<!-- book-code-note:end -->
+
 
 ##### 2. 先选择符合常见读写操作的数据结构
 
@@ -234,14 +245,14 @@ export async function importRows(file: File, options: ImportOptions): Promise<Im
 
 ```
 type User = { id: string; name: string };
-// 探したいユーザーのID
+// 要查找的用户 ID
 declare const id: string;
 
-// 前：IDで引くたびに、配列を先頭から探す
+// 修改前：每次按 ID 查询都从头遍历数组
 const userList: User[] = [];
 const found = userList.find((u) => u.id === id);
 
-// 後：IDをキーにした表で持ち、IDから直接引く
+// 修改后：用 ID 作为键建立映射，直接按 ID 查询
 const usersById = new Map<string, User>();
 const user = usersById.get(id);
 ```
@@ -257,12 +268,12 @@ const user = usersById.get(id);
 例如，导入操作可以采用以下两种公开接口。
 
 ```
-// 深い：公開するのは1つの関数だけで、読み込み、検証、保存はその裏に隠す
+// 深模块：只公开一个函数，将读取、验证和保存隐藏在内部
 type DeepImporter = {
   importRows(file: File, options: ImportOptions): Promise<ImportResult>;
 };
 
-// 浅い：3つの関数を公開し、呼び出し側がそれらを正しい順番で呼ぶ必要がある
+// 浅模块：公开三个函数，要求调用方按正确顺序调用
 type ShallowImporter = {
   loadRows(file: File): string[][];
   validateRows(rows: string[][]): string[][];
@@ -279,12 +290,12 @@ type ShallowImporter = {
 例如，「已发货的订单必须有追踪编号」可用以下三种方式表达。
 
 ```
-// 型で表す：shipped の注文は、trackingNo を持つ形しか書けない
+// 用类型表达：shipped 状态的订单必须有 trackingNo
 type Order =
   | { state: "paid" }
   | { state: "shipped"; trackingNo: string };
 
-// 実行時のチェック：型では防げず、動かしたときに初めて見つかる
+// 运行时检查：类型无法阻止，只有执行时才会发现
 type LooseOrder = { state: "paid" | "shipped"; trackingNo?: string };
 
 function assertTrackingNo(order: LooseOrder): void {
@@ -293,13 +304,18 @@ function assertTrackingNo(order: LooseOrder): void {
   }
 }
 
-// コメント：守られるかどうかは、コメントを読んだ人次第
+// 注释：能否遵守取决于读注释的人
 type CommentedOrder = {
   state: "paid" | "shipped";
-  // state が "shipped" のときは、必ず trackingNo を入れること
+  // state 为 "shipped" 时，必须提供 trackingNo
   trackingNo?: string;
 };
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息中的日文表示「已发货却没有追踪号码」；该字符串是示例运行时输出，故保留原值。
+<!-- book-code-note:end -->
+
 
 如果用类型表达，编译器会在写出违反不变条件的代码时提示。因此应尽可能用类型表达不变条件。
 
@@ -331,30 +347,30 @@ type CommentedOrder = {
 例如，下面的导入骨架同时具有四个危险信号。
 
 ```
-// load.ts：CSVを読み、各行を文字列の配列にする（浅いモジュール）
+// load.ts：读取 CSV，并将每行转为字符串数组（浅模块）
 export function loadRows(file: File): string[][] {
   throw new Error("not implemented");
 }
 
-// validate.ts：0列目がIDであることを前提に、IDが空の行を除く（浅いモジュール・情報の漏れ）
+// validate.ts：假设第 0 列是 ID，过滤掉 ID 为空的行（浅模块，泄露内部知识）
 export function validateRows(rows: string[][]): string[][] {
   throw new Error("not implemented");
 }
 
-// save.ts：0列目がIDであることを前提に、IDをキーにして保存する（浅いモジュール・情報の漏れ）
+// save.ts：假设第 0 列是 ID，以 ID 为键保存（浅模块，泄露内部知识）
 export function saveRows(rows: string[][]): Promise<void> {
   throw new Error("not implemented");
 }
 
 // importer.ts
 export class Importer {
-  // 受け取った rows を、同じ形のまま saveRows へ渡すだけ（素通しのメソッド）
+  // 只是将收到的 rows 原样传给 saveRows（透传方法）
   save(rows: string[][]): Promise<void> {
     return saveRows(rows);
   }
 }
 
-// 呼び出し側：3つを正しい順番で呼ばないと取り込めない（順番による分割）
+// 调用方：必须按正确顺序调用三个函数才能完成导入（按步骤拆分）
 async function onImportClick(file: File) {
   const rows = validateRows(loadRows(file));
   await new Importer().save(rows);
@@ -404,36 +420,36 @@ Agent 不等待回复而继续，人类事后修正方向，符合 Principle「[
 ```
 type Row = { id: string; name: string };
 
-// 取り込みに使うデータベースの接続を、先に作っておく関数
+// 预先建立导入所用数据库连接的函数
 declare function initImporter(): Promise<void>;
 
-// 骨組みでは parseRows(text: string): Row[] だった
-// 兆候4：実装で、骨組みになかった tenantId（どの契約者のデータか）の引数が必要になった
+// 骨架中的签名是 parseRows(text: string): Row[]
+// 征兆 4：实现时需要骨架中没有的 tenantId 参数（表示数据属于哪个租户）
 declare function parseRows(text: string, tenantId: string): Row[];
 
-// 骨組みでは saveRows(rows: Row[]): Promise<void> だった
-// 兆候4：実装で、骨組みになかった tenantId（どの契約者のデータか）の引数が必要になった
+// 骨架中的签名是 saveRows(rows: Row[]): Promise<void>
+// 征兆 4：实现时需要骨架中没有的 tenantId 参数（表示数据属于哪个租户）
 declare function saveRows(rows: Row[], tenantId: string): Promise<void>;
 
-// 設定画面
+// 设置页面
 async function onUploadFromSettings(file: File) {
-  // 兆候3：これを先に呼ばないと、importRows が失敗する。この決まりは、importRows の型からは読み取れない
+  // 征兆 3：若不先调用此函数，importRows 就会失败；这一约定无法从 importRows 的类型看出
   await initImporter();
 
-  // 兆候1：importRows を呼ぶ前に、CSVの1行目（見出しの行）を自分で取り除いている
+  // 征兆 1：调用 importRows 前，自行去掉 CSV 的第一行（标题行）
   const lines = (await file.text()).split("\n");
   const body = new File([lines.slice(1).join("\n")], file.name);
 
-  // 兆候2：骨組みの ImportResult にない reasons（飛ばした行の理由）を読むために、any にしている
+  // 征兆 2：为读取骨架的 ImportResult 中没有的 reasons（跳过行的原因），使用 any
   const result = (await importRows(body, { onError: "skip" })) as any;
   console.log(result.reasons);
 }
 
-// ダッシュボード：設定画面とは無関係の画面なのに、兆候1の前処理と、兆候3の初期化を同じように書いている
+// 仪表盘：虽然与设置页面无关，却重复了征兆 1 的预处理和征兆 3 的初始化
 async function onUploadFromDashboard(file: File) {
-  // 兆候3の初期化
+  // 征兆 3 的初始化
   await initImporter();
-  // 兆候1の前処理
+  // 征兆 1 的预处理
   const lines = (await file.text()).split("\n");
   const body = new File([lines.slice(1).join("\n")], file.name);
   await importRows(body, { onError: "stop" });
@@ -457,14 +473,14 @@ async function onUploadFromDashboard(file: File) {
 
 ```
 /architect design the import pipeline before writing any code. i care most about how callers use it.
-// コードを書く前に、インポートの処理の流れを設計して。一番気にしているのは、呼び出し側がどう使うか。
+// 写代码前先设计导入流程。我最关心调用方会怎样使用它。
 ```
 
 若希望在 Phase C 加入确认环节，使用者可这样请求。
 
 ```
 /architect with checkpoint. stop and show me before implementing.
-// 確認を挟んで。実装の前に止まって、設計を見せて。
+// 请设置确认环节：在实现前停下来，给我看设计。
 ```
 
 从调用方用法出发设计，以及重新审视设计的实践，将分别在[第 38 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7549a7)和[第 39 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/166acb)介绍。
@@ -637,7 +653,7 @@ async function onUploadFromDashboard(file: File) {
 
 ```
 /arena this, 5 candidates. the cache key format is expensive to change later.
-// これを候補5つで。キャッシュキーの形式は後から変えると高くつく。
+// 给出五个候选方案。缓存键格式事后修改代价很高。
 ```
 
 随附指南 [`10-recipes-and-pitfalls.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/10-recipes-and-pitfalls.md) 还建议：对于事后修改成本高的决定，可以先就当前设计征求第二意见。
@@ -646,7 +662,7 @@ async function onUploadFromDashboard(file: File) {
 
 ```
 ask /arena for a second opinion on this thread and our approach
-// このスレッドと、私たちの進め方について、/arena でセカンドオピニオンを出して
+// 用 /arena 对这个讨论及我们的工作方式提出第二意见。
 ```
 
 <a id="%2Fswarm-%E3%81%AF%E3%80%81%E7%B6%B2%E7%BE%85%E3%81%A8%E7%AB%B6%E4%BA%89%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E4%BB%95%E4%BA%8B%E3%82%92workers%E3%81%AB%E5%88%86%E3%81%91%E3%80%81%E7%B5%90%E6%9E%9C%E3%82%92%E4%B8%80%E3%81%A4%E3%81%AE%E5%A0%B1%E5%91%8A%E3%81%AB%E3%81%99%E3%82%8B"></a>
@@ -749,7 +765,7 @@ Frame 可选择以下三种模式。
 
 ```
 /swarm check every package under packages/ against its check.sh. one worker per package. one report.
-// packages/ 以下の全パッケージを、それぞれの check.sh で確かめて。1パッケージに1体。報告は1つ。
+// 用各自的 check.sh 检查 packages/ 下的全部软件包。每个软件包安排一个 Agent，最后提交一份报告。
 ```
 
 请求用三句话分别写明验证方法（`check.sh`）、模式与数量（每个包一名 Worker）、输出（一份报告）。<strong>这三项分别对应主 Agent 在 Frame 阶段要决定的内容</strong>；写进请求后，主 Agent 便可按指定条件构建 Frame。

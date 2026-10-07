@@ -123,8 +123,8 @@
 /poteto-mode i'm stepping away. migrate every caller from the synchronous store
 to the new async one, keeping behavior identical. i want to trust it was done
 right when i'm back.
-// 席を外す。同期ストアの呼び出し元をすべて新しい非同期ストアへ移して。
-// 振る舞いは同一に保って。戻ったときに、正しくできたと信頼できるようにして。
+// 我暂时离开。把同步存储的所有调用方迁移到新的异步存储。
+// 保持行为一致，并留下足够的证据，让我回来时能相信迁移正确。
 ```
 
 <a id="%2Ffigure-it-out-%E3%81%AF%E3%81%9D%E3%81%AE%E4%BD%9C%E6%A5%AD1%E5%9B%9E%E5%88%86%E3%81%AE%E9%80%B2%E3%82%81%E6%96%B9%E3%82%92%E8%A8%AD%E8%A8%88%E3%81%97%E3%80%81%E3%80%8Eorchestrate%E3%80%8F%E3%81%AF%E8%A8%88%E7%94%BB%E5%85%A8%E4%BD%93%E3%82%92%E9%81%8B%E5%96%B6%E3%81%99%E3%82%8B"></a>

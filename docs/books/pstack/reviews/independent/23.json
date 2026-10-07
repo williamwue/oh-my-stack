@@ -1,13 +1,32 @@
 {
   "chapter": 23,
-  "reviewer": "root independent AI review; translator translate_b",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full comparison of338 Japanese/Chinese visible entries including prose, lists, tables, conditions, numbers and attribution. Code/embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "8ac038f5bef8f7331d268ab74250dca70b1970bbf57a615e536a519a75240381",
-  "translation_sha256": "e3b28a2868734a31648056f3c46c951ff89fea85611bdbc72e33f1ceb9e38500",
+  "translation_sha256": "e333e70bd77e3827ca115a34766fef97212e2b2fb98e276acbc028874e196486",
   "findings_resolved": [
-    "Translated one omitted race-condition explanation paragraph (two increments yielding11 rather than12)."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 23,
+    "reviewer": "root independent AI review; translator translate_b",
+    "human_review": false,
+    "coverage": "Full comparison of338 Japanese/Chinese visible entries including prose, lists, tables, conditions, numbers and attribution. Code/embeds checked separately.",
+    "source_sha256": "8ac038f5bef8f7331d268ab74250dca70b1970bbf57a615e536a519a75240381",
+    "translation_sha256": "e3b28a2868734a31648056f3c46c951ff89fea85611bdbc72e33f1ceb9e38500",
+    "findings_resolved": [
+      "Translated one omitted race-condition explanation paragraph (two increments yielding11 rather than12)."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

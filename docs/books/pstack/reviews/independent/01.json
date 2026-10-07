@@ -1,13 +1,32 @@
 {
   "chapter": 1,
-  "reviewer": "root independent AI review; translator translate_a",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "ae6760ef8669079b51f3fd15a69266b579b72e2094f41ff20b5a9e124645eebc",
-  "translation_sha256": "683a43a53308d29ba828c5b2c513ae9444f5d0177f3c775c30a7fe940ad58cf5",
+  "translation_sha256": "e20c20977bfc721967a437007547d5dd579e4c46c7ad2800b59d29a1f0b4b3e7",
   "findings_resolved": [
-    "Corrected attribution: Japanese rendering of the guide example was added by the book author; it was not asserted to be part of the original guide."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 1,
+    "reviewer": "root independent AI review; translator translate_a",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator.",
+    "source_sha256": "ae6760ef8669079b51f3fd15a69266b579b72e2094f41ff20b5a9e124645eebc",
+    "translation_sha256": "683a43a53308d29ba828c5b2c513ae9444f5d0177f3c775c30a7fe940ad58cf5",
+    "findings_resolved": [
+      "Corrected attribution: Japanese rendering of the guide example was added by the book author; it was not asserted to be part of the original guide."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

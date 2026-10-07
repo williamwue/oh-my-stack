@@ -176,7 +176,7 @@ poteto 在文章中介绍了“<strong>README 驱动开发</strong>”这种先�
 按照 `/architect` 的要求，Agent 先写使用方式，再从中推导骨架，就会得到以下结果。
 
 ```
-// 1. 先に、呼び出し側の使い方を書く
+// 1. 先写调用方的用法
 const limiter = createRateLimiter({ perMinute: 60 });
 
 function handleWebhook(webhook: { senderId: string }): Response {
@@ -186,7 +186,7 @@ function handleWebhook(webhook: { senderId: string }): Response {
   return new Response("OK");
 }
 
-// 2. 使い方から骨組みを導く：型と関数の形だけを書き、中身はまだ書かない
+// 2. 从用法推导骨架：只写类型与函数形式，暂不写实现
 type RateLimiterOptions = { perMinute: number };
 type RateLimiter = { tryAcquire(senderId: string): boolean };
 
@@ -257,13 +257,13 @@ pstack 的许多 Skill，包括 `/technical-writing`，组合使用时能互相�
 
 ```
 (1) /recall my work fixing virtualization bugs and perf issues from the past 7 days. use /how and /why to understand how our current virtualization implementation works.
-// 過去7日間に仮想化の不具合と性能問題を直した作業を思い出して。/how と /why を使って、今の仮想化の実装がどう動いているかを理解して。
+// 回忆过去七天修复虚拟化缺陷与性能问题的工作。用 /how 和 /why 理解当前虚拟化实现的运行方式。
 
 (2) then use /poteto-mode planning and /technical-writing to come up with a new virtualization engine that categorically eliminates flickering and jittering. let's start by writing a tutorial on how i would use this new package to virtualize a React app
-// 次に、/poteto-mode で計画を立て、/technical-writing を使って、ちらつきとガタつきを根本からなくす新しい仮想化エンジンを考えて。まずは、私がこの新しいパッケージでReactアプリを仮想化する方法のチュートリアルを書くところから始めて。
+// 然后通过 /poteto-mode 制定计划，用 /technical-writing 设计一个从根本上消除闪烁和抖动的新虚拟化引擎。先写教程，说明我如何在 React 应用中使用这个新软件包实现虚拟化。
 
 (3) after you write the plan, /teach me and prove to me why this new approach is superior to our current engine
-// 計画を書いたら、/teach で教えて。この新しい方法が今のエンジンより優れている理由を、私に証明して。
+// 计划完成后，用 /teach 教给我，并证明新方法为何优于当前引擎。
 ```
 
 `/technical-writing` 出现在 (2)，承担编写新软件包教程的任务，也就是[要点5](#%E8%A6%81%E7%82%B95%EF%BC%9A%E4%BD%BF%E3%81%84%E6%96%B9%E3%82%92%E5%85%88%E3%81%AB%E6%9B%B8%E3%81%8F)所说的“使用方式”。
@@ -362,7 +362,7 @@ poteto 称之为失败。
 
 ```
 /poteto-mode prototype a few options for <feature request>. use /control-app* and take videos/screenshots for me to review and choose from
-// <機能の要望>の案のプロトタイプをいくつか作って。/control-app* で動画とスクリーンショットを撮って、私が見比べて選べるようにして。
+// 为<功能需求>制作几个候选原型。用 /control-app* 录制视频并截图，让我比较后选择。
 ```
 
 文章的脚注（*）解释，`/control-app` 指的是《The Complete Guide to pstack》[Part 1](https://x.com/poteto/status/2094457600259842065) 中制作的验证 Skill（[第36章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7081)）。

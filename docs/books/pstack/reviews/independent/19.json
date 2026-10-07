@@ -1,14 +1,33 @@
 {
   "chapter": 19,
-  "reviewer": "root independent AI review; translator translate_b",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator. Localized figures reviewed separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "3af1fcb03bca5ff924298dda353e3ff280573113faecceecc371f8c93cadd83b",
-  "translation_sha256": "f604293c4c1dd063fd9c4301d7024a2ea2be0ec71079cb048571328ceb256779",
+  "translation_sha256": "624697ef1a3796966fbcc7a675cb0f629d40d4d915dbd6890f9aad70d7dd9083",
   "findings_resolved": [
-    "終了条件 means completion condition, not baseline.",
-    "再開地点 means resumption point, not current state."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 19,
+    "reviewer": "root independent AI review; translator translate_b",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator. Localized figures reviewed separately.",
+    "source_sha256": "3af1fcb03bca5ff924298dda353e3ff280573113faecceecc371f8c93cadd83b",
+    "translation_sha256": "f604293c4c1dd063fd9c4301d7024a2ea2be0ec71079cb048571328ceb256779",
+    "findings_resolved": [
+      "終了条件 means completion condition, not baseline.",
+      "再開地点 means resumption point, not current state."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

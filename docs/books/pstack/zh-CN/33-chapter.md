@@ -256,7 +256,7 @@
 
 ```
 /interrogate the whole branch, but skeptically. no nitpicks unless it's an actual bug or regression.
-// ブランチ全体を懐疑的に見て。本物のバグやリグレッションでない限り、細かい指摘は必要ない。
+// 以怀疑的态度审阅整个分支。只有真正的缺陷或回归才需要指出，不必纠缠细枝末节。
 ```
 
 对抗性审查者找不到严重问题时，往往会用琐碎意见填满报告。若使用者像示例一样明确不要琐碎意见，Act on 中的意见就更有可能是真正的问题，也更值得阅读。

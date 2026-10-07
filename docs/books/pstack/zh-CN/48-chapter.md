@@ -79,7 +79,7 @@ pstack 有 23 份 Playbook、23 项 Principle、24 项 Skill，<strong>但无须
 
 ```
 /poteto-mode add json output to this command. text output stays byte-identical, the json parses, both run against the sample project. show me the evidence.
-// このコマンドにJSON出力を足して。テキスト出力は1バイトも変えない。JSONはパースできる。両方をサンプルプロジェクトで実行する。証拠を見せて。
+// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。
 ```
 
 请求中的三个条件都可通过执行来判定成败。
@@ -101,7 +101,7 @@ pstack 有 23 份 Playbook、23 项 Principle、24 项 Skill，<strong>但无须
 
 ```
 /poteto-mode build <description of feature, any useful context>. use /control-app to verify your changes and show me a video and screenshots as proof
-// <機能の説明と、役に立つコンテキスト>を作って。/control-app で変更を確かめて。証拠として動画とスクリーンショットを見せて。
+// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。
 ```
 
 `/control-app` 是文章中为通过 [`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md) 创建的验证 Skill 使用的名称。
@@ -175,7 +175,7 @@ Agent 会考虑将该指示改为以下任一形式；若可行，就改成机�
 eslint.config.js
 
 ```
-// any を書くと、lint がエラーにする（typescript-eslint を導入済みの前提）
+// 编写 any 时 lint 应报错（假设已引入 typescript-eslint）。
 import tseslint from "typescript-eslint";
 
 export default [

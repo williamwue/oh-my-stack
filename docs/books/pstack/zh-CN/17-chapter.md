@@ -181,7 +181,7 @@ Cursor 内置的 Skill，用于编写 `SKILL.md`。
 
 ```
 /poteto-mode write a skill for verifying database migrations in this repo
-// このリポジトリのデータベースマイグレーションを検証するSkillを書いて。
+// 编写一个 Skill，验证这个代码库中的数据库迁移。
 ```
 
 <a id="%E3%80%8Eeval%E3%80%8F%E3%81%AF%E3%80%81%E8%A9%95%E4%BE%A1%E3%81%A0%E3%81%A8%E6%B0%97%E3%81%A5%E3%81%8B%E3%81%9B%E3%81%9A%E3%81%AB%E3%80%81%E5%A4%89%E6%9B%B4%E3%81%8C%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%AE%E8%A1%8C%E5%8B%95%E3%81%AB%E4%B8%8E%E3%81%88%E3%82%8B%E5%8A%B9%E6%9E%9C%E3%82%92%E6%B8%AC%E3%82%8B"></a>
@@ -252,7 +252,7 @@ Cursor 内置的 Skill，用于编写 `SKILL.md`。
 
 ```
 /poteto-mode run the eval playbook on this skill change. same task for both variants, candidates stay blind.
-// このSkillの変更に Eval Playbook を実行して。両方の版に同じタスクを与えて。候補は盲検のままにして。
+// 对这个 Skill 的修改运行 Eval Playbook。给两个版本安排相同任务，并保持候选版本盲测。
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

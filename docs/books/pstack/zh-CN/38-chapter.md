@@ -544,7 +544,7 @@
 
 ```
 /unslop the readme changes, no emdashes
-// READMEの変更を unslop して。em dash は使わないで
+// 对 README 的修改运行 unslop。不要使用 em dash。
 ```
 
 其中「the readme changes」是要修改的文字，「no emdashes」是额外规则。
@@ -553,7 +553,7 @@
 
 ```
 unslop that, tighten it
-// それを unslop して、引き締めて
+// 对它运行 unslop，让文字更精练。
 ```
 
 其中「that」指刚刚写的文章。
@@ -867,7 +867,7 @@ Agent 还要在各处用同一个名称称呼同一事物。如果一篇文档�
 
 ```
 /technical-writing review the readme changes
-// READMEの変更をレビューして
+// 审阅 README 的修改。
 ```
 
 同一页面还说明，用户既可以用这项 Skill 审阅自己或 Agent 已经写好的文档，也可以在请 Agent 撰写文档时，把 Skill 名称放在请求的开头。

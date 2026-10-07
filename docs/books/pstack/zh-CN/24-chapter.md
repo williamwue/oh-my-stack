@@ -31,7 +31,7 @@
 
 ```
 /poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
-// 再試行が実行の途中に入ると、エクスポートが重複した行を書き出す。まず再現して、それから直して、確かめて。
+// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。
 ```
 
 本章的请求示例也与[第 17 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a8e80b)一样，写成包含 Principle 名称的单行指令。即使不写名称，只要工作符合触发条件，Agent 就会自行阅读并应用 Principle；这一点已在[第 17 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/a8e80b)的前提中说明。
@@ -178,7 +178,7 @@ Agent 应读取实际值，而非缓存值或由原始值派生的其他显示�
 例如，比较输出文件与期望内容的脚本可以写成如下形式。
 
 ```
-// check-export.ts：書き出したファイルの行を、期待する行と比べる
+// check-export.ts：比较导出文件的各行与预期内容
 import { readFileSync } from "node:fs";
 
 const actual = readFileSync("out/export.csv", "utf8").trim().split("\n");
@@ -217,7 +217,7 @@ console.log("OK", actual.length);
 
 ```
 apply prove it works. show me the real output, not the build log.
-// prove it works を適用して。ビルドログではなく、本物の出力を見せて。
+// 使用 prove it works。展示真实输出，而非构建日志。
 ```
 
 <a id="%E3%80%8Efix-root-causes%E3%80%8F%E3%81%AF%E3%80%81%E4%B8%8D%E5%85%B7%E5%90%88%E3%81%AE%E7%97%87%E7%8A%B6%E3%81%A7%E3%81%AF%E3%81%AA%E3%81%8F%E5%8E%9F%E5%9B%A0%E3%82%92%E7%9B%B4%E3%81%99"></a>
@@ -296,15 +296,15 @@ Agent 不应加一道防护判断来掩盖症状。
 
 ```
 type Row = { id: string };
-declare function writeRow(row: Row): void; // 1行をファイルに書く
+declare function writeRow(row: Row): void; // 向文件写入一行
 
 const writtenIds = new Set<string>();
 
 function writeRowOnce(row: Row) {
-  // 再試行が入ると、書き終えたはずの行がもう一度届くことがある。
-  // なぜもう一度届くのかは分かっていない。
-  // そこで、書き終えた行の ID を覚えておき、同じ ID の行が届いたら書かずに捨てる。
-  // こうすれば、重複した行は書き出されなくなる。
+  // 如果中途发生重试，已写完的行可能再次传入。
+  // 目前尚不清楚它为何再次传入。
+  // 因此，记录已写入行的 ID；若同一 ID 再次传入，就丢弃而不写入。
+  // 这样就不会导出重复的行。
   if (writtenIds.has(row.id)) return;
   writeRow(row);
   writtenIds.add(row.id);
@@ -347,11 +347,11 @@ Agent 应搜索（用 grep）与原因具有相同模式的代码，修复所有
 例如，旧代码把中间状态保存为 `{ step: 3 }`，当前代码预期的是 `{ lastRowId: "b" }`；状态验证可写成以下形式。
 
 ```
-// 今のコードが想定する、途中の状態の形
-// 古い { step: 3 } の形は、下の loadState で弾く
+// 当前代码预期的中间状态结构
+// 下方的 loadState 会拒绝旧的 { step: 3 } 结构
 type SavedState = { lastRowId: string };
 
-// 保存ファイルから読み込んだ値が、SavedState の形かを確かめる
+// 验证从保存文件读出的值是否符合 SavedState 结构
 function loadState(raw: unknown): SavedState | null {
   if (
     typeof raw === "object" &&
@@ -361,7 +361,7 @@ function loadState(raw: unknown): SavedState | null {
   ) {
     return { lastRowId: raw.lastRowId };
   }
-  // { step: 3 } のような古い形の状態は使わず、最初からやり直す
+  // 不使用 { step: 3 } 这样的旧状态，而是从头开始
   return null;
 }
 ```
@@ -439,11 +439,11 @@ Agent 应排列提交和 PR，使审阅者依序查看提交就能确认改动�
 这样排列，审阅者能亲眼看到测试由失败变成通过。
 
 ```
-コミットの並び（下が先）
+提交顺序（越靠下越早）
 
-修正のコミット          ← ここでテストが通る
+修复提交                ← 在此提交中测试通过
    ↑
-失敗するテストのコミット  ← ここでテストが落ちる
+失败测试的提交          ← 在此提交中测试失败
    ↑
 trunk
 ```
@@ -480,15 +480,15 @@ Agent 应让每个提交都可以独立合入，并让整个提交序列像一�
 <strong>直接写在测试中的期望值</strong>（原文称 literal expected value）……不通过代码计算、直接写出值本身的期望值，例如下例中的 <code>"hello-world"</code>。</li>
 </ul>
 <p class="code-line" data-line="370">例如，测试把字符串转为 URL 适用形式的 <code>slugify</code>，可以用以下两种写法（假定使用 Vitest 测试运行器）。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="372"><span class="line"><span style="color:#a0aab5">// 文字列をURL向けの形に変える</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="372"><span class="line"><span style="color:#a0aab5">// 将字符串转换为适合 URL 的形式</span></span>
 <span class="line"><span style="color:#F97583">declare</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> slugify</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">text</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">; </span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 実装をテストする：slugify が内部で toLowerCase を呼んだかを見る</span></span>
+<span class="line"><span style="color:#a0aab5">// 测试实现细节：检查 slugify 内部是否调用 toLowerCase</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> spy</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vi.</span><span style="color:#B392F0">spyOn</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">String</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">prototype</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"toLowerCase"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#B392F0">slugify</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, World!"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#B392F0">expect</span><span style="color:#E1E4E8">(spy).</span><span style="color:#B392F0">toHaveBeenCalled</span><span style="color:#E1E4E8">();</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 振る舞いをテストする：使う側と同じく slugify を呼び、結果を直接書いた期待値と比べる</span></span>
+<span class="line"><span style="color:#a0aab5">// 测试行为：像使用方一样调用 slugify，再与直接写出的预期值比较</span></span>
 <span class="line"><span style="color:#B392F0">expect</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">slugify</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, World!"</span><span style="color:#E1E4E8">)).</span><span style="color:#B392F0">toBe</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"hello-world"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="385">第一种写法只要 <code>slugify</code> 调用了 <code>toLowerCase</code> 就能通过，即使结果不是 <code>"hello-world"</code>；第二种写法在结果不是 <code>"hello-world"</code> 时就会失败。</p>
@@ -536,13 +536,13 @@ Agent 应让每个提交都可以独立合入，并让整个提交序列像一�
 例如，对前述 `slugify` 写 `expect(slugify("Hello, World!")).toBeDefined()`，即使它返回的是 `"xyz"` 而非 `"hello-world"`，测试仍会通过。
 
 ```
-// 文字列をURL向けの形に変える
+// 将字符串转换成适合 URL 的形式
 declare function slugify(text: string): string; 
 
-// 弱い：slugify が "xyz" を返しても通る
+// 薄弱的测试：即使 slugify 返回 "xyz" 也能通过
 expect(slugify("Hello, World!")).toBeDefined();
 
-// 強い："hello-world" 以外を返せば落ちる
+// 有力的测试：只要返回值不是 "hello-world" 就会失败
 expect(slugify("Hello, World!")).toBe("hello-world");
 ```
 
@@ -557,11 +557,16 @@ expect(slugify("Hello, World!")).toBe("hello-world");
 
 ```
 type User = { name: string };
-declare function findUsers(name: string): User[]; // 名前で会員を探す
+declare function findUsers(name: string): User[]; // 按名称查找用户
 
-// 空の配列になることだけを見ている。常に [] を返す壊れた実装でも通る
+// 只检查结果是否为空数组；即使错误实现永远返回 []，测试也能通过
 expect(findUsers("存在しない名前")).toEqual([]);
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：测试输入中的日文表示「不存在的姓名」，作为查找参数保留。
+<!-- book-code-note:end -->
+
 
 <a id="%E6%9C%9F%E5%BE%85%E5%80%A4%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E5%AF%BE%E8%B1%A1%E3%81%8B%E3%82%89%E4%BD%9C%E3%82%8B"></a>
 
@@ -576,15 +581,15 @@ expect(findUsers("存在しない名前")).toEqual([]);
 
 ```
 type Item = { price: number; quantity: number };
-// 合計金額を計算する（数量を掛け忘れるバグがある）
+// 计算总金额（存在忘记乘以数量的缺陷）
 declare function calcTotal(items: Item[]): number; 
 
 const items = [{ price: 100, quantity: 2 }];
 
-// 前：期待値も calcTotal で計算している。左も右も 100 になるので通ってしまう
+// 修改前：预期值也用 calcTotal 计算，左右两边都是 100，因此测试通过
 expect(calcTotal(items)).toBe(calcTotal(items));
 
-// 後：期待値をテストに直接書く。100 は 200 と違うので落ちる
+// 修改后：直接在测试中写入预期值；100 与 200 不同，因此测试失败
 expect(calcTotal(items)).toBe(200);
 ```
 
@@ -598,10 +603,10 @@ expect(calcTotal(items)).toBe(200);
 例如，代码将 Agent 一次可使用的工具数量上限设为 `8`，测试只把 `LIMITS.maxTools` 中的 `8` 重写一遍。
 
 ```
-// コード：道具の数の上限を 8 と決めている
+// 代码：将工具数量上限设为 8
 const LIMITS = { maxTools: 8 };
 
-// テスト：コードに書いた 8 を、テストでもう一度書いているだけ
+// 测试：只把代码中的 8 又抄写了一遍
 expect(LIMITS.maxTools).toBe(8);
 ```
 
@@ -614,8 +619,8 @@ expect(LIMITS.maxTools).toBe(8);
 
 ```
 it("keeps the user name", () => {
-  const user = { name: "taro" }; // テストが自分で作ったデータ
-  expect(user.name).toBe("taro"); // テスト対象のコードを一度も呼んでいない
+  const user = { name: "taro" }; // 测试自己创建的数据
+  expect(user.name).toBe("taro"); // 完全没有调用待测试的代码
 });
 ```
 
@@ -638,11 +643,16 @@ it("keeps the user name", () => {
 
 ```
 type User = { name: string };
-declare function findUsers(name: string): User[]; // 名前で会員を探す
+declare function findUsers(name: string): User[]; // 按名称查找用户
 
 expect(findUsers("存在しない名前")).toEqual([]);
 expect(findUsers("taro")).toEqual([{ name: "taro" }]);
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：测试输入中的日文表示「不存在的姓名」，作为查找参数保留。
+<!-- book-code-note:end -->
+
 
 总是返回空数组的错误实现，会在第二条断言失败。
 
@@ -653,15 +663,15 @@ expect(findUsers("taro")).toEqual([{ name: "taro" }]);
 例如，「每页显示数量」可改写如下。
 
 ```
-// 1ページに表示する件数の設定値（今は 20）
+// 每页显示条数的配置值（当前为 20）
 declare const PAGE_SIZE: number; 
-// 配列をページごとに分ける。pageSize を省くと PAGE_SIZE を使う
+// 将数组分页；省略 pageSize 时使用 PAGE_SIZE
 declare function paginate<T>(items: T[], pageSize?: number): T[][];
 
-// 前：設定値を書き写しただけ。設定値を 30 に変えると落ちる
+// 修改前：只复制了配置值；将配置改为 30 后测试就会失败
 expect(PAGE_SIZE).toBe(20);
 
-// 後：ページに分ける処理を、入力1つで確かめる
+// 修改后：用一个输入检查分页行为
 expect(paginate(["a", "b", "c"], 2)).toEqual([["a", "b"], ["c"]]);
 ```
 
@@ -679,17 +689,17 @@ expect(paginate(["a", "b", "c"], 2)).toEqual([["a", "b"], ["c"]]);
 
 ```
 type Mailer = { send: (mail: { to: string; body: string }) => void };
-// 会員を登録し、登録のお礼のメールを mailer で送る
+// 注册用户，并通过 mailer 发送注册感谢邮件
 declare function registerUser(mailer: Mailer, user: { email: string }): Promise<void>;
 
-// 前：送信が呼ばれたことだけを見る。宛先や本文が間違っていても通る
+// 修改前：只检查是否调用发送方法；收件人或正文错误时仍能通过
 it("sends a welcome mail", async () => {
   const mailer = { send: vi.fn() };
   await registerUser(mailer, { email: "taro@example.com" });
   expect(mailer.send).toHaveBeenCalled();
 });
 
-// 後：モックが受け取った宛先と本文を、直接書いた期待値と比べる
+// 修改后：将 mock 收到的收件人与正文和直接写出的预期值比较
 it("sends a welcome mail", async () => {
   const mailer = { send: vi.fn() };
   await registerUser(mailer, { email: "taro@example.com" });
@@ -699,6 +709,11 @@ it("sends a welcome mail", async () => {
   });
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：邮件正文中的日文表示「感谢注册」，作为 mock 所检查的输出值保留。
+<!-- book-code-note:end -->
+
 
 这段测试中，即使 `registerUser` 把空地址作为收件人，原测试也能通过；修改后的测试会因收件人不是 `taro@example.com` 而失败。
 
@@ -718,7 +733,7 @@ it("sends a welcome mail", async () => {
 
 ```
 /poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
-// 再試行が実行の途中に入ると、エクスポートが重複した行を書き出す。まず再現して、それから直して、確かめて。
+// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。
 ```
 
 Agent 收到请求后，要编写重试测试。
@@ -729,18 +744,18 @@ Agent 收到请求后，要编写重试测试。
 type Db = { query: (...args: unknown[]) => unknown };
 type InMemoryDb = Db & { rows: (table: string) => { source_row_id: string }[] };
 
-// 元の行 input をエクスポートし、途中で失敗したら再試行する
+// 导出原始行 input；中途失败时重试
 declare function exportWithRetry(
   db: Db,
   input: string[],
   options?: { failAfterRows?: number },
 ): Promise<void>;
- // テスト用に、メモリ上で動くDBを作る
+ // 为测试创建内存数据库
 declare function createInMemoryDb(): InMemoryDb;
-// 元の行（a、b、c の3行）
+// 原始行（a、b、c 共三行）
 declare const input: string[]; 
 
-// 悪いテスト。モックが呼ばれたことしか見ていない
+// 错误的测试：只检查 mock 是否被调用
 it("writes rows on retry", async () => {
   const db = { query: vi.fn() };
   await exportWithRetry(db, input);
@@ -751,7 +766,7 @@ it("writes rows on retry", async () => {
 下一段测试将使用方可观察的结果，也就是实际写出的行，与直接写在测试中的期望值 `["a", "b", "c"]` 比较。
 
 ```
-// 振る舞いを確かめるテスト
+// 验证行为的测试
 it("writes each source row once when a retry lands mid-run", async () => {
   const db = createInMemoryDb();
   await exportWithRetry(db, input, { failAfterRows: 2 });
@@ -784,7 +799,7 @@ it("writes each source row once when a retry lands mid-run", async () => {
 
 ```
 /poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
-// 再試行が実行の途中に入ると、エクスポートが重複した行を書き出す。まず再現して、それから直して、確かめて。
+// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。
 ```
 
 本书认为，在这个请求中，[第 11 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/6fcb42)介绍的「[<strong>Bug fix</strong>](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)」Playbook，主要会在各步骤应用两条 Principle。

@@ -1,13 +1,32 @@
 {
   "chapter": 30,
-  "reviewer": "/root/review_a",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese comparison of 298 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "3d82dc914f503e2761d77e163c87211bfaaf24009bdf23b655e9950f35d975f9",
-  "translation_sha256": "11a62dbfa3caed06fb59afc985e9ac422b843f57ab4d3378e054445a429e7412",
+  "translation_sha256": "b40e21a368947a817befb1acc4c43e96794d804916e29a5543cde74188d2a15d",
   "findings_resolved": [
-    "F30-1: restored zero-based column index2 rather than second column; reviewer rechecked isolated correction."
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 30,
+    "reviewer": "/root/review_a",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese comparison of 298 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+    "source_sha256": "3d82dc914f503e2761d77e163c87211bfaaf24009bdf23b655e9950f35d975f9",
+    "translation_sha256": "11a62dbfa3caed06fb59afc985e9ac422b843f57ab4d3378e054445a429e7412",
+    "findings_resolved": [
+      "F30-1: restored zero-based column index2 rather than second column; reviewer rechecked isolated correction."
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

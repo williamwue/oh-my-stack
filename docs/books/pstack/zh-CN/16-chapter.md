@@ -173,7 +173,7 @@
 
 ```
 /poteto-mode add a --json flag. text output stays byte-identical. verify both forms.
-// --json フラグを足して。テキスト出力はバイト単位で同じまま。両方の形を確かめて。
+// 添加 --json 标志。文本输出保持逐字节一致。验证两种输出形式。
 ```
 
 <a id="%E3%80%8Erefactoring%E3%80%8F%E3%81%AF%E3%80%81%E4%BB%8A%E3%81%AE%E6%8C%AF%E3%82%8B%E8%88%9E%E3%81%84%E3%82%92%E5%9B%BA%E5%AE%9A%E3%81%97%E3%81%A6%E3%81%8B%E3%82%89%E6%A7%8B%E9%80%A0%E3%82%92%E5%8B%95%E3%81%8B%E3%81%99"></a>
@@ -277,7 +277,7 @@
 
 ```
 /poteto-mode move parsing into one module, zero behavior change. record the current output first and prove it's unchanged after.
-// パースを1つのモジュールに移して。振る舞いの変化はゼロ。先に今の出力を記録して、後で変わっていないことを証明して。
+// 把解析逻辑移到一个模块，行为变化必须为零。先记录当前输出，再证明修改后没有变化。
 ```
 
 「先记录现有输出」对应步骤 1，「之后证明输出未改变」对应步骤 6。
@@ -362,7 +362,7 @@ pstack 的 [README](https://github.com/cursor/plugins/blob/main/pstack/README.md
 
 ```
 /poteto-mode build two prototypes of the markdown renderer so we can compare. spawn an agent for each.
-// 比べられるように、markdownレンダラーのプロトタイプを2つ作って。それぞれにエージェントを立てて。
+// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。
 ```
 
 「做一个 mock」「试试这种布局」之类的措辞也是<strong>选择这个 Playbook 的信号</strong>。
@@ -442,7 +442,7 @@ README 中的示例如下。
 
 ```
 /poteto-mode the row spacing is too tall when this flag is on. the second image is correct. repro and fix until it matches.
-// このフラグがオンのとき、行間が高すぎる。2枚目の画像が正しい。再現して、一致するまで直して。
+// 启用这个标志时，行距太大。第二张图才是正确效果。先复现，再修到一致。
 ```
 
 「第二张图是正确的」一句话说明<strong>应以哪种外观为基线</strong>。没有这句话，Agent 只能猜测该对齐哪一张图。

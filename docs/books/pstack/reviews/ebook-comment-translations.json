@@ -1,0 +1,3364 @@
+{
+  "date": "2026-10-04",
+  "baseline_commit": "d64afa5a4509dde49182db5a1c8387bd060de867",
+  "method": "Hash-bound AI translation correction. Source before is committed Chinese edition at baseline; rendered blocks use mistune 3.1.3 plus BeautifulSoup pre code get_text(); body hashes follow validate-pstack-book.mjs editionBody normalization.",
+  "chapters": [
+    {
+      "order": 1,
+      "file": "docs/books/pstack/zh-CN/01-preface.md",
+      "before_body_sha256": "683a43a53308d29ba828c5b2c513ae9444f5d0177f3c775c30a7fe940ad58cf5",
+      "after_body_sha256": "e20c20977bfc721967a437007547d5dd579e4c46c7ad2800b59d29a1f0b4b3e7",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "9c8866a91e6d6d70f970f492418ff4f5a52e7e7d046aaf20a78fd13b990af855",
+          "after_sha256": "c9921aaf67abf1529765285d2beeb7b538e041ede307aed7580a1dbbb50094a8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "a7de8b8e196ac4d26f77cec2eab149eff117fe3e02aba7b9aa79e47d52c21d16",
+          "after_sha256": "3ce14e327c564e0e7faf3f4f987cbda7809f97bf2abaefc8a36a3f5cba7d3def",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 4,
+      "file": "docs/books/pstack/zh-CN/04-chapter.md",
+      "before_body_sha256": "73ffa0730047ee37bbb1aaead0a687c3cebf6138742d5227ffb61dfbc115e906",
+      "after_body_sha256": "9d0ee6d58f26cfc2bd76bea9daf653b0e5691ca49d9dc15ba431ab6c24296e2b",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "2daac6e469ab33f4286d3939bd0b855f48bc916266d41ee5bb6ffd6ba896731d",
+          "after_sha256": "a63ef3c5ba6ddfea057d66bbe674a97f358b87a4a63a8a9492823b173410bc71",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "bbc5fb4c77ce590afbf6f5b9561ba0a51f4c8c5a4ccb1ccfce3fdb673c230c71",
+          "after_sha256": "9a607647b4d29666bfc46cf2d71df5381fd4d6c82361ba65fc919ade0bdb68ad",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 10,
+      "file": "docs/books/pstack/zh-CN/10-chapter.md",
+      "before_body_sha256": "55ed19496e1bc4e314d76ab10df8a971629d6e00986a25936b6370161aa69138",
+      "after_body_sha256": "b1744b05294b8d0df8dcfa19252a973eaa24be1ec6acfe633b116eb40e529a36",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "f14effaed92afae0f5e6f81daa0d29467e6997f9d0fc57a43e81b2e027b5ee61",
+          "after_sha256": "d1442b27e270ad7cbb62a736b39b23c300caf703b60b6445f5595d0a74d7391a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "ca70d25fc54851e98d4d2443c71908183ba7ba7b59f61dfba80d448f287a953b",
+          "after_sha256": "a4b885e2e1b5634a003ab0515a5d75d0ea696ebe0a8634a1f869be00add8163b",
+          "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 1 行；例如「# 遇到新任务时，如果符合 Playbook 或需要严谨处理，就使用 /poteto-mode。闲聊回合以及用户要求停止时不要使用。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "9bb23be4139079e4411fbbe947b3c800e159cd09255b249aacd22e9021f6de1a",
+          "after_sha256": "fd96ed0451aad58637a0ef43cd6d1a79bc9e22d514ec5c388748d34bfc2aa0b0",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 就按这个继续。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "919f3e48d12bd3fec715b50934cac16dbd671f2784b90d7726b3c6576a6327da",
+          "after_sha256": "f1c5b30018b0d635e843ebcd3c372b61dd177038a62332a823f6b69df1834cc7",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续。」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "edde616e7f36779d227da8869f2a3ffc0063503dc717d92a50108ac352207a2f",
+          "after_sha256": "2b75ea3d71662fdd562116d51b37b87955bfcddbc81ed980e5db72eec71117d9",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续，直到完成。」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "7208cba60194a65788e719dc6b121d6dd8433d5f95e5a35c0e368b1f086a683e",
+          "after_sha256": "46ee2b22ec5d83ef6ff8ee2767b8c636d9cb86fafce66c268967aa9f0f848a5f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "d0941e1097a397daeb3530231b33779a40265501b037e1efd3636b7e24f05870",
+          "after_sha256": "3785f8a9187aa980af35a16d3ae5a883f6e3d9c36f6dafd48a841d5804cd09ed",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。继续处理，直到迁移检查报告旧调用方为零，并记录决策。」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "6d099a2444ea92451935509434e8669da67b850e4f5ac89b11acc71e394c54bc",
+          "after_sha256": "cbe4b105fa3345e6a9fa59b6d0dd8237eac9eb95d78d29af114a751eeaa5b1c8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "232fbebddcb874072b3a9450f2eae06da53b1e95ffbafd88f5697d9bb61b7720",
+          "after_sha256": "a09157dd3754daa470117408f63351afeb38a3d6df1a0461c7dfebee2e2cbde7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "8d00db3f591cb587a996d4665abb1e1ac972fca9b9d8530648d2b5e00e1fe6b4",
+          "after_sha256": "36f4f8f63f9de0ee16cac41e5e84e0f2f1ae58a59b4356dbf13e517f1fd2a0e7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "16c54104b09aaafbf958fd46c2c2a18de4d2b2bf4b70210963660197bade628d",
+          "after_sha256": "3dcbef35782768e2086e01efa792003e703dd53f649f5e2744f40d9f0afb6103",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "bcfe386383f41b8eb473d1fb7e33bff3ea217d12dbea4306c800314a5845c628",
+          "after_sha256": "d46f52625bcbf53ab4059663ab21474c4b9f8fd8f406afca357822f742c836c7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "5fb13d147d176596483e9475979b6bfbc9929d0162c3d53a4a0283420c807dc1",
+          "after_sha256": "2b582f8fda67772ae4ebc9f23008acd01b546905c7089a2517d30f56a21edd31",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "a3bfd64d19339ec34c2e50ff6b4f22aa7f1c18c43dc26c5814540586e631f8d0",
+          "after_sha256": "916bb11c2264b2f2e71ffd32369d6185e38333b898821fc11fbaeb9edfcb7f12",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "4327b5e65d60a00a2c293ce48deb3e10614a433008bc7a0467868cf4e4a93460",
+          "after_sha256": "b9cd066750fb624e075708ea3cda81355c21993576bac9b735dee2160f443b96",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "3bb17713db93f359dd51907cda56691a663c5f5950275924a6caa0e049bf0200",
+          "after_sha256": "57c9c7ae68de51887d8f00509f48b8f305b8264eea76b25fe58a15f06cd494cb",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 11,
+      "file": "docs/books/pstack/zh-CN/11-chapter.md",
+      "before_body_sha256": "61569d2dbf0733356279ecd4746797850847c4f3beac77f1983ad339297ccb39",
+      "after_body_sha256": "6a3ef0f1378bffecf0b6ee0447b39c31116bd6d85eb53b9e93b0df3dabbad924",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "c3df359bbd617d2aed96af1b90f39bf60ca800a63adf6c9a4242b9a0bc0cf984",
+          "after_sha256": "8c1dbc0fc320117e2b6fd356e21b8df36fcc00f73d1947004eafb864908ab8da",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "9c8866a91e6d6d70f970f492418ff4f5a52e7e7d046aaf20a78fd13b990af855",
+          "after_sha256": "c9921aaf67abf1529765285d2beeb7b538e041ede307aed7580a1dbbb50094a8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "e35b4422a23f0e4d412966f75379b62218913f48c350f4b96034ce0128bf102e",
+          "after_sha256": "d9992af4553f0288f40b9a0fe0842f762005652f958a4527663c30c6eceab917",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "a7de8b8e196ac4d26f77cec2eab149eff117fe3e02aba7b9aa79e47d52c21d16",
+          "after_sha256": "3ce14e327c564e0e7faf3f4f987cbda7809f97bf2abaefc8a36a3f5cba7d3def",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 14,
+      "file": "docs/books/pstack/zh-CN/14-chapter.md",
+      "before_body_sha256": "dc01513ea073da59b9e85d7a7ce975c298a9a9ff7dcf09f4858e801a2cf92ff7",
+      "after_body_sha256": "5d17f8f4863590445555019d362c68f2089d2185c3baaa8e616c445394c5bbbc",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "6d099a2444ea92451935509434e8669da67b850e4f5ac89b11acc71e394c54bc",
+          "after_sha256": "cbe4b105fa3345e6a9fa59b6d0dd8237eac9eb95d78d29af114a751eeaa5b1c8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "79937dde66f3e5a6f91153118350037b5ca2f6da27983acc05d7f8c7221a89c1",
+          "after_sha256": "bae8f813f64f04acb13dd3e495af655aa0c35c3d223d15793f438bdc846e03b5",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 有时因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "3bb17713db93f359dd51907cda56691a663c5f5950275924a6caa0e049bf0200",
+          "after_sha256": "57c9c7ae68de51887d8f00509f48b8f305b8264eea76b25fe58a15f06cd494cb",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "be14b5e2e551017d7768331c7cdc8d87beb4feaa986c6dbce7a3564f6b9b2d20",
+          "after_sha256": "bb32d1b10d9f17f514ed594ccce5af2f402bde4191edf163ed0d600ac54c40cc",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 15,
+      "file": "docs/books/pstack/zh-CN/15-chapter.md",
+      "before_body_sha256": "98f4454efb34086986bb3e11e4f010d1ebf99dad579c9fa7205761c3c16f0306",
+      "after_body_sha256": "379a42dfaff777a5128e0cc9c36e21e6d29a3b1f773e8a2c8dacd95f806c87b1",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "b9e3aa60f2b1ef30ddf761ef5568917a3eb28d2385d9f13740fd16652759a302",
+          "after_sha256": "357dd2da1eebde8a3ffa1a2149787f2fc336288ef40a397803199eed46b432d1",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果能方便地编写测试，就使用 /tdd。然后修复并重新运行。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "67cff19129aa056fd06da9232c10f9c93a0896ed1b770f715f050d82ac83d248",
+          "after_sha256": "647a3db5a4946624e552005515840aece93802a40812005203529fab686e93a0",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用这个固定的测试输入，启动需要 1.8 秒。采集追踪，修复测得的原因，并展示修改前后的结果。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "906f8d48f3a9b4e4727ac86588839c98f42171e8f93e4767e548db878e366fb5",
+          "after_sha256": "9aa2617e325db5f6108e0b8589a3bcdd63d2baf088d36b21168ac7c94648f99e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "455eb35b18509cab154629da52154f5facfcb6a9b0fa7c01aa080939d923c7ba",
+          "after_sha256": "71099c2f3836ae43bd5cc28a00bdd4a913abcae961dc9e74a304fbc995153a12",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "36952956342e9850e2e9cbcc7d4903688716a6224bd600bce3541db37ab0ebd9",
+          "after_sha256": "6144ea82ae274813e71770d31db7f9ccddbbe7b8e17610330b875de95fc74650",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "c7d65a53bfa557f19bcb75881a89015d9a7673c7cb3e011c275cfeb77326b80f",
+          "after_sha256": "93fcd965864c5fc012fc9fd1479c5a47dddbd0effc3c558d0b29b7073563457e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 16,
+      "file": "docs/books/pstack/zh-CN/16-chapter.md",
+      "before_body_sha256": "6c6ab709c4858c599f5dd9bc70ce056cb3b2b95727e8baee6f7661796c293766",
+      "after_body_sha256": "82ebeeb3f01b8d50933975fa0dc469727147d40ece602d4fd8ecbcb7eae75c09",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "6bd18a55884ab299c822fe93504adf694ae32f259f0fbb68356b923c4cccd015",
+          "after_sha256": "28af44f46462c3503e29c338657af7bc50989f4830a752135b9132deeebe4d55",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 添加 --json 标志。文本输出保持逐字节一致。验证两种输出形式。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "c6ce6983f342ecadbe8b06d0b937be40d091ab672da2d6521181d2fe9e9d52dc",
+          "after_sha256": "694352175bce9eb6ee499ce12071176099b9cdb9f4859d2b74f8eb3b3bb3382f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把解析逻辑移到一个模块，行为变化必须为零。先记录当前输出，再证明修改后没有变化。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "a73ea903882b649c14d94082fe05c9e044b32b3ff92af84ce59f3b185812106b",
+          "after_sha256": "c187d010246513354e523b9ee6fdc62f243c670becc910e562fafd57b1fdbafe",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "8f3c43c0086bc0e7427dedcf0eafedd8eb08c6b24571059915099d2b1908fe4a",
+          "after_sha256": "07c7facf3be527cc6530423d30887ac2b448976c5cee61727745f6c8127ef4d8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启用这个标志时，行距太大。第二张图才是正确效果。先复现，再修到一致。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "337975e077e65912ba07fe47768ccc49a71bd47fb15592454425faaae21ee5cc",
+          "after_sha256": "36fee71b0bc2d2e6f8b26f6783b569f4e012c514188443a70a32180c056e7ca5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "a0c547620ea39fa03d6970e297c7d296e20d0cf870f143dd9f80d70383665934",
+          "after_sha256": "0e54170c4f0283152d354634de81d95d62af6e2043adbcd73c63943629087210",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "e6d697b6b75ca9c7fb2515d8b13fb8ddf3f94b813e6d55453975d17c1f8de50b",
+          "after_sha256": "da1d346209ec40830d750dd0a9964793a1fcd359b1a87bd19ba2232de67626cf",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "ca4a8e682953b6fe91df2f4137322eff6fe3009343cd1d38124c65378ee9aaa0",
+          "after_sha256": "01dd4b968ed0ade00d3cb724778def5ccd630eae4680ef12fea9361aaf79442b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 17,
+      "file": "docs/books/pstack/zh-CN/17-chapter.md",
+      "before_body_sha256": "248b1932d12b37335ced687607d81ebc5c17e4408c2a145b1f06586156bbf621",
+      "after_body_sha256": "c4e2c0a26ab6206dfb213b611c33904ade3d7ec189b6d3f81b63f052b5f5acf5",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "c292baac2dcfb4dbb97b0afd5a0b251234de6a9fecb2400a16b44e0677a1cd86",
+          "after_sha256": "3de6e2b3a9ff59ccf7b8ce13b13412cc9e0e61a8612cede613da3f916fc79a9b",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写一个 Skill，验证这个代码库中的数据库迁移。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "b2577d00d57433ca0b0eff7a482544eaa638d78ba6778cc0d5d71deeef429759",
+          "after_sha256": "d337491af80909783e5198ce39e1b5bcee3cb0edd0279ce17ebbec32bf2aa081",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对这个 Skill 的修改运行 Eval Playbook。给两个版本安排相同任务，并保持候选版本盲测。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "ff2b1b555403f3e0f810c9fcf24659f488b8f945b09ec4587ef98566d608f93d",
+          "after_sha256": "a38b23318c16a2dcba362bd8a37944151e3cfb1f12f6b5880ca34950a5183231",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "05d66c5adafd5bb01796894e40e9a9a7ed047a0b11f7a9dd576a9fe76f7e2474",
+          "after_sha256": "f963a4dd3b65e261e1e003069cd60212df9bcce7311e2c60710e96b58f6a1213",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 18,
+      "file": "docs/books/pstack/zh-CN/18-chapter.md",
+      "before_body_sha256": "7b6b6b54c474dfae4a04a774f33d9a2ca144ba42a13387bd878c1aa753dbea4b",
+      "after_body_sha256": "8111d25e7d64f61cd69f100cd843a19cf9340cabc1b575515f02a18452f3fe45",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "8079075940293130d5975c99cb03920513be84d3800700da69c5f5fc6fae5e40",
+          "after_sha256": "744f8f64e9729276e18593a0c610e939b443c9a0e92579ae0773413744609385",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "c73b351ff4ec441c800404149b35d0da947a206996d98f01c8ce499ed586c5eb",
+          "after_sha256": "e33bb40e457ce72deaad34e7e3211fdc94f9b255acfcf0e0870073d3d2d1e49a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "98352654bab526c1bebd9f191c840493c8c992116b8acf379b8dae52a9656530",
+          "after_sha256": "68bf22b68ceb43b02bc9191d15a00005151a8f780fedb9f52d0938f08e0ab8b8",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「└─ PR #1 (base: main) ← 只有最底层的 PR 以 trunk 为目标」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "7d85bfeee90efab2f4a391a2df049d2ca42eec24073368a8ea42135e7aa3c85b",
+          "after_sha256": "a9223a50336a4854af7349aaea0f30a95d5e0edd1bd6eacada67615f674646b6",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建 PR。提交要小而有序，并在 PR 描述中写出证据。」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "8079075940293130d5975c99cb03920513be84d3800700da69c5f5fc6fae5e40",
+          "after_sha256": "744f8f64e9729276e18593a0c610e939b443c9a0e92579ae0773413744609385",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "11d7fecb5ac5329e79623dd5eb4327f3bebacafd2216a8519c16f3ac50e32974",
+          "after_sha256": "806f971f7a5993137d0a1a593dec455558b8dc9180c8d0aafd3139378048c977",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查 PR 123 的状态。还有什么事没完成？」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "78efbb18442a215396235405fab2b1452cb8813e30cacdb808c7eb57a4aa9881",
+          "after_sha256": "ed3f3901564fdcc32b5f079b141baa669219fa23a6ffc790777754fda075c82d",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「PR #4 PASS ← 已验证，但下面还有未验证的 PR」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "c73b351ff4ec441c800404149b35d0da947a206996d98f01c8ce499ed586c5eb",
+          "after_sha256": "e33bb40e457ce72deaad34e7e3211fdc94f9b255acfcf0e0870073d3d2d1e49a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "1c1022163fce9a32e1587862d91bacd0878aea34a46d38730887d1a9eb325258",
+          "after_sha256": "4096b2edf061a0fabadbbd0c5442adeda3fc1b2dc8f08050e2368d7db0364c08",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "df871340b4511a37117631e417185f467aeb8722e0e4ae519e68eccce0db8fdf",
+          "after_sha256": "d5e4d6ab75253f827e4fb57a8186febac48db6b0ed29f2079e30d492012f4879",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "b7236eb1171278d807053dbd0dfc4f5a5c530b162e9ec50721f7eb371eea8b91",
+          "after_sha256": "3cb01467cbc541180d5990e4dbd807858769da98d159808586f9660dc4c74cbd",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "095b72b3b2e642d1c25d2c968a0caa1b78f5debbe424455610e30c619464d235",
+          "after_sha256": "52bfd225d74c8e682dff7eecca322da294a612d4301d2a9c18b9b09b5e0be331",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "1c1022163fce9a32e1587862d91bacd0878aea34a46d38730887d1a9eb325258",
+          "after_sha256": "4096b2edf061a0fabadbbd0c5442adeda3fc1b2dc8f08050e2368d7db0364c08",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "1292009e501887d37e6c43f3f10517af7129da1b3ca227240716a89feccdfa88",
+          "after_sha256": "f937f1851f19a766dd98e566318da93d96955d832b6377548839b047d3c67a78",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "73b3d49adb42281e75d48ffae3c99da336ea8eaef11ea1da661df77d48205920",
+          "after_sha256": "b9e35322a0bce2ef09d67f552124ee4c11db608f936189c12ef353549a2a34f6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "df871340b4511a37117631e417185f467aeb8722e0e4ae519e68eccce0db8fdf",
+          "after_sha256": "d5e4d6ab75253f827e4fb57a8186febac48db6b0ed29f2079e30d492012f4879",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 19,
+      "file": "docs/books/pstack/zh-CN/19-chapter.md",
+      "before_body_sha256": "f604293c4c1dd063fd9c4301d7024a2ea2be0ec71079cb048571328ceb256779",
+      "after_body_sha256": "624697ef1a3796966fbcc7a675cb0f629d40d4d915dbd6890f9aad70d7dd9083",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "f3322e0cb93637b5ce33991ca68c7aae6984eafb71471a7749d36bb4d8920a69",
+          "after_sha256": "a32c8e0bfc55047785c6d8f1dab12a6e55b62986338d264f7eff2a95a59d18a5",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 接手这个分支。阅读决策日志，了解已经完成的工作，然后从那里继续。不要重做已完成的工作。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "29afcf2ad056e30c49ecda7a024fb31f55c2712032eac2bdf3fbf86670a4f65c",
+          "after_sha256": "f66a93ba7e9de60b1ec27bd3fb13fa54b1cc015718515bfeffdbdf2117c13a1d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 什么占用了磁盘空间？删除可以安全删除的 worktree。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "b434010d5df1bc9dcfe6408ec2ebc7472c0b5d1c2222e639db5b77834dec5f78",
+          "after_sha256": "bff60e967e2bb2aee853deec42bc5f257d7f4f4d83017a3e911492cd16c06686",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "342887b335469994700f09cca9d7c3c0166ba0cdf85eea661cee9975d695c5a0",
+          "after_sha256": "4137a1a6c162d047e6d8a26983d40b6f5851c11edd57a836197ae8b443233e24",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 20,
+      "file": "docs/books/pstack/zh-CN/20-chapter.md",
+      "before_body_sha256": "51936e1a112f57665014bef48c3618a6439adbbf4de982cba2539ba445b07cd8",
+      "after_body_sha256": "a31af6803b79a9b33154fcd9a5b6e1c8ba390e100713fb0ddc783433fa2b7637",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "320ee58191245695b14780df179feca1f3a3fbb8a59bf994ee4ea163a11f726c",
+          "after_sha256": "d372791a26cceac05bd02c3916ecd0eb11c6562dbbe2384bdba46459f4da50a0",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这些 Skill 作为插件发布。不要泄露任何公司内部资料；在临时目录中工作，并先展示依赖关系图。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "b2c493b6d594a3681976440b55385854213c57b8811bd269dc43488cf72d5f4d",
+          "after_sha256": "7f8825c1db733610c21f238c4dd72ef4a56b9230fa117a389d8756d8a765423b",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 9 行；例如「更新之前」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "370aec298565ca56bdd202acce3a991ca272fa7207cd9b5cf188069de054ecda",
+          "after_sha256": "dbedf757ab15ba92ae19935eccf2bed4f5bc27db7f99253b046d2148cbd06ad7",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 统筹存储系统迁移，直到所有软件包都完成转换并合并。每天检查两次。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "523d80c772254004650f7d502dfe534052bfe7026401e531b56cfc34057b876e",
+          "after_sha256": "6184adf0aa487f16de55ed410bbdf158df74e6436af05c7294b0ca3668b844e5",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 full autopilot 处理这个队列。各项任务相互独立，早上之前完成合并。」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "47eaa963f4dbd08ef1d4ef2e9574dfec149cd0e6023eb13e26013f82857b1ffe",
+          "after_sha256": "3469b2b1d20c7501046296ea06970736e8c8fab4638139305ce52f8e7a12c9db",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 autopilot 处理这五项改动，但要组成 PR 堆栈，不要投入生产。早上我会亲自合入整个堆栈。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "b312940c4a75d6f85501c312143ed17b88f1a0d41f1aba2b414608cbe4a7dc3f",
+          "after_sha256": "c477ea966eb30646becdc4f68ecbcd335225231e7ba89ac3cf9f04045f8afa2e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "44e57c7cef3d7c2c029825ad0539502ca9520392332328faf6b0a6e13084426b",
+          "after_sha256": "4190cd8c86fe1d82df2702b680471c8fbd15b7c5181891ba4ae5e578be9245c1",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "1498dc95e3991848bd5ab3440f78e96f4f5ddf03f1320a820966f94642641ae3",
+          "after_sha256": "3fccfe16c556c40e208e92a0cec175e7a240a6b798239a7e4728aea7d0352bb0",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "c60bbdb0960babfc2d7eb608ee201d01eeed951659c8cde1747378d7fa441e55",
+          "after_sha256": "18732bbcc9f9f112b2c3015cd27fdffdae44785d1940586317df8241f98da28e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "96bfc3265ea9d773997a715ea3b6ec20d6423e499fb3271d386f841e06e3e1b7",
+          "after_sha256": "a8b74ac90e0a9107385fc1f6d6a5244077e6ff72eacb4a83ad88af57fa293aca",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 21,
+      "file": "docs/books/pstack/zh-CN/21-chapter.md",
+      "before_body_sha256": "bde4344988bd79371fdcb18bd0bb9b75edc7ad33709fcc79cd40dfe62a79d7b3",
+      "after_body_sha256": "181eec3a491d1bb6f9bb7199c340582b3bf913506279d44f32827eb2a1e1d0b9",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "29ca59855f3545e72f14e8cc8d4ec4bbe862f10f9efb99ba3edd0263798310c9",
+          "after_sha256": "b09fb81df09b7289438482cfe57f2d595e77985617312448b9f0d877fb11baf3",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。实际运行导入，并展示写入的记录。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "984dbc013532654862c4f791112a1d9fcb0026588ada95fa8fdf173100fabbe5",
+          "after_sha256": "87e563623f36d2fdb5bab6a8e7ab0962ceb08d7719dda4db6cf16e9e4593e0b6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 22,
+      "file": "docs/books/pstack/zh-CN/22-chapter.md",
+      "before_body_sha256": "7c3768773572fa84a18d9d3a157c289f4e8eea415f4f1851a25395568b6d82a0",
+      "after_body_sha256": "d73feaef28c5bc4c980fbcf51718c6cb5615a099ed38e1dd2914b043a4c1edc8",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "6893802dc3620d6e2f7c5c8dd5243057133a29a5374483f21e6e0db73b14faa3",
+          "after_sha256": "f9425a0b49c5352ba9ff81342e97d2f1b5beb9823abc2491f269453a1086c4e6",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 subtract before you add。先删除过时的适配器，再设计剩余部分。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "93538caef597caf30b399a731e51ab119f36912d6152209056da449078273287",
+          "after_sha256": "ee7244a17f702f828e1886bd5a78c1e39b8f23bd2cb2bcfb3fe5a1da759ade65",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：saveUser 只调用 db.save，而且只有这里用到它」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "aab1f134e097220c84273e8665e7c78549d9275bfc0dd96d15448050b864690d",
+          "after_sha256": "e09199a51ed5e61018ea832d5fe1c745f7054d9707cf081e4152302f0c6ac40f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：多了一层可替换接口，但只有 A 公司的一种实现」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "1def75e07b94c5449bcc5026c3495b7066c5f459e25033fc2ad813522be699c0",
+          "after_sha256": "a49bff351e855481c69a6117089b192bfcf1924da9b9551455b33d16d08d9109",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 先确定结构：商品有名称、价格和库存数量」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "1fd248cdaefac77b67c38b7afbbecd777ce2549a19e7985efa117596b2ccd3ba",
+          "after_sha256": "ed505387474e9da3e85890720dd0acdb698cccd0d8945e63d84fcdf26893093e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 修改前：所有 Worker 共享一个「已处理数量」，先读取再写入」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "bd7145f5bb3db2852d58dd84a46ae66aa119adf718d8882aff6e5d0de43d9a03",
+          "after_sha256": "33114c1d7480e09bf2fbb16c869dc387048d6e24f0dc6acfcc6561bfd131e259",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 事后补丁：金额仍只是以日元表示的数字，每个使用处都加上「如果是美元」的分支」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "ded29813a8ed6f3150534f0e15cbfca1f8c3d7c69b753440b37e1c5b9b942711",
+          "after_sha256": "a7554be9738db24fb37a6bb8a3921332348d3dfce1279eb1feb462fbe187259a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重新设计：金额表示为「数值与币种」的组合，所有使用处都接收这种类型」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "ad3e7bb1f7a5bd9344bf28c4cce367d9ce0f6b83d0c0ea7710dfc9726d3438f9",
+          "after_sha256": "c187d010246513354e523b9ee6fdc62f243c670becc910e562fafd57b1fdbafe",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "dadd9931a8d6e38d46a2f4ea9e88c7b969335e60c7a1222829661a90a5b87036",
+          "after_sha256": "34b2899ec9ab375d76e9deccce5fa8c799da5f2fada5df85aa15674527a15261",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「手动完成第一项，了解步骤」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "37676a647b31a206d4da57ab18f46ab2195419748e29e4465c24d2018fa4eef1",
+          "after_sha256": "9e049c318b168b0364a1672a5b7d734307f6302d02422cc1dcdbc7842e301d2d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。把所有调用方从同步存储迁移到新的异步存储，保持行为不变。我回来时需要有证据相信迁移正确。」。"
+        },
+        {
+          "block": 11,
+          "kind": "html-pre",
+          "before_sha256": "a03749bf6df3e4c0cb63a6b8a4a150c3e3c54da1e3329f627d87ee31d43e2461",
+          "after_sha256": "79fb4dc2310f5134e99c5bbbab17751986d1162fc61a187fb428ed2136661b50",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「// 表示已经验证不小于 0 的金额类型」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "eba444a12e66fd89603d94a58d147e4852f397616b09c5358be88797bcdd316b",
+          "after_sha256": "17429d5900e9606aad80ec02208c2a01e4db1cd04b50f63d0b5aefd7223d6ef7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "11cd37f8b982683c576174c9dbf9f1e868b5f4640253bdd4ebc24bddfb3b68ca",
+          "after_sha256": "5f674f32e047cf89dde71dad3e538b0851b00543f2389ef05d5d979a2d258e77",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "aac292f2b392369bc77a2728a9bc44d06a7fe4dec1aa976d057a78a6ff29e2c4",
+          "after_sha256": "dd23c47e8ac4ad1087d169b4fbb18def6ede15123db433fe81550727eba5c14a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "48726aee366586398260790e58edaa44625550985265c72e7af11cf1cab3f08d",
+          "after_sha256": "93dfe536d68281096afb7a1208e30a3738f948c2304b27f801ce405356971288",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "da1adafb8e333cafb545e67a73c8e8d22c185ac65314f8c40629a88cd185811b",
+          "after_sha256": "8a98af742ac00fb58bb0c67b611381fef2f4283da6a5e500b1f0a047519cd966",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "79c318dea00764b79ac61676d1791c3f55154bfbad7abfe77bf34dec06c666fd",
+          "after_sha256": "d061181129fae021653560f327feb9a0c9b497d5ededa597ac886b42a7f934a3",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "afffc62102e33e80444de642e922aa03e3d9f7af09b695b939efdde8b4412183",
+          "after_sha256": "1c618ee2313a7699b0d14b273c486d03e811fd3ebdb15a7b8bbea792f6c58e63",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "8cf817e317c40a3fdeb68a031ab8d5d1c00a5148c5e56c6093eaa8481eb977bf",
+          "after_sha256": "00ce952175e9c7892b6092839a0408148cf739121ec0b754cd7aaef503e71869",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "0728acc0134004f13af6bd8acf483b41b1fe8a5cc4dff9b6c2ad8d99ff44de31",
+          "after_sha256": "da1d346209ec40830d750dd0a9964793a1fcd359b1a87bd19ba2232de67626cf",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "e037dd7394c3afbf7ac5cdbb9a435847542123f49efa8f29851239e0f2abad1f",
+          "after_sha256": "fd76175bb43481fb92d8340c91e89ed21332dc2440a36032621b258531b7636e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "3261ae2647097170bfc13296da02bb016c2d45be0d20e32f9dc817c439014b9f",
+          "after_sha256": "ffdf81f686cbfa8e95fa1804e35d2c59eda637f31c48afa36883bda4aab36393",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 4,
+          "before_sha256": "48726aee366586398260790e58edaa44625550985265c72e7af11cf1cab3f08d",
+          "after_sha256": "93dfe536d68281096afb7a1208e30a3738f948c2304b27f801ce405356971288",
+          "lines": [
+            "    throw new Error(\"金額は0以上で入力してください\");",
+            "  return `ご請求金額：${amount}円`;"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ],
+      "retained_non_kana_japanese_cases": [
+        {
+          "block": 5,
+          "before_sha256": "da1adafb8e333cafb545e67a73c8e8d22c185ac65314f8c40629a88cd185811b",
+          "after_sha256": "8a98af742ac00fb58bb0c67b611381fef2f4283da6a5e500b1f0a047519cd966",
+          "literal": "円、在庫",
+          "meaning_zh_cn": "日元、库存",
+          "rationale": "formatProduct 的显示模板保留原始日文输出值。 代码块附近已有中文项目注。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "afffc62102e33e80444de642e922aa03e3d9f7af09b695b939efdde8b4412183",
+          "after_sha256": "1c618ee2313a7699b0d14b273c486d03e811fd3ebdb15a7b8bbea792f6c58e63",
+          "literal": "円",
+          "meaning_zh_cn": "日元",
+          "rationale": "formatPrice 的日元分支保留实际返回的货币单位。 代码块附近已有中文项目注。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "8cf817e317c40a3fdeb68a031ab8d5d1c00a5148c5e56c6093eaa8481eb977bf",
+          "after_sha256": "00ce952175e9c7892b6092839a0408148cf739121ec0b754cd7aaef503e71869",
+          "literal": "円",
+          "meaning_zh_cn": "日元",
+          "rationale": "重设计后的 formatPrice 日元分支保留实际返回的货币单位。 代码块附近已有中文项目注。"
+        }
+      ]
+    },
+    {
+      "order": 23,
+      "file": "docs/books/pstack/zh-CN/23-chapter.md",
+      "before_body_sha256": "e3b28a2868734a31648056f3c46c951ff89fea85611bdbc72e33f1ceb9e38500",
+      "after_body_sha256": "e333e70bd77e3827ca115a34766fef97212e2b2fb98e276acbc028874e196486",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "62d44bc97b82302d6a8f558473a5ea284b660b5f172ad7f0b12c69740ce8708a",
+          "after_sha256": "635a330c70a1f72d37f3eb52f7fb599325165d3df09fd1727dfe2f7a06389729",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// order.ts：用三个布尔值保存订单状态（分散的布尔值）」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "de5e3bdc2e0602c2999c049ad1464afacbb6082e7d69c8ecd66ad7d763eeaa95",
+          "after_sha256": "52f7e3b34202d703e197af6559576a8e31ce9c860fce798087d539a8dcc6ee60",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// order.ts：集中定义订单结构与可能的状态」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "61d61ca81c9c482c959d9037c20540e1d0b55de8f08acea5c92d8ee1c34c0b0c",
+          "after_sha256": "51d16a1999c2521b45a378508774941f54d1eac3a5f9b75951c1cccbe89ae0da",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：可以表示相互矛盾的状态组合」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "b8db753b9628bf416e35c461819fcb9259af6b3722020b4d4405aef148d8255a",
+          "after_sha256": "7e3eba4f41835ea39dc15cfcd5b2a6cdde934f0cdff4ac3148ba23580545b8f7",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改前：两个函数各自列出相同的三个参数」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "ef3466b2049bc8c81000818196977a4e045c38bd2a7f7461b855093f09be3164",
+          "after_sha256": "89689c095829de15d70f973b86bed609ff7f3ed033746aa681a98074af4b76af",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：只定义一次 User 类型，两个函数都接收它」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "a4a8113f71a28de96bdf19218faff57cf3286fcb13fd3c95a3ec9aa5da2851fd",
+          "after_sha256": "6b07cfe6d2dba3d53a8a1b2cb0ec35977ad9642e44c7ab5bb43a0360fa1db817",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：页面、计费和邮件三个文件中都有相同的 if/else」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "30bbe4a8e7d3b5915f08843a9d6b45aeb719f0806bd925ec3342a3d52e62dd23",
+          "after_sha256": "16226f29184aad2bb4185ede00107d26707aaed258e0fa0666e8bcf6bd8e75eb",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：任何支付方式都可以包含全部字段」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "db3ff62a63aff63fb5ef99d143ac82f4b4ab023ea7169bb63fd6b5fa70fa4b94",
+          "after_sha256": "d0fe5514e0f6f3abc94429e8f7fd17f0fb7700265c6efddf160b6f796aef1c85",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：三个页面分别直接修改购物车」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "736b1e90bde4dedad024749e32ed8d1c5a44fad49403d1ba6a9d4c7df7628a0f",
+          "after_sha256": "9b2a2fa2cab64681ffbf509f6d0924ccb932aafa17feef88cf895656960d3919",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 6 行；例如「let stock = 10; // 库存数量」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "63ac61dcd391c64832fe1f9cec086b92f6b26cf3567593ee5b2de6509e3a78a1",
+          "after_sha256": "b3db91d9b36fe2620549c641ca6181d1f1e2d3820e36478abef9ca80483defc3",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「let stock = 10; // 库存数量」。"
+        },
+        {
+          "block": 11,
+          "kind": "fence",
+          "before_sha256": "c4cc40bfff72d7cb96a84a7928e85dd71ea0e66b8fd1c590df750423c5c85b94",
+          "after_sha256": "9e4497ecf6daf13aebfae36c43646b9f92c707436fafaddbb35408c09e2d850f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 边界：读取配置文件时只验证一次，并转成 Config 类型的值」。"
+        },
+        {
+          "block": 12,
+          "kind": "fence",
+          "before_sha256": "c95ca379d92b099e2d51342612848a9b0600c9059c46906bc380a1c07a50458f",
+          "after_sha256": "21e44820b1c738d099df4ada5d39df8f6580a112d02a1ed49fa53a2c3041f753",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 纯函数：相同的 items 总返回相同的总价，不访问页面」。"
+        },
+        {
+          "block": 13,
+          "kind": "fence",
+          "before_sha256": "7d18d54dab9cb51066b1a0f611fc4ddaea3420d7ac72ed0a5a3ad9da67150aa8",
+          "after_sha256": "907ef2c8fcf5f2bac9b2eee5dad7a1472fac76ce8a6c9f9474aa918433541d1e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 两者内部都是字符串，但传入 OrderId 会导致编译错误」。"
+        },
+        {
+          "block": 14,
+          "kind": "fence",
+          "before_sha256": "10f9f3e01f247911de537a21a4bc8ac9fe66bd8e0ada5c9cbc697f0f79f960d3",
+          "after_sha256": "c3b29689463aaa01769c4b94898e83d05f6d6dc0e02b509c295125bced44704b",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 已给任务类型添加 canceled」。"
+        },
+        {
+          "block": 15,
+          "kind": "fence",
+          "before_sha256": "f248c700a7134d9c18e7347889164396dc4526199b7bdae5a2e1765ea26d8c4b",
+          "after_sha256": "18d5d4ec61e604053c3ad04a8b778c86b9f685f967ebe2267a285d9f30b56214",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「拆分前（各主体共享同一个写入位置）」。"
+        },
+        {
+          "block": 16,
+          "kind": "fence",
+          "before_sha256": "baa29fb47756952b2a602f17a8bfebf692a9e029680d2568aa8ba75d24e7f073",
+          "after_sha256": "e4a8de2aeb5dcb9a1bcd23bd39387e08bed89f9239bc0aef5c4ab1bacc6e7bbe",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 separate before serializing shared state。给每次尝试分配专用 worktree，不要加锁。」。"
+        },
+        {
+          "block": 17,
+          "kind": "html-pre",
+          "before_sha256": "76894e8599ffa05400652f0657336b4967c9e22c63fb43674999341f9cd79b49",
+          "after_sha256": "ef4ce54cc066eb19b2f8462042b66fa8c846172e1e2ccc8f29cda9f86a8c12e8",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 表达领域的结构：状态只能取 status 的四种值之一」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "56fe70b1c70ba6c4dce26c44be2034ad6c9836d85a0a5a7ed3003d8ffbb336bb",
+          "after_sha256": "8a65a0a6c446c66aa19274e4f764815e85b92609d6c8dbe0fac7d910d3756e09",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "7514ed2c1d664af151e039c0956672970c009ddc18d43e100d96ff473adacc66",
+          "after_sha256": "64127199d3f841406ebab0be958f2eaa92f9d20126e0d5cf3a2af22dcb967e8a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "5411c999d149f7aa58eaf9807dc2fe634a3a08feb1c2286bfd187fd7065596d4",
+          "after_sha256": "18a026d14871250609cc3d9b4ab4a49381c562bdeb47eb53d74ad31a0c9c32b8",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "79717bd1d604ec6bf502430aeb898af4cb918b0ba5f5a1d8e215a5b56ca7e6d8",
+          "after_sha256": "720fde717a5d1518bbcaec0e599e2c2034a1caec0fab469c5c83e7f3fa62a0bd",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "d863c2b3cf65c6d7a30ecac82400f72b8928bbeb67919dc8f8617641c39eb648",
+          "after_sha256": "76f458a080489407a91c6870a47e2f3cf740e8326a767211a471adf85d9683b0",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "20874b2e5b25fe5f9a756e5620277191481528a7089c61aef7158f671b09e3d5",
+          "after_sha256": "c6d192153d1bc92d4618dde37e245debc725e0a68d22f49bb53465465112e977",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "88b9548b00d5311551370279718e2952a81672127200d6261fb93843ca38798f",
+          "after_sha256": "4cebeb76e9c603a659e51b410c614bf441f96598d5eb27a516f0c8b38018560b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "45611609b21f3bfe76e55d257a8cac44240536490b8c7f2a28c8a07a14658f71",
+          "after_sha256": "13d5ffe6a091625e1a0d12edab43300a1bec8772f0f38051b5b86333ef739344",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "6378431162b8a51bd592dd655f0f5cb630eca59feb85040ebdcc2e5ecfe75106",
+          "after_sha256": "3117b748e2957f31bce6de5f89c4b5109ffe0d068ab4b9e270729613a34e9889",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "3d757fc5cf4e3793b3816901d30f099841609b0e4e9fa940c5a87451b5665fe5",
+          "after_sha256": "86ba321c10d18fac965a8835631d359a554c2a0c41bc233ea38ecda9c668ecbb",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "97af726a40e679cc773f1a31604c8c694c0da73c4d2253f41a053ab2b6d17672",
+          "after_sha256": "47f8826476eea288e33403362fbfe1a4f4a465fde95f86b0dda08803182280ba",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "a900c630a0b21c85104c12a4677e3bef1f340d265c85e7fe90d93f698f5a9a5c",
+          "after_sha256": "9cb7310b9351726b5b43805ee0983aece2b5e4e240009016dcc387002e6ed9e6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 13,
+          "before_sha256": "e9aa76f39706bdf90f9e4a15a2abeb6fbc282d878068af672fcbf5b750f6f16b",
+          "after_sha256": "cd14b9e76943afff1bc0962490674d0c1a7097aa17d374fb8a33c659e727e557",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 14,
+          "before_sha256": "d100d1076151fcbc4691f2dd3632d8341384e8cd3cf5f9979b2de05472912971",
+          "after_sha256": "66febf6b7bfa0c2b37740898e575e84d0a6aa35781e660f6305956dc8549c674",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "5da8e22412054f71fd2c26792d3deaa5b3f81586698b6f1ca5744ebeb9b74bb8",
+          "after_sha256": "9b1e0b86c91361b2dd4d4c696b79972de36ba8a1fab69d3f4269672535cbf260",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 16,
+          "before_sha256": "9ad661f34213b5b229117f400e9ee529720fa6bfc27a3493aa79d3e5f38613e4",
+          "after_sha256": "49e635ea937c53fb74e866015658b0ec48ad095c70f8000289f23300c083c59b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 17,
+          "before_sha256": "66405f644d9f04e48c5b9a338b26b79548f160d46d0b9a57620705a6816953ec",
+          "after_sha256": "c9a4d606e26d436b5d155f44aba2955c03f8042b71e2616d50a0957155c035e5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 2,
+          "before_sha256": "7514ed2c1d664af151e039c0956672970c009ddc18d43e100d96ff473adacc66",
+          "after_sha256": "64127199d3f841406ebab0be958f2eaa92f9d20126e0d5cf3a2af22dcb967e8a",
+          "lines": [
+            "  if (!order.address) throw new Error(\"住所がありません\");",
+            "  if (order.isCanceled) return \"キャンセル済み\";",
+            "  if (order.isShipped) return \"発送済み\";",
+            "  if (order.isPaid) return \"発送待ち\";",
+            "  return \"支払い待ち\";",
+            "  if (!order.address) throw new Error(\"住所がありません\");",
+            "  if (order.isCanceled) return \"ご注文をキャンセルしました\";",
+            "  if (order.isShipped) return \"商品を発送しました\";",
+            "  if (order.isPaid) return \"お支払いを確認しました\";",
+            "  return \"お支払いをお待ちしています\";"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "5411c999d149f7aa58eaf9807dc2fe634a3a08feb1c2286bfd187fd7065596d4",
+          "after_sha256": "18a026d14871250609cc3d9b4ab4a49381c562bdeb47eb53d74ad31a0c9c32b8",
+          "lines": [
+            "  unpaid: \"支払い待ち\",",
+            "  paid: \"発送待ち\",",
+            "  shipped: \"発送済み\",",
+            "  canceled: \"キャンセル済み\",",
+            "  unpaid: \"お支払いをお待ちしています\",",
+            "  paid: \"お支払いを確認しました\",",
+            "  shipped: \"商品を発送しました\",",
+            "  canceled: \"ご注文をキャンセルしました\","
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "45611609b21f3bfe76e55d257a8cac44240536490b8c7f2a28c8a07a14658f71",
+          "after_sha256": "13d5ffe6a091625e1a0d12edab43300a1bec8772f0f38051b5b86333ef739344",
+          "lines": [
+            "      return `カード（末尾 ${p.cardLast4}）`;"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "3d757fc5cf4e3793b3816901d30f099841609b0e4e9fa940c5a87451b5665fe5",
+          "after_sha256": "86ba321c10d18fac965a8835631d359a554c2a0c41bc233ea38ecda9c668ecbb",
+          "lines": [
+            "  if (quantity < 1) throw new Error(\"数量は1以上にしてください\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "97af726a40e679cc773f1a31604c8c694c0da73c4d2253f41a053ab2b6d17672",
+          "after_sha256": "47f8826476eea288e33403362fbfe1a4f4a465fde95f86b0dda08803182280ba",
+          "lines": [
+            "    throw new Error(\"数量は1以上の整数にしてください\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "a900c630a0b21c85104c12a4677e3bef1f340d265c85e7fe90d93f698f5a9a5c",
+          "after_sha256": "9cb7310b9351726b5b43805ee0983aece2b5e4e240009016dcc387002e6ed9e6",
+          "lines": [
+            "    throw new Error(\"batchSize は正の数にしてください\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ],
+      "retained_non_kana_japanese_cases": [
+        {
+          "block": 13,
+          "before_sha256": "e9aa76f39706bdf90f9e4a15a2abeb6fbc282d878068af672fcbf5b750f6f16b",
+          "after_sha256": "cd14b9e76943afff1bc0962490674d0c1a7097aa17d374fb8a33c659e727e557",
+          "literal": "円",
+          "meaning_zh_cn": "日元",
+          "rationale": "页面总价文字保留实际显示的货币单位。 代码块附近已有中文项目注。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "5da8e22412054f71fd2c26792d3deaa5b3f81586698b6f1ca5744ebeb9b74bb8",
+          "after_sha256": "9b1e0b86c91361b2dd4d4c696b79972de36ba8a1fab69d3f4269672535cbf260",
+          "literal": "未完了、完了",
+          "meaning_zh_cn": "未完成、已完成",
+          "rationale": "任务状态标签保留函数实际返回的原始字符串。 代码块附近已有中文项目注。"
+        }
+      ]
+    },
+    {
+      "order": 24,
+      "file": "docs/books/pstack/zh-CN/24-chapter.md",
+      "before_body_sha256": "3c4ed7dd24638991f49bb80f8396b5dbf277616d16cdb18e09bb4bcb375800b9",
+      "after_body_sha256": "6a06f72b15a18d350a7f5e5fa9b0f2fb8308cba714a4d3c7ab28576a66fe4bf9",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "9c8866a91e6d6d70f970f492418ff4f5a52e7e7d046aaf20a78fd13b990af855",
+          "after_sha256": "c9921aaf67abf1529765285d2beeb7b538e041ede307aed7580a1dbbb50094a8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "cf1d704a4da08412100784b0c993f49e0c3ab136d1472e0ea098820bd33dbd2d",
+          "after_sha256": "a695ec774fe460187ad354d4b7f4f380b7ea65670db6cc5cf905ab17f4ecf8ec",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// check-export.ts：比较导出文件的各行与预期内容」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "848b71d29e55ec2c671e03cf004e8f3ccadf11bb66e50c54e0a37205df9f108e",
+          "after_sha256": "5c8cf7261c5f53c6b04b1434558f7071f8195d118d02ef840058add2cbcc396f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。展示真实输出，而非构建日志。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "5be54d4e2d37e6107ec22a8f8dd5d49547df1400476c0036c6cdd6bc669dc679",
+          "after_sha256": "16ccaeec7e893dbb659a2cd0d0b76c502bd504ea7487034eded181fb019eb41f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「declare function writeRow(row: Row): void; // 向文件写入一行」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "ec061db45d8eae78f8c8a29c63b170172e353986d47cd121848ab61615335e95",
+          "after_sha256": "b7836506f817d7f17881bb7e8ba51bdb2cf35f3d20e8eeff282fb844e48188b4",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 当前代码预期的中间状态结构」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "515bad8ef23b3a295cb8b28f1824e443e976476996c663065f76a9b7ed13d7bd",
+          "after_sha256": "42b36ce36e69210f489b97773ac820d4c09ec4e0929e5c5e0cb9d03640fef2ef",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「提交顺序（越靠下越早）」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "f2e91a696ee0eda3708abc66e32ab900a19abf68fcb0e8c04ced68ac0f34ab7a",
+          "after_sha256": "fc4f8540105d8577b2f3adca717794e6e40cb2fdc226b17dd9843134ccbe32af",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 将字符串转换成适合 URL 的形式」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "5da0810d269b606cc2842352166ed390a91621bfbe90e1e454d18a146e3b7254",
+          "after_sha256": "8c6af153505a0f813289dc0f2eed3d15cd4be57a471cd0ffda4fc5b746b814dc",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "16504c3038e222026c154253a96a13e9cb4af0926314e46632594d716ccaf384",
+          "after_sha256": "410eabaddb0f05f9da30ac58fdc9e0ea950978b86d55040f590ae5d2e4238fb6",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 计算总金额（存在忘记乘以数量的缺陷）」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "9588554f3c5d2d2984063bd14b7e8743f2be10273bc32f23c74f9c10e6f0650d",
+          "after_sha256": "56258953efd551c4883d77d26da49a4a7a665054e77945eb95b58c72d4c46e37",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 代码：将工具数量上限设为 8」。"
+        },
+        {
+          "block": 11,
+          "kind": "fence",
+          "before_sha256": "027eba5965e4d36dd8f0d292bdfcfe936fd5331c223fd2ff57ced38041b9b75c",
+          "after_sha256": "55e9a42a096bbb7a39538c2e87cc74042eb40b6572ba917153fe6092a10bc78a",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「const user = { name: \"taro\" }; // 测试自己创建的数据」。"
+        },
+        {
+          "block": 12,
+          "kind": "fence",
+          "before_sha256": "f4aef7f8d97e6718f2af4801bddd6067e19143f74aa43b49aee9bd29cb08ac24",
+          "after_sha256": "7204b981695b13ef8808f415751cc330b5943733f2f792eccb92f06ecd7943d9",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。"
+        },
+        {
+          "block": 13,
+          "kind": "fence",
+          "before_sha256": "a5b1de9cf4b1a4107b8e6cf85ceeeb856169744254083ec1515f15e971ce8524",
+          "after_sha256": "487e1067e98c9d70e3978f7be8f9cafd700240e39515a25c0fc57483596914ae",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 每页显示条数的配置值（当前为 20）」。"
+        },
+        {
+          "block": 14,
+          "kind": "fence",
+          "before_sha256": "d2dd58622feb45d5b09f019bab9144e00be14f2ba31370026013c21300e473a3",
+          "after_sha256": "b4a3e00b734204a2e10743bdaa2744b09cb8ceb38f24089743da0a9e5f93ddfa",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 注册用户，并通过 mailer 发送注册感谢邮件」。"
+        },
+        {
+          "block": 15,
+          "kind": "fence",
+          "before_sha256": "9c8866a91e6d6d70f970f492418ff4f5a52e7e7d046aaf20a78fd13b990af855",
+          "after_sha256": "c9921aaf67abf1529765285d2beeb7b538e041ede307aed7580a1dbbb50094a8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 16,
+          "kind": "fence",
+          "before_sha256": "d438238e7841f8b4cd493e2c61a6829dc100b65a73a1d3a2ae23ca84c5da843e",
+          "after_sha256": "c0675abfc3bd6b771813926c366faeb19cd5f143b3870de8ffc7df863e3c3d76",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 导出原始行 input；中途失败时重试」。"
+        },
+        {
+          "block": 17,
+          "kind": "fence",
+          "before_sha256": "ca0aab739cda15015883e647f7b76b4bf36f3d16061bff6e1958c33f8ae37381",
+          "after_sha256": "90195261161890d4710b32d34c203bf7633cb8e218fe2bd5ca43eec8a1dab8ff",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 验证行为的测试」。"
+        },
+        {
+          "block": 18,
+          "kind": "fence",
+          "before_sha256": "9c8866a91e6d6d70f970f492418ff4f5a52e7e7d046aaf20a78fd13b990af855",
+          "after_sha256": "c9921aaf67abf1529765285d2beeb7b538e041ede307aed7580a1dbbb50094a8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 19,
+          "kind": "html-pre",
+          "before_sha256": "8d70c846a5d26272374c99478b7ba58835d68c786073168d42e0f8f7709b3940",
+          "after_sha256": "cc9067ef2ecc1ca59bc682e9ef893d24db229a66bd9b230cc0a8061dbafb3a11",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 将字符串转换为适合 URL 的形式」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "a7de8b8e196ac4d26f77cec2eab149eff117fe3e02aba7b9aa79e47d52c21d16",
+          "after_sha256": "3ce14e327c564e0e7faf3f4f987cbda7809f97bf2abaefc8a36a3f5cba7d3def",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "a2d48612246d5e250daf8968c70d67f0524774da5d444bdc51fbb608d9926aac",
+          "after_sha256": "f17f36fb51714c782edc734dd4cb5f26091b608d82d0cd2684fcbfa15ff3d2e5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "eafc0093b2445e6590c42c56110301830d32424db17280ce4d50f64394884eaa",
+          "after_sha256": "b8d0760f108be98193be8b7ca73af616dce38e48a4a66435b34ee28e08c7876b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "3d18d1c05c8e9d353c322700ddc58b5cc3c43803042ea35e66ae0746af420f72",
+          "after_sha256": "4c69dd5d8b9327fc1546f72f513fb01c4ad619d12e372ef3186c05d6edc834d7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "b7f39d3ecc9cf9b8492b421bfe42ccbf1c14411ddd0538c2fa02ff6a4dc02731",
+          "after_sha256": "a0c53da0428e2c9e00f4d5a9024947cad5b3ae374e4dbbd7dab9e6bc71da9844",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "a90143ac5658c939bab65ebfa8ad690a9a0a966b643a0cefa200994060256613",
+          "after_sha256": "99af706916f94dd3abfee0cae4713e91168f3e2023165ae90c4ab0362bac36bf",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "ca64f65b3a4492da98063ea956c92194ce38c8f9f8f2c46c797f03e6a745a84b",
+          "after_sha256": "70d191cf010f457fa37dde658f96537729e6a9242c4688504dcb4d70438ae0ee",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "a3dea3a9991e79a87a0038e113a69b09bf1f4efd30d5ce24775c4a430f1d9daa",
+          "after_sha256": "05be9e1688c0c8309c8a5a6a66e4228e8f122dfedd930e62b5f2945f3a15de1d",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "816882cfc5f495a66d061f4f580cc008191d2a9cea604ab5892abe71f4ef1649",
+          "after_sha256": "3bcbb5234517576c7c9ae4324104b525c0ea794e65502afd9f182c7087ef4669",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "7a6799238feea154fea640c355d564deb1936dbc7443d499c10e14750252cf43",
+          "after_sha256": "7b46be859b4257a4584f66a0e952b911e6eed408c532f5b9bf26fed84378945c",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "290caa4dab82fe3de5da8cc5f2f99ecea383d906de4b7c9c8f54474c8dbff064",
+          "after_sha256": "f52027240cb4967fde6b5c94493068198f4a0698ba1a06f0a0d302058e5e42cc",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "cdfc2c9a3a3f01969d37384449ee97b2c0458d5611065977c1bad30bbd3ca22c",
+          "after_sha256": "ca13658fa5dc554403fb504cd3fa07a499e62e4ca469895832e456dccf74d5a6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 13,
+          "before_sha256": "95a5c2b8c5e76b557a00c28025ef0d7000138a81caea494a97ce8038f4b62a24",
+          "after_sha256": "0f943c17d12035cf93223f494137f2bcd4063b7554a98d33c5e9fd59af2f1322",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 14,
+          "before_sha256": "5ae4c05b7763d63964fc6190fc6d83fcc94eefb46fcfddfe3141d29cc3f1d088",
+          "after_sha256": "ff07c69cc78427869c6211b9464bdda92ffff7a25013e11bd0ee3c2d876a2d59",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "06a939822ee819e377d39df7de6e6af98e19dc34125a444d014ee0317afde8c3",
+          "after_sha256": "f1e112fed5bfa873a32c5de2e1f4d65c4cf727b79ca99ca96a6c5f96d23b1d31",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 16,
+          "before_sha256": "a7de8b8e196ac4d26f77cec2eab149eff117fe3e02aba7b9aa79e47d52c21d16",
+          "after_sha256": "3ce14e327c564e0e7faf3f4f987cbda7809f97bf2abaefc8a36a3f5cba7d3def",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 17,
+          "before_sha256": "c28e214ded540256b7228fa5f27a4d7f38f6b8eb3ef8b2f7ebb966efdfa285ff",
+          "after_sha256": "6b2b388b3860e4c3570496ebce9f682f5c82554a7b222ffb32159e426e2c491e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 18,
+          "before_sha256": "1ad836915621eb7823c4aa52b7430c795ec99d0b6ce862364420af9019c99ff6",
+          "after_sha256": "19a0a37a74f84f0a12fcbd8b048755f3fbc4f8d541cac647d8227d9942ebf2f9",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 19,
+          "before_sha256": "a7de8b8e196ac4d26f77cec2eab149eff117fe3e02aba7b9aa79e47d52c21d16",
+          "after_sha256": "3ce14e327c564e0e7faf3f4f987cbda7809f97bf2abaefc8a36a3f5cba7d3def",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 9,
+          "before_sha256": "816882cfc5f495a66d061f4f580cc008191d2a9cea604ab5892abe71f4ef1649",
+          "after_sha256": "3bcbb5234517576c7c9ae4324104b525c0ea794e65502afd9f182c7087ef4669",
+          "lines": [
+            "expect(findUsers(\"存在しない名前\")).toEqual([]);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 13,
+          "before_sha256": "95a5c2b8c5e76b557a00c28025ef0d7000138a81caea494a97ce8038f4b62a24",
+          "after_sha256": "0f943c17d12035cf93223f494137f2bcd4063b7554a98d33c5e9fd59af2f1322",
+          "lines": [
+            "expect(findUsers(\"存在しない名前\")).toEqual([]);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "06a939822ee819e377d39df7de6e6af98e19dc34125a444d014ee0317afde8c3",
+          "after_sha256": "f1e112fed5bfa873a32c5de2e1f4d65c4cf727b79ca99ca96a6c5f96d23b1d31",
+          "lines": [
+            "    body: \"ご登録ありがとうございます\","
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 25,
+      "file": "docs/books/pstack/zh-CN/25-chapter.md",
+      "before_body_sha256": "a4909c29e260e8a4e44b1bcbc138aea511d27e17474ce508f4e3d9f8f2aafc45",
+      "after_body_sha256": "e7d7ffe1c46063e9af455826dea1a36f218f97f5764e25ca38620d8ce83b58ec",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "aa3c81e22c324e340c8da72e4578a457601aa7a079a0c7b093edbcc62653956d",
+          "after_sha256": "148040a48ca63c1a72a3fa3827af30a7e6c1cced8d5648f25e0d38e40c9d7e1c",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「修改前：把每次使用的报告模板放在单独文件中」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "f0755a924ab38a713922e667174abd9bd130f02911dbc0c52fd9e8533d6653c4",
+          "after_sha256": "0de75d6d430d835d7e5b5ada362072b407084d9aab9ed1d7a3af0afa3b3f48de",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 26,
+      "file": "docs/books/pstack/zh-CN/26-chapter.md",
+      "before_body_sha256": "79f218e419f45feb62993b97cec1c2392529ec0728e11f41c99623fa8ef4b3ac",
+      "after_body_sha256": "ad5ec000526b1528768863d8fabee79a7cf10f888506ada3ce02da01d17f0f74",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "ecc8c4ca94cad90c144217e99f4bafea750abf6b0dd22c0377fb56c582604c18",
+          "after_sha256": "4e72d146f85772b356df34ebf898a98e332e8a3a0829dad04e62069b33fb6c6a",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「修改前：在规则文件中用文字说明」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "9d220cfe3a7370da13fb3ebfcfaf35430c1908cd10eaeaa6cb2fc41d996f7e90",
+          "after_sha256": "0e32146dad91eef18411be8ef011ae93eac667a85719890223e1671ee139e691",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改后：添加以下配置，并删除规则文件中的文字（假设已引入 typescript-eslint）」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "aed2de34d2d6e6ccda42fee262e84c5b0f610ec884165c7ff08b5e01592443cd",
+          "after_sha256": "48f3a87c375962442c42d294edd261833fd6336606ba837ad309c8066000a2ba",
+          "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 3 行；例如「## 必须遵守」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "d7c58aef2757f620eb8e1a02cc2278f1f9e1b4b4f26ddf3360a14855d08b413a",
+          "after_sha256": "3aa94a67cdf0a94e001ed86869ecd54d351c6f2dbf4a3e43369ca567b9988e19",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 订单列表页面：自行格式化日期，并在显示前检查格式」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "4e8fee320c704e28bb99ea68945f5aadba6601e2e9aeae2f62bc2f890740fa25",
+          "after_sha256": "9d4c629317054f0e61afb78332533133a1ddb888d50996d00e689ad479289658",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// date.ts：只在标准辅助函数 formatDate() 中格式化日期」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "471ba251d816888ddef9751de3fcd62a495914f2e9f48ecce292453e50040ea5",
+          "after_sha256": "a7c93bd18c84b46759931ea0f7ba854bdf8031281d23813e9055a41f42877c8d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 在 eslint.config.js 中添加以下配置，禁止在 date.ts 外格式化日期（假设已引入 typescript-eslint）」。"
+        },
+        {
+          "block": 7,
+          "kind": "html-pre",
+          "before_sha256": "f7ba4fd9939c86a3d86f80c4466bff232b0b1ab481d9c68a8f147bd322773ebc",
+          "after_sha256": "8dca610d9efa9e5f7e6976b75965205c9b3f4cc7ef653a2f4081f4286109e54d",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 在页面上显示的日期字符串」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "7f28db528ff2a2f14eeff6ee004767b36b7e81a91ece7f18eaf75ab936ffe7f8",
+          "after_sha256": "12c1d528edc8cc1e855b899e917ede37fdb42ec3fe3b0b8bee00395ab6b19be7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "674e228fe41159955facb47d9f6524f23ceeca6a4971ad0b72fb856c6692d593",
+          "after_sha256": "1d8dbf65c4ad7ad233f80fbc450f6d6fe5917a6c5c5fd5905f382f5a796ceda3",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "c5a110bc87a086aae169ddc0125673e016756243455384c223e60812965f8bf0",
+          "after_sha256": "0bd82fb12c6c065ec3b4b3b48f43ce5e318f9e88fef7fea5cd0a5ccfcd5b39d2",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "43034f2f77c9c84add8262b6af6df903b46fe6953ee73a53734a0e6a2b173387",
+          "after_sha256": "4bc499bc382e92cf9c5fa862c93dd5bf87e150cd59a82fb53a954c52e2d451f1",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "0f33e074f8feb30b2293724b3d73fd33f9564d2eab030e5ed5a0001e8c201bb8",
+          "after_sha256": "366d4c5c26cbcbfd87eb16a5ca5f2d4138cddf0ef28d50b6c30e449d98d3e49d",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "87b8b37bcccf6886eb86a7802303812ed9932f8ffedbdc937519a8dcc0b2d5d2",
+          "after_sha256": "f58dfaf23d680cb0bafc4730e9dbb8fe297399967a2ba938cabc06958577b4c0",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "d37c978b4cbfb2cbe5776ae1c916b2e7b2698cd739ef8cdd4ef731a6c46af25b",
+          "after_sha256": "73a079d7b5d040c4f63f431af1835f8d8a260251280a393d533c7d76eae504a6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 1,
+          "before_sha256": "7f28db528ff2a2f14eeff6ee004767b36b7e81a91ece7f18eaf75ab936ffe7f8",
+          "after_sha256": "12c1d528edc8cc1e855b899e917ede37fdb42ec3fe3b0b8bee00395ab6b19be7",
+          "lines": [
+            "  throw new Error(`日付の形が違います: ${text}`);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "c5a110bc87a086aae169ddc0125673e016756243455384c223e60812965f8bf0",
+          "after_sha256": "0bd82fb12c6c065ec3b4b3b48f43ce5e318f9e88fef7fea5cd0a5ccfcd5b39d2",
+          "lines": [
+            "          message: \"internal/ のモジュールは、internal/ の外から import しないでください\","
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "0f33e074f8feb30b2293724b3d73fd33f9564d2eab030e5ed5a0001e8c201bb8",
+          "after_sha256": "366d4c5c26cbcbfd87eb16a5ca5f2d4138cddf0ef28d50b6c30e449d98d3e49d",
+          "lines": [
+            "    throw new Error(`日付の形が違います: ${text}`);",
+            "    throw new Error(`日付の形が違います: ${text}`);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "d37c978b4cbfb2cbe5776ae1c916b2e7b2698cd739ef8cdd4ef731a6c46af25b",
+          "after_sha256": "73a079d7b5d040c4f63f431af1835f8d8a260251280a393d533c7d76eae504a6",
+          "lines": [
+            "        message: \"日付の整形には formatDate() を使ってください\","
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 28,
+      "file": "docs/books/pstack/zh-CN/28-chapter.md",
+      "before_body_sha256": "eff836eeec01fb34c870d21f2e5d95fa2039f361a7b525c6c2b35b8c12798958",
+      "after_body_sha256": "a1145d0f06c67b35a480cff546c385c6b7030361b9319112ab430516e508f36c",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "b140c38ddb37ff64864543624c24ce4982a1cb0e39c463db64ee06682dd8efde",
+          "after_sha256": "8c1dbc0fc320117e2b6fd356e21b8df36fcc00f73d1947004eafb864908ab8da",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "ad3a4aa39776406875ed61c0f9472278db730e0a4c8b73a3bc83383299e592a0",
+          "after_sha256": "e87546f26586749fd977696c76bf0d0dcce74a58890a0e9af659314a5bbfe246",
+          "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 2 行；例如「# 显示最后修改目标行的提交」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "49a7df58f550d2faa3667307d6e155b66fe3db9f666115f41a44cdb93960a5a1",
+          "after_sha256": "69293a032bccc6e124055467ebf6cac12023352db670caf366245bcda7e943d1",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「Preserve: 不超过上游 API 允许的重试次数（该上限的理由已有记录）」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "84d23347690c63468e80810f570f87e99fe328de7f9e62b481b0d44fb5e7c1fc",
+          "after_sha256": "6bb09131a725bc390175b6c727099f37c48ad244ec6fa6419f8595fde76baf4b",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为什么把重试上限设为 5？当初的理由现在仍成立吗？」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "e3a208ca853a373a5e7b34cf5d3b4704b1f74f671b8e286a70898254f2acd9fd",
+          "after_sha256": "9dfd416fcb59d59bb0e1ec750dc3f274a779d840442c58eae080016e258552dc",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明这个 PR 如何改变重试，并让我相信修复的是原因而非症状。」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "65b8156ac6a67ec3ddf27bc08f31aab48a212ad11bdd91a4cd479122d9ea7b70",
+          "after_sha256": "a0d5363348d28db2e490a64d4b9e785d8df042d98b60127fcff315ef209a0944",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 10 行；例如「- 把 CSV 导出从页面处理流程移到异步任务中」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "ce5fc6fab8ac6327ad837d86321a495ebea17f97a234a4e29fe51ed3751fbd23",
+          "after_sha256": "2e1e503b48c1db29722d2ce12adfa7dd3fd7fddee8e33857a4a5bd9294976b7f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明上周导出工作的进展」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "398616df627798a3e37155c96969a0e112f22b8ba1d8adc6008b0617cff6752f",
+          "after_sha256": "d9992af4553f0288f40b9a0fe0842f762005652f958a4527663c30c6eceab917",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "e35fbfda7e26485d988223f005abbbd7d7f42d0de5fbafea5ea06a9e35929eaf",
+          "after_sha256": "67568ec78db224e601971a668cb6209a9787ba902e65c07d09a6d7c3585ecc2f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "1d7e584a1d370f81db9bebe78fa76a413f837c376db756f056f5bff11a8d96a3",
+          "after_sha256": "bcbfe1d56eb7a97979a2ac88ea6ea45262bd09769e5fc6f4d0e2abfc54f6fcc5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "aedc4ca2ade57d13259786248e07af2087b9309985eac6b5e141d5edc0f541aa",
+          "after_sha256": "b2165d5a53b5536552248f0d13c3ecf1cac037df5bd1c69e9b8852708c993f79",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "b54024fa9bda0d1328cecb69d638b8b7f0d8f630140165921093bf0f113f1347",
+          "after_sha256": "c1d2a09d5a87e2f79bb4437efdeead41cd1f956d893b2ad1401d325b12a3879f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "8123e5ef8357b28e2e4765721eec0fdca84c7ed91f4b55be7cf93d248b9d8787",
+          "after_sha256": "cb768b38f597b4e07418ab01ca03244b0bd02ba2c3f74cd91b2859209c5121b1",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "b8e2df6004a9267acc18e0e44563688a50a624ac02ba1decc744fb89b8fa781d",
+          "after_sha256": "d0380decc526b668aefc8ff58f6c9c942ee149ca0125e0b407dc57bbf5773987",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 29,
+      "file": "docs/books/pstack/zh-CN/29-chapter.md",
+      "before_body_sha256": "f12d2f627b570a2ecd9f68faafd5cc14170fb1a8038a3739d4a5e459ea20eb84",
+      "after_body_sha256": "215c7fe032e269fbb860975d4e24614e3d6fae55e2f5aa74baf4f91df1aa5d59",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "c765f072b670a36c330b2ffa79c1e231acb8ea06f2a81c305f069e2418e64d72",
+          "after_sha256": "ab77d8adb93e70c1ddaf5fe0bf34056f64aa8b4c4d1190fe0c2011c188dfb943",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 我暂时离开。把同步存储的所有调用方迁移到新的异步存储。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "ba54569afb1b722dd5983d2736d930f2c80743c12cfcd7bb28cc7141cdcdffa3",
+          "after_sha256": "00fca51a8159face3b681fb46cc7b6c29a3263775d82f811c13a70a21d6aad4b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 30,
+      "file": "docs/books/pstack/zh-CN/30-chapter.md",
+      "before_body_sha256": "11a62dbfa3caed06fb59afc985e9ac422b843f57ab4d3378e054445a429e7412",
+      "after_body_sha256": "b40e21a368947a817befb1acc4c43e96794d804916e29a5543cde74188d2a15d",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "2d9e114fabc764cbf8546335d47bddb093d063ef3dab5ff59af2c93805f60206",
+          "after_sha256": "26c71cc49cacd185e69334aa49dbe2b68e78ee1b874ce5dc8d76b30fb50f30bb",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "5530c542e1a4399f88a93591660f77779f5afa7fd355ebe921b40226a57eb301",
+          "after_sha256": "861d61640da67af599bc66f27d801f5ae13d59ee78fd4ddbfebc27f354eff07c",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 要查找的用户 ID」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "a1ddf6ee1f98d40fb9e75b2bbc0b12af0e2fbfa72161dcc20c9126b2860ca9d4",
+          "after_sha256": "cff5a1673bdedd42cf48d9f5a0ecff55000b9965e819b9847aef2a6f703336cc",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 深模块：只公开一个函数，将读取、验证和保存隐藏在内部」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "7aace01dcb9e60d8a9fb1666f417511c2a887772a105ed74591134b7341a77ea",
+          "after_sha256": "1b09502da3a13de6f14ec4fec719ddc073becea97cef5fe90b1939407e10a8bf",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 用类型表达：shipped 状态的订单必须有 trackingNo」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "6dfda2cf6d7b8c584db44bee8b18e844afbae1db81223d586e374de7390c1798",
+          "after_sha256": "6013f0c3b29ac4b7680f7733d98704f7edfaafbf272f9b26304b53069e6f8056",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// load.ts：读取 CSV，并将每行转为字符串数组（浅模块）」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "79be739a5388185d6d0a8cf0e45971bf07a05de635f3538c2f630df583e5d64d",
+          "after_sha256": "d5c226b0922bd5597696198c922abffb6667336529d0c0c0ca1144d341336c07",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 12 行；例如「// 预先建立导入所用数据库连接的函数」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "0a42a9c8d1c2d957ab5398083273fe5b3bbe2895d59bccd6bafcec516ce081aa",
+          "after_sha256": "a83e669cd5bf91294d725a53ad0c9aeff7005c58c1506fb4c6ab083a03abf89a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 写代码前先设计导入流程。我最关心调用方会怎样使用它。」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "82641324ffeee2578d29e0b1e3c97fb0f7fa24ff235280e713b8e64f6e4a9d36",
+          "after_sha256": "49866b93dee6e5cce6f61eb1b605d6b64af38606628958cfa84c355c04ccabcb",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 请设置确认环节：在实现前停下来，给我看设计。」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "6fbafd2ed2288fa645b991866e78cefa57a16786853dfa7a9554814ecb3127b6",
+          "after_sha256": "fe0894f3ef70b63908067d7abd3a96b7e4d8dd892839e2fc0793769783da2811",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给出五个候选方案。缓存键格式事后修改代价很高。」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "c7e86c4d0d81860014c20687f1245ea0a6c1e6e7ef3e428854dcb2d3a6bd02dd",
+          "after_sha256": "f4c83df5f0176a7d1ef42948efff4527eb564c5a2acbab8a7ae704456034249b",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /arena 对这个讨论及我们的工作方式提出第二意见。」。"
+        },
+        {
+          "block": 11,
+          "kind": "fence",
+          "before_sha256": "8a6d6f9ba62caa77376aa4eb88501f3c518782bf5f57424885904ab84c0466dd",
+          "after_sha256": "9144254b1d735c998b456b4c9eea920dc71dc8e4f5d2523ce29950a1694c729c",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用各自的 check.sh 检查 packages/ 下的全部软件包。每个软件包安排一个 Agent，最后提交一份报告。」。"
+        },
+        {
+          "block": 12,
+          "kind": "html-pre",
+          "before_sha256": "60bca211d03082657b79bad7a37cfa299d797ac21da28f9e61c5de85a8de2edd",
+          "after_sha256": "d5c4a1f96beb5db3390b65872b232f60f47258fbd7c8f53f21082718efacdf92",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "ca7f95aa739017b5476a002da34ceb59ea6c7dcba5ef486684b2d70f86b47dba",
+          "after_sha256": "cd610e357993403928b299eaa5a7ff74938b9316ea249f077032c159b1463e31",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "ca7f95aa739017b5476a002da34ceb59ea6c7dcba5ef486684b2d70f86b47dba",
+          "after_sha256": "e4696086035f05ce9d22d25173869ba527175ff8553ed7d611759bb7401a6557",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "7f2bda5089ec66b3c271d03b876107c6f2ebb5c72149d0055ed4d7d213ba5c1c",
+          "after_sha256": "7ee18ec5eef0131af6e2000719e3b4f54a5cf7692faa0b31954e26f408274c80",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "8fc9d8cb44ca929c2f78b1b854e7655c202aac79f4ee447926d97b94e3026f6d",
+          "after_sha256": "cbdb342c4e70435061b1234aefc8b1bcaaf536dcdcf692e6fab8804382ded66f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "fae0f8475654788ad6ec3233276aa92f3b45ed91f9b02c1f8cef684cbd0798d3",
+          "after_sha256": "c09d9a3b8237aa9d3048d008c761ac6ffe7567f9b83ec9af8d00423120c6c245",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "964f373d0dc0d1eaacd891378ad402ceb805501dd37798ae8cabcf474a094903",
+          "after_sha256": "1f12d42384f01ac534c5ba25cbfe77288bd53822e02f4dc319c14c244cdda350",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "08a7955022609771defe9ba777eab92514f9f3160b164c78a01abbfe4198d0ea",
+          "after_sha256": "1df1d7b27e57dae7e2f5c6f0d79c509dca83f8e618240264c41a068ab124a584",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "0f7c872278034ab2241e674741c2233c158b47467fa6f658595b72fec3877469",
+          "after_sha256": "ccb7e1cc98fe4d24c289fa30608e6efa9790af1596589e0749a5b9a971f30c32",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "69a2facb8a1877dc46da38891c7391c8595ee97776431dcfeffb550e4497470d",
+          "after_sha256": "556cdbcc9809cb27fb4fa3e943b34c2e3b51fc81707a9f41b82042efbffca3bd",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "f88feccf544b144eee298d562c7a09d79765d0403d04fcec62fd1699004ce747",
+          "after_sha256": "ce1e8ea64b15987438f9224b803d4ea40b0b1ff30bec104bfbc1af399ed41912",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "bed20c9c00519714bede63612ac7440d6f5cd39f6e94bd0a202ae325bc787fe1",
+          "after_sha256": "c30f50dba8df5bd39b5e83a18fbe4e0a7743ac844e1510b608a9a10c2f7a4a15",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "cd06a70a15e7e67af26fb1118f223ed686b25c01f958b5e0839191168117a037",
+          "after_sha256": "a1cc9caf3c4e57b78f12b317846e5df1c6cc03e4360ceb5b2e742019bbd3083e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 1,
+          "before_sha256": "ca7f95aa739017b5476a002da34ceb59ea6c7dcba5ef486684b2d70f86b47dba",
+          "after_sha256": "cd610e357993403928b299eaa5a7ff74938b9316ea249f077032c159b1463e31",
+          "lines": [
+            "  console.log(`${result.imported}件を取り込み、${result.skipped}件を飛ばしました`);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "ca7f95aa739017b5476a002da34ceb59ea6c7dcba5ef486684b2d70f86b47dba",
+          "after_sha256": "e4696086035f05ce9d22d25173869ba527175ff8553ed7d611759bb7401a6557",
+          "lines": [
+            "  console.log(`${result.imported}件を取り込み、${result.skipped}件を飛ばしました`);"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "fae0f8475654788ad6ec3233276aa92f3b45ed91f9b02c1f8cef684cbd0798d3",
+          "after_sha256": "c09d9a3b8237aa9d3048d008c761ac6ffe7567f9b83ec9af8d00423120c6c245",
+          "lines": [
+            "    throw new Error(\"発送済みなのに追跡番号がありません\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 31,
+      "file": "docs/books/pstack/zh-CN/31-chapter.md",
+      "before_body_sha256": "daf77488d1dc8507b6892870e917603261c51fd22f85337891b2bbd328d3f7c3",
+      "after_body_sha256": "2671c0692672692c3a2a2addd2ffd31675adb9a226dff642646f0b1bb178ba6a",
+      "code_changes": [
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "e0c4b28c1130d7f2d3e6d83b1829f539ceef8789d81dc9c2155de4f699b79908",
+          "after_sha256": "b5076926dc3f6d37540277595e93aec2e3ae986cbd9148c162e7625eca48fc5f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 利用上次编辑以来的所有信息，更新我的 mode Skill。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 2,
+          "before_sha256": "0f9b5a9d821e984be68d45f1e8ffd3358abddd554e25d84b01b7679c7b1061fe",
+          "after_sha256": "d1b77f461678de975ee1aaac182f7f8a24bb2055b8b6638f956689299c32fea0",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 32,
+      "file": "docs/books/pstack/zh-CN/32-chapter.md",
+      "before_body_sha256": "f391ba5c6ec0d60bd351e0ac3c0dc25cd2cd9fa30268201ea387df94ea8f307d",
+      "after_body_sha256": "4ac7be86999de80ac94d5b672346095aaaf7b946f30675256a410cc47170dad5",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "7a3f4a475494c5e8902a74a12b5a6fcd1a73cc128a24923aef81d12caedc4ffc",
+          "after_sha256": "0e23c8b0ae4c4c7fc28b576313fdcb036aca47538937993642d7654fe099fc36",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「<!-- 仍有占位内容：下一个 Agent 不知道该运行什么、点击什么 -->」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "3b817f8fa66cdba7ee181afccab3bb0217799bf1c2b94432c670b732c508c4cf",
+          "after_sha256": "95c673c3703f17ead57adcf2ab04bb381dc1430c769b6ffe6ce1d1ad994507ad",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：按屏幕坐标点击；按钮位置变化后可能点到其他地方」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "6ae1b302704134e281ec953a085cdc162474d5a3e4830b718663d681dc5847e2",
+          "after_sha256": "5170a856704675ff6a70d7dad2295fa605a372cc549e21ae11b3d67a10eea6cc",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查验证 Skill。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "bb2eb5da2d473d3f9d09b98aaea3afe6ebe0c0fcb4a820b54997bb0a8e266332",
+          "after_sha256": "df3b3a0dabab8087d9879f2cb4e64ee3ac8fde993414a40fe5c39bf591053caa",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "fa0c620822e20dcd6c1e379af029975a2009985d597515a500e712fc3b051c58",
+          "after_sha256": "4b97eb60ccc251ab807fefdd36cf35c80fdae00a59ad3913d69814476054eff7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "e914c9da64067d728b66c8b31f328f463f16bb678e815d8174d57c6ade01142c",
+          "after_sha256": "4bd8e7a3ed691e017564fbd0f3b9d5f466954416585e9116df7aaff41de59766",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [],
+      "retained_non_kana_japanese_cases": [
+        {
+          "block": 1,
+          "before_sha256": "bb2eb5da2d473d3f9d09b98aaea3afe6ebe0c0fcb4a820b54997bb0a8e266332",
+          "after_sha256": "df3b3a0dabab8087d9879f2cb4e64ee3ac8fde993414a40fe5c39bf591053caa",
+          "literal": "送信",
+          "meaning_zh_cn": "发送",
+          "rationale": "按钮可访问名称是精确匹配值，故保留。 代码块附近已有中文项目注。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "fa0c620822e20dcd6c1e379af029975a2009985d597515a500e712fc3b051c58",
+          "after_sha256": "4b97eb60ccc251ab807fefdd36cf35c80fdae00a59ad3913d69814476054eff7",
+          "literal": "保存",
+          "meaning_zh_cn": "保存",
+          "rationale": "按钮可访问名称是精确匹配值，故保留。 代码块附近已有中文项目注。"
+        }
+      ]
+    },
+    {
+      "order": 33,
+      "file": "docs/books/pstack/zh-CN/33-chapter.md",
+      "before_body_sha256": "0f5aae4acd64ef09bd9173138a08156cc74153220a256c5ecceb7a7ffe3c3de8",
+      "after_body_sha256": "0ed4788d6c0b59f6fadde79e6e4e035e5636ece5497c8ac339ac614bc6e5c2f6",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "ea8f6431c87d15ab769da60ad1d58901bf11f77002ecfa0cd6d2960cbce5a76f",
+          "after_sha256": "2cbfc4297a411a0879b09437baf9606002da02c098ab0e1797c55584bfaba420",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 以怀疑的态度审阅整个分支。只有真正的缺陷或回归才需要指出，不必纠缠细枝末节。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "31acb45a9e775f8055c943d70cd83f0d920bbee0f7f8c5339fe8aec6f773d833",
+          "after_sha256": "cd89dc1afc63f701a4c1324818647ad3a29fbd15967a149152f12a4471a64109",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 34,
+      "file": "docs/books/pstack/zh-CN/34-chapter.md",
+      "before_body_sha256": "e16a5076d2e4b193529f7ecc8c296140bb0d4ba5a051b5786f4875f2feb4dc2c",
+      "after_body_sha256": "6866aafae1da34d924c3e2f1042bf778d611e8ee053a26edf9e16105e846ee01",
+      "code_changes": [
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "5120e4b0ae58b2c227c38a66f32788c816ee061c35ea07e09b75a0fa42f36f45",
+          "after_sha256": "67f910fd6c2865e389cfce48620cfbdf558dccadac6f5a60eb33ab0737b3789d",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "f158b44913c8603a1e943de2042bc364199f7964ffa46ee31d523faec0a38ec2",
+          "after_sha256": "6f8bc6090ee0afdd4087eccb985f4150d87e258d049f59e18fc3fb3cf18b4a98",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "4e4c0862faf17d85cc9d385e476844e3e6610b8cc1f0a4800ffa63fa1b77fd02",
+          "after_sha256": "20e6d0e88e88070087bf4118f163b0909395a22f549c337e940f5d74afd48c71",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「- decisions.tsv 中 11:15 的记录：pixel-diff 0 的证据只有首页的一张截图；其他使用该组件的页面尚未验证。」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "bef707aff56bfaa4bea51665980cffafb5efbfcc97a492fa8eda8505d2a20639",
+          "after_sha256": "2b113291f65d36e1bc3610b44469a28815f810b8b3785c24a265c5327a0c2d39",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 留下决策记录，方便我回来后复查。」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "52f865d7bedea8a5e51e0d29bc6e49ce54545445eebd660d85e8d074b3edf4b9",
+          "after_sha256": "aff3d189f838f85f4abe5a23094d933657efb9dad6ef660e6290b3f391513cc5",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 告诉我昨晚完成了什么。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 4,
+          "before_sha256": "17f6c986ce6fd46123b1cddf317a6a0eb3a0fe28bf95fa9f3f802a75cc3f4159",
+          "after_sha256": "17c820c1c35c3e5f68968646a39a34f74e3d5e211db5aea6d2977030c7076ea2",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "2a31988df6557067ddb62ce7e6c02a013682bb3fdc042fdb3f210d444c7482b0",
+          "after_sha256": "394cf43931d8817565b7f4a6f16d14a6a404899ede1f7c7a2261d6234818d169",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "425a8a2808c788a6178d2d7dd75bc8314b36240d3779a126a2d723d9a4627356",
+          "after_sha256": "b9ecb8ff315f68f1cf7c769e2e6e544fe08daa25a22d4f5ff9b65c969f6bf52c",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "117e92ce75b48613baaca5ad9126cd277a4a62e7e2404b2485d47a5dfb501a10",
+          "after_sha256": "d7810db2aff576a6d459df5921f338f9348ba4356f1a3b0e084421ebe17698d2",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "04eafa6084bd2c707e3a037734f7a0b75d9543f52437d86ad6069dcac0cbc43a",
+          "after_sha256": "e9959af717d348f1f4438b675f13e319fefa8a56d869ce4f6f0df61c2dadd584",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 35,
+      "file": "docs/books/pstack/zh-CN/35-chapter.md",
+      "before_body_sha256": "267eb470ddbc08144296e650d781b7c6222ef5957cad8ae7a774bb304f4fcb7d",
+      "after_body_sha256": "53dd391a996c7cae1b4554079f7978ea33d188e444ef23812bb0a196523a8f0c",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "ac4b1cb765a1879f9e2626a8a25464c152beb96ed08cc1c97522ec59c881ac49",
+          "after_sha256": "6ef20ef50c9aa0223e6c13a215d9e629233835c0efacddde39c710abfe310d05",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 差异（修改过的文件清单）」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "f8b08a9b2ab3db04d93b766908617d7ca4e0d809aadc0568b7eed983999c348a",
+          "after_sha256": "4accbe7c3803939ac706efd13f7b31fbfaa401aa9ae94c60ae18f2d7a64af41e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 检查字符串是否符合 UUID 格式」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "0a4f67fd32a8eca7660d6a215d32bc29a927c8b326b4f78fbe015915909f0ee1",
+          "after_sha256": "0a46f547e6a29be580e35deab4f43643774a26b4ec34956ca1e1697e509ebf5d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 非空数组：第一个元素一定存在」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "c33c8132b2e1ecf7d39cf7b17381d9a417bb93e77e4939adbfefd0048390eeac",
+          "after_sha256": "5d948edd62a050fae459fb2249e827ddb84111d2776cde2ab356160423e31ea8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 可以继续使用 T[] 的例子：空数组也能返回 0」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "8146be3eed57ef7dc906b5ec7138db2c7a85f7e44930f0a5b8e7f6d84cd144ea",
+          "after_sha256": "e8fa104f33fe4a8141a134b99f682a3173132110c02c8c4451c149a81f6bc813",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：接收 any 后，无须验证就能使用」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "20639fddca404492823d9ffdd100448f5e65e0fb43efa58fe07a01a430f15850",
+          "after_sha256": "d7c28559f38a7f7dbd06766f81918d0b12af1743ea4e994bf79296d62b690ae6",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 从 schema 推导类型」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "98b90804f409adfaccb917a34b214dc649acca5420a55788ad7f3f703a79c993",
+          "after_sha256": "7fc6b0e371e9b5095556d1fa3fa99ae0636981b77713ce01112a3dfeb7622a13",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：未经验证就断言它是 User」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "33d0aafb33fa7d5e4fc9ee282f59d4aee17612b252f44b15476b88e78c2af4d4",
+          "after_sha256": "6583634ae769b17dabba71b594eb40212d9c8c89806efb4643a3c308fa1daf81",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 1. 对表示类别的字段使用 switch：检查 kind 后，编译器会自动缩小类型」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "8b34dcb73d228f19c08bc5292966d763535dfeab345cd1ad1ac641e3506869cd",
+          "after_sha256": "1644d45f2d70c9c66ebd6f91d7509ae925283b652d5cace027d53185c682fa13",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 实际检查了表示类别的字段」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "59d3ee382ca31f65b190c072d7dd5ab5422ecb907bdc38de49054ab9f6719924",
+          "after_sha256": "e0aa7154652caf8afd979eaa62be11e700fc465d3cadf6c9a26cb79ead850497",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 若在 Shape 中增加 variant 却忘记添加 case，这里会出现编译错误」。"
+        },
+        {
+          "block": 11,
+          "kind": "fence",
+          "before_sha256": "6718bcc22a0097917bc4afb10d2cffd38b5a81a526cae824f996483c7f120d31",
+          "after_sha256": "db870d6830f536afde6960485adfd02518f018493120d87fd2520ed051483a4a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 错误示例：使用 as 会把 theme 的类型扩大为 \"dark\" | \"light\"，丢失它确为 \"dark\" 的信息」。"
+        },
+        {
+          "block": 12,
+          "kind": "fence",
+          "before_sha256": "ac0695e034bf1b9ddfdb083bd3b003643b8fb5d14c3af733f438325a05364b15",
+          "after_sha256": "7a529a7e84493e2d93f4a208bf83cdc9cddadb42535eb6a7fabf34711884d6e4",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 领域类型：明确订单有哪些字段，以及每个字段的类型」。"
+        },
+        {
+          "block": 13,
+          "kind": "fence",
+          "before_sha256": "3b0c9994e44228d343fd682efc58059fb648950eadcebd35ca6455dcc47b7a93",
+          "after_sha256": "ecbab44f9ef5ff2a78dec105ba5ae07fe722d71c8bbdc6b878e94ea796e9a65d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 生成的类型（实际应从生成的模块中 import）」。"
+        },
+        {
+          "block": 14,
+          "kind": "fence",
+          "before_sha256": "1bedc4b1ca983e834e9a09114e9d86678a90902514653270556ff6794004d350",
+          "after_sha256": "8978e84222ac363fd0feb72b63f7dc620cc545091c95516aace2addf71931cad",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：即使调换两个参数，只要类型相符就能通过编译」。"
+        },
+        {
+          "block": 15,
+          "kind": "fence",
+          "before_sha256": "a157a429dd65e0249e2042ca5ad51c4d5a67b1bce2c8460be4e584b9d6339ab3",
+          "after_sha256": "33c97d0cecf1841a37fe47a96fae61bfa4dcdf0a3473ed9e09ef82ba27242d45",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：连可在本机运行的文件保存都替换成 mock，只检查 mock 被调用的次数」。"
+        },
+        {
+          "block": 16,
+          "kind": "fence",
+          "before_sha256": "0512aa52588fbf01c7e5915c068fd7505b93b865697e9a52baee3c45762a27af",
+          "after_sha256": "222b9399e62fbf4b9e3185ea47a9a0b43c46511fc9033344ce8fc1baadd0683d",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：只有字符串，事后无法查出哪个订单因何失败」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "3ccc8b23623b029fc514e37c3d403ad2c6266ca0e1152002888712a767b290d8",
+          "after_sha256": "f82d801d8b39025b982c40744b6ae3bc7a398b997d1d0bbce2403455870e9b97",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "759040eb5b3a84cc1890ba6598bb835f84e0a9b1be097461d1ac9b5e369183f4",
+          "after_sha256": "27565fe73c6a33b33b3d9bd68cf26e9d3fb69c9c91ff69063df5e9865358e78c",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "c9c82da522be39ed6ce26ba2a33b45398d2211b13f8885caf178fd64b5de6934",
+          "after_sha256": "31e90422221154db1f6bf3b8d32ffd7445878e639579d56417c582364ef2d231",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "0e42d4fdf1358983b5c711e1a75b66627bac649a4c557764412624ebc7d53286",
+          "after_sha256": "101cbfff5612e973a59d192c7ee4201460932ddcea10f435b8ea51ea9972a064",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "420b5def4b31e4d0586f71de7388e62398aa3e824cd691c80847197946de79ca",
+          "after_sha256": "24b004a1aa2b885b18ed1f232f971554d4212f20b0ce849b409e242f96b03e43",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "b43baa500121572358f47f5ff8c3802e9a08b2459fb7589f59fc9ed89ee0b68b",
+          "after_sha256": "40a57bd2f56a136b89ed706976eb25d26c3a7dc87538bdf3199d0a40615c1fd7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "86d0d441dd963344ad67a4a021a77379ac564fa22a9ccbdb0a400d91617a6a4b",
+          "after_sha256": "33ec3c134eb56d41e367071b766a990ad067f6ccb4ae73f77ede37153c60d175",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "77209605d18b2d7c1c8639a005fbd1384381a5fadab0800bc469ec5c12972c17",
+          "after_sha256": "4ca6cab3845dfe784c260d000dbed7ee213ecfc2caa8fc2a45946fdb3304c047",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "44854ca223e5afa3b9ce650946346090a88b7c7f716143ef0c12762574ae3568",
+          "after_sha256": "79a8be3a39d9580b1aa6db474fc024d5311d54d34090d4ec16fe18a92ec2ce7a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "075d03a84754470d07fce34cec093ff20069986f98a06c333669a7c846814344",
+          "after_sha256": "7a3697661ca54912e6f40c3b13aba57da9461887d1f945e2790a6eca363c5c12",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "ee4ecef5ea319d2f5d3d1b2c6f07ca27ce89c143d417829c9dac7df783a05c03",
+          "after_sha256": "5b0e32d3f1cf5fbedd0de971136cfd693f7a5f0e001d09e94331b7361f5dbdb7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "266a016c45077cf2c4a55b8b87a01f8aa6a83f94102e5a9e675b489b7a2c5173",
+          "after_sha256": "e2b28b0196c9c36f3c6c20b27de2561dbbaf5df1a2ec6cefffaa585c19c0cfee",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 13,
+          "before_sha256": "2e0e6630a77e5edd38c7f50caff4c308ee831c249c9db56df9a4553ffbe6c170",
+          "after_sha256": "1c673fa9823fe2e43b42bbc79b0551baec2be58834edd2196080378a946c6138",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 14,
+          "before_sha256": "18ef7cc90857879cbaaad23c2d4d9aa337adddb981df8892eb8b9f342a82c6f0",
+          "after_sha256": "fae67eb2dbe328c80490f9fcb4342de8b84df8bcb91c84ea39b24a79acc42f92",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "e5598e856d934dd1e66dfda85b07f4d08e610e068d5627879dccaaddfd9663ee",
+          "after_sha256": "ed496d5b24258e58dfb3b5387b938ca0901e0a74305a9449c4039245f4c23e41",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 16,
+          "before_sha256": "7d9fc7eccf9a36d6b780575d13c950ec50d1a5829ba2e0c7f7befb65b9b3ec44",
+          "after_sha256": "fbe453fbbf4c70ac5ff96df8a7ad0f83e5e071a99d376cf1aac92fa323c1fb9b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 15,
+          "before_sha256": "e5598e856d934dd1e66dfda85b07f4d08e610e068d5627879dccaaddfd9663ee",
+          "after_sha256": "ed496d5b24258e58dfb3b5387b938ca0901e0a74305a9449c4039245f4c23e41",
+          "lines": [
+            "test(\"メモを保存する\", async () => {",
+            "  await saveNote(\"/notes\", \"買い物\");",
+            "test(\"保存したメモを読み戻せる\", async () => {",
+            "  await saveNote(dir, \"買い物\");",
+            "  expect(await loadNote(dir)).toBe(\"買い物\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 36,
+      "file": "docs/books/pstack/zh-CN/36-chapter.md",
+      "before_body_sha256": "34548403f6fc063f0087dca7a903c221f50ce91a11079cf3bedcb4600d40f3db",
+      "after_body_sha256": "30ddaadbec75a41978f6942b18f9a661f24c40f5314d1e3a4ac86cb401cf64e1",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "64c3521190015c1d9ca971100c6f5c50e732a274500317d9fbe8f66b92d26b7e",
+          "after_sha256": "f50781b73afb3998cd7582db771012b9c7a609487d56d1d723162ffc6f32606b",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "6e188c6204c091948ed641e5c621a1caa1d9e6f258bbde1ce1024f510399b81a",
+          "after_sha256": "d2860e31aecd2930df6781735f921cc45a23a13497aac265472088d4d802dca8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 8 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "843691e6a5340e8d41353e1d6f184becb05ad4ce4227c93c861c3e08bb6883ef",
+          "after_sha256": "a9ebe98407e09c886bd7724b495c0ae8a34234e99d69bdfa3caa63d0caeece18",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：检查预期行为（只送达一条通知）」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "23754967ce33ecf1f8fe6f10342ce681703c387a404fc0f8e5d23399b38dae88",
+          "after_sha256": "9e3f570b0c3a207dfc8229c5a83be9c49b28cf9e3223e3533b06fd0547d4eeb7",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 /tdd 实现。」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "cf9d08ce3202808c8e7b92ca3cddbb604cfa6d6ba0b05bf3eb25610c3608ab3f",
+          "after_sha256": "086aaea69b5333dc8229cf0e18aff4fbcd3a58f67b0cc933e2aa573fae77561e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果容易编写测试，就使用 /tdd；然后修复并重新运行。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "03aa39244f9a400d503916f836eff7d47051f6eb85a1a0c69ca122968a3324d5",
+          "after_sha256": "dd06b5041608eca2ecc7b0f19481acb8a7758ea1b84caf948ce98fc1071611b0",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "00c8b670ff365f583126dce9bda81d9025006c6db3e6dec49792eecc2cd182e7",
+          "after_sha256": "0afb3bda77e20ce3ef269df945294a05c6aa6b6921ef0ca40e0202f6768e9045",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "47f2ebee43b840751dfc095ef62f881ce27856ff49af349915e7d0b1f97dc9f7",
+          "after_sha256": "3a3d135a920b06683df960e545c319a2f485ffe0f7496be8ebc4ed316dbf6eeb",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "1bf2344b7cd3ea8d99a31fe2690cb63ca4eb2a6dc385b41a163b321bca0645af",
+          "after_sha256": "04e8c84e722a18ae53b5b31686db678779b236067ee0009eb24495216f146994",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "9a06ccba5a0ba331a93b6a42734a213685e0ea9c59796146904988138b222ed6",
+          "after_sha256": "6a619ce3f816682e534d0c1783e2ca593d3131e497ab0c0f45ea090179bf697d",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 1,
+          "before_sha256": "03aa39244f9a400d503916f836eff7d47051f6eb85a1a0c69ca122968a3324d5",
+          "after_sha256": "dd06b5041608eca2ecc7b0f19481acb8a7758ea1b84caf948ce98fc1071611b0",
+          "lines": [
+            "test(\"再試行しても、通知は1通だけ届く\", () => {",
+            "  const sent = sendWithRetry(\"注文を受け付けました\");",
+            "test(\"再試行しても、通知は1通だけ届く\", () => {",
+            "  const sent = sendAndRetry(\"注文を受け付けました\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "00c8b670ff365f583126dce9bda81d9025006c6db3e6dec49792eecc2cd182e7",
+          "after_sha256": "0afb3bda77e20ce3ef269df945294a05c6aa6b6921ef0ca40e0202f6768e9045",
+          "lines": [
+            "test(\"送信の部品を1回呼ぶ\", () => {",
+            "  sendWithRetry(\"注文を受け付けました\", mockTransport);",
+            "test(\"再試行の回数が1回になる\", () => {",
+            "  sendWithRetry(\"注文を受け付けました\");",
+            "test(\"再試行しても、通知は1通だけ届く\", () => {",
+            "  const sent = sendWithRetry(\"注文を受け付けました\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 37,
+      "file": "docs/books/pstack/zh-CN/37-chapter.md",
+      "before_body_sha256": "1a9cd8a31a122b55bb2e2e9fb85070200cd12b6d3f684e01fd6e53c76ac79411",
+      "after_body_sha256": "2a48339d7f20279a60f2f64c81ce9cc5d825ced39f7fda7730c1837c3ccf8b75",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "fac33a5c8ea6ced1a12b48f97b572ce3d01f86653f808f59a01c6024fe19b4f9",
+          "after_sha256": "218a93e3d5247e8f5f0285366764599adeec06e8800cfb6e44ddd6b7254450da",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：用注释说明自家函数的意外行为」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "133518a9d9ba11efd62c2f37298d089e97f7c01c980297f074d4ba2f255c0a16",
+          "after_sha256": "f41e4a281296384d5148616de638b390b6328b23ff1e5b186c6130b07dbd2921",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：将两项工作拆成两个名称清楚的函数」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "d21a0f6cc9e0f1ea1796d6db3ec50b8785d47cbdadc93c78649b3c42053fd3d8",
+          "after_sha256": "768fc605db622a48179c0bb5674980d3cb2e903f0b93ff195cf2299ca4cb655a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：只用注释声明约束」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "b8006ae8bd89edbd6eb8f97638994f5c3deb4ac0ea766fb3d3682359023bbdad",
+          "after_sha256": "1a5e83bb1bef4ba36f463df66a7c5468bde98b353cb6dc38ee3f236c78d8bfe8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 添加一个测试」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "9dbc6363e6444f0c936ccd6769624d972eb13c89ccaf24ac546d6ae9d41ae4ee",
+          "after_sha256": "705f08175a047e362903097e09336f54595388791719c0afba28182d4b18b819",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 针对差异」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "90efd87b85d0a2fabbe2858e89817c82deabeb6f15dce142df30858907dc8a85",
+          "after_sha256": "bc4d7ad54804acc4cb9df92d8797fcf2978ceff1845ce007dbc2a9984e58882a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "044bf9ad453f27ed4a570501cccb8033f163d70bfa988c54843efbc2e76a39fc",
+          "after_sha256": "e41cc59b80d53a4123b8a8faa795b68865a70986f7a863aa82c3a4a0e0ff49da",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "e592fc011704920638412e8394ac7c84a7e620e2d017ddb57c8cf5c33b679bdf",
+          "after_sha256": "baaf6ef6d3a6c4c3deef3ab7c92cc477ed61d83a9a9a5d82ddb4b0ee24998294",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "e5221a0d26b7fb0f7afce66e72daf39701b3c120591a3911f119500a8a25ad72",
+          "after_sha256": "74221a0afc3d183c12d555075fa55f64e0b3da8bd6c690823e5d57126d50f798",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "84929aeaf2b3c416daaeef307236353184a8f5699704825d34e8f3fc51bcb814",
+          "after_sha256": "16f6feb47ad1a72b2d7a1ab0bb6a72ed56421a5376cd727fdcb5f5934168e698",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 4,
+          "before_sha256": "e592fc011704920638412e8394ac7c84a7e620e2d017ddb57c8cf5c33b679bdf",
+          "after_sha256": "baaf6ef6d3a6c4c3deef3ab7c92cc477ed61d83a9a9a5d82ddb4b0ee24998294",
+          "lines": [
+            "  return count === 0 ? \"在庫切れです\" : `残り${count}点`;"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "e5221a0d26b7fb0f7afce66e72daf39701b3c120591a3911f119500a8a25ad72",
+          "after_sha256": "74221a0afc3d183c12d555075fa55f64e0b3da8bd6c690823e5d57126d50f798",
+          "lines": [
+            "  return count === 0 ? \"在庫切れです\" : `残り${count}点`;",
+            "test(\"在庫が0のときの文言は「在庫切れです」から変わらない\", () => {",
+            "  expect(stockLabel(0)).toBe(\"在庫切れです\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 38,
+      "file": "docs/books/pstack/zh-CN/38-chapter.md",
+      "before_body_sha256": "197f7b92e7efd85254e36caaa26eb70e2831554c03de04c0c41b94e1accb7ee6",
+      "after_body_sha256": "0a323a744bc2ef90583e3a5b21277bb76b65927dd6d30399631b6e07b2eb1ba8",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "3289c65b6eb855c7b0b9d8ca3ab722e8ee3746d360bfd6d53621688197335319",
+          "after_sha256": "19ac676b3a9f95285f685f8f2509dc936ada32d81b1dd496906500204c7dd850",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对 README 的修改运行 unslop。不要使用 em dash。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "0228ad0e1597669dae047cb4c6b057fae1080ac5df21774e62eeb672a756cfbf",
+          "after_sha256": "c18676c2124e7eee990b736bbf5d45bf8b1359897b8099b0e8c8274f21f68347",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对它运行 unslop，让文字更精练。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "2c7fd8ffab61d15cb8a22c86ad344d15f4adf485d958801f6334fe3a0cea0bff",
+          "after_sha256": "5324c2551e88b824ac2061c18047a428431c2801bbb68c6967baa195ae7fc86c",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 审阅 README 的修改。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "fb31dbdf6b1180003d45c29709db35b7e2af5bd487666f1a67026fb544d3b418",
+          "after_sha256": "a7c9219cdf45c77d105058ec7cf8cfcacfc43871f436961a582d518862f3cde1",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "8f02d3c57a3b91cf85fceb521110de974bf29254eafa1851d90705f659cb11da",
+          "after_sha256": "f6cf6c57043c0b608149c8143d4fd11b2986cfffe4874fd9e98e4fae57c120f7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "fca95749eb0763c24ed542c20580b975388b6e3bedaad7dd86ae2ee6c72fc2aa",
+          "after_sha256": "29b3eea4b3d7a6ef517c6fc2fcd1c85f40fc8e4f33ea42d8b99dd4209b41eaf6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 39,
+      "file": "docs/books/pstack/zh-CN/39-chapter.md",
+      "before_body_sha256": "c59abbeeb2ea4d92b584cfcb75d097a49f961b451ec1a56745cdc07a72cbbd0b",
+      "after_body_sha256": "02d3864386d193c710715550a8b17ba6b3694e73c31c1daed104fae0c29e5a17",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "8dd342f5927aa924d264087e9204696916816037e41087afbd07987dfbd4a296",
+          "after_sha256": "8bc90549ef4888309b8af9dc8ead21b4e7a172bc1d1fb818c87e36982e0f583e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 花费太久了。记录经验，避免下次执行时重蹈覆辙。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "9570c7fa8ffaf5b4b105c046f5b2ce3ed42a5a271e65569525af0415e5b77741",
+          "after_sha256": "4908680a2cd2a2cac4e3285673975f768b9470a5d2560e0e779b26eb8c2f3b22",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 41,
+      "file": "docs/books/pstack/zh-CN/41-chapter.md",
+      "before_body_sha256": "2e8db65f7d63c6de4a526b45946e0036aeb5031cce9b8bb126940d7b203c1895",
+      "after_body_sha256": "633a7993cef43583cf999c4acd3d137e7f343be01ca99a8db0295e14cac67665",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "d626ba89a222adc9010afc3f35612c4b4142dae9b15b0187058da000942b9ebb",
+          "after_sha256": "097c466312767fdf3f19b0f05aae5f686e17fd701ed82c11759862e4b3911c1d",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「按照 Fix Root Causes，修复了每次重试都重复写入已导出行的根本问题，没有在导出后增加去重步骤。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "54a62d999136d4886c207d6cbcff611744949cb66d71b2c78cc06c6cfcb81537",
+          "after_sha256": "60e956678fffb16e968bb3412c2dc60e09f6e1ba355c04b59ff2c8a9eda0b505",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「遵循了 Fix Root Causes 和 Make Operations Idempotent」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "5a78729d8d598d17aef2517c9cd9b9b673630742ddd2a4b3af48e9a16918a007",
+          "after_sha256": "9e10e5976cf8984cda023c96f0e267a8491588a36203095c2bb6f3f0af6e3723",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写有状态逻辑、多分支代码，或在多个文件中重复相同前提时，用结构（状态机、带类型的模型、表或注册表、reducer、边界、合适的集合）表达领域，而非散落的条件分支。」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "f14effaed92afae0f5e6f81daa0d29467e6997f9d0fc57a43e81b2e027b5ee61",
+          "after_sha256": "d1442b27e270ad7cbb62a736b39b23c300caf703b60b6445f5595d0a74d7391a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "fe49cf482deef81886792c38a15feb328e29f3fdda2c631ecdf25cd2fccb79a5",
+          "after_sha256": "5d080713031d9d4a00a671b1460404eda58cf0e170b9895420f0a4d73c3d0353",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「修改前：修好了：原因是定时器，所以我把它停了；我想现在大概没问题了。」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "903edd325cd56a32cefa97ccf22971dad85c57dcae59cf71a4434cb1d83bb7ab",
+          "after_sha256": "2eecd0cfd83900f32aec2da67f171a0225082fb3c077e4b70152318bf87babe9",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 修改前：用描述阶段的注释表示操作步骤」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "c46a5bf08c1a77b82df0d0d96f020faa8233e2d06bc3a5b7865a41ca7cc96f41",
+          "after_sha256": "e1e2fb999fac96505d32a262a20bd18801467186f47519979b4ff8b2554e2fcf",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "b6dec4bb12f716378ba89a65b943f006fa50c23daca4b6f0022a949b85bb1cd4",
+          "after_sha256": "5e13122af966ec4d1751b0dc16a51665dae73563ea9569d00e75d8d11f5cddfb",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "c4b9aba2196abbb8623c183c65dd12129837c5511ae53025de37104b4bf0d943",
+          "after_sha256": "f0c9dc97c2f7061d15ffb0a0d4cab97e8e537fdfb829ce0b42bb7a8431299b18",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "232fbebddcb874072b3a9450f2eae06da53b1e95ffbafd88f5697d9bb61b7720",
+          "after_sha256": "a09157dd3754daa470117408f63351afeb38a3d6df1a0461c7dfebee2e2cbde7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "ff7959753d0a3a938205103d3c15f683dee5b53f14303c55d2656bf80918e669",
+          "after_sha256": "248cb85e4f41d964cf375ff48b2c276807b8a304fa8ce34c975776a7d2c0c628",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "6a8d5f0943b14ee912a71c8ba08849c81021442ee85c482d8b4324811ecf1751",
+          "after_sha256": "fe1bbbe350c3165ba9d2007088e929debfe2b610c97d3dd30932541959bf7ea5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 6,
+          "before_sha256": "6a8d5f0943b14ee912a71c8ba08849c81021442ee85c482d8b4324811ecf1751",
+          "after_sha256": "fe1bbbe350c3165ba9d2007088e929debfe2b610c97d3dd30932541959bf7ea5",
+          "lines": [
+            "  assert((await countCards()) === 2, \"再起動しても、カードが保存されている\");"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 43,
+      "file": "docs/books/pstack/zh-CN/43-chapter.md",
+      "before_body_sha256": "e986eb4a02134387ae346e78200ed9c5086f698089d5fa1785990c016e0242ca",
+      "after_body_sha256": "a5d68d093396e692d76215496deda560535737f4924dabc36ace3e38a7d46622",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "d3d88262f1ba9cde71dd70038ad9ef53b47ce60ecf68155ba280613743e38080",
+          "after_sha256": "6dc698024908c0daba3ab0a6777d409e9b944e0d82554577e3ca964700cdaf19",
+          "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「├─ SKILL.md（从启动到清理的步骤）」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "4b439614168179696a95a34881c96e22c2acccfc44fb231f73586a725e068d26",
+          "after_sha256": "8ead6c2df119ab6b9bd73c1108dae8e7e328eb3b2bb19eff44d8782adba19291",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "17ab0335fe56d1ebf7f1307b004ea24cb860e22d347cbc3e526866cf3d8eaf09",
+          "after_sha256": "9cdf0fa5083346444de84624c7227af07d6c735648c4246490a866aa30336a94",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它用 /poteto-mode 创建<功能说明和有用的上下文>；用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "906f8d48f3a9b4e4727ac86588839c98f42171e8f93e4767e548db878e366fb5",
+          "after_sha256": "9aa2617e325db5f6108e0b8589a3bcdd63d2baf088d36b21168ac7c94648f99e",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "03921388bb1a866ed902aeaf74e05d6f436a11fbf501e08488d7d5dd1ee2bd6f",
+          "after_sha256": "6f83593a58a7eda84a02b9e734eeecdadc0620f917d128481ef66e007a23f4ee",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "342b9ce81d9c386375d65d068b37ea67d4052f32b28ef852f98e572c4d8020f2",
+          "after_sha256": "26e5d8bbbae9192d1f7fe8ddb5fd7333b47a60c0dc54c32c5d6a6733bcad13f6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "08ec80021158f9226159ba6a3c73a05fdb9c007bfd08f0674c88d25e4dfa5e56",
+          "after_sha256": "61ad17143b5396b159ffa1e887d7108aa03344baa187b1ec4f77d6da55b8d2c5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "c7d65a53bfa557f19bcb75881a89015d9a7673c7cb3e011c275cfeb77326b80f",
+          "after_sha256": "93fcd965864c5fc012fc9fd1479c5a47dddbd0effc3c558d0b29b7073563457e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 44,
+      "file": "docs/books/pstack/zh-CN/44-chapter.md",
+      "before_body_sha256": "f39fc0310d0c6b83e7a2bd75b7ac5480e3a8f3b873abb01411dc5614f13401d1",
+      "after_body_sha256": "196611a8bfd7506e83dfdd3f147484dc8a1c787c716304378bc04d724ecb44ae",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "7208cba60194a65788e719dc6b121d6dd8433d5f95e5a35c0e368b1f086a683e",
+          "after_sha256": "46ee2b22ec5d83ef6ff8ee2767b8c636d9cb86fafce66c268967aa9f0f848a5f",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "d6338d87ad938bc9a08066b37042b70ce8b1020b1716f6ef1aac94aac1af2be1",
+          "after_sha256": "95ee52857272ab8da8af945f6b5f1372796e8dd5452815e8c47ade1bc0dcfd3c",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 阅读这个 Slack 讨论串，用自己的话简明复述你认为根本问题是什么。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "731a9254530131a28e112dd21ecfeae4ce3e612d7e182edfc2123b1980fc9fd8",
+          "after_sha256": "864570a5da390201153163f4ebe55eadafea4d540000e788359504af4f057a5a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 虚拟化是怎样实现的？」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "6f98a59c324faaff1c1b5b7ec785b20581089e3ffc874b3d43b38663537d102b",
+          "after_sha256": "0796ec4d8413ed236ab8f39d2d4cedada0f1f84bf434b697bda01e7b45b196ed",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 回忆昨天完成的虚拟化工作，然后阅读 Slack 上的这份缺陷报告。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "a3bfd64d19339ec34c2e50ff6b4f22aa7f1c18c43dc26c5814540586e631f8d0",
+          "after_sha256": "916bb11c2264b2f2e71ffd32369d6185e38333b898821fc11fbaeb9edfcb7f12",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "7933edde6c98ac6d616b14d0c63284db957bff0484a7bf2c3cfd606ce940b140",
+          "after_sha256": "1102353bc6a480dd6a50d66a4cec19fdafa429c380d126113a1cabbc8d8f25c3",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "af5c2ab9b4f14c85b8be9a6c4a35460cb699511ef5a3cf6f7ba034c5f6b6ee4c",
+          "after_sha256": "87319bdd6833bc3c6e3a66913b6bbc444abad2455f56f87900d86d4096ceeaa5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "11a4fe2ad8fff23a5c9df705ef5a547daf2868a9a2fc255d831e4395d7bc2b36",
+          "after_sha256": "34d98bd43137c6bf8be030b2b25df144b8311f9469f67ccc03bf814898b40ed5",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 45,
+      "file": "docs/books/pstack/zh-CN/45-chapter.md",
+      "before_body_sha256": "a5bf72953474e944f3e92d7757fca489d057e87eddbe2c53243a5f724d001bd3",
+      "after_body_sha256": "6d80613b6341c56f2aad0b1346a0bdf21cb4b28987648a11758601c71f9357b5",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "01157f0c1e7e116191c1bac03a1891a42a3c8c969c12a23d5114ed95b3af279d",
+          "after_sha256": "68a8f1f4ee673c9e93c6789c1a843148d7b758d48a8a9ef36e8e3362ee698dba",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "5522cc5a38f06bb4574dd2b7ba36b1db7d086c237f92a39e8e434a7b63a92168",
+          "after_sha256": "bef99252879200e424001713895accced122d43e986522e8a19f0b3b1a290ee0",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 回忆过去七天修复虚拟化缺陷与性能问题的工作。用 /how 和 /why 理解当前虚拟化实现的运行方式。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "a043db0d7559464bbce9cb74d8b3a9ebea794f4af9439782f52be540b6510959",
+          "after_sha256": "db56f40f80e60fb035f4c9aa85b58654bcce044b74c84e3a337c1928810ed35c",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为<功能需求>制作几个候选原型。用 /control-app* 录制视频并截图，让我比较后选择。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "9ab12fef0ccdf3f9d9cb111e676b08bc15ac5bc6b595d4019bd3b1d9fb42733a",
+          "after_sha256": "10d8fdc72d6e86a1d23b1524405fb448687f1ee5fa0c5bcbafd64804919e5a2c",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "3a2d7f48ad523838bbb802d1afaf0382768bcbbd0c081c59db94f55db233cca6",
+          "after_sha256": "cdd9fe9d2e4e7a529427fabc527f29a3b7539ec02e12458a077e532e99aefa34",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "420e1172ec11621616ab2c783b0110af2debb9ca48770a969eeb6aff19f59708",
+          "after_sha256": "9ba1b517d1a43491d68a3dfe4f7d617b9459505029ad0b90a0855353df466665",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 46,
+      "file": "docs/books/pstack/zh-CN/46-chapter.md",
+      "before_body_sha256": "05bc569abc56b039d7c5f03db653b6d82735d57d5555479815597f95eb402528",
+      "after_body_sha256": "6b9582ba434efa405b7405fd1aef6265a7414a8168454bc3e878206698136414",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "368e520ebd25287e5a380ae6b7496da02084173db9b5ea4475c29b803a719e23",
+          "after_sha256": "0eb7960d12d10a384b5ac61a63a376a582908a1b4e715f9cfb9a8afe9fe02ff4",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 设计这个新的<功能需求>。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "775747762ea180768bbcb4e63a048f6e2b40754bd250bedeb429b7379c10b94a",
+          "after_sha256": "ec508069a18e5edc6174dd25d483d5992fee904a58d2faa9f8d52714a7f58f96",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// price.ts（修改前）：只返回金额」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "a0dd7fc13ddc70647b10c47c133bcb98805f75a1f279216ae55dbbd86e4748a6",
+          "after_sha256": "9ff4906f9fcb07627d6f8771b5e92c7041686a1a844a2820e9a365572814eb82",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// UserPage.ts（修改前）：页面代码持有缓存」。"
+        },
+        {
+          "block": 4,
+          "kind": "fence",
+          "before_sha256": "349da30c75855cc23d48df71c7ac92427352541fae9763f11a087e9c9e31e686",
+          "after_sha256": "938044253e9726491fdf2139ee04da61c3f4fa79a801e4783dcfa6281a396812",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// userApi.ts（修改后）：获取数据的模块持有缓存」。"
+        },
+        {
+          "block": 5,
+          "kind": "fence",
+          "before_sha256": "2d511c37b598597a30c1eb5b61f9a0530957c1ea72c1cd4d91368129ba9a3432",
+          "after_sha256": "0e54e3b993b95bc1e24391995f4ff907e940d397c042788e46c9e92b366a8d55",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 骨架中定义的类型：没有币种字段」。"
+        },
+        {
+          "block": 6,
+          "kind": "fence",
+          "before_sha256": "b9e902ef306fa1056eccf5cdeca0951be3ce2ef7b56d2012ea131c961a34d63e",
+          "after_sha256": "4a289598ab7f53b7912e46066ee3cc4ace7eadd6520ea202a5823df79420bdb8",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把这个设计写成计划。」。"
+        },
+        {
+          "block": 7,
+          "kind": "fence",
+          "before_sha256": "3b28b7efb8b36f23f45b34aa9976f3ab28933acbeb6ff446a58a7e5c8bb068ad",
+          "after_sha256": "ed5ff324895033befd4c55884b05658592a8ed9a6473e8d7e8f9255be5ce5d3f",
+          "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 5 行；例如「# webhook 限流计划文档」。"
+        },
+        {
+          "block": 8,
+          "kind": "fence",
+          "before_sha256": "bfe4b27fcff9c708e2b46b188044ff4df947a756947b614e278e2a3fb39401aa",
+          "after_sha256": "b058c10e241b4b267320e043b674a648890f921eaaa0b5f8e505bf60a5b184c1",
+          "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 17 行；例如「## 添加按发送方限流的功能（PR 2）」。"
+        },
+        {
+          "block": 9,
+          "kind": "fence",
+          "before_sha256": "ffc8209526b419aeab5722c92b40c365eb9c1abad43c024317731cc57c940e15",
+          "after_sha256": "95ac0fe7ff03275f06ac35989000df76856f163d8122a1d411e97b02b916ecac",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 周期性因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。"
+        },
+        {
+          "block": 10,
+          "kind": "fence",
+          "before_sha256": "85e78b77390a333112b00794a51e6aba2801004487d5c7da0bff60c4ae488f4d",
+          "after_sha256": "d452213c3bddd1d83c335dcc394c4217c4f1b80f5cb9549b64779fbea9feefb3",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 外部 webhook 需要限流。先用 /architect 做设计，用原型解答未决问题，再让我审阅后继续。」。"
+        },
+        {
+          "block": 11,
+          "kind": "fence",
+          "before_sha256": "5a017a777b5e27971046fdb064cc249c43a0c2cbb9b97207800aa3ec02d3bf83",
+          "after_sha256": "507a9fbd6553098f044cf5c2971c87264ab6fa1a84b0e862b343d6ae6928655a",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制定将整个 UI 库迁移到 StyleX 的计划，拆成可小步验证的 PR。每个 PR 都要有视觉回归测试和在运行中应用验证的步骤。最终效果要与原来 100% …」。"
+        },
+        {
+          "block": 12,
+          "kind": "fence",
+          "before_sha256": "42f97863d733f20acb881cc87636602b16081afc4bf2b5c43e49e834dac169e0",
+          "after_sha256": "9a6672ed2064c60a6aef0c953570146f31066be87b0767931819a6f171a3e240",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// （讨论串中已有足够上下文）请照此执行。」。"
+        },
+        {
+          "block": 13,
+          "kind": "fence",
+          "before_sha256": "c7bdb366c725c8c5c90e46a3fbc41a8890d52f37391c0a9bcd7d31a9eeec6eee",
+          "after_sha256": "baa1988cf21b69e75bc07ad71de6a9c2d45ac85d032bd4d811a1fdd9024b5575",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /control-app 复现这个问题。在 main 上复现后修复，并用视频展示证据。」。"
+        },
+        {
+          "block": 14,
+          "kind": "html-pre",
+          "before_sha256": "f0a09937ae70dec19f936fd903acbe9f494dda658823fde9be10e9d6cd917cc2",
+          "after_sha256": "76a9a51f1d2b972d54221eec12aa8695268efab2dfa283045aa2ef366b52f51e",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。"
+        },
+        {
+          "block": 15,
+          "kind": "html-pre",
+          "before_sha256": "18bcb12e952f4b0ee272af6e16e0037893c0e41e4950cdea6d14ed1e9382d6d7",
+          "after_sha256": "4f395dc62751eb25b08b4ef38c04d66366413387c726b7aa0301de2eb5bcd8b7",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 仅对旧格式订单另行计算」。"
+        },
+        {
+          "block": 16,
+          "kind": "html-pre",
+          "before_sha256": "f5f2de10f52d04a62bdcd519c3295718b07b0b6c599cc00ec18114b55bc3c571",
+          "after_sha256": "f3625d8a9588c697a44c550af2ca11e258b63b857c9c93b243186d4d982703ef",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架的前提：每个发送方的计数只由一个处理过程读写」。"
+        },
+        {
+          "block": 17,
+          "kind": "html-pre",
+          "before_sha256": "105796ad98a758ad9e24822f4fcc8b678ff5c676b959fe1630c497a6ad1ebaaf",
+          "after_sha256": "77246cf6a7bf03ae5b1352c1a70d6f9c9e3eb035fe1a99b34594a90f81e3f411",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 实现过程中：试图加入骨架中没有的锁」。"
+        },
+        {
+          "block": 18,
+          "kind": "html-pre",
+          "before_sha256": "7747df9e9a55863a6d910e21478effadce874089ae9616b59707095bede0ed70",
+          "after_sha256": "ffabfb15e2c8e92b840f4aee96e230284dfc56e4f8a3a6b681128e0b8f182d29",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「limiter.init(); // 内部约定要求先调用此方法」。"
+        },
+        {
+          "block": 19,
+          "kind": "html-pre",
+          "before_sha256": "19627058cf5171a363de391b8950c0a38138ff6d84034f71152911a029755c1e",
+          "after_sha256": "cfb04f160ca7735c2d6e9475aa30a9c36d7247ff36a46ec8786cb360b482b1c6",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架：只接收订单」。"
+        },
+        {
+          "block": 20,
+          "kind": "html-pre",
+          "before_sha256": "90f01d7fa05db9f2e07eda4794a3ac597b64206c8b98019c11a03ae3fb067e7a",
+          "after_sha256": "9b10c7be016475c5e568ed6e9ef07942ef4bce17206288d0ff64ec528a911f7d",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 实现 invoice.ts 时：发现需要骨架中没有的 locale 参数」。"
+        },
+        {
+          "block": 21,
+          "kind": "html-pre",
+          "before_sha256": "ca4e03007c38d90ead431bdef4aefac72036d10ccc2725fa7dd9189401fd246c",
+          "after_sha256": "f8ee6d18df5725d39a2bcdaed1791bacf808ca13612759ed3b1ea079720c2fd4",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 36 行；例如「# webhook 限流计划文档」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "6a341e97afe12de0c87c72bdf80c5ae92c47e02522adb2c2cb8662cb24c53507",
+          "after_sha256": "5539009a683dde3b5c24ae5aadfdcff90ab689a6dc26f773363081bdf3d1816b",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "9ab12fef0ccdf3f9d9cb111e676b08bc15ac5bc6b595d4019bd3b1d9fb42733a",
+          "after_sha256": "b0ab085d1f3da16ec12d17b07a6cc0e38335c540e6e7870e6266b1c2a29158e7",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "2f79a108625e4b832a959851c83a7f2009ef188afe424db4a5a141010d928b64",
+          "after_sha256": "eb703268afad3fa2faf93c75c4e43ac69f51458e4a07eaa27c1a73a52572c71d",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "c56a395f6b9ee171a646da9412d5ec827c25905e05397dc6f718a6b7cf4a3f50",
+          "after_sha256": "7efc2f4fbd56b54f50d075cef6d35160581dd42a715c2355de5fc9584f66b233",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "61539ffb30ac2287e119fee6eaff1338f9300a4368d30457633fc47b3a812a3b",
+          "after_sha256": "17ed42894537fb48a6af361d1ed4ff5e8def293d2f64954711e1e164cf9b1153",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "75d81c49ac35c4e7ba93f690b0c1eca14ad7b86453113e39f5038e9012f8a21d",
+          "after_sha256": "7ee5611f39ecf308a597d713a52e66c94ddb545d458dc659ac7123608871557d",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "eab0d555aa427d785a09f81b6ea51821b353082eb8ae10f10beaeb796e59bf7e",
+          "after_sha256": "a1118f3e33caffe5d7c9143176fe0112d58b4d1247b79c474e5875adb0ee431f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 8,
+          "before_sha256": "3e5faca2fad887274669b89df0486743a69a099c8470cb89f36c6d5cbfd98d82",
+          "after_sha256": "fd4e9c331c4a5463eadbe692b1401949c0672d50fc71e86adff2dc6e21a0ebb9",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 9,
+          "before_sha256": "8f282c28c83138c2f268a50331e7411cdf6ed7b14aa7844a4a687b642609265d",
+          "after_sha256": "db071fe5660efceba2829c8c72725c9467267e761e2a08f1849df4cbf1d93ce3",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 10,
+          "before_sha256": "2cd9d2130e9927ebfa288d95b9886509b30b64491e092038fd8e048f2f43b8df",
+          "after_sha256": "9d2d4751ecd4abc19a2a52d483c63585fed9595b55ef2261faa9e0b3e959e22a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 11,
+          "before_sha256": "81ea16d139370ddc1e892a9c539f420385a0b167f53f907acd593e02cff35868",
+          "after_sha256": "c867264a0457fe10a437ef874269596e14ecd94df6d2032262c8cbdf822bd39a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 12,
+          "before_sha256": "77d87ae8ab89de10d4eb61c1c6d9527f8c09976d1ff30e41a96fcaa2495487f0",
+          "after_sha256": "a0b35bc9c461899fb5d789ca6dbfbf5cc359880eb11e111dc300f5215780b17a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 13,
+          "before_sha256": "07c906b794dd3e1e6a5b9febfdf5188b2647ba90b3c5e2fda5e166d24cf2922c",
+          "after_sha256": "99cf0bb2582a0ce7ed384c4cb7f874a3f3e4587dc72f937b07db192c0240e82a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 14,
+          "before_sha256": "41747b9281704f5cfaccb16db42ab24ac1bf7c1c3d1aca6d84659bd55caea81a",
+          "after_sha256": "5b2661a03eb1614f64861a3eb783763bd3e1f2abb25a38c6fee50f023851bb65",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 15,
+          "before_sha256": "5562fe66eed511d073be5fe981299907c72c899b9752ce06965a58c8a58047e4",
+          "after_sha256": "7841a606856ab7e3dbd0af027d9c4944533976f70f90502cb15185557a28306c",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 16,
+          "before_sha256": "02b5ba941130d58520606efa3be80e9f2222c551927c47e7a6f580a226136df4",
+          "after_sha256": "a553177667b903036f81d606db78ff7fe75a6800797df99b21509a9aa0622d5e",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 17,
+          "before_sha256": "b9c7c9aa9499b2747aab6be31e2493f50fccb7b1fb62dce6084314f4895598cb",
+          "after_sha256": "a203f3dc68fdb72f9376b30c198463ac493ec0ac21c84f62b37439d82b48084f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 18,
+          "before_sha256": "2a558bd752e1313e054f7e880bb63f71976deb886072b0cec29f23d7ac9a01a2",
+          "after_sha256": "ff5d889c2391ce4e6b3775b2b49ea32c1e7b0897b5bd6e4b02809dd65bea23dd",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 19,
+          "before_sha256": "88d91aadc4c43dd3afb86ab2288fdafcdd040840e517b0e3cb7bac58b071995a",
+          "after_sha256": "a7ec100599c43ff355cd37cc9e5daf34dcdcffae8f841c345637993c6ae43058",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 20,
+          "before_sha256": "d249f7bf5e43789c99c594a31ce785839824c0fa7c6ad841a624ef0c4843341e",
+          "after_sha256": "e38db53c0187fb8a9dced8ad96dbd8d8b7027133bbdb0c0fc485277d95483b48",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 21,
+          "before_sha256": "4bd1c889fb36b017df4748f19bdc40274d9cfa44f113f34c4ab66d051d0c3a5d",
+          "after_sha256": "13c38f79890990a302ff5371c49d9ba8bb0cfc5995f4b9624619834f6c35c5f9",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": [
+        {
+          "block": 7,
+          "before_sha256": "eab0d555aa427d785a09f81b6ea51821b353082eb8ae10f10beaeb796e59bf7e",
+          "after_sha256": "a1118f3e33caffe5d7c9143176fe0112d58b4d1247b79c474e5875adb0ee431f",
+          "lines": [
+            "  if (order.id.endsWith(\"-gift\")) return \"ギフト\";"
+          ],
+          "rationale": "这些日文仅出现在影响示例输出、测试断言或选择器匹配的原始字符串中；代码块附近有中文项目注解释。"
+        }
+      ]
+    },
+    {
+      "order": 47,
+      "file": "docs/books/pstack/zh-CN/47-chapter.md",
+      "before_body_sha256": "9c82d33fe0a2a8ccb1c5dac6a6c43a114e90998eb7eb3ba8a55b5937df5d2ecc",
+      "after_body_sha256": "420678b58800b72db0d506cd7c76ec7ed18b19d4927297548ad541612cb18728",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "html-pre",
+          "before_sha256": "8a195de576be7d0aa1cd4a5a1ee6f6ebd6c43bcdcbfdf931e4b6021af5bdd1d9",
+          "after_sha256": "9846148eeec0d9c3e373e394ed6af3a1d51e33e9d8dc43be6d3f8da3d7b1efa6",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 10 行；例如「# 便捷点餐」。"
+        },
+        {
+          "block": 2,
+          "kind": "html-pre",
+          "before_sha256": "1a20fee33d85b821c89f8cf3c26af84093a1b3b11b0d42c0cefec3449be99b97",
+          "after_sha256": "0e6313c8430a2054fe05106e06267b55630939597bafbce94b332cd6a622343a",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「❓ **Q1** - **可取消的阶段**: README 写着「取餐前可以取消订单」。制作中的订单也可以取消吗？」。"
+        },
+        {
+          "block": 3,
+          "kind": "html-pre",
+          "before_sha256": "3f600c97021add457d90e76aca332ac2916d62532af5b5827212bf42ea733d61",
+          "after_sha256": "a81ac07bbe33bdc290ce485a9dca6a46eb180e38d78b327c024f7e7022afa4c8",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 9 行；例如「# 订单」。"
+        },
+        {
+          "block": 4,
+          "kind": "html-pre",
+          "before_sha256": "92da206c9cbf79681c585f3b8ad23da9c883dba3c3f0274fe000997c08626edf",
+          "after_sha256": "a3938d5eeb52b3c14c8b2e95f864149a9ff29d3166b81101c048033aca0e2df3",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。"
+        },
+        {
+          "block": 5,
+          "kind": "html-pre",
+          "before_sha256": "58ec244e41d18092434eb4466835e6284f0005dabdf752d40ec04d7a1bb98171",
+          "after_sha256": "62dcda8defdec69b9bba246ff12d446160d323e85d14d44d84d0d647d227bf77",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 11 行；例如「# 创建笔记」。"
+        },
+        {
+          "block": 6,
+          "kind": "html-pre",
+          "before_sha256": "71eb349fdfc9f6bd67016766c6db16037e56dd8fef2bdaeeae1c311a559c6259",
+          "after_sha256": "505348e7ceba9a5b36b74b5e50919998d49db482de8ec39c2f32ee130f8fa279",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。"
+        },
+        {
+          "block": 7,
+          "kind": "html-pre",
+          "before_sha256": "4f42d8dabb08227407e714d86b2bbff37683cfe1a8171576ede7b19a08f2272d",
+          "after_sha256": "ac252844368dce1651a5ef28eda75f2ce8892f2e4aeee7bc1af0cf0ce0887779",
+          "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 将订单数据集中到一个数据库」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "0ac1f8b1a4b9d713b775625121441fb5ffe6d8f7e646ab735fb877f6a3f65bd9",
+          "after_sha256": "d8384f5a3152570870e5102c38499fb44b0faf5a8b8f410ed42d5c3f1b2551c2",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "776d9878bacd71dcf464399187018fa1a970025e602dc87cc74e015be94fed03",
+          "after_sha256": "54289e4868c1df50f49d682d9de6353e766271ae8c96f25d3858c3b22bec53bd",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "f28642bb509a890016124ce8e96f17f83f88ff1ae73271e1b9567b92488d5d9e",
+          "after_sha256": "4c6a6d93f2ccaeddbf4f4f87fe537b3ce32ca6b5edc7a693372e36da82d616ac",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 4,
+          "before_sha256": "07938c994973f55eb4572a5f21bd34c1dc16512c35c3f4c6c48e49ae349ba565",
+          "after_sha256": "7e92236276194ee95e19f1a8028d0512892f339a4d40a602309812c535e4086a",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 5,
+          "before_sha256": "4ae8624d7871ae540e3d0b7c71170bf66d7edc808bad17925a0d08b97e43422f",
+          "after_sha256": "26f7bb19f2ceef305446fbb974e580611e856a14d1c17f74776a5e9b97e16ed6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 6,
+          "before_sha256": "30372cfebdde83e50febc55b6879749c25d1916d37af4b316446263ab11a4102",
+          "after_sha256": "007b215351eccf23f318ed2223d57a21c676e7e119ea3939dcc65978a0a137ac",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 7,
+          "before_sha256": "8fd1c0c6bce9cec4a8299546450f4a7687b71fe9e662deba71d2d813cd64aed3",
+          "after_sha256": "4227c8415425861ec17edfdf98cd31993b8a9c5d9b2d8230cb65d9255ffe9f0f",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    },
+    {
+      "order": 48,
+      "file": "docs/books/pstack/zh-CN/48-chapter.md",
+      "before_body_sha256": "5810e4ce794109ad237cc001828561dd46b073e307050c3c98636befb60ea5ae",
+      "after_body_sha256": "9ed911100c31ebf8cfdae5b20f8bc614a0f14c7780f1851eec06e84f0deb87fb",
+      "code_changes": [
+        {
+          "block": 1,
+          "kind": "fence",
+          "before_sha256": "1c838c604d65d20df88d2603409704e6bf5c0cb9adb9d45165c1a7034aedd507",
+          "after_sha256": "a63ef3c5ba6ddfea057d66bbe674a97f358b87a4a63a8a9492823b173410bc71",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。"
+        },
+        {
+          "block": 2,
+          "kind": "fence",
+          "before_sha256": "4b439614168179696a95a34881c96e22c2acccfc44fb231f73586a725e068d26",
+          "after_sha256": "8ead6c2df119ab6b9bd73c1108dae8e7e328eb3b2bb19eff44d8782adba19291",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+        },
+        {
+          "block": 3,
+          "kind": "fence",
+          "before_sha256": "a3db3b542d1a0393bd8fde93a3c914b3ce182073488b00bd107da2149d4ce9f3",
+          "after_sha256": "5e4bf75106dafe1a1bb6c2d0ab5a7043eff263b3a41c5be1d7cd51f359e03905",
+          "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写 any 时 lint 应报错（假设已引入 typescript-eslint）。」。"
+        }
+      ],
+      "rendered_code_changes": [
+        {
+          "block": 1,
+          "before_sha256": "e9f32c06da56e48b46678f417bf872490ae230209389fd16b10b6e9d8ea89d77",
+          "after_sha256": "9a607647b4d29666bfc46cf2d71df5381fd4d6c82361ba65fc919ade0bdb68ad",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 2,
+          "before_sha256": "342b9ce81d9c386375d65d068b37ea67d4052f32b28ef852f98e572c4d8020f2",
+          "after_sha256": "26e5d8bbbae9192d1f7fe8ddb5fd7333b47a60c0dc54c32c5d6a6733bcad13f6",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        },
+        {
+          "block": 3,
+          "before_sha256": "5776da9e97f3797573eb6fc4680efbb93735db12b1da56db5418126ec13fdf67",
+          "after_sha256": "77b48554fa153cfa5e9083d998faedfa2b208e3627e3f7c93afdcdfabefa1327",
+          "rationale": "翻译代码示例中的日文自然语言，保留非语言程序结构和影响行为的字符串。"
+        }
+      ],
+      "residual_kana_cases": []
+    }
+  ],
+  "counts": {
+    "changed_chapters": 36,
+    "changed_code_blocks": 202,
+    "changed_rendered_code_blocks": 202,
+    "residual_kana_blocks": 24,
+    "baseline_kana_blocks": 202,
+    "retained_literal_blocks_with_kana_or_japanese_kanji": 31
+  },
+  "verification": {
+    "source_code_scan": "202 of 202 original kana-bearing rendered pre/code blocks changed across 36 chapters. A second original-versus-current CJK scan found and translated the remaining Kanji-only reader-facing lines in chapters 18, 20, 30, and 43.",
+    "residual_japanese": "24 rendered blocks retain kana inside behavior-bearing strings or test values. Seven additional blocks retain Kanji-only runtime values or exact selector names. All 31 have nearby marked Chinese project notes.",
+    "nonlanguage_code": "512 changed rendered lines checked; 17 lines with executable prefixes retained those prefixes byte-for-byte; zero discrepancies.",
+    "book_validator": "npm run check:books -- --complete: exit 0; 48 chapters ready and 202 documented code deviations.",
+    "epub_build": "Not run in isolated translation checkout; root coordinator owns generation and EPUB acceptance."
+  }
+}

@@ -218,7 +218,7 @@ Part 2 介绍了 Agent 能验证自己的工作之后，poteto 如何借助 psta
 
 ```
 /poteto-mode users get two notifications after a retry. repro first, then fix and verify.
-// 再試行の後、ユーザーに通知が2回届く。まず再現して、それから直して、確かめて。
+// 重试后，用户收到了两次通知。先复现，再修复，然后验证。
 ```
 
 这条请求<strong>说明了现象（重试后用户收到两次通知）和要遵守的约束（先复现），没有写具体方案，例如修改哪个文件的哪个函数</strong>。
@@ -255,7 +255,7 @@ poteto 说，当有人在 Slack 报告问题时，他常常会<strong>在让 Age
 
 ```
 /poteto-mode read this slack thread. restate in your own words and in plain english what you think the underlying issue is
-// このSlackのスレッドを読んで。根本の問題が何だと思うかを、自分の言葉で、平易に言い直して。
+// 阅读这个 Slack 讨论串，用自己的话简明复述你认为根本问题是什么。
 ```
 
 poteto 列出这种请求的三个效果。
@@ -325,13 +325,13 @@ poteto 在“Building up a mental model”一节写道，与比自己更聪明�
 
 ```
 /how is virtualization implemented?
-// 仮想化はどう実装されている？
+// 虚拟化是怎样实现的？
 
 /why are we still stuck an old version of node.js?
-// なぜ、まだ古いバージョンのNode.jsから抜け出せていないのか？
+// 为什么我们还无法摆脱旧版 Node.js？
 
 /teach me why you implemented it this way and not <other way>. what were the tradeoffs you made and why?
-// なぜ<別の方法>ではなくこの方法で実装したのかを教えて。どんなトレードオフを選び、それはなぜか。
+// 解释为什么选择这种实现方式而不是<其他方式>。权衡了什么，理由是什么？
 ```
 
 除了帮助人理解，`/teach` 还有一个效果：<strong>为向人解释而进行的调查，也能帮助 Agent 自己</strong>。
@@ -385,7 +385,7 @@ poteto 在“Learning from history”一节，写了自己修复 Cursor 中报�
 
 ```
 /recall the work i did yesterday on virtualization and then read this bug report on slack
-// 昨日やった仮想化の作業を思い出して。それから、Slackのこの不具合報告を読んで。
+// 回忆昨天完成的虚拟化工作，然后阅读 Slack 上的这份缺陷报告。
 ```
 
 <a id="pstack%EF%BC%9A%2Frecall-%E3%81%AF%E5%A4%B1%E6%95%97%E3%81%AE%E8%A8%98%E9%8C%B2%E3%82%82%E9%9B%86%E3%82%81%E3%82%8B"></a>

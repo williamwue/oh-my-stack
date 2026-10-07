@@ -20,14 +20,20 @@
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
 <p class="code-line" data-line="9"><strong>运行时检查</strong>……程序运行时检查是否遵守规则的代码</p>
 <p class="code-line" data-line="11">例如，在显示日期之前检查它是否符合 <code>2026/09/26</code> 格式，可以使用以下代码。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="13"><span class="line"><span style="color:#a0aab5">// 画面に表示する日付の文字列</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="13"><span class="line"><span style="color:#a0aab5">// 在页面上显示的日期字符串</span></span>
 <span class="line"><span style="color:#F97583">declare</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> text</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 実行時チェック：表示する直前に、日付の形を確かめる</span></span>
+<span class="line"><span style="color:#a0aab5">// 运行时检查：在显示前验证日期格式</span></span>
 <span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#9ECBFF">/</span><span style="color:#F97583">^</span><span style="color:#79B8FF">\d</span><span style="color:#F97583">{4}</span><span style="color:#85E89D;font-weight:bold">\/</span><span style="color:#79B8FF">\d</span><span style="color:#F97583">{2}</span><span style="color:#85E89D;font-weight:bold">\/</span><span style="color:#79B8FF">\d</span><span style="color:#F97583">{2}$</span><span style="color:#9ECBFF">/</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">test</span><span style="color:#E1E4E8">(text)) {</span></span>
 <span class="line"><span style="color:#F97583">  throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`日付の形が違います: ${</span><span style="color:#E1E4E8">text</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span></code></pre></div>
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息中的日文表示「日期格式不正确」，后面附带原始 text；作为运行时输出保留。
+<!-- book-code-note:end -->
+
+
 <p class="code-line" data-line="23">只有程序实际执行到这里，这段代码才会发现日期格式不对。</p>
 </div></aside>
 
@@ -117,21 +123,21 @@ Agent 发现同一提醒写了两次，就要<strong>建立执行提醒的机制
 AGENTS.md
 
 ```
-前：ルールファイルに、文章で書いている
-- internal/ のモジュールを、internal/ の外から import しない
+修改前：在规则文件中用文字说明
+- 不要在 internal/ 外部 import internal/ 中的模块
 ```
 
 eslint.config.js
 
 ```
-// 後：次の設定を追加し、ルールファイルの文は消す（typescript-eslint を導入済みの前提）
+// 修改后：添加以下配置，并删除规则文件中的文字（假设已引入 typescript-eslint）
 import tseslint from "typescript-eslint";
 
 export default [
   {
     files: ["src/**/*.ts"],
     languageOptions: { parser: tseslint.parser },
-    // internal/ の中どうしの import は許す
+    // 允许 internal/ 内的模块互相 import
     ignores: ["src/internal/**"],
     rules: {
       "no-restricted-imports": ["error", {
@@ -144,6 +150,11 @@ export default [
   },
 ];
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：规则配置中的日文错误消息表示「不要从 internal/ 外部导入 internal/ 的模块」，作为 lint 输出值保留。
+<!-- book-code-note:end -->
+
 
 有了这项设置，`internal/` 之外的文件若 import `internal/` 的模块，lint 就会报错。因此，无需再把同一提醒留在规则文件中。
 
@@ -161,10 +172,10 @@ export default [
 AGENTS.md
 
 ```
-## 必ず守ること
+## 必须遵守
 
-- **エラーメッセージは、ユーザーが次に何をすればよいか分かるように書く**
-  - 失敗の例：「エラーが発生しました」。ユーザーは、次に何をすればよいか分からない
+- **编写错误消息时，要让用户知道下一步该做什么**
+  - 失败示例：「发生错误」。用户不知道接下来该怎么做
 ```
 
 机器无法判断的指令只能以文字保留，因此需要突出显示，并附上失败示例。
@@ -216,7 +227,7 @@ AGENTS.md
 type Order = { id: string; orderedAt: Date };
 type Shipment = { id: string; shippedAt: Date };
 
-// 注文一覧の画面：日付を自分で整形し、表示する直前に形を確かめる
+// 订单列表页面：自行格式化日期，并在显示前检查格式
 function orderRow(order: Order): string {
   const d = order.orderedAt;
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -230,7 +241,7 @@ function orderRow(order: Order): string {
   return `${order.id} ${text}`;
 }
 
-// 発送一覧の画面：次のエージェントが上をまね、同じ整形と同じ実行時チェックを書き足す
+// 发货列表页面：下一个 Agent 模仿上述代码，重复编写相同的格式化逻辑和运行时检查
 function shipmentRow(shipment: Shipment): string {
   const d = shipment.shippedAt;
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -245,32 +256,37 @@ function shipmentRow(shipment: Shipment): string {
 }
 ```
 
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息中的日文表示「日期格式不正确」，后面会附上原始 text；作为运行时输出保留。
+<!-- book-code-note:end -->
+
+
 如果改为提供标准辅助函数 `formatDate()`，并通过 lint 禁止绕过它自行格式化日期，下一个 Agent 模仿的就会是调用 `formatDate()` 的写法。
 
 ```
 type Order = { id: string; orderedAt: Date };
 type Shipment = { id: string; shippedAt: Date };
 
-// date.ts：日付の整形は、正規のヘルパー formatDate() の一か所だけで行う
+// date.ts：只在标准辅助函数 formatDate() 中格式化日期
 function formatDate(d: Date): string {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}/${mm}/${dd}`;
 }
 
-// 注文一覧の画面
+// 订单列表页面
 function orderRow(order: Order): string {
   return `${order.id} ${formatDate(order.orderedAt)}`;
 }
 
-// 発送一覧の画面：次のエージェントも、上をまねて formatDate() を呼ぶ
+// 发货列表页面：下一个 Agent 也模仿上述代码，调用 formatDate()
 function shipmentRow(shipment: Shipment): string {
   return `${shipment.id} ${formatDate(shipment.shippedAt)}`;
 }
 ```
 
 ```
-// eslint.config.js に次の設定を追加し、date.ts の外で日付を整形するコードを禁じる（typescript-eslint を導入済みの前提）
+// 在 eslint.config.js 中添加以下配置，禁止在 date.ts 外格式化日期（假设已引入 typescript-eslint）
 import tseslint from "typescript-eslint";
 
 export default [
@@ -287,6 +303,11 @@ export default [
   },
 ];
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：规则配置中的日文消息表示「请使用 formatDate() 格式化日期」，作为 lint 输出值保留。
+<!-- book-code-note:end -->
+
 
 这样，日期格式化会集中在 `formatDate()` 一处，添加页面时也不再重复增加同样的运行时检查。
 

@@ -77,14 +77,14 @@
 例如，修复[第 8 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d)的实际案例（重试在运行中途发生时，导出文件会写出重复行）后，回复中可以加入以下内容。
 
 ```
-Fix Root Causes に従い、再試行のたびに書き出し済みの行をもう一度書き込む箇所を直しました。書き出した後で重複を取り除く処理は足していません。
-Make Operations Idempotent に従い、書き込みを行のキーで上書きする形に変えました。同じ実行を2回しても、行数は変わりません。
+按照 Fix Root Causes，修复了每次重试都重复写入已导出行的根本问题，没有在导出后增加去重步骤。
+按照 Make Operations Idempotent，改为按行键覆写。即使同一次执行运行两遍，行数也不变。
 ```
 
 也就是说，以下回复不符合上述两条要求。
 
 ```
-Fix Root Causes と Make Operations Idempotent に従いました
+遵循了 Fix Root Causes 和 Make Operations Idempotent
 ```
 
 因为只列原则名称的回复，无法让人知道 Agent 根据原则作了什么决定。而且，如果 Agent 说不清做了什么决定，它可能根本没有实际应用该原则。
@@ -261,7 +261,7 @@ Agent 通过 `/poteto-mode` 开始工作时，会先读这份索引，选择适�
 
 ```
 - **Model the Domain** (**principle-model-the-domain**). Writing stateful logic, or code that branches a lot or repeats a shape assumption across files. Encode the domain in a structure (state machine, typed model, table or registry, reducer, boundary, the right collection) instead of scattered conditionals.
-// 状態を持つロジックを書くとき、または分岐が多いコードや、同じ形の前提をファイルをまたいで繰り返すコードを書くとき。散らばった条件分岐ではなく、構造（状態機械、型付きのモデル、表や登録簿、reducer、境界、適切なコレクション）でドメインを表す。
+// 编写有状态逻辑、多分支代码，或在多个文件中重复相同前提时，用结构（状态机、带类型的模型、表或注册表、reducer、边界、合适的集合）表达领域，而非散落的条件分支。
 ```
 
 Agent 决定应用某项原则时，不会只凭索引中的要点行事，还会完整阅读该原则的 Skill 文件（`SKILL.md`）。
@@ -426,17 +426,17 @@ Agent 决定应用某项原则时，不会只凭索引中的要点行事，还�
 
 ```
 /poteto-mode this pr has a subtle bug where the scroll drifts every 750ms even when idle. repro first, then fix and verify.
-// このPRには気づきにくいバグがある。アイドル中でも750msごとにスクロールがずれる。まず再現して、それから直して、確かめて。
+// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。
 ```
 
 修复「滚动位置漂移」请求中的缺陷后，用违反规则和符合规则的方式回复，分别如下。
 
 ```
-前：直りました: 原因はタイマーだったので止めておきました、たぶんもう大丈夫だと思います。
+修改前：修好了：原因是定时器，所以我把它停了；我想现在大概没问题了。
 
-後：アイドル中にスクロールがずれる不具合は、もう起きません（measured）。
-原因は、750msごとに位置を書き換えるタイマーでした（measured）。
-次にこのコードを受け持つ人は、タイマーを追加するとき、アイドル中に位置を書き換えないかを確かめる必要があります（inferred）。
+修改后：空闲时滚动位置偏移的缺陷已不再出现（measured）。
+原因是每 750ms 改写位置的定时器（measured）。
+下一个维护者添加定时器时，需要检查它是否会在空闲状态改写位置（inferred）。
 ```
 
 前一种回复在句中用了冒号，一句话里塞进了三件事，而且无法判断「修好了」是测量结论还是猜测。后一种先说清应用用户得到什么改变，再说明下一个维护代码的人需要注意什么，并给每项主张加上标签。
@@ -459,22 +459,27 @@ Agent 决定应用某项原则时，不会只凭索引中的要点行事，还�
 下例脚本添加两张卡片并重启应用，然后检查卡片是否仍然存在。
 
 ```
-// 前：段階を説明するコメントで手順を示す
+// 修改前：用描述阶段的注释表示操作步骤
 async function checkBefore() {
-  // 段階1：カードを追加する
+  // 阶段 1：添加卡片
   await addCards(2);
-  // 段階2：アプリを再起動する
+  // 阶段 2：重启应用
   await restartApp();
   assert((await countCards()) === 2, "失敗");
 }
 
-// 後：アサーションの文字列で、何を確かめたかを示す
+// 修改后：用断言字符串说明验证了什么
 async function checkAfter() {
   await addCards(2);
   await restartApp();
   assert((await countCards()) === 2, "再起動しても、カードが保存されている");
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：修改前的断言消息「失敗」意为「失败」；修改后的消息表示「重启后卡片仍被保存」。两者都是断言失败时显示的原始文字。
+<!-- book-code-note:end -->
+
 
 前一种写法里，断言失败时只会显示「失败」。要知道它在检查什么，还得阅读注释。
 

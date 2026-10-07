@@ -212,14 +212,19 @@ Agent 只根据[步骤 1](#%E6%89%8B%E9%A0%861%EF%BC%9A%E3%82%A2%E3%83%97%E3%83%
 以下对比保留 placeholder 与依据调查事实写成的示例。
 
 ```
-<!-- プレースホルダが残っている：次のエージェントは、何を実行し、何をクリックすればよいか分からない -->
-起動：`<起動コマンド>` を実行し、`http://localhost:<PORT>` が応答したら準備完了
-操作：`TODO: 送信ボタンのセレクタ` をクリックする
+<!-- 仍有占位内容：下一个 Agent 不知道该运行什么、点击什么 -->
+启动：运行 `<启动命令>`；`http://localhost:<PORT>` 有响应后即准备就绪
+操作：点击 `TODO: 发送按钮的选择器`
 
-<!-- 調査で見つけた事実で書いている：次のエージェントは、そのまま実行できる -->
-起動：`pnpm dev` を実行し、`http://localhost:5173` が応答したら準備完了
-操作：`getByRole('button', { name: '送信' })` をクリックする
+<!-- 根据调查所得事实编写：下一个 Agent 可以直接照做 -->
+启动：运行 `pnpm dev`；`http://localhost:5173` 有响应后即准备就绪
+操作：点击 `getByRole('button', { name: '送信' })` 所定位的按钮
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：getByRole 的 name 值「送信」意为「发送」；它必须与示例按钮的可访问名称一致，因此保留原值。
+<!-- book-code-note:end -->
+
 
 <table class="code-line" data-line="130">
 <thead class="code-line" data-line="130">
@@ -269,21 +274,25 @@ declare const page: {
   locator(selector: string): { click(): Promise<void> };
 };
 
-// 前：画面の座標で押す。ボタンの位置が変わると、別の場所を押してしまう
+// 修改前：按屏幕坐标点击；按钮位置变化后可能点到其他地方
 async function saveByPosition() {
   await page.mouse.click(640, 410);
 }
 
-// 後：ARIAラベルで押す。ボタンの位置が変わっても、同じボタンを押せる
+// 修改后：按 ARIA 标签点击；按钮位置变化后仍能点到同一按钮
 async function saveByLabel() {
   await page.getByRole("button", { name: "保存" }).click();
 }
 
-// 後：data 属性で押す。ボタンの位置が変わっても、同じボタンを押せる
+// 修改后：按 data 属性点击；按钮位置变化后仍能点到同一按钮
 async function saveByDataAttribute() {
   await page.locator('[data-testid="save"]').click();
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：`getByRole` 中的「保存」意为「保存」，是按钮可访问名称的精确匹配值，因此保留原值。
+<!-- book-code-note:end -->
 
 Evidence 还要写明证明标准，例如：
 
@@ -518,7 +527,7 @@ Agent 在检查期间不编辑产品代码。如果应用没有按照 <strong>Fe
 
 ```
 audit the verify skill
-// 検証スキルを点検して
+// 检查验证 Skill。
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

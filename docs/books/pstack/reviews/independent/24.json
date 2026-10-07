@@ -1,11 +1,30 @@
 {
   "chapter": 24,
-  "reviewer": "root independent AI review; translator translate_b",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese comparison of 252 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "45eb1af4368d615004f6f6bd1a37c09391f2111ff336040c6911c4adf3f68c99",
-  "translation_sha256": "3c4ed7dd24638991f49bb80f8396b5dbf277616d16cdb18e09bb4bcb375800b9",
-  "findings_resolved": [],
+  "translation_sha256": "6a06f72b15a18d350a7f5e5fa9b0f2fb8308cba714a4d3c7ab28576a66fe4bf9",
+  "findings_resolved": [
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
+  ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 24,
+    "reviewer": "root independent AI review; translator translate_b",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese comparison of 252 visible entries including prose, headings, lists, table cells, conditions, numbers, negations and attribution. Code/embeds checked separately.",
+    "source_sha256": "45eb1af4368d615004f6f6bd1a37c09391f2111ff336040c6911c4adf3f68c99",
+    "translation_sha256": "3c4ed7dd24638991f49bb80f8396b5dbf277616d16cdb18e09bb4bcb375800b9",
+    "findings_resolved": [],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

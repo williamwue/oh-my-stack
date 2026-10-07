@@ -276,8 +276,8 @@ ts	phase	decision	why	evidence	result
 
 ```
 ts	phase	decision	why	evidence	result
-2026-05-24T13:00:00Z	widget	ボタンの色を直した	見た目の崩れを直すため	commit 9d4e2b1	tests green
-2026-05-24T15:20:00Z	widget	13:00の行を訂正する。ボタンの色は直しておらず、commit 9d4e2b1 は存在しない	トランスクリプトと突き合わせて、行が事実と違うと分かった	agent-transcripts/ の、この実行の記録	open
+2026-05-24T13:00:00Z	widget	修复了按钮颜色	为修复外观问题	commit 9d4e2b1	tests green
+2026-05-24T15:20:00Z	widget	更正 13:00 的记录：按钮颜色并未修复，commit 9d4e2b1 也不存在	对照执行记录后发现原记录与事实不符	agent-transcripts/ 中本次执行的记录	open
 ```
 
 第一行保留不删，检查者就能追踪记录何时偏离事实、又何时得到更正。
@@ -312,7 +312,7 @@ Agent 在报告所记录工作的回复末尾，必须加上「Attention」栏�
 把不存在的提交写作证据的行<sup class="footnote-ref"><a href="#fn-e542-2" id="fnref-e542-2">[2]</a></sup>如下。
 
 ```
-2026-05-24T13:00:00Z	widget	ボタンの色を直した	見た目の崩れを直すため	commit 9d4e2b1	tests green
+2026-05-24T13:00:00Z	widget	修复了按钮颜色	为修复外观问题	commit 9d4e2b1	tests green
 ```
 
 此时，「Attention」栏可能如下所示（此例并非原文所载）。
@@ -321,8 +321,8 @@ Agent 在报告所记录工作的回复末尾，必须加上「Attention」栏�
 Attention
 reviewed by grok-4.7-xhigh-fast
 
-- decisions.tsv の 11:15 の行：pixel-diff 0 の根拠は、トップページのスクリーンショット1枚だけ。ウィジェットを使うほかの画面は確かめていない。
-- decisions.tsv の 13:00 の行：存在しない commit 9d4e2b1 を証拠にしていた。15:20 の行で訂正済みだが、ボタンの色はまだ直っていない。
+- decisions.tsv 中 11:15 的记录：pixel-diff 0 的证据只有首页的一张截图；其他使用该组件的页面尚未验证。
+- decisions.tsv 中 13:00 的记录：把不存在的 commit 9d4e2b1 作为证据。15:20 的记录已作更正，但按钮颜色仍未修复。
 ```
 
 第一行 `reviewed by grok-4.7-xhigh-fast` 标明由哪个模型检查。其下逐项列出检查者的意见，每项都指出涉及 `decisions.tsv` 的哪一行（或 transcript 的哪个片段）。使用者可以沿意见找到对应记录，核对证据。
@@ -347,14 +347,14 @@ No flags
 
 ```
 /show-me-your-work keep a decision trail i can review when i'm back.
-// 戻ったときに見直せるよう、判断の記録を残して。
+// 留下决策记录，方便我回来后复查。
 ```
 
 使用者回来后，可以按 `docs/guide/07-overnight.md` 中的以下请求，收到前一晚工作的报告。报告末尾会附上「Attention」栏。
 
 ```
 /show-me-your-work catch me up on what you did last night
-// 昨夜やったことを教えて。
+// 告诉我昨晚完成了什么。
 ```
 
 使用者先阅读回复中的「Attention」栏，再查看该栏指向的日志行。由于栏中只列检查者找到的注意事项，使用者不必重新阅读整个长时间任务的记录。
