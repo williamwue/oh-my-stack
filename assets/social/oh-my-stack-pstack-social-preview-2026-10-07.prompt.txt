@@ -1,0 +1,20 @@
+Use case: ads-marketing. Edit/redesign the provided social cover into a restrained, mature engineering-tool identity, target 1280 x 640, 2:1.
+References:
+Image 1 is the current solo Lauren cover: preserve the copy and core identity cues of the ONE woman, but thoroughly change its visual treatment.
+Image 2 is the project's original dark engineering-tool cover: use its dark navy / charcoal palette, clean white type, subtle cyan / violet accents and premium developer-tool mood. It is a COLOR / BRAND reference only: do not copy its glass stacks, words, URL, OMP platform or composition.
+Image 3 is the official Codex source visual, use ONLY the existing Codex app icon.
+Image 4 is the official Claude documentation source symbol, use ONLY its orange radiating asterisk.
+Primary visual goal: a professional open-source engineering workflow project, with a small creator identity cue. Typography and clear product positioning dominate, not a cartoon celebrity portrait.
+Canvas/background: very dark midnight navy / charcoal with extremely subtle blue depth; almost solid, no loud neon. Ample negative space. Sparse precise hairline topology branches and a few small circular nodes in muted cyan behind/right of the portrait hint at task orchestration and verification; these are restrained accents, not busy diagrams. No 3D glass stacks. No decorative code or made-up technical labels.
+Typography/layout: left approximately 65% is calm aligned copy, right approximately 35% is one subtle half-bust editorial portrait. Very large clean white sans-serif "oh-my-stack" on one line at upper left. Below it a strong cool-white "pstack", directly paired with a smaller light-grey "engineering workflows". At lower left, "Ported to" introduces two compact platform groups: Codex icon + "Codex", then "&", then Claude orange symbol + "Claude Code". Integrate this into the SAME dark background. No ivory band or oversized badge strip. Platforms should remain clear at thumbnail size, but subordinate to the title. Logos stay accurately recognizable from references; no new invented terminal symbol and no OpenAI knot substitution.
+Woman's style: NOT chibi, NOT anime, NOT cute mascot. Reinterpret the long wavy dark-brown hair and round thin gold glasses as a refined, minimally shaded editorial portrait, with natural human adult head/body proportions, normal-size eyes, quiet closed-mouth slight smile, charcoal jacket / dark simple clothing. Use muted navy, slate and soft pale-grey tones; no saturated blush. A sophisticated limited-palette ink / vector illustration, with thin controlled contours, not thick comic outlines. Bust positioned in the right third, around 280-330px wide at final size, substantial but visibly smaller than the previous full-height cartoon. Portrait softly integrates into the dark field; keep face clear, no big avatar circle, no photoreal fake headshot, no extravagant rim light. No hands raised, no fists, no stars, no exclamation marks, no speech balloons, no heart icons. Only one woman; no Matt.
+Exact text only:
+"oh-my-stack"
+"pstack"
+"engineering workflows"
+"Ported to"
+"Codex"
+"&"
+"Claude Code"
+Readability: main title ~76px at 1280 width, source pstack ~56px, workflow subtitle ~32px, platform labels ~34px. Generous margins, at least 60px around essential copy. All copy correctly spelled, no logos or portrait overlapping letters. At reduced social-thumbnail width all product/source/platform wording remains readable.
+Constraints: preserve the agreed source/port positioning; no OMP, no Matt, no extra text, no versions, no performance metrics, no PR numbers, no endorsement badges, no URLs, no cartoon workshop, no bots. The overall effect should be quiet, rigorous, polished and visually consistent with a developer framework. Opaque background.

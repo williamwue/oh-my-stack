@@ -1,11 +1,12 @@
 # Oh My Stack
 
-![Oh My Stack — portable, verifiable engineering workflows for Codex, Claude Code, and OMP](assets/social/oh-my-stack-social-preview-2026-10-07.png)
+![Oh My Stack — pstack engineering workflows, ported to Codex and Claude Code](assets/social/oh-my-stack-pstack-social-preview-2026-10-07.jpg)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Engineering workflows for Codex and Claude Code, based on pstack and including
-selected original AIHero skills from Matt Pocock.
+pstack engineering workflows, ported to Codex and Claude Code.
+
+Includes selected original AIHero skills from Matt Pocock.
 
 Describe a task, clarify a requirement, review a change, or inspect a module's
 design. Oh My Stack gives your agent a workflow and asks it to show evidence

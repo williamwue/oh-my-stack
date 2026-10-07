@@ -1,0 +1,26 @@
+{
+  "repository": "williamwue/oh-my-stack",
+  "purpose": "adopted pstack-focused README and GitHub social preview",
+  "adoptedBy": "maintainer in this conversation",
+  "generator": "built-in image_gen",
+  "image": "oh-my-stack-pstack-social-preview-2026-10-07.jpg",
+  "prompt": "oh-my-stack-pstack-social-preview-2026-10-07.prompt.txt",
+  "width": 1280,
+  "height": 640,
+  "bytes": 186329,
+  "sha256": "fa99feb4df95be7e66320bc9d7fa2e08e125785cf62d4b4a99f8322fb1eff862",
+  "repositoryDescription": "pstack engineering workflows → Codex & Claude Code",
+  "githubSocialPreview": {
+    "status": "uploaded_and_verified",
+    "settingsUrl": "https://github.com/williamwue/oh-my-stack/settings",
+    "imageUrl": "https://repository-images.githubusercontent.com/1381129203/a3283297-26aa-4401-9e9a-dec43aa89ca8",
+    "verifiedAt": "2026-10-07T02:07:37.344517+00:00",
+    "verification": "Public repository og:image bytes and SHA-256 match the adopted JPEG."
+  },
+  "visualReferences": {
+    "portrait": "https://www.youtube.com/watch?v=MN9dGgmLyso",
+    "codex": "https://openai.com/codex/get-started/",
+    "claudeCode": "https://code.claude.com/docs/en/overview"
+  },
+  "artworkNote": "Portrait and platform symbols were redrawn from reference assets. No creator or provider endorsement is claimed."
+}
