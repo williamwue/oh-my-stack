@@ -15,7 +15,7 @@ setting; keeping the current settings or cancelling writes nothing. Existing
 project overrides still take precedence over a personal default.
 
 Setup uses native choice controls when the current interface and mode support
-them. Otherwise it presents numbered choices and waits for your selection.
+them. Otherwise it presents explicit text choices and waits for your selection.
 You can finish without configuring models. Routing choices preserve model
 mappings and do not run model inventory or worker probes. Review and trust the
 OMS hook through `/hooks`, then start a new session to verify automatic routing.

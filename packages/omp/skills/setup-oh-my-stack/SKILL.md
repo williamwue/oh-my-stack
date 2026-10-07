@@ -59,7 +59,7 @@ Inspect the effective routing mode and scope through the binding before offering
 choices. Show that current state in the user's language, including any project
 override. If inspection fails, report the error before changing configuration.
 Use the host's native fixed-choice question tool when available and allowed in
-the current mode. Otherwise show the same numbered options in the conversation
+the current mode. Otherwise show the same explicit text choices in the conversation
 and wait for a selection. Do not ask the user to compose a configuration prompt.
 
 Offer these routing choices:

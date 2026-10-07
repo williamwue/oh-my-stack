@@ -1,0 +1,52 @@
+{
+  "nativeChoiceFeature": "default_mode_request_user_input not enabled; default-mode text choice acceptance",
+  "runtime": "codex-cli 0.160.1",
+  "version": "0.11.1",
+  "fixture": "isolated native local marketplace installation; exact generated cache bytes verified",
+  "cases": [
+    {
+      "name": "unanswered",
+      "questions": [],
+      "commands": [
+        "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g '*SKILL.md' -g '*setup*' . $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills\"",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/SKILL.md'",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/WORKFLOW.md'",
+        "/bin/zsh -lc 'node $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/scripts/routing.mjs status'"
+      ],
+      "assistant": [
+        "我会先查找并读取 `oh-my-stack:setup-oh-my-stack` 的说明，再按其中的流程完成配置。",
+        "当前自动路由为手动模式（默认值），没有项目覆盖。请选择路由设置；若选择启用或禁用，接下来选择保存范围后就会保存。\n- 启用自动路由（推荐）：将普通工程任务匹配到 OMS 工作流\n- 禁用自动路由：仅通过明确的工作流入口使用\n- 保留当前设置：不修改路由配置",
+        "当前为手动路由，尚未修改配置。请在选项中选择启用、禁用或保留当前设置。\n\n[setup-oh-my-stack 工作流]($FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/WORKFLOW.md) 要求 “wait for a selection”，因此需要先收到你的选择再继续。"
+      ],
+      "responses": [],
+      "methods": {
+        "remoteControl/status/changed": 1,
+        "account/updated": 1,
+        "thread/started": 1,
+        "mcpServer/startupStatus/updated": 3,
+        "thread/settings/updated": 1,
+        "thread/status/changed": 2,
+        "turn/started": 1,
+        "item/started": 9,
+        "item/completed": 9,
+        "item/agentMessage/delta": 155,
+        "thread/tokenUsage/updated": 6,
+        "account/rateLimits/updated": 6,
+        "turn/completed": 1
+      },
+      "turnStatus": "completed",
+      "userRouting": null,
+      "projectUnchanged": true
+    }
+  ],
+  "discovery": {
+    "publicSkills": 90,
+    "installedCacheBytesMatchGenerated": true,
+    "hookCount": 1,
+    "hookTrust": "untrusted"
+  },
+  "model": "gpt-6.1-sol",
+  "pathsNormalized": true,
+  "testedWorkflowSha256": "50d0f9c8095abb45d67cd2cb527409fd85472217a2b1427e938ed514ef0761b6",
+  "boundary": "Final wording candidate, isolated native installation and default-mode setup text choices; unanswered selection left configuration untouched. No native choice feature enabled."
+}
