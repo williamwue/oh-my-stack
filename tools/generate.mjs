@@ -255,14 +255,10 @@ function validateAdapter(adapter, project, profiles, path) {
   for (const id of adapter.profiles) assert(profiles.has(id), `${path}: missing profile ${id}`);
   if (adapter.id === "codex") {
     assert(adapter.manifestPath === ".codex-plugin/plugin.json", `${path}: invalid Codex manifest path`);
-    assert(adapter.portableManifestPath === "plugin.json", `${path}: invalid portable Codex manifest path`);
-    assert(
-      adapter.portableManifest?.$schema === "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-      `${path}: portable Codex schema is required`,
-    );
-    assert(adapter.portableManifest.name === project.name, `${path}: portable manifest name must match project name`);
+    assert(!adapter.portableManifestPath && !adapter.portableManifest,
+      `${path}: the verified native Codex hook loader requires compatibility-only packaging`);
     assert(adapter.manifest.interface, `${path}: Codex interface metadata is required`);
-    assert(!("hooks" in adapter.manifest), `${path}: unsupported Codex manifest field hooks`);
+    assert(adapter.manifest.hooks === "./hooks/hooks.json", `${path}: invalid Codex hook path`);
   }
   if (adapter.id === "claude-code") {
     assert(adapter.manifestPath === ".claude-plugin/plugin.json", `${path}: invalid Claude manifest path`);
@@ -675,7 +671,34 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding].filter(Boolean).join("\n").trimEnd();
+  const routingBinding = ["oms-auto", "setup-oh-my-stack"].includes(skill.metadata.name)
+    ? (adapter.id === "codex" ? [
+      "## Codex automatic routing binding",
+      "",
+      "Run `node ../../scripts/routing.mjs status` from the user's project, resolving",
+      "the script path relative to this installed Skill, before automatic routing.",
+      "Use the returned `enabled` flag; errors mean automatic routing is unavailable.",
+      "The nearest project switch overrides the user switch; absence defaults to manual.",
+      "For a routing setup request, preview `node ../../scripts/routing.mjs set",
+      "--scope user|project --mode auto|manual`, then use the same command with",
+      "`--apply` only when applying that switch is authorized. Replace the choice",
+      "placeholders with the requested values. Report the returned effective mode",
+      "and any project override. Routing setup does not require model setup.",
+      "The bundled SessionStart hook adds a short routing hint only in auto mode.",
+      "Native hook trust and observed hook execution are separate from configuration.",
+      "Read [the routing guide](../../docs/automatic-routing.md) for exact scope paths",
+      "and hook verification. Do not modify native hook trust automatically.",
+      "",
+    ].join("\n") : [
+      "## Automatic routing availability",
+      "",
+      "Automatic routing is not configured on this target. For oms-auto or a",
+      "routing-only setup request, return control to the host without automatic",
+      "execution. Use the explicit poteto-mode entry for engineering work.",
+      "For ordinary model setup, continue with the procedure below.",
+      "",
+    ].join("\n")) : "";
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding, routingBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -846,7 +869,17 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+    for (const name of ["routing.mjs", "codex-routing-hook.mjs"]) {
+      await cp(join(model.root, "tools", name), join(target, "scripts", name));
+    }
+    await writeJson(join(target, "hooks", "hooks.json"), {
+      hooks: { SessionStart: [{ matcher: "startup|resume|clear|compact", hooks: [{
+        type: "command", command: 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"',
+        timeout: 10, additionalContextLimit: 500,
+      }] }] },
+    });
     await mkdir(join(target, "docs"), { recursive: true });
+    await cp(join(model.root, "docs", "automatic-routing.md"), join(target, "docs", "automatic-routing.md"));
     await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
     for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
       await cp(join(model.root, "tools", name), join(target, "scripts", name));
@@ -934,6 +967,13 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
   }
   if (adapter.id === "codex") {
+    for (const name of ["routing.mjs", "codex-routing-hook.mjs"]) {
+      assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);
+    }
+    assert(!await exists(join(target, "plugin.json")), "codex: root Agent Plugins manifest bypasses the verified hook loader");
+    assert(manifest.hooks === "./hooks/hooks.json", "codex: native manifest must name the routing hook");
+    assert(await exists(join(target, "hooks", "hooks.json")), "codex: routing hook is missing");
+    assert(await exists(join(target, "docs", "automatic-routing.md")), "codex: routing guide is missing");
     assert(await exists(join(target, "docs", "github-workflow.md")), "codex: GitHub workflow documentation is missing");
     for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
       assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);

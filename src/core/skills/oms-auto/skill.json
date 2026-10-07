@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "oms-auto",
+  "invocation": "automatic",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": ["commands.run", "scripts.execute", "resources.relative_paths"],
+  "fallbacks": {
+    "commands.run": "leave_task_with_host_without_automatic_routing",
+    "scripts.execute": "leave_task_with_host_without_automatic_routing",
+    "resources.relative_paths": "leave_task_with_host_without_automatic_routing"
+  }
+}

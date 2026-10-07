@@ -1,6 +1,10 @@
 # Project status
 
-Current source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
+Current source version: [0.11.0](releases/0.11.0.md), with 90 public Skills.
+The [release checklist](acceptance/automatic-routing-0.11.0/release-checklist.md)
+separates candidate, publication, stable promotion and installed acceptance.
+
+Previous source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
 eleven original AIHero entries. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
 for publication status and the [release checklist](acceptance/aihero-0.10.0/release-checklist.md)
 for gates and version-specific acceptance.

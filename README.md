@@ -107,6 +107,9 @@ Basic use inherits the agent's model when no Oh My Stack mapping is configured.
 Use [optional model configuration](docs/model-configuration.md) to choose models
 and reasoning budgets for roles and review panels.
 
+Version 0.11.0 also provides [optional automatic routing in Codex](docs/automatic-routing.md).
+It is off by default and keeps explicit entries and model configuration intact.
+
 ## More documentation
 
 - [First task](docs/getting-started.md)

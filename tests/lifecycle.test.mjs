@@ -83,11 +83,13 @@ test("Codex repo marketplace copy installs, replaces, and removes only the plugi
     }, null, 2)}\n`);
     await writeFile(sentinel, "preserve me\n");
 
-    assert.equal((await readJson(join(target, "plugin.json"))).name, "oh-my-stack");
+    assert.equal(await pathExists(join(target, "plugin.json")), false);
     assert.equal((await readJson(join(target, ".codex-plugin", "plugin.json"))).name, "oh-my-stack");
 
     await writeFile(join(target, "stale-owned-file.txt"), "remove on update\n");
+    await writeFile(join(target, "plugin.json"), '{"name":"oh-my-stack","version":"0.9.1"}\n');
     await replaceDirectory(source, target);
+    assert.equal(await pathExists(join(target, "plugin.json")), false, "an old owned root manifest must not suppress native hooks after update");
     assert.equal(await pathExists(join(target, "stale-owned-file.txt")), false);
     assert.equal(await readFile(sentinel, "utf8"), "preserve me\n");
 

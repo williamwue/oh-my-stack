@@ -1,0 +1,611 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-07",
+  "candidateVersion": "0.10.0",
+  "host": "Codex CLI 0.160.1 macOS",
+  "transport": "native app-server --stdio",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "installation": "codex plugin marketplace add; codex plugin add oh-my-stack@oms-native-acceptance",
+  "authentication": "existing native maintainer login; no credential copy",
+  "trust": "exact discovered key+hash supplied only through invocation config; no persisted trust write",
+  "fixture": "installed plugin only; no project-local Skill copies; read-only sandbox",
+  "discovery": {
+    "data": [
+      {
+        "cwd": "<FIXTURE>/installed-project",
+        "hooks": [
+          {
+            "key": "oh-my-stack@oms-native-acceptance:hooks/hooks.json:session_start:0:0",
+            "eventName": "sessionStart",
+            "handlerType": "command",
+            "command": "node \"<INSTALLED_PLUGIN>/scripts/codex-routing-hook.mjs\"",
+            "async": false,
+            "matcher": "startup|resume|clear|compact",
+            "timeoutSec": 10,
+            "statusMessage": null,
+            "additionalContextLimit": 500,
+            "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+            "source": "plugin",
+            "pluginId": "oh-my-stack@oms-native-acceptance",
+            "displayOrder": 0,
+            "enabled": true,
+            "isManaged": false,
+            "currentHash": "sha256:55104ea703a66ec075acde77901215991db5b99e36ce37900f65b6cf65e70108",
+            "trustStatus": "untrusted"
+          }
+        ],
+        "warnings": [],
+        "errors": []
+      }
+    ]
+  },
+  "verifiedInstalledFiles": {
+    ".codex-plugin/plugin.json": "bc076dbd2eed8f92d24b329cba0c9944bb56bdd547d60394c0846cb9705ddd31",
+    "hooks/hooks.json": "474994d3bde899f94b3569db9ae20354cf941d8b609757bfc76c8f49e2548a01",
+    "scripts/routing.mjs": "a2e165232ccda71c064aaea9668e6379ea71f28a416820b9f5ba12fa1ac34295",
+    "scripts/codex-routing-hook.mjs": "451202b46b0ec97d288cdbda129fdaf6179e23e4f3d28304add916dad871820f",
+    "skills/oms-auto/SKILL.md": "a4682bfcaca1727752c2e863957a174dcc1bfd89c0087312dc433e45cd80d745"
+  },
+  "sourceUnchanged": true,
+  "clearBoundary": "thread/start sessionStartSource=clear; interactive UI untested",
+  "operations": [
+    "thread/start + turn/start",
+    "thread/resume + turn/start",
+    "thread/compact/start + turn/start",
+    "thread/start sessionStartSource=clear + turn/start",
+    "turn/start structured skill input poteto-help"
+  ],
+  "scenarios": [
+    {
+      "name": "native-startup",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378318,
+          "completedAt": 1791378318,
+          "durationMs": 75,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        }
+      ],
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g '*math*' -g '*test*' -g 'package.json' -g '.oh-my-stack/**'\"",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'node <INSTALLED_PLUGIN>/scripts/routing.mjs status'",
+          "exitCode": 0,
+          "status": "completed",
+          "output": "{\"mode\":\"auto\",\"enabled\":true,\"scope\":\"project\",\"path\":\"<FIXTURE>/installed-project/.oh-my-stack/routing.json\"}\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/poteto-mode/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat AGENTS.md math.mjs math.test.mjs'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/investigation/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'node --test math.test.mjs'",
+          "exitCode": 1,
+          "status": "failed",
+          "output": "TAP version 13\n# Subtest: addition\nnot ok 1 - addition\n  ---\n  duration_ms: 0.789833\n  type: 'test'\n  location: '<FIXTURE>/installed-project/math.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 5\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 5\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file://<FIXTURE>/installed-project/math.test.mjs:4:28)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 57.758375\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/how/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        }
+      ],
+      "finalResponses": [
+        "`add(a, b)` in [math.mjs](<FIXTURE>/installed-project/math.mjs:1) returns `a - b`, so it performs subtraction.\n\nThe [existing test](<FIXTURE>/installed-project/math.test.mjs:4) expects `add(2, 3)` to equal `5`, but the function returns `2 - 3 = -1`. That mismatch causes the assertion to fail.\n\nConfirmed by running `node --test math.test.mjs`. No files were changed."
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "commandExecution",
+        "reasoning",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed"
+      ]
+    },
+    {
+      "name": "native-resume-compact",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378386,
+          "completedAt": 1791378386,
+          "durationMs": 69,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        },
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378432,
+          "completedAt": 1791378432,
+          "durationMs": 59,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        }
+      ],
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'node <INSTALLED_PLUGIN>/scripts/routing.mjs status'",
+          "exitCode": 0,
+          "status": "completed",
+          "output": "{\"mode\":\"auto\",\"enabled\":true,\"scope\":\"project\",\"path\":\"<FIXTURE>/installed-project/.oh-my-stack/routing.json\"}\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'nl -ba math.mjs; nl -ba math.test.mjs; node --test math.test.mjs'",
+          "exitCode": 1,
+          "status": "failed",
+          "output": "     1\texport function add(a, b) { return a - b; }\n     1\timport test from \"node:test\";\n     2\timport assert from \"node:assert/strict\";\n     3\timport {add} from \"./math.mjs\";\n     4\ttest(\"addition\",()=>assert.equal(add(2,3),5));\nTAP version 13\n# Subtest: addition\nnot ok 1 - addition\n  ---\n  duration_ms: 0.796084\n  type: 'test'\n  location: '<FIXTURE>/installed-project/math.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 5\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 5\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file://<FIXTURE>/installed-project/math.test.mjs:4:28)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 56.43975\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'node <INSTALLED_PLUGIN>/scripts/routing.mjs status'",
+          "exitCode": 0,
+          "status": "completed",
+          "output": "{\"mode\":\"auto\",\"enabled\":true,\"scope\":\"project\",\"path\":\"<FIXTURE>/installed-project/.oh-my-stack/routing.json\"}\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'nl -ba math.mjs\nnl -ba math.test.mjs\nnode --test math.test.mjs'",
+          "exitCode": 1,
+          "status": "failed",
+          "output": "     1\texport function add(a, b) { return a - b; }\n     1\timport test from \"node:test\";\n     2\timport assert from \"node:assert/strict\";\n     3\timport {add} from \"./math.mjs\";\n     4\ttest(\"addition\",()=>assert.equal(add(2,3),5));\nTAP version 13\n# Subtest: addition\nnot ok 1 - addition\n  ---\n  duration_ms: 0.791584\n  type: 'test'\n  location: '<FIXTURE>/installed-project/math.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 5\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 5\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file://<FIXTURE>/installed-project/math.test.mjs:4:28)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 55.882917\n"
+        }
+      ],
+      "finalResponses": [
+        "The current `math.test.mjs:4` expects `add(2, 3)` to return `5`. But `math.mjs:1` implements `add` as `return a - b`, so it returns `-1`.\n\nThe strict equality assertion therefore fails with `-1 !== 5`. I confirmed this by rerunning `node --test math.test.mjs`. No files were changed.",
+        "The current `math.test.mjs:4` expects `add(2, 3)` to return `5`. But `math.mjs:1` uses `return a - b`, so it returns `-1`.\n\nThe strict equality assertion fails because `-1 !== 5`. Running `node --test math.test.mjs` confirmed this failure. No files were changed."
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "commandExecution",
+        "contextCompaction",
+        "reasoning",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed",
+        "completed",
+        "completed"
+      ]
+    },
+    {
+      "name": "native-clear",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378453,
+          "completedAt": 1791378453,
+          "durationMs": 74,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        }
+      ],
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'node <INSTALLED_PLUGIN>/scripts/routing.mjs status'",
+          "exitCode": 0,
+          "status": "completed",
+          "output": "{\"mode\":\"auto\",\"enabled\":true,\"scope\":\"project\",\"path\":\"<FIXTURE>/installed-project/.oh-my-stack/routing.json\"}\n"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/poteto-mode/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!node_modules'\"' -g '\"'!.git'\"'\"",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'nl -ba AGENTS.md math.test.mjs math.mjs'",
+          "exitCode": 1,
+          "status": "failed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/investigation/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'nl -ba math.mjs'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat AGENTS.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'nl -ba math.test.mjs'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/how/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'node --test math.test.mjs'",
+          "exitCode": 1,
+          "status": "failed",
+          "output": "TAP version 13\n# Subtest: addition\nnot ok 1 - addition\n  ---\n  duration_ms: 0.779417\n  type: 'test'\n  location: '<FIXTURE>/installed-project/math.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 5\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 5\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file://<FIXTURE>/installed-project/math.test.mjs:4:28)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 54.829167\n"
+        }
+      ],
+      "finalResponses": [
+        "The test fails because `add` subtracts its arguments.\n\n- [math.test.mjs:4](<FIXTURE>/installed-project/math.test.mjs:4) expects `add(2, 3)` to equal `5`.\n- [math.mjs:1](<FIXTURE>/installed-project/math.mjs:1) returns `a - b`, producing `-1`.\n\nRunning `node --test math.test.mjs` confirmed the assertion failure: `-1 !== 5`. The implementation would need `a + b` to satisfy the test. No files were changed."
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "commandExecution",
+        "reasoning",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed"
+      ]
+    },
+    {
+      "name": "native-translation",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378492,
+          "completedAt": 1791378492,
+          "durationMs": 73,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        }
+      ],
+      "commands": [],
+      "finalResponses": [
+        "图书馆九点开门。"
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed"
+      ]
+    },
+    {
+      "name": "native-manual",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378498,
+          "completedAt": 1791378499,
+          "durationMs": 73,
+          "entries": []
+        }
+      ],
+      "commands": [
+        {
+          "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g '*math*' -g 'package.json'\"",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat AGENTS.md math.test.mjs math.mjs'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'node --test math.test.mjs'",
+          "exitCode": 1,
+          "status": "failed",
+          "output": "TAP version 13\n# Subtest: addition\nnot ok 1 - addition\n  ---\n  duration_ms: 0.792583\n  type: 'test'\n  location: '<FIXTURE>/installed-project/math.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 5\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 5\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file://<FIXTURE>/installed-project/math.test.mjs:4:28)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 56.309917\n"
+        }
+      ],
+      "finalResponses": [
+        "The test expects `add(2, 3)` to return `5`, but [math.mjs](<FIXTURE>/installed-project/math.mjs:1) implements `add` as `a - b`, which returns `-1`.\n\nRunning `node --test math.test.mjs` confirms the assertion fails with `-1 !== 5`. The defect is in the implementation: addition requires `a + b`.\n\nNo files were changed."
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "commandExecution",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed"
+      ]
+    },
+    {
+      "name": "native-explicit-help",
+      "hooks": [
+        {
+          "id": "session-start:0:<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "eventName": "sessionStart",
+          "handlerType": "command",
+          "executionMode": "sync",
+          "scope": "thread",
+          "sourcePath": "<INSTALLED_PLUGIN>/hooks/hooks.json",
+          "source": "plugin",
+          "displayOrder": 0,
+          "status": "completed",
+          "statusMessage": null,
+          "startedAt": 1791378525,
+          "completedAt": 1791378525,
+          "durationMs": 68,
+          "entries": [
+            {
+              "kind": "context",
+              "text": "OMS automatic engineering routing is enabled. For a repository engineering request\nwithout a user-selected Skill, read the automatic entry at \"<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md\".\nRun that entry's routing status command first. Only enabled=true permits reading poteto-mode or an engineering workflow.\nHonor an explicit Skill, a bounded child assignment, or a request to skip OMS instead.\nOrdinary chat, translation, and tool-use questions do not enter engineering execution.\nUse the smallest verified path: local direct work for narrow tasks, broader investigation\nor independent review only when the evidence or explicit request calls for it.\nRouting never adds permission to write, delegate, publish, merge, deploy, or access credentials."
+            }
+          ]
+        }
+      ],
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/poteto-help/SKILL.md <INSTALLED_PLUGIN>/SKILL_CATALOG.json'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/bug-fix/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/poteto-mode/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/feature/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/refactoring/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/how/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/investigation/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/why/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/architect/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/benchmark-checklist/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/reflect/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/correct/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/interrogate/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/perf-issue/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/shipping/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/research/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/poteto-help/references/prompting.md <INSTALLED_PLUGIN>/skills/poteto-help/references/recipes.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/why/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/how/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/architect/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/investigation/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/interrogate/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/benchmark-checklist/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/perf-issue/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/babysit/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/prototype/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/multi-phase-plan/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'cat <INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md'",
+          "exitCode": 0,
+          "status": "completed"
+        }
+      ],
+      "finalResponses": [
+        "Use **`poteto-help` for guidance** and **`poteto-mode` to route an engineering task**. Choose a specific entry when the intended outcome is clear.\n\nEach link below points to its installed instructions.\n\n| Common request | OMS entry |\n|---|---|\n| Explain OMS setup or workflow choices | [poteto-help](<INSTALLED_PLUGIN>/skills/poteto-help/SKILL.md) |\n| Pick the workflow for an execution request | [poteto-mode](<INSTALLED_PLUGIN>/skills/poteto-mode/SKILL.md) |\n| Answer an engineering question without changes | [investigation](<INSTALLED_PLUGIN>/skills/investigation/SKILL.md) |\n| Explain how code works / why a design exists | [how](<INSTALLED_PLUGIN>/skills/how/SKILL.md) / [why](<INSTALLED_PLUGIN>/skills/why/SKILL.md) |\n| Reproduce and fix defective behavior | [bug-fix](<INSTALLED_PLUGIN>/skills/bug-fix/SKILL.md) |\n| Add or intentionally change behavior | [feature](<INSTALLED_PLUGIN>/skills/feature/SKILL.md) |\n| Improve structure while preserving behavior | [refactoring](<INSTALLED_PLUGIN>/skills/refactoring/SKILL.md) |\n| Design interfaces and module boundaries | [architect](<INSTALLED_PLUGIN>/skills/architect/SKILL.md) |\n| Test alternatives with a throwaway experiment | [prototype](<INSTALLED_PLUGIN>/skills/prototype/SKILL.md) |\n| Produce a dependency plan without executing it | [multi-phase-plan](<INSTALLED_PLUGIN>/skills/multi-phase-plan/SKILL.md) |\n| Challenge a bounded change or design; return a review | [interrogate](<INSTALLED_PLUGIN>/skills/interrogate/SKILL.md) |\n| Fix measured slowness / validate a performance claim | [perf-issue](<INSTALLED_PLUGIN>/skills/perf-issue/SKILL.md) / [benchmark-checklist](<INSTALLED_PLUGIN>/skills/benchmark-checklist/SKILL.md) |\n| Prevent recurring repository mistakes structurally | [correct](<INSTALLED_PLUGIN>/skills/correct/SKILL.md) |\n| Review conversation lessons for Skill improvements | [reflect](<INSTALLED_PLUGIN>/skills/reflect/SKILL.md) |\n| Check or make an existing PR merge-ready | [babysit](<INSTALLED_PLUGIN>/skills/babysit/SKILL.md); capability limits apply, and merging needs separate authorization |\n| Explicitly land an existing PR or stack | [shipping](<INSTALLED_PLUGIN>/skills/shipping/SKILL.md) |\n\n[`oms-auto`](<INSTALLED_PLUGIN>/skills/oms-auto/SKILL.md) is optional automatic routing, enabled only after its status check. An explicitly selected Skill takes precedence.\n\nUse the host’s supported Skill picker or invocation mechanism; plain-text names do not necessarily select a Skill. After selecting `poteto-mode`, one usable prompt is:\n\n> Reproduce [failure] using [steps], fix its cause, and show the passing user flow plus a check that detects the original failure. Keep changes within [scope]. Do not publish.\n\nVerified against the installed [catalog](<INSTALLED_PLUGIN>/SKILL_CATALOG.json) and owning files. I did not inspect or change this project, spawn agents, or publish anything."
+      ],
+      "itemTypes": [
+        "agentMessage",
+        "commandExecution",
+        "reasoning",
+        "userMessage"
+      ],
+      "turnStatuses": [
+        "completed"
+      ]
+    }
+  ],
+  "limits": [
+    "No Desktop or IDE acceptance",
+    "No selection success-rate claim",
+    "Startup inventory preceded status; workflow reads followed status",
+    "Resume/compact reused prior workflow context",
+    "Explicit help reads catalog and workflow documentation; no project inspection or engineering execution",
+    "No published release or personal OMS upgrade"
+  ],
+  "cleanup": {
+    "candidatePluginRemoved": true,
+    "testMarketplaceRemoved": true,
+    "pluginInventoryMatchesBefore": true,
+    "marketplaceInventoryMatchesBefore": true,
+    "formalInstalledVersion": "0.9.0"
+  }
+}

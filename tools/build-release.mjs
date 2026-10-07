@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFile } from "node:child_process";
-import { cp, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { cp, lstat, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,6 +11,14 @@ import { createArchive, packageInventory, sha256 } from "./release-lib.mjs";
 
 const execFileAsync = promisify(execFile);
 export const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+async function assertNativeCodexManifest(packageRoot) {
+  const rootManifest = await lstat(join(packageRoot, "plugin.json")).catch((error) => {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  });
+  if (rootManifest) throw new Error("Codex root plugin.json would shadow native plugin hooks");
+}
 
 function parseArgs(argv) {
   const options = { out: join(repoRoot, "dist"), check: false, tag: null };
@@ -83,15 +91,14 @@ async function buildPluginBundle({ root, out, project, bundle }) {
     throw new Error("invalid Codex marketplace bundle configuration");
   }
   const packageRoot = join(root, bundle.packageDir);
-  const portableManifest = JSON.parse(await readFile(join(packageRoot, "plugin.json"), "utf8"));
+  await assertNativeCodexManifest(packageRoot);
   const compatibilityManifest = JSON.parse(
     await readFile(join(packageRoot, ".codex-plugin", "plugin.json"), "utf8"),
   );
   if (
-    portableManifest.name !== project.name
-    || portableManifest.version !== project.version
-    || compatibilityManifest.name !== project.name
+    compatibilityManifest.name !== project.name
     || compatibilityManifest.version !== project.version
+    || compatibilityManifest.hooks !== "./hooks/hooks.json"
   ) {
     throw new Error("Codex plugin manifest name or version drift");
   }
@@ -187,6 +194,7 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
   const artifacts = [];
   for (const target of config.targets) {
     const packageRoot = join(root, target.packageDir);
+    if (target.id === "codex") await assertNativeCodexManifest(packageRoot);
     const generation = JSON.parse(await readFile(join(packageRoot, "GENERATION.json"), "utf8"));
     if (generation.target !== target.id || generation.sourceVersion !== project.version) {
       throw new Error(`${target.id}: generated package version or target drift`);

@@ -244,7 +244,7 @@ assistant message before the structured yield.
 
 ### Codex
 
-The Codex target generates Skills, a portable root `plugin.json`, and the supported `.codex-plugin/plugin.json` compatibility manifest. It will add custom-agent TOML files and Hook definitions only when a workflow requires them. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
+The Codex target generates Skills and the native `.codex-plugin/plugin.json` manifest, which explicitly names its optional routing hook. It omits a root Agent Plugins manifest: the observed Codex 0.160.1 loader skips hooks for that format, even with a complete OpenAI extension. Custom-agent TOML files and Hook definitions belong to their target. Capability and installation claims are recorded separately for Codex desktop, CLI, and IDE surfaces. A skills-only package remains valid when a surface does not support plugin installation.
 
 For Codex CLI, a top-level managed worktree may be the single writer isolation
 boundary and delegated children may share it. Project `.agents` content is

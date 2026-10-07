@@ -1,6 +1,6 @@
 ---
 name: setup-oh-my-stack
-description: "Configure role models from observed runtime inventory."
+description: "Configure role models or optional Codex automatic routing."
 ---
 
 # Setup Oh My Stack
@@ -17,6 +17,29 @@ configuration artifacts, not evidence that this Codex surface selected
 those custom roles. Delegated workflows use explicit spawn parameters and
 the complete generated role contract through `../../scripts/codex-delegation.mjs`.
 Verify actual model and effort from persisted child records when available.
+
+## Codex automatic routing binding
+
+Run `node ../../scripts/routing.mjs status` from the user's project, resolving
+the script path relative to this installed Skill, before automatic routing.
+Use the returned `enabled` flag; errors mean automatic routing is unavailable.
+The nearest project switch overrides the user switch; absence defaults to manual.
+For a routing setup request, preview `node ../../scripts/routing.mjs set
+--scope user|project --mode auto|manual`, then use the same command with
+`--apply` only when applying that switch is authorized. Replace the choice
+placeholders with the requested values. Report the returned effective mode
+and any project override. Routing setup does not require model setup.
+The bundled SessionStart hook adds a short routing hint only in auto mode.
+Native hook trust and observed hook execution are separate from configuration.
+Read [the routing guide](../../docs/automatic-routing.md) for exact scope paths
+and hook verification. Do not modify native hook trust automatically.
+
+If the request is only to enable, disable, or inspect automatic routing, use
+the generated routing binding before the model procedure below. A switch-only
+request does not need model inventory, mapping changes, or a paid worker probe.
+Inspect the effective scope, preview the requested switch, and apply only when
+that configuration change was requested. Report unsupported targets without
+changing model configuration. Continue below only for requested model setup.
 
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.

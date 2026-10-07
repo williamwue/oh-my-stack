@@ -252,6 +252,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "oms-auto",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic"
+    },
+    {
       "name": "opening-a-pr",
       "audience": "public",
       "category": "workflow",

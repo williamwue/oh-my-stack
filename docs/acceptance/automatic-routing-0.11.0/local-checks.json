@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "version": "0.11.0",
+  "date": "2026-10-07",
+  "base": "3b650a271a300d269e9060455a2c6d352bb312dc",
+  "offlineCheck": {
+    "command": "npm run check",
+    "tests": 265,
+    "passed": 265,
+    "failed": 0
+  },
+  "bookAudit": {
+    "completeSourceChapters": 48,
+    "auditedEnglishAndChineseChapters": 96,
+    "issues": [],
+    "pythonTests": 5,
+    "passed": 5
+  },
+  "scope": "Automatic routing only; unrelated unpushed book commits remain in original worktree.",
+  "boundaries": [
+    "Native lifecycle receipts from the earlier 0.10.0-labelled source candidate retain their original version.",
+    "0.11.0 exact installed candidate is verified separately.",
+    "Desktop/IDE behavior remains unverified."
+  ]
+}

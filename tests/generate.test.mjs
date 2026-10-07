@@ -92,7 +92,7 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 54 + model.sourceSkills.length);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 55 + model.sourceSkills.length);
   assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 24);
   let originalLength = 0;
   let generatedLength = 0;
@@ -120,10 +120,10 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
 });
 
-test("loads ninety portable Skills, seven roles, and three adapters", async () => {
+test("loads ninety-one portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.coreSkills.length, 90);
-  assert.equal(model.skills.length, 90 + model.sourceSkills.length);
+  assert.equal(model.coreSkills.length, 91);
+  assert.equal(model.skills.length, 91 + model.sourceSkills.length);
   assert.deepEqual(model.coreSkills.map((skill) => skill.metadata.name), [
     "architect",
     "arena",
@@ -162,6 +162,7 @@ test("loads ninety portable Skills, seven roles, and three adapters", async () =
     "make-bot-ui",
     "multi-phase-plan",
     "no-comments",
+    "oms-auto",
     "opening-a-pr",
     "orchestrate",
     "pause-safely",
@@ -223,8 +224,8 @@ test("loads ninety portable Skills, seven roles, and three adapters", async () =
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.coreSkillCatalog.public.length, 78);
-  assert.equal(model.skillCatalog.public.length, 78 + model.sourceSkills.length);
+  assert.equal(model.coreSkillCatalog.public.length, 79);
+  assert.equal(model.skillCatalog.public.length, 79 + model.sourceSkills.length);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)
@@ -458,7 +459,6 @@ test("generated manifests identify the public source repository", async () => {
     for (const adapter of model.adapters) await renderTarget(stage, model, adapter);
     const manifests = [
       "packages/omp/package.json",
-      "packages/codex/plugin.json",
       "packages/codex/.codex-plugin/plugin.json",
       "packages/claude-code/.claude-plugin/plugin.json",
     ];
