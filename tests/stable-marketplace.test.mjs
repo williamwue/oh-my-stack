@@ -7,7 +7,7 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 import { createArchive, packageInventory, sha256 } from "../tools/release-lib.mjs";
-import { buildStableMarketplace, assertPromotion, assertPublisherIdentity, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
+import { buildStableMarketplace, assertPromotion, assertPublisherIdentity, assertTaggedRebuild, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
 
 const exec = promisify(execFile);
 const commit = "a".repeat(40);
@@ -92,6 +92,39 @@ test("stable snapshot keeps released host payloads separate and byte-identical",
   assert.equal(codex.plugins[0].source.path, "./plugins/codex");
   assert.equal(claude.plugins[0].source, "./plugins/claude-code");
   await assert.rejects(buildStableMarketplace({ assets, release, out }), /already exists/);
+});
+
+test("tagged rebuild allows only gzip OS metadata and refuses all other byte or manifest drift", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "oms-stable-platform-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const { assets, manifest } = await fixture(root);
+  const rebuilt = join(root, "rebuilt");
+  const { cp } = await import("node:fs/promises");
+  await cp(assets, rebuilt, { recursive: true });
+  assert.deepEqual(await assertTaggedRebuild({ assets, rebuilt }), []);
+  for (const entry of [...manifest.artifacts, ...manifest.pluginBundles]) {
+    const archive = await readFile(join(rebuilt, entry.file));
+    archive[9] = archive[9] === 3 ? 19 : 3;
+    await writeFile(join(rebuilt, entry.file), archive);
+    entry.sha256 = sha256(archive);
+  }
+  await json(join(rebuilt, "release-manifest.json"), manifest);
+  assert.equal((await assertTaggedRebuild({ assets, rebuilt })).length, 5);
+  const file = manifest.artifacts[0].file;
+  const valid = await readFile(join(rebuilt, file));
+  for (const index of [4, 10, valid.length - 1]) {
+    const bad = Buffer.from(valid); bad[index] ^= 1;
+    await writeFile(join(rebuilt, file), bad);
+    await assert.rejects(assertTaggedRebuild({ assets, rebuilt }), /tagged rebuild differs/);
+  }
+  await writeFile(join(rebuilt, file), valid);
+  manifest.source.commit = "b".repeat(40);
+  await json(join(rebuilt, "release-manifest.json"), manifest);
+  await assert.rejects(assertTaggedRebuild({ assets, rebuilt }), /release-manifest/);
+  manifest.source.commit = commit;
+  await json(join(rebuilt, "release-manifest.json"), manifest);
+  await writeFile(join(assets, "SHA256SUMS"), "tampered\n");
+  await assert.rejects(assertTaggedRebuild({ assets, rebuilt }), /SHA256SUMS/);
 });
 
 test("draft, prerelease, wrong repository, and incomplete assets never create a snapshot", async (t) => {

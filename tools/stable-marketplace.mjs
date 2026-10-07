@@ -55,6 +55,31 @@ export function assertPromotion({ manifest, tagCommit, runs, previous = null }) 
   if (previous) requireThat(compare(manifest.version, previous.version) >= 0, "stable cannot downgrade");
   return run;
 }
+export async function assertTaggedRebuild({ assets, rebuilt }) {
+  const manifest = JSON.parse(await readFile(join(rebuilt, "release-manifest.json")));
+  const normalized = [];
+  for (const entry of [...manifest.artifacts, ...manifest.pluginBundles]) {
+    const original = await readFile(join(assets, entry.file));
+    const reproduced = await readFile(join(rebuilt, entry.file));
+    requireThat(original.length >= 10 && reproduced.length >= 10
+      && original[0] === 0x1f && original[1] === 0x8b && original[2] === 8 && original[3] === 0
+      && reproduced[0] === 0x1f && reproduced[1] === 0x8b && reproduced[2] === 8 && reproduced[3] === 0,
+    `unexpected gzip header: ${entry.file}`);
+    // zlib records the operating system in byte 9. Accept only that header
+    // difference; every other compressed byte must reproduce exactly.
+    if (reproduced[9] !== original[9]) normalized.push({ file: entry.file, rebuilt: reproduced[9], published: original[9] });
+    reproduced[9] = original[9];
+    requireThat(reproduced.equals(original), `tagged rebuild differs: ${entry.file}`);
+    entry.sha256 = sha256(reproduced);
+    entry.size = reproduced.length;
+  }
+  const manifestBytes = encode(manifest);
+  requireThat(manifestBytes.equals(await readFile(join(assets, "release-manifest.json"))), "tagged rebuild differs: release-manifest.json");
+  const sums = [...manifest.artifacts, ...manifest.pluginBundles].map((entry) => `${entry.sha256}  ${entry.file}`);
+  sums.push(`${sha256(manifestBytes)}  release-manifest.json`);
+  requireThat(Buffer.from(`${sums.join("\n")}\n`).equals(await readFile(join(assets, "SHA256SUMS"))), "tagged rebuild differs: SHA256SUMS");
+  return normalized;
+}
 function inventory(files) {
   return files.map((file) => ({ path: file.path, size: file.contents.length,
     mode: file.mode & 0o111 ? "0755" : "0644", sha256: sha256(file.contents) }));
@@ -257,11 +282,12 @@ async function main(argv) {
     requireThat((await exec("git", ["rev-parse", "HEAD"], { cwd: source })).stdout.trim() === tagCommit, "tag moved during clone");
     const rebuilt = join(workspace, "rebuilt");
     await exec(process.execPath, ["tools/build-release.mjs", "--tag", options.tag, "--out", rebuilt], { cwd: source });
-    for (const asset of release.assets) requireThat(sha256(await readFile(join(rebuilt, asset.name))) === sha256(await readFile(join(assets, asset.name))), `tagged rebuild differs: ${asset.name}`);
+    const gzipOperatingSystemNormalized = await assertTaggedRebuild({ assets, rebuilt });
     const remote = `${URL}.git`;
     const expectedHead = await head(remote, workspace);
     const result = await promoteSnapshot({ snapshot, remote, expectedHead, publish: options.publish });
-    const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, ciRun: ci.databaseId, taggedRebuildMatched: true, ...result };
+    const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, ciRun: ci.databaseId,
+      taggedRebuildMatched: true, gzipOperatingSystemNormalized, ...result };
     await writeFile(join(evidence, "promotion.json"), encode(report));
     console.log(JSON.stringify(report, null, 2));
   } finally { await rm(workspace, { recursive: true, force: true }); }
