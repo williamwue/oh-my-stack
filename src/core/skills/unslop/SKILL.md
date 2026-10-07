@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: "Cut AI tells from any writing. Must always apply."
+description: "Edit prose to remove recurring AI writing patterns when writing cleanup is requested."
 ---
 # Unslop
 

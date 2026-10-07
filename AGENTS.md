@@ -1,3 +1,5 @@
+# Repository instructions
+
 <!-- BEGIN official-cloud-operations -->
 ## Official cloud operations
 
@@ -7,4 +9,12 @@ The william-cloud-ops plugin, gateway, scripts/hooks and credential store are re
 Use the existing maintainer account through official OAuth/CLI login. Do not require new custom reader roles, fixed RAM principals, permission tiers or a unified gateway for routine management. Verify the actual account and target; preserve application authorization and existing release/migration approvals.
 <!-- END official-cloud-operations -->
 
-# Repository instructions
+## Development entry
+
+Use the [README](README.md) for architecture and local commands. Edit semantic
+Skill instructions in `src/core/skills`; regenerate `packages` with
+`npm run generate` instead of changing runtime copies by hand.
+
+For Skill or generator changes, run `npm run check` and fix failures caused by
+the change. Generated packages and fixture checks establish local consistency;
+report live model, installation, and production evidence separately.
