@@ -2,44 +2,44 @@
   "schemaVersion": 1,
   "generatedBy": "tools/stable-marketplace.mjs",
   "repository": "williamwue/oh-my-stack",
-  "version": "0.9.1",
-  "releaseId": 405190283,
-  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.9.1",
-  "publishedAt": "2026-10-06T22:29:43Z",
+  "version": "0.10.0",
+  "releaseId": 405237623,
+  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.10.0",
+  "publishedAt": "2026-10-07T00:14:12Z",
   "source": {
-    "ref": "v0.9.1",
-    "commit": "30d6764e6d3fb7431df1b4b1bd52a0dd8fd49c42",
+    "ref": "v0.10.0",
+    "commit": "43b8891a4262a4f4212fc1cdba13e1dd6c0a8c70",
     "worktreeDirty": false,
     "cleanTaggedCheckout": true
   },
   "assets": [
     {
       "name": "SHA256SUMS",
-      "sha256": "9b8bde57455bb433e6f75eacb94c190b5a33408d735603439289685bbcca175e"
+      "sha256": "7fa571e5a9ebc1950a3ea0c715b1442f0d2e1d6e6e831a515d2c44ce8cd1439f"
     },
     {
-      "name": "oh-my-stack-claude-code-0.9.1.tar.gz",
-      "sha256": "63a9f4c5153c90fd4932338a89eb4ac3a5eff0205859533186c44ec40326e11a"
+      "name": "oh-my-stack-claude-code-0.10.0.tar.gz",
+      "sha256": "d824f754d8a0401edce127a40e8a0f0d08c95003d7bc17e710db933b9aebf65b"
     },
     {
-      "name": "oh-my-stack-claude-plugin-0.9.1.tar.gz",
-      "sha256": "10c86ef437e59100a284b9d6651b1b8c8b91a0fab61e65b2758ea490a3776eff"
+      "name": "oh-my-stack-claude-plugin-0.10.0.tar.gz",
+      "sha256": "acb2b66b4f0d5a4d60545002de33fc286419881563c37a94b2662456b0b5ecab"
     },
     {
-      "name": "oh-my-stack-codex-0.9.1.tar.gz",
-      "sha256": "211077704c56dda1e33be92d2ab4c0aadd69f8d66c7f876ffc94a33277bb6f47"
+      "name": "oh-my-stack-codex-0.10.0.tar.gz",
+      "sha256": "c4d25140af889cffc5bf14bf218e772fae2aa0fea52ac30f5662be560e925288"
     },
     {
-      "name": "oh-my-stack-codex-plugin-0.9.1.tar.gz",
-      "sha256": "ffd9abe86191a84484de07498e828e286da3dfce568466bc582c0adf0788f37c"
+      "name": "oh-my-stack-codex-plugin-0.10.0.tar.gz",
+      "sha256": "516b60332ee71289bf264e2328ae7433eae5a63d9e88505a01fa0fe85065bc07"
     },
     {
-      "name": "oh-my-stack-omp-0.9.1.tar.gz",
-      "sha256": "bcf28a0d71b283d88dfa3b85f5c09f55ccbe3c9a7a5a875232ded4cfe543ef87"
+      "name": "oh-my-stack-omp-0.10.0.tar.gz",
+      "sha256": "86223c38d70b337194fde9196c6d2bda194edd8c6a3c48865aff00651a955712"
     },
     {
       "name": "release-manifest.json",
-      "sha256": "8c1486412fcd76cb209cf98a71621522a83fa4cf5a7c4e5705098231948beeef"
+      "sha256": "11e4d48d7040c6c3b92b053f945255495c87a20874df14c1121c2b45d687f126"
     }
   ],
   "files": [
@@ -57,9 +57,9 @@
     },
     {
       "path": "plugins/claude-code/.claude-plugin/plugin.json",
-      "size": 391,
+      "size": 392,
       "mode": "0644",
-      "sha256": "fe06eef2eacf7b0b8b4a064d95614ffdbadba307ab1f807889a835394f55757c"
+      "sha256": "e0fb7ef4650ff550f0036931ea93f519ef16e3986cc181be1c3c045696c829f5"
     },
     {
       "path": "plugins/claude-code/agents/evidence-reader.md",
@@ -111,9 +111,9 @@
     },
     {
       "path": "plugins/claude-code/GENERATION.json",
-      "size": 317,
+      "size": 318,
       "mode": "0644",
-      "sha256": "4e1df0932dc5db4550d89b8ae634e73027c28beb115a3f11a83342203d0ad9ae"
+      "sha256": "3bd07fe416fbccaebf418073b56cc7e6fd096570711d0d63b33da0cc5fc22036"
     },
     {
       "path": "plugins/claude-code/LICENSE",
@@ -159,9 +159,9 @@
     },
     {
       "path": "plugins/claude-code/SKILL_CATALOG.json",
-      "size": 13745,
+      "size": 15957,
       "mode": "0644",
-      "sha256": "184caa7211450600ace0cbc29c05e1f1b0ed35a995989f195a746345f3fd562f"
+      "sha256": "32ec9709043ac81c768488090fde7b5b1d483f124b7d5b3295551b14453e83aa"
     },
     {
       "path": "plugins/claude-code/skills/architect/references/design-contract.md",
@@ -782,6 +782,30 @@
       "sha256": "d5135efcfc2fc024bd261a337eaf10aa3ceb5b65ccdf49f0c223090e93b2c40e"
     },
     {
+      "path": "plugins/claude-code/skills/research/agents/openai.yaml",
+      "size": 94,
+      "mode": "0644",
+      "sha256": "9b4c470d63221c1f68f22df70b83e2f12401b317babe0d1b7b5f24a974474d0d"
+    },
+    {
+      "path": "plugins/claude-code/skills/research/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/claude-code/skills/research/SKILL.md",
+      "size": 794,
+      "mode": "0644",
+      "sha256": "985569f15739c713d6784887c3d186d4ef9ac85bec5ad9c068d25bf0739928e4"
+    },
+    {
+      "path": "plugins/claude-code/skills/research/SOURCE.json",
+      "size": 239,
+      "mode": "0644",
+      "sha256": "e177e1fc34c35eb259f99b617249f070394ded58407824350b1c026e798766ea"
+    },
+    {
       "path": "plugins/claude-code/skills/runtime-forensics/SKILL.md",
       "size": 1390,
       "mode": "0644",
@@ -816,6 +840,60 @@
       "size": 13603,
       "mode": "0644",
       "sha256": "455d45ab5f74ab5440ac636c388d78fb7d886dea703a5c013bc73bf776c9f86c"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/agents/openai.yaml",
+      "size": 152,
+      "mode": "0644",
+      "sha256": "9527de0110541c45712319025155aeab8dc7d77c6ed6e5e83271bab1851ab939"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/domain.md",
+      "size": 2042,
+      "mode": "0644",
+      "sha256": "593a7042218689f1d24df89df14eaf0a20e19e0d0a7d479a01947ac78f0784b9"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+      "size": 4142,
+      "mode": "0644",
+      "sha256": "da619c7423506c905ceea62d4d71c955371c2f2c743aada92a01e3deffa93474"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+      "size": 3809,
+      "mode": "0644",
+      "sha256": "ea175f73d193b3f55819c0ed9bbccf6ee0e70ad8f928e3d7607596c53380acd6"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+      "size": 1810,
+      "mode": "0644",
+      "sha256": "7dcda20a2eb4bdc89b95d1143423c0691309921cadae3132e6424f371030506e"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/SKILL.md",
+      "size": 6847,
+      "mode": "0644",
+      "sha256": "9a0c21694be19fa3eefc39343355d3af7414716ba364882c7432c2f821eac3e9"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/SOURCE.json",
+      "size": 255,
+      "mode": "0644",
+      "sha256": "18af83f6b2e82b65a2e6732a029fe179785d8624de53486720375f019a5e0994"
+    },
+    {
+      "path": "plugins/claude-code/skills/setup-matt-pocock-skills/triage-labels.md",
+      "size": 1045,
+      "mode": "0644",
+      "sha256": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
     },
     {
       "path": "plugins/claude-code/skills/setup-oh-my-stack/SKILL.md",
@@ -870,6 +948,78 @@
       "size": 10982,
       "mode": "0644",
       "sha256": "6d6d9e625ae412ee8f36df8deb6fd9203d7c6acca776d5ee3cabbb9126f8b84c"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-questionnaire/agents/openai.yaml",
+      "size": 166,
+      "mode": "0644",
+      "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-questionnaire/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-questionnaire/SKILL.md",
+      "size": 2904,
+      "mode": "0644",
+      "sha256": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-questionnaire/SOURCE.json",
+      "size": 248,
+      "mode": "0644",
+      "sha256": "f992006bf73cc9775e5954849ede1e654df2e54fe2bb9541f1c54c40103ea712"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-spec/agents/openai.yaml",
+      "size": 135,
+      "mode": "0644",
+      "sha256": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-spec/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-spec/SKILL.md",
+      "size": 3043,
+      "mode": "0644",
+      "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-spec/SOURCE.json",
+      "size": 238,
+      "mode": "0644",
+      "sha256": "bb4900c2f3b4f7c3af2cb502829f264b17536186ee2324b42e7ef7fad5dd564e"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-tickets/agents/openai.yaml",
+      "size": 146,
+      "mode": "0644",
+      "sha256": "21bc6215fffcd7614e9f772bb1760e87cc5fc7dcc707e7d282bc9414267a6090"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-tickets/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-tickets/SKILL.md",
+      "size": 5812,
+      "mode": "0644",
+      "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995"
+    },
+    {
+      "path": "plugins/claude-code/skills/to-tickets/SOURCE.json",
+      "size": 241,
+      "mode": "0644",
+      "sha256": "fa6d98c8aab7c3dc49d129ff066e46c398180509ef18e6d411c0066a42dd6753"
     },
     {
       "path": "plugins/claude-code/skills/trace-forensics/SKILL.md",
@@ -933,9 +1083,9 @@
     },
     {
       "path": "plugins/codex/.codex-plugin/plugin.json",
-      "size": 984,
+      "size": 985,
       "mode": "0644",
-      "sha256": "e5c90fe7f8df3d13c4b3023e754623acdd007f19f59b870e39c1f01d5fe30d96"
+      "sha256": "0e22b434559d8e00544ccf7c24bc41b20e50e2bc41f604661e3ff7edb6c4529c"
     },
     {
       "path": "plugins/codex/agents/evidence-reader.toml",
@@ -999,9 +1149,9 @@
     },
     {
       "path": "plugins/codex/GENERATION.json",
-      "size": 368,
+      "size": 369,
       "mode": "0644",
-      "sha256": "922e8a02aae2ae44886840665b74d6aefdf3aaa5222550ccc1efd1431b0bff69"
+      "sha256": "0b0925b2fc9f284e590bd901ad578444e4c70297b8c0d0a46fcfb8610a9eae00"
     },
     {
       "path": "plugins/codex/LICENSE",
@@ -1017,9 +1167,9 @@
     },
     {
       "path": "plugins/codex/plugin.json",
-      "size": 460,
+      "size": 461,
       "mode": "0644",
-      "sha256": "6d921626871130a26df0bc29f528cc427ed13e0f37378edc9f5076fe34212b5d"
+      "sha256": "3b2d715f34234305aa9566ce4e91ebb728767618af1433d1a20928ae6bfc171b"
     },
     {
       "path": "plugins/codex/scripts/codex-delegation.mjs",
@@ -1071,9 +1221,9 @@
     },
     {
       "path": "plugins/codex/SKILL_CATALOG.json",
-      "size": 13739,
+      "size": 15951,
       "mode": "0644",
-      "sha256": "cf048afe36d22f8c21f2f04818668ea109c137931bc9112cf1a6f5f50589e25e"
+      "sha256": "4487e3c94b4647e37134ce3171762bba981462b119a03f3034014a4f18b2966c"
     },
     {
       "path": "plugins/codex/skills/architect/agents/openai.yaml",
@@ -2084,6 +2234,30 @@
       "sha256": "27327bd811abbc5ef3293eb10f1139237435d41f120fcecd86d8dc1d8dca6aa3"
     },
     {
+      "path": "plugins/codex/skills/research/agents/openai.yaml",
+      "size": 94,
+      "mode": "0644",
+      "sha256": "9b4c470d63221c1f68f22df70b83e2f12401b317babe0d1b7b5f24a974474d0d"
+    },
+    {
+      "path": "plugins/codex/skills/research/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/codex/skills/research/SKILL.md",
+      "size": 794,
+      "mode": "0644",
+      "sha256": "985569f15739c713d6784887c3d186d4ef9ac85bec5ad9c068d25bf0739928e4"
+    },
+    {
+      "path": "plugins/codex/skills/research/SOURCE.json",
+      "size": 239,
+      "mode": "0644",
+      "sha256": "e177e1fc34c35eb259f99b617249f070394ded58407824350b1c026e798766ea"
+    },
+    {
       "path": "plugins/codex/skills/runtime-forensics/agents/openai.yaml",
       "size": 229,
       "mode": "0644",
@@ -2142,6 +2316,60 @@
       "size": 13448,
       "mode": "0644",
       "sha256": "423ee9479f0cd25e15843191557761aaa4cbd9ae8445b946afc5366ea96cbb87"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/agents/openai.yaml",
+      "size": 152,
+      "mode": "0644",
+      "sha256": "9527de0110541c45712319025155aeab8dc7d77c6ed6e5e83271bab1851ab939"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/domain.md",
+      "size": 2042,
+      "mode": "0644",
+      "sha256": "593a7042218689f1d24df89df14eaf0a20e19e0d0a7d479a01947ac78f0784b9"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+      "size": 4142,
+      "mode": "0644",
+      "sha256": "da619c7423506c905ceea62d4d71c955371c2f2c743aada92a01e3deffa93474"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+      "size": 3809,
+      "mode": "0644",
+      "sha256": "ea175f73d193b3f55819c0ed9bbccf6ee0e70ad8f928e3d7607596c53380acd6"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+      "size": 1810,
+      "mode": "0644",
+      "sha256": "7dcda20a2eb4bdc89b95d1143423c0691309921cadae3132e6424f371030506e"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/SKILL.md",
+      "size": 6847,
+      "mode": "0644",
+      "sha256": "9a0c21694be19fa3eefc39343355d3af7414716ba364882c7432c2f821eac3e9"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/SOURCE.json",
+      "size": 255,
+      "mode": "0644",
+      "sha256": "18af83f6b2e82b65a2e6732a029fe179785d8624de53486720375f019a5e0994"
+    },
+    {
+      "path": "plugins/codex/skills/setup-matt-pocock-skills/triage-labels.md",
+      "size": 1045,
+      "mode": "0644",
+      "sha256": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
     },
     {
       "path": "plugins/codex/skills/setup-oh-my-stack/agents/openai.yaml",
@@ -2250,6 +2478,78 @@
       "size": 10775,
       "mode": "0644",
       "sha256": "934c0f6bf5c9c7f0aa07f03e4f7a9ed7bd9b0d77e4081151ee032b9f29576085"
+    },
+    {
+      "path": "plugins/codex/skills/to-questionnaire/agents/openai.yaml",
+      "size": 166,
+      "mode": "0644",
+      "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2"
+    },
+    {
+      "path": "plugins/codex/skills/to-questionnaire/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/codex/skills/to-questionnaire/SKILL.md",
+      "size": 2904,
+      "mode": "0644",
+      "sha256": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b"
+    },
+    {
+      "path": "plugins/codex/skills/to-questionnaire/SOURCE.json",
+      "size": 248,
+      "mode": "0644",
+      "sha256": "f992006bf73cc9775e5954849ede1e654df2e54fe2bb9541f1c54c40103ea712"
+    },
+    {
+      "path": "plugins/codex/skills/to-spec/agents/openai.yaml",
+      "size": 135,
+      "mode": "0644",
+      "sha256": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb"
+    },
+    {
+      "path": "plugins/codex/skills/to-spec/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/codex/skills/to-spec/SKILL.md",
+      "size": 3043,
+      "mode": "0644",
+      "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088"
+    },
+    {
+      "path": "plugins/codex/skills/to-spec/SOURCE.json",
+      "size": 238,
+      "mode": "0644",
+      "sha256": "bb4900c2f3b4f7c3af2cb502829f264b17536186ee2324b42e7ef7fad5dd564e"
+    },
+    {
+      "path": "plugins/codex/skills/to-tickets/agents/openai.yaml",
+      "size": 146,
+      "mode": "0644",
+      "sha256": "21bc6215fffcd7614e9f772bb1760e87cc5fc7dcc707e7d282bc9414267a6090"
+    },
+    {
+      "path": "plugins/codex/skills/to-tickets/LICENSE",
+      "size": 1068,
+      "mode": "0644",
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "plugins/codex/skills/to-tickets/SKILL.md",
+      "size": 5812,
+      "mode": "0644",
+      "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995"
+    },
+    {
+      "path": "plugins/codex/skills/to-tickets/SOURCE.json",
+      "size": 241,
+      "mode": "0644",
+      "sha256": "fa6d98c8aab7c3dc49d129ff066e46c398180509ef18e6d411c0066a42dd6753"
     },
     {
       "path": "plugins/codex/skills/trace-forensics/agents/openai.yaml",
@@ -2361,9 +2661,9 @@
     },
     {
       "path": "README.md",
-      "size": 687,
+      "size": 689,
       "mode": "0644",
-      "sha256": "5e5f2177b0f80ac1a2b5f81143d953dba76e337e56b3dbb7626bc5a1e7e30ae6"
+      "sha256": "6e4317b4f129f99873e5af13214be657e22938661104a4642d7994bb714f4014"
     }
   ]
 }
