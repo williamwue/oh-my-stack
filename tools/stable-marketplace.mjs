@@ -26,6 +26,26 @@ function cleanSource(manifest) {
     && manifest.source.cleanTaggedCheckout === true && manifest.source.worktreeDirty === false,
   "stable requires a clean, exact tagged release manifest");
 }
+export function assertPublisherIdentity({ repo, account, automation = null, run = null }) {
+  requireThat(repo.full_name === REPOSITORY && repo.default_branch === "main", "wrong publishing repository");
+  if (!automation) {
+    requireThat(typeof account === "string" && account && repo.permissions?.push === true,
+      "native GitHub account does not have write permission for the expected repository");
+    return { kind: "maintainer", account };
+  }
+  // Installation tokens do not expose the user's repository permissions object.
+  // Bind automation to the server-observed run; the Git server enforces write access.
+  requireThat(automation.repository === REPOSITORY && /^\d+$/.test(automation.runId)
+    && Number.isSafeInteger(Number(automation.runId)) && Number(automation.runId) > 0,
+  "wrong automation repository or run ID");
+  requireThat(run?.id === Number(automation.runId) && run.repository?.full_name === REPOSITORY
+    && run.head_repository?.full_name === REPOSITORY && run.path === ".github/workflows/stable-marketplace.yml"
+    && ["release", "workflow_dispatch"].includes(run.event) && run.event === automation.event
+    && /^[a-f0-9]{40}$/.test(automation.sha) && run.head_sha === automation.sha
+    && (run.event !== "workflow_dispatch" || run.head_branch === "main"),
+  "automation is not the expected publishing workflow run");
+  return { kind: "github-actions", account: "github-actions[bot]", runId: run.id };
+}
 export function assertPromotion({ manifest, tagCommit, runs, previous = null }) {
   cleanSource(manifest);
   requireThat(manifest.source.commit === tagCommit, "release tag and manifest commit differ");
@@ -211,11 +231,13 @@ async function main(argv) {
   const ghJson = async (...args) => JSON.parse(await run("gh", args));
   try {
     const automation = process.env.GITHUB_ACTIONS === "true";
-    if (automation) requireThat(process.env.GITHUB_REPOSITORY === REPOSITORY, "wrong automation repository");
+    const context = automation ? { repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID,
+      sha: process.env.GITHUB_SHA, event: process.env.GITHUB_EVENT_NAME } : null;
+    if (automation) requireThat(context.repository === REPOSITORY && /^\d+$/.test(context.runId), "wrong automation repository or run ID");
     const account = automation ? "github-actions[bot]" : (await ghJson("api", "user")).login;
     const repo = await ghJson("api", `repos/${REPOSITORY}`);
-    requireThat(repo.full_name === REPOSITORY && repo.default_branch === "main" && repo.permissions?.push === true,
-      "native GitHub account does not have write permission for the expected repository");
+    const workflowRun = automation ? await ghJson("api", `repos/${REPOSITORY}/actions/runs/${context.runId}`) : null;
+    const identity = assertPublisherIdentity({ repo, account, automation: context, run: workflowRun });
     const release = await ghJson("api", `repos/${REPOSITORY}/releases/tags/${options.tag}`);
     requireThat(release.tag_name === options.tag && release.draft === false && release.prerelease === false, "tag is not a published stable release");
     const tagCommit = (await ghJson("api", `repos/${REPOSITORY}/commits/${options.tag}`)).sha;
@@ -239,7 +261,7 @@ async function main(argv) {
     const remote = `${URL}.git`;
     const expectedHead = await head(remote, workspace);
     const result = await promoteSnapshot({ snapshot, remote, expectedHead, publish: options.publish });
-    const report = { repository: REPOSITORY, account, release: options.tag, sourceCommit: tagCommit, ciRun: ci.databaseId, taggedRebuildMatched: true, ...result };
+    const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, ciRun: ci.databaseId, taggedRebuildMatched: true, ...result };
     await writeFile(join(evidence, "promotion.json"), encode(report));
     console.log(JSON.stringify(report, null, 2));
   } finally { await rm(workspace, { recursive: true, force: true }); }

@@ -8,7 +8,7 @@ Existing original workflow bodies and shipped model-routing scripts are retained
 ## Before landing the PR
 
 - Pass `npm run check`, including original-byte/invocation/dependency validation,
-  deterministic archive checks, documentation drift, and all 254 tests.
+  deterministic archive checks, documentation drift, and all 256 tests.
 - Complete the CI bilingual book source audit and five Python audit tests.
 - Recheck the ten bounded AIHero host fixture receipts and preservation snapshots.
 - Verify native candidate installation, 89 public entries, and installed cache bytes.

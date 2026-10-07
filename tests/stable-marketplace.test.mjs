@@ -7,11 +7,38 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 import { createArchive, packageInventory, sha256 } from "../tools/release-lib.mjs";
-import { buildStableMarketplace, assertPromotion, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
+import { buildStableMarketplace, assertPromotion, assertPublisherIdentity, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
 
 const exec = promisify(execFile);
 const commit = "a".repeat(40);
 async function json(path, value) { await writeFile(path, `${JSON.stringify(value, null, 2)}\n`); }
+
+test("maintainer identity requires explicit native write permission for the exact repository", () => {
+  const repo = { full_name: REPOSITORY, default_branch: "main", permissions: { push: true } };
+  assert.deepEqual(assertPublisherIdentity({ repo, account: "maintainer" }), { kind: "maintainer", account: "maintainer" });
+  for (const bad of [{ ...repo, permissions: undefined }, { ...repo, permissions: { push: false } },
+    { ...repo, full_name: "elsewhere/repo" }, { ...repo, default_branch: "other" }]) {
+    assert.throws(() => assertPublisherIdentity({ repo: bad, account: "maintainer" }));
+  }
+});
+
+test("Actions installation tokens bind to the exact server-observed trusted publishing run", () => {
+  const repo = { full_name: REPOSITORY, default_branch: "main" };
+  const automation = { repository: REPOSITORY, runId: "123", sha: commit, event: "workflow_dispatch" };
+  const run = { id: 123, repository: { full_name: REPOSITORY }, head_repository: { full_name: REPOSITORY },
+    path: ".github/workflows/stable-marketplace.yml", event: "workflow_dispatch", head_sha: commit, head_branch: "main" };
+  const input = { repo, automation, run };
+  assert.deepEqual(assertPublisherIdentity(input), { kind: "github-actions", account: "github-actions[bot]", runId: 123 });
+  assert.equal(assertPublisherIdentity({ ...input, automation: { ...automation, event: "release" },
+    run: { ...run, event: "release", head_branch: "v1.2.3" } }).runId, 123);
+  for (const bad of [
+    { automation: { ...automation, repository: "elsewhere/repo" } }, { automation: { ...automation, runId: "invalid" } },
+    { run: null }, { run: { ...run, id: 124 } }, { run: { ...run, repository: { full_name: "elsewhere/repo" } } },
+    { run: { ...run, head_repository: { full_name: "elsewhere/repo" } } }, { run: { ...run, path: ".github/workflows/untrusted.yml" } },
+    { run: { ...run, head_sha: "b".repeat(40) } }, { run: { ...run, head_branch: "feature/untrusted" } },
+    { run: { ...run, event: "pull_request" } }, { automation: { ...automation, event: "release" } },
+  ]) assert.throws(() => assertPublisherIdentity({ ...input, ...bad }));
+});
 
 async function fixture(root, version = "1.2.3") {
   const assets = join(root, "assets");
