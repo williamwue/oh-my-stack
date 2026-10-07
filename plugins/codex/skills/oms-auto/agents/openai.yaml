@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Oms Auto"
+  short_description: "Route opted-in repository engineering tasks; skip chat, translat"
+  default_prompt: "Use $oms-auto for this task."
+policy:
+  allow_implicit_invocation: true

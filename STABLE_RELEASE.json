@@ -2,44 +2,44 @@
   "schemaVersion": 1,
   "generatedBy": "tools/stable-marketplace.mjs",
   "repository": "williamwue/oh-my-stack",
-  "version": "0.10.0",
-  "releaseId": 405237623,
-  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.10.0",
-  "publishedAt": "2026-10-07T00:14:12Z",
+  "version": "0.11.0",
+  "releaseId": 405794505,
+  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.11.0",
+  "publishedAt": "2026-10-07T13:29:53Z",
   "source": {
-    "ref": "v0.10.0",
-    "commit": "43b8891a4262a4f4212fc1cdba13e1dd6c0a8c70",
+    "ref": "v0.11.0",
+    "commit": "ddaa164a6e779e787ecd5bc5c91c183c8c5cd75c",
     "worktreeDirty": false,
     "cleanTaggedCheckout": true
   },
   "assets": [
     {
       "name": "SHA256SUMS",
-      "sha256": "7fa571e5a9ebc1950a3ea0c715b1442f0d2e1d6e6e831a515d2c44ce8cd1439f"
+      "sha256": "a864543cd03ac41ed81419860465aa80aab06d12f975c9c346728433edb0178f"
     },
     {
-      "name": "oh-my-stack-claude-code-0.10.0.tar.gz",
-      "sha256": "d824f754d8a0401edce127a40e8a0f0d08c95003d7bc17e710db933b9aebf65b"
+      "name": "oh-my-stack-claude-code-0.11.0.tar.gz",
+      "sha256": "3ee895f7c74214dcfca8015aabe424ae9f0799f9b2ac30fb047b9dcce898b6f5"
     },
     {
-      "name": "oh-my-stack-claude-plugin-0.10.0.tar.gz",
-      "sha256": "acb2b66b4f0d5a4d60545002de33fc286419881563c37a94b2662456b0b5ecab"
+      "name": "oh-my-stack-claude-plugin-0.11.0.tar.gz",
+      "sha256": "edc346eecccbd32fcf5d8aa6f598f27c947a0465a56a7a6ba5993b69de1a3193"
     },
     {
-      "name": "oh-my-stack-codex-0.10.0.tar.gz",
-      "sha256": "c4d25140af889cffc5bf14bf218e772fae2aa0fea52ac30f5662be560e925288"
+      "name": "oh-my-stack-codex-0.11.0.tar.gz",
+      "sha256": "d76940e623fa680e5b2abcecc39431714cdb3822396d8e9912a3cd50677333cd"
     },
     {
-      "name": "oh-my-stack-codex-plugin-0.10.0.tar.gz",
-      "sha256": "516b60332ee71289bf264e2328ae7433eae5a63d9e88505a01fa0fe85065bc07"
+      "name": "oh-my-stack-codex-plugin-0.11.0.tar.gz",
+      "sha256": "b21645d2acb1bab4c8856eda48c317c6c23cabc2837ac7a0e9f86600cc38667d"
     },
     {
-      "name": "oh-my-stack-omp-0.10.0.tar.gz",
-      "sha256": "86223c38d70b337194fde9196c6d2bda194edd8c6a3c48865aff00651a955712"
+      "name": "oh-my-stack-omp-0.11.0.tar.gz",
+      "sha256": "f987cddac5e62844dee851f786e944db63469e9522a16b8da35d96a30d803e45"
     },
     {
       "name": "release-manifest.json",
-      "sha256": "11e4d48d7040c6c3b92b053f945255495c87a20874df14c1121c2b45d687f126"
+      "sha256": "9dc5cc378420c231f9df13fcb04c1297a5ed66fd2097acbfd8830793ca6dce13"
     }
   ],
   "files": [
@@ -59,7 +59,7 @@
       "path": "plugins/claude-code/.claude-plugin/plugin.json",
       "size": 392,
       "mode": "0644",
-      "sha256": "e0fb7ef4650ff550f0036931ea93f519ef16e3986cc181be1c3c045696c829f5"
+      "sha256": "1f48fe9b3cb46ed56ad6e707f3dbb3fc58578931443cabbfc8206000fd4d0cd0"
     },
     {
       "path": "plugins/claude-code/agents/evidence-reader.md",
@@ -113,7 +113,7 @@
       "path": "plugins/claude-code/GENERATION.json",
       "size": 318,
       "mode": "0644",
-      "sha256": "3bd07fe416fbccaebf418073b56cc7e6fd096570711d0d63b33da0cc5fc22036"
+      "sha256": "2a34afd7b04cc5cd24c948a62d7175b03cf8980119d4fb09e388318e534d8447"
     },
     {
       "path": "plugins/claude-code/LICENSE",
@@ -159,9 +159,9 @@
     },
     {
       "path": "plugins/claude-code/SKILL_CATALOG.json",
-      "size": 15957,
+      "size": 16086,
       "mode": "0644",
-      "sha256": "32ec9709043ac81c768488090fde7b5b1d483f124b7d5b3295551b14453e83aa"
+      "sha256": "7e7ad0e230c62ddcc48f7fe2b91176d6f56484cc43b207b38fb107f1eee60e4a"
     },
     {
       "path": "plugins/claude-code/skills/architect/references/design-contract.md",
@@ -528,6 +528,12 @@
       "size": 2659,
       "mode": "0644",
       "sha256": "653493fa2ef90faa79206321f4f92ef914af97a5583743c24aa972e156ce9cd9"
+    },
+    {
+      "path": "plugins/claude-code/skills/oms-auto/SKILL.md",
+      "size": 2517,
+      "mode": "0644",
+      "sha256": "6d2c65bbd4bdfa47f3bc3ac9ff00450a5ac8f539de4f35f9a64384c8f257592d"
     },
     {
       "path": "plugins/claude-code/skills/opening-a-pr/SKILL.md",
@@ -897,9 +903,9 @@
     },
     {
       "path": "plugins/claude-code/skills/setup-oh-my-stack/SKILL.md",
-      "size": 12292,
+      "size": 13109,
       "mode": "0644",
-      "sha256": "f2caba5ec4b55de11fafa4fa41d2d3769fa329beb9f5e1d6e9bf0f672fd11592"
+      "sha256": "c2689d60bf960b96b72294be5443c5ccf08c8083f964122f1cad0bf4ae7b2d04"
     },
     {
       "path": "plugins/claude-code/skills/shipping/SKILL.md",
@@ -944,10 +950,22 @@
       "sha256": "b99f1349b10cd50390a552506f06b40e83e6a119b2d93be9bf06e3e2fc3fc1d1"
     },
     {
-      "path": "plugins/claude-code/skills/technical-writing/SKILL.md",
-      "size": 10982,
+      "path": "plugins/claude-code/skills/technical-writing/references/document-structure.md",
+      "size": 2108,
       "mode": "0644",
-      "sha256": "6d6d9e625ae412ee8f36df8deb6fd9203d7c6acca776d5ee3cabbb9126f8b84c"
+      "sha256": "4ee2ebdcf9109cc75854806e6615931ffbda6759b1a130f3322ee67899404900"
+    },
+    {
+      "path": "plugins/claude-code/skills/technical-writing/references/sentence-style.md",
+      "size": 6003,
+      "mode": "0644",
+      "sha256": "1062765fab12d78ad989f1cd72a89f09f043063ef60129c48119f54047429c02"
+    },
+    {
+      "path": "plugins/claude-code/skills/technical-writing/SKILL.md",
+      "size": 1699,
+      "mode": "0644",
+      "sha256": "225dacf7eff136bb5eacdd4134a758e53afb86b7cd4d2eb71e9b30257bbc3d13"
     },
     {
       "path": "plugins/claude-code/skills/to-questionnaire/agents/openai.yaml",
@@ -1047,9 +1065,9 @@
     },
     {
       "path": "plugins/claude-code/skills/unslop/SKILL.md",
-      "size": 6095,
+      "size": 6131,
       "mode": "0644",
-      "sha256": "acbd8c3d5ef55473c6db67476743c085ac81fc8294b5d54671bef9d32a787f6f"
+      "sha256": "e84725100a82ec18f79fbde74ae7aa296c9d3691df2254edd5d91d9aac51c356"
     },
     {
       "path": "plugins/claude-code/skills/visual-parity/SKILL.md",
@@ -1083,9 +1101,9 @@
     },
     {
       "path": "plugins/codex/.codex-plugin/plugin.json",
-      "size": 985,
+      "size": 1018,
       "mode": "0644",
-      "sha256": "0e22b434559d8e00544ccf7c24bc41b20e50e2bc41f604661e3ff7edb6c4529c"
+      "sha256": "2829676f32c2d3805f21fbe36287a87b0b1c5a15249899f9dbc88514ccf4e7a4"
     },
     {
       "path": "plugins/codex/agents/evidence-reader.toml",
@@ -1142,6 +1160,12 @@
       "sha256": "d85ecbe3637838f9df90baaa1646c9484ce294801bebd3ac18a4af3e8698ac41"
     },
     {
+      "path": "plugins/codex/docs/automatic-routing.md",
+      "size": 6253,
+      "mode": "0644",
+      "sha256": "6cda4f1de14166ba6e6807dd6ae82831ec9ddf8043d5ee0a640e9e344b69cb93"
+    },
+    {
       "path": "plugins/codex/docs/github-workflow.md",
       "size": 11009,
       "mode": "0644",
@@ -1151,7 +1175,13 @@
       "path": "plugins/codex/GENERATION.json",
       "size": 369,
       "mode": "0644",
-      "sha256": "0b0925b2fc9f284e590bd901ad578444e4c70297b8c0d0a46fcfb8610a9eae00"
+      "sha256": "7e6fd693abd23479c11e8fb5798dee1df92eab4e5adf699eb98df3ee59704db2"
+    },
+    {
+      "path": "plugins/codex/hooks/hooks.json",
+      "size": 350,
+      "mode": "0644",
+      "sha256": "474994d3bde899f94b3569db9ae20354cf941d8b609757bfc76c8f49e2548a01"
     },
     {
       "path": "plugins/codex/LICENSE",
@@ -1166,16 +1196,16 @@
       "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
     },
     {
-      "path": "plugins/codex/plugin.json",
-      "size": 461,
-      "mode": "0644",
-      "sha256": "3b2d715f34234305aa9566ce4e91ebb728767618af1433d1a20928ae6bfc171b"
-    },
-    {
       "path": "plugins/codex/scripts/codex-delegation.mjs",
       "size": 8601,
       "mode": "0644",
       "sha256": "800166a4b296c3680f87984789cb7c72c0f2f1a6359c0766d71aaefaeb479a0c"
+    },
+    {
+      "path": "plugins/codex/scripts/codex-routing-hook.mjs",
+      "size": 2393,
+      "mode": "0644",
+      "sha256": "451202b46b0ec97d288cdbda129fdaf6179e23e4f3d28304add916dad871820f"
     },
     {
       "path": "plugins/codex/scripts/collect-model-inventory.mjs",
@@ -1197,9 +1227,9 @@
     },
     {
       "path": "plugins/codex/scripts/github-autopilot-provider.mjs",
-      "size": 35027,
+      "size": 35059,
       "mode": "0644",
-      "sha256": "1f999b941fd3b69356d68fb297f13c84d60f1c9078f5976c09a105d7ff6b8013"
+      "sha256": "5dd56a582275cf624eb0f4d4349d6218c96eafe181769cb065cc93756b375711"
     },
     {
       "path": "plugins/codex/scripts/github-workflow.mjs",
@@ -1214,6 +1244,12 @@
       "sha256": "78c28e2ebcc2705ad1a5f0a25ca2f795c779b6afe2fc0d6e107ad24153830172"
     },
     {
+      "path": "plugins/codex/scripts/routing.mjs",
+      "size": 5608,
+      "mode": "0644",
+      "sha256": "a2e165232ccda71c064aaea9668e6379ea71f28a416820b9f5ba12fa1ac34295"
+    },
+    {
       "path": "plugins/codex/scripts/setup-acceptance.mjs",
       "size": 16483,
       "mode": "0644",
@@ -1221,9 +1257,9 @@
     },
     {
       "path": "plugins/codex/SKILL_CATALOG.json",
-      "size": 15951,
+      "size": 16080,
       "mode": "0644",
-      "sha256": "4487e3c94b4647e37134ce3171762bba981462b119a03f3034014a4f18b2966c"
+      "sha256": "2e5192418a37c3fc2a912a9535cb19b65a1789ab9808cbb96d4264243b8612a4"
     },
     {
       "path": "plugins/codex/skills/architect/agents/openai.yaml",
@@ -1752,6 +1788,18 @@
       "size": 3560,
       "mode": "0644",
       "sha256": "19bb2f5e8d607f35d357eca1a485da34b53093a5d0550438768b4eeaac6b9b4e"
+    },
+    {
+      "path": "plugins/codex/skills/oms-auto/agents/openai.yaml",
+      "size": 227,
+      "mode": "0644",
+      "sha256": "a9de7212b82cb8c38fa695e6f040cb61b1f34a8d74cc76c4942706371f64c8f1"
+    },
+    {
+      "path": "plugins/codex/skills/oms-auto/SKILL.md",
+      "size": 3188,
+      "mode": "0644",
+      "sha256": "a4682bfcaca1727752c2e863957a174dcc1bfd89c0087312dc433e45cd80d745"
     },
     {
       "path": "plugins/codex/skills/opening-a-pr/agents/openai.yaml",
@@ -2373,21 +2421,21 @@
     },
     {
       "path": "plugins/codex/skills/setup-oh-my-stack/agents/openai.yaml",
-      "size": 236,
+      "size": 240,
       "mode": "0644",
-      "sha256": "e2c4777510afd2d6f6f0b3815d614f4e72a93a5da75e0ff7515ffcfc3de8ad90"
+      "sha256": "ed01853e97a057de222b535bfec1db04dd08e1bd3feca18f10c7cc597e063b22"
     },
     {
       "path": "plugins/codex/skills/setup-oh-my-stack/SKILL.md",
-      "size": 682,
+      "size": 686,
       "mode": "0644",
-      "sha256": "c9b102f0e584cc6192d3571b38d24cee192e2f7a58ba54ad7327599c298b789f"
+      "sha256": "434204963436bd9cd5d6c74d96206bae948f1ddc9ff176cab136376bd9e5630c"
     },
     {
       "path": "plugins/codex/skills/setup-oh-my-stack/WORKFLOW.md",
-      "size": 11048,
+      "size": 12543,
       "mode": "0644",
-      "sha256": "960f8eef00d0e511c0c1a3bd81ee5031384925762a7a75396267153b81698376"
+      "sha256": "9e16352ca3e4198800ef3934517fc12552bb1210f95b329cc8ed74312e6cdde3"
     },
     {
       "path": "plugins/codex/skills/shipping/agents/openai.yaml",
@@ -2468,16 +2516,22 @@
       "sha256": "dd53309ebc05d03523f8a80761bcc1b8df1883c8781a14fe2536f677494a683e"
     },
     {
-      "path": "plugins/codex/skills/technical-writing/SKILL.md",
-      "size": 702,
+      "path": "plugins/codex/skills/technical-writing/references/document-structure.md",
+      "size": 2108,
       "mode": "0644",
-      "sha256": "d41a0d26ef31834cf2678075c23fc69ba8f4013f827ed6b18f334f89c6829461"
+      "sha256": "4ee2ebdcf9109cc75854806e6615931ffbda6759b1a130f3322ee67899404900"
     },
     {
-      "path": "plugins/codex/skills/technical-writing/WORKFLOW.md",
-      "size": 10775,
+      "path": "plugins/codex/skills/technical-writing/references/sentence-style.md",
+      "size": 6003,
       "mode": "0644",
-      "sha256": "934c0f6bf5c9c7f0aa07f03e4f7a9ed7bd9b0d77e4081151ee032b9f29576085"
+      "sha256": "1062765fab12d78ad989f1cd72a89f09f043063ef60129c48119f54047429c02"
+    },
+    {
+      "path": "plugins/codex/skills/technical-writing/SKILL.md",
+      "size": 1649,
+      "mode": "0644",
+      "sha256": "7324a95ce0c27d9cfc1edf9c8f41f0cbed7ca8fd128a43fbda3eee2a85b6de99"
     },
     {
       "path": "plugins/codex/skills/to-questionnaire/agents/openai.yaml",
@@ -2663,7 +2717,7 @@
       "path": "README.md",
       "size": 689,
       "mode": "0644",
-      "sha256": "6e4317b4f129f99873e5af13214be657e22938661104a4642d7994bb714f4014"
+      "sha256": "167ba5c45f3c33e07e21043323fb46ab24d2070bb295aa0d7e676af791a3c9ba"
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Oh My Stack stable marketplace
 
-Published release: [v0.10.0](https://github.com/williamwue/oh-my-stack/releases/tag/v0.10.0).
+Published release: [v0.11.0](https://github.com/williamwue/oh-my-stack/releases/tag/v0.11.0).
 
 This generated branch contains released Codex and Claude Code payloads.
 Original Skill files retain their release bytes; STABLE_RELEASE.json records provenance.
