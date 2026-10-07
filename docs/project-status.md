@@ -1,7 +1,7 @@
 # Project status
 
-Current source version: [0.11.0](releases/0.11.0.md), with 90 public Skills.
-The [release checklist](acceptance/automatic-routing-0.11.0/release-checklist.md)
+Current source version: [0.11.1](releases/0.11.1.md), with 90 public Skills.
+The [release checklist](acceptance/setup-routing-0.11.1/release-checklist.md)
 separates candidate, publication, stable promotion and installed acceptance.
 
 Previous source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and

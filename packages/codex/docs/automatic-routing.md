@@ -4,6 +4,8 @@ This feature is available in version 0.11.0. Installing or upgrading OMS
 does not enable it. Existing `poteto-mode` and other explicit entries remain
 available. Claude Code and OMP do not yet have this routing configuration.
 
+Version 0.11.1 adds the choice-based setup below.
+
 In Codex, type `$` and select `oh-my-stack:setup-oh-my-stack`. Submit its default
 setup prompt; no enable instruction is needed. Setup shows the effective mode
 and offers **Enable automatic routing**, **Disable automatic routing**, or

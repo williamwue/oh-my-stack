@@ -57,8 +57,8 @@
           }
         ],
         "commands": [
-          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . /Users/williamwue/.agents/skills $FIXTURE/codex-home/skills\"",
-          "/bin/zsh -lc \"ls -la; rg --files --hidden $FIXTURE /Users/williamwue/.agents | rg 'setup-oh-my-stack|AGENTS.md|SKILL.md'\"",
+          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . $MAINTAINER_HOME/.agents/skills $FIXTURE/codex-home/skills\"",
+          "/bin/zsh -lc \"ls -la; rg --files --hidden $FIXTURE $MAINTAINER_HOME/.agents | rg 'setup-oh-my-stack|AGENTS.md|SKILL.md'\"",
           "/bin/zsh -lc 'cat $FIXTURE/package/skills/setup-oh-my-stack/SKILL.md'",
           "/bin/zsh -lc 'cat $FIXTURE/package/skills/setup-oh-my-stack/WORKFLOW.md'",
           "/bin/zsh -lc 'node $FIXTURE/package/scripts/routing.mjs status'"
@@ -148,8 +148,8 @@
           }
         ],
         "commands": [
-          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . /Users/williamwue/.agents/skills $FIXTURE/codex-home/skills\"",
-          "/bin/zsh -lc 'ls -la; find $FIXTURE /Users/williamwue/.agents/skills -name SKILL.md -o -name AGENTS.md'",
+          "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*setup*' . $MAINTAINER_HOME/.agents/skills $FIXTURE/codex-home/skills\"",
+          "/bin/zsh -lc 'ls -la; find $FIXTURE $MAINTAINER_HOME/.agents/skills -name SKILL.md -o -name AGENTS.md'",
           "/bin/zsh -lc 'cat ../package/skills/setup-oh-my-stack/SKILL.md'",
           "/bin/zsh -lc 'cat ../package/skills/setup-oh-my-stack/WORKFLOW.md'",
           "/bin/zsh -lc 'node ../package/scripts/routing.mjs status'",
@@ -220,5 +220,6 @@
     "Structured question requests were observed through app-server; no Desktop, IDE, TUI rendering or automatic engineering routing claim.",
     "Fixture configurations and temporary local authentication copy were removed after each run."
   ],
-  "fixturePathsNormalized": true
+  "fixturePathsNormalized": true,
+  "localPathsNormalized": true
 }
