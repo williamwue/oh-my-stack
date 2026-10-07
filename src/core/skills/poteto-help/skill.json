@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/skill.schema.json",
+  "schemaVersion": 1,
+  "name": "poteto-help",
+  "invocation": "explicit",
+  "deliveryTarget": "D3",
+  "workflowTarget": "W1",
+  "requires": [
+    "workspace.inspect"
+  ],
+  "fallbacks": {}
+}

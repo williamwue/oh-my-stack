@@ -199,7 +199,7 @@
       "purpose": "Persist and recover a provider-independent durable run state with atomic, revision-bound, idempotent event appends.",
       "network": false,
       "writes": ["explicit caller-selected durable run store"],
-      "uninstallBehavior": "Not installed in target packages; caller-selected run stores remain user-owned."
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-selected run stores remain user-owned."
     },
     {
       "path": "tools/run-evidence.mjs",
@@ -338,6 +338,94 @@
         "explicit caller-selected evidence/result store"
       ],
       "uninstallBehavior": "Removed with the owning Oh My Stack package."
+    },
+    {
+      "path": "tools/books/import-pstack-book.py",
+      "owner": "oh-my-stack",
+      "purpose": "Archive authorized public Zenn chapter bodies with source hashes.",
+      "network": true,
+      "writes": [
+        "upstream/books/pstack/<snapshot-date>"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/prepare-editions.py",
+      "owner": "oh-my-stack",
+      "purpose": "Assemble attributed English chapters and completed Chinese drafts with matching source receipts.",
+      "network": false,
+      "writes": [
+        "docs/books/pstack"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/validate-pstack-book.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Check book provenance, edition completeness, code fidelity, local links and review evidence offline.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/audit-source.py",
+      "owner": "oh-my-stack",
+      "purpose": "Verify archived chapter hashes, rendered text and exact code against raw source offline.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/github-autopilot-provider.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Observe explicit GitHub targets through official gh and reconcile scoped authorized PR creation and merge through a local durable journal.",
+      "network": true,
+      "writes": [
+        "explicit local operation journal for library mutations",
+        "GitHub pull requests only with caller-supplied scoped authorization; CLI inspection is read-only"
+      ],
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; operation journals and remote pull requests remain for owner-led reconciliation."
+    },
+    {
+      "path": "tools/github-workflow.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind explicit Codex PR workflow scope, root authority, independent review and target policy to the GitHub provider; expose inspection and reconciliation through a bounded CLI.",
+      "network": true,
+      "writes": [
+        "explicit private operation journal for authorized library mutations and reconciliation",
+        "GitHub pull requests only through scoped authorized library operations; CLI never publishes or merges"
+      ],
+      "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-owned journals and remote PRs remain for reconciliation."
+    },
+    {
+      "path": "tools/source-skills.mjs",
+      "owner": "local-core",
+      "purpose": "Validate pinned original source skills, dependency closure, and resource hashes for packaging.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository library; removed with the checkout."
+    },
+    {
+      "path": "tools/generate-skill-directory.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Generate or check the user Skill directory from the packaged public catalog and descriptions.",
+      "network": false,
+      "writes": [
+        "docs/skill-directory.md (generation only; check is read-only)"
+      ],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/stable-marketplace.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Build a stable Git marketplace only from verified published assets; optionally advance its one pinned GitHub branch after clean-tag rebuild and CI gates.",
+      "network": true,
+      "writes": [
+        "explicit new evidence directory",
+        "temporary isolated Git checkout",
+        "williamwue/oh-my-stack refs/heads/stable only with --publish"
+      ],
+      "uninstallBehavior": "Maintainer tool is not installed in plugin packages. Evidence and stable branch remain independently managed."
     }
   ]
 }

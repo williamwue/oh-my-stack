@@ -1,0 +1,13 @@
+{
+  "chapter": 45,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full comparison of238 visible Japanese/Chinese entries, including1 table and15 cells; conditions, negation, numbers and attribution;40 link destinations and3 code blocks. External iframe bodies were not reviewed. Corrected line163 was rechecked against Japanese; reverse replacement confirms no other change.",
+  "source_sha256": "4cf9a9267fab6cbb55470f83cc95d609a1a974653f6c09b89ca72d5a3777853d",
+  "translation_sha256": "a5bf72953474e944f3e92d7757fca489d057e87eddbe2c53243a5f724d001bd3",
+  "findings_resolved": [
+    "F45-1: Clarified that receiver accepts at most60 webhooks per minute from each sender."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

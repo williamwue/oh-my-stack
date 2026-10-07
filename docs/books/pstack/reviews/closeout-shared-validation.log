@@ -1,0 +1,7 @@
+
+> oh-my-stack@0.3.0 validate
+> node tools/validate.mjs
+
+docs/github-target-policy-prototype-2026-10-03.md: missing local link github-workflow.md
+
+exit_code=1

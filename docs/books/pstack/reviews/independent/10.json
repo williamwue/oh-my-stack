@@ -1,0 +1,11 @@
+{
+  "chapter": 10,
+  "reviewer": "root independent AI review; translator translate_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator. Localized figures are reviewed separately.",
+  "source_sha256": "166759a1a70463a44a82f4f52754aadfaf30eaec8a7254b3506d7880c1c6ad65",
+  "translation_sha256": "55ed19496e1bc4e314d76ab10df8a971629d6e00986a25936b6370161aa69138",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

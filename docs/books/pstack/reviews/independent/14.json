@@ -1,0 +1,16 @@
+{
+  "chapter": 14,
+  "reviewer": "root independent AI review; translator translate_b",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator. Localized figures reviewed separately.",
+  "source_sha256": "d5cf8a0db9ed9be26e9340f79f541c3f2f7cf720712b080bb10956edf9d9f297",
+  "translation_sha256": "dc01513ea073da59b9e85d7a7ce975c298a9a9ff7dcf09f4858e801a2cf92ff7",
+  "findings_resolved": [
+    "Clarified the comparison with Runtime forensics in the Trace forensics section."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed",
+  "root_review_corrections": [
+    "Clarified comparison with Runtime forensics: collection is already complete."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "task_name": "oms01513_review_3",
+  "fork_turns": "none",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "audit": {
+    "role": "reviewer",
+    "route": "interrogate.reviewers",
+    "entry": 3,
+    "contractSha256": "8b6564db043f0667e2ed776b5fed80e2039d2517eb084933247015873e3a1965",
+    "taskSha256": "6994f15c5047d1b61e5479170fcaae203fdcba1a3beb3a084c26ad540ca58e92",
+    "resolutionInventorySha256": "19362c17a8a5fd2f2c6f2424167d309ebacd3cdf8da65fd91cc83323bc166735",
+    "resolutionScope": "user"
+  }
+}

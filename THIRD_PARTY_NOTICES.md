@@ -1,5 +1,21 @@
 # Third-party notices
 
+## The pstack book by kaito
+
+The Chinese chapters under `docs/books/pstack/zh-CN/` are translated from
+[kaito's Japanese book](https://zenn.dev/sc30gsw/books/080faba713547b), with the
+[author's English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04) used
+for comparison and archived under `docs/books/pstack/en/`. Source snapshots
+are retained under `upstream/books/pstack/`. Original author: kaito. Translation preparation: Oh My Stack,
+with AI assistance. The full translation has AI review records and is pending human review.
+
+The maintainer reports the author's verbal permission to publish Chinese and
+English editions. The [authorization record](docs/books/pstack/AUTHORIZATION.md)
+documents that report and its scope. The book is not designated MIT-licensed;
+the pstack plugin's MIT license does not establish the license of the book.
+Source chapter URLs and translation status are in
+[`source-manifest.json`](docs/books/pstack/source-manifest.json).
+
 ## Cursor pstack
 
 The `principle-*`, `tdd`, `technical-writing`, `unslop`, `how`,
@@ -79,3 +95,31 @@ September 28 semantic reconciliation imports the decision-log and autopilot-full
 reference files from Cursor pstack commit `ecc249f1e306fc64ddf83c7bed16cacf7c2239db`
 under MIT. Immutable files and license are in
 `upstream/snapshots/cursor-pstack-september-28/ecc249f1e306fc64ddf83c7bed16cacf7c2239db/pstack`.
+
+## pstack 0.15.13 semantic update
+
+Source: <https://github.com/cursor/plugins/tree/2cbf58508f40de470d7490b55c51d71241928fa2/pstack>.
+Revision: `2cbf58508f40de470d7490b55c51d71241928fa2`.
+License: MIT; the exact license and changed files are retained under
+`upstream/snapshots/cursor-pstack-october-06/`.
+This update adds four portable Skills and adapts workflow and guide changes.
+Original source snapshots and dated acceptance records remain historical.
+
+## AIHero / Matt Pocock Skills
+
+Selected original skills from [mattpocock/skills](https://github.com/mattpocock/skills)
+are pinned at `6fd947921b935b7e1e69293a200400f0fdd5c15f`. Copyright (c) 2026
+Matt Pocock. License: MIT. The original license and complete selected resources
+are retained in the revision-bound `upstream/snapshots/aihero/` directory.
+`upstream/source-skills.json` records every imported file hash and dependency.
+
+Version 0.9.0 selects original `codebase-design`, `grill-me`, `grilling`,
+`domain-modeling`, `grill-with-docs`, and `improve-codebase-architecture`.
+The generated packages retain original source instructions and resources.
+Each selected skill includes the upstream MIT license and a `SOURCE.json`
+coordinate. Runtime verification is recorded separately; importing or packaging
+a skill does not establish behavioral parity.
+
+The unreleased 0.10.0 source candidate adds original `research`,
+`to-questionnaire`, `setup-matt-pocock-skills`, `to-spec`, and `to-tickets`
+from the same pinned revision. All resources and UI metadata are retained.

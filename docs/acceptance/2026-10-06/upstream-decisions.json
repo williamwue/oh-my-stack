@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "from": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db",
+  "to": "2cbf58508f40de470d7490b55c51d71241928fa2",
+  "upstreamVersion": "0.15.13",
+  "fileCount": 33,
+  "decisions": [
+    {
+      "upstreamPath": "pstack/.cursor-plugin/plugin.json",
+      "change": "modified",
+      "decision": "retained-difference",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "OMS is separately versioned 0.7.0; upstream version is provenance, not our package version."
+    },
+    {
+      "upstreamPath": "pstack/README.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/agents/poteto-agent.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/poteto-mode/references/subagent-handoff.md"
+      ],
+      "rationale": "Fresh-session lifecycle is expressed as a shared portable handoff contract; no Cursor routing agent is installed."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/01-setup.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/02-poteto-mode.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/03-understand.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/04-design.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/05-build-and-clean.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/06-verify-and-ship.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/07-overnight.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/08-principles.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/09-make-it-yours.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/10-recipes-and-pitfalls.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/README.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Carry user-facing setup, prompting, measurement, correction, and help guidance into the OMS update guide with actual portable workflows and host limits; book editions remain historical."
+    },
+    {
+      "upstreamPath": "pstack/skills/architect/SKILL.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/architect/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/architect/references/design-red-flags.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/architect/references/design-contract.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/benchmark-checklist/SKILL.md",
+      "change": "added",
+      "decision": "adopted",
+      "targets": [
+        "src/core/skills/benchmark-checklist/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/correct/SKILL.md",
+      "change": "added",
+      "decision": "adopted",
+      "targets": [
+        "src/core/skills/correct/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-help/SKILL.md",
+      "change": "added",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/poteto-help/SKILL.md"
+      ],
+      "rationale": "Keep help intent and prompt recipes; derive admitted entries from the generated OMS catalog, respect host invocation, and never invent candidate public URLs."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-help/references/prompting.md",
+      "change": "added",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/poteto-help/references/prompting.md"
+      ],
+      "rationale": "Keep help intent and prompt recipes; derive admitted entries from the generated OMS catalog, respect host invocation, and never invent candidate public URLs."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-help/references/recipes.md",
+      "change": "added",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/poteto-help/references/recipes.md"
+      ],
+      "rationale": "Keep help intent and prompt recipes; derive admitted entries from the generated OMS catalog, respect host invocation, and never invent candidate public URLs."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/SKILL.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/poteto-mode/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/autopilot-full.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/autopilot-full/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/autopilot-stack/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/hillclimb.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/hillclimb/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/multi-phase-plan/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/opening-a-pr/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/perf-issue.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/perf-issue/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/multi-phase-plan/SKILL.md"
+      ],
+      "rationale": "Keep OMS plan contract and host-native bounded wake semantics; do not import the Cursor document parser or /loop command."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-explain-the-number/SKILL.md",
+      "change": "added",
+      "decision": "adopted",
+      "targets": [
+        "src/core/skills/principle-explain-the-number/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/swarm/SKILL.md",
+      "change": "modified",
+      "decision": "adapted",
+      "targets": [
+        "src/core/skills/swarm/SKILL.md"
+      ],
+      "rationale": "Adopt the semantic delta while retaining portable host bindings, scoped authorization, independent verification, and existing failure fencing."
+    },
+    {
+      "upstreamPath": "pstack/skills/technical-writing/SKILL.md",
+      "change": "modified",
+      "decision": "retained-difference",
+      "targets": [
+        "docs/upstream-pstack-0.15.13.md"
+      ],
+      "rationale": "Upstream deletes source attribution lines only. Preserve existing attributed writing guidance and immutable source history."
+    },
+    {
+      "upstreamPath": "pstack/skills/typescript-best-practices/references/patterns.md",
+      "change": "modified",
+      "decision": "adopted",
+      "targets": [
+        "src/core/skills/typescript-best-practices/SKILL.md"
+      ],
+      "rationale": "Existing schema-first boundary parsing already covers part of the delta; add complete-type validation and reuse the owning schema."
+    }
+  ]
+}

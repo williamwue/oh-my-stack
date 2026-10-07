@@ -1,0 +1,56 @@
+TAP version 13
+# Subtest: immutable snapshots may contain upstream template links; published instructions may not
+ok 1 - immutable snapshots may contain upstream template links; published instructions may not
+  ---
+  duration_ms: 6.448292
+  type: 'test'
+  ...
+# Subtest: snapshot path examples remain verbatim while private keys remain forbidden
+ok 2 - snapshot path examples remain verbatim while private keys remain forbidden
+  ---
+  duration_ms: 6.324
+  type: 'test'
+  ...
+# Subtest: Markdown links allow internal parent paths and reject encoded escapes
+ok 3 - Markdown links allow internal parent paths and reject encoded escapes
+  ---
+  duration_ms: 3.01325
+  type: 'test'
+  ...
+# Subtest: only exact snapshots, node_modules, .git, and root .tmp are excluded
+ok 4 - only exact snapshots, node_modules, .git, and root .tmp are excluded
+  ---
+  duration_ms: 4.014
+  type: 'test'
+  ...
+# Subtest: source-model dependencies reject rather than silently reducing hygiene coverage
+ok 5 - source-model dependencies reject rather than silently reducing hygiene coverage
+  ---
+  duration_ms: 1.792083
+  type: 'test'
+  ...
+# Subtest: frozen historical reports keep original paths without exempting changed or copied content
+not ok 6 - frozen historical reports keep original paths without exempting changed or copied content
+  ---
+  duration_ms: 2.969667
+  type: 'test'
+  location: '<repository>/tests/markdown-links.test.mjs:103:1'
+  failureType: 'testCodeFailure'
+  error: 'docs/operations/cloud-management-acceptance-2026-10-01.md: contains an absolute macOS home path'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    assert (file://<repository>/tools/validate.mjs:17:25)
+    validatePublicHygiene (file://<repository>/tools/validate.mjs:203:7)
+    async TestContext.<anonymous> (file://<repository>/tests/markdown-links.test.mjs:115:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.202416

@@ -1,0 +1,841 @@
+# Chapter 19: Verification: four principles that check real behavior
+
+[Contents](README.md) · [Previous](23-chapter.md) · [Next](25-chapter.md) · [简体中文](../zh-CN/24-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/1fb019) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers the following four principles.
+
+1. [Prove It Works](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md)
+2. [Fix Root Causes](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-fix-root-causes/SKILL.md)
+3. [Sequence Work into Verifiable Units](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-sequence-verifiable-units/SKILL.md)
+4. [Test Behavior, Not Implementation](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-test-behavior-not-implementation/SKILL.md)
+
+The four belong to the Verification group, and each one decides <strong>what the agent must verify before it can call the work finished</strong>. The bundled guide page [`docs/guide/08-principles.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/08-principles.md) sums up the four as the principles that decide "what counts as proof".
+
+With the four principles, the agent behaves as follows.
+
+- It does not stop at "the build passed". It opens the file it wrote and checks the lines that are actually in it.
+- It does not stop at making the error go away, for example by adding a check that skips the work when a value is null. It finds out why the error happened and fixes that cause.
+- It splits the work into small units, runs the tests after each unit, and moves to the next unit only after they pass.
+- In tests, it does not check which functions the code called. It passes the code a concrete input and compares the value that actually comes back with an expected value.
+
+As in [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863), this chapter explains the four principles one at a time in terms of their rules and trigger conditions. At the end, it shows how the principles apply to the duplicate-rows request.
+
+The duplicate-rows request is the following request from the [Preface](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3dfdf0). In it, the user asks the agent to fix a bug: "when a retry lands mid-run, the export writes duplicate rows".
+
+```
+/poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
+```
+
+As in [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863), the example requests in this chapter are one-line instructions that name the principle. The premises in [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863) showed that the agent reads and applies a principle on its own when the work matches the trigger condition, even if you do not name the principle.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="27">Of the four principles, this chapter gives an example request only for "Prove It Works".</p>
+<p class="code-line" data-line="29">In this book, I limit example requests to ones that appear in pstack's bundled guide or <a href="https://github.com/cursor/plugins/blob/main/pstack/README.md" rel="nofollow noopener noreferrer" target="_blank">README</a>. If I wrote an example request for a principle that has none in the source, I could end up showing a use that pstack does not intend.</p>
+</div></aside>
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter is organized as follows.
+
+- A list of the four principles
+- "Prove It Works" checks the result of the work by looking at the real thing, not a proxy
+- "Fix Root Causes" fixes the cause of a bug, not its symptom
+- "Sequence Work into Verifiable Units" splits the work into small units that can be verified
+- "Test Behavior, Not Implementation" tests behavior, not implementation
+- In the duplicate-rows request, "Fix Root Causes" and "Prove It Works" apply at the steps of the "Bug fix" Playbook
+- Summary
+
+<a id="a-list-of-the-four-principles"></a>
+
+
+## A list of the four principles
+
+<table class="code-line" data-line="46">
+<thead class="code-line" data-line="46">
+<tr class="code-line" data-line="46">
+<th>Principle</th>
+<th>The conclusion in one sentence</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="48">
+<tr class="code-line" data-line="48">
+<td>"Prove It Works"</td>
+<td>Check the result of the work by looking at the real thing, not a proxy</td>
+</tr>
+<tr class="code-line" data-line="49">
+<td>"Fix Root Causes"</td>
+<td>Do not hide the symptom of a bug, such as the error that surfaced. Fix the root cause that produced the symptom</td>
+</tr>
+<tr class="code-line" data-line="50">
+<td>"Sequence Work into Verifiable Units"</td>
+<td>Split the work into small units that can be verified, and move on only after each unit's checks, such as tests, pass</td>
+</tr>
+<tr class="code-line" data-line="51">
+<td>"Test Behavior, Not Implementation"</td>
+<td>Call the code the same way its callers do, and compare the observable result with an expected value written directly in the test</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="54">A <strong>proxy</strong> is an indirect clue you look at in place of the thing you actually want to verify.</p>
+<p class="code-line" data-line="56">For example, when you decide "the file's modification time is recent, so its contents must have been rewritten correctly" or "the build passed, so the feature must work", the modification time and the successful build are proxies.</p>
+</div></aside>
+
+<a id="%22prove-it-works%22-checks-the-result-of-the-work-by-looking-at-the-real-thing%2C-not-a-proxy"></a>
+
+
+## "Prove It Works" checks the result of the work by looking at the real thing, not a proxy
+
+The principle "Prove It Works" asks the agent to <strong>check for itself</strong> the running app, the file it wrote, and the value on the screen before it declares the work finished.
+
+The core of this principle is the following sentence at the start of the source. I also quoted it in [Chapter 2](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071).
+
+> Verify every task output by checking the real thing directly. Do not infer from proxies, self-reports, or "it compiles."
+
+The principle asks for this because <strong>work that nobody verified can look correct and still be wrong</strong>.
+
+To the agent, indirect checks like the ones below look cheaper than looking at the real thing, because none of them require running the feature.
+
+- The file's modification time, as in "the modification time is recent, so the write must have succeeded"
+- Whether the output looks new, as in "it looks like this run wrote it, so it must be correct"
+- The agent's self-report, such as a report that says "I fixed it"
+- A saved screenshot, which is a copy of the screen taken earlier
+
+But <strong>work that builds on a wrong guess costs far more than checking the real thing</strong>.
+
+For example, suppose the agent looks only at the modification time and reports "the write succeeded", while the file actually contains duplicate rows. The user notices the duplicates later and has to go back through the work to find where it broke.
+
+If the agent declares the work finished without checking the real thing, someone has much more work to do later. So the agent must check the real thing directly before it finishes.
+
+<a id="rule%3A-run-the-feature-and-read-the-actual-values"></a>
+
+
+### Rule: run the feature and read the actual values
+
+To look at the real thing, the agent runs the feature and reads the actual values. The main rules are as follows.
+
+<a id="run-the-feature-to-verify-it"></a>
+
+
+#### Run the feature to verify it
+
+The agent does not stop at "the build passed" or "the agent said so". It runs the feature and looks at the result, because a successful build shows only that the code compiled.
+
+For example, for a feature where pressing a button adds an item to the cart, the agent presses the button and confirms on the screen that the item is in the cart.
+
+<a id="check-directly-whether-a-program-is-running"></a>
+
+
+#### Check directly whether a program is running
+
+The agent does not guess whether a program such as a server is running from other information the program left behind, such as a log file.
+
+For example, the agent does not decide "the log file was updated recently, so the server must be running". It sends a request to the server and confirms that a response comes back. The server may have written the log right before it stopped.
+
+<a id="read-the-actual-value%2C-not-a-saved-copy"></a>
+
+
+#### Read the actual value, not a saved copy
+
+The agent reads the actual value, not a cached value or a separate view built from the original value.
+
+For example, to check that the price on the screen is correct, the agent reads the price on the current screen, not a screenshot taken earlier. An earlier screenshot can stay stale after the original value changes.
+
+<a id="when-a-check-fails%2C-suspect-the-check-before-the-system"></a>
+
+
+#### When a check fails, suspect the check before the system
+
+When a check gives a strange result, the agent asks whether its own way of checking is wrong before it concludes that the system is broken.
+
+For example, if the new value does not appear on the screen, the agent first checks whether it left an old screen open or is looking at a server in a different environment. If the check is wrong, the agent may try to fix a system that works correctly.
+
+<a id="keep-the-check-as-a-script"></a>
+
+
+#### Keep the check as a script
+
+According to the principle, the strongest evidence is not a one-time visual check but <strong>a script that can rerun the same comparison any number of times</strong>.
+
+A script makes the same comparison every time it runs. So instead of trusting the agent's word, the reviewer can rerun the same check and see whether the result matches.
+
+When it can, the agent therefore writes a script, runs it, and leaves the output where the reviewer can see it.
+
+For example, a script that compares the contents of the written file with the expected contents looks like this.
+
+```
+// check-export.ts: compare the lines of the written file with the expected lines
+import { readFileSync } from "node:fs";
+
+const actual = readFileSync("out/export.csv", "utf8").trim().split("\n");
+const expected = ["a", "b", "c"];
+
+if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+  console.error("NG", { actual, expected });
+  process.exit(1);
+}
+console.log("OK", actual.length);
+```
+
+If the written file has the three lines `a`, `b`, and `c`, the script prints `OK 3`.
+
+If lines are duplicated and the file reads `a`, `b`, `a`, `b`, `c`, the script prints `NG` and both contents, so the reviewer can see for themselves where the two differ.
+
+Usually, though, the agent does not commit the script and its output. It leaves them where the reviewer can see them.
+
+The agent commits them only for large or complex work where someone must be able to audit the trail later, such as a large port or migration.
+
+<a id="trigger-conditions"></a>
+
+
+### Trigger conditions
+
+After the work is done, before the agent declares it finished.
+
+<a id="example-request%3A-ask-for-the-real-output%2C-not-the-build-log"></a>
+
+
+### Example request: ask for the real output, not the build log
+
+The bundled guide page [`docs/guide/10-recipes-and-pitfalls.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/10-recipes-and-pitfalls.md) lists one common pitfall, which is that the agent reports success only because the build passed. A successful build shows only that the code compiled.
+
+The same page lists the following request as one of the one-line requests that bring a run back when it drifts. It asks for the real output, not the build log, so you can use it when the agent reports success only because the build passed.
+
+```
+apply prove it works. show me the real output, not the build log.
+```
+
+<a id="%22fix-root-causes%22-fixes-the-cause-of-a-bug%2C-not-its-symptom"></a>
+
+
+## "Fix Root Causes" fixes the cause of a bug, not its symptom
+
+When the agent debugs, the principle "Fix Root Causes" asks it not to stop at the smallest change that makes the error go away. It asks the agent to <strong>trace why the error happened back to the root cause and fix it where the cause is</strong>.
+
+The principle asks for this because workarounds for symptoms pile up.
+
+<strong>A workaround leaves the real bug in place, so each time that bug produces another symptom, another workaround appears. The more workarounds there are, the harder it is for a reader to understand how the system behaves.</strong>
+
+Also, when a workaround stays in the code, the agent takes it into context as an example of a correct implementation. The agent then produces more wrong copies, and the codebase stops working as memory ([Chapter 4](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd)).
+
+Fixing the cause takes longer at first, but it cuts the total time spent on debugging. The benefit also compounds across every later task.
+
+<a id="rule%3A-fix-the-cause-instead-of-adding-a-guard-that-hides-the-symptom"></a>
+
+
+### Rule: fix the cause instead of adding a guard that hides the symptom
+
+The main rules are as follows.
+
+<a id="reproduce-the-bug-first"></a>
+
+
+#### Reproduce the bug first
+
+Before it fixes anything, the agent sets up the situation in which the bug happens and confirms that the bug actually occurs.
+
+For example, for a report that says "pressing the save button twice in a row causes an error", the agent first presses it twice and gets the error. If the agent fixes the bug without reproducing it, it cannot verify whether the fix worked.
+
+<a id="ask-%22why%22-until-you-reach-the-root-cause"></a>
+
+
+#### Ask "why" until you reach the root cause
+
+The agent keeps asking "why" until it reaches the root cause.
+
+Take the save button example from above. The agent asks the following questions.
+
+1. Why does the error happen? Because the save runs twice.
+2. Why does the save run twice? Because the button stays clickable after the first press.
+3. Why does the button stay clickable? Because nothing disables the button while the save runs.
+
+The third answer is the cause, so the agent changes the code to disable the button while the save runs.
+
+If the agent stopped at the first answer, it would add code that ignores the second save and nothing more. The root cause, a button that stays clickable, would remain.
+
+An agent that stops asking "why" partway treats only the symptom. So it must keep asking "why" until it reaches the root cause.
+
+<a id="do-not-hide-the-symptom-with-a-guard"></a>
+
+
+#### Do not hide the symptom with a guard
+
+The agent does not add a guard to hide a symptom.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="199">A <strong>guard</strong> is a short check that stops or skips the rest of the work when a value looks likely to cause a problem. An example is <code>if (user === null) return;</code> at the top of a function.</p>
+</div></aside>
+
+For example, if code crashes when a value is null and you add a guard that does nothing when the value is null, the crash goes away. But you still do not know why the value became null.
+
+So the agent does not add the guard. It fixes the reason the value becomes null, because a guard only hides the symptom and the real bug stays.
+
+<a id="if-you-need-a-long-comment-to-excuse-the-code%2C-fix-the-code"></a>
+
+
+#### If you need a long comment to excuse the code, fix the code
+
+<strong>If a workaround needs a paragraph of comments to justify it, the code is wrong.</strong> The thing to fix is the code, not the comment.
+
+For example, if someone added the following fix for the duplicate-rows bug, the fix is likely a workaround.
+
+```
+type Row = { id: string };
+declare function writeRow(row: Row): void; // write one row to the file
+
+const writtenIds = new Set<string>();
+
+function writeRowOnce(row: Row) {
+  // When a retry happens, a row we already wrote can arrive again.
+  // We do not know why it arrives again.
+  // So we remember the IDs of written rows and drop any row whose ID we have already seen.
+  // This way, no duplicate rows get written.
+  if (writtenIds.has(row.id)) return;
+  writeRow(row);
+  writtenIds.add(row.id);
+}
+```
+
+This fix stops duplicate rows from being written, but the comment does not answer why the same row arrives again.
+
+Before it writes a comment and code like these, the agent asks why the same row arrives again.
+
+If a fix needs a long comment to justify it, the agent must fix the code instead of writing the comment.
+
+<a id="fix-every-place-that-has-the-same-pattern"></a>
+
+
+#### Fix every place that has the same pattern
+
+The agent uses grep to search for code with the same pattern as the cause, and fixes every place it finds.
+
+For example, if the cause is that "a button stays clickable after the first press" on one screen, the agent checks whether buttons on other screens use the same code. If the agent fixes only one place, the same bug stays in the others.
+
+<a id="when-you-are-stuck%2C-measure-instead-of-guessing"></a>
+
+
+#### When you are stuck, measure instead of guessing
+
+When it is stuck, the agent does not fix things by guessing. It adds logs or reads the actual error messages to see what is happening. When the guess is wrong, a fix based on it adds one more workaround and nothing else.
+
+For a bug like "it stopped working after a restart", the agent suspects stale persistent state, which survives a restart, before it suspects the code. Examples of such state include the following.
+
+- Config files
+- Caches
+- Lock files
+- In-progress state saved to a file
+
+If the program starts working after you delete the file that holds the in-progress state, the cause is the stale state left in that file.
+
+In that case, the agent does not stop at deleting the file. As the fix, it prefers state validation, which is code that checks whether the state read from the file has the shape the current code expects. If the agent only deletes the file, the program breaks again the next time a run leaves stale state behind.
+
+For example, suppose the old code saved the in-progress state in the shape `{ step: 3 }` and the current code expects the shape `{ lastRowId: "b" }`. The state validation looks like this.
+
+```
+// The shape of in-progress state that the current code expects
+// loadState below rejects the old { step: 3 } shape
+type SavedState = { lastRowId: string };
+
+// Check whether the value read from the save file has the SavedState shape
+function loadState(raw: unknown): SavedState | null {
+  if (
+    typeof raw === "object" &&
+    raw !== null &&
+    "lastRowId" in raw &&
+    typeof raw.lastRowId === "string"
+  ) {
+    return { lastRowId: raw.lastRowId };
+  }
+  // Do not use state in an old shape such as { step: 3 }. Start over
+  return null;
+}
+```
+
+If the state that a previous run left behind decides whether the program works, the agent must validate the state it reads.
+
+<a id="trigger-conditions-1"></a>
+
+
+### Trigger conditions
+
+When the agent debugs.
+
+<a id="%22sequence-work-into-verifiable-units%22-splits-the-work-into-small-units-that-can-be-verified"></a>
+
+
+## "Sequence Work into Verifiable Units" splits the work into small units that can be verified
+
+The principle "Sequence Work into Verifiable Units" asks the agent to split the work into small units, run checks such as tests after each unit, and <strong>move to the next unit only after every check passes</strong>.
+
+For example, for a rename that spans 50 files, the agent renames in one package, runs that package's tests, and moves to the next package only after they pass.
+
+The principle asks for this because verifying each unit catches a breakage at the unit that caused it.
+
+For example, if the agent renamed in 10 packages at once in the rename above and then a test failed, it would have to find which of the 10 changes caused the failure. By then, it would also have piled more work on top of the broken state.
+
+If the agent verifies one package at a time, a failing test points only at the one package it just changed.
+
+The more changes you verify together, the wider the search for the cause gets. So the agent must verify after each change.
+
+<a id="rule%3A-verify-one-unit-at-a-time%2C-and-order-commits-so-they-show-correctness"></a>
+
+
+### Rule: verify one unit at a time, and order commits so they show correctness
+
+The rules for how the agent proceeds are as follows.
+
+<a id="make-one-change%2C-then-verify-once"></a>
+
+
+#### Make one change, then verify once
+
+The agent starts from a state known to be good, makes one change, and runs the checks before it moves on. In the rename example above, one package is one unit.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="flowchart%20TD%0A%20%20%20%20A%5BState%20known%20to%20be%20good%5D%20--%3E%20B%5BMake%20one%20change%5D%0A%20%20%20%20B%20--%3E%20C%5BRun%20the%20checks%5D%0A%20%20%20%20C%20--%3E%20D%7BDid%20everything%20pass%7D%0A%20%20%20%20D%20--%20passed%20--%3E%20E%5BMove%20to%20the%20next%20unit%5D%0A%20%20%20%20E%20--%3E%20B%0A%20%20%20%20D%20--%20failed%20--%3E%20F%5BFix%20the%20one%20change%20just%20made%5D%0A%20%20%20%20F%20--%3E%20C" frameborder="0" id="zenn-embedded__0ae8b194ac744" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__0ae8b194ac744"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 1](../diagrams/en/24-01.svg)
+
+[View diagram 1](../diagrams/en/24-01.md)
+<!-- book-diagram-link:end -->
+
+When a check fails, the agent fixes only the one change it just made. So the search for the cause does not widen.
+
+Even when the agent uses a tool that makes edits automatically, such as one built with "[Build the Lever](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-build-the-lever/SKILL.md)" in [Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863), it does not skip the per-unit checks. With a tool, the per-unit checks cost almost nothing.
+
+<a id="rebase-onto-a-clean-trunk-before-you-start"></a>
+
+
+#### Rebase onto a clean trunk before you start
+
+Before it starts work, the agent rebases its branch onto the latest trunk, with no unrelated changes.
+
+That way, every check result is a comparison against the real baseline, which is the latest trunk.
+
+Suppose the agent works on top of an old trunk or on a branch mixed with other changes. When a check fails, the agent cannot tell whether its own change caused the failure or the failure was already there.
+
+<a id="order-commits-so-they-show-correctness"></a>
+
+
+#### Order commits so they show correctness
+
+The agent orders commits and PRs so that a reviewer can confirm the change is correct by following the commits in order. The basic shape is "<strong>the failing test first, then the fix on top of it</strong>".
+
+In this order, the reviewer can watch the test fail and then pass.
+
+```
+Commit order (bottom comes first)
+
+Fix commit               ← the test passes here
+   ↑
+Failing test commit      ← the test fails here
+   ↑
+trunk
+```
+
+The principle lists three more orderings.
+
+- Put a commit that deletes dead code before a commit that restructures. For example, delete unused functions first, then restructure the remaining files.
+- Put a commit that records the current measurement before an improvement commit. For example, record the current processing time before a change that makes the processing faster.
+- Put a commit that builds only the base for a feature before the commits that build the feature. For example, before you build the contents of a new screen, add only an empty screen and the route to it.
+
+The agent makes each commit able to land on its own. The whole sequence of commits then reads as a step-by-step explanation that the change is correct.
+
+<a id="trigger-conditions-2"></a>
+
+
+### Trigger conditions
+
+When the agent does multi-step work, such as a bulk fix, a migration, or a series of similar edits, and when it decides the order of commits or PRs.
+
+<a id="%22test-behavior%2C-not-implementation%22-tests-behavior%2C-not-implementation"></a>
+
+
+## "Test Behavior, Not Implementation" tests behavior, not implementation
+
+The principle "Test Behavior, Not Implementation" defines a test as something that calls the code the same way its callers do and <strong>compares a result the callers can observe with an expected value written directly in the test</strong>.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="362">
+<li class="code-line" data-line="362">
+<strong>Behavior</strong> is what the code's callers can see it do or produce, such as the value a function returns or the data it saved.</li>
+<li class="code-line" data-line="363">
+<strong>Implementation</strong> is how the code is built inside, such as which functions it calls and how.</li>
+<li class="code-line" data-line="364">A <strong>literal expected value</strong> is an expected value written as the value itself, not computed by code. In the example below, <code>"hello-world"</code> is a literal expected value.</li>
+</ul>
+<p class="code-line" data-line="366">For example, here are two ways to write a test for <code>slugify</code>, a function that turns a string into a URL-friendly form. The test runner is Vitest.</p>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="368"><span class="line"><span style="color:#a0aab5">// Turn a string into a URL-friendly form</span></span>
+<span class="line"><span style="color:#F97583">declare</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> slugify</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">text</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">; </span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#a0aab5">// Testing implementation: check whether slugify calls toLowerCase internally</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> spy</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vi.</span><span style="color:#B392F0">spyOn</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">String</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">prototype</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"toLowerCase"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#B392F0">slugify</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, World!"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#B392F0">expect</span><span style="color:#E1E4E8">(spy).</span><span style="color:#B392F0">toHaveBeenCalled</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#a0aab5">// Testing behavior: call slugify the way callers do and compare the result with a literal expected value</span></span>
+<span class="line"><span style="color:#B392F0">expect</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">slugify</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, World!"</span><span style="color:#E1E4E8">)).</span><span style="color:#B392F0">toBe</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"hello-world"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre></div>
+<p class="code-line" data-line="381">The first test passes as long as <code>slugify</code> calls <code>toLowerCase</code>, even if the result is not <code>"hello-world"</code>. The second test fails unless the result is <code>"hello-world"</code>.</p>
+</div></aside>
+
+The principle defines tests this way because a test that checks which functions the code called, or a test that only copies a constant from the code, does not fail when the code has a bug.
+
+Such tests neither call the code the way callers do nor compare an observable result. So they spend CI time and the reviewer's attention and find no bugs.
+
+Also, <strong>a test that only copies a constant fails when someone edits that constant on purpose, so it gets in the way of that edit</strong>.
+
+For example, suppose the setting for "items shown per page" is `20`, and a test also writes `20` and checks that the setting is `20`.
+
+If you want 30 items per page and change the setting to `30`, the page shows 30 items correctly, but the test fails because it expects `20`. The only way to make it pass is to change the `20` in the test to `30` too.
+
+A test that only copies a constant's value fails when someone changes the constant correctly, so it gets in the way of correct edits.
+
+<a id="rule%3A-one-question%2C-%22would-it-pass-if-everything-returned-undefined%3F%22%2C-finds-tests-that-check-nothing"></a>
+
+
+### Rule: one question, "would it pass if everything returned undefined?", finds tests that check nothing
+
+Before it keeps a test, the agent judges it with one question: "If every function this test imports returned only `undefined`, would this test still pass?"
+
+If it would pass, the test <strong>observes no behavior</strong> and does not fail even when the real code is broken. In that case, the agent rewrites the assertion or deletes the test.
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<p class="code-line" data-line="403">An assertion is the statement in a test that checks whether a result is what you expected. A mock is a fake part that a test puts in place of the real one.</p>
+</div></aside>
+
+Tests that pass this question mostly take the following five forms.
+
+<a id="using-a-weak-check"></a>
+
+
+#### Using a weak check
+
+These tests have no assertion, or they use only a check that almost anything passes, such as `toBeDefined`, which checks only that the value is not `undefined`.
+
+For example, if you write `expect(slugify("Hello, World!")).toBeDefined()` for the `slugify` test above, the test passes even if `slugify` returns `"xyz"` instead of `"hello-world"`.
+
+```
+// Turn a string into a URL-friendly form
+declare function slugify(text: string): string; 
+
+// Weak: passes even if slugify returns "xyz"
+expect(slugify("Hello, World!")).toBeDefined();
+
+// Strong: fails if it returns anything other than "hello-world"
+expect(slugify("Hello, World!")).toBe("hello-world");
+```
+
+<a id="looking-only-at-whether-something-was-called"></a>
+
+
+#### Looking only at whether something was called
+
+These tests check only that a mock was called, with `toHaveBeenCalled`, or that the result is empty, with `toEqual([])`.
+
+For example, `findUsers` is a function that searches for members by name. If its only test is `expect(findUsers("no-such-name")).toEqual([])`, the test passes even for a broken `findUsers` that always returns an empty array for any name.
+
+```
+type User = { name: string };
+declare function findUsers(name: string): User[]; // search for members by name
+
+// Looks only at whether the result is an empty array. Passes even for a broken implementation that always returns []
+expect(findUsers("no-such-name")).toEqual([]);
+```
+
+<a id="building-the-expected-value-from-the-code-under-test"></a>
+
+
+#### Building the expected value from the code under test
+
+These tests compute the expected value with the very code they test.
+
+For example, suppose `calcTotal`, a function that computes the total price, has a bug that forgets to multiply by the quantity. If you buy two items at 100 yen, `calcTotal` should return `200`, but it returns `100`.
+
+The "before" test computes the expected value with the same `calcTotal`. So whatever wrong value `calcTotal` returns, the left and right sides are always equal, and the test passes.
+
+```
+type Item = { price: number; quantity: number };
+// Compute the total price (has a bug that forgets to multiply by the quantity)
+declare function calcTotal(items: Item[]): number; 
+
+const items = [{ price: 100, quantity: 2 }];
+
+// Before: the expected value is also computed with calcTotal. Both sides are 100, so the test passes
+expect(calcTotal(items)).toBe(calcTotal(items));
+
+// After: write the expected value directly in the test. 100 is not 200, so the test fails
+expect(calcTotal(items)).toBe(200);
+```
+
+<a id="only-copying-a-constant"></a>
+
+
+#### Only copying a constant
+
+These tests only write a constant, setting, or prompt string from the code a second time in the test and compare the two.
+
+For example, if the code sets the maximum number of tools the agent can use at once to `8`, the test only writes the `8` from `LIMITS.maxTools` in the code a second time.
+
+```
+// Code: sets the maximum number of tools to 8
+const LIMITS = { maxTools: 8 };
+
+// Test: only writes the 8 from the code a second time
+expect(LIMITS.maxTools).toBe(8);
+```
+
+<a id="looking-only-at-data-the-test-set-up"></a>
+
+
+#### Looking only at data the test set up
+
+These tests only read and check data that the test created during setup, and never call the code under test.
+
+```
+it("keeps the user name", () => {
+  const user = { name: "taro" }; // data the test created itself
+  expect(user.name).toBe("taro"); // never calls the code under test
+});
+```
+
+<a id="how-to-rewrite-them"></a>
+
+
+#### How to rewrite them
+
+##### Call the code under test with a concrete input and compare with a literal expected value
+
+When it rewrites a test, the agent calls the code under test with one concrete input and compares the returned value, or an observable change such as saved data, with a literal expected value.
+
+For example, for `slugify` above, it writes `expect(slugify("Hello, World!")).toBe("hello-world")`.
+
+##### To check that something does not happen, also check that it happens for another input
+
+When the agent wants to check that something does not happen, it also checks, in the same test, that the thing does happen for another input.
+
+For example, in the same test for `findUsers` above, the agent also compares the result for a name that exists, as follows.
+
+```
+type User = { name: string };
+declare function findUsers(name: string): User[]; // search for members by name
+
+expect(findUsers("no-such-name")).toEqual([]);
+expect(findUsers("taro")).toEqual([{ name: "taro" }]);
+```
+
+A broken implementation that always returns an empty array fails the second assertion.
+
+##### For a constant, check the code that reads it instead of copying the value
+
+For a constant, instead of restating the value, the agent checks the code that reads the constant, with one input.
+
+For example, for the "items shown per page" setting above, it rewrites the test as follows.
+
+```
+// The setting for items shown per page (currently 20)
+declare const PAGE_SIZE: number; 
+// Split an array into pages. If pageSize is omitted, use PAGE_SIZE
+declare function paginate<T>(items: T[], pageSize?: number): T[][];
+
+// Before: only copies the setting. Fails if the setting changes to 30
+expect(PAGE_SIZE).toBe(20);
+
+// After: check the code that splits into pages, with one input
+expect(paginate(["a", "b", "c"], 2)).toEqual([["a", "b"], ["c"]]);
+```
+
+The "after" test fails if the code that splits into pages breaks, but it does not fail when you change the setting to `30`.
+
+##### Delete a test when you cannot find a way to check it
+
+If the agent cannot find a way to check the behavior like this, it deletes the test.
+
+##### With a mock, check what it received, not that it was called
+
+A mock is fine in itself. But in the test, the agent checks what the mock received, or the state after the call, not that the mock was called.
+
+For example, if the agent mocks the part that sends email, it checks that "the correct recipient and body were passed", not that "send was called". A test that checks only that send was called passes even when the contents passed in are wrong.
+
+```
+type Mailer = { send: (mail: { to: string; body: string }) => void };
+// Register a member and send a thank-you email with mailer
+declare function registerUser(mailer: Mailer, user: { email: string }): Promise<void>;
+
+// Before: looks only at whether send was called. Passes even if the recipient or body is wrong
+it("sends a welcome mail", async () => {
+  const mailer = { send: vi.fn() };
+  await registerUser(mailer, { email: "taro@example.com" });
+  expect(mailer.send).toHaveBeenCalled();
+});
+
+// After: compare the recipient and body the mock received with literal expected values
+it("sends a welcome mail", async () => {
+  const mailer = { send: vi.fn() };
+  await registerUser(mailer, { email: "taro@example.com" });
+  expect(mailer.send).toHaveBeenCalledWith({
+    to: "taro@example.com",
+    body: "Thank you for registering",
+  });
+});
+```
+
+In this test code, if `registerUser` has a bug that sends with an empty recipient, the "before" test still passes. The "after" test fails because the recipient is not `taro@example.com`.
+
+<a id="trigger-conditions-3"></a>
+
+
+### Trigger conditions
+
+When the agent writes a test, changes one, or decides whether to keep one.
+
+<a id="example%3A-write-the-retry-test-in-terms-of-behavior"></a>
+
+
+### Example: write the retry test in terms of behavior
+
+The duplicate-rows request gives an example of a test of the ["looking only at whether something was called"](#looking-only-at-whether-something-was-called) kind, and of how to rewrite that test. The duplicate-rows request is the following request from the start of the chapter.
+
+```
+/poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
+```
+
+In this case, the agent that received the request writes a test for the retry.
+
+The following test passes as long as `exportWithRetry` calls `db.query`, even if it does not write the rows correctly.
+
+```
+type Db = { query: (...args: unknown[]) => unknown };
+type InMemoryDb = Db & { rows: (table: string) => { source_row_id: string }[] };
+
+// Export the source rows in input, and retry if it fails partway
+declare function exportWithRetry(
+  db: Db,
+  input: string[],
+  options?: { failAfterRows?: number },
+): Promise<void>;
+ // Create an in-memory DB for tests
+declare function createInMemoryDb(): InMemoryDb;
+// The source rows (three rows: a, b, and c)
+declare const input: string[]; 
+
+// A bad test. It looks only at whether the mock was called
+it("writes rows on retry", async () => {
+  const db = { query: vi.fn() };
+  await exportWithRetry(db, input);
+  expect(db.query).toHaveBeenCalled();
+});
+```
+
+The following test compares a result the callers can observe, the rows that were actually written, with the literal expected value `["a", "b", "c"]`.
+
+```
+// A test that checks behavior
+it("writes each source row once when a retry lands mid-run", async () => {
+  const db = createInMemoryDb();
+  await exportWithRetry(db, input, { failAfterRows: 2 });
+  expect(db.rows("export_rows").map((r) => r.source_row_id)).toEqual(["a", "b", "c"]);
+});
+```
+
+`failAfterRows: 2` makes the export fail once after it writes two rows, so that a retry lands mid-run.
+
+With an implementation whose retry starts again from the first row, the written rows change as follows.
+
+<span class="embed-block zenn-embedded zenn-embedded-mermaid"><iframe data-content="sequenceDiagram%0A%20%20%20%20participant%20E%20as%20exportWithRetry%0A%20%20%20%20participant%20D%20as%20export_rows%0A%20%20%20%20E-%3E%3ED%3A%20write%20a%0A%20%20%20%20E-%3E%3ED%3A%20write%20b%0A%20%20%20%20Note%20over%20E%3A%20fails%20after%20writing%20two%20rows%20and%20retries%0A%20%20%20%20E-%3E%3ED%3A%20write%20a%20again%0A%20%20%20%20E-%3E%3ED%3A%20write%20b%20again%0A%20%20%20%20E-%3E%3ED%3A%20write%20c%0A%20%20%20%20Note%20over%20D%3A%20rows%20%3D%20a%2C%20b%2C%20a%2C%20b%2C%20c" frameborder="0" id="zenn-embedded__419315abc2313" loading="lazy" scrolling="no" src="https://embed.zenn.studio/mermaid#zenn-embedded__419315abc2313"></iframe></span>
+
+<!-- book-diagram-link:start -->
+![View diagram 2](../diagrams/en/24-02.svg)
+
+[View diagram 2](../diagrams/en/24-02.md)
+<!-- book-diagram-link:end -->
+
+After the first `a` and `b` come `a`, `b`, and `c`, which the retry wrote again from the first row. So the actual rows are `["a", "b", "a", "b", "c"]`. These rows do not match the expected value `["a", "b", "c"]`, so the test fails.
+
+Whether a test can catch a bug depends on what it compares. So the agent must compare an observable result with a literal expected value.
+
+<a id="in-the-duplicate-rows-request%2C-%22fix-root-causes%22-and-%22prove-it-works%22-apply-at-the-steps-of-the-%22bug-fix%22-playbook"></a>
+
+
+## In the duplicate-rows request, "Fix Root Causes" and "Prove It Works" apply at the steps of the "Bug fix" Playbook
+
+Here is the duplicate-rows request from the start of the chapter again.
+
+```
+/poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
+```
+
+In this book, I read this request as one where two principles mainly apply within the steps of the "[Bug fix](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)" Playbook from [Chapter 11](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/ff12ce).
+
+In the request, "repro first" maps to "Fix Root Causes" and "verify" maps to "Prove It Works".
+
+<table class="code-line" data-line="649">
+<thead class="code-line" data-line="649">
+<tr class="code-line" data-line="649">
+<th>Step in "Bug fix"</th>
+<th>The principle used and how it changes the decision</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="651">
+<tr class="code-line" data-line="651">
+<td>1. Reproduce it yourself</td>
+<td>"Fix Root Causes". Set up the condition where a retry lands mid-run, and narrow the condition until the duplicates appear. Write the fix only after you reproduce the bug</td>
+</tr>
+<tr class="code-line" data-line="652">
+<td>2. Narrow the cause with a binary search</td>
+<td>"Fix Root Causes". List the candidate causes, halve the suspect range each time, add logs, and check the candidates one by one</td>
+</tr>
+<tr class="code-line" data-line="653">
+<td>3. Plan the fix</td>
+<td>"Fix Root Causes". Code that deletes duplicate rows after the write does not fix the reason the duplicates happen, so it treats only the symptom. If you make the write idempotent, check the write's design with the three questions of "<a href="https://github.com/cursor/plugins/blob/main/pstack/skills/principle-make-operations-idempotent/SKILL.md" rel="nofollow noopener noreferrer" target="_blank">Make Operations Idempotent</a>" in <a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4" target="_blank">Chapter 18</a>
+</td>
+</tr>
+<tr class="code-line" data-line="654">
+<td>4. Verify with the same environment and steps</td>
+<td>"Prove It Works". Check that the original repro passes and look at the rows that were actually written, not only whether the unit tests passed</td>
+</tr>
+<tr class="code-line" data-line="655">
+<td>5. Commit the failing repro first</td>
+<td>"Sequence Work into Verifiable Units". Record in the Git history the change from a failing test to a passing one</td>
+</tr>
+<tr class="code-line" data-line="656">
+<td>Reply</td>
+<td>"Prove It Works". Write the root cause and the fix, and paste output that shows the repro steps failing before the fix and passing after it</td>
+</tr>
+</tbody>
+</table>
+
+In step 2, the candidate causes the agent checks include, for example, the following.
+
+- The queue hands out the same job twice
+- The retry starts over from rows it already wrote, not from the row after the last one written
+- The write is not idempotent ([Chapter 18](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/e529e4))
+  - An operation is idempotent when running it any number of times gives the same result as running it once
+
+<a id="summary"></a>
+
+
+## Summary
+
+- "Prove It Works" does not accept "it compiles" or "the agent said so" as evidence. It looks directly at the real artifact, such as the written file or the running screen.
+- "Fix Root Causes" reproduces the bug, asks "why" until it reaches the cause, and fixes the cause instead of hiding the symptom with a guard.
+- "Sequence Work into Verifiable Units" confirms that tests and other checks pass for each small unit, and puts the commit with the failing repro before the fix commit.
+- "Test Behavior, Not Implementation" uses one question, "would it pass if everything returned undefined?", to find tests that cannot catch any bug.
+- In the duplicate-rows request, "Fix Root Causes" applies from the repro of "Bug fix" through planning the fix, and "Prove It Works" applies to verification and the reply.
+
+The next chapter, [Chapter 20](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0ec4d6), covers the two Delegation principles: "[Guard the Context Window](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-guard-the-context-window/SKILL.md)" and "[Never Block on the Human](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-never-block-on-the-human/SKILL.md)".
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](23-chapter.md) · [Next](25-chapter.md) · [简体中文](../zh-CN/24-chapter.md)

@@ -32,6 +32,9 @@ Use the first matching row:
 | Build a local control page for an authenticated bot webhook | `make-bot-ui` |
 | Create a project-local user-path verification Skill | `create-verification-skill` |
 | Audit and repair an existing verification Skill and feature map | `maintain-verification-skill` |
+| Answer setup or workflow help without starting the described work | `poteto-help` |
+| Prevent repeated repository mistakes with structural enforcement | `correct` |
+| Vet a measured performance number before reporting or acting on it | `benchmark-checklist` |
 | Capture recurring personal working conventions in a mode Skill | `automate-me` |
 | Create or revise a task-specific Skill | `authoring-a-skill` |
 | Reflect on conversation lessons and route them to scoped Skill changes | `reflect` |
@@ -99,6 +102,12 @@ bounded task.
   panels; absent it, inherit the runtime model. Portable workflow text does
   not name concrete providers or model identifiers.
 - Report fallbacks and evidence gaps where they affect confidence.
+- Before trusting a measured performance or eval result, apply
+  [Explain the Number](../principle-explain-the-number/SKILL.md). Performance
+  comparisons use [benchmark-checklist](../benchmark-checklist/SKILL.md).
+- New delegated work defaults to a fresh session with consolidated scope.
+  Read [the handoff contract](references/subagent-handoff.md) for permitted
+  reuse and host-specific lifecycle boundaries.
 
 ## Output
 

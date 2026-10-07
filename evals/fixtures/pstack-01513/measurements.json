@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "kind": "synthetic adversarial receipts, not benchmark observations",
+  "cases": [
+    {
+      "id": "failed_requests",
+      "before": {
+        "samplesMs": [
+          100,
+          101,
+          99,
+          102,
+          100
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "after": {
+        "samplesMs": [
+          5,
+          6,
+          5,
+          5,
+          6
+        ],
+        "errors": 1000,
+        "workRequested": 1000,
+        "workCompleted": 0,
+        "outputCorrect": false,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "sampleOrder": "A,B,A,B,A,B,A,B,A,B",
+      "data": "identical 1000-item fixture",
+      "kind": "synthetic adversarial receipt"
+    },
+    {
+      "id": "skipped_work",
+      "before": {
+        "samplesMs": [
+          100,
+          101,
+          99,
+          102,
+          100
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "after": {
+        "samplesMs": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 0,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "generator constructed but never iterated",
+        "limiter": "no independent profile recorded"
+      },
+      "sampleOrder": "A,B,A,B,A,B,A,B,A,B",
+      "data": "identical 1000-item fixture",
+      "kind": "synthetic adversarial receipt"
+    },
+    {
+      "id": "unawaited_work",
+      "before": {
+        "samplesMs": [
+          100,
+          101,
+          99,
+          102,
+          100
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "after": {
+        "samplesMs": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 0,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "promises created, timer stopped before awaits",
+        "limiter": "no independent profile recorded"
+      },
+      "sampleOrder": "A,B,A,B,A,B,A,B,A,B",
+      "data": "identical 1000-item fixture",
+      "kind": "synthetic adversarial receipt"
+    },
+    {
+      "id": "untuned_side",
+      "before": {
+        "samplesMs": [
+          100,
+          101,
+          99,
+          102,
+          100
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "after": {
+        "samplesMs": [
+          50,
+          50,
+          51,
+          50,
+          49
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=1000",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "sampleOrder": "A,B,A,B,A,B,A,B,A,B",
+      "data": "identical 1000-item fixture",
+      "kind": "synthetic adversarial receipt"
+    },
+    {
+      "id": "overlapping_noise",
+      "before": {
+        "samplesMs": [
+          100,
+          101,
+          99,
+          102,
+          100
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "after": {
+        "samplesMs": [
+          99,
+          103,
+          100,
+          98,
+          101
+        ],
+        "errors": 0,
+        "workRequested": 1000,
+        "workCompleted": 1000,
+        "outputCorrect": true,
+        "configuration": "release, warmed cache, batch=100",
+        "timedRegion": "all work awaited before stop",
+        "limiter": "no independent profile recorded"
+      },
+      "sampleOrder": "A,B,A,B,A,B,A,B,A,B",
+      "data": "identical 1000-item fixture",
+      "kind": "synthetic adversarial receipt"
+    }
+  ]
+}

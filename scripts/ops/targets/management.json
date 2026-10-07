@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "project": "oh-my-stack",
+  "origin": "git@github.com:williamwue/oh-my-stack.git",
+  "applicationRoot": ".",
+  "cloudAccess": "official-provider-tools",
+  "credentialPolicy": "native login or explicitly authorized configuration outside repositories; no application env loading",
+  "verificationDate": "2026-10-01",
+  "providers": {
+    "github": {
+      "state": "bound"
+    },
+    "vercel": {
+      "state": "unbound"
+    },
+    "cloudflare": {
+      "state": "unbound"
+    },
+    "supabase": {
+      "state": "unbound"
+    },
+    "alicloud": {
+      "state": "unbound"
+    },
+    "clerk": {
+      "state": "unbound"
+    },
+    "zpay": {
+      "state": "unbound"
+    }
+  }
+}

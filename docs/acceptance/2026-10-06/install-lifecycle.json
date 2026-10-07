@@ -1,0 +1,112 @@
+{
+  "baseline": "published GitHub v0.6.0 assets, downloaded and checksum verified",
+  "candidate": "local WORKTREE 0.7.0, unpublished",
+  "outcomes": [
+    {
+      "target": "codex",
+      "destination": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/lifecycle/codex",
+      "checks": [
+        {
+          "action": "install",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": false
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        },
+        {
+          "action": "rollback",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": true
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        }
+      ],
+      "candidateContentSha256": "67ac0f5fe6972c5f18f569d1a425714eb37e52e6c14f830b63332746ef442726"
+    },
+    {
+      "target": "omp",
+      "destination": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/lifecycle/omp",
+      "checks": [
+        {
+          "action": "install",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": false
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        },
+        {
+          "action": "rollback",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": true
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        }
+      ],
+      "candidateContentSha256": "779df40e9e8597c179c1303f5f81af0bd1e18633545c057c38157c86b8b4a3f1"
+    },
+    {
+      "target": "claude-code",
+      "destination": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/lifecycle/claude-code",
+      "checks": [
+        {
+          "action": "install",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": false
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        },
+        {
+          "action": "rollback",
+          "version": "0.6.0",
+          "manifestTree": "verified",
+          "catalogCount": 74,
+          "planReadOnly": true
+        },
+        {
+          "action": "update",
+          "version": "0.7.0",
+          "manifestTree": "verified",
+          "catalogCount": 78,
+          "planReadOnly": true
+        }
+      ],
+      "candidateContentSha256": "9b3e78a3fc17e67c24a9aa257b767e932845db03340417a4c046db3f869d94c4"
+    }
+  ],
+  "personalProfiles": "not targeted"
+}

@@ -8,10 +8,22 @@ import test from "node:test";
 import { filesUnder } from "../tools/generate.mjs";
 import {
   validateExecutableInventory,
+  validateLocalMarkdownLinks,
   validateRuntimeEvidence,
   validateSemanticDerivations,
   validateUpstreamState,
 } from "../tools/validate.mjs";
+
+test("literal fenced glossary examples do not require files, but real links still do", async () => fixture(async (root) => {
+  await put(root, "README.md", "# Guide\n\n````md\n[Ordering](./src/ordering/GLOSSARY.md)\n```\n[Billing](./src/billing/GLOSSARY.md)\n````\n\n~~~md\n[Example](./missing.md)\n~~~\n");
+  await validateLocalMarkdownLinks(root);
+  await put(root, "README.md", "# Guide\n\n```md\n[Example](./missing.md)\n```\n\n[Real resource](./missing.md)\n");
+  await assert.rejects(validateLocalMarkdownLinks(root), /missing local link/);
+  await put(root, "missing.md", "# Resource\n");
+  await validateLocalMarkdownLinks(root);
+  await put(root, "README.md", "# Guide\n\n[Outside](../outside.md)\n");
+  await assert.rejects(validateLocalMarkdownLinks(root), /link escapes repository/);
+}));
 
 async function fixture(callback) {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-validator-"));

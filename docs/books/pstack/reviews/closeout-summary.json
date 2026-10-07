@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-03",
+  "resume_branch": "docs/pstack-book-bilingual",
+  "resume_base": "52bec251d379799afc56a3eb538ad82e68908020",
+  "inherited": "48English and48Chinese entries,96source snapshots,31bilingual diagram pairs, semantic review and local reading QA",
+  "new_work": "Fix repository check conflicts with immutable historical evidence; preserve exact historical bytes, hash-bound path exception, narrow Markdown style rules and current instruction formatting",
+  "redone": {
+    "checks": "npm run check; complete book gate; source audit; Python audit tests",
+    "reason": "Validator and lint configuration changed; verify inherited book and current repository together"
+  },
+  "checks": {
+    "npm_run_check": {
+      "exit_code": 0,
+      "node_tests": 211,
+      "node_failures": 0,
+      "markdown_files": 690,
+      "markdown_issues": 0,
+      "scope": "earlier shared workspace before concurrent prototype document arrived"
+    },
+    "complete_book": {
+      "ready": 48,
+      "warnings": []
+    },
+    "source_audit": {
+      "source_entries": 96,
+      "translations": 48,
+      "code_blocks": 444,
+      "issues": []
+    },
+    "python_tests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "regression_before": {
+      "passed": 5,
+      "failed": 1,
+      "reason": "Original historical source rejected for absolute home path"
+    },
+    "regression_after": {
+      "passed": 6,
+      "failed": 0
+    }
+  },
+  "preserved_history": {
+    "docs/operations/cloud-management-acceptance-2026-10-01.md": "b05a97a10e579751b187d5e5d06e7150841aea9f85e4c994931594ec101dcce8",
+    "docs/omp-18.2.9-live-test-plan.md": "17c558f6a5ccb28c6c2434b1877bb94ea9151d7f7339cc5c2160a4be7876b7ac"
+  },
+  "boundaries": [
+    "Root-only implementation; independent read-only closeout review completed with no remaining findings.",
+    "Unrelated GitHub provider work preserved.",
+    "No commit, push, PR, merge or deployment performed.",
+    "Human editorial review and GitHub-hosted rendering remain unperformed."
+  ],
+  "independent_review": "closeout-review.json",
+  "current_acceptance": {
+    "isolated_report": "closeout-isolated-summary.json",
+    "isolated_node_tests": 191,
+    "isolated_node_failures": 0,
+    "shared_validate_exit_code": 1,
+    "shared_failure": "new concurrent prototype document links to missing github-workflow.md"
+  },
+  "isolation_retry": "Archive-only verification could not run release check withoutGit metadata; preserved closeout-isolated-archive-attempt.log, then used a local clone. No commit or remote action."
+}

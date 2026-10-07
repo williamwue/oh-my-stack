@@ -1,0 +1,31 @@
+# Port pstack 0.15.13 into OMS 0.7.0
+
+This update adds correct, poteto-help, benchmark-checklist, and
+principle-explain-the-number, and adapts the reviewed upstream workflow changes
+to Codex, OMP and Claude Code. Public catalogs contain 78 Skills. Help resolves
+the installed catalog and owning procedure; correction proves enforcement
+against a real historical failure; performance claims check completed work,
+failures, comparable tuning and noise.
+
+All 33 upstream changed paths have explicit decisions. Immutable snapshots,
+licenses, source ownership transitions and hashes preserve attribution.
+Generated handoff instructions include optional performance delegates. PR
+instructions prefer supported host-owned tools while retaining bounded adapter
+authority gates. Existing scheduler and publication boundaries remain intact.
+
+## Verification
+
+- Full repository check: 241 passing tests, deterministic packages, provenance,
+  generation, conformance, books and Markdown validation.
+- Three-host 0.6.0 → 0.7.0 → 0.6.0 → 0.7.0 isolated lifecycle verified.
+- Codex native help, historical correction and adversarial measurement checks;
+  Claude native help; OMP native install, doctor and four new Skill reads.
+- Additional CI book gate: 96 source rows, 444 code blocks, 48 translations,
+  complete validation and five Python tests passed on local Node 22.
+- Three original review findings fixed; three fresh repair reviews found none.
+
+See [candidate acceptance](docs/acceptance/2026-10-06/README.md) and
+[continuation record](docs/acceptance/2026-10-06/continuation.md) for the current
+OMP model result, limits, and the exact candidate inventory. Local checks do not
+claim remote Linux CI or a clean tag build. Publication and personal installation
+remain separate operations; existing development dependency advisories remain.

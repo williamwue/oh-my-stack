@@ -1,0 +1,18 @@
+[
+  {
+    "language": "ja",
+    "source_url": "https://static.zenn.studio/user-upload/802fac6e0ca9-20260926.png",
+    "file": "signup-options-ja.png",
+    "sha256": "9703f5882172a9b29ede220eb70e12320e380e3c16a5141c1eeaf52f21688b8a",
+    "attribution": "kaito, pstack book chapter17 (entry22)",
+    "observed_on": "2026-10-03"
+  },
+  {
+    "language": "en",
+    "source_url": "https://static.zenn.studio/user-upload/50533bdd013e-20261003.png",
+    "file": "signup-options-en.png",
+    "sha256": "5d2531fe2f3a9d5e55f733c9f0b1144d2bf155aa12ea79065653e8131d23a9e3",
+    "attribution": "kaito, pstack book chapter17 (entry22)",
+    "observed_on": "2026-10-03"
+  }
+]

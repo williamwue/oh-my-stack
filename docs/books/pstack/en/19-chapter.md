@@ -1,0 +1,407 @@
+# Chapter 15: Delegate long-running work to the agent
+
+[Contents](README.md) · [Previous](18-chapter.md) · [Next](20-chapter.md) · [简体中文](../zh-CN/19-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/7d7609) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/305f88)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+This chapter covers the following four Playbooks.
+
+1. [Autonomous run](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/autonomous-run.md)
+2. [Pause safely](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/pause-safely.md)
+3. [Session pickup](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/session-pickup.md)
+4. [Worktree and simulator cleanup](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/worktree-cleanup.md)
+
+All four Playbooks <strong>handle one long piece of work that you delegate to the agent</strong>. Their roles are as follows.
+
+- Carry one task through to the end without stopping
+- Stop partway so that another agent can resume
+- Clean up unneeded worktrees and other leftovers after the work
+
+<aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
+<ul class="code-line" data-line="14">
+<li class="code-line" data-line="14">A <strong>worktree</strong> is a git feature that creates several working directories from one repository, so you can check out different branches at the same time.</li>
+</ul>
+</div></aside>
+
+The bundled guide's page on overnight work ([`docs/guide/07-overnight.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/07-overnight.md)) lists three conditions for work that you delegate while you sleep. The conditions are as follows.
+
+- <strong>A finish condition you can verify</strong>
+- <strong>An isolated worktree</strong>
+- <strong>A decision record to audit in the morning</strong>
+
+For example, "zero old callers" is a finish condition you can verify, but "work for four hours" does not meet this condition.
+
+This chapter sorts the four Playbooks by role, then explains when to use each one, its steps, and its key point.
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter is organized as follows.
+
+- The four Playbooks split one long piece of work into "continue, stop and resume, and clean up"
+- "Autonomous run" sets the finish condition first and keeps working without stopping until the condition is met
+- "Pause safely" stops the work at a point where an agent that knows nothing can resume
+- "Session pickup" trusts the previous agent's record and starts from where the work left off
+- "Worktree and simulator cleanup" proves that a worktree is "not in use" before it deletes the worktree
+- Summary
+
+<a id="the-four-playbooks-split-one-long-piece-of-work-into-%22continue%2C-stop-and-resume%2C-and-clean-up%22"></a>
+
+
+## The four Playbooks split one long piece of work into "continue, stop and resume, and clean up"
+
+The four Playbooks in this chapter fall into the <strong>three roles</strong> in the following table.
+
+<table class="code-line" data-line="42">
+<thead class="code-line" data-line="42">
+<tr class="code-line" data-line="42">
+<th>Role</th>
+<th>Playbook</th>
+<th>What it is responsible for</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="44">
+<tr class="code-line" data-line="44">
+<td>Carry one task through to the end without stopping</td>
+<td>"Autonomous run"</td>
+<td>The finish condition</td>
+</tr>
+<tr class="code-line" data-line="45">
+<td>Stop and resume</td>
+<td>"Pause safely"</td>
+<td>A stop in a state that another agent can resume</td>
+</tr>
+<tr class="code-line" data-line="46">
+<td>Stop and resume</td>
+<td>"Session pickup"</td>
+<td>Where to resume the previous work</td>
+</tr>
+<tr class="code-line" data-line="47">
+<td>Clean up</td>
+<td>"Worktree and simulator cleanup"</td>
+<td>Reclaimed disk space, and a check before deletion that each item is safe to delete</td>
+</tr>
+</tbody>
+</table>
+
+<a id="tools-that-appear-throughout-the-chapter"></a>
+
+
+### Tools that appear throughout the chapter
+
+The Playbooks in this chapter use the following tools again and again.
+
+- `/loop` is a built-in Cursor command that starts the agent at a fixed interval or on an event, such as the end of a CI run.
+- `decisions.tsv` is the decision record that `/show-me-your-work` ([Chapter 28](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/6638a6)) writes, with one decision per line.
+
+For long work, or work that the agent does while you are away, the agent records its decisions with `/show-me-your-work`. In the morning, you do not reread all of the night's work. <strong>You audit the decisions in this record, `decisions.tsv`.</strong>
+
+<a id="%22autonomous-run%22-sets-the-finish-condition-first-and-keeps-working-without-stopping-until-the-condition-is-met"></a>
+
+
+## "Autonomous run" sets the finish condition first and keeps working without stopping until the condition is met
+
+"Autonomous run" is the Playbook that <strong>carries a long task to completion without stopping</strong>, for requests like "loop until it's done" or "use /loop until X".
+
+<a id="six-steps"></a>
+
+
+### Six steps
+
+The steps are as follows.
+
+1. Set the finish condition
+2. Decide how the agent wakes up
+3. Make one needed change at a time based on evidence, and verify the result
+4. Handle what you find along the way yourself
+5. Record the decisions with `/show-me-your-work` every time
+6. Stop when the finish condition is met
+
+The sections below look at each step in turn.
+
+<a id="1.-set-the-finish-condition"></a>
+
+
+#### 1. Set the finish condition
+
+Before the first iteration, write the finish condition in a form such as "the tests pass" or "all N PRs are merged".
+
+<a id="2.-decide-how-the-agent-wakes-up"></a>
+
+
+#### 2. Decide how the agent wakes up
+
+Set up the wake-up with `/loop`. If there is an event to wait for, such as the end of a CI run or a merge, add a watcher subagent that monitors the event and wakes the agent. Also set up a periodic wake-up at a long interval as a backup. If there is no event to wait for, wake the agent at a fixed interval that matches how often a recheck of the result is worthwhile.
+
+<a id="3.-make-one-needed-change-at-a-time-based-on-evidence%2C-and-verify-the-result"></a>
+
+
+#### 3. Make one needed change at a time based on evidence, and verify the result
+
+Make the smallest change the evidence calls for. After the change, verify whether the work moved closer to the finish condition set at the start. If it did, commit. If it did not, revert the change. The principle "[Sequence Work into Verifiable Units](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-sequence-verifiable-units/SKILL.md)" asks for this cycle ([Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914)).
+
+<a id="4.-handle-what-you-find-along-the-way-yourself"></a>
+
+
+#### 4. Handle what you find along the way yourself
+
+The agent fixes related bugs and flaky checks itself, and puts fixes that stray from the main task in separate PRs. It asks a human only about irreversible operations, decisions that an experiment cannot settle, and real dead ends.
+
+<a id="5.-record-the-decisions-with-%2Fshow-me-your-work-every-time"></a>
+
+
+#### 5. Record the decisions with `/show-me-your-work` every time
+
+On every iteration, record one row for what changed and whether the finish condition moved closer.
+
+<a id="6.-stop-when-the-finish-condition-is-met"></a>
+
+
+#### 6. Stop when the finish condition is met
+
+If the condition is not met, try another approach. Do not lower the condition and call the work finished. If the agent cannot make progress at all, it reports the situation.
+
+<a id="what-the-reply-includes"></a>
+
+
+#### What the reply includes
+
+The reply includes the following items.
+
+- The finish condition
+- The number of loop iterations
+- The changes kept in the end, and the changes reverted because they did not move the work closer to the condition
+- The final state of the condition
+
+<a id="the-key-point-is-to-make-the-finish-condition-a-predicate-you-can-verify"></a>
+
+
+### The key point is to make the finish condition a predicate you can verify
+
+A predicate is a condition whose result you can judge as true or false.
+
+As I said at the start of the chapter, <strong>a length of time is not a finish condition</strong>. "Work for four hours" gives nothing to verify, and all that is left in the morning is four hours of activity. The bundled guide's pitfalls page ([`docs/guide/10-recipes-and-pitfalls.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/10-recipes-and-pitfalls.md)) also lists a vague condition like "make it better" as a failure case. So the agent sets the condition in step 1 and keeps the same condition until it stops in step 6.
+
+<a id="%22pause-safely%22-stops-the-work-at-a-point-where-an-agent-that-knows-nothing-can-resume"></a>
+
+
+## "Pause safely" stops the work at a point where an agent that knows nothing can resume
+
+"Pause safely" is the Playbook to use when someone tells the agent to stop, when Cursor is about to restart, or when compaction is near. Compaction is the process that summarizes the part of the conversation that no longer fits into the context. <strong>The Playbook stops the work in a state that even an agent that knows nothing can resume.</strong> It runs only on an explicit instruction, and it does not stop when the user says "keep going" or "don't stop".
+
+<a id="four-steps"></a>
+
+
+### Four steps
+
+The Playbook has the following four steps.
+
+1. <strong>Stop at a safe point.</strong> Finish or revert the current smallest step, and start nothing new.
+2. <strong>Do not do anything irreversible only to stop.</strong> Do not create a PR or push, unless a PR already exists.
+3. <strong>Make the work durable.</strong> Squash the uncommitted edits into one commit that starts with `wip:`.
+4. <strong>Write the resume note outside the context.</strong> Write the intent, the progress, the next step, and the caveats. If a `/show-me-your-work` record exists, point to it instead of duplicating it.
+
+The reply includes the following items.
+
+- Where in the loop the agent is
+- The information recorded in files and commits, and the state, intent, caveats, and other parts of the work that still live only in the conversation's context
+- The commits it made
+- The first action on resume
+
+<a id="the-key-point-is-to-move-%22what-exists-only-in-the-agent's-head%22-into-files"></a>
+
+
+### The key point is to move "what exists only in the agent's head" into files
+
+The agent's context disappears at compaction or at the end of a session. In its reply, the agent writes "what is on disk" separately from "what exists only in its head". What is on disk is the information recorded in files and commits. What exists only in its head is the state, intent, and caveats of the work. This separation <strong>shows you what the agent failed to move into files or commits</strong>.
+
+The `wip:` commit saves the half-edited code to disk, and the resume note saves the intent and caveats that cannot go into code. You can read this Playbook as a procedure that applies "the codebase is memory" from [Chapter 4](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3cc0dd) to a single piece of work.
+
+<a id="%22session-pickup%22-trusts-the-previous-agent's-record-and-starts-from-where-the-work-left-off"></a>
+
+
+## "Session pickup" trusts the previous agent's record and starts from where the work left off
+
+"Session pickup" is the Playbook that takes over work the previous agent left unfinished, from a transcript, a Cloud Agents URL, or a pushed branch. It is the counterpart of "Pause safely".
+
+To take over one specific piece of work, use "Session pickup". <strong>To gather context from several chats, use [`/recall`](https://github.com/cursor/plugins/blob/main/pstack/skills/recall/SKILL.md)</strong> ([Chapter 22](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/031877)).
+
+<a id="five-steps"></a>
+
+
+### Five steps
+
+The Playbook has the following five steps.
+
+1. <strong>Find the previous record</strong>
+   - Look in a transcript in the current workspace, a Cloud Agents URL, or a pushed branch
+   - Have a subagent read a long transcript, and keep only the summary in the main thread, which is the conversation that calls the subagents. The principle "[Guard the Context Window](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-guard-the-context-window/SKILL.md)" asks for this delegation ([Chapter 20](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/0ec4d6))
+2. <strong>Rebuild the state of the work</strong>
+   - Find out the working branch, the changes already in (verify with `git log` and `git diff` against the base), the remaining TODOs, and the decisions already made
+3. <strong>Compare what is done with what remains</strong>
+   - Compare what was planned with what is done to find where to resume, and do not repeat finished work
+4. <strong>Hand the remaining work to the Playbook that fits it</strong>
+   - From here on, the Playbook that fits the work takes over
+5. <strong>Verify the inherited claims against the real thing</strong>
+   - Do not treat the previous agent's self-report of "it succeeded" as proof. Verify the inherited changes against the real artifact, as the principle "[Prove It Works](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md)" asks ([Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914))
+
+The reply includes the following items.
+
+- Where the previous agent stopped
+- What it took over and what it redid
+- The resume point
+- The result
+
+<a id="the-key-point-is-to-treat-the-previous-record-as-trusted-input"></a>
+
+
+### The key point is to treat the previous record as trusted input
+
+<strong>The agent that resumes uses the previous record as input as it is. It does not derive the record's contents again on its own.</strong>
+
+The Playbook asks the agent to use the previous record to tell finished work from remaining work, and to resume from what remains.
+
+For example, if the previous agent reproduced a bug and left the steps, screens, and logs, the next agent does not repeat the same steps. It reads that record and resumes from the investigation of the cause or from the fix.
+
+<a id="how-to-write-the-request%3A-ask-the-agent-to-read-the-decision-log-and-continue-from-the-finished-work"></a>
+
+
+### How to write the request: ask the agent to read the decision log and continue from the finished work
+
+The bundled guide's example request asks the agent to take over a branch, read the decision log to find out what is done, and not redo finished work.
+
+```
+/poteto-mode take over this branch. read the decision log, figure out what's done, and continue from there. don't redo finished work.
+```
+
+<a id="%22worktree-and-simulator-cleanup%22-proves-that-a-worktree-is-%22not-in-use%22-before-it-deletes-the-worktree"></a>
+
+
+## "Worktree and simulator cleanup" proves that a worktree is "not in use" before it deletes the worktree
+
+"Worktree and simulator cleanup" is the Playbook that frees disk space by deleting merged or abandoned git worktrees and old iOS simulators.
+
+<a id="six-steps-1"></a>
+
+
+### Six steps
+
+The steps are as follows.
+
+1. Record and audit
+2. The classification is advice, not permission
+3. Verify usage before you delete
+4. Stop before an irreversible loss
+5. Delete what is confirmed
+6. Clean up the other places to reclaim, such as simulators
+
+The sections below look at each step in turn.
+
+<a id="1.-record-and-audit"></a>
+
+
+#### 1. Record and audit
+
+Record the current disk usage with `df -h /`, and run [`worktree-audit.sh`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/scripts/worktree-audit.sh). The principle "[Build the Lever](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-build-the-lever/SKILL.md)" asks for this record ([Chapter 17](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/97d863)).
+
+`worktree-audit.sh` is a read-only script that deletes nothing. It checks the following items.
+
+- The size of each worktree
+- The age of each worktree, which is the time since its last update
+- Whether the worktree is merged
+- Uncommitted edits
+- The PR status
+- The chat that last touched it
+
+Based on these items, the script proposes a classification.
+
+<a id="2.-the-classification-is-advice%2C-not-permission"></a>
+
+
+#### 2. The classification is advice, not permission
+
+The script's classification proposes candidates for deletion. Leave out any worktree that a pinned or active chat is using. A pinned or active chat is a chat with the agent that appears in the sidebar. In the past, the script has marked a worktree that a pinned chat was using as safe. So check the candidates against the list of chats.
+
+<a id="3.-verify-usage-before-you-delete"></a>
+
+
+#### 3. Verify usage before you delete
+
+For a doubtful worktree, have a subagent read the transcript to verify whether the worktree is in use.
+
+<a id="4.-stop-before-an-irreversible-loss"></a>
+
+
+#### 4. Stop before an irreversible loss
+
+For a worktree with uncommitted work, show the user the diff and get a decision.
+
+<a id="5.-delete-what-is-confirmed"></a>
+
+
+#### 5. Delete what is confirmed
+
+Delete with `git worktree remove` and `git worktree prune`. The branch stays, so no commits are lost.
+
+<a id="6.-clean-up-the-other-places-to-reclaim%2C-such-as-simulators"></a>
+
+
+#### 6. Clean up the other places to reclaim, such as simulators
+
+Delete old simulators and runtimes, and the build cache if needed.
+
+<a id="what-the-reply-includes-1"></a>
+
+
+#### What the reply includes
+
+The reply includes the following items.
+
+- The free disk space before and after the deletion, and the space gained
+- The worktrees it deleted
+- What it kept, and the reason for keeping each item
+
+<a id="the-key-point-is-that-the-gate-before-deletion-is-itself-the-review"></a>
+
+
+### The key point is that the gate before deletion is itself the review
+
+When the agent deletes a worktree or a simulator, the user can lose a working environment or uncommitted changes. So before it deletes anything, the agent confirms that the item is not in use and has no uncommitted changes. This check is the gate that keeps the agent from deleting the wrong thing.
+
+In other Playbooks, code review catches mistakes. This Playbook is the only one that deletes worktrees and simulators on the user's machine with no code review. So <strong>the gate in steps 2 to 4, which verifies that no item is in use and that no work is uncommitted, is itself the review</strong>.
+
+<a id="how-to-write-the-request%3A-ask-the-agent-to-%22prune-the-worktrees-that-are-safe-to-prune%22"></a>
+
+
+### How to write the request: ask the agent to "prune the worktrees that are safe to prune"
+
+The bundled guide's example request asks what is using the disk, and asks the agent to delete only the worktrees that are safe to delete.
+
+```
+/poteto-mode what's eating my disk? prune the worktrees that are safe to prune.
+```
+
+<a id="summary"></a>
+
+
+## Summary
+
+- Of the four Playbooks, "Autonomous run" carries one task to the end, "Pause safely" and "Session pickup" stop the work and resume it, and "Worktree and simulator cleanup" handles the cleanup.
+- "Autonomous run" sets a finish condition you can verify and keeps working without stopping until the condition is met.
+- "Pause safely" moves what exists only in the agent's head into a `wip:` commit and a resume note, then stops.
+- "Session pickup" trusts the previous record, does not redo work, and verifies the inherited claims against the real artifact.
+- "Worktree and simulator cleanup" proves that an item is not in use before it deletes the item. The gate before deletion is itself the review.
+
+The next chapter, [Chapter 16](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/3b2bef), looks at four Playbooks for planning many PRs and running them with several agents.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](18-chapter.md) · [Next](20-chapter.md) · [简体中文](../zh-CN/19-chapter.md)

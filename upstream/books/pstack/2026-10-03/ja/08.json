@@ -1,0 +1,30 @@
+{
+  "chapter": {
+    "id": 165559,
+    "post_type": "Chapter",
+    "is_free": false,
+    "slug": "a5fb04",
+    "body_letters_count": 2136,
+    "source_repo_updated_at": null,
+    "body_updated_at": "2026-09-29T21:10:57.969+09:00",
+    "filename": null,
+    "position": 8,
+    "path": "/sc30gsw/books/080faba713547b/viewer/a5fb04",
+    "title": "第2部 pstackとは何か",
+    "body_html": "<p data-line=\"0\" class=\"code-line\">第2部では、「<strong>pstackは、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/86acbc\" target=\"_blank\">第1部</a>の条件をどういう部品で実現しているか</strong>」を、pstackの設計を通して解説します。</p>\n<p data-line=\"2\" class=\"code-line\">結論から言うと、pstackは、<strong>入口を一つにし、中身を必要なときに必要な分だけ読む設計</strong>で、この条件を実現しています。</p>\n<p data-line=\"4\" class=\"code-line\">利用者が覚える入口は、基本的に <a href=\"https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><code>/poteto-mode</code></a> だけです。</p>\n<p data-line=\"6\" class=\"code-line\"><code>/poteto-mode</code> が依頼の種類を見てPlaybookを1冊選び、Playbookが作業の順番を決め、各手順で必要なSkillを呼びます。その間、Principleが「この一手を採るか」「まだ終わりではないか」の判断基準として働きます。</p>\n<p data-line=\"8\" class=\"code-line\">すべてを最初に読み込むわけではなく、Playbookは依頼に合う1冊だけを開き、Principleは最初に一覧だけを読んで、条件に該当したときに本文を読みます。この設計が、<strong>手順の厳密さとトークン効率の両立</strong>を支えています。</p>\n<h2 id=\"%E7%AC%AC2%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" data-line=\"10\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E7%AC%AC2%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8\" aria-hidden=\"true\"></a> 第2部で分かること</h2>\n<p data-line=\"12\" class=\"code-line\">第2部を読むと、次のことが分かります。</p>\n<ul data-line=\"14\" class=\"code-line\">\n<li data-line=\"14\" class=\"code-line\">pstackが解こうとしている問題と、何を目指して作られたか</li>\n<li data-line=\"15\" class=\"code-line\">\n<code>/poteto-mode</code> に依頼を渡すと何が起きるか。良い依頼の書き方</li>\n<li data-line=\"16\" class=\"code-line\">Playbook、Skill、Principleがそれぞれ何を担当し、どう異なるのか</li>\n<li data-line=\"17\" class=\"code-line\">手順と判断基準を「必要なときに呼び出す」仕組みと、その利点</li>\n</ul>\n<p data-line=\"19\" class=\"code-line\"><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/72f8ee\" target=\"_blank\">第3部</a>から<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/2a4af5\" target=\"_blank\">第5部</a>は、pstackの全項目を扱う詳細編です。第2部は、その詳細を読むための地図にあたります。部品の役割分担をつかんでおくと、各項目が「どの部品の、どの役割を担っているか」を迷わずに読めます。</p>\n<h2 id=\"%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" data-line=\"21\" class=\"code-line\">\n<a class=\"header-anchor-link\" href=\"#%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0\" aria-hidden=\"true\"></a> この部の章</h2>\n<table data-line=\"23\" class=\"code-line\">\n<thead data-line=\"23\" class=\"code-line\">\n<tr data-line=\"23\" class=\"code-line\">\n<th>章</th>\n<th>役割</th>\n</tr>\n</thead>\n<tbody data-line=\"25\" class=\"code-line\">\n<tr data-line=\"25\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/33f073\" target=\"_blank\">第6章 pstackは何を解決するのか</a></td>\n<td>pstackの全体像と目的。何を問題とし、何を目指しているか</td>\n</tr>\n<tr data-line=\"26\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4fda7d\" target=\"_blank\">第7章 /poteto-mode ― 依頼を適切な進め方につなぐ入口</a></td>\n<td>入口の使い方。依頼がPlaybookに振り分けられる流れと、依頼の書き方</td>\n</tr>\n<tr data-line=\"27\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d\" target=\"_blank\">第8章 Playbook・Skill・Principleは何を担うのか</a></td>\n<td>3つの部品の役割と違い。サブエージェントの位置づけ</td>\n</tr>\n<tr data-line=\"28\" class=\"code-line\">\n<td><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/6b7496\" target=\"_blank\">第9章 pstackが必要なものだけを読み込む理由</a></td>\n<td>読み込みの設計。なぜ全部を常に読ませないのか</td>\n</tr>\n</tbody>\n</table>\n<p data-line=\"30\" class=\"code-line\"><a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/33f073\" target=\"_blank\">第6章</a>で「何のために」を、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/4fda7d\" target=\"_blank\">第7章</a>で「どう使うか」を、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d\" target=\"_blank\">第8章</a>と<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/6b7496\" target=\"_blank\">第9章</a>で「中はどうなっているか」を扱います。<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/d4d843\" target=\"_blank\">はじめに</a>で紹介した重複行の依頼は、<a href=\"https://zenn.dev/sc30gsw/books/080faba713547b/viewer/096f3d\" target=\"_blank\">第8章</a>で、『<a href=\"https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><strong>Bug fix</strong></a>』Playbookに振り分けられ、SkillとPrincipleが働く場所をたどる例として登場します。各章を順に読むことを推奨します。</p>\n",
+    "toc": [
+      {
+        "id": "%E7%AC%AC2%E9%83%A8%E3%81%A7%E5%88%86%E3%81%8B%E3%82%8B%E3%81%93%E3%81%A8",
+        "text": "第2部で分かること",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0",
+        "text": "この部の章",
+        "level": 2,
+        "children": []
+      }
+    ]
+  }
+}

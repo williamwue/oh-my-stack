@@ -1,0 +1,87 @@
+{
+  "intent": "Verify the three root-approved corrections from the original pstack 0.15.13 candidate review without expanding implementation scope. Original intent and findings are retained in sibling files.",
+  "priorScopeSha256": "63cb1e0be791386cc0560f1d08684da42ce71539e940548f16c37b5df2e12d3f",
+  "files": [
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "5c0e4d5965aee84a51bf543e1adf38896c85c3f1020e457d3213d418111d5601"
+    },
+    {
+      "path": "tests/pstack-01513.test.mjs",
+      "sha256": "6391c8b170ec2c11ce7500dabdfb47e8d4c70bbb9c4d63b243a2248e9a627924"
+    },
+    {
+      "path": "docs/skill-directory.md",
+      "sha256": "d6f6a096994eea1991aff4f695c6f8aefc6ce918b0e201394d95a1373dd9fd47"
+    },
+    {
+      "path": "src/core/skills/opening-a-pr/SKILL.md",
+      "sha256": "73b8de93ddc0c0ada4d7cf849c142a0ed4a7a54f6797ce8e9f30204a2fa197ba"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/references/subagent-handoff.md",
+      "sha256": "2ac1f382082f29ef32b45aa940f0c0aa79600755cd28c2316042aed4d5925a60"
+    },
+    {
+      "path": "packages/codex/skills/perf-issue/SKILL.md",
+      "sha256": "9aa5fed887931daba8f52ca18fa891d2489cbb3384ba8eafe345afac89052b79"
+    },
+    {
+      "path": "packages/codex/skills/hillclimb/SKILL.md",
+      "sha256": "1a39001d0de668b834c15c23c3452eb527e82974e0a2e3ac8f1f39f8df0cd902"
+    },
+    {
+      "path": "packages/codex/skills/opening-a-pr/SKILL.md",
+      "sha256": "74e75802b3ece962a7e907d882fbf747d738a9922f2ff50bb2d33f096155123f"
+    },
+    {
+      "path": "packages/codex/skills/babysit/SKILL.md",
+      "sha256": "eaa966dc50cfde3492a44a505079ea8e187023e008227dd5aae2ccceeb17891e"
+    },
+    {
+      "path": "packages/codex/skills/shipping/SKILL.md",
+      "sha256": "315afac04ecb2fd24a372511b812a479a59a8e9539cc8fd58d86be493d0efd27"
+    },
+    {
+      "path": "packages/omp/skills/perf-issue/SKILL.md",
+      "sha256": "aeb4c3e0def137134966fb59f593c7dafd65c46fb4cde40fefd8e5ac0cae7835"
+    },
+    {
+      "path": "packages/omp/skills/hillclimb/SKILL.md",
+      "sha256": "20cb21717933da1022a7018a25b784984a740e5307d205cb6f9f0090c8dbfea0"
+    },
+    {
+      "path": "packages/omp/skills/opening-a-pr/SKILL.md",
+      "sha256": "c26f38091763507342d1f4efa24e8077feebd6dbe9c1648f71b59d87b80a6e59"
+    },
+    {
+      "path": "packages/omp/skills/babysit/SKILL.md",
+      "sha256": "59658c0b3773e53eb7d3493a66eaef706331589ed450a839885f596f96aa45bf"
+    },
+    {
+      "path": "packages/omp/skills/shipping/SKILL.md",
+      "sha256": "591f97838160d03091a09731dfa0a5e2172eb35c445a2789475f2ae1499eea24"
+    },
+    {
+      "path": "packages/claude-code/skills/perf-issue/SKILL.md",
+      "sha256": "5b53d7e2591d773f18ad3e90d1d8761362be9f0a8703251735c2597a7e4a86e8"
+    },
+    {
+      "path": "packages/claude-code/skills/hillclimb/SKILL.md",
+      "sha256": "3113ae7c4ef0784d4ccad292d82b959fa614700d8b2d5c3da2d19331aa7fc8ad"
+    },
+    {
+      "path": "packages/claude-code/skills/opening-a-pr/SKILL.md",
+      "sha256": "c26f38091763507342d1f4efa24e8077feebd6dbe9c1648f71b59d87b80a6e59"
+    },
+    {
+      "path": "packages/claude-code/skills/babysit/SKILL.md",
+      "sha256": "59658c0b3773e53eb7d3493a66eaef706331589ed450a839885f596f96aa45bf"
+    },
+    {
+      "path": "packages/claude-code/skills/shipping/SKILL.md",
+      "sha256": "ab7bec889ee50d3d3b0ca9ee2f7e5b97a334343e55de2f7652eba52bd6a801ef"
+    }
+  ],
+  "scopeSha256": "5d5c3c4a98cebce03ec6b77cc1f6df5b1a5334edd46fbeac22026e05ea1f0865"
+}

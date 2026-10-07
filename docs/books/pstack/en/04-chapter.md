@@ -1,0 +1,293 @@
+# Chapter 2: Trust the artifact, not the agent
+
+[Contents](README.md) · [Previous](03-chapter.md) · [Next](05-chapter.md) · [简体中文](../zh-CN/04-chapter.md)
+
+By kaito · [Japanese original](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/27a183) · [Author’s English edition](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/950071)
+
+Source snapshot: 2026-10-03. The text below preserves the author’s English edition.
+
+[Authorization / 授权记录](../AUTHORIZATION.md)
+
+<!-- book-body:start -->
+When you hand work off to an agent, what you should trust is not the agent's report but <strong>the artifact the agent made</strong>.
+
+poteto presented this idea under "trust," the first theme of [the talk](https://x.com/poteto/status/2102050467505430555).
+
+This chapter explains what it means to trust the artifact and how pstack puts that idea into practice.
+
+<a id="how-this-chapter-is-organized"></a>
+
+
+## How this chapter is organized
+
+This chapter is organized as follows.
+
+- Why trust the artifact instead of the report?
+- What does verifying an artifact mean, and how does the agent do it?
+- What in a reply tells you that the work can be delegated?
+- How do you get closer to a state where you can delegate with confidence?
+- Summary: move your trust from the report to the artifact
+
+<a id="why-trust-the-artifact-instead-of-the-report%3F"></a>
+
+
+## Why trust the artifact instead of the report?
+
+You trust the artifact because <strong>a report does not prove that the work is correct</strong>.
+
+When the agent says "I fixed it" or "it should work," the statement tells you only that the agent judged it so. The report alone does not tell you what the judgment rests on: a passing test, an impression from reading the code, or the result of running it.  
+To verify that the work is correct, the human ends up reading the diff and trying the app by hand.
+
+If you add more work in this state, you only add more unverified changes. The talk also says that if you increase throughput without verification, <strong>what increases is bugs, not results</strong>. If quality holds only while a human sits beside the agent and watches, you have not delegated the work.
+
+On the other hand, if the agent can verify the artifact, the human no longer needs to believe the report or verify everything again by hand.
+
+pstack provides a verification mechanism for this purpose. In *The Complete Guide to pstack* [Part 1](https://x.com/poteto/status/2094457600259842065), poteto defines verification as "<strong>the agent being able to verify its own work</strong>."
+
+<a id="what-does-verifying-an-artifact-mean%2C-and-how-does-the-agent-do-it%3F"></a>
+
+
+## What does verifying an artifact mean, and how does the agent do it?
+
+Verifying an artifact means that <strong>the agent itself checks the real thing, in a way that leaves evidence</strong>.  
+In concrete terms, verification has to meet the following three conditions.
+
+1. <strong>It deals with the real thing.</strong> It checks the running app, the values actually written, and the files actually produced, not whether the build passed or how many tests ran
+2. <strong>The agent runs it itself.</strong> The agent operates and observes the app, instead of a human trying the app by hand
+3. <strong>Evidence remains.</strong> Something remains that a human can look at and judge later, such as screenshots, videos, traces, and command output
+
+<a id="it-deals-with-the-real-thing"></a>
+
+
+### It deals with the real thing
+
+The principle "[Prove It Works](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md)" sets the first condition. It opens with this sentence.
+
+> Verify every task output by checking the real thing directly. Do not infer from proxies, self-reports, or "it compiles."
+
+This sentence does not forbid builds or tests. What it forbids is treating "it compiles" as evidence that something works. In addition to builds and tests, the agent has to run the real thing and check it.
+
+The `description` in `SKILL.md` gives these three examples of ways to verify.
+
+1. Run the feature for real
+2. Read the actual values
+3. Look at the diff
+
+The principle also gives a cached screenshot as an example of an indirect check to avoid. A screenshot looks like an artifact, but if you cannot tell whether it shows the screen after this change, it is weak grounds for verification. From this, I read that when you look at an artifact, you should also check <strong>whether the artifact was made after this change</strong>.
+
+The same idea also applies when the agent hands work off to a subagent. In [`/poteto-mode`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md), the main agent does not pass on a subagent's report as is. It looks at the diff before it replies, so <strong>the reply the human receives has already been checked once against the artifact</strong> ([Chapter 8](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/cd0205)).
+
+<a id="the-agent-runs-it-itself"></a>
+
+
+### The agent runs it itself
+
+The "Bug fix" Playbook ([`playbooks/bug-fix.md`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)) supports the second condition. In this Playbook, the agent in charge uses tools that operate the app (the Playbook calls them control Skills). It reproduces the bug itself in the same environment where the bug happened, and verifies the fix in the same environment too ([Chapter 11](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/ff12ce)).
+
+pstack itself does not include tools that operate the app. `control-ui`, for browsers and Electron, and `control-cli`, for CLIs and TUIs, live in a separate plugin, [`cursor-team-kit`](https://github.com/cursor/plugins/tree/main/cursor-team-kit). [Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c) and [Chapter 36](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/c9901e) cover how to build a tool for your own app.
+
+The agent may ask the user to reproduce the bug only under two conditions. The agent must first operate the app as far as its tools go, and it must state a specific reason why its tools cannot reach the target.
+
+For example, suppose login requires two-factor authentication on a physical device partway through, and the tools cannot get past that point. Then the agent asks the user to reproduce the bug, and says how far it got and why it stopped.
+
+I think this limit matters. The limit keeps open the option of asking a human, but it requires a reason. So the agent finds it harder to hand verification back to the human only because verification takes effort.
+
+<a id="evidence-remains"></a>
+
+
+### Evidence remains
+
+The section "[Script the check when you can](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md#script-the-check-when-you-can)" of "Prove It Works" supports the third condition.
+
+> The strongest proof is a deterministic script that re-runs the same comparison, not a one-time eyeball.
+
+This section recommends that you write a script that can re-run the same comparison and keep its results where a human can see them. The script is what you re-run. The results are what the human reads.
+
+You need to commit the evidence to the repository only in cases that need an audit of the history later, such as a large port or migration. [Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c) covers how to turn a check into a script.
+
+I feel this third condition is the one people overlook most. Even if the first and second conditions hold, without evidence only a report that says "I verified it" reaches the human. You are then back where this chapter started.
+
+When you build a verification mechanism, I think you should decide two things: whether the agent can verify the work, and <strong>whether the results of the verification stay somewhere a human can see them</strong>.
+
+<a id="what-in-a-reply-tells-you-that-the-work-can-be-delegated%3F"></a>
+
+
+## What in a reply tells you that the work can be delegated?
+
+When you read a reply, check <strong>whether each "I did X" claim comes with evidence that the agent verified it</strong>.
+
+For example, a reply that says only "I fixed the bug" gives you no way to judge whether it is correct. If it includes the output that showed the bug before the fix and the output that no longer shows it after the fix, the reader can judge for themselves.
+
+<a id="pstack-requires-evidence-or-a-%22guess%22-label-for-each-claim"></a>
+
+
+### pstack requires evidence or a "guess" label for each claim
+
+In pstack, `/poteto-mode` ([`skills/poteto-mode/SKILL.md`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md)), which you use to start work, has this rule for writing replies.
+
+> Every claim carries its evidence or its label in the same sentence. Measured, inferred, or guess.
+
+The agent attaches evidence when it has it, and when it has none, it writes "this is inferred" or "this is a guess." The verification page of the guide bundled with pstack ([`docs/guide/06-verify-and-ship.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/06-verify-and-ship.md)) uses the same idea to tell good replies from bad ones.
+
+> If a check couldn't run, a good reply says "inconclusive", and you should treat a confident reply without evidence as a red flag.
+
+For example, if there was no environment to run the tests and the reply still says "Fixed, no problems," treat that reply as a red flag.
+
+<a id="a-reply-with-evidence-lets-the-reader-judge-correctness"></a>
+
+
+### A reply with evidence lets the reader judge correctness
+
+The same page lists the check that fits each kind of change. The table below uses that list to set replies that give only a report beside replies that come with evidence. I made up the middle column for comparison.
+
+<table class="code-line" data-line="103">
+<thead class="code-line" data-line="103">
+<tr class="code-line" data-line="103">
+<th>Kind of change</th>
+<th>Reply with only a report</th>
+<th>Reply with evidence</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="105">
+<tr class="code-line" data-line="105">
+<td>CLI change</td>
+<td>"I added the flag"</td>
+<td>The output of running the actual command</td>
+</tr>
+<tr class="code-line" data-line="106">
+<td>UI change</td>
+<td>"I fixed the display"</td>
+<td>A record of operating the changed screen flow in the running app</td>
+</tr>
+<tr class="code-line" data-line="107">
+<td>Parser or migration</td>
+<td>"I fixed the conversion"</td>
+<td>The result of feeding saved inputs through again</td>
+</tr>
+<tr class="code-line" data-line="108">
+<td>Performance improvement</td>
+<td>"It should be faster now"</td>
+<td>A comparison of profiles from before and after the change</td>
+</tr>
+<tr class="code-line" data-line="109">
+<td>Change to saving</td>
+<td>"I made it write the value"</td>
+<td>The result of reading back the written value</td>
+</tr>
+</tbody>
+</table>
+
+The middle column may not be false, but it gives you nothing to judge correctness with. The right column lets the reader judge for themselves.
+
+<a id="%22the-tests-passed%22-alone-does-not-show-that-the-bug-is-fixed"></a>
+
+
+### "The tests passed" alone does not show that the bug is fixed
+
+A common mistake is to put "the tests passed" in the right column.  
+Step 4 of the "Bug fix" Playbook, the step that verifies the fix, also says that passing unit tests alone do not show that the bug is fixed. Even if the code works under the conditions the test sets up, you have to reproduce the operation where the reported bug happened and confirm that the bug no longer happens there.
+
+<a id="check-whether-a-test-verifies-behavior-by-asking-if-it-passes-when-functions-return-undefined"></a>
+
+
+### Check whether a test verifies behavior by asking if it passes when functions return `undefined`
+
+The principle "[Test Behavior, Not Implementation](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-test-behavior-not-implementation/SKILL.md)" lets you check whether a test verifies <strong>the code's behavior</strong>, meaning the result that the people who use the code actually receive.
+
+This principle says that <strong>a test calls the code the same way its users do and compares the result they receive with a concrete expected value</strong>. The following question checks whether a test really looks at that result.
+
+> The check: before you keep a test, ask whether it would still pass if every function it imports returned `undefined`. If yes, it observes no behavior and cannot fail for a defect.
+
+For example, a test that checks only whether a function was called still passes when the function returns `undefined`. The principle asks you to rewrite or delete such tests.
+
+If a test passes this check, though, you know only that "the test checks the result the code returns." It does not prove that there are no bugs.
+
+<a id="the-%22bug-fix%22-playbook-has-the-reply-show-the-failing-and-the-passing-output-side-by-side"></a>
+
+
+### The "Bug fix" Playbook has the reply show the failing and the passing output side by side
+
+Finally, the "Bug fix" Playbook shows what remains in the reply.
+
+The Playbook sets what goes in the reply as follows. "Repro" here is the work that the section "[The agent runs it itself](#the-agent-runs-it-itself)" describes. The agent actually performs the operation that triggers the bug and confirms that the same bug happens.
+
+> <strong>Reply:</strong> what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.
+
+<strong>The output from when the bug appeared and the output from when it no longer appears sit side by side in the reply</strong>.
+
+<a id="how-do-you-get-closer-to-a-state-where-you-can-delegate-with-confidence%3F"></a>
+
+
+## How do you get closer to a state where you can delegate with confidence?
+
+To get closer to a state where you can delegate with confidence, I think you should <strong>find the checks that are missing and move them into mechanisms one at a time</strong>.
+
+First, look for gaps with the following five items. I turned what this chapter has covered into these five checks.
+
+<table class="code-line" data-line="146">
+<thead class="code-line" data-line="146">
+<tr class="code-line" data-line="146">
+<th>What to check</th>
+<th>If the answer is "no"</th>
+</tr>
+</thead>
+<tbody class="code-line" data-line="148">
+<tr class="code-line" data-line="148">
+<td>Is the finish condition something you can run to get a pass or fail?</td>
+<td>Add "what counts as done" to the request</td>
+</tr>
+<tr class="code-line" data-line="149">
+<td>Can the agent run the actual app or artifact itself?</td>
+<td>Provide a way to operate the app (<a href="https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c" target="_blank">Chapter 3</a>)</td>
+</tr>
+<tr class="code-line" data-line="150">
+<td>Does the result of running it remain as evidence?</td>
+<td>Decide on steps that keep screenshots, output, and traces</td>
+</tr>
+<tr class="code-line" data-line="151">
+<td>When the agent could not verify something, does it say so honestly?</td>
+<td>Allow "inconclusive," and do not accept success reports without evidence</td>
+</tr>
+<tr class="code-line" data-line="152">
+<td>Do the four checks above keep running when the human steps away?</td>
+<td>Replace the parts that do not keep running with mechanisms (Chapters 3 to 5)</td>
+</tr>
+</tbody>
+</table>
+
+The section "State the finish condition up front" on the verification page of the bundled guide ([`docs/guide/06-verify-and-ship.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/06-verify-and-ship.md)) covers the first item, the "finish condition."
+
+> Put what done means in the first prompt, in whatever words fit:
+
+The example it gives is this request.
+
+```
+/poteto-mode add json output to this command. text output stays byte-identical, the json parses, both run against the sample project. show me the evidence.
+```
+
+The guide explains that a request written this way <strong>gives the agent three checks it can run and verify, instead of a goal whose completion it can judge only by feel</strong>.
+
+When you write the finish condition, you also decide the second and later check items. If you write "text output stays byte-identical," you need a step that compares the output before and after the change. If you write "both run against the sample project," the agent needs to be able to run that project.
+
+If you cannot write the finish condition as something you can run to get a pass or fail, take that as a sign that you should review whether the specification is settled and whether you have a way to judge pass or fail.
+
+You cannot set up most of the mechanisms in the right column of the table with the request text alone. You need tools that run the app, steps that keep evidence, and mechanisms that keep running when the human steps away. These mechanisms are the theme from [Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c) on.
+
+<a id="summary%3A-move-your-trust-from-the-report-to-the-artifact"></a>
+
+
+## Summary: move your trust from the report to the artifact
+
+- <strong>Why trust the artifact instead of the report?</strong> Because a report does not prove correctness, and if quality holds only while you watch, you have not delegated the work.
+- <strong>What does verifying an artifact mean?</strong> The agent itself checks the real thing, in a way that leaves evidence. In pstack, the principle "Prove It Works," `/poteto-mode`, and the "Bug fix" Playbook support these conditions. The one people tend to overlook is that evidence must remain.
+- <strong>What should you look at in a reply?</strong> Whether each "I did X" claim comes with evidence that the agent verified it. A passing test is only one input to your judgment, and only when that test verifies the code's behavior. It does not prove that there are no bugs.
+- <strong>How do you get closer?</strong> Find the gaps with the five check items, and move them into mechanisms one at a time.
+
+[Chapter 19](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/d3f914) covers the principles in the Verification group, starting with "Prove It Works," in detail.
+
+Once it is clear what to trust, the next question is how to build more trust. If you verify an artifact once but cannot repeat the same check on the next change, trust does not build up. [Chapter 3](https://zenn.dev/sc30gsw/books/7ff701b9811d04/viewer/87177c) explains three ways to raise trust and a way to keep corrected lessons in mechanisms.
+<!-- book-body:end -->
+
+---
+
+[Contents](README.md) · [Previous](03-chapter.md) · [Next](05-chapter.md) · [简体中文](../zh-CN/04-chapter.md)

@@ -1,19 +1,89 @@
 # Project status
 
-Updated: 2026-09-30. Release candidate: [0.3.0](releases/0.3.0.md).
-Previous published baseline: [v0.2.1](releases/0.2.1.md).
+Current source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
+eleven original AIHero entries. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+for publication status and the [release checklist](acceptance/aihero-0.10.0/release-checklist.md)
+for gates and version-specific acceptance.
+See the [current import record](maintainers/aihero-imports-0.10.0.md).
+The dated records below describe their original baselines.
+
+Updated: 2026-10-06. Source version: [0.9.0](releases/0.9.0.md), with 84 public Skills and the
+[pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Local validation and native-host evidence are recorded separately from
+publication. [GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+record the actual published version; native managers record installed versions.
+Previous published baseline for this update: [0.8.0](releases/0.8.0.md).
 All six local source units passed independent review. The
 [operations guide](operations-guide.md) documents the source CLI and recovery
 procedure. Full pstack equivalence is not established; hosted autopilot,
-POSIX runtime acceptance, and authenticated backend integration remain
+complete cross-platform host acceptance, and authenticated backend integration remain
 deferred. FishSpeech desktop/mobile rendering was checked, but interaction
 acceptance remains partial.
 The first non-beta release was published after clean tagged checks, GitHub CI and downloaded-asset
 verification on 2026-09-26.
 The [beta.3 candidate record](releases/0.2.0-beta.3-candidate.md) remains
 historical evidence for the pre-publication gate.
+The [post-0.5.0 checklist continuation](checklist-continuation-2026-10-03.md)
+records the installer fix, preserved workspace and fresh host evidence. These source
+changes are included in 0.6.0; the dated record preserves its pre-release status.
 This is the current backlog. Earlier dated acceptance documents remain evidence
 for their recorded revisions and runtimes, not a second current task list.
+
+## AIHero original skills
+
+The 0.9.0 source adds complete original `grill-me`, `grilling`,
+`domain-modeling`, `grill-with-docs`, and `improve-codebase-architecture` to
+original `codebase-design`, with their original references, UI metadata,
+invocation modes, dependency closure and MIT license. All three generated
+targets preserve the original bytes and prior skill files.
+[Usage instructions](aihero-original-skills.md),
+[bounded live acceptance](aihero-original-0.9.0-acceptance.md), and
+[release gates](acceptance/aihero-0.9.0/README.md) separate source validation,
+CLI behavior, publication and personal installation. Desktop UI and live OMP
+behavior are separate acceptance lanes. No pstack/AIHero workflow fusion or
+model-routing instructions are inserted in these originals.
+
+## Source continuation: GitHub provider
+
+The October 3 continuation adds a separate
+[GitHub provider and recovery interface](github-autopilot-provider.md), keeping
+the existing disposable provider for offline fixtures. It uses native `gh`
+login, exact account/repository checks, a read-only inspection CLI and a
+durable journal around explicitly authorized library mutations. Full hosted
+autopilot acceptance remains open: the GitHub merge API provides a head SHA
+guard but no atomic expected-base guard, and local tests do not certify remote
+publication or merge. The original bounded interface shipped in 0.4.0;
+0.5.0 adds the explicit single-maintainer policy described below.
+
+The 0.4.0 bounded unit added [Codex workflow bindings](github-workflow.md) and a
+packaged helper for one PR. It keeps independent OMS review separate from
+GitHub approval and binds the merge policy to root authority. The
+[concurrency experiment](github-target-policy-prototype-2026-10-03.md) confirms
+that server-policy merging cannot guarantee an unchanged target revision.
+The [continuation acceptance](github-workflow-acceptance-2026-10-03.md) records
+the complete local gate separately from hosted and installed-runtime evidence.
+
+The subsequent [hosted run](github-hosted-acceptance-2026-10-03.md) created a real
+PR in the user-selected private acceptance repository, observed failing then
+passing CI, and recovered creation after an actual client kill. No independent
+approval account was available, so that private fixture PR remains unmerged.
+The subsequent [single-maintainer run](github-single-maintainer-acceptance-2026-10-03.md)
+used a separately authorized public protected target. Normal merge and
+operator-assisted interrupted-merge recovery passed through an installed
+candidate package, with one merge PUT per scenario. The new explicit policy
+requires an independent OMS session and audits supported server protections;
+it never replaces GitHub approval configured by repository rules.
+
+| Priority | Remaining pstack parity task | Current boundary |
+| --- | --- | --- |
+| P0 | Repository gate | The baseline gate now passes with immutable historical-report hashes; integrated candidate checks are recorded in the continuation acceptance. |
+| P0 | Provider workflow integration | The packaged adapter covers opening a PR, babysit check and one root-authorized merge on Codex. Drive, stacks and other hosts need separate integration. |
+| P1 | Target concurrency policy | Experiment complete: strict stops; server-policy requires explicit authority and permits target movement after the final read. |
+| P1 | Hosted PR and interruption acceptance | [Real PR creation, CI failure/repair and operator-assisted recovery after SIGKILL passed](github-hosted-acceptance-2026-10-03.md). [Protected-target merge and interrupted-merge recovery passed under independent OMS review](github-single-maintainer-acceptance-2026-10-03.md). Live independent-GitHub-account approval remains unverified. |
+| P1 | Bounded autonomous queue | Not established by the single-PR helper. |
+| P1 | Host lifecycle and recovery | Retain existing bounded wake/cancel evidence; broad restart, late result and worker reattachment behavior remains open. |
+| P2 | Per-workflow acceptance matrix | Catalog coverage and local fixtures do not prove all workflows end to end. |
+| P2 | Authenticated Benny and webhooks | Real authenticated delivery remains open. |
+| P2 | Release and installed-plugin acceptance | Release publication, downloaded artifacts and active host upgrades have separate version-specific receipts. |
 
 ## Published 0.2.1 acceptance update
 
@@ -49,11 +119,9 @@ the local build after downloading. Downloaded packages passed installation
 checks; Codex/OMP native package smokes passed, and Claude manifest validation
 passed without the waived authenticated test.
 
-Follow-up: the source installer can silently no-op when its script is invoked
-through an aliased absolute macOS path. Use `node tools/install-release.mjs`
-from the source checkout or the canonical script path and check success output.
-The source entrypoint needs a later regression fix; native plugin managers
-are unaffected by that entrypoint.
+Follow-up: the aliased absolute macOS path entrypoint bug is fixed in the
+0.6.0 source with a failing-before regression and independent review. Published 0.5.0 still needs the relative-path or canonical-path
+workaround for its source installer; native plugin managers are unaffected.
 
 The user reported completing the Claude Code manual check on 2026-09-25.
 This closes the requested human check, but no transcript, exact selected
@@ -72,8 +140,8 @@ user-level setup or complete workflow acceptance.
   gates and bounded Claude collaboration evidence are in the release notes.
 
 - All 25 originally missing upstream entries are implemented: 16 main entries
-  and nine extracted playbooks. The public catalog has 74 directly selectable
-  Skills: 51 workflows and 23 principles. See the
+  and nine extracted playbooks. The public catalog has 78 directly selectable
+  Skills: 54 workflows and 24 principles. See the
   [completion plan](upstream-completion-plan.md) for preserved contracts.
 - Codex and OMP user-level setup, complete project overrides, named workflow
   routes and ordered panels, and shared reasoning-budget targets are implemented.

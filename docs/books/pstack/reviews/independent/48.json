@@ -1,0 +1,11 @@
+{
+  "chapter": 48,
+  "reviewer": "/root/review_a",
+  "human_review": false,
+  "coverage": "Full comparison of242 visible Japanese/Chinese entries, including all HTML table cells, quotations, numbers, conditions, negations and attribution. All href values and order independently compared; raw HTML pre/code text retained. No external linked pages reviewed.",
+  "source_sha256": "89b6f7a468e0a4fa327577e450e30454a58c501f25182e699dfb921f0da77dc6",
+  "translation_sha256": "5810e4ce794109ad237cc001828561dd46b073e307050c3c98636befb60ea5ae",
+  "findings_resolved": [],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

@@ -18,3 +18,7 @@ Skill instructions in `src/core/skills`; regenerate `packages` with
 For Skill or generator changes, run `npm run check` and fix failures caused by
 the change. Generated packages and fixture checks establish local consistency;
 report live model, installation, and production evidence separately.
+
+## Current management entry (2026-10-01)
+
+Read [oh-my-stack management entry](docs/operations/management-entry.md) before cloud work. Use official provider tools and the maintainer's existing native login; metadata reads do not require new IAM or database roles. Never load repository production env files for management commands. Preserve existing release/migration gates, unrelated modifications and historical evidence.

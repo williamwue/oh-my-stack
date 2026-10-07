@@ -51,6 +51,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "benchmark-checklist",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "blast-radius",
       "audience": "public",
       "category": "workflow",
@@ -69,10 +75,46 @@
       "invocation": "automatic"
     },
     {
+      "name": "codebase-design",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/codebase-design",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "correct",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "create-verification-skill",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "domain-modeling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/domain-modeling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "eval",
@@ -93,6 +135,56 @@
       "invocation": "explicit"
     },
     {
+      "name": "grill-me",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grill-me",
+        "license": "MIT",
+        "dependencies": [
+          "grilling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grill-with-docs",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/grill-with-docs",
+        "license": "MIT",
+        "dependencies": [
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "grilling",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/grilling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "hillclimb",
       "audience": "public",
       "category": "workflow",
@@ -103,6 +195,25 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/improve-codebase-architecture",
+        "license": "MIT",
+        "dependencies": [
+          "codebase-design",
+          "grilling",
+          "domain-modeling"
+        ],
+        "adaptations": []
+      }
     },
     {
       "name": "interrogate",
@@ -165,6 +276,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "poteto-help",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "poteto-mode",
       "audience": "public",
       "category": "workflow",
@@ -202,6 +319,12 @@
     },
     {
       "name": "principle-experience-first",
+      "audience": "public",
+      "category": "principle",
+      "invocation": "explicit"
+    },
+    {
+      "name": "principle-explain-the-number",
       "audience": "public",
       "category": "principle",
       "invocation": "explicit"
@@ -345,6 +468,21 @@
       "invocation": "explicit"
     },
     {
+      "name": "research",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/research",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "runtime-forensics",
       "audience": "public",
       "category": "workflow",
@@ -361,6 +499,21 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "setup-matt-pocock-skills",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/setup-matt-pocock-skills",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "setup-oh-my-stack",
@@ -403,6 +556,51 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "to-questionnaire",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/to-questionnaire",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "to-spec",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/to-spec",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "to-tickets",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/to-tickets",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "trace-forensics",

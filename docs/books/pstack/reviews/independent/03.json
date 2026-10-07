@@ -1,0 +1,13 @@
+{
+  "chapter": 3,
+  "reviewer": "root independent AI review; translator translate_a",
+  "human_review": false,
+  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator.",
+  "source_sha256": "083ccf0615d34b2c9be66b0de77d6c93f6b003494a8207540eb17cc22f1ae627",
+  "translation_sha256": "3d95ca8b703f36910c1e64e33d229fca1f911df655fce4c47002fddf2da2540b",
+  "findings_resolved": [
+    "Softened 必然 to 应当 to preserve the source inference marker はず."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

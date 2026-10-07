@@ -29,6 +29,27 @@ function expectedCodexBody(name, sourceText) {
   return body;
 }
 
+test("Codex bundles the bounded GitHub workflow and its dependencies", async () => {
+  const model = await loadModel();
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-github-binding-"));
+  try {
+    const target = await renderTarget(root, model, model.adapters.find((entry) => entry.id === "codex"));
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      assert.equal(await readFile(join(target, "scripts", name), "utf8"),
+        await readFile(join(repoRoot, "tools", name), "utf8"));
+    }
+    assert.equal(await readFile(join(target, "docs", "github-workflow.md"), "utf8"),
+      await readFile(join(repoRoot, "docs", "github-workflow.md"), "utf8"));
+    for (const name of ["opening-a-pr", "babysit", "shipping"]) {
+      const skill = await readFile(join(target, "skills", name, "SKILL.md"), "utf8");
+      const complete = skill.includes("](WORKFLOW.md)")
+        ? await readFile(join(target, "skills", name, "WORKFLOW.md"), "utf8") : skill;
+      assert.match(complete, /Codex GitHub workflow binding/);
+      assert.match(complete, /\.\.\/\.\.\/docs\/github-workflow\.md/);
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test("Codex long direct entries preserve complete procedures outside the injection budget", async () => {
   const model = await loadModel();
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-long-skills-"));
@@ -71,13 +92,17 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   const model = await loadModel();
   const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 51);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 23);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 54 + model.sourceSkills.length);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 24);
   let originalLength = 0;
   let generatedLength = 0;
   for (const name of model.skillCatalog.public) {
     const source = model.skills.find((skill) => skill.metadata.name === name);
     const document = await readFile(join(repoRoot, "packages/codex/skills", name, "SKILL.md"), "utf8");
+    if (source.source) {
+      assert.equal(document, source.text, `${name}: preserve original frontmatter and instructions`);
+      continue;
+    }
     const description = JSON.parse(document.match(/^description: (.+)$/m)[1]);
     assert.ok(description.length <= 120, name);
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
@@ -95,10 +120,11 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
 });
 
-test("loads eighty-six portable Skills, seven roles, and three adapters", async () => {
+test("loads ninety portable Skills, seven roles, and three adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.skills.length, 86);
-  assert.deepEqual(model.skills.map((skill) => skill.metadata.name), [
+  assert.equal(model.coreSkills.length, 90);
+  assert.equal(model.skills.length, 90 + model.sourceSkills.length);
+  assert.deepEqual(model.coreSkills.map((skill) => skill.metadata.name), [
     "architect",
     "arena",
     "authoring-a-skill",
@@ -107,6 +133,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "autopilot-full",
     "autopilot-stack",
     "babysit",
+    "benchmark-checklist",
     "blast-radius",
     "bro",
     "bug-fix",
@@ -122,6 +149,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "check-stale-replay",
     "check-transcript",
     "check-writer-isolation",
+    "correct",
     "create-verification-skill",
     "eval",
     "feature",
@@ -138,6 +166,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "orchestrate",
     "pause-safely",
     "perf-issue",
+    "poteto-help",
     "poteto-mode",
     "principle-attack-the-premise",
     "principle-boundary-discipline",
@@ -145,6 +174,7 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     "principle-encode-lessons-in-structure",
     "principle-exhaust-the-design-space",
     "principle-experience-first",
+    "principle-explain-the-number",
     "principle-fix-root-causes",
     "principle-foundational-thinking",
     "principle-guard-the-context-window",
@@ -193,7 +223,8 @@ test("loads eighty-six portable Skills, seven roles, and three adapters", async 
     true,
   );
   assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.skillCatalog.public.length, 74);
+  assert.equal(model.coreSkillCatalog.public.length, 78);
+  assert.equal(model.skillCatalog.public.length, 78 + model.sourceSkills.length);
   assert.equal(model.skillCatalog.probes.length, 12);
   assert.deepEqual(model.skillCatalog.probes, model.skills
     .map((skill) => skill.metadata.name)

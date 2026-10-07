@@ -27,6 +27,19 @@ Do not assume the deprecated `hub` tool exists. If safe cancellation
 is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
 Coordinate one bounded fan-out and return one report. This is not a standing
 program, background monitor, or permission to publish. Keep a checklist: frame,
 fan out, aggregate, report.
@@ -82,10 +95,14 @@ Inspect actual terminal artifacts and root-check critical evidence before
 accepting PASS. A dropout leaves a coverage gap; assign a bounded retry or mark
 that slice BLOCKED. Race winners must meet the predeclared rule; no passing arm
 means no winner. A result missing required revisions or measurement method is
-not a PASS: retry that worker once with the same frozen contract, then record a
+not a PASS: start a fresh worker once with the same frozen contract, including
+prior findings and unresolved objections, then record a
 gap if it still omits them. A worker with a proven defect reports ISSUES with
 every defect it can substantiate, not just the first. Keep failed or
 contradictory evidence visible.
+
+Apply [the handoff contract](../poteto-mode/references/subagent-handoff.md)
+when retrying or replacing a worker. Fence active writers before replacement.
 
 Return one table of slice/arm, actual worker identity, status, evidence, and
 remaining gap, followed by concise findings and the applied selection rule.

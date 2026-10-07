@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "intent": "Release original Matt Pocock codebase-design in OMS 0.8.0 atop 0.7.0, preserving all original resources, semantics, license and invocation. No OMS workflow fusion or instruction injection. Generate three targets, preserve existing pstack skills, enforce hashes and complete declared dependencies. User authorized publish and Codex experience; this review is read-only and must not publish or mutate files.",
+    "base": "6d2c43a12297338034bf9265cea91e2521048ece",
+    "head": "b8d15bb496f779b08785fb21b63d003696cf6307",
+    "diffSha256": "898f03f10f8c4474eb6a3365597a37ea2f2411e953ff38d0ce1c778dcaa1496d",
+    "workspace": "isolated candidate worktree",
+    "priorFindings": [],
+    "unresolvedObjections": [],
+    "acceptance": "244 Node tests pass via npm run check; complete bilingual book audit and 5 Python tests pass; 383 prior pstack generated resources byte-identical. Original source unchanged from earlier 3-agent design evidence. Native Codex plugin smoke will run after publication and install; OMP live not claimed."
+  },
+  "reviewers": [
+    {
+      "name": "reviewer-one",
+      "text": "No findings\n\nROLE_POLICY=independent-frozen-review",
+      "rawTextSha256": "c2d89fe672f992717d9044f6fcfd394794c5f1b45950cbea3c7b54682502bfbd",
+      "runtimeAudit": {
+        "modelAndEffortVerified": true,
+        "parentId": "01a1108b-94a8-7c31-bb2c-8006c8a53b03",
+        "childId": "01a11196-99ff-7351-87fe-dac583f4d77a",
+        "model": "gpt-6-astra",
+        "reasoningEffort": "high",
+        "role": "reviewer",
+        "route": "interrogate.reviewers",
+        "checkedChildContexts": 1,
+        "messageVerified": false,
+        "messageAudit": "encrypted-in-parent-record",
+        "roleSelectionClaim": false
+      }
+    },
+    {
+      "name": "reviewer-two",
+      "text": "No findings.\n\nROLE_POLICY=independent-frozen-review",
+      "rawTextSha256": "d6dd5d41383c37a333225deaeee283795de4a0c9b46952c9778b1843f3800f74",
+      "runtimeAudit": {
+        "modelAndEffortVerified": true,
+        "parentId": "01a1108b-94a8-7c31-bb2c-8006c8a53b03",
+        "childId": "01a11196-c80d-7202-83fe-e204ec0fe3de",
+        "model": "gpt-6-sol",
+        "reasoningEffort": "high",
+        "role": "reviewer",
+        "route": "interrogate.reviewers",
+        "checkedChildContexts": 1,
+        "messageVerified": false,
+        "messageAudit": "encrypted-in-parent-record",
+        "roleSelectionClaim": false
+      }
+    },
+    {
+      "name": "reviewer-three",
+      "text": "1. **severity: warning**  \n   **location:** [docs/aihero-original-acceptance-2026-10-06.md]([isolated-candidate]/docs/aihero-original-acceptance-2026-10-06.md:9)  \n   **finding:** The acceptance record says source resource hashes are included in each package, but the generated package metadata does not include them. `SOURCE.json` contains the source coordinate, license, dependencies, and adaptations; the source hashes are kept in `upstream/source-skills.json`, which `renderTarget` does not copy into packages.  \n   **evidence:** A consumer inspecting the generated package cannot use its included metadata to verify the original resource hashes, despite the acceptance record saying those hashes are included.  \n   **suggestion:** Include the per-file hashes in packaged source metadata, or revise the acceptance record to say the hashes are maintained in the repository manifest.\n\nROLE_POLICY=independent-frozen-review",
+      "rawTextSha256": "dd60325dac1923dfde5b08fd165adf9296883b20b60ce8dd0eba0484de4f382c",
+      "runtimeAudit": {
+        "modelAndEffortVerified": true,
+        "parentId": "01a1108b-94a8-7c31-bb2c-8006c8a53b03",
+        "childId": "01a11196-efe5-79c0-94ab-6efd945caf14",
+        "model": "gpt-6-luna",
+        "reasoningEffort": "high",
+        "role": "reviewer",
+        "route": "interrogate.reviewers",
+        "checkedChildContexts": 1,
+        "messageVerified": false,
+        "messageAudit": "encrypted-in-parent-record",
+        "roleSelectionClaim": false
+      }
+    }
+  ],
+  "synthesis": {
+    "text": "Recommendation: accept reviewer 3\u2019s warning and resolve it with a narrow prose correction before publication. The frozen findings establish no implementation blocker and do not justify changing the package metadata design.\n\nScope: candidate `b8d15bb496f779b08785fb21b63d003696cf6307`, based on `6d2c43a12297338034bf9265cea91e2521048ece`. This synthesis uses the supplied packet, complete frozen diff, all three complete reviews, and lead judgment. No mutable implementation files were inspected or changed.\n\n| Category | Attribution | Judgment |\n|---|---|---|\n| **Act on** | Reviewer 3, warning | Correct the acceptance document\u2019s claim that original resource hashes are included in the package. |\n| **Consider** | None | No additional change is needed to resolve the frozen findings. |\n| **Noted** | Reviewers 1 and 2 | Both report no findings. Their silence does not rebut reviewer 3\u2019s concrete evidence. |\n| **Dismissed as a release requirement** | Reviewer 3\u2019s alternative remedy | Adding file hashes to packaged metadata is unnecessary for the established intent. Reviewer 3 explicitly also permits correcting the prose. |\n\nThe warning is supported by the frozen diff:\n\n- The acceptance paragraph says source coordinates, resource hashes, and the MIT license are included in the package: [candidate.diff:229]([frozen-review]/candidate.diff:229).\n- All three generated `SOURCE.json` files contain coordinates, license, dependencies, and adaptations, with no file hashes; the Codex instance appears at [candidate.diff:1253]([frozen-review]/candidate.diff:1253).\n- `sourceCoordinate()` deliberately produces those same fields: [candidate.diff:2002]([frozen-review]/candidate.diff:2002).\n- `upstream/source-skills.json` records the original file hashes, and `validateSourceTarget()` checks packaged resources against those hashes: [candidate.diff:2270]([frozen-review]/candidate.diff:2270), [candidate.diff:2007]([frozen-review]/candidate.diff:2007).\n\nA sufficient replacement is:\n\n> Original source coordinates and the MIT license are included in each generated package. Original resource hashes are recorded in the repository\u2019s `upstream/source-skills.json` and checked during package validation.\n\nThis resolves the consumer-facing mismatch while preserving original bytes, semantics, invocation, and the existing metadata arrangement. No finding demonstrates missing originals, missing license attribution, altered instructions, or lost hash enforcement.\n\nThere is one distinct finding after deduplication. Reviewers 1 and 2 offer no contrary argument; reviewer 3 identifies a documentation defect and provides two possible remedies. The evidence supports the prose remedy. The lead judgment calls for evidence-based adjudication, so the warning should remain attributed and actionable despite the two clean reviews.\n\nRelease disposition: the unchanged candidate retains one unresolved documentation warning. Correct that paragraph, record the response to reviewer 3, and preserve the existing checks and review gates for the resulting candidate. This objection requires no packaging redesign and supplies no reason to block release after the correction. Publication, native Codex installation, and fresh-session discovery remain subsequent gates; neither this synthesis nor the historical bounded design evidence establishes their completion.\n\nROLE_POLICY=frozen-findings-synthesis",
+    "rawTextSha256": "53dafa390e53e08184ada4c59cc5f3b97617595f134da55a61a841f93523a68b",
+    "runtimeAudit": {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1108b-94a8-7c31-bb2c-8006c8a53b03",
+      "childId": "01a1119d-0ccc-71a2-8d70-9866ac4aa16f",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "synthesizer",
+      "route": null,
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  },
+  "rootJudgment": {
+    "actOn": [
+      {
+        "attribution": "reviewer-three",
+        "location": "docs/aihero-original-acceptance-2026-10-06.md:9",
+        "problem": "Prose claimed upstream resource hashes were included inside each generated package.",
+        "inspection": "sourceCoordinate() and all three SOURCE.json files carry coordinates, dependencies and license fields; upstream/source-skills.json holds original hashes; target validation enforces them.",
+        "resolution": "Correct prose to describe repository-held hashes; preserve existing original packaging."
+      }
+    ],
+    "blockingImplementationFindings": 0,
+    "reviewLimit": "Spawn model, effort and parent linkage verified from native records; exact spawn message text is encrypted in parent records. Complete original verdict texts remain local; this record redacts only absolute local paths."
+  }
+}

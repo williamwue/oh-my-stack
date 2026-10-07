@@ -1,0 +1,17 @@
+{
+  "chapter": "41",
+  "source_sha256": "cc2943b11fa46debb09d5b8913d53f413da5fba1e8308d23887ef06ffdd115cb",
+  "translation_sha256": "2e8db65f7d63c6de4a526b45946e0036aeb5031cce9b8bb126940d7b203c1895",
+  "translator": "AI-assisted",
+  "reviewed_by": "translator self-check",
+  "human_review": false,
+  "source_heading_count": 16,
+  "translated_heading_count": 16,
+  "preserved_code": true,
+  "omissions": [],
+  "issues": [],
+  "root_review_corrections": [
+    "注释写法",
+    "代码中的注释是否真的必要"
+  ]
+}

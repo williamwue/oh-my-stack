@@ -17,7 +17,11 @@ native Skill format supports it. Do not broaden it to unrelated languages.
 - Treat external values as `unknown` and parse once at boundaries. Prefer the
   repository's existing schema library to a handwritten guard. A type guard
   must actually check the shape it claims. Inside validated code, trust the
-  domain type.
+  domain type. Derive the domain type from its schema where possible. If the
+  type comes first, type the validator against that complete type so removing
+  a required field fails compilation. Parse with the schema that already owns
+  the shape; add a new schema only where none exists. A partial field check
+  cannot justify a claim that the whole object matches the domain type.
 - Prefer discriminant switches, then property or primitive checks. Use casts
   only when evidence or validation justifies them. Use `satisfies` when checking
   an object without widening its literals. Check union exhaustiveness with

@@ -1,0 +1,23 @@
+{
+  "runtime": "codex-cli 0.160.1",
+  "candidate": "0.7.0",
+  "exitCode": 0,
+  "project": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/codex-measurements",
+  "prompt": "$benchmark-checklist $principle-explain-the-number Read both selected Skills in full. Vet measurements.json as synthetic adversarial receipts. Do not change files or optimize code. Return only JSON with receiptSha256 (SHA-256 of measurements.json) and cases in receipt order, each containing id, verdict, and reason grounded in the receipt. A verdict is faster, slower, no measurable difference, or inconclusive. Do not invent a profile or successful completed work.",
+  "rawTranscriptLocalOnly": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-01513-native-dklhdomz/codex-measurements-events.jsonl",
+  "actions": [
+    {
+      "command": "/bin/zsh -lc \"pwd; rg --files -g 'measurements.json' -g 'AGENTS.md' -g 'SKILL.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"'\"",
+      "exit_code": 0
+    },
+    {
+      "command": "/bin/zsh -lc 'cat .agents/skills/benchmark-checklist/SKILL.md .agents/skills/principle-explain-the-number/SKILL.md; shasum -a 256 measurements.json; cat measurements.json'",
+      "exit_code": 0
+    }
+  ],
+  "externalVerification": {
+    "exitCode": 0,
+    "stdout": "{\"cases\":5,\"falseSpeedupsAccepted\":0}\n",
+    "stderr": ""
+  }
+}

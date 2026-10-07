@@ -60,10 +60,14 @@ Inspect actual terminal artifacts and root-check critical evidence before
 accepting PASS. A dropout leaves a coverage gap; assign a bounded retry or mark
 that slice BLOCKED. Race winners must meet the predeclared rule; no passing arm
 means no winner. A result missing required revisions or measurement method is
-not a PASS: retry that worker once with the same frozen contract, then record a
+not a PASS: start a fresh worker once with the same frozen contract, including
+prior findings and unresolved objections, then record a
 gap if it still omits them. A worker with a proven defect reports ISSUES with
 every defect it can substantiate, not just the first. Keep failed or
 contradictory evidence visible.
+
+Apply [the handoff contract](../poteto-mode/references/subagent-handoff.md)
+when retrying or replacing a worker. Fence active writers before replacement.
 
 Return one table of slice/arm, actual worker identity, status, evidence, and
 remaining gap, followed by concise findings and the applied selection rule.

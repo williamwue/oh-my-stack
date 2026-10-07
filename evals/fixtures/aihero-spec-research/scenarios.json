@@ -1,0 +1,22 @@
+{
+  "research": [
+    "Use the explicitly selected research skill. Delegate the reading work to a background agent as the original instructs. Research how this project local tracker stores specs, individual tickets and blockers. The authoritative primary source is docs/agents/issue-tracker.md, copied from the pinned original Matt Pocock template; cite that source for each claim. The repo research convention is docs/research/. Save a single Markdown note there. Do not change the tracker or source code. You may continue other read-only inspection while the child reads, then collect the result."
+  ],
+  "to-questionnaire": [
+    "Use the explicitly selected to-questionnaire skill. I need a discovery questionnaire about launch readiness. Follow the original two exchanges: ask who receives it, then ask what I need back. Wait for my answer at each step; do not invent the recipient or write the questionnaire yet.",
+    "It goes to Maya, our customer operations lead. She runs support and understands launch staffing and incident escalation. I am the engineering lead and do not know her team staffing capacity.",
+    "I need to decide launch support coverage hours, escalation owner for failed cancellations, and expected number of cancellation requests per day. Use those three gaps as separate questions with answer stubs; do not invent the answers. From: engineering lead. To: Maya. Deadline: Friday. Effort: about 10 minutes. Write the questionnaire now."
+  ],
+  "setup-matt-pocock-skills": [
+    "Use the explicitly selected setup-matt-pocock-skills skill. This is a single-context project. I already choose local Markdown as the issue tracker. Explore the actual repo, use original seed templates, present the draft of the configuration and Agent skills block, then wait for approval before writing anything. Preserve all surrounding existing instructions. The original triage skill is not installed; skip its optional section.",
+    "I approve the draft and local Markdown choice. Apply it now using the original templates. Keep single-context domain docs and omit the optional triage section. Preserve the existing surrounding instructions."
+  ],
+  "to-spec": [
+    "Use the explicitly selected to-spec skill. Our agreed feature is partial cancellation of an unshipped Order Line: a positive whole-number quantity up to its remaining uncancelled quantity; preserve prior cancellations; reject shipped lines and excessive or zero quantities; return the remaining quantity. No payment or refund work. Explicitly agreed interface decision: extend the existing public cancelOrder(orderLine, quantity) operation; do not add or rename a public operation such as cancelOrderLine. Keep the existing public function as the sole test entry. Use existing domain vocabulary and the configured local tracker. First inspect the existing code and tests, propose the highest existing testing seam, and wait for my confirmation before publishing the spec. Do not implement the feature or start a new interview.",
+    "I confirm the proposed existing public cancelOrder seam for behavior tests. Publish the spec to the configured local tracker now. No new seams and no implementation edits."
+  ],
+  "to-tickets": [
+    "Use the explicitly selected to-tickets skill on .scratch/partial-cancellation/spec.md. Read the entire spec. Propose two manageable end-to-end tickets: first the basic cancellation behavior, then repeated cancellation and rejection of invalid states, blocked by the first. Use the existing public function and behavior tests; the fixture has no UI or database layers. Show what each delivers and its genuine blockers, ask for approval, and stop before creating ticket files. Do not modify the parent spec or implement the feature.",
+    "I approve the two-ticket granularity and blocking edges. Publish each approved ticket as its own numbered local Markdown file in dependency order using the original template. Do not modify the parent spec or implementation."
+  ]
+}

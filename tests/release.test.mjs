@@ -8,6 +8,7 @@ import {
   readFile,
   readdir,
   rm,
+  symlink,
   writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -141,7 +142,8 @@ test("Codex plugin bundle exposes the generated package through one local market
     const packagedSkills = codexArtifact.files
       .map((file) => file.path)
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
-    assert.equal(packagedSkills.length, 74);
+    const sourceManifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
+    assert.equal(packagedSkills.length, 78 + sourceManifest.sources.reduce((count, source) => count + source.skills.length, 0));
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
@@ -347,6 +349,40 @@ test("tagged release source requires the version tag at clean HEAD", async () =>
     assert.equal(worktreeSource.worktreeDirty, true);
     assert.equal(worktreeSource.cleanTaggedCheckout, false);
     await assert.rejects(releaseSource(root, "0.1.0-alpha.0", "v0.1.0-alpha.0"), /clean checkout/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+
+test("release installer CLI executes through file and directory aliases", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-release-alias-"));
+  try {
+    const destination = join(root, "owned-package");
+    await mkdir(destination);
+    await writeFile(join(destination, "GENERATION.json"), JSON.stringify({
+      generatedBy: "tools/generate.mjs", target: "codex", sourceVersion: "0.5.0",
+    }));
+    const fileAlias = join(root, "installer.mjs");
+    const directoryAlias = join(root, "source");
+    try {
+      await symlink(join(repoRoot, "tools", "install-release.mjs"), fileAlias, "file");
+      await symlink(repoRoot, directoryAlias, process.platform === "win32" ? "junction" : "dir");
+    } catch (error) {
+      if (process.platform === "win32" && ["EPERM", "EACCES"].includes(error.code)) {
+        t.skip("symbolic links require additional Windows privileges"); return;
+      }
+      throw error;
+    }
+    for (const cli of [fileAlias, join(directoryAlias, "tools", "install-release.mjs")]) {
+      const result = await execFileAsync(process.execPath, [cli, "inspect", "--target", "codex", "--destination", destination]);
+      assert.ok(result.stdout.trim(), "alias invocation must execute rather than silently succeed");
+      const inspected = JSON.parse(result.stdout);
+      assert.equal(inspected.installedVersion, "0.5.0");
+      assert.equal(inspected.installedFileCount, 1);
+      await assert.rejects(execFileAsync(process.execPath, [cli, "unknown-action"]),
+        (error) => error.code === 1 && /action must be/.test(error.stderr));
+    }
   } finally {
     await rm(root, { recursive: true, force: true });
   }

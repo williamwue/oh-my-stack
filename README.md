@@ -1,728 +1,135 @@
 # Oh My Stack
 
-Portable, verifiable engineering workflows for OMP, Codex, and Claude Code.
+![Oh My Stack — pstack engineering workflows, ported to Codex and Claude Code](assets/social/oh-my-stack-pstack-social-preview-2026-10-07.jpg)
 
-`oh-my-stack` is a portable execution framework derived from pstack's engineering workflows. It keeps workflow intent and verification rules independent from any one agent runtime, then generates native packages for each supported host and surface.
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-## Release status
+pstack engineering workflows, ported to Codex and Claude Code.
 
-See the [current project status and remaining work](docs/project-status.md)
-for completed work, next steps, and user-deferred acceptance.
+Includes selected original AIHero skills from Matt Pocock.
 
-The first non-beta version is
-[0.2.0](https://github.com/williamwue/oh-my-stack/releases/tag/v0.2.0),
-with 74 public Skills.
-See the [release notes](docs/releases/0.2.0.md) and
-[support policy](docs/support-policy.md) for its bounded support contract.
-Fresh Claude Code authenticated validation was skipped by explicit user
-approval after an account-limit failure; it is not recorded as passed.
-Codex CLI and OMP have live
-verification evidence. The Codex marketplace bundle has also passed an
-isolated install, reinstall, and uninstall lifecycle. Claude Code has a native
-marketplace, observed Sonnet/Opus setup and bounded native role tests. Beta.5
-adds stricter review attribution and complete arena artifact handoff. Bounded
-Claude failure/retry, cancellation, isolated writers and one architecture
-implementation cycle passed. The native beta.4-to-beta.5 update preserved
-29 role files in an isolated configuration. Full workflow parity and external
-integration coverage remain unverified.
+Describe a task, clarify a requirement, review a change, or inspect a module's
+design. Oh My Stack gives your agent a workflow and asks it to show evidence
+for the result.
 
-| Target | Package | Current confidence |
-| --- | --- | --- |
-| Codex | Native marketplace plugin and standalone package | Supported core on observed CLI versions; Desktop selection is separately user-verified |
-| OMP | Native package | Supported core on observed versions; isolated-profile installation required for tests; `--dry-run` remains unsafe |
-| Claude Code | Native plugin and marketplace | Supported core on observed versions; bounded Sonnet/Opus native role and collaboration evidence |
+[Get started](docs/getting-started.md) · [Choose a task](docs/guides/common-tasks.md) ·
+[Documentation](docs/README.md)
 
-This is a pre-1.0 project with explicitly scoped support. Review the generated instructions before granting
-write, network, credential, merge, or deployment authority. Surface-specific
-details are tracked in [capabilities](docs/capabilities.md), while release
-claims use the separate verification labels documented in the
-[release process](docs/release-process.md).
+## Install
+
+Copy the prompt for your tool into an agent conversation with access to this
+machine. The agent can download, install, and check the plugin for you.
+
+### Codex
+
+```text
+Install Oh My Stack for Codex on this machine using the latest published release.
+Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
+Preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
+```
+
+### Claude Code
+
+```text
+Install Oh My Stack for Claude Code on this machine at user scope.
+Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
+Use the latest published release and preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
+```
+
+For detailed prompts, existing installations, and optional model setup, see
+[install with an agent](docs/install/with-agent.md).
+
+For manual installation, use the guide for your tool. Each tool needs its own installation.
+
+| Your tool | Installation guide |
+| --- | --- |
+| Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
+| Claude Code | [Marketplace installation](docs/install/claude-code.md). |
+| OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
+
+Start a new session after installation. See [support](docs/support-policy.md)
+for tested tools and limitations.
+
+## Update an existing installation
+
+[Copy an update prompt or use the native commands](docs/guides/update-and-uninstall.md).
+The guide detects the existing source and scope, preserves model configuration,
+and separates a read-only update check from an authorized update.
 
 ## Quick start
 
-### Build a local release candidate
+First, open your project in a new agent session and select `prove-it-works`.
+It checks Skill loading and workspace facts without changing project files.
 
-Requirements: Git, Node.js 20 or newer, and npm.
+Then try a read-only task through `poteto-mode`.
 
-```bash
-git clone https://github.com/williamwue/oh-my-stack.git
-cd oh-my-stack
-npm ci --ignore-scripts
-npm run check
-npm run release:build
-(cd dist && shasum -a 256 -c SHA256SUMS)
-```
-
-Download all files for one version from
-[GitHub Releases](https://github.com/williamwue/oh-my-stack/releases) and
-verify them with `SHA256SUMS` before installation. Building from source remains
-available for development and independent reproduction.
-
-### Install the Codex plugin
-
-Extract `oh-my-stack-codex-plugin-0.2.0.tar.gz` into a dedicated
-directory. Then register that extracted marketplace root and install the
-plugin:
-
-```bash
-codex plugin marketplace add /absolute/path/to/oh-my-stack-marketplace
-codex plugin add oh-my-stack@oh-my-stack
-```
-
-Start a new Codex task after installation, then try an explicit workflow such
-as:
+In Codex, type `$` and select `oh-my-stack:poteto-mode` from the Skill picker.
+Send this request with that selection:
 
 ```text
-Use $prove-it-works to verify this installation.
+Explain this project's main modules and request entry points.
+Use actual file references. Read only; do not change files.
 ```
 
-For direct invocation, type `$` in the composer and select the Oh My Stack
-Skill from the picker (for example, `oh-my-stack:how`), then describe the task.
-Display names distinguish workflows and principles; invocation names stay stable.
-To let the router choose, select `oh-my-stack:poteto-mode` and describe the goal.
-Typing a Skill name as plain text, including in `codex exec`, is not equivalent
-to selecting a structured Skill input. Explicit-only Skills may be absent from
-the model's initial automatic-use list while remaining available in discovery.
-See the [0.2.0 release notes](docs/releases/0.2.0.md) for the
-current verification scope; the [alpha.4 acceptance record](docs/releases/0.2.0-alpha.4-acceptance.md)
-remains historical evidence.
+In Claude Code, enter this in the conversation:
 
-Inspect or remove the installation with:
-
-```bash
-codex plugin list
-codex plugin remove oh-my-stack@oh-my-stack
-codex plugin marketplace remove oh-my-stack
+```text
+/oh-my-stack:poteto-mode Explain this project's main modules and request entry points. Use actual file references. Read only; do not change files.
 ```
 
-### OMP and Claude Code installation
+Look for a code explanation with file references. The agent must report gaps
+it cannot verify. Follow the [first-task walkthrough](docs/getting-started.md)
+for installation checks, expected results, and troubleshooting.
 
-Claude Code can register this repository's marketplace and persist the plugin
-at user scope:
+## Choose an entry for your task
 
-```bash
-claude plugin marketplace add williamwue/oh-my-stack
-claude plugin install oh-my-stack@oh-my-stack --scope user
-claude plugin list --json
-```
+| What you want to do | Entry | What to expect |
+| --- | --- | --- |
+| Fix a bug, build a feature, or let the agent choose an engineering workflow | `poteto-mode` | A workflow matched to your request, work within your stated scope, and verification. |
+| Clarify a requirement and record agreed terminology and decisions | `grill-with-docs` | Question rounds, glossary updates, and architectural decision records when needed. |
+| Stress-test an idea through conversation | `grill-me` | Questions and recommendations, followed by a pause for your answers. |
+| Review a change | `interrogate` | Independent reviews of a fixed change and a root-owned judgment. |
+| Find modules worth improving | `improve-codebase-architecture` | An architecture report and a choice of candidates before implementation. |
+| Ask how to use the tool | `poteto-help` | An explanation and a suggested prompt. It does not start that task. |
 
-See the [release process](docs/release-process.md#install-the-claude-code-plugin)
-for update and removal. Installing the plugin does not apply a model mapping;
-setup still requires explicit model inventory and acceptance.
+Select `oh-my-stack:<entry>` in Codex, or type `/oh-my-stack:<entry>` in
+Claude Code. [Common task examples](docs/guides/common-tasks.md) give you
+prompts and describe their expected file changes.
 
-The release builder also creates OMP and Claude Code archives. Their package
-trees and owned-directory lifecycle are validated. For OMP, the beta release
-uses a read-only package preflight and a real installation in a disposable
-profile before any user-profile installation. Follow the exact commands and
-cleanup boundary in the [release process](docs/release-process.md#omp-preflight-and-isolated-native-acceptance).
-Do not use `omp plugin link --dry-run` for preview. Claude Code's
-[first native acceptance](docs/claude-code-acceptance-2026-09-25.md) used the
-published archive in a session-only plugin directory. After extracting that
-archive into a dedicated directory, run:
+`poteto-mode` routes the pstack-derived engineering workflows. Invoke AIHero
+originals directly when you want them. There is no automatic AIHero-to-pstack
+pipeline. The [AIHero guide](docs/aihero-original-skills.md) explains the
+selected originals and their dependencies.
 
-```bash
-claude plugin validate /absolute/path/to/oh-my-stack
-claude --plugin-dir /absolute/path/to/oh-my-stack
-```
+Basic use inherits the agent's model when no Oh My Stack mapping is configured.
+Use [optional model configuration](docs/model-configuration.md) to choose models
+and reasoning budgets for roles and review panels.
 
-Then invoke `/oh-my-stack:prove-it-works` in the fresh session. This does not
-install the plugin globally. The beta.4 package uses opt-in, usage-consuming
-Sonnet/Opus probes for a two-model setup; Haiku is not part of
-that mapping. One temporary-project panel ran Opus/Sonnet/Opus with native
-roles and hook-observed `high` effort. This does not establish user-level
-installation or full workflow behavior. Do not use a model-menu entry as proof
-of account entitlement, and do not probe Fable through print mode to infer it.
+## More documentation
 
-## Detailed verification status
-
-The sections below include historical acceptance at the versions named in each
-record. Use the [current backlog](docs/project-status.md) for remaining work.
-
-Phase 1, the Alpha 0 build slice, and most Phase 2 runtime probes are
-implemented. Thirteen original capability fixtures, twenty-three pinned pstack
-principles, the three Alpha 1 Skills (`tdd`, `show-me-your-work`, and
-`bug-fix`), the Alpha 2 `interrogate` Skill, nine Alpha 3 workflow Skills
-(`how`, `technical-writing`, `unslop`, `poteto-mode`, `investigation`,
-`feature`, `refactoring`, `prototype`, and `opening-a-pr`), and the
-`setup-oh-my-stack` configuration Skill, and the Phase 7 `babysit`,
-`pause-safely`, `session-pickup`, `autonomous-run`, `shipping`, `orchestrate`,
-`autopilot-stack`, `autopilot-full`, `setup-benny`, `triage-issue-reports`, and
-`reproduce-and-fix-issues` Skills generate deterministic OMP, Codex, and Claude
-Code target packages. Seven canonical roles generate native read-only and
-writable definitions. All packages pass static `D0` validation.
-
-Live `W1` and `W2` probes pass on OMP 18.2.6 and Codex CLI 0.155.1 on macOS
-arm64. The `W2` fixtures prove one read-only worker, two parallel read-only
-workers, and a two-turn follow-up on the same read-only worker. Results remain
-separately attributable and are followed by an independent root read.
-The Codex CLI 0.155.1 plugin-manager lifecycle establishes `D1`: an isolated
-`CODEX_HOME` accepts the generated marketplace, installs the exact generated
-plugin tree, reinstalls it, removes it, and deregisters the marketplace. Codex
-CLI therefore reaches cumulative `D3` after its observed discovery and
-explicit-invocation checks. The alpha.11 OMP gate remained at `D0` because
-`plugin link --dry-run` wrote state on 18.2.6, 18.2.10, and 18.3.0. Beta.1
-uses a different safety gate: package-byte verification and real native
-installation in an isolated profile, followed by a separately authorized
-user-profile install. This does not repair OMP's dry-run. See the
-[beta.1 release notes](docs/releases/0.2.0-beta.1.md).
-Codex Desktop has a
-focused scheduled-wake probe; its other capability families and Codex IDE
-remain unprobed. Claude Code now has bounded native Skill, child, and local
-two-model panel evidence; global installation and broader workflows remain
-unverified.
-
-The resource fixture proves that OMP and Codex CLI can load packaged
-`references/` and `assets/`, then execute a packaged helper that resolves its
-own asset. Script execution currently depends on the external Node.js runtime
-and is recorded separately from native relative-resource support.
-
-OMP's parallel fixture also proves asynchronous background-job waiting. Its
-follow-up fixture proves an idle worker can be woken, while Codex records both
-worker turns on the same child thread. A W3-targeted cancellation fixture now
-proves active-worker cancellation and exclusion of the cancelled generation
-from accepted results on both runtimes. A second W3-targeted fixture proves one
-writer is isolated from the source checkout: OMP retains an unapplied patch
-from an isolated task worktree, while Codex runs the parent and writer in a
-managed `--worktree` checkout. Completed-worker transcript retrieval is also
-proven: OMP exposes a native `history://` resource, while Codex CLI requires an
-external read of its persisted session JSONL. A W3-targeted panel fixture now
-proves two independent parallel candidates, frozen candidate and review
-boundaries, and distinct reviewer and synthesizer sessions on both runtimes.
-A controlled stale-replay fixture additionally passes on Codex CLI: generation
-1 sends a peer-ready signal, is cancelled while active, and later releases its
-retained old marker through one follow-up on the same session after generation
-2 has been accepted. The delivered stale marker is recorded but rejected, so
-Codex CLI now has passing evidence for every `W3` semantic family. This is a
-controlled replay rather than a naturally racing network response. The same
-OMP fixture did not pass in two fresh attempts because the generation-1
-provider turn never emitted an assistant or tool event; OMP therefore remains
-at `W2` coverage and peer messaging remains `unknown`, not `unsupported`.
-Codex lifecycle probes require persisted sessions;
-`--ephemeral` cannot create usable child threads in Codex CLI 0.155.1.
-
-The Alpha 1 bounded bug-fix workflow passes both its root-only and one-worker
-fixtures on OMP 18.2.6 and Codex CLI 0.155.1. In every run the root captured
-the same failing test before the edit, established the off-by-one cause,
-inspected the one-line diff, and reran the identical test to two passes. OMP's
-worker produced an isolated unapplied patch that the root reviewed and
-integrated. Codex used one top-level managed worktree shared by root and child;
-the original source checkout remained clean, and the inline implementer
-fallback was used because that CLI surface cannot select the generated custom
-role.
-
-Alpha 2 now includes the portable `interrogate` workflow. Its live fixture
-passes on both OMP and Codex CLI with two reviewers started before waiting,
-identical frozen packets, frozen attributable results, a distinct later
-synthesizer, and independent root execution of every final `Act on` finding.
-Both runs kept the reviewed repository unchanged and correctly declined to
-claim model diversity: OMP resolved every child to the same model, while Codex
-exposed no independently verifiable child model identity in this run.
-
-The first Alpha 3 end-to-end fixture also passes on OMP and Codex CLI. The
-explicit `poteto-mode` router selects `investigation`, which invokes the
-complex `how` path: exactly two explorers start before waiting, their
-attributable results freeze before one new explainer starts, and the root
-independently re-reads the critical flow. An initial OMP attempt failed because
-it inspected an installed pstack cache and created a second explorer/explainer
-generation. That failure is retained as evidence; the fixture now requires
-repository-generated resources only and forbids successful-child replacement.
-The hardened rerun passes without modifying the project. Codex uses inline
-role contracts because its probed spawn surface cannot select generated custom
-roles. Neither run claims model diversity.
-
-The routed Alpha 3 `feature` fixture passes on both live CLI runtimes as well.
-Each root inspects the simple normalize-to-render boundary with `how`, captures
-the new receipt-note test failing before delegation, records the direct design
-and throughput checkpoint, starts exactly one bounded writer, inspects the
-actual two-file diff, and reruns the same command to two passing tests. OMP
-uses an isolated child worktree and root-applied patch. Codex isolates the
-whole root session in a managed worktree and serializes its single writer
-inside that checkout because nested child isolation is unavailable. Neither
-run changes tests or performs publication.
-
-The routed `refactoring` fixture now passes on the same two runtimes. Each root
-pins the exact four-output behavior before delegation, names the duplicated
-reader load and target private helper, runs exactly one bounded writer, checks
-that only the implementation module changed and that no public export was
-added, then reruns the identical test to the same two passing tests. OMP uses
-an isolated child patch; Codex uses its managed root worktree and serialized
-writer fallback. This is behavior-preserving evidence, not a feature claim.
-
-The root-only `prototype` fixture passes on OMP and Codex CLI. Both create one
-throwaway script under `scratch/`, run scan and set through the same variant
-switch, preserve identical first-seen output, and observe deterministic
-membership-check counts of 14 and 8 without using wall-clock timing. Project
-inputs retain their hashes, the artifact stays outside production source, and
-both reports require a separate `feature` run for implementation. The first
-Codex attempt is retained as a failure because automatic approval rejected
-creation of a previously absent scratch directory; the passing harness tracks
-that empty repository-owned directory before invocation.
-
-The `opening-a-pr` fallback fixture passes on OMP and Codex CLI. Both roots
-resolve the real Git remote, base, head, one-commit range, and two-file diff;
-rerun the two-test verification command; apply `technical-writing` followed by
-`unslop`; and return an exact pending `gh pr create` operation. Because
-`scm.pull_requests` remains `unknown`, neither runtime contacts a forge,
-publishes a pull request, fabricates a URL, or merges anything. The first run
-on each runtime is retained as a harness failure because runner logs were
-written inside the fixture repository. Hardened reruns externalize every
-runner artifact and leave strict Git status clean. This is passing W1 fallback
-evidence, not authenticated W4 publication or forge read-back.
-
-The standalone `technical-writing` then `unslop` fixture passes at W1 on both
-CLI runtimes. Each top-level agent captures the intentionally failing document
-test, reads both generated Skills in order, rewrites one file as a concise
-how-to, inspects the complete diff, and reruns the same command to one pass.
-The hardened contract preserves the Node.js prerequisite, commands, port,
-counts, outputs, URL, stop action, and operational order. OMP's first attempt
-is retained as a semantic failure because the original test allowed the
-Node.js prerequisite to disappear. Codex's first attempt is retained because
-the phrase `as root` triggered an unnecessary rejected `sudo` command; the
-current fixture names the top-level agent and forbids user changes. Passing
-runs modify only the document and use no delegation or publication.
-
-The generated custom read-only role is discovered and applied natively by OMP.
-Codex CLI 0.155.1 finds the generated project role definition, but the
-`spawn_agent` surface exposed to `codex exec` has no role selector. That exact
-surface is therefore recorded as `unsupported`, despite newer official Codex
-documentation describing custom-agent configuration; desktop and IDE remain
-separate, unprobed surfaces.
-
-Per-worker model and reasoning routing is independently observed on both live
-CLI surfaces. OMP resolves a probe-only role alias to an alternate model and
-applies its `thinkingLevel`; Codex CLI passes an alternate model and reasoning
-effort directly at spawn. Runtime session metadata—not worker self-report—
-confirms the resolved worker values. Concrete model identifiers remain outside
-the portable core and appear only in target-specific probe configuration and
-evidence.
-
-Native fixed-choice and free-text interaction passes on the interactive OMP
-and Codex CLI TUI surfaces. Non-interactive OMP print mode and Codex `exec`
-preserve the workflow invariant through an explicit `INTERACTION_REQUIRED`
-result with both questions pending and no fabricated responses. Codex CLI
-0.155.1 exposes interaction through the experimental
-`default_mode_request_user_input` feature as an asynchronous queued question
-card, so it has a separate profile from non-interactive `codex exec`. OMP's
-passing interactive result is bound to the observed `cursor/default` model
-because a separate reconnaissance model skipped the available native
-operation.
-
-The first pstack content slices are imported at the pinned upstream revision:
-all twenty-three `principle-*` Skills, `tdd`, `technical-writing`, `unslop`,
-`how`, `show-me-your-work`, the `bug-fix` playbook semantics, and the bounded
-Alpha 3 router/playbooks. Immutable source snapshots, per-file ownership,
-mechanical transformation hashes, reviewed semantic-derivation records, and
-the candidate/baseline/verified pin lifecycle are stored under `upstream/`.
-Explicit-only policy is compiled into native target metadata rather than
-leaking source-host frontmatter into the portable core.
+- [First task](docs/getting-started.md)
+- [Complete Skill directory](docs/skill-directory.md)
+- [Updates and removal](docs/guides/update-and-uninstall.md)
+- [FAQ and troubleshooting](docs/faq.md)
+- [Support policy](docs/support-policy.md)
+- [Latest release](https://github.com/williamwue/oh-my-stack/releases/latest)
 
 ## Development
 
-```bash
-npm install
-npm run generate
-npm run check
-```
+To contribute, read [CONTRIBUTING.md](CONTRIBUTING.md). It links the build,
+architecture, testing, and release documentation.
+The [previous README](docs/maintainers/readme-0.9.0.md) retains the historical
+implementation and acceptance narrative.
 
-`npm run generate` replaces only the generator-owned target directories under
-`packages/`. `npm run check` verifies generated drift, schemas and invariants,
-local links, deterministic release output, the executable inventory, and the
-test suite without network access.
+## Reading
 
-Build the three runtime archives plus the Codex and Claude marketplace bundles and
-verify their checksums with:
-
-```bash
-npm run release:build
-(cd dist && shasum -a 256 -c SHA256SUMS)
-```
-
-The release manifest records every installed file, target profile, checksum,
-and separate static, discovery, lifecycle, and end-to-end status. See the
-[release process](docs/release-process.md) and the
-[0.2.0 release notes](docs/releases/0.2.0.md). Claude Code is
-packaged and lifecycle-tested in an isolated profile, with bounded native
-Skill, single-route, ordered panel, and isolated writer runs. User-level setup
-has separate bounded evidence; broader end-to-end use remains unverified.
-
-The locally built Codex bundle is `dist/oh-my-stack-codex-plugin-<version>.tar.gz`.
-After extracting it, add the extracted marketplace root and install the plugin:
-
-```bash
-codex plugin marketplace add /absolute/path/to/oh-my-stack-marketplace
-codex plugin add oh-my-stack@oh-my-stack
-```
-
-Start a new Codex task after installation so its bundled Skills are loaded.
-The current bundle exposes 74 public Skills, including the 25
-upstream entries added after alpha.4. Their full real-project acceptance
-remains in progress.
-Invoke a Skill directly, such as `$how`, `$interrogate`, or `$tdd`, or use
-`$poteto-mode` to select a workflow. Full instructions load when a Skill is used.
-Short Codex descriptions reduce discovery metadata without hiding entrypoints.
-The current [Skill directory](docs/skill-directory.md) groups 51 workflows and 23
-principles. Codex display names and generated catalog metadata mark the same
-categories; invocation names remain unchanged. These labels do not require
-native grouped menus. Internal probes remain test-only.
-
-Each generated package contains `scripts/collect-model-inventory.mjs`,
-`scripts/configure-models.mjs`, `scripts/model-resolution.mjs` on OMP/Codex,
-and `config/runtime-resolution.json`. The
-explicit `setup-oh-my-stack` Skill first runs the collector against the current
-runtime's native model inventory, then uses the configuration script to preview
-and write target-native role files. OMP and Codex default to user scope;
-`--project-root` creates a complete override for one project. On the current
-development branch, `--preset pstack` offers named workflow slots (such as
-`how.explorer` and `why.investigator`), ordered reviewer/runner panels, and an
-optional `--budget unlimited|large|medium|small`. Individual slots can be
-changed with `--route KEY=MODEL@REASONING`, panels with an ordered
-`--panel KEY=MODEL@REASONING,...`, or set to `inherit-parent`. The panel length
-sets the intended worker count. The earlier `--fast`, `--balanced`, `--deep`,
-and `--role` controls remain available. For example, after collecting an
-inventory, preview the mapping without writing anything:
-
-```bash
-node scripts/configure-models.mjs --inventory /absolute/path/to/inventory.json \
-  --preset pstack --budget medium
-```
-
-On both Codex and OMP, the budget is a reasoning target: `medium` targets
-`high` for every non-inherited role and route, raising lower preset efforts
-and lowering higher ones. A model that does not support the target uses its
-highest supported effort below it. Use `--uniform-reasoning EFFORT` only to
-request an exact explicit target; unsupported efforts are rejected.
-
-On OMP, `pstack` retains the upstream Cursor model choices and fails closed
-when those IDs are not in the live inventory. If OMP instead exposes the exact
-OpenAI-Codex GPT-6 Luna, Sol, and Astra IDs, preview the optional
-`--preset pstack-openai-codex` with the same inventory and budget. It proposes
-Luna for fast work, Sol for routine coding, Astra for deep work, and ordered
-Astra/Sol/Luna panels; it never selects GPT-5.5 by default. This is an
-alternative proposal, not an assertion that these models match Cursor's or
-each other's behavior. Astra may cost substantially more, so review every
-route, panel, and runtime price before applying. If any required ID is absent,
-choose observed models explicitly rather than silently substituting an older
-one. Switching presets does not automatically retain prior budget or overrides;
-pass and review any choices that should carry over.
-
-Review and adjust the exact model choices, then repeat the same command with
-`--apply` to write the Codex or OMP user role directory. OMP supports native
-user and project task agents; project configuration wins when present. On OMP,
-the `pstack` preset keeps the upstream
-workload-specific slots for feature/refactoring, bug-fix, perf-issue, hillclimb,
-and the separate reflection lenses. A selected budget targets its advertised
-thinking level even when that raises a previous setting, falling back to the
-highest supported lower level for the same model. Re-running the same preset keeps
-explicit model-family, alias, and ordered-panel choices. OMP Skills resolve
-the nearest project manifest and then the user default. Codex now has the
-same six independently configurable code and reflection slots. These are
-on-demand workflow choices, not Cursor's globally injected rule. For Codex,
-generated TOML files are configuration
-artifacts, not evidence of activation: delegated work uses explicit model and
-reasoning parameters plus complete role instructions. The bundled
-`scripts/codex-delegation.mjs` prepares those spawn arguments and verifies the
-parent call and child `turn_context` from persisted runtime records when
-available. From an extracted Codex package, a representative preparation is:
-
-```bash
-node scripts/codex-delegation.mjs prepare \
-  --route how.explorer --task-name explore_entry \
-  --task-file /absolute/path/to/one-bounded-task.txt \
-  --output /absolute/path/to/prepared-spawn.json
-```
-
-Pass only the returned `task_name`, `fork_turns`, `model`,
-`reasoning_effort`, and `message` to the Codex spawn operation. Preparation
-uses the nearest project resolution or the user default; `--resolution` can
-select a manifest explicitly. Afterward,
-`verify --request ... --parent-record ... --child-record ...` checks the
-persisted call and resolved worker settings. Codex may encrypt the spawn message
-in its persisted parent record; the verifier reports that limitation rather
-than claiming the exact role/task text was independently read. If records are
-unavailable, report the model resolution as unverified. These per-workflow and
-user and project-scoped controls are newer than
-the published alpha.5 bundle. Collection
-fails closed for targets without a verified inventory operation. The resolver
-rejects unobserved model or reasoning identifiers and preflights every owned
-file before writing any update. It refuses symlink targets and does not edit
-runtime settings or unrelated project configuration. Role files
-and distinct model selections alone do not prove native role selection or
-multi-model execution; those still require a fresh worker trace. In particular,
-the tested Codex CLI spawn surface does not select generated custom roles by
-name, so its workflow routing must use explicit per-worker model settings.
-
-The live setup fixture passes on OMP 18.2.6 and Codex CLI 0.155.1. OMP
-normalized 124 models from `omp models --json --no-extensions`; Codex
-normalized five models from app-server `model/list` with hidden models
-excluded. Each run rejected an invented identifier before writing, completed a
-no-output preview, generated seven native role definitions on apply, bound the
-result to the exact inventory hash, and preserved an unrelated marker file.
-The deterministic first-eligible selection used by the fixture mapped all
-three workload classes to one model, so every generated role correctly records
-that model diversity was not established. The published Claude beta.3 package
-predates the authenticated local two-model setup acceptance described above.
-
-The canonical Skill catalog now separates 74 public workflows and principles
-from 12 internal `check-*` runtime probes. The previous 49-Skill matrix passes
-on OMP 18.2.8 and Codex CLI 0.155.1: every Skill is discovered and explicitly
-loaded exactly once, its canonical name and first heading match the generated
-package, no probe Skill leaks into the public matrix, and both read-only Git
-fixtures remain unchanged. The advanced workflow Skills are also exercised by
-focused live fixtures. The three Benny Skills pass a deterministic
-local-provider fixture covering dormant setup, source-bound triage,
-tracker-write compensation,
-trusted-marker handoff, repeated before-and-after UI proof, independent media
-review identity, and an unmerged draft pull request. Focused OMP 18.2.8 and
-Codex CLI 0.155.1 runs pass the same local-provider protocol at W3 with one
-fresh read-only reviewer and externally audited parent and child transcripts.
-
-Phase 5 now has a deterministic same-scenario compiler. It converts passing
-OMP and Codex evidence for bug fixing, a boundary-crossing feature, a
-behavior-preserving refactor, a frozen architecture comparison, a mixed
-true/false-positive review, and conflicting writers into twelve normalized
-conformance records. Each record
-binds the runtime coordinate and configuration fingerprint
-to the source evidence, provider-inventory evidence, exact fixture and artifact
-hashes, repetition threshold, common semantic event trace, and mapped protocol
-assertions. The compiler deliberately records scenario model resolution as
-`not-recorded` where the original run did not expose it instead of borrowing a
-model identity from a separate routing probe.
-
-The architecture fixture starts two read-only reviewers with identical complete
-literal packets, freezes both attributable results, and only then starts one
-synthesizer. OMP and Codex both selected `durable-log`; each root independently
-reread the inputs, verified their hashes, ran the exact verifier, and confirmed
-a clean repository. Retained failed attempts document OMP print-mode child
-disposal and Codex's missing referenced-packet transport; the hardened passing
-runs use explicit root liveness and literal initial packets rather than hiding
-either failure.
-
-The mixed-review fixture proves judgment rather than reviewer voting. A
-reachable exclusive-end regression remains `Act on`, while a tempting negative
-`.at()` warning is `Dismissed` because the frozen public boundary rejects that
-input first. Both runtimes used two frozen read-only reviews, one later
-synthesizer, and an independent root execution. Retained failures record an OMP
-one-word packet mismatch and a Codex run that failed to disclose its inline-role
-fallback before the hardened runs passed.
-
-The conflicting-writers fixture closes the sixth scenario family. OMP starts
-exactly two `isolated:true` native implementers from one frozen baseline with
-`task.isolation.apply=false`, freezes two disjoint same-file patches, and lets
-the root inspect and apply them in order. Codex runs exactly two inline-role
-writers serially inside one managed root worktree, with the root inspecting and
-verifying BatchWriter before RetryWriter starts. Both final files match the
-expected bytes and pass the combined verifier. Two retained OMP failures prove
-that prose-only isolation and an unverified apply setting are hard failures.
-
-Phase 7 now graduates both `babysit` check and drive modes on OMP 18.2.6 and
-Codex CLI 0.155.1. Check mode performs one frozen read-only classification and
-leaves Git and forge bytes unchanged. Drive mode uses a disposable branch,
-local bare origin, and deterministic provider to reproduce a pinned defect,
-change one source file, create one commit, push one wave, refresh once to
-`READY`, preserve main, and stop without merging. Codex drive requires a
-permission profile that can write `.git`; its retained workspace-write failure
-is not counted as conformance. These are W1 local-provider results, not live
-forge access, hosted polling, `threads-only`, `background`, or W4 completion.
-
-The `pause-safely` and `session-pickup` workflows pass on OMP 18.2.8 and Codex
-CLI 0.155.1 in a two-session cold-start
-fixture: session A commits one existing atomic unit as `wip:`, writes an
-off-worktree checkpoint with exact Git anchors, and does not push; a distinct
-session B validates those anchors before editing, inherits the completed unit
-without redoing it, completes only the pending unit, runs combined verification,
-and still does not publish. This is W1 portable checkpoint handoff, not native
-runtime resume, transcript import, cloud handoff, or delegated W2 execution.
-
-The first `autonomous-run` slice also passes on OMP 18.2.8 and Codex CLI
-0.155.1. Each root freezes a `3/3` predicate, exact measurement, four-iteration
-and ten-minute budget, authorized mutations, and stop conditions before work.
-It then completes three ready local units in order with one focused test, one
-single-file commit, one controller advance, and one append-only decision row per
-iteration, stopping immediately at `3/3` without scheduling a wake or
-publishing. The deterministic suite rejects early edits to future units. This
-is continuous-local W1 evidence only; host-native scheduled or event wake,
-external waiting, restart, deadline and cost enforcement, discard or pivot
-behavior, and W4 completion remain unverified.
-
-The deterministic waiting-branch fixture persists a runtime-issued wake
-identifier, provider revision, next observation, absolute deadline, wake-count
-budget, later-session authority, and verified-disarm boundary. Codex Desktop
-26.915.31945 passes this branch through one standalone local cron task: a later
-host-created task validates the waiting checkpoint, measures the independently
-released provider once, advances once, deletes its schedule, and verifies
-cleanup. The profile therefore records native `automation.recurring` and
-`coordination.scheduled_wake` for that exact surface. A retained one-minute
-recurrence failure shows that deleting a schedule does not cancel an occurrence
-already queued; the passing run uses a daily cadence whose first occurrence is
-the next useful minute and exits before provider measurement when a checkpoint
-is no longer waiting. A separate current-thread heartbeat attempt remains
-failed W0 evidence because it never re-entered the active task.
-
-The first `shipping` slice generates for all three targets and passes both its
-deterministic fixture and live OMP 18.2.8 and Codex CLI 0.155.1 runs against a
-disposable local provider. Each runtime starts three real independent reviewer
-sessions, preserves its runtime-issued reviewer identifiers, binds each verdict
-to the exact base, head, patch identity, and observed verification, and lands
-only the contiguous passing run bottom-up. PRs 41 and 42 land; the failing PR 43
-remains open and unarmed. Retained failures cover root self-review, a worker
-role without command capability, and overly narrow OMP and Codex task-identity
-grammars. Deterministic negative cases also reject an upper merge and a head
-changed after review. This is coordinated local-provider W3 evidence, not
-native `scm.merge` or an authenticated W4 forge merge.
-
-The first `orchestrate` slice also passes its deterministic fixture and live
-OMP 18.2.8 and Codex CLI 0.155.1 runs. Each coordinator completes a pilot before
-fan-out, binds four runtime-issued worker identities through no-write standby
-turns and same-session follow-ups, starts alpha and beta before waiting, freezes
-alpha and beta in separate drains, and uses four distinct reviewers. The join
-brief carries the actual integrated alpha and beta heads, all verdicts bind to
-generation and output hashes, and both runs stop at `4/4` with no publication.
-External transcript audits confirm that neither root executes unit work or unit
-verification. This is coordinated local-provider W3 evidence, not recovery
-from a real coordinator restart or authenticated W4 external-system completion.
-
-The first deterministic `autopilot-stack` slice builds two disjoint changes from
-one frozen target, requires two distinct revision-bound reviewer lanes per
-change, and reserves aggregation and topology writes for the root. The root
-keeps the bottom change based on `main`, rebases the second branch onto that
-exact parent, preserves the code verdict only when the stable patch identity
-survives, and refreshes checks at the rewritten head. The verifier requires a
-linear open chain, unchanged `main`, and no merge or automatic-merge operation.
-Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs now pass the same local
-provider protocol at W3. Both start two attributable owners before waiting,
-serialize their exact build and self-proof commands across the shared checkout,
-and then use four fresh reviewers for the two frozen gates/live lanes. External
-transcript audits find no root owner build, owner self-proof, or reviewer verify
-command. Both roots alone arrange `main <- change-51 <- change-52`, preserve the
-tip code verdict only across an unchanged stable patch, refresh checks at the
-rewritten head, and stop with two open, unarmed changes. This is coordinated
-local-provider evidence, not authenticated W4 forge completion.
-
-The first `autopilot-full` slice keeps the upstream authority split intact:
-each autonomous change has one attributable owner from build and self-proof
-through merge, while only the root aggregates the independent swarm and issues
-a single-use countersign. The fixture starts two independent branches from one
-target. The first owner lands only after gates, live, and regression lanes
-agree; the second owner then rebases onto current `main`, reruns proof, receives
-a fresh three-lane verdict and countersign, and lands its own change. A third
-operator-held item remains untouched. Negative cases reject delegation of that
-item, merge without countersign, root consumption of owner authority, and a
-head changed after countersign.
-
-Live OMP 18.2.8 and Codex CLI 0.155.1 coordinator runs now pass the same local
-provider protocol at W3. Both start and bind the two lifecycle owners before
-waiting, serialize mutations across the shared checkout, use six fresh
-reviewers across two three-lane swarms, and keep build, proof, rebase, review,
-and merge execution out of the root. In each runtime the original change-61
-owner lands first; the original change-62 owner then rebases with an unchanged
-stable patch, reruns self-proof, and lands after a fresh countersign. Independent
-transcript audits confirm the authority boundary, and the final verifier leaves
-change 63 at its operator gate. This is coordinated local-provider evidence,
-not authenticated W4 forge completion.
-
-The unavailable-wake fallback now passes on OMP 18.2.8 and Codex CLI 0.155.1.
-Each root loads only the generated Skills, measures the pinned provider exactly
-once, observes `WAITING`, writes a durable checkpoint with `automationId: null`
-and `wakeCount: 0`, and stops after an independent verifier succeeds. A retained
-initial OMP failure records why persistent measurement counting and a strict
-three-command envelope are required: exploratory searches were backgrounded,
-their later delivery caused another pass, and the provider was measured twice.
-The hardened passing runs start no schedule, sleep, poll, detached process, or
-publication operation and do not claim unattended completion.
-
-Canonical roles live beside the portable Skills. The generator emits native
-role definitions under each target package's `agents/` directory; runtime
-setup or installation places those definitions in the host's discovered role
-location.
-
-Runtime probe records live under `evals/evidence/`. The OMP probe overlay at
-`evals/configs/omp-probe.yml` clears machine-specific Skill allowlists so the
-fixture measures the generated package rather than a developer preference.
-The writer-isolation fixture keeps its writable project data outside
-`.agents/skills`: Codex exposes project Skill content as read-only
-configuration even in a workspace-write session.
-Codex output contains the preferred portable root `plugin.json` plus the
-supported `.codex-plugin/plugin.json` compatibility manifest.
-
-## Goals
-
-- Maintain one semantic source of truth for workflows, roles, principles, and lifecycle protocols.
-- Generate native OMP, Codex, and Claude Code packages instead of asking an agent to translate foreign tool names at runtime.
-- Preserve upstream pstack provenance and make upstream synchronization reviewable.
-- Treat skill discovery, delegation, isolation, lifecycle control, model routing, and end-to-end behavior as separate compatibility claims.
-- Require observable evidence before declaring a runtime or workflow supported.
-- Keep packaging maturity separate from workflow conformance.
-
-## Non-goals
-
-- Reproduce Cursor-only behavior that has no safe equivalent.
-- Promise feature parity from `SKILL.md` discovery alone.
-- Make model slugs part of the portable core.
-- Maintain three hand-edited copies of every playbook.
-- Import all long-running and shipping workflows into the first release.
-- Build a cross-runtime agent daemon or replace native host orchestration.
-
-## Naming
-
-- Display name: **Oh My Stack**
-- Repository and plugin slug: `oh-my-stack`
-- Reserved future CLI command: `oms`
-- Reserved package scope: `@oh-my-stack/*`
-
-Use `oh-my-stack` in paths, manifests, package names, and documentation links. `ohmystack` is not a second identifier.
-
-## Design documents
-
-- [Architecture](docs/architecture.md)
-- [Runtime capability model](docs/capabilities.md)
-- [Codex upstream parity and acceptance backlog](docs/codex-parity-matrix.md)
-- [Prior-art assessment](docs/prior-art.md)
-- [Implementation plan](docs/implementation-plan.md)
-- [Security model](docs/security.md)
-- [Release process](docs/release-process.md)
-- [Public evidence policy](docs/evidence-policy.md)
-- [0.2.0-alpha.3 public-package boundary notes](docs/releases/0.2.0-alpha.3.md)
-- [0.2.0-alpha.2 public-release candidate notes](docs/releases/0.2.0-alpha.2.md)
-- [0.2.0-alpha.1 plugin release notes](docs/releases/0.2.0-alpha.1.md)
-- [0.2.0 Alpha release notes](docs/releases/0.2.0-alpha.0.md)
-- [0.1.0 Alpha release notes](docs/releases/0.1.0-alpha.0.md)
-- [ADR 0001: portable core and generated targets](docs/decisions/0001-portable-core.md)
-- [ADR 0002: surface-aware compatibility profiles](docs/decisions/0002-surface-aware-compatibility.md)
-- [ADR 0003: adapters compile and probe](docs/decisions/0003-adapters-compile-and-probe.md)
-
-## Target repository shape
-
-```text
-oh-my-stack/
-├── src/
-│   ├── core/
-│   ├── adapters/
-│   │   ├── omp/
-│   │   ├── codex/
-│   │   └── claude-code/
-│   ├── capabilities/
-│   └── packaging/
-├── packages/
-│   ├── omp/
-│   ├── codex/
-│   └── claude-code/
-├── tools/
-├── tests/
-├── evals/
-├── upstream/
-│   ├── sources.yaml
-│   ├── ownership.yaml
-│   ├── snapshots/
-│   └── patches/
-└── dist/
-```
-
-`packages/` contains committed generator-owned installation trees so Git-based installs remain reviewable. CI regenerates them and rejects drift. `dist/` contains uncommitted release archives and checksums; neither directory is a semantic source of truth.
+[kaito's pstack book](docs/books/pstack/README.md) is available in English and
+Simplified Chinese. Its guide and OMS companion provide additional background.
 
 ## Attribution
 
-This repository contains mechanically imported and semantically derived
-material from the MIT-licensed upstream projects recorded in
-`upstream/sources.yaml`. Imported files are pinned to immutable revisions and
-tracked through source snapshots, per-component ownership, derivation records,
-license metadata, and `THIRD_PARTY_NOTICES.md`.
+pstack-derived workflows include cross-tool adaptations. Selected AIHero skills
+retain their pinned original content. See [third-party notices](THIRD_PARTY_NOTICES.md)
+for sources, changes, and licensing. Oh My Stack uses the [MIT license](LICENSE).

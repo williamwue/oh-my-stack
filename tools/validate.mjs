@@ -63,7 +63,21 @@ export async function validateLocalMarkdownLinks(root) {
   const markdownFiles = (await validationFiles(root, root, { excludeSnapshots: true }))
     .filter((path) => path.endsWith(".md"));
   for (const path of markdownFiles) {
-    const text = await readFile(path, "utf8");
+    // Fenced examples are literal templates, not links in the rendered document.
+    let fence = null;
+    const text = (await readFile(path, "utf8")).split(/\r?\n/).filter((line) => {
+      const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+      if (fence) {
+        if (marker && marker[1][0] === fence.character
+          && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
+        return false;
+      }
+      if (marker && !(marker[1][0] === "`" && marker[2].includes("`"))) {
+        fence = { character: marker[1][0], length: marker[1].length };
+        return false;
+      }
+      return true;
+    }).join("\n");
     for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
       const target = match[1];
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;
@@ -165,6 +179,15 @@ async function validateJsonDocuments(root) {
   await readJson(join(root, "package-lock.json"));
 }
 
+// Dated evidence is immutable. These exact documents also have narrowly scoped
+// Markdown style overrides; hash drift requires explicit provenance review.
+const historicalEvidence = new Map([
+  ["docs/operations/cloud-management-acceptance-2026-10-01.md",
+    "b05a97a10e579751b187d5e5d06e7150841aea9f85e4c994931594ec101dcce8"],
+  ["docs/omp-18.2.9-live-test-plan.md",
+    "17c558f6a5ccb28c6c2434b1877bb94ea9151d7f7339cc5c2160a4be7876b7ac"],
+]);
+
 export async function validatePublicHygiene(root) {
   const roots = [
     ".github",
@@ -195,11 +218,14 @@ export async function validatePublicHygiene(root) {
     const key = relative(root, path);
     assert(!/\.env(?:\.|$)|\.(?:jsonl|sqlite3?|db|pem|key)$/.test(key), `${key}: private runtime or credential file cannot be published`);
     if (!/\.(?:c?js|json|md|mjs|toml|txt|ya?ml)$/.test(path) && basename(path) !== "LICENSE") continue;
-    const text = await readFile(path, "utf8");
+    const bytes = await readFile(path);
+    const text = bytes.toString("utf8");
+    const historicalHash = historicalEvidence.get(key.split(sep).join("/"));
+    if (historicalHash) assert(sha256(bytes) === historicalHash, `${key}: historical evidence hash drift`);
     const macHomePrefix = ["", "Users", ""].join("/");
     // Third-party source is retained byte-for-byte for provenance, including
     // its path examples. It is not part of a generated user-facing Skill.
-    if (!within(join(root, "upstream", "snapshots"), path)) {
+    if (!historicalHash && !within(join(root, "upstream", "snapshots"), path)) {
       assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
     }
     assert(!/-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/.test(text), `${key}: contains a private key`);

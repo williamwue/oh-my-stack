@@ -8,10 +8,10 @@ SHA-256 checksums, and explicit verification maturity.
 The Codex plugin bundle is a fourth archive rooted at
 `oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. All 74 current public Skills remain discoverable
+`.agents/plugins/marketplace.json`. All 89 current public Skills remain discoverable
 and directly invocable. Codex descriptions are concise; full instructions and
-resources load on demand. Catalog categories distinguish 51 workflows and
-23 principles without moving either group outside the discovery directory.
+resources load on demand. Catalog categories distinguish 65 workflows and
+24 principles without moving either group outside the discovery directory.
 
 The Claude Code marketplace bundle is a fifth archive rooted at
 `oh-my-stack-claude-marketplace/`. It contains the generated Claude plugin at
@@ -72,7 +72,7 @@ node tools/install-release.mjs plan \
 ```
 
 `plan` is read-only and does not register a plugin or update model settings.
-Use the [setup receipt](../README.md) to inspect the configuration selected by
+Use the [model configuration guide](model-configuration.md) to inspect the configuration selected by
 the current project; package version and model configuration are distinct.
 Retain the previous trusted release manifest and archives. To roll back an
 owned directory, run `plan` with that previous manifest, then:
@@ -199,7 +199,7 @@ From a published repository, register its native marketplace and install at
 user scope:
 
 ```bash
-claude plugin marketplace add williamwue/oh-my-stack
+claude plugin marketplace add https://github.com/williamwue/oh-my-stack.git#stable
 claude plugin install oh-my-stack@oh-my-stack --scope user
 claude plugin list --json
 ```
@@ -221,8 +221,9 @@ claude plugin marketplace remove oh-my-stack
 The native manager may keep cached plugin data after removal; these commands
 do not remove Oh My Stack model setup files. An isolated `CLAUDE_CONFIG_DIR`
 native install/list/same-version update/uninstall test verifies manager
-lifecycle without changing a personal Claude profile. Authenticated user-scope
-setup, live workers, and a future-version update remain separate acceptance.
+lifecycle without changing a personal Claude profile. The dated [stable marketplace acceptance](acceptance/2026-10-07/stable-marketplace.md)
+adds a 0.9.0 to 0.9.1 user-scope Git update. Authenticated setup, live workers,
+other scopes, and future versions remain separate acceptance.
 
 ## Uninstall
 
@@ -279,3 +280,69 @@ Release metadata keeps four claims separate:
 `lifecycle: verified` in the release manifest describes the generic owned-dir
 installer. It does not override a surface-specific runtime plugin-manager
 result. Likewise, one CLI result cannot be attributed to desktop or IDE.
+
+## Stable Git marketplace
+
+The `stable` branch is a generated distribution, separate from `main`. It has
+native catalogs at `.agents/plugins/marketplace.json` and
+`.claude-plugin/marketplace.json`, pointing to `plugins/codex` and
+`plugins/claude-code` respectively. The payloads are byte-for-byte copies of
+published target archives, including original Skills and supporting resources.
+Only the marketplace paths and channel README/provenance receipt are composed.
+
+After the existing release gates above have passed, prepare a promotion using
+Node.js 22, Git, and the maintainer's existing official `gh` login. Run from a
+neutral directory, without sourcing repository environment files:
+
+```bash
+node /absolute/path/to/oh-my-stack/tools/stable-marketplace.mjs \
+  --tag v0.9.1 --out /new/absolute/path/to/stable-plan
+```
+
+This downloads release assets and writes local evidence, but does not push.
+It verifies the native account's write access and exact repository, a published
+non-prerelease, all seven GitHub asset digests, same-release `SHA256SUMS`, clean
+manifest provenance, safe archive inventories, exact tag commit, successful
+main-push CI, and an independent clean tagged rebuild of all seven assets.
+Cross-platform rebuilding may normalize only gzip's operating-system header
+byte to the published value; every other compressed byte, complete manifest
+and checksum file must match. Any normalization is recorded in the receipt.
+Published downloads and GitHub asset digests are always checked unchanged.
+Maintainer execution requires native repository write permission. Actions uses
+the repository's installation token and verifies the exact server-observed
+publishing run, repository, event and commit instead of requiring a user
+permissions object. The workflow declares `contents: write`; GitHub enforces
+that permission when the publisher pushes the stable ref.
+Inspect `promotion.json`, `snapshot/STABLE_RELEASE.json`, and the downloads.
+The source tool does not accept arbitrary publication repository coordinates.
+
+When publication of that stable source is authorized, rerun with a new evidence
+directory and the explicit remote-write switch:
+
+```bash
+node /absolute/path/to/oh-my-stack/tools/stable-marketplace.mjs \
+  --tag v0.9.1 --out /new/absolute/path/to/stable-publish --publish
+```
+
+Publication changes only `refs/heads/stable`. Each update appends a commit,
+refuses downgrades or same-version byte changes, validates the previous branch's
+ownership/inventory, and uses an expected-head lease to reject concurrent
+changes. A rerun of identical content is a no-op. The tool verifies the remote
+head after pushing and records the result. It does not create tags, releases,
+PRs, merge code, or change user profiles. A prepared local commit is not a
+published source.
+
+`.github/workflows/stable-marketplace.yml` runs the same gates after a published
+release or a manual dispatch with an already published tag. It checks out
+trusted `main` tools, uses the repository's native Actions token with scoped
+permissions, serializes promotions, and retains failure/success evidence for
+30 days. It does not replace candidate review, human release authorization,
+or pre-publication tagged checks. Missing assets or failed/missing source CI
+stop promotion; after the release checks complete, retry by manual dispatch.
+This automation is available only after its implementation has landed on
+`main`; a local workflow file alone does not activate it on GitHub.
+
+The initial stable channel was bootstrapped from published v0.9.1. Subsequent
+versions become eligible only after formal publication and the same gates;
+local candidates are never eligible for promotion.
+See [observed native manager upgrades and limits](acceptance/2026-10-07/stable-marketplace.md).

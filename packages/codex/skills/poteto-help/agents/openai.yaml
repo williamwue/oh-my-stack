@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Poteto Help"
+  short_description: "Answer setup and workflow questions with a usable prompt and ver"
+  default_prompt: "Use $poteto-help for this task."
+policy:
+  allow_implicit_invocation: false

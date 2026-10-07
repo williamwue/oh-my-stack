@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { codexSkillDescriptions } from "./codex-skill-descriptions.mjs";
+import { loadSourceSkills, sourceCoordinate, validateSourceTarget } from "./source-skills.mjs";
 
 import {
   access,
@@ -358,8 +359,17 @@ export async function loadModel(root = repoRoot) {
     skills.push({ directory, metadata, text, frontmatter });
   }
   assert(skills.length > 0, "portable core has no skills");
-  const skillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
-  validateSkillCatalog(skillCatalog, skills.map((skill) => skill.metadata.name));
+  const coreSkillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
+  validateSkillCatalog(coreSkillCatalog, skills.map((skill) => skill.metadata.name));
+  const coreSkills = [...skills];
+  const sourceSkills = await loadSourceSkills(root, parseSkillFrontmatter, registry);
+  for (const skill of sourceSkills) {
+    assert(!skills.some((entry) => entry.metadata.name === skill.metadata.name), `source Skill conflicts with existing name: ${skill.metadata.name}`);
+    skills.push(skill);
+  }
+  skills.sort((left, right) => left.metadata.name.localeCompare(right.metadata.name));
+  const skillCatalog = { ...coreSkillCatalog,
+    public: [...coreSkillCatalog.public, ...sourceSkills.map((skill) => skill.metadata.name)].sort() };
 
   const roles = [];
   const roleRoot = join(root, "src", "core", "roles");
@@ -409,11 +419,11 @@ export async function loadModel(root = repoRoot) {
     for (const skill of skills) validateRequirementSupport(skill, targetProfiles);
   }
 
-  assert(JSON.stringify(Object.keys(codexSkillDescriptions).sort()) === JSON.stringify(skillCatalog.public), "Codex descriptions must cover exactly the public catalog");
+  assert(JSON.stringify(Object.keys(codexSkillDescriptions).sort()) === JSON.stringify(coreSkillCatalog.public), "Codex descriptions must cover exactly the core public catalog");
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, skillCatalog, roles };
+  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -433,6 +443,7 @@ function codexSkillMetadata(skill) {
 }
 
 function renderSkillDocument(skill, adapter) {
+  if (skill.source) return skill.text;
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
   if (["omp", "codex"].includes(adapter.id) && skill.metadata.name === "reflect") {
     body = body.replace(
@@ -458,7 +469,8 @@ function renderSkillDocument(skill, adapter) {
   if (skill.metadata.invocation === "explicit" && adapter.id !== "codex") {
     frontmatter.push("disable-model-invocation: true");
   }
-  const codexDelegation = adapter.id === "codex" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name))
+  const delegates = skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name);
+  const codexDelegation = adapter.id === "codex" && delegates
     ? [
       "## Codex delegation binding",
       "",
@@ -495,6 +507,39 @@ function renderSkillDocument(skill, adapter) {
       "those custom roles. Delegated workflows use explicit spawn parameters and",
       "the complete generated role contract through `../../scripts/codex-delegation.mjs`.",
       "Verify actual model and effort from persisted child records when available.",
+      "",
+    ].join("\n")
+    : "";
+  const codexGitHub = adapter.id === "codex" && ["opening-a-pr", "babysit", "shipping"].includes(skill.metadata.name)
+    ? [
+      "## Codex GitHub workflow binding",
+      "",
+      "When the selected provider is explicitly `github.com`, read",
+      "`../../scripts/github-workflow.mjs` and",
+      "`../../docs/github-workflow.md` before using this bounded single-PR adapter.",
+      "For authorized operations supported by a host-owned PR tool, use that",
+      "tool first and preserve the host's task association requirements.",
+      "Use `executeGitHubWorkflow(request)` only as the bounded fallback for",
+      "creation or merge that the host-owned tool does not support. Tool choice",
+      "does not expand the workflow's authorization or target gates.",
+      "Its CLI exposes only `inspect` and `recover`; recovery",
+      "can append local reconciliation evidence. The request must name this",
+      "workflow, the exact target and account, and any required journal and",
+      "authority records. Caller records assert scope; they do not authenticate",
+      "human consent or reviewer provenance. Select no provider by inference.",
+      ...(skill.metadata.name === "babysit"
+        ? ["This binding supports `check` only. Stop for `drive`, `threads-only`,",
+          "`background`, repair, polling, or merge requests."] : []),
+      ...(skill.metadata.name === "shipping"
+        ? ["This binding accepts one root-countersigned bottom PR only. It does",
+          "not discover or validate stack topology. Strict target CAS stops;",
+          "`server-policy` requires separately scoped authorization and retains",
+          "the GitHub base-revision race boundary. Review defaults to `github-review`;",
+          "`independent-oms` must be explicitly authorized and still honors",
+          "the repository's actual GitHub approval requirements."] : []),
+      ...(skill.metadata.name === "opening-a-pr"
+        ? ["This binding creates one ready PR from an already pushed branch;",
+          "it does not push a branch or create a stack."] : []),
       "",
     ].join("\n")
     : "";
@@ -570,7 +615,7 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const ompDelegation = adapter.id === "omp" && (skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name) || skill.metadata.name === "poteto-mode")
+  const ompDelegation = adapter.id === "omp" && (delegates || skill.metadata.name === "poteto-mode")
     ? [
       "## OMP model routing",
       "",
@@ -601,7 +646,36 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, ompSetup, claudeSetup, ompDelegation].filter(Boolean).join("\n").trimEnd();
+  const handoffBinding = delegates
+    ? [
+      "## Child session handoff",
+      "",
+      "Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).",
+      "New tasks, repair rounds, retries, and queue items use fresh child sessions",
+      "with the original brief, every later directive, prior findings and responses,",
+      "and unresolved objections. Reuse only for required costly live state, and",
+      "only when the host allows it. Stop and fence active writers before replacement.",
+      "A host-owned orchestrator's model catalog, workspace binding, child tools,",
+      "and review-round rules take precedence over the native binding above.",
+      "Keep its task handles and attribution receipts. Do not use a backing child",
+      "conversation as a new delegated review, or claim native-record verification",
+      "for a host-owned child. Report attribution evidence gaps explicitly.",
+      "",
+    ].join("\n")
+    : "";
+  const helpBinding = skill.metadata.name === "poteto-help"
+    ? [
+      "## Installed catalog",
+      "",
+      "Read [the generated Skill catalog](../../SKILL_CATALOG.json) for this package.",
+      "Use the host's actual Skill picker or supported invocation syntax. Do not",
+      "assume typing a Skill name as plain text selected its structured input.",
+      "For setup and installation, read this package's setup Skill and the verified",
+      "operations documentation for the current host before giving exact commands.",
+      "",
+    ].join("\n")
+    : "";
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -680,7 +754,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   for (const skill of skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
-    await rm(join(skillTarget, "skill.json"));
+    if (!skill.source) await rm(join(skillTarget, "skill.json"));
     const document = renderSkillDocument(skill, adapter);
     if (adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
@@ -692,7 +766,13 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       await writeText(join(skillTarget, "SKILL.md"), document);
     }
     if (adapter.id === "codex") {
-      await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
+      if (!skill.source) await writeText(join(skillTarget, "agents", "openai.yaml"), codexSkillMetadata(skill));
+    }
+    if (skill.source) {
+      await cp(skill.source.licenseFile, join(skillTarget, "LICENSE"));
+      await writeJson(join(skillTarget, "SOURCE.json"), sourceCoordinate(skill.source));
+      await mkdir(join(target, "licenses", skill.source.id), { recursive: true });
+      await cp(skill.source.licenseFile, join(target, "licenses", skill.source.id, "LICENSE"));
     }
   }
 
@@ -708,6 +788,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       audience: audiences.get(skill.metadata.name),
       category: skill.metadata.name.startsWith("check-") ? "probe" : skill.metadata.name.startsWith("principle-") ? "principle" : "workflow",
       invocation: skill.metadata.invocation,
+      ...(skill.source ? { source: sourceCoordinate(skill.source) } : {}),
     })),
   });
 
@@ -765,6 +846,11 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+    await mkdir(join(target, "docs"), { recursive: true });
+    await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      await cp(join(model.root, "tools", name), join(target, "scripts", name));
+    }
   }
   if (adapter.id === "claude-code") {
     await cp(join(model.root, "tools", "claude-effort-hook.mjs"), join(target, "scripts", "claude-effort-hook.mjs"));
@@ -815,6 +901,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
 
   for (const skill of skills) {
     const skillPath = join(target, adapter.skillsDir, skill.metadata.name, "SKILL.md");
+    await validateSourceTarget(target, skill);
     const frontmatter = parseSkillFrontmatter(await readFile(skillPath, "utf8"), skillPath);
     assert(frontmatter.name === skill.metadata.name, `${adapter.id}: generated skill name drift`);
     if (adapter.id === "codex") {
@@ -845,6 +932,12 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   if (["omp", "codex", "claude-code"].includes(adapter.id)) {
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
+  }
+  if (adapter.id === "codex") {
+    assert(await exists(join(target, "docs", "github-workflow.md")), "codex: GitHub workflow documentation is missing");
+    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
+      assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);
+    }
   }
   if (adapter.id === "claude-code") {
     assert(await exists(join(target, "scripts", "claude-effort-hook.mjs")), "Claude Code effort hook is missing");

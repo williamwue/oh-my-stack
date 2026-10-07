@@ -1,0 +1,13 @@
+{
+  "chapter": 23,
+  "reviewer": "root independent AI review; translator translate_b",
+  "human_review": false,
+  "coverage": "Full comparison of338 Japanese/Chinese visible entries including prose, lists, tables, conditions, numbers and attribution. Code/embeds checked separately.",
+  "source_sha256": "8ac038f5bef8f7331d268ab74250dca70b1970bbf57a615e536a519a75240381",
+  "translation_sha256": "e3b28a2868734a31648056f3c46c951ff89fea85611bdbc72e33f1ceb9e38500",
+  "findings_resolved": [
+    "Translated one omitted race-condition explanation paragraph (two increments yielding11 rather than12)."
+  ],
+  "unresolved": [],
+  "verdict": "reviewed"
+}

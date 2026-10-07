@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/williamwue/oh-my-stack",
+  "revision": "6de221e75555ad1401a64e60e54c98655c625226",
+  "path": "tools/install-release.mjs",
+  "sha256": "89a1f531c8cefee1d2f146b1bb66aa7a2ad4fae5842260c1fb44dd9eb6ed1b72",
+  "gitBlob": "6cc465f13fc4e5bd4d8d28bd1471fb45ff80eab3",
+  "occurrences": [
+    "file symlink invocation silently skipped the CLI",
+    "directory symlink invocation silently skipped the CLI"
+  ],
+  "historicalRecord": "docs/checklist-continuation-2026-10-03.md"
+}

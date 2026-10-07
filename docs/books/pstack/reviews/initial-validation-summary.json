@@ -1,0 +1,34 @@
+{
+  "status": "local book candidate complete; repository-wide gates blocked by pre-existing files",
+  "complete_gate": {
+    "chapters": 48,
+    "ready": 48,
+    "warnings": []
+  },
+  "node_book_tests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "python_audit_tests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "book_markdownlint": {
+    "files": 172,
+    "issues": 0
+  },
+  "repository_tests": {
+    "passed": 209,
+    "failed": 1,
+    "failure": "source and generated packages validate: existing absolute home path in historical operations document"
+  },
+  "repository_markdownlint": {
+    "issues": 12,
+    "files": 4
+  },
+  "full_check_exit_code": 1,
+  "human_review": false,
+  "publication": "not committed, pushed or published",
+  "base_commit": "52bec251d379799afc56a3eb538ad82e68908020",
+  "review_model_identity": "Child runtime model identities unverified; prepared delegation configs are not runtime proof."
+}
