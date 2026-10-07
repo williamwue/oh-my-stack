@@ -22,6 +22,26 @@ Skill 会观察当前工具，不根据菜单名称或别的账号猜测可用�
 
 ## 审阅并应用
 
+Codex 的 `pstack` 推荐使用 GPT-6 Luna、GPT-6.1 Sol 和 GPT-6 Astra。
+OMP 的 `pstack-openai-codex` 备选使用相同模型及其供应商前缀 ID。
+预设是经过核对的推荐；发现新版模型不会自动替换已配置模型。
+推荐 ID 不可用时，setup 会要求明确选择已观察到的模型，不会静默回退。
+重新运行模型设置会预览更新后的预设默认值，并保留显式模型覆盖、推理预算和面板顺序。
+
+Claude Code 没有固定版本的 pstack 预设。Setup 观察 `sonnet`、`opus`
+别名实际对应的模型，Haiku 仍为可选项。别名可能因供应商或本机配置而对应不同版本。
+收集器识别 Opus、Sonnet、Haiku 5.5 的可配置推理档位；Haiku 4.5 没有原生档位覆盖。
+未经核对的版本会停止收集，不会沿用旧型号的能力判断。
+观察请求消耗账号用量，仍需用户批准。模型可用及文档支持的档位，
+不代表账号实际档位或子代理执行已验证。
+使用 Anthropic API 当前别名版本时，Claude Code 至少需要
+2.1.280（Opus 5.5）、2.1.284（Sonnet 5.5）或 2.1.293（Haiku 5.5）。
+选择 Haiku 前检查本机客户端版本；OMS 不会代替用户升级宿主工具。
+
+上述推荐与能力规则于 2026-10-08 核对
+[OpenAI 模型目录](https://developers.openai.com/api/docs/models)和
+[Claude Code 模型配置文档](https://code.claude.com/docs/en/model-config)。
+
 检查建议模型、推理等级、worker 数量和配置范围。
 在支持的工具中，项目配置优先于用户默认值。
 需要应用时，请求 Skill 写入已经审阅的具体映射。

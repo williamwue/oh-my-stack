@@ -50,7 +50,17 @@ test("Claude probe accepts only observed family and reviewed effort policy", () 
     { id: "claude-opus-5-5", reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] });
   assert.deepEqual(normalizeClaudeProbe("haiku", result("claude-haiku-4-5")),
     { id: "claude-haiku-4-5", reasoningEfforts: ["none"] });
+  assert.deepEqual(normalizeClaudeProbe("haiku", result("claude-haiku-4-5-20251001")),
+    { id: "claude-haiku-4-5-20251001", reasoningEfforts: ["none"] });
+  for (const alias of ["opus", "sonnet", "haiku"]) {
+    const id = `claude-${alias}-5-5`;
+    assert.deepEqual(normalizeClaudeProbe(alias, result(id)),
+      { id, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] });
+  }
+  assert.deepEqual(normalizeClaudeProbe("sonnet", result("claude-sonnet-4-6")),
+    { id: "claude-sonnet-4-6", reasoningEfforts: ["low", "medium", "high", "max"] });
   assert.throws(() => normalizeClaudeProbe("sonnet", result("claude-opus-5-5")), /different family or fallback/);
   assert.throws(() => normalizeClaudeProbe("fable", result("claude-fable-1")), /only haiku, sonnet, and opus/);
   assert.throws(() => normalizeClaudeProbe("sonnet", result("claude-sonnet-6")), /no reviewed effort policy/);
+  assert.throws(() => normalizeClaudeProbe("haiku", result("claude-haiku-6")), /no reviewed effort policy/);
 });

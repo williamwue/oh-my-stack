@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "version": "0.11.2",
+  "fullCheckTests": 267,
+  "codexCli": "0.160.1",
+  "claudeCode": "2.1.287",
+  "isolatedNativeCacheInventoriesVerified": [
+    "codex",
+    "claude-code"
+  ],
+  "installedConfigurationScriptsVerified": [
+    "codex",
+    "claude-code"
+  ],
+  "codexDiscovery": {
+    "version": "0.11.2",
+    "freshAppServer": true,
+    "publicSkills": 90,
+    "allPathsAtNewVersion": true,
+    "nativeHookCount": 1,
+    "hookTrust": "untrusted",
+    "modelTurnPerformed": false
+  },
+  "claudeCanonicalObservation": {
+    "schemaVersion": 1,
+    "runtime": "claude-code",
+    "observedAt": "2026-10-07T23:55:04.387Z",
+    "source": "claude --model <sonnet,opus> bounded live probes; effort support from https://code.claude.com/docs/en/model-config (account caps require runtime acceptance)",
+    "models": [
+      {
+        "id": "claude-sonnet-5-5",
+        "reasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      {
+        "id": "claude-opus-5-5",
+        "reasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    ]
+  },
+  "claudeMappingPreview": {
+    "modelChange": "claude-sonnet-5 -> claude-sonnet-5-5",
+    "opusPreserved": "claude-opus-5-5",
+    "budgetPreserved": "medium/high",
+    "orderedPanels": 4,
+    "panelLength": 3,
+    "applied": false
+  },
+  "authentication": "Existing native Claude login for two bounded alias probes; no credentials copied to isolated installation homes.",
+  "boundaries": [
+    "No Claude child execution or effort observation",
+    "No optional Haiku or Fable probe",
+    "No Desktop/IDE rendering claim",
+    "Candidate is not tagged/published evidence"
+  ]
+}
