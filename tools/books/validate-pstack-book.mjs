@@ -159,7 +159,7 @@ async function checkLinks(root, files, chapterPaths) {
       catch { throw new Error(`${relative(root, file)}: malformed local link ${target}`); }
       const destination = pathname ? resolve(dirname(file), pathname) : file;
       check(inside(root, destination), `${relative(root, file)}: link escapes repository ${target}`);
-      await requiredFile(root, relative(root, destination), `${relative(root, file)}: local link`);
+      await requiredFile(root, relative(root, destination).split(sep).join("/"), `${relative(root, file)}: local link`);
       if (fragment) {
         if (!anchorCache.has(destination)) anchorCache.set(destination, anchors(await readFile(destination, "utf8")));
         check(anchorCache.get(destination).has(fragment) || anchorCache.get(destination).has(rawFragment),
