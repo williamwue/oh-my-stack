@@ -108,7 +108,7 @@ export function createGhTransport({ executable = 'gh', timeoutMs = 15_000, maxOu
         });
         child.stdin.end(body === undefined ? undefined : JSON.stringify(body));
       });
-    } finally { await rm(cwd, { recursive: true, force: true }); }
+    } finally { await rm(cwd, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }
   };
 }
 
