@@ -27,6 +27,7 @@
     "make-bot-ui",
     "multi-phase-plan",
     "no-comments",
+    "oms-auto",
     "opening-a-pr",
     "orchestrate",
     "pause-safely",

@@ -1,6 +1,6 @@
 ---
 name: setup-oh-my-stack
-description: "Configure role models from observed runtime inventory."
+description: "Configure role models or optional Codex automatic routing."
 ---
 
 # Setup Oh My Stack

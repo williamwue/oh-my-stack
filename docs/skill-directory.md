@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-89 public entries: 65 workflows and 24 principles.
+90 public entries: 66 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -28,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-65 entries.
+66 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -63,6 +63,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`make-bot-ui`](../packages/codex/skills/make-bot-ui/SKILL.md) | Build a local control page for an authenticated webhook. | explicit | OMS core |
 | [`multi-phase-plan`](../packages/codex/skills/multi-phase-plan/SKILL.md) | Write a dependency plan with verifiable units and live checks. | explicit | OMS core |
 | [`no-comments`](../packages/codex/skills/no-comments/SKILL.md) | Review comments, remove redundancy, and encode real constraints. | explicit | OMS core |
+| [`oms-auto`](../packages/codex/skills/oms-auto/SKILL.md) | Route opted-in repository engineering tasks; skip chat, translation, and tool help. | automatic | OMS core |
 | [`opening-a-pr`](../packages/codex/skills/opening-a-pr/SKILL.md) | Prepare a reviewed pull request; publish only when explicitly requested. | explicit | OMS core |
 | [`orchestrate`](../packages/codex/skills/orchestrate/SKILL.md) | Coordinate ongoing engineering work with bounded tasks and independent checks. | explicit | OMS core |
 | [`pause-safely`](../packages/codex/skills/pause-safely/SKILL.md) | Checkpoint in-flight work when the user requests a pause. | explicit | OMS core |
@@ -80,7 +81,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md) | Resume checkpointed work without repeating completed steps. | explicit | OMS core |
 | [`setup-benny`](../packages/codex/skills/setup-benny/SKILL.md) | Configure Benny triage and reproduction automations. | explicit | OMS core |
 | [`setup-matt-pocock-skills`](../packages/codex/skills/setup-matt-pocock-skills/SKILL.md) | Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills. | explicit | aihero original |
-| [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md) | Configure role models from observed runtime inventory. | explicit | OMS core |
+| [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md) | Configure role models or optional Codex automatic routing. | explicit | OMS core |
 | [`shipping`](../packages/codex/skills/shipping/SKILL.md) | Land an explicitly authorized PR or stack after independent checks. | explicit | OMS core |
 | [`show-me-your-work`](../packages/codex/skills/show-me-your-work/SKILL.md) | Record an append-only decision trail for long or delegated work. | explicit | OMS core |
 | [`swarm`](../packages/codex/skills/swarm/SKILL.md) | Run bounded coverage or races, drain workers, and consolidate verified results. | explicit | OMS core |

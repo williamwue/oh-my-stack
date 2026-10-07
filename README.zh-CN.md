@@ -94,6 +94,9 @@ pstack 工程工作流，移植到 Codex 和 Claude Code。
 未配置 Oh My Stack 模型映射时，基础使用继承 agent 的模型。
 需要为角色和审阅面板选择模型、推理预算时，使用[可选模型配置指南](docs/zh-CN/model-configuration.md)。
 
+0.11.0 也提供 [Codex 可选自动路由](docs/zh-CN/automatic-routing.md)。
+默认关闭；现有显式入口和模型配置继续保留。
+
 ## 更多文档
 
 - [首次使用](docs/zh-CN/getting-started.md)

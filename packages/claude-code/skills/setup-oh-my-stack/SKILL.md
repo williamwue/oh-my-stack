@@ -1,6 +1,6 @@
 ---
 name: setup-oh-my-stack
-description: "Preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory."
+description: "Configure optional automatic routing, or preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory."
 disable-model-invocation: true
 ---
 
@@ -36,6 +36,20 @@ effective effort through `scripts/claude-effort-hook.mjs`; pass that
 JSONL with `--hook-record`. Use an isolated project and do not install a
 diagnostic hook into the user's global settings. Without hook evidence,
 treat child effort as unverified even when the agent file specifies it.
+
+## Automatic routing availability
+
+Automatic routing is not configured on this target. For oms-auto or a
+routing-only setup request, return control to the host without automatic
+execution. Use the explicit poteto-mode entry for engineering work.
+For ordinary model setup, continue with the procedure below.
+
+If the request is only to enable, disable, or inspect automatic routing, use
+the generated routing binding before the model procedure below. A switch-only
+request does not need model inventory, mapping changes, or a paid worker probe.
+Inspect the effective scope, preview the requested switch, and apply only when
+that configuration change was requested. Report unsupported targets without
+changing model configuration. Continue below only for requested model setup.
 
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.
