@@ -37,6 +37,7 @@ DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib .tmp/ebook-venv/bin/python tools/bo
 DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib .tmp/ebook-venv/bin/python tools/books/build-pstack-ebooks.py --language en --format epub
 .tmp/ebook-venv/bin/python tests/ebook-layout.test.py
 .tmp/ebook-venv/bin/python tests/pstack-book-audit.test.py
+.tmp/ebook-venv/bin/python tests/ebook-paths.test.py
 .tmp/ebook-venv/bin/python tools/books/audit-source.py
 .tmp/ebook-venv/bin/python tools/books/validate-pstack-ebooks.py --language zh-CN
 .tmp/ebook-venv/bin/python tools/books/validate-pstack-ebooks.py --language en
@@ -46,7 +47,9 @@ The default build produces both formats for the selected languages. `--format
 epub` only updates the EPUB output. Source manifests and review hashes must pass
 the complete book check before generation. Run EPUBCheck 5.4.0 separately on
 each resulting EPUB, inspect the rendered output, then refresh
-`output/ebooks-validation.json` and `output/SHA256SUMS.txt`.
+a new dated `output/ebook-mainline-validation-YYYY-MM-DD.json` and
+`output/SHA256SUMS.txt`. Preserve `output/ebooks-validation.json` as historical
+evidence; do not overwrite it with new build results.
 
 Chinese natural-language code changes have per-block deviations and a
 supplemental receipt in `reviews/ebook-comment-translations.json`. Original

@@ -4,7 +4,7 @@
 import argparse
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 from urllib.parse import unquote, urlsplit
 import xml.etree.ElementTree as ET
@@ -85,7 +85,7 @@ def validate(language, artifact):
                 url = urlsplit(value)
                 if url.scheme or url.netloc:
                     continue
-                destination = str(Path(name).parent / unquote(url.path)) if url.path else name
+                destination = str(PurePosixPath(name).parent / unquote(url.path)) if url.path else name
                 assert destination in names, f"{name}: missing resource {value}"
                 if url.fragment:
                     assert destination in documents, f"{name}: fragment target is not XHTML"
@@ -122,7 +122,7 @@ def validate(language, artifact):
                 actual_comments = {explanatory_comment(line).strip() for block in actual_code
                                    for line in block.splitlines() if explanatory_comment(line).strip()}
                 assert not original_comments.intersection(actual_comments), f"chapter {order}: original Japanese comment remains (including Kanji-only text)"
-            rows.append({"order": order, "edition_file": str(path.relative_to(ROOT)),
+            rows.append({"order": order, "edition_file": path.relative_to(ROOT).as_posix(),
                          "edition_sha256": digest(path.read_bytes()), "code_blocks": len(actual_code),
                          "tables": len(source.select("table")), "table_rows": len(expected),
                          "blocks_with_kana": sum(bool(KANA.search(block)) for block in actual_code)})

@@ -64,7 +64,7 @@ def make_content(lang,folder):
     if not fragment or fragment in idsets[target]:x['href']=f'ch{target:02}.xhtml'+('#'+ident(target,fragment) if fragment else '')
    elif not parts.scheme and not href.startswith('#'):
     local=(p.parent/unquote(parts.path)).resolve()
-    x['href']='https://github.com/williamwue/oh-my-stack/blob/'+SOURCE_REV+'/'+str(local.relative_to(ROOT)).replace(' ','%20')+('#'+parts.fragment if parts.fragment else '')
+    x['href']='https://github.com/williamwue/oh-my-stack/blob/'+SOURCE_REV+'/'+local.relative_to(ROOT).as_posix().replace(' ','%20')+('#'+parts.fragment if parts.fragment else '')
   for x in s.select('[id]'):x['id']=ident(order,x['id'])
   image_count=0
   for x in s.select('img'):
@@ -73,7 +73,7 @@ def make_content(lang,folder):
    target=folder/'images'/name
    if origin.suffix=='.svg':w,h=diagram_png(origin,target,folder)
    else:target.write_bytes(origin.read_bytes());w,h=Image.open(target).size
-   x.attrs={'src':'images/'+name,'alt':x.get('alt') or ('图示' if lang=='zh-CN' else 'Diagram')};x['data-original']=str(origin.relative_to(BOOK));fig=s.new_tag('figure');x.wrap(fig);image_count+=1
+   x.attrs={'src':'images/'+name,'alt':x.get('alt') or ('图示' if lang=='zh-CN' else 'Diagram')};x['data-original']=origin.relative_to(BOOK).as_posix();fig=s.new_tag('figure');x.wrap(fig);image_count+=1
    if origin.suffix=='.svg':
     vb=BeautifulSoup(origin.read_text(),'xml').svg['viewBox'].split();fig['data-w']=vb[2];fig['data-h']=vb[3]
   # Strip browser-only attributes. XML output retains only HTML attributes supported in reading systems.
@@ -91,7 +91,7 @@ def make_content(lang,folder):
   line.append('2026-10-03');section.append(line)
   for child in list(s.contents):section.append(child.extract())
   outputs.append((f'ch{order:02}.xhtml',title,str(wrapper)))
-  stats.append({'order':order,'edition_file':str(p.relative_to(ROOT)),'edition_sha256':sha(p.read_bytes()),'code_blocks':len(original_codes),'images':image_count,'text_and_code_preserved':True})
+  stats.append({'order':order,'edition_file':p.relative_to(ROOT).as_posix(),'edition_sha256':sha(p.read_bytes()),'code_blocks':len(original_codes),'images':image_count,'text_and_code_preserved':True})
  return outputs,stats
 
 def xhtml(title,content,lang,stylesheet='book.css'):
@@ -121,7 +121,7 @@ def package_epub(lang,folder,chapters,front,cover_png):
  for n,t in files.items():
   if n.endswith('.xhtml'):etree.fromstring(t.encode())
  mimetypes={'.otf':'font/otf','.png':'image/png','.txt':'text/plain'}
- binaries={str(p.relative_to(folder)):p.read_bytes() for path in ['images','fonts'] for p in (folder/path).glob('*') if p.is_file() and not re.search(r'-part[0-9]+\.png$',p.name)}
+ binaries={p.relative_to(folder).as_posix():p.read_bytes() for path in ['images','fonts'] for p in (folder/path).glob('*') if p.is_file() and not re.search(r'-part[0-9]+\.png$',p.name)}
  manifest=[];spine=[]
  for i,(name,data) in enumerate(files.items()):
   props=' properties="nav"' if name=='nav.xhtml' else '';media='application/xhtml+xml' if name.endswith('.xhtml') else 'text/css';manifest.append(f'<item id="f{i}" href="{name}" media-type="{media}"{props}/>')
@@ -151,7 +151,7 @@ def main(lang,formats):
   for fn,title,path in [('glossary.xhtml','附加资料：术语表',BOOK/'zh-CN/GLOSSARY.md'),('image-notes.xhtml','附加资料：图片文字说明',BOOK/'assets/README.md')]:
    soup=BeautifulSoup(RENDER(path.read_text()),'html.parser')
    for a in soup.select('a[href]'):
-    if not urlsplit(a['href']).scheme:a['href']='https://github.com/williamwue/oh-my-stack/blob/'+SOURCE_REV+'/'+str((path.parent/a['href']).resolve().relative_to(ROOT))
+    if not urlsplit(a['href']).scheme:a['href']='https://github.com/williamwue/oh-my-stack/blob/'+SOURCE_REV+'/'+(path.parent/a['href']).resolve().relative_to(ROOT).as_posix()
    for h in soup.select('h1'):h.decompose()
    chapters.append((fn,title,f'<section class="chapter" id="{Path(fn).stem}"><h1>{title}</h1>{soup}</section>'))
  front=about(lang);cover_html=cover(lang)
