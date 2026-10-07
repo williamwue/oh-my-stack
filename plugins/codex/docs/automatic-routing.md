@@ -4,13 +4,24 @@ This feature is available in version 0.11.0. Installing or upgrading OMS
 does not enable it. Existing `poteto-mode` and other explicit entries remain
 available. Claude Code and OMP do not yet have this routing configuration.
 
-Select `setup-oh-my-stack` and ask:
+Version 0.11.1 adds the choice-based setup below.
 
-```text
-Enable automatic OMS engineering routing for this project. Preserve my model
-mapping and other settings. Apply the project switch and report the effective
-mode. Do not change hook trust or run a model probe.
-```
+In Codex, type `$` and select `oh-my-stack:setup-oh-my-stack`. Submit its default
+setup prompt; no enable instruction is needed. Setup shows the effective mode
+and offers **Enable automatic routing**, **Disable automatic routing**, or
+**Keep current settings**. If you choose a change, select **Default across
+projects** or **Only this project**. Completing those choices saves the selected
+setting; keeping the current settings or cancelling writes nothing. Existing
+project overrides still take precedence over a personal default.
+
+Setup uses native choice controls when the current interface and mode support
+them. Otherwise it presents explicit text choices and waits for your selection.
+You can finish without configuring models. Routing choices preserve model
+mappings and do not run model inventory or worker probes. Review and trust the
+OMS hook through `/hooks`, then start a new session to verify automatic routing.
+
+You can still request a specific mode and scope directly, or ask for a read-only
+status or preview. Setup reuses choices you already supplied.
 
 After enabling and verifying the hook in a new session, describe an engineering
 task normally, without selecting a Skill. OMS routes it through the existing
