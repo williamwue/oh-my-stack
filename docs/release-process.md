@@ -304,6 +304,10 @@ It verifies the native account's write access and exact repository, a published
 non-prerelease, all seven GitHub asset digests, same-release `SHA256SUMS`, clean
 manifest provenance, safe archive inventories, exact tag commit, successful
 main-push CI, and an independent clean tagged rebuild of all seven assets.
+Cross-platform rebuilding may normalize only gzip's operating-system header
+byte to the published value; every other compressed byte, complete manifest
+and checksum file must match. Any normalization is recorded in the receipt.
+Published downloads and GitHub asset digests are always checked unchanged.
 Maintainer execution requires native repository write permission. Actions uses
 the repository's installation token and verifies the exact server-observed
 publishing run, repository, event and commit instead of requiring a user
