@@ -1,0 +1,24 @@
+{
+  "repository": "williamwue/oh-my-stack",
+  "purpose": "adopted project-brand README and GitHub social preview",
+  "adoptedBy": "maintainer in this conversation",
+  "generator": "built-in image_gen",
+  "image": "oh-my-stack-brand-social-preview-2026-10-07.jpg",
+  "prompt": "oh-my-stack-brand-social-preview-2026-10-07.prompt.txt",
+  "width": 1280,
+  "height": 640,
+  "bytes": 154217,
+  "sha256": "7a1ba710b78f4ddf7956baeb5211566b16565ff857591af444a55e700f1d2d90",
+  "generatedSourceSha256": "5c3566d4c88199b140d87c2bc6f4e64e91ed76edb93c82050d932be76db556ba",
+  "export": "Generated 2:1 artwork resized to 1280x640 and exported as JPEG for GitHub.",
+  "repositoryDescription": "pstack engineering workflows → Codex & Claude Code",
+  "supersedes": "oh-my-stack-pstack-social-preview-2026-10-07.jpg",
+  "githubSocialPreview": {
+    "status": "uploaded_and_verified",
+    "settingsUrl": "https://github.com/williamwue/oh-my-stack/settings",
+    "imageUrl": "https://repository-images.githubusercontent.com/1381129203/b6a0b959-323c-4f5c-b9ae-0f93e7daac9b",
+    "verifiedAt": "2026-10-07T02:27:38.302331+00:00",
+    "verification": "Public repository og:image bytes and SHA-256 match the adopted JPEG."
+  },
+  "artworkNote": "Original stacked-module project mark and abstract workflow diagram. Platform symbols were generated as visual interpretations; no provider endorsement is claimed."
+}
