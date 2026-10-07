@@ -1,0 +1,194 @@
+{
+  "nativeChoiceFeature": "default_mode_request_user_input enabled only in disposable app-server process",
+  "runtime": "codex-cli 0.160.1",
+  "version": "0.11.1",
+  "fixture": "isolated native local marketplace installation; exact generated cache bytes verified",
+  "cases": [
+    {
+      "name": "unanswered",
+      "questions": [
+        {
+          "id": "routing_mode",
+          "header": "自动路由",
+          "question": "当前为手动模式，没有已保存的路由设置或项目覆盖；你希望如何设置 OMS 自动路由？选择启用或停用后，再选择保存范围。",
+          "isOther": true,
+          "isSecret": false,
+          "options": [
+            {
+              "label": "启用自动路由 (Recommended)",
+              "description": "让普通工程任务自动匹配 OMS 工作流。"
+            },
+            {
+              "label": "停用自动路由",
+              "description": "只通过明确指定的入口使用 OMS 工作流。"
+            },
+            {
+              "label": "保持当前设置",
+              "description": "保留手动模式，不写入路由配置。"
+            }
+          ]
+        }
+      ],
+      "commands": [
+        "/bin/zsh -lc \"pwd; rg --files -g 'SKILL.md' -g 'AGENTS.md' -g '*setup*' $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1 .\"",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/SKILL.md'",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/WORKFLOW.md'",
+        "/bin/zsh -lc 'node $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/scripts/routing.mjs status'"
+      ],
+      "assistant": [
+        "我会先查找并读取 `oh-my-stack:setup-oh-my-stack` 技能，按其中的流程完成设置。"
+      ],
+      "responses": [],
+      "methods": {
+        "remoteControl/status/changed": 1,
+        "account/updated": 1,
+        "thread/started": 1,
+        "warning": 1,
+        "mcpServer/startupStatus/updated": 3,
+        "thread/settings/updated": 1,
+        "thread/status/changed": 2,
+        "turn/started": 1,
+        "item/started": 7,
+        "item/completed": 7,
+        "item/agentMessage/delta": 27,
+        "thread/tokenUsage/updated": 4,
+        "account/rateLimits/updated": 4,
+        "item/tool/requestUserInput": 1
+      },
+      "stoppedAtUnansweredChoice": true,
+      "userRouting": null,
+      "projectUnchanged": true
+    },
+    {
+      "name": "enable-user-with-project-override",
+      "questions": [
+        {
+          "id": "routing_mode",
+          "header": "自动路由",
+          "question": "希望如何设置 OMS 自动路由？选择启用或禁用后，下一步会选择保存范围。",
+          "isOther": true,
+          "isSecret": false,
+          "options": [
+            {
+              "label": "启用自动路由 (Recommended)",
+              "description": "将普通工程任务匹配到 OMS 工作流。"
+            },
+            {
+              "label": "禁用自动路由",
+              "description": "通过显式工作流入口使用 OMS。"
+            },
+            {
+              "label": "保持当前设置",
+              "description": "保留当前手动模式，不修改路由配置。"
+            }
+          ]
+        },
+        {
+          "id": "routing_scope",
+          "header": "保存范围",
+          "question": "将自动路由保存到哪里？选定范围后会保存设置；当前项目为 $FIXTURE/project。",
+          "isOther": true,
+          "isSecret": false,
+          "options": [
+            {
+              "label": "所有项目的默认设置 (Recommended)",
+              "description": "保存到本次环境的 CODEX_HOME；现有项目覆盖仍优先，当前项目会继续使用手动模式。"
+            },
+            {
+              "label": "仅此项目",
+              "description": "将当前项目的覆盖设置改为自动路由，个人默认设置不变。"
+            }
+          ]
+        },
+        {
+          "id": "next_step",
+          "header": "后续配置",
+          "question": "路由设置已保存，是否继续配置 OMS 工作流的模型和推理预算？",
+          "isOther": true,
+          "isSecret": false,
+          "options": [
+            {
+              "label": "完成设置 (Recommended)",
+              "description": "结束本次设置，保留现有模型配置。"
+            },
+            {
+              "label": "配置模型和推理预算",
+              "description": "读取实时模型清单，预览各工作流映射及推理设置。"
+            }
+          ]
+        }
+      ],
+      "commands": [
+        "/bin/zsh -lc \"pwd; rg --files $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1 $MAINTAINER_HOME/.agents/skills -g '*SKILL.md' -g '*setup*'\"",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/SKILL.md'",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/skills/setup-oh-my-stack/WORKFLOW.md'",
+        "/bin/zsh -lc 'node $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/scripts/routing.mjs status'",
+        "/bin/zsh -lc 'cat $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/docs/automatic-routing.md'",
+        "/bin/zsh -lc 'node $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/scripts/routing.mjs set --scope user --mode auto'",
+        "/bin/zsh -lc 'node $FIXTURE/codex-home/plugins/cache/oms-setup-release-candidate/oh-my-stack/0.11.1/scripts/routing.mjs set --scope user --mode auto --apply'"
+      ],
+      "assistant": [
+        "我会先查找并读取 `oh-my-stack:setup-oh-my-stack` 的说明，再按其中的流程完成配置。\n",
+        "当前有效模式是手动路由，来自本项目的覆盖配置。此项目设置优先于个人默认设置。\n",
+        "已将自动路由保存为本次环境的个人默认设置。当前项目仍因项目覆盖而使用手动路由。要验证自动路由，请通过 Codex 的 `/hooks` 审查并信任 OMS hook，然后在没有手动覆盖的项目中开启新会话；保存设置本身不证明 hook 已执行。\n",
+        "已保存自动路由为个人默认设置，文件位于 [routing.json]($FIXTURE/codex-home/oh-my-stack/routing.json)。\n\n当前项目仍使用**手动路由**，因为项目覆盖优先。模型配置未修改。\n\n启用后的实际行为尚待验证：请通过 `/hooks` 审查并信任 OMS hook，再在没有手动覆盖的项目中开启新会话。"
+      ],
+      "responses": [
+        {
+          "routing_mode": {
+            "answers": [
+              "启用自动路由 (Recommended)"
+            ]
+          }
+        },
+        {
+          "routing_scope": {
+            "answers": [
+              "所有项目的默认设置 (Recommended)"
+            ]
+          }
+        },
+        {
+          "next_step": {
+            "answers": [
+              "完成设置 (Recommended)"
+            ]
+          }
+        }
+      ],
+      "methods": {
+        "thread/tokenUsage/updated": 11,
+        "account/rateLimits/updated": 11,
+        "thread/status/changed": 9,
+        "turn/completed": 2,
+        "serverRequest/resolved": 4,
+        "thread/started": 1,
+        "warning": 1,
+        "mcpServer/startupStatus/updated": 2,
+        "thread/settings/updated": 1,
+        "turn/started": 1,
+        "item/started": 13,
+        "item/completed": 13,
+        "item/agentMessage/delta": 249,
+        "item/tool/requestUserInput": 3
+      },
+      "turnStatus": "completed",
+      "userRouting": {
+        "schemaVersion": 1,
+        "owner": "oh-my-stack",
+        "target": "codex",
+        "mode": "auto"
+      },
+      "projectUnchanged": true
+    }
+  ],
+  "discovery": {
+    "publicSkills": 90,
+    "installedCacheBytesMatchGenerated": true,
+    "hookCount": 1,
+    "hookTrust": "untrusted"
+  },
+  "model": "gpt-6.1-sol",
+  "pathsNormalized": true,
+  "boundary": "Candidate native installation and bounded setup choice turns; feature flag enabled only in disposable process, no Desktop/IDE or automatic engineering routing claim."
+}
