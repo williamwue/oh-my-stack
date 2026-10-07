@@ -304,6 +304,11 @@ It verifies the native account's write access and exact repository, a published
 non-prerelease, all seven GitHub asset digests, same-release `SHA256SUMS`, clean
 manifest provenance, safe archive inventories, exact tag commit, successful
 main-push CI, and an independent clean tagged rebuild of all seven assets.
+Maintainer execution requires native repository write permission. Actions uses
+the repository's installation token and verifies the exact server-observed
+publishing run, repository, event and commit instead of requiring a user
+permissions object. The workflow declares `contents: write`; GitHub enforces
+that permission when the publisher pushes the stable ref.
 Inspect `promotion.json`, `snapshot/STABLE_RELEASE.json`, and the downloads.
 The source tool does not accept arbitrary publication repository coordinates.
 
