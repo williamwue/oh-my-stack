@@ -11,6 +11,8 @@ Follow the [Codex](install/codex.md) or [Claude Code](install/claude-code.md)
 guide. For OMP, use its [profile installation guide](install/omp.md).
 Open your project and start a new agent session after installation.
 
+Prefer a copyable prompt? [Let an agent install it](install/with-agent.md).
+
 Model configuration is optional for this walkthrough. Your agent keeps its
 model when no Oh My Stack mapping is configured.
 

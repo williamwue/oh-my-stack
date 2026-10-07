@@ -16,28 +16,46 @@ for the result.
 
 ## Install
 
-Choose the tool you use. Each tool needs its own installation.
+Copy the prompt for your tool into an agent conversation with access to this
+machine. The agent can download, install, and check the plugin for you.
 
-| Your tool | Start here |
-| --- | --- |
-| Codex | [Install the released Codex plugin](docs/install/codex.md) |
-| Claude Code | Use the terminal commands below, then [start your first task](docs/getting-started.md). |
-| OMP | [Install with the OMP profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
+### Codex
 
-For Claude Code, run these commands in your terminal:
-
-```bash
-claude plugin marketplace add williamwue/oh-my-stack
-claude plugin install oh-my-stack@oh-my-stack --scope user
+```text
+Install Oh My Stack for Codex on this machine using the latest published release.
+Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
+Preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
 ```
 
-Start a new session after installation. The
-[Claude Code installation guide](docs/install/claude-code.md) also covers
-verification, updates, and removal.
+### Claude Code
 
-The Codex guide uses the published plugin archive. You do not need to build
-the project to use that archive. Check the [support policy](docs/support-policy.md)
-for tested tools and current limitations.
+```text
+Install Oh My Stack for Claude Code on this machine at user scope.
+Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
+Use the latest published release and preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
+```
+
+For detailed prompts, existing installations, and optional model setup, see
+[install with an agent](docs/install/with-agent.md).
+
+For manual installation, use the guide for your tool. Each tool needs its own installation.
+
+| Your tool | Installation guide |
+| --- | --- |
+| Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
+| Claude Code | [Marketplace installation](docs/install/claude-code.md). |
+| OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
+
+Start a new session after installation. See [support](docs/support-policy.md)
+for tested tools and limitations.
+
+## Update an existing installation
+
+[Copy an update prompt or use the native commands](docs/guides/update-and-uninstall.md).
+The guide detects the existing source and scope, preserves model configuration,
+and separates a read-only update check from an authorized update.
 
 ## Quick start
 

@@ -81,6 +81,66 @@
         {
           "path": "skills/productivity/grilling/agents/openai.yaml",
           "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b"
+        },
+        {
+          "path": "skills/engineering/research/SKILL.md",
+          "sha256": "985569f15739c713d6784887c3d186d4ef9ac85bec5ad9c068d25bf0739928e4"
+        },
+        {
+          "path": "skills/engineering/research/agents/openai.yaml",
+          "sha256": "9b4c470d63221c1f68f22df70b83e2f12401b317babe0d1b7b5f24a974474d0d"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+          "sha256": "9a0c21694be19fa3eefc39343355d3af7414716ba364882c7432c2f821eac3e9"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml",
+          "sha256": "9527de0110541c45712319025155aeab8dc7d77c6ed6e5e83271bab1851ab939"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/domain.md",
+          "sha256": "593a7042218689f1d24df89df14eaf0a20e19e0d0a7d479a01947ac78f0784b9"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md",
+          "sha256": "da619c7423506c905ceea62d4d71c955371c2f2c743aada92a01e3deffa93474"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+          "sha256": "ea175f73d193b3f55819c0ed9bbccf6ee0e70ad8f928e3d7607596c53380acd6"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md",
+          "sha256": "7dcda20a2eb4bdc89b95d1143423c0691309921cadae3132e6424f371030506e"
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills/triage-labels.md",
+          "sha256": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
+        },
+        {
+          "path": "skills/engineering/to-spec/SKILL.md",
+          "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088"
+        },
+        {
+          "path": "skills/engineering/to-spec/agents/openai.yaml",
+          "sha256": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb"
+        },
+        {
+          "path": "skills/engineering/to-tickets/SKILL.md",
+          "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995"
+        },
+        {
+          "path": "skills/engineering/to-tickets/agents/openai.yaml",
+          "sha256": "21bc6215fffcd7614e9f772bb1760e87cc5fc7dcc707e7d282bc9414267a6090"
+        },
+        {
+          "path": "skills/productivity/to-questionnaire/SKILL.md",
+          "sha256": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b"
+        },
+        {
+          "path": "skills/productivity/to-questionnaire/agents/openai.yaml",
+          "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2"
         }
       ],
       "skills": [
@@ -160,6 +220,69 @@
             "grilling",
             "domain-modeling"
           ]
+        },
+        {
+          "path": "skills/engineering/research",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "agents.spawn"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/setup-matt-pocock-skills",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "resources.relative_paths",
+            "workspace.inspect",
+            "workspace.write",
+            "commands.run",
+            "interaction.free_text"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/to-spec",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "interaction.free_text",
+            "issue_tracker.lifecycle"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/to-tickets",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "interaction.free_text",
+            "issue_tracker.lifecycle"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/productivity/to-questionnaire",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.write",
+            "interaction.free_text"
+          ],
+          "dependencies": []
         }
       ],
       "adaptations": []

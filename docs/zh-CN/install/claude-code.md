@@ -3,14 +3,16 @@
 [English](../../install/claude-code.md) | [简体中文](claude-code.md)
 
 通过 Claude Code 插件管理器，从本仓库的 marketplace 安装。
-以下终端命令安装到用户范围。
+以下终端命令从 stable 分支安装正式发布包，安装到用户范围。
+
+也可以[复制提示词，让 agent 完成安装](with-agent.md#为-claude-code-安装)。
 
 ## 安装插件
 
 在终端执行：
 
 ```bash
-claude plugin marketplace add williamwue/oh-my-stack
+claude plugin marketplace add https://github.com/williamwue/oh-my-stack.git#stable
 claude plugin install oh-my-stack@oh-my-stack --scope user
 claude plugin list --json
 ```
@@ -38,7 +40,8 @@ Claude Code 会拒绝模型主动调用这些仅显式使用的原版技能。�
 
 按[更新和卸载指南](../guides/update-and-uninstall.md)执行。
 [支持范围，英文](../../support-policy.md)说明验收边界。
-0.9.0 原版工作流实测使用 Claude Code CLI 的会话插件，不能证明每种持久安装或未来升级组合。
+0.9.0 → 0.9.1 的用户级 Git 更新见[验收记录，英文](../../acceptance/2026-10-07/stable-marketplace.md)。
+未来版本、其他安装范围和自动更新界面仍需各自验证。
 
 ## 仅在一个会话中检查安装包
 

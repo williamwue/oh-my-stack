@@ -12,25 +12,42 @@
 
 ## 安装
 
-选择你使用的工具。每个工具需要独立安装。
+复制对应提示词，发给能操作本机的 agent，让它完成下载、安装和检查。
 
-| 使用的工具 | 从这里开始 |
-| --- | --- |
-| Codex | [安装正式发布的 Codex 插件](docs/zh-CN/install/codex.md) |
-| Claude Code | 执行下方终端命令，再[完成第一个任务](docs/zh-CN/getting-started.md)。 |
-| OMP | [通过独立 profile 检查安装](docs/zh-CN/install/omp.md)。不同工作流的实测范围不同。 |
+### Codex
 
-在终端执行以下 Claude Code 安装命令：
-
-```bash
-claude plugin marketplace add williamwue/oh-my-stack
-claude plugin install oh-my-stack@oh-my-stack --scope user
+```text
+请在本机为 Codex 安装最新版正式发布的 Oh My Stack。
+先阅读并遵循 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
+保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话显式加载 prove-it-works 做只读验证。
+最后报告实际安装版本及已完成的检查；需要我重启或手动操作时，给出明确的下一步。
 ```
 
-安装后新开会话。[Claude Code 安装指南](docs/zh-CN/install/claude-code.md)还包含安装确认、更新和卸载步骤。
+### Claude Code
 
-Codex 安装指南使用正式发布的插件包，无需构建项目。
-查看[支持范围](docs/support-policy.md)，了解已测试的工具和当前限制。
+```text
+请在本机为 Claude Code 安装 Oh My Stack，使用用户范围。
+先阅读并遵循 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
+使用最新版正式发布版本，保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话显式加载 prove-it-works 做只读验证。
+最后报告实际安装版本及已完成的检查；需要我重启或手动操作时，给出明确的下一步。
+```
+
+完整提示词、已有安装的处理和可选模型配置，见[让 agent 帮你安装](docs/zh-CN/install/with-agent.md)。
+
+手动安装请按工具查看指南。每个工具需要独立安装。
+
+| 使用的工具 | 安装指南 |
+| --- | --- |
+| Codex | [stable Git marketplace 或正式发布包](docs/zh-CN/install/codex.md)，无需构建源码。 |
+| Claude Code | [Marketplace 安装](docs/zh-CN/install/claude-code.md)。 |
+| OMP | [通过独立 profile 检查安装](docs/zh-CN/install/omp.md)。不同工作流的实测范围不同。 |
+
+安装后新开会话。[支持范围](docs/support-policy.md)说明已测试的工具和当前限制。
+
+## 更新现有安装
+
+[复制更新提示词或使用原生命令](docs/zh-CN/guides/update-and-uninstall.md)。
+按现有来源和安装范围更新，保留模型配置；“检查更新”只读，“执行更新”完成实际更新。
 
 ## 完成第一个任务
 

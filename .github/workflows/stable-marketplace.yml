@@ -1,0 +1,55 @@
+name: Promote stable marketplace
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Already published stable release tag
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: stable-marketplace
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: github.repository == 'williamwue/oh-my-stack' && (github.event_name == 'workflow_dispatch' || (!github.event.release.draft && !github.event.release.prerelease))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted publishing tools
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Verify published assets and advance only stable
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          PUBLISHER: ${{ github.workspace }}/tools/stable-marketplace.mjs
+          EVIDENCE: ${{ runner.temp }}/stable-marketplace-evidence
+        working-directory: ${{ runner.temp }}
+        run: |
+          gh auth setup-git
+          node "$PUBLISHER" --tag "$RELEASE_TAG" --out "$EVIDENCE" --publish
+
+      - name: Retain promotion or failure evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: stable-marketplace-evidence
+          path: ${{ runner.temp }}/stable-marketplace-evidence
+          if-no-files-found: ignore
+          retention-days: 30

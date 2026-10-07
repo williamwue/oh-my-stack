@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
   "target": "claude-code",
-  "sourceVersion": "0.9.1",
+  "sourceVersion": "0.10.0",
   "profiles": [
     "claude-code-default"
   ],
   "skills": {
     "audience": "public",
-    "included": 84,
+    "included": 89,
     "omittedProbes": 12
   },
   "claims": {

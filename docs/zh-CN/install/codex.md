@@ -2,8 +2,26 @@
 
 [English](../../install/codex.md) | [简体中文](codex.md)
 
-使用正式发布的 Codex 插件压缩包。以下命令面向 macOS 终端和 Codex CLI 插件管理器。
-此方式无需构建源码或安装 Node.js。[支持范围](../../support-policy.md)说明已测试的工具和限制。
+新安装建议使用 stable Git marketplace，也保留正式发布的插件压缩包安装方式。
+以下命令使用 Codex CLI 插件管理器；两种方式都无需构建源码或安装 Node.js。[支持范围](../../support-policy.md)说明已测试的工具和限制。
+
+也可以[复制提示词，让 agent 完成安装](with-agent.md#为-codex-安装)。
+
+## 从 stable Git marketplace 安装
+
+```bash
+codex plugin marketplace add williamwue/oh-my-stack --ref stable
+codex plugin add oh-my-stack@oh-my-stack
+codex plugin list --json
+```
+
+`stable` 分支只包含已验证的正式发布包。`STABLE_RELEASE.json` 记录发布标签、源码提交、
+资产校验值和包内文件校验值。检查安装版本，与[正式发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)比较。
+维护者的[推进流程，英文](../../release-process.md#stable-git-marketplace)要求干净标签重建、资产校验及源码 CI 成功。
+如果渠道晚于正式发布，报告差异；需要立即使用该版本时，可以走下方已校验的压缩包方式。
+
+已有 `oh-my-stack` 注册时，先检查来源，按[更新指南](../guides/update-and-uninstall.md)处理现有安装。
+迁移来源是明确的可选操作，旧版解压文件继续保留。
 
 ## 下载并校验同一版本
 
@@ -21,7 +39,7 @@ shasum -a 256 --ignore-missing -c SHA256SUMS
 Linux 使用 `sha256sum --ignore-missing -c SHA256SUMS`。
 压缩包校验失败时停止，不解压。校验文件应来自可信仓库的同一版本。
 
-## 注册并安装
+## 注册并安装压缩包
 
 在该目录执行：
 
@@ -47,6 +65,9 @@ codex plugin list
 
 ## 更新插件
 
+stable Git 来源使用[原生更新命令](../guides/update-and-uninstall.md#codex)。
+以下步骤用于本地解压来源。
+
 在另一个版本专属目录下载并校验新包，解压 Codex 插件压缩包。保留旧目录供回退。
 
 在新目录中，只替换 Oh My Stack 的 marketplace 注册：
@@ -59,7 +80,8 @@ codex plugin list
 ```
 
 检查实际安装版本，然后新开会话。
-原生管理器从 0.8.0 升级到 0.9.0 的操作已有独立观察；未来版本和其他工具版本仍需各自检查。
+0.9.0 到 0.9.1 的 Git 更新及本地来源迁移见[验收记录，英文](../../acceptance/2026-10-07/stable-marketplace.md)。
+未来版本和其他工具版本仍需各自检查。
 Git marketplace 的升级命令不适用于这个本地解压目录。模型配置与插件安装是独立的。
 
 回退时重新注册保留的旧 marketplace 目录，再安装 `oh-my-stack@oh-my-stack`，并检查实际版本。

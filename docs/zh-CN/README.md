@@ -5,6 +5,7 @@
 ## 开始使用
 
 - [完成第一个任务](getting-started.md)。
+- [复制提示词，让 agent 帮你安装](install/with-agent.md)。
 - 为 [Codex](install/codex.md)、[Claude Code](install/claude-code.md) 或 [OMP](install/omp.md) 安装插件。
 - [按常见任务选择入口](guides/common-tasks.md)。
 - [使用精选 AIHero 原版技能](guides/aihero.md)。
@@ -17,9 +18,10 @@
 - [可选模型配置](model-configuration.md)
 - [当前支持范围，英文](../support-policy.md)
 - [第三方来源和适配声明，英文](../../THIRD_PARTY_NOTICES.md)
-- [发布说明，英文](../releases/0.9.1.md)与[已发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)
+- [发布说明，英文](../releases/0.10.0.md)与[已发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)
 
-当前用户指南对应正式发布包。带日期的验收记录只说明当时命名的版本和工具。
+新增的五项调研与规划原版能力需要 0.10.0 或更高版本。使用前核对正式发布版本和实际安装版本。
+带日期的验收记录只说明当时命名的版本和工具。
 
 ## 参与开发或查看实现
 

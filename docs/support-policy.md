@@ -1,6 +1,7 @@
 # Support policy
 
-Current user instructions describe the 0.9.1 release. Support is limited to the
+The latest published release is 0.9.1. The AIHero guide and generated directory
+also describe five additions in the unreleased 0.10.0 source candidate. Support is limited to the
 observed tools, installation surfaces, and tasks below. Entry discovery and
 intact source files do not certify every workflow on every model.
 
@@ -23,6 +24,15 @@ The Codex desktop Skill picker has not received a separate interaction check.
 Its documented selection is a user entry; native CLI structured selection is
 the observed explicit invocation. Linux offline CI checks do not establish
 Linux interactive behavior. Windows interactive behavior is not certified.
+
+## Unreleased 0.10.0 source observations
+
+Five additional original skills each passed a separate bounded fixture on
+Codex CLI 0.160.1 and Claude Code 2.1.287: research, questionnaire, setup,
+spec, and tickets. See [the acceptance and limitations](aihero-original-0.10.0-acceptance.md).
+These used project-local or session-plugin loading and a local Markdown tracker.
+They do not establish a global installed-version upgrade, remote issue publishing,
+live internet research, automatic selection quality, or live OMP behavior.
 
 ## What the package provides
 

@@ -2,9 +2,32 @@
 
 [English](codex.md) | [简体中文](../zh-CN/install/codex.md)
 
-Use the published Codex plugin archive. The commands below use a macOS shell
-and the Codex CLI plugin manager. No source build or Node.js installation is
-required for this method. See [tested tools and limits](../support-policy.md).
+Use the stable Git marketplace for new installations. The released archive
+route below remains available. These commands use the Codex CLI plugin manager;
+neither route requires a source build or Node.js installation. See [tested tools and limits](../support-policy.md).
+
+[Install with an agent](with-agent.md#install-for-codex) if you prefer a copyable prompt.
+
+## Install from the stable Git marketplace
+
+```bash
+codex plugin marketplace add williamwue/oh-my-stack --ref stable
+codex plugin add oh-my-stack@oh-my-stack
+codex plugin list --json
+```
+
+The `stable` branch contains verified published release payloads rather than
+unreleased source. Its `STABLE_RELEASE.json` names the tag, source commit,
+release asset hashes, and packaged file hashes. Check the installed version
+against the [published release](https://github.com/williamwue/oh-my-stack/releases/latest).
+The maintainer [promotion process](../release-process.md#stable-git-marketplace)
+requires a clean tagged rebuild, asset verification, and successful source CI.
+If promotion lags a release, report that gap and use the verified archive route
+when the requested version is needed immediately.
+
+Already registered `oh-my-stack`? Inspect its source first. Use
+[the update guide](../guides/update-and-uninstall.md) for an existing installation;
+source migration is explicit, and does not discard old extracted release files.
 
 ## Download and verify one release
 
@@ -23,7 +46,7 @@ are skipped. On Linux, use `sha256sum --ignore-missing -c SHA256SUMS` instead.
 If the archive checksum fails, stop before extraction. Use the checksum file
 from the same release, downloaded from the trusted repository.
 
-## Register and install
+## Register and install the archive
 
 From that folder, run:
 
@@ -51,6 +74,9 @@ The [FAQ](../faq.md) covers missing entries and unexpected invocation.
 
 ## Update the plugin
 
+For stable Git, use [the native update commands](../guides/update-and-uninstall.md#codex).
+The following steps update an extracted local archive source.
+
 Download and verify the new release in another version-specific folder.
 Extract its Codex plugin archive. Keep the old folder for rollback.
 
@@ -64,8 +90,9 @@ codex plugin list
 ```
 
 Check the reported installed version, then start a new session.
-The native manager update from 0.8.0 to 0.9.0 was observed separately from
-archive checks. Future versions and other tool versions need their own checks.
+Native 0.9.0 to 0.9.1 Git update and local-source migration are recorded in
+[dated acceptance](../acceptance/2026-10-07/stable-marketplace.md). Future versions
+and other tool versions need their own checks.
 A Git-marketplace upgrade command does not update this extracted local source.
 Model configuration remains separate from the installed plugin.
 

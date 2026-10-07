@@ -468,6 +468,21 @@
       "invocation": "explicit"
     },
     {
+      "name": "research",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/research",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "runtime-forensics",
       "audience": "public",
       "category": "workflow",
@@ -484,6 +499,21 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "setup-matt-pocock-skills",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/setup-matt-pocock-skills",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "setup-oh-my-stack",
@@ -526,6 +556,51 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "to-questionnaire",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/to-questionnaire",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "to-spec",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/to-spec",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "to-tickets",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/to-tickets",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "trace-forensics",

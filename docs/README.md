@@ -5,6 +5,7 @@
 ## Start using Oh My Stack
 
 - [Complete your first task](getting-started.md).
+- [Copy a prompt and let an agent install it](install/with-agent.md).
 - Install for [Codex](install/codex.md), [Claude Code](install/claude-code.md), or [OMP](install/omp.md).
 - [Choose an entry for a common task](guides/common-tasks.md).
 - [Use the selected AIHero originals](aihero-original-skills.md).
@@ -17,10 +18,12 @@
 - [Optional model configuration](model-configuration.md)
 - [Current support policy](support-policy.md)
 - [Third-party sources and adaptations](../THIRD_PARTY_NOTICES.md)
-- [Release notes](releases/0.9.1.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+- [Release notes](releases/0.10.0.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
 
-The current user instructions describe the released package. Dated acceptance
-records describe only the versions and tools named in those records.
+The five research and planning originals require 0.10.0 or later. Check the
+[published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+and your installed version. Dated acceptance records describe only the
+versions and tools named in those records.
 
 ## Contribute or inspect the implementation
 

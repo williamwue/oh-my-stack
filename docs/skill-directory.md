@@ -3,7 +3,11 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-84 public entries: 60 workflows and 24 principles.
+89 public entries: 65 workflows and 24 principles.
+
+This directory reflects the generated source packages. Released installations may differ;
+see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
+and the [AIHero guide](aihero-original-skills.md) for version requirements.
 
 For a first task, start with [the walkthrough](getting-started.md) or
 [common task examples](guides/common-tasks.md). You do not need to learn every entry.
@@ -24,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-60 entries.
+65 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -71,9 +75,11 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`refactoring`](../packages/codex/skills/refactoring/SKILL.md) | Improve code structure while verifying unchanged behavior. | explicit | OMS core |
 | [`reflect`](../packages/codex/skills/reflect/SKILL.md) | Review conversation lessons and propose scoped Skill improvements. | explicit | OMS core |
 | [`reproduce-and-fix-issues`](../packages/codex/skills/reproduce-and-fix-issues/SKILL.md) | Benny repro automation only: reproduce triaged bugs before a draft PR. | explicit | OMS core |
+| [`research`](../packages/codex/skills/research/SKILL.md) | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent. | automatic | aihero original |
 | [`runtime-forensics`](../packages/codex/skills/runtime-forensics/SKILL.md) | Diagnose a live process using runtime evidence. | explicit | OMS core |
 | [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md) | Resume checkpointed work without repeating completed steps. | explicit | OMS core |
 | [`setup-benny`](../packages/codex/skills/setup-benny/SKILL.md) | Configure Benny triage and reproduction automations. | explicit | OMS core |
+| [`setup-matt-pocock-skills`](../packages/codex/skills/setup-matt-pocock-skills/SKILL.md) | Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills. | explicit | aihero original |
 | [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md) | Configure role models from observed runtime inventory. | explicit | OMS core |
 | [`shipping`](../packages/codex/skills/shipping/SKILL.md) | Land an explicitly authorized PR or stack after independent checks. | explicit | OMS core |
 | [`show-me-your-work`](../packages/codex/skills/show-me-your-work/SKILL.md) | Record an append-only decision trail for long or delegated work. | explicit | OMS core |
@@ -81,6 +87,9 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`tdd`](../packages/codex/skills/tdd/SKILL.md) | Use for requested TDD or cheap local regression tests; skip unclear or costly test paths. | explicit | OMS core |
 | [`teach`](../packages/codex/skills/teach/SKILL.md) | Explain mechanics and rationale plainly while preserving evidence and uncertainty. | explicit | OMS core |
 | [`technical-writing`](../packages/codex/skills/technical-writing/SKILL.md) | Write or review docs, RFCs, READMEs, PR descriptions, and commit messages. | explicit | OMS core |
+| [`to-questionnaire`](../packages/codex/skills/to-questionnaire/SKILL.md) | Turn a decision you can't fully answer into a questionnaire for someone else to fill in. | explicit | aihero original |
+| [`to-spec`](../packages/codex/skills/to-spec/SKILL.md) | Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you've already discussed. | explicit | aihero original |
+| [`to-tickets`](../packages/codex/skills/to-tickets/SKILL.md) | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker (edges as text in one file per ticket locally, or native blocking links on a real tracker). | explicit | aihero original |
 | [`trace-forensics`](../packages/codex/skills/trace-forensics/SKILL.md) | Diagnose an existing trace or profile and map it to source. | explicit | OMS core |
 | [`triage-issue-reports`](../packages/codex/skills/triage-issue-reports/SKILL.md) | Benny triage automation only: assess Slack reports and deduplicate tickets. | explicit | OMS core |
 | [`typescript-best-practices`](../packages/codex/skills/typescript-best-practices/SKILL.md) | Apply type and boundary guidance to TS or TSX work. | explicit | OMS core |

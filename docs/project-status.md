@@ -1,5 +1,12 @@
 # Project status
 
+Current source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
+eleven original AIHero entries. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+for publication status and the [release checklist](acceptance/aihero-0.10.0/release-checklist.md)
+for gates and version-specific acceptance.
+See the [current import record](maintainers/aihero-imports-0.10.0.md).
+The dated records below describe their original baselines.
+
 Updated: 2026-10-06. Source version: [0.9.0](releases/0.9.0.md), with 84 public Skills and the
 [pstack 0.15.13 semantic update](upstream-pstack-0.15.13.md). Local validation and native-host evidence are recorded separately from
 publication. [GitHub releases](https://github.com/williamwue/oh-my-stack/releases/latest)
