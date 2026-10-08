@@ -226,7 +226,7 @@ function collectCodex(binary) {
 }
 
 export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", claudeBin = "claude",
-  claudeModels, confirmClaudeProbes = false, now = new Date() }) {
+  claudeModels = ["haiku", "sonnet", "opus"], confirmClaudeProbes = false, now = new Date() }) {
   let observed;
   if (runtime === "omp") observed = await collectOmp(ompBin);
   else if (runtime === "codex") observed = await collectCodex(codexBin);
