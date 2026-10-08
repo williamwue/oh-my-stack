@@ -820,7 +820,9 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     await cp(skill.directory, skillTarget, { recursive: true });
     if (!skill.source) await rm(join(skillTarget, "skill.json"));
     const document = renderSkillDocument(skill, adapter);
-    if (adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
+    // Source originals retain their complete upstream bytes, including long
+    // references without an H1. Only portable core instructions use the wrapper.
+    if (!skill.source && adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
       await writeText(join(skillTarget, "WORKFLOW.md"), document);
       const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];

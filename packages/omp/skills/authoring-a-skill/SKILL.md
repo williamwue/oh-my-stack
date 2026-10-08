@@ -13,6 +13,10 @@ Create or update a discoverable `SKILL.md` with `name` and a precise
 Preserve an existing Skill's trigger and metadata unless the user asks to
 change them.
 
+Consult `writing-for-agents` for context pointers, completion criteria, and
+pruning; read its `SKILL-MECHANICS.md` for invocation and router choices. Keep
+the target adapter's actual discovery and invocation contract authoritative.
+
 Write only instructions another agent needs to decide or act. Put conditional
 detail in linked references, reuse existing workflows by path, and avoid
 duplicating project rules already enforced by types, config, or tests. Prefer

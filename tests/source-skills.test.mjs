@@ -10,6 +10,11 @@ import { loadSourceSkills } from "../tools/source-skills.mjs";
 test("all selected AIHero originals ship every resource and their invocation modes on every host", async () => {
   const model = await loadModel();
   const expected = {
+    "diagnosing-bugs": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
+    "code-review": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
+    "writing-for-agents": { invocation: "automatic", dependencies: [] },
+    "retro": { invocation: "explicit", dependencies: ["writing-for-agents"] },
+    "handoff": { invocation: "explicit", dependencies: [] },
     "research": { invocation: "automatic", dependencies: [] },
     "to-questionnaire": { invocation: "explicit", dependencies: [] },
     "setup-matt-pocock-skills": { invocation: "explicit", dependencies: [] },
@@ -36,13 +41,13 @@ test("all selected AIHero originals ship every resource and their invocation mod
             await readFile(join(skill.directory, relative)), `${adapter.id}/${name}/${relative}: original changed`);
         }
         const entry = catalog.skills.find((entry) => entry.name === name);
-        assert.equal(entry.source.id, "aihero");
+        assert.equal(entry.source.id, expected[name].source ?? "aihero");
         assert.equal(entry.invocation, expected[name].invocation);
         assert.deepEqual(entry.source.dependencies, expected[name].dependencies);
         assert.deepEqual(entry.source.adaptations, []);
+        assert.equal(await readFile(join(target, "licenses", skill.source.id, "LICENSE"), "utf8"),
+          await readFile(skill.source.licenseFile, "utf8"));
       }
-      assert.equal(await readFile(join(target, "licenses/aihero/LICENSE"), "utf8"),
-        await readFile(model.sourceSkills[0].source.licenseFile, "utf8"));
     }
   } finally { await rm(stage, { recursive: true, force: true }); }
 });
@@ -53,9 +58,11 @@ test("a workflow cannot ship when an original invoked dependency is omitted", as
   try {
     const manifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
     const source = manifest.sources[0];
-    await cp(join(repoRoot, source.snapshot), join(root, source.snapshot), { recursive: true });
+    for (const record of manifest.sources) {
+      await cp(join(repoRoot, record.snapshot), join(root, record.snapshot), { recursive: true });
+    }
     await mkdir(join(root, "upstream"), { recursive: true });
-    for (const dependency of ["grilling", "domain-modeling", "codebase-design"]) {
+    for (const dependency of ["grilling", "domain-modeling", "codebase-design", "writing-for-agents"]) {
       const selected = source.skills;
       source.skills = selected.filter((skill) => !skill.path.endsWith(`/${dependency}`));
       await writeFile(join(root, "upstream/source-skills.json"), JSON.stringify(manifest));
@@ -71,8 +78,13 @@ test("a packaged original cannot silently change after generation", async () => 
   try {
     const adapter = model.adapters.find((entry) => entry.id === "codex");
     const target = await renderTarget(stage, model, adapter);
-    await writeFile(join(target, "skills/codebase-design/DEEPENING.md"), "# Altered method\n");
-    await assert.rejects(validateRenderedTarget(target, adapter, model), /original source changed in package/);
+    for (const resource of ["skills/codebase-design/DEEPENING.md", "skills/diagnosing-bugs/scripts/hitl-loop.template.sh"]) {
+      const path = join(target, resource);
+      const original = await readFile(path);
+      await writeFile(path, "# Altered method\n");
+      await assert.rejects(validateRenderedTarget(target, adapter, model), /original source changed in package/);
+      await writeFile(path, original);
+    }
   } finally { await rm(stage, { recursive: true, force: true }); }
 });
 
@@ -83,7 +95,9 @@ test("source validation rejects changed originals, omitted dependencies, unrecor
     await mkdir(join(root, "upstream"));
     const manifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
     const source = manifest.sources[0];
-    await cp(join(repoRoot, source.snapshot), join(root, source.snapshot), { recursive: true });
+    for (const record of manifest.sources) {
+      await cp(join(repoRoot, record.snapshot), join(root, record.snapshot), { recursive: true });
+    }
     const save = () => writeFile(join(root, "upstream/source-skills.json"), JSON.stringify(manifest));
     await save();
     const originalPath = join(root, source.snapshot, "skills/engineering/codebase-design/DEEPENING.md");

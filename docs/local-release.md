@@ -10,8 +10,9 @@ retired. Personal plugins, model mappings and routing settings are separate.
 Use the official Node **22.23.3** distribution with zlib **1.3.1-e00f703** for both
 packing and promotion. The local command refuses a different version before
 writing evidence or changing remote state. The general development Node range
-is unchanged. The local command currently targets macOS/Linux maintainer
-environments. A Node version alone is insufficient: the maintainer's other
+is unchanged. The local command supports macOS, Linux, and Windows maintainer
+environments, selecting native npm and Python virtual-environment layouts.
+A Node version alone is insufficient: the maintainer's other
 22.23.3 build used zlib 1.2.12 and produced different compressed bytes for the
 same uncompressed TARs. Record platform and architecture with the receipt.
 
@@ -29,6 +30,12 @@ OMS_RELEASE_NODE="$HOME/.local/share/oh-my-stack/toolchains/node-v22.23.3-darwin
 Changing the pin is a reviewed release-tool change. Re-run reproducibility and
 publication checks after such a change; do not reuse receipts from another
 build environment.
+
+For Windows, use the official `node-v22.23.3-win-x64.zip`, verify its SHA-256,
+and retain the complete extracted distribution so its bundled npm is available.
+Python must be available as `python`; the pipeline creates its own virtual
+environment and uses `Scripts/python.exe`. The same Node/zlib pin, clean tagged
+source, independent review, and downloaded-asset gates apply.
 
 ## Prepare the source and review
 

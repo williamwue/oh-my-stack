@@ -104,7 +104,9 @@ export function normalizeClaudeProbe(alias, result) {
 
 function run(command, args, timeoutMs = 60_000) {
   return new Promise((resolvePromise, reject) => {
-    const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
+    const javascript = /\.(?:mjs|cjs|js)$/i.test(command);
+    const child = spawn(javascript ? process.execPath : command, javascript ? [command, ...args] : args,
+      { stdio: ["ignore", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     const timeout = setTimeout(() => child.kill(), timeoutMs);

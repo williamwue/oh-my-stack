@@ -545,6 +545,38 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "upstream/snapshots/aihero-20261008/f3fc5632f401156837ee3872f14fe33ccf1024ea/skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/omp/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/codex/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/claude-code/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
     }
   ]
 }

@@ -215,7 +215,9 @@ export async function main(argv = process.argv.slice(2)) {
   const source = await inspectSource(options.source, options.tag);
   const reviewBytes = await fileBytes(options.review), review = assertReview(JSON.parse(reviewBytes), source.tree);
   if (options.publish) { requireThat((await fileBytes(options.notesFile)).toString().trim(), "release notes must not be empty"); }
-  const nodeDirectory = dirname(process.execPath), npm = join(nodeDirectory, "../lib/node_modules/npm/bin/npm-cli.js");
+  const nodeDirectory = dirname(process.execPath);
+  const npm = join(nodeDirectory, process.platform === "win32"
+    ? "node_modules/npm/bin/npm-cli.js" : "../lib/node_modules/npm/bin/npm-cli.js");
   await fileBytes(npm);
   await mkdir(options.out); await mkdir(join(options.out, "logs"));
   await writeFile(join(options.out, "review.json"), reviewBytes, { flag: "wx" });
@@ -225,8 +227,8 @@ export async function main(argv = process.argv.slice(2)) {
   try {
     await run("npm-ci", [npmCommand(["ci", "--ignore-scripts"])]);
     await run("repository-check", [npmCommand(["run", "check"])]);
-    const python = join(options.out, "python", "bin", "python");
-    await run("book-environment", [["python3", ["-m", "venv", join(options.out, "python")]],
+    const python = join(options.out, "python", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
+    await run("book-environment", [[process.platform === "win32" ? "python" : "python3", ["-m", "venv", join(options.out, "python")]],
       [python, ["-m", "pip", "install", "-r", join(options.source, "tools/books/requirements.txt")]]]);
     await run("book-validation", [node(["tools/books/validate-pstack-book.mjs", "--complete"])]);
     await run("book-audit", [[python, ["tools/books/audit-source.py"]]]);

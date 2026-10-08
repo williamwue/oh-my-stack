@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-90 public entries: 66 workflows and 24 principles.
+95 public entries: 71 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -28,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-66 entries.
+71 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -44,9 +44,11 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`blast-radius`](../packages/codex/skills/blast-radius/SKILL.md) | Prove the safety assumptions and downstream risks of a change. | explicit | OMS core |
 | [`bro`](../packages/codex/skills/bro/SKILL.md) | Restate the last answer plainly without changing its meaning. | explicit | OMS core |
 | [`bug-fix`](../packages/codex/skills/bug-fix/SKILL.md) | Reproduce, fix, and independently verify a software defect. | automatic | OMS core |
+| [`code-review`](../packages/codex/skills/code-review/SKILL.md) | Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\". | automatic | aihero-20261008 original |
 | [`codebase-design`](../packages/codex/skills/codebase-design/SKILL.md) | Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary. | automatic | aihero original |
 | [`correct`](../packages/codex/skills/correct/SKILL.md) | Prevent repeated repository mistakes with structural checks and failing proof. | explicit | OMS core |
 | [`create-verification-skill`](../packages/codex/skills/create-verification-skill/SKILL.md) | Create and exercise a project-local user-path verification Skill. | explicit | OMS core |
+| [`diagnosing-bugs`](../packages/codex/skills/diagnosing-bugs/SKILL.md) | Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow. | automatic | aihero-20261008 original |
 | [`domain-modeling`](../packages/codex/skills/domain-modeling/SKILL.md) | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR. | automatic | aihero original |
 | [`eval`](../packages/codex/skills/eval/SKILL.md) | Compare workflow variants with blinded outputs and a frozen rubric. | explicit | OMS core |
 | [`feature`](../packages/codex/skills/feature/SKILL.md) | Add or change behavior with design and end-to-end verification. | explicit | OMS core |
@@ -54,6 +56,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`grill-me`](../packages/codex/skills/grill-me/SKILL.md) | A relentless interview to sharpen a plan or design. | explicit | aihero original |
 | [`grill-with-docs`](../packages/codex/skills/grill-with-docs/SKILL.md) | A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go. | explicit | aihero original |
 | [`grilling`](../packages/codex/skills/grilling/SKILL.md) | Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases. | automatic | aihero original |
+| [`handoff`](../packages/codex/skills/handoff/SKILL.md) | Compact the current conversation into a handoff document for another agent to pick up. | explicit | aihero original |
 | [`hillclimb`](../packages/codex/skills/hillclimb/SKILL.md) | Improve one metric through bounded measured attempts. | explicit | OMS core |
 | [`how`](../packages/codex/skills/how/SKILL.md) | Explain a code path or subsystem using verified repository evidence. | explicit | OMS core |
 | [`improve-codebase-architecture`](../packages/codex/skills/improve-codebase-architecture/SKILL.md) | Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick. | explicit | aihero original |
@@ -77,6 +80,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`reflect`](../packages/codex/skills/reflect/SKILL.md) | Review conversation lessons and propose scoped Skill improvements. | explicit | OMS core |
 | [`reproduce-and-fix-issues`](../packages/codex/skills/reproduce-and-fix-issues/SKILL.md) | Benny repro automation only: reproduce triaged bugs before a draft PR. | explicit | OMS core |
 | [`research`](../packages/codex/skills/research/SKILL.md) | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent. | automatic | aihero original |
+| [`retro`](../packages/codex/skills/retro/SKILL.md) | Conduct a retrospective on a coding session. | explicit | aihero original |
 | [`runtime-forensics`](../packages/codex/skills/runtime-forensics/SKILL.md) | Diagnose a live process using runtime evidence. | explicit | OMS core |
 | [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md) | Resume checkpointed work without repeating completed steps. | explicit | OMS core |
 | [`setup-benny`](../packages/codex/skills/setup-benny/SKILL.md) | Configure Benny triage and reproduction automations. | explicit | OMS core |
@@ -98,6 +102,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`visual-parity`](../packages/codex/skills/visual-parity/SKILL.md) | Migrate a UI against frozen visual baselines. | explicit | OMS core |
 | [`why`](../packages/codex/skills/why/SKILL.md) | Investigate design rationale using cited history and available evidence sources. | explicit | OMS core |
 | [`worktree-cleanup`](../packages/codex/skills/worktree-cleanup/SKILL.md) | Audit and reclaim scoped worktrees while preserving active work. | explicit | OMS core |
+| [`writing-for-agents`](../packages/codex/skills/writing-for-agents/SKILL.md) | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. | automatic | aihero original |
 
 ## Principles
 

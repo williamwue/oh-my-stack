@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-10-08",
+  "kind": "source-import-local-checks",
+  "baseRevision": "3bc672568a8ccba812a804bec082d6d24a1d0cab",
+  "environment": { "platform": "win32", "node": "v22.23.2" },
+  "fullCheck": {
+    "command": "npm run check",
+    "exitCode": 1,
+    "passedStages": [
+      "generate:check", "docs:check", "conformance:check", "release:check",
+      "validate", "check:books", "lint:markdown"
+    ],
+    "tests": { "total": 287, "passed": 281, "failed": 4, "skipped": 2 },
+    "localLog": ".tmp/aihero-complements/check.log",
+    "logSha256": "eafaa53c5ae0c073ed9fdf542216081ed03c2cd07e0fec6a1070ecdf04aef66e"
+  },
+  "sourceSkills": { "tests": 4, "passed": 4, "failed": 0 },
+  "focusedCheck": {
+    "command": "node --test tests/source-skills.test.mjs tests/generate.test.mjs",
+    "exitCode": 0,
+    "tests": { "total": 19, "passed": 19, "failed": 0 }
+  },
+  "baselineComparison": {
+    "method": "git archive HEAD extracted into an isolated temporary directory; rerun exactly the four failing test names without changing baseline files",
+    "command": "node --test --test-name-pattern='Claude default probes|generated hook injects|generated Claude plugin hook|Git promotion appends' tests/collect-model-inventory.test.mjs tests/routing.test.mjs tests/stable-marketplace.test.mjs",
+    "exitCode": 1,
+    "tests": { "total": 4, "passed": 0, "failed": 4 },
+    "localLog": ".tmp/aihero-complements/baseline-failures.log",
+    "logSha256": "379b5b97c697ed7c6db0105d27fddf964c62a150a788cfedd8de770e8999be83",
+    "sameFailures": [
+      { "test": "Claude default probes all three families with consent and honors explicit subsets", "error": "spawn EFTYPE" },
+      { "test": "generated hook injects a bounded hint only for enabled startup/resume/clear/compact", "error": "context.includes(native OMS Skill path) assertion" },
+      { "test": "generated Claude plugin hook and setup use the Claude switch and fail closed", "error": "context.includes(native OMS Skill path) assertion" },
+      { "test": "Git promotion appends history, is idempotent, and rejects concurrent branch changes", "error": "spawn which ENOENT" }
+    ]
+  },
+  "releaseGatePassed": false,
+  "published": false,
+  "globalInstallationChanged": false
+}
