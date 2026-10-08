@@ -43,6 +43,9 @@ Explicit overrides and budgets survive a same-preset rerun. Existing two-model
 configurations are preserved until the user accepts a new mapping. An explicitly
 requested probe subset is a partial inventory; missing or ambiguous families
 stop the three-family preset instead of silently substituting another model.
+When a native alias returns another family, an explicitly selected reviewed pin
+such as `--claude-models haiku=claude-haiku-5-5,sonnet,opus` can be observed
+without rewriting global settings. The returned pinned ID must match exactly.
 Aliases can resolve to different versions by provider or local configuration.
 The collector recognizes Opus, Sonnet, and Haiku 5.5 with configurable effort;
 Haiku 4.5 has no native effort override. An unreviewed version stops collection

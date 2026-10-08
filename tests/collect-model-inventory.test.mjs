@@ -78,7 +78,7 @@ import { appendFileSync } from "node:fs";
 const args = process.argv.slice(2);
 appendFileSync(${JSON.stringify(log)}, JSON.stringify(args) + "\\n");
 const alias = args[args.indexOf("--model") + 1];
-const id = "claude-" + alias + "-5-5";
+const id = alias.startsWith("claude-") ? alias : "claude-" + alias + "-5-5";
 console.log(JSON.stringify({ is_error: false, subtype: "success", modelUsage: { [id]: { canonicalModel: id } } }));
 `, { mode: 0o755 });
   await assert.rejects(collectInventory({ runtime: "claude-code", claudeBin: binary }), /consume account usage/);
@@ -97,6 +97,24 @@ console.log(JSON.stringify({ is_error: false, subtype: "success", modelUsage: { 
     claudeModels: ["sonnet", "opus"], confirmClaudeProbes: true });
   assert.deepEqual(subset.models.map((model) => model.id), ["claude-sonnet-5-5", "claude-opus-5-5"]);
   assert.equal((await readFile(log, "utf8")).trim().split("\n").length, 5);
+  const pinned = await collectInventory({ runtime: "claude-code", claudeBin: binary,
+    claudeModels: ["haiku=claude-haiku-5-5"], confirmClaudeProbes: true });
+  assert.equal(pinned.models[0].id, "claude-haiku-5-5");
+  assert.match(pinned.source, /haiku=claude-haiku-5-5/);
+  const pinnedCall = JSON.parse((await readFile(log, "utf8")).trim().split("\n").at(-1));
+  assert.equal(pinnedCall[pinnedCall.indexOf("--model") + 1], "claude-haiku-5-5");
+  for (const pin of ["haiku=claude-sonnet-5-5", "haiku=claude-haiku-6", "haiku=", "haiku=a=b", "fable=claude-fable-5"]) {
+    await assert.rejects(collectInventory({ runtime: "claude-code", claudeBin: binary,
+      claudeModels: [pin], confirmClaudeProbes: true }));
+  }
+  await assert.rejects(collectInventory({ runtime: "claude-code", claudeBin: binary,
+    claudeModels: ["haiku", "haiku=claude-haiku-5-5"], confirmClaudeProbes: true }), /must be unique/);
+  assert.equal((await readFile(log, "utf8")).trim().split("\n").length, 6);
+  await writeFile(binary, `#!/usr/bin/env node
+console.log(JSON.stringify({ is_error: false, subtype: "success", modelUsage: { "claude-haiku-4-5": {} } }));
+`, { mode: 0o755 });
+  await assert.rejects(collectInventory({ runtime: "claude-code", claudeBin: binary,
+    claudeModels: ["haiku=claude-haiku-5-5"], confirmClaudeProbes: true }), /refusing fallback/);
   await writeFile(binary, `#!/usr/bin/env node
 console.log(JSON.stringify({ is_error: true, subtype: "error", modelUsage: {} }));
 `, { mode: 0o755 });
