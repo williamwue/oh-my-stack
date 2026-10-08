@@ -121,7 +121,8 @@ longer publishing, then remove only the inspected commit from a neutral director
 using the same native Git authentication and an explicit expected-head lease:
 
 ```bash
-git push --force-with-lease=refs/heads/oms-release-lock:INSPECTED_OWNER_COMMIT \
+git -C /path/to/evidence/github/publication-lease/checkout \
+  push --force-with-lease=refs/heads/oms-release-lock:INSPECTED_OWNER_COMMIT \
   https://github.com/williamwue/oh-my-stack.git :refs/heads/oms-release-lock
 ```
 
