@@ -7,6 +7,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { packageInventory, parseArchive, sha256 } from "./release-lib.mjs";
+import { assertBuildEnvironment, BUILD_ENVIRONMENT, readLocalVerification, REQUIRED_CHECKS } from "./local-release-lib.mjs";
 
 export const REPOSITORY = "williamwue/oh-my-stack";
 const URL = `https://github.com/${REPOSITORY}`;
@@ -26,34 +27,32 @@ function cleanSource(manifest) {
     && manifest.source.cleanTaggedCheckout === true && manifest.source.worktreeDirty === false,
   "stable requires a clean, exact tagged release manifest");
 }
-export function assertPublisherIdentity({ repo, account, automation = null, run = null }) {
+export function assertPublisherIdentity({ repo, account, automation = null }) {
+  requireThat(!automation, "stable publication requires the maintainer's local pipeline");
   requireThat(repo.full_name === REPOSITORY && repo.default_branch === "main", "wrong publishing repository");
-  if (!automation) {
-    requireThat(typeof account === "string" && account && repo.permissions?.push === true,
-      "native GitHub account does not have write permission for the expected repository");
-    return { kind: "maintainer", account };
-  }
-  // Installation tokens do not expose the user's repository permissions object.
-  // Bind automation to the server-observed run; the Git server enforces write access.
-  requireThat(automation.repository === REPOSITORY && /^\d+$/.test(automation.runId)
-    && Number.isSafeInteger(Number(automation.runId)) && Number(automation.runId) > 0,
-  "wrong automation repository or run ID");
-  requireThat(run?.id === Number(automation.runId) && run.repository?.full_name === REPOSITORY
-    && run.head_repository?.full_name === REPOSITORY && run.path === ".github/workflows/stable-marketplace.yml"
-    && ["release", "workflow_dispatch"].includes(run.event) && run.event === automation.event
-    && /^[a-f0-9]{40}$/.test(automation.sha) && run.head_sha === automation.sha
-    && (run.event !== "workflow_dispatch" || run.head_branch === "main"),
-  "automation is not the expected publishing workflow run");
-  return { kind: "github-actions", account: "github-actions[bot]", runId: run.id };
+  requireThat(typeof account === "string" && account && repo.permissions?.push === true,
+    "native GitHub account does not have write permission for the expected repository");
+  return { kind: "maintainer", account };
 }
-export function assertPromotion({ manifest, tagCommit, runs, previous = null }) {
+export function assertPromotion({ manifest, tagCommit, tagTree, verification, previous = null }) {
   cleanSource(manifest);
   requireThat(manifest.source.commit === tagCommit, "release tag and manifest commit differ");
-  const run = runs.find((entry) => entry.conclusion === "success" && entry.event === "push"
-    && entry.headBranch === "main" && entry.headSha === tagCommit);
-  requireThat(run, "stable promotion requires successful main push CI at the exact release commit");
+  requireThat(verification?.schemaVersion === 1 && verification.kind === "oh-my-stack-local-release"
+    && verification.repository === REPOSITORY, "stable promotion requires a local verification receipt");
+  requireThat(verification.source?.commit === tagCommit && verification.source?.tree === tagTree
+    && /^[a-f0-9]{40}$/.test(tagTree) && verification.source?.ref === manifest.source.ref
+    && verification.source?.worktreeDirty === false && verification.source?.cleanTaggedCheckout === true,
+  "local verification does not bind the exact clean release tag and tree");
+  requireThat(verification.environment?.node === BUILD_ENVIRONMENT.node
+    && verification.environment?.zlib === BUILD_ENVIRONMENT.zlib, "local verification used a different build environment");
+  requireThat(verification.review?.tree === tagTree && verification.review?.verdict === "approved"
+    && Array.isArray(verification.review?.evidence) && verification.review.evidence.some((value) => typeof value === "string" && value.trim()),
+  "local verification requires a review of the exact source tree");
+  const required = REQUIRED_CHECKS;
+  requireThat(Array.isArray(verification.checks) && required.every((name) => verification.checks.filter((check) => check.name === name && check.exitCode === 0).length === 1),
+    "local verification is missing successful checks");
   if (previous) requireThat(compare(manifest.version, previous.version) >= 0, "stable cannot downgrade");
-  return run;
+  return verification;
 }
 export async function assertTaggedRebuild({ assets, rebuilt }) {
   const manifest = JSON.parse(await readFile(join(rebuilt, "release-manifest.json")));
@@ -238,38 +237,37 @@ async function main(argv) {
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--publish") options.publish = true;
-    else if (["--tag", "--out", "--assets", "--release-info"].includes(arg)) {
+    else if (["--tag", "--out", "--assets", "--release-info", "--verification"].includes(arg)) {
       requireThat(argv[i + 1] && !argv[i + 1].startsWith("--"), `missing value for ${arg}`);
       options[arg.slice(2)] = argv[++i];
     } else throw new Error(`unknown argument: ${arg}`);
   }
   if (options.assets || options["release-info"]) {
-    requireThat(options.assets && options["release-info"] && options.out && !options.publish && !options.tag, "offline build requires --assets, --release-info, --out only");
+    requireThat(options.assets && options["release-info"] && options.out && !options.publish && !options.tag && !options.verification, "offline build requires --assets, --release-info, --out only");
     const result = await buildStableMarketplace({ assets: resolve(options.assets), release: JSON.parse(await readFile(options["release-info"])), out: resolve(options.out) });
     console.log(JSON.stringify({ status: "built", version: result.receipt.version, out: resolve(options.out) }, null, 2));
     return;
   }
   requireThat(/^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(options.tag), "promotion requires --tag vMAJOR.MINOR.PATCH");
   requireThat(options.out, "promotion requires a new --out evidence directory");
+  requireThat(options.verification, "promotion requires --verification from the local release command");
+  assertBuildEnvironment();
   const evidence = resolve(options.out);
   try { await lstat(evidence); throw new Error("evidence output already exists"); } catch (error) { if (error.code !== "ENOENT") throw error; }
   const workspace = await mkdtemp(join(tmpdir(), "oms-stable-admin-"));
-  const run = async (binary, args) => (await exec(binary, args, { cwd: workspace, maxBuffer: 20 * 1024 * 1024 })).stdout.trim();
+  const nativeEnv = { ...process.env, GH_HOST: "github.com", GH_PROMPT_DISABLED: "1" };
+  for (const key of ["GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "GH_REPO"]) delete nativeEnv[key];
+  const run = async (binary, args) => (await exec(binary, args, { cwd: workspace, env: nativeEnv, maxBuffer: 20 * 1024 * 1024 })).stdout.trim();
   const ghJson = async (...args) => JSON.parse(await run("gh", args));
   try {
-    const automation = process.env.GITHUB_ACTIONS === "true";
-    const context = automation ? { repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID,
-      sha: process.env.GITHUB_SHA, event: process.env.GITHUB_EVENT_NAME } : null;
-    if (automation) requireThat(context.repository === REPOSITORY && /^\d+$/.test(context.runId), "wrong automation repository or run ID");
-    const account = automation ? "github-actions[bot]" : (await ghJson("api", "user")).login;
+    requireThat(process.env.GITHUB_ACTIONS !== "true", "stable publication runs locally, not in Actions");
+    const account = (await ghJson("api", "user")).login;
     const repo = await ghJson("api", `repos/${REPOSITORY}`);
-    const workflowRun = automation ? await ghJson("api", `repos/${REPOSITORY}/actions/runs/${context.runId}`) : null;
-    const identity = assertPublisherIdentity({ repo, account, automation: context, run: workflowRun });
+    const identity = assertPublisherIdentity({ repo, account });
     const release = await ghJson("api", `repos/${REPOSITORY}/releases/tags/${options.tag}`);
     requireThat(release.tag_name === options.tag && release.draft === false && release.prerelease === false, "tag is not a published stable release");
-    const tagCommit = (await ghJson("api", `repos/${REPOSITORY}/commits/${options.tag}`)).sha;
-    const runs = await ghJson("run", "list", "--repo", REPOSITORY, "--workflow", "CI", "--commit", tagCommit, "--status", "completed", "--limit", "100",
-      "--json", "databaseId,conclusion,headSha,headBranch,event");
+    const tag = await ghJson("api", `repos/${REPOSITORY}/commits/${options.tag}`);
+    const tagCommit = tag.sha, tagTree = tag.commit?.tree?.sha;
     await mkdir(evidence, { recursive: true });
     const assets = join(evidence, "downloads");
     await mkdir(assets);
@@ -277,7 +275,9 @@ async function main(argv) {
     await writeFile(join(evidence, "release-info.json"), encode(release));
     const snapshot = join(evidence, "snapshot");
     const { manifest } = await buildStableMarketplace({ assets, release, out: snapshot });
-    const ci = assertPromotion({ manifest, tagCommit, runs });
+    const verification = await readLocalVerification({ path: resolve(options.verification), manifest, tagCommit, tagTree, assets });
+    assertPromotion({ manifest, tagCommit, tagTree, verification });
+    const verificationSha256 = sha256(await readFile(resolve(options.verification)));
     // Independently reproduce the published assets using the release's own clean tagged tools.
     const source = join(workspace, "source");
     await run("git", ["clone", "--quiet", "--depth", "1", "--branch", options.tag, `${URL}.git`, source]);
@@ -287,8 +287,11 @@ async function main(argv) {
     const gzipOperatingSystemNormalized = await assertTaggedRebuild({ assets, rebuilt });
     const remote = `${URL}.git`;
     const expectedHead = await head(remote, workspace);
+    await readLocalVerification({ path: resolve(options.verification), manifest, tagCommit, tagTree, assets });
+    requireThat(sha256(await readFile(resolve(options.verification))) === verificationSha256, "local verification changed during promotion");
     const result = await promoteSnapshot({ snapshot, remote, expectedHead, publish: options.publish });
-    const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, ciRun: ci.databaseId,
+    const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, verification: { kind: verification.kind, sha256: verificationSha256,
+      tree: verification.source.tree, environment: verification.environment },
       taggedRebuildMatched: true, gzipOperatingSystemNormalized, ...result };
     await writeFile(join(evidence, "promotion.json"), encode(report));
     console.log(JSON.stringify(report, null, 2));

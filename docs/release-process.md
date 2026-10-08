@@ -1,6 +1,9 @@
 # Release process
 
-Oh My Stack builds all runtime packages from one versioned source tree. Release
+Oh My Stack builds all runtime packages from one versioned source tree. Formal
+publication uses the [local maintainer pipeline](local-release.md); Actions is
+an optional manual check. The commands below describe the retained package and
+archive contracts. Release
 archives are deterministic, contain one target package under the
 `oh-my-stack/` archive root, and are accompanied by a complete file inventory,
 SHA-256 checksums, and explicit verification maturity.
@@ -259,8 +262,8 @@ For a non-prerelease, also complete the version's candidate checklist before
 creating the tag. A provider limit or missing authenticated smoke is a pending
 gate, not permission to reuse historical evidence as a fresh result. In the
 GitHub release, mark the version as non-prerelease only after the tagged build
-and remote CI pass. Download every asset after publishing and compare its
-checksum with the trusted local tagged build.
+and source-bound local verification pass. Download every asset after publishing
+and compare its checksum with the trusted local tagged build.
 
 For an extracted local Codex marketplace, `marketplace upgrade` is not the
 update operation: that command requires a Git marketplace. Replace only the
@@ -290,29 +293,30 @@ native catalogs at `.agents/plugins/marketplace.json` and
 published target archives, including original Skills and supporting resources.
 Only the marketplace paths and channel README/provenance receipt are composed.
 
-After the existing release gates above have passed, prepare a promotion using
-Node.js 22, Git, and the maintainer's existing official `gh` login. Run from a
+After the existing release gates above have passed, use the
+[local maintainer release command](local-release.md) with the pinned official
+Node and zlib, Git, and the maintainer's existing official `gh` login. Run from a
 neutral directory, without sourcing repository environment files:
 
 ```bash
 node /absolute/path/to/oh-my-stack/tools/stable-marketplace.mjs \
-  --tag v0.9.1 --out /new/absolute/path/to/stable-plan
+  --tag v0.11.3 --verification /path/to/verification.json \
+  --out /new/absolute/path/to/stable-plan
 ```
 
 This downloads release assets and writes local evidence, but does not push.
 It verifies the native account's write access and exact repository, a published
 non-prerelease, all seven GitHub asset digests, same-release `SHA256SUMS`, clean
-manifest provenance, safe archive inventories, exact tag commit, successful
-main-push CI, and an independent clean tagged rebuild of all seven assets.
+manifest provenance, safe archive inventories, exact tag commit and tree, a
+verified local check/review receipt, and an independent clean tagged rebuild of all seven assets.
 Cross-platform rebuilding may normalize only gzip's operating-system header
 byte to the published value; every other compressed byte, complete manifest
 and checksum file must match. Any normalization is recorded in the receipt.
 Published downloads and GitHub asset digests are always checked unchanged.
-Maintainer execution requires native repository write permission. Actions uses
-the repository's installation token and verifies the exact server-observed
-publishing run, repository, event and commit instead of requiring a user
-permissions object. The workflow declares `contents: write`; GitHub enforces
-that permission when the publisher pushes the stable ref.
+Maintainer execution requires native repository write permission. Local receipt
+logs, review and seven asset hashes are verified against the same source. Actions
+is not a publication authority. The receipt is local maintainer evidence, not a
+signed third-party attestation or a historical CI result.
 Inspect `promotion.json`, `snapshot/STABLE_RELEASE.json`, and the downloads.
 The source tool does not accept arbitrary publication repository coordinates.
 
@@ -321,7 +325,8 @@ directory and the explicit remote-write switch:
 
 ```bash
 node /absolute/path/to/oh-my-stack/tools/stable-marketplace.mjs \
-  --tag v0.9.1 --out /new/absolute/path/to/stable-publish --publish
+  --tag v0.11.3 --verification /path/to/verification.json \
+  --out /new/absolute/path/to/stable-publish --publish
 ```
 
 Publication changes only `refs/heads/stable`. Each update appends a commit,
@@ -332,15 +337,11 @@ head after pushing and records the result. It does not create tags, releases,
 PRs, merge code, or change user profiles. A prepared local commit is not a
 published source.
 
-`.github/workflows/stable-marketplace.yml` runs the same gates after a published
-release or a manual dispatch with an already published tag. It checks out
-trusted `main` tools, uses the repository's native Actions token with scoped
-permissions, serializes promotions, and retains failure/success evidence for
-30 days. It does not replace candidate review, human release authorization,
-or pre-publication tagged checks. Missing assets or failed/missing source CI
-stop promotion; after the release checks complete, retry by manual dispatch.
-This automation is available only after its implementation has landed on
-`main`; a local workflow file alone does not activate it on GitHub.
+The automatic stable workflow has been retired. CI can be started explicitly
+with `workflow_dispatch` for optional inspection; it is not triggered by a push,
+PR or release and does not replace local release or review evidence. Publication
+and stable promotion run on the maintainer's machine using the same pinned
+build environment. Existing published assets remain immutable.
 
 The initial stable channel was bootstrapped from published v0.9.1. Subsequent
 versions become eligible only after formal publication and the same gates;

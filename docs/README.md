@@ -34,3 +34,5 @@ Start with [CONTRIBUTING.md](../CONTRIBUTING.md).
 - [Source operations tools](operations-guide.md)
 - [Maintainer records and acceptance history](maintainers/README.md)
 - [pstack book and OMS companion](books/pstack/README.md)
+
+Maintainer publication: [Local release pipeline](local-release.md).
