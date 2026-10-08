@@ -706,6 +706,30 @@ function renderSkillDocument(skill, adapter) {
       "Read [the routing guide](../../docs/automatic-routing.md) for exact scope paths",
       "and hook verification. Do not modify native hook trust automatically.",
       "",
+    ].join("\n") : adapter.id === "claude-code" ? [
+      "## Claude Code automatic routing binding",
+      "",
+      "Run `node ../../scripts/routing.mjs status --runtime claude-code` from the",
+      "user's project, resolving the script path relative to this installed Skill,",
+      "before automatic routing. Use the returned `enabled` flag; errors disable routing.",
+      "The nearest Claude project switch overrides the user switch; absence is manual.",
+      "The user directory is the absolute CLAUDE_CONFIG_DIR, or ~/.claude when unset.",
+      "Claude uses .oh-my-stack/routing.claude-code.json for project overrides;",
+      "Codex's .oh-my-stack/routing.json is independent and must not be rewritten.",
+      "For a routing setup request, preview `node ../../scripts/routing.mjs",
+      "set --runtime claude-code --scope user|project --mode auto|manual`, then",
+      "use the same command with `--apply` for the authorized selection.",
+      "Report saved scope, effective mode, and project overrides separately.",
+      "Routing-only setup needs no model inventory, paid probes, or model mapping changes.",
+      "The plugin's SessionStart hook adds the oms-auto entry pointer only in auto mode.",
+      "Use the Skill tool for oh-my-stack:oms-auto when available; otherwise read its",
+      "installed file. Always recheck the switch before reading poteto-mode or a workflow.",
+      "After enabled=true, read ../poteto-mode/SKILL.md and follow its workflow routing.",
+      "When enabling, review the plugin SessionStart hook through Claude Code's /hooks",
+      "and start a fresh session. Do not bypass host hook permissions or alter trust.",
+      "Saving a switch does not prove hook execution or workflow selection.",
+      "Read [the routing guide](../../docs/automatic-routing.md) for verification.",
+      "",
     ].join("\n") : [
       "## Automatic routing availability",
       "",
@@ -886,17 +910,26 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
-    for (const name of ["routing.mjs", "codex-routing-hook.mjs"]) {
+  }
+  if (["codex", "claude-code"].includes(adapter.id)) {
+    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
+    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
       await cp(join(model.root, "tools", name), join(target, "scripts", name));
     }
     await writeJson(join(target, "hooks", "hooks.json"), {
       hooks: { SessionStart: [{ matcher: "startup|resume|clear|compact", hooks: [{
-        type: "command", command: 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"',
-        timeout: 10, additionalContextLimit: 500,
+        type: "command",
+        command: adapter.id === "codex"
+          ? 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"'
+          : 'node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-routing-hook.mjs"',
+        timeout: 10,
+        ...(adapter.id === "codex" ? { additionalContextLimit: 500 } : {}),
       }] }] },
     });
     await mkdir(join(target, "docs"), { recursive: true });
     await cp(join(model.root, "docs", "automatic-routing.md"), join(target, "docs", "automatic-routing.md"));
+  }
+  if (adapter.id === "codex") {
     await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
     for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
       await cp(join(model.root, "tools", name), join(target, "scripts", name));
@@ -983,10 +1016,15 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
   }
-  if (adapter.id === "codex") {
-    for (const name of ["routing.mjs", "codex-routing-hook.mjs"]) {
-      assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);
+  if (["codex", "claude-code"].includes(adapter.id)) {
+    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
+    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
+      assert(await exists(join(target, "scripts", name)), `${adapter.id}: ${name} is missing`);
     }
+    assert(await exists(join(target, "hooks", "hooks.json")), `${adapter.id}: routing hook is missing`);
+    assert(await exists(join(target, "docs", "automatic-routing.md")), `${adapter.id}: routing guide is missing`);
+  }
+  if (adapter.id === "codex") {
     assert(!await exists(join(target, "plugin.json")), "codex: root Agent Plugins manifest bypasses the verified hook loader");
     assert(manifest.hooks === "./hooks/hooks.json", "codex: native manifest must name the routing hook");
     assert(await exists(join(target, "hooks", "hooks.json")), "codex: routing hook is missing");

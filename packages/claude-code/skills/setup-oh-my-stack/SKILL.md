@@ -54,12 +54,28 @@ JSONL with `--hook-record`. Use an isolated project and do not install a
 diagnostic hook into the user's global settings. Without hook evidence,
 treat child effort as unverified even when the agent file specifies it.
 
-## Automatic routing availability
+## Claude Code automatic routing binding
 
-Automatic routing is not configured on this target. For oms-auto or a
-routing-only setup request, return control to the host without automatic
-execution. Use the explicit poteto-mode entry for engineering work.
-For ordinary model setup, continue with the procedure below.
+Run `node ../../scripts/routing.mjs status --runtime claude-code` from the
+user's project, resolving the script path relative to this installed Skill,
+before automatic routing. Use the returned `enabled` flag; errors disable routing.
+The nearest Claude project switch overrides the user switch; absence is manual.
+The user directory is the absolute CLAUDE_CONFIG_DIR, or ~/.claude when unset.
+Claude uses .oh-my-stack/routing.claude-code.json for project overrides;
+Codex's .oh-my-stack/routing.json is independent and must not be rewritten.
+For a routing setup request, preview `node ../../scripts/routing.mjs
+set --runtime claude-code --scope user|project --mode auto|manual`, then
+use the same command with `--apply` for the authorized selection.
+Report saved scope, effective mode, and project overrides separately.
+Routing-only setup needs no model inventory, paid probes, or model mapping changes.
+The plugin's SessionStart hook adds the oms-auto entry pointer only in auto mode.
+Use the Skill tool for oh-my-stack:oms-auto when available; otherwise read its
+installed file. Always recheck the switch before reading poteto-mode or a workflow.
+After enabled=true, read ../poteto-mode/SKILL.md and follow its workflow routing.
+When enabling, review the plugin SessionStart hook through Claude Code's /hooks
+and start a fresh session. Do not bypass host hook permissions or alter trust.
+Saving a switch does not prove hook execution or workflow selection.
+Read [the routing guide](../../docs/automatic-routing.md) for verification.
 
 ## Choose automatic routing
 

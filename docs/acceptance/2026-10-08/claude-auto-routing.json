@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "570db48665bb6b6c09ddbea03795f138880eacb2",
+  "surface": "Claude Code CLI 2.1.293 on macOS",
+  "packageLoading": "local --plugin-dir; installed user OMS disabled for these sessions",
+  "model": "claude-opus-5-5",
+  "mainSessionRequestedEffort": "high",
+  "childDelegation": "none",
+  "rawEvidenceDirectory": "/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs",
+  "cases": {
+    "routed": {
+      "sessionId": "5d20af09-5118-445c-9400-db4066947af3",
+      "result": "success",
+      "hooks": [
+        {
+          "name": "SessionStart:startup",
+          "enabledHint": true,
+          "exitCode": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "name": "Skill",
+          "input": {
+            "skill": "oh-my-stack:oms-auto",
+            "args": "Investigate this regression: index.mjs is expected to export 5 but exports -1. Trace the cause across index.mjs and math.mjs, explain the precise mismatch and the smallest fix. Read-only: do not edit files, run subagents, or access external services."
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs status --runtime claude-code",
+            "description": "Check OMS routing switch status"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<package-root>/skills/poteto-mode/SKILL.md"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls -la /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs/routed",
+            "description": "List project files"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs/routed/index.mjs"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs/routed/math.mjs"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<package-root>/skills/investigation/SKILL.md"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node --input-type=module -e 'import { result } from \"./index.mjs\"; import { add } from \"./math.mjs\"; console.log({ result, \"add(2,3)\": add(2,3), \"2-3\": 2-3, \"2+3\": 2+3 });'",
+            "description": "Import modules and print actual result values"
+          }
+        }
+      ]
+    },
+    "skip": {
+      "sessionId": "ec235a0f-40b5-4f85-81d4-f92f63647a36",
+      "result": "success",
+      "hooks": [
+        {
+          "name": "SessionStart:startup",
+          "enabledHint": true,
+          "exitCode": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls -la && cat -n index.mjs && echo ---- && cat -n math.mjs",
+            "description": "List files and show both modules"
+          }
+        }
+      ]
+    },
+    "manual": {
+      "sessionId": "07b76289-8ad7-46bf-bcf3-45733b3144cf",
+      "result": "success",
+      "hooks": [
+        {
+          "name": "SessionStart:startup",
+          "enabledHint": false,
+          "exitCode": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs/manual/index.mjs"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-claude-routing-live-lb9skhgs/manual/math.mjs"
+          }
+        }
+      ]
+    },
+    "setup": {
+      "sessionId": "ed932418-9ba3-4c63-81a9-ad37f4685fc6",
+      "result": "success",
+      "hooks": [
+        {
+          "name": "SessionStart:startup",
+          "enabledHint": false,
+          "exitCode": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs status --runtime claude-code; echo \"exit=$?\"",
+            "description": "Check current routing status for this project"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs status --runtime claude-code",
+            "description": "Check current routing status for this project"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs set --runtime claude-code --scope project --mode auto",
+            "description": "Preview enabling auto routing for this project"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs set --runtime claude-code --scope project --mode auto --apply",
+            "description": "Apply auto routing for this project"
+          }
+        },
+        {
+          "name": "Bash",
+          "input": {
+            "command": "node <package-root>/scripts/routing.mjs status --runtime claude-code",
+            "description": "Re-check effective routing status"
+          }
+        }
+      ]
+    },
+    "resume-translation": {
+      "sessionId": "5d20af09-5118-445c-9400-db4066947af3",
+      "result": "success",
+      "hooks": [
+        {
+          "name": "SessionStart:resume",
+          "enabledHint": true,
+          "exitCode": 0
+        }
+      ],
+      "toolCalls": []
+    }
+  }
+}

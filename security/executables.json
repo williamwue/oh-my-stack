@@ -484,10 +484,10 @@
     {
       "path": "tools/routing.mjs",
       "owner": "oh-my-stack",
-      "purpose": "Inspect or preview/apply a separately owned Codex automatic-routing switch; defaults to manual and uses no model or credentials.",
+      "purpose": "Inspect or preview/apply separately owned Codex and Claude Code automatic-routing switches; defaults to manual and uses no model or credentials.",
       "network": false,
       "writes": [
-        "only the explicitly selected user or project OMS routing.json on set --apply"
+        "only the explicitly selected runtime user or project OMS routing configuration on set --apply"
       ],
       "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
     },
@@ -529,6 +529,22 @@
         "williamwue/oh-my-stack refs/heads/oms-release-lock only through an authorized publication caller"
       ],
       "uninstallBehavior": "Maintainer library is not installed in plugin packages. Interrupted leases require owner-led recovery."
+    },
+    {
+      "path": "tools/routing-hook.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Shared bounded SessionStart context and fail-closed input handling for Codex and Claude Code; reads only the selected runtime routing switch.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "tools/claude-routing-hook.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run the shared SessionStart hook with the Claude Code runtime; inject the installed oms-auto entry only when its switch is enabled.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
     }
   ]
 }

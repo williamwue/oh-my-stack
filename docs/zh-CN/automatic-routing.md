@@ -1,7 +1,8 @@
-# Codex 可选自动路由
+# Codex 和 Claude Code 可选自动路由
 
 此能力从 0.11.0 提供。安装或升级不会自动开启。
-现有 `poteto-mode` 显式入口继续可用；Claude Code 和 OMP 尚未接入此开关。
+现有 `poteto-mode` 显式入口继续可用。当前源代码已增加 Claude Code 适配；
+这不代表已发布或已更新本机安装。OMP 尚未接入此开关。
 
 0.11.1 起提供以下选项式设置流程。
 
@@ -69,3 +70,30 @@ CLI 跟进验收已观察到已安装插件在启动、恢复和压缩后执行 
 [英文指南](../automatic-routing.md)。
 本次 CLI 观察与未验证边界见
 [验收记录](../codex-auto-routing-0.10.0-acceptance.md)。
+
+## Claude Code 适配
+
+加载含此适配的插件后，运行 `/oh-my-stack:setup-oh-my-stack`，选择开启、关闭
+或保持现状，再选择个人默认或仅当前项目。完成选择后保存设置，无需另写开启指令。
+路由设置不探测模型，不修改模型或推理强度配置；默认仍为手动模式。
+
+命令行检查和预览必须显式选择 Claude 运行时：
+
+```bash
+node /path/to/installed/oh-my-stack/scripts/routing.mjs status --runtime claude-code
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto --apply
+```
+
+个人设置位于 `$CLAUDE_CONFIG_DIR/oh-my-stack/routing.json`，未设置时使用
+`~/.claude/oh-my-stack/routing.json`。配置目录必须是绝对路径。项目覆盖使用
+`.oh-my-stack/routing.claude-code.json`，与 Codex 的 `routing.json` 分开，
+互不覆盖；项目设置优先于个人默认，错误配置停用自动路由。
+
+Claude 插件通过 `hooks/hooks.json` 注册 `SessionStart`。开启时，在启动、恢复、
+清空和压缩后注入 `oms-auto` 入口提示；进入自动入口时再次检查开关。显式 Skill、
+跳过 OMS、限定子任务和原有授权边界优先；闲聊、翻译及工具使用问答不进入工程执行。
+通过 Claude 的 `/hooks` 检查插件 hook，遵守宿主权限设置，加载插件后启动新会话。
+不绕过权限，也不自动改写宿主设置。
+`--plugin-dir` 只验证本地包，不证明已安装版本更新。配置保存、hook 执行和实际选择
+工作流需要分别验证。完整路径和验证方式见[英文说明](../automatic-routing.md)。
