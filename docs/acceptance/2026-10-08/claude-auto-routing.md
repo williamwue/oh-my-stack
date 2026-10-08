@@ -58,6 +58,17 @@ installed-plugin registry; no user Claude routing file was created.
 See the [sanitized native tool receipt](claude-auto-routing.json). Raw stream logs
 remain in the external temporary evidence directory named in that receipt.
 
+## Final 0.12.0 candidate
+
+After regenerating version metadata, a fresh native Claude session
+`5e1dcffa-8aca-49c8-befb-afdb261f31c1` loaded the 0.12.0 generated package.
+It again observed startup hook exit 0, invoked `oms-auto`, checked the explicit
+Claude runtime switch, read `poteto-mode` and `investigation`, and reproduced
+`result === -1` without changing fixture source. It used the same limited
+Read/Bash/Skill surface, native authentication, and session-only package loading.
+Full `npm run check` again passed: 285 passed, 2 optional skips, 0 failures.
+The raw stream is retained in the external 0.12.0 release evidence directory.
+
 ## Verification limits
 
 Native startup and resume were observed. Clear and compact sources were exercised
