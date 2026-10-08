@@ -29,7 +29,8 @@
     "test": "node --test tests/*.test.mjs",
     "check": "npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test",
     "docs:generate": "node tools/generate-skill-directory.mjs",
-    "docs:check": "node tools/generate-skill-directory.mjs --check"
+    "docs:check": "node tools/generate-skill-directory.mjs --check",
+    "release:local": "node tools/local-release.mjs"
   },
   "license": "MIT",
   "devDependencies": {

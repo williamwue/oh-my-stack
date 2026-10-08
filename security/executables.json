@@ -472,7 +472,7 @@
     {
       "path": "tools/stable-marketplace.mjs",
       "owner": "oh-my-stack",
-      "purpose": "Build a stable Git marketplace only from verified published assets; optionally advance its one pinned GitHub branch after clean-tag rebuild and CI gates.",
+      "purpose": "Build a stable Git marketplace from verified published assets; optionally advance its pinned GitHub branch after exact local validation receipt and clean-tag rebuild gates.",
       "network": true,
       "writes": [
         "explicit new evidence directory",
@@ -498,6 +498,37 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "tools/local-release.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run maintainer local checks in a pinned Node/zlib environment; bind a source review and seven assets to a receipt, and publish through native gh/Git only with --publish.",
+      "network": true,
+      "writes": [
+        "explicit new external evidence directory",
+        "development dependencies in the explicit clean source checkout",
+        "owned tags, draft/release assets and stable branch in williamwue/oh-my-stack only with --publish"
+      ],
+      "uninstallBehavior": "Maintainer source tooling; not installed in runtime plugin packages. Evidence and published artifacts remain independently managed."
+    },
+    {
+      "path": "tools/local-release-lib.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify pinned build environment and source-bound local check, review, log and asset evidence before publication.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Maintainer source tooling; not installed in runtime plugin packages. Evidence and published artifacts remain independently managed."
+    },
+    {
+      "path": "tools/release-publisher.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind HTTPS Git authentication to the native gh login and serialize participating maintainers with a repository publication lease.",
+      "network": true,
+      "writes": [
+        "explicit external lease evidence and temporary Git checkout",
+        "williamwue/oh-my-stack refs/heads/oms-release-lock only through an authorized publication caller"
+      ],
+      "uninstallBehavior": "Maintainer library is not installed in plugin packages. Interrupted leases require owner-led recovery."
     }
   ]
 }

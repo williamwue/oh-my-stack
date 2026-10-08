@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -8,6 +8,8 @@ import test from "node:test";
 
 import { createArchive, packageInventory, sha256 } from "../tools/release-lib.mjs";
 import { buildStableMarketplace, assertPromotion, assertPublisherIdentity, assertTaggedRebuild, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
+
+import { nativePublisherEnvironment } from "../tools/release-publisher.mjs";
 
 const exec = promisify(execFile);
 const commit = "a".repeat(40);
@@ -22,22 +24,9 @@ test("maintainer identity requires explicit native write permission for the exac
   }
 });
 
-test("Actions installation tokens bind to the exact server-observed trusted publishing run", () => {
-  const repo = { full_name: REPOSITORY, default_branch: "main" };
-  const automation = { repository: REPOSITORY, runId: "123", sha: commit, event: "workflow_dispatch" };
-  const run = { id: 123, repository: { full_name: REPOSITORY }, head_repository: { full_name: REPOSITORY },
-    path: ".github/workflows/stable-marketplace.yml", event: "workflow_dispatch", head_sha: commit, head_branch: "main" };
-  const input = { repo, automation, run };
-  assert.deepEqual(assertPublisherIdentity(input), { kind: "github-actions", account: "github-actions[bot]", runId: 123 });
-  assert.equal(assertPublisherIdentity({ ...input, automation: { ...automation, event: "release" },
-    run: { ...run, event: "release", head_branch: "v1.2.3" } }).runId, 123);
-  for (const bad of [
-    { automation: { ...automation, repository: "elsewhere/repo" } }, { automation: { ...automation, runId: "invalid" } },
-    { run: null }, { run: { ...run, id: 124 } }, { run: { ...run, repository: { full_name: "elsewhere/repo" } } },
-    { run: { ...run, head_repository: { full_name: "elsewhere/repo" } } }, { run: { ...run, path: ".github/workflows/untrusted.yml" } },
-    { run: { ...run, head_sha: "b".repeat(40) } }, { run: { ...run, head_branch: "feature/untrusted" } },
-    { run: { ...run, event: "pull_request" } }, { automation: { ...automation, event: "release" } },
-  ]) assert.throws(() => assertPublisherIdentity({ ...input, ...bad }));
+test("Actions identity cannot publish through the local-only gate", () => {
+  assert.throws(() => assertPublisherIdentity({ repo: { full_name: REPOSITORY, default_branch: "main", permissions: { push: true } },
+    account: "maintainer", automation: { repository: REPOSITORY } }), /local pipeline/);
 });
 
 async function fixture(root, version = "1.2.3") {
@@ -172,12 +161,21 @@ test("a self-consistent checksum set cannot hide a dirty source or false archive
   }
 });
 
-test("promotion binds clean manifest, exact tag commit, successful main CI, and monotonic versions", () => {
+test("promotion binds clean manifest, exact tag and tree, local checks, review, and monotonic versions", () => {
+  const tree = "c".repeat(40);
   const manifest = { version: "1.2.3", source: { ref: "v1.2.3", commit, worktreeDirty: false, cleanTaggedCheckout: true } };
-  const runs = [{ conclusion: "success", event: "push", headSha: commit, headBranch: "main", databaseId: 12 }];
-  assert.equal(assertPromotion({ manifest, tagCommit: commit, runs }).databaseId, 12);
-  for (const bad of [{ tagCommit: "b".repeat(40) }, { runs: [{ ...runs[0], conclusion: "failure" }] }, { runs: [{ ...runs[0], event: "pull_request" }] }, { previous: { version: "1.3.0" } }, { manifest: { ...manifest, source: { ...manifest.source, worktreeDirty: true } } }]) {
-    assert.throws(() => assertPromotion({ manifest, tagCommit: commit, runs, ...bad }));
+  const verification = { schemaVersion: 1, kind: "oh-my-stack-local-release", repository: REPOSITORY,
+    source: { ...manifest.source, tree }, environment: { node: "22.23.3", zlib: "1.3.1-e00f703" },
+    review: { tree, verdict: "approved", evidence: ["frozen review"] },
+    checks: ["npm-ci", "repository-check", "book-validation", "book-audit", "book-tests", "release-reproducibility"].map((name) => ({ name, exitCode: 0 })) };
+  assert.equal(assertPromotion({ manifest, tagCommit: commit, tagTree: tree, verification }), verification);
+  for (const bad of [{ tagCommit: "b".repeat(40) }, { tagTree: "d".repeat(40) }, { verification: undefined },
+    { verification: { ...verification, checks: verification.checks.slice(1) } },
+    { verification: { ...verification, environment: { ...verification.environment, zlib: "1.2.12" } } },
+    { verification: { ...verification, review: { ...verification.review, verdict: "pending" } } },
+    { previous: { version: "1.3.0" } },
+    { manifest: { ...manifest, source: { ...manifest.source, worktreeDirty: true } } }]) {
+    assert.throws(() => assertPromotion({ manifest, tagCommit: commit, tagTree: tree, verification, ...bad }));
   }
 });
 
@@ -187,20 +185,34 @@ test("Git promotion appends history, is idempotent, and rejects concurrent branc
   const remote = join(root, "remote.git");
   await exec("git", ["init", "--bare", remote]);
   const { assets, release } = await fixture(root);
+  const bin = join(root, "bin"); await mkdir(bin);
+  const realGit = (await exec("which", ["git"])).stdout.trim();
+  const wrapper = join(bin, "git");
+  await writeFile(wrapper, `#!/bin/sh\n[ "$OMS_PUBLISH_ENV" = "native" ] && [ -z "$GH_TOKEN$GITHUB_TOKEN" ] || exit 71\nexec "${realGit}" "$@"\n`);
+  await chmod(wrapper, 0o755);
+  const env = nativePublisherEnvironment({ ...process.env, GH_TOKEN: "fixture-override",
+    OMS_PUBLISH_ENV: "native", PATH: `${bin}:${process.env.PATH}` });
   const snapshot = join(root, "snapshot");
   await buildStableMarketplace({ assets, release, out: snapshot });
-  const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true });
-  const second = await promoteSnapshot({ snapshot, remote, expectedHead: first.commit, publish: true });
+  const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env });
+  const second = await promoteSnapshot({ snapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal(second.status, "unchanged");
-  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true }), /changed/);
+  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env }), /changed/);
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable"])).stdout.trim(), first.commit);
   const next = join(root, "next");
   await mkdir(next);
   const newer = await fixture(next, "1.2.4");
   const nextSnapshot = join(next, "snapshot");
   await buildStableMarketplace({ ...newer, out: nextSnapshot });
-  const third = await promoteSnapshot({ snapshot: nextSnapshot, remote, expectedHead: first.commit, publish: true });
+  const third = await promoteSnapshot({ snapshot: nextSnapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable^"])).stdout.trim(), first.commit);
-  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true }), /downgrade/);
+  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true, env }), /downgrade/);
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable"])).stdout.trim(), third.commit);
+});
+
+
+test("successful Actions CI cannot substitute for a commit-bound local release receipt", () => {
+  const manifest = { version: "1.2.3", source: { ref: "v1.2.3", commit, worktreeDirty: false, cleanTaggedCheckout: true } };
+  const runs = [{ conclusion: "success", event: "push", headSha: commit, headBranch: "main", databaseId: 12 }];
+  assert.throws(() => assertPromotion({ manifest, tagCommit: commit, runs }), /local.*verification|local.*receipt/i);
 });
