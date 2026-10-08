@@ -1,10 +1,13 @@
-# Optional automatic routing in Codex
+# Optional automatic routing in Codex and Claude Code
 
 This feature is available in version 0.11.0. Installing or upgrading OMS
 does not enable it. Existing `poteto-mode` and other explicit entries remain
-available. Claude Code and OMP do not yet have this routing configuration.
+available. The current source adds Claude Code routing; this does not establish
+publication or an upgrade of an installed plugin. OMP does not yet have this
+routing configuration.
 
-Version 0.11.1 adds the choice-based setup below.
+Version 0.11.1 added choice-based setup for Codex. Claude Code uses the same
+choices through `/oh-my-stack:setup-oh-my-stack` in the current source.
 
 In Codex, type `$` and select `oh-my-stack:setup-oh-my-stack`. Submit its default
 setup prompt; no enable instruction is needed. Setup shows the effective mode
@@ -37,7 +40,9 @@ change those Skills' native invocation policies.
 
 The optional routing helpers require Node.js 20 or later. They do not collect
 model inventory, load application env files, access credentials, or use a model.
-Replace `/path/to/installed/oh-my-stack` with the installed Codex plugin root.
+Replace `/path/to/installed/oh-my-stack` with the installed plugin root.
+The commands below default to Codex for compatibility. Claude Code must pass
+`--runtime claude-code`; the helper never infers a runtime from installed tools.
 Run these commands from the project you want to configure.
 
 ```bash
@@ -47,13 +52,28 @@ node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mo
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mode manual --apply
 ```
 
+For Claude Code, use the explicit runtime selector:
+
+```bash
+node /path/to/installed/oh-my-stack/scripts/routing.mjs status --runtime claude-code
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto --apply
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope project --mode manual --apply
+```
+
 Without `--apply`, `set` is a preview and writes nothing. `--scope user` sets
 personal defaults. `--cwd PATH` selects a project explicitly. Applying an
 already-matching mode is an idempotent no-op.
 
-- User switch: `$CODEX_HOME/oh-my-stack/routing.json`, or
+- Codex user switch: `$CODEX_HOME/oh-my-stack/routing.json`, or
   `~/.codex/oh-my-stack/routing.json` when `CODEX_HOME` is unset.
-- Project switch: `.oh-my-stack/routing.json` at the Git worktree root.
+- Codex project switch: `.oh-my-stack/routing.json` at the Git worktree root.
+- Claude user switch: `$CLAUDE_CONFIG_DIR/oh-my-stack/routing.json`, or
+  `~/.claude/oh-my-stack/routing.json` when `CLAUDE_CONFIG_DIR` is unset.
+  An explicitly selected configuration directory must be absolute.
+- Claude project switch: `.oh-my-stack/routing.claude-code.json` at the worktree
+  root. Each runtime ignores the other runtime's project filename. A file with
+  the wrong `target` for its own runtime is rejected, rather than inherited.
 - Lookup starts at the current directory and checks ancestors only up to that
   worktree root. The nearest project switch overrides the user switch completely,
   including an explicit `manual` that disables a personal `auto` default.
@@ -66,7 +86,7 @@ or symlinked routing files are rejected. Configuration errors disable automatic
 routing instead of falling back to an enabled user default.
 
 To remove a project override and return to the personal default, remove only the
-project's OMS-owned `routing.json` after inspecting it. Plugin removal preserves
+project's OMS-owned runtime-specific routing file after inspecting it. Plugin removal preserves
 these user-owned routing preferences, just as it preserves model configuration.
 
 ## Hook and invocation boundaries
@@ -75,6 +95,17 @@ The Codex package uses `.codex-plugin/plugin.json` with an explicit
 `./hooks/hooks.json` path. It intentionally omits root `plugin.json`: the
 tested Codex 0.160.1 loader prioritizes that newer manifest format and skips
 plugin hooks for it. Verify that your native surface discovers and runs the hook.
+The Claude package ships `hooks/hooks.json`, discovered by Claude Code's plugin
+loader, and runs `scripts/claude-routing-hook.mjs` using `CLAUDE_PLUGIN_ROOT`.
+Its command reads the event's `cwd` and returns JSON with
+`hookSpecificOutput.hookEventName: SessionStart` and `additionalContext` only
+when Claude's switch is enabled. It uses no model and changes no host settings.
+See the official [Claude hook reference](https://code.claude.com/docs/en/hooks).
+Review the plugin hook in Claude Code's `/hooks`, respect host permission and
+hook-disable settings, and start a new session after loading the updated plugin.
+Do not bypass hook permissions. A session loaded with `--plugin-dir` verifies
+only that local package, not the user's persistent installed copy.
+
 The short `SessionStart` hook rechecks the current switch on
 startup, resume, clear, and compact; it injects an entry pointer only in auto
 mode. The `oms-auto` entry rechecks the switch again when used, so changing a
@@ -88,7 +119,7 @@ it. Do not bypass hook trust for ordinary installation. If this surface does not
 support or run the hook, report that boundary and retain explicit `poteto-mode`.
 
 The automatic entry also permits native implicit Skill selection. That allows
-Codex to consider it; it does not guarantee selection. With the switch off, it
+the host to consider it; it does not guarantee selection. With the switch off, it
 returns control without entering OMS workflows. A trusted hook is a routing
 hint, not a deterministic dispatcher. A hook failure prints a bounded fallback
 message and adds no routing instruction; it does not block the session.

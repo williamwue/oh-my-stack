@@ -38,6 +38,12 @@ and manual/translation controls. Desktop/IDE activation remains unverified.
 A fix could still choose the existing implicit bug-fix Skill directly. These
 observations do not establish universal activation or a routing success rate.
 
+The current source adds Claude Code routing configuration and a plugin
+SessionStart hook with separate user/project settings. Offline checks establish
+configuration and package behavior. Native activation and observed routing must
+be reported separately for the tested Claude version; a local `--plugin-dir`
+session does not upgrade an installed plugin. See [automatic routing](automatic-routing.md).
+
 Five additional original skills each passed a separate bounded fixture on
 Codex CLI 0.160.1 and Claude Code 2.1.287: research, questionnaire, setup,
 spec, and tickets. See [the acceptance and limitations](aihero-original-0.10.0-acceptance.md).
