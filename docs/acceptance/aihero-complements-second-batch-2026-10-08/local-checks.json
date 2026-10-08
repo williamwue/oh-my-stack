@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-10-08",
+  "kind": "source-import-second-batch-local-checks",
+  "baseRevision": "3bc672568a8ccba812a804bec082d6d24a1d0cab",
+  "sourceRevision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
+  "environment": {
+    "platform": "win32",
+    "node": "v22.23.2"
+  },
+  "fullCheck": {
+    "command": "npm run check",
+    "exitCode": 1,
+    "passedStages": [
+      "generate:check",
+      "docs:check",
+      "conformance:check",
+      "release:check",
+      "validate",
+      "check:books",
+      "lint:markdown"
+    ],
+    "tests": {
+      "tests": 287,
+      "pass": 281,
+      "fail": 4,
+      "skipped": 2
+    },
+    "localLog": ".tmp/aihero-complements/second-batch/check.log",
+    "logSha256": "2b48805d5949d185cd195f1005e5d7f7a7cbfce3ee9b477fe34c9ef684d4e8d3"
+  },
+  "sourceSkills": {
+    "tests": 4,
+    "passed": 4,
+    "failed": 0
+  },
+  "baselineComparison": {
+    "evidence": "../aihero-complements-2026-10-08/local-checks.json",
+    "method": "Compare second-batch failing names and decisive errors to the unchanged base-revision reproduction captured during batch one.",
+    "sameFailures": [
+      {
+        "test": "Claude default probes all three families with consent and honors explicit subsets",
+        "error": "spawn EFTYPE"
+      },
+      {
+        "test": "generated hook injects a bounded hint only for enabled startup/resume/clear/compact",
+        "error": "context.includes(native OMS Skill path) assertion"
+      },
+      {
+        "test": "generated Claude plugin hook and setup use the Claude switch and fail closed",
+        "error": "context.includes(native OMS Skill path) assertion"
+      },
+      {
+        "test": "Git promotion appends history, is idempotent, and rejects concurrent branch changes",
+        "error": "spawn which ENOENT"
+      }
+    ],
+    "newFailures": []
+  },
+  "releaseGatePassed": false,
+  "published": false,
+  "globalInstallationChanged": false
+}

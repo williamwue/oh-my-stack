@@ -75,6 +75,21 @@
       "invocation": "automatic"
     },
     {
+      "name": "code-review",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero-20261008",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
+        "path": "skills/engineering/code-review",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
       "name": "codebase-design",
       "audience": "public",
       "category": "workflow",
@@ -100,6 +115,21 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "diagnosing-bugs",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero-20261008",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
+        "path": "skills/engineering/diagnosing-bugs",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     },
     {
       "name": "domain-modeling",
@@ -179,6 +209,21 @@
         "repository": "https://github.com/mattpocock/skills",
         "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
         "path": "skills/productivity/grilling",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
+    },
+    {
+      "name": "handoff",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/handoff",
         "license": "MIT",
         "dependencies": [],
         "adaptations": []
@@ -489,6 +534,23 @@
       }
     },
     {
+      "name": "retro",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/engineering/retro",
+        "license": "MIT",
+        "dependencies": [
+          "writing-for-agents"
+        ],
+        "adaptations": []
+      }
+    },
+    {
       "name": "runtime-forensics",
       "audience": "public",
       "category": "workflow",
@@ -649,6 +711,21 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "writing-for-agents",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic",
+      "source": {
+        "id": "aihero",
+        "repository": "https://github.com/mattpocock/skills",
+        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+        "path": "skills/productivity/writing-for-agents",
+        "license": "MIT",
+        "dependencies": [],
+        "adaptations": []
+      }
     }
   ]
 }

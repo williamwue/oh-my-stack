@@ -24,6 +24,10 @@ examples consistent with the project's actual language and formatting.
 
 ## References to select by task
 
+- For documents an agent consumes, such as Skills, `AGENTS.md`, or linked
+  operating instructions, consult `writing-for-agents` for context pointers,
+  information hierarchy, pruning, and completion criteria. Its reference does
+  not expand the requested editing scope.
 - For a document set or a substantial guide, read
   [document structure](references/document-structure.md) to select tutorial,
   how-to, reference, or explanation sections.

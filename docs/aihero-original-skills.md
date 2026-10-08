@@ -2,13 +2,20 @@
 
 [English](aihero-original-skills.md) | [简体中文](zh-CN/guides/aihero.md)
 
-Oh My Stack includes eleven selected original skills from Matt Pocock's
+The current source includes sixteen selected original skills from Matt Pocock's
 [skills repository](https://github.com/mattpocock/skills). Select one directly
 when you want its original process. You do not need to enter `poteto-mode` first.
 
 The five research, questionnaire, setup, spec, and ticket entries below require
 **0.10.0 or later**. Check the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
 and your actual installed version before using them.
+
+`writing-for-agents`, `retro`, `handoff`, `diagnosing-bugs`, and `code-review`
+require **0.13.0 or later** and are absent from 0.12.0 or earlier. Check the actual
+Skill catalog; see the [source import record](maintainers/aihero-complements-2026-10-08.md)
+for their verification and release boundaries.
+The [second-batch record](maintainers/aihero-complements-second-batch-2026-10-08.md)
+covers the newer diagnosis and review originals.
 
 ## Choose a capability
 
@@ -25,10 +32,16 @@ and your actual installed version before using them.
 | Configure original engineering skills for a project | `setup-matt-pocock-skills` | A draft of the tracker and domain-doc settings; waits for confirmation before editing project instructions and configuration. |
 | Capture an agreed feature as a spec | `to-spec` | Synthesizes existing context, confirms testing seams, then writes to the configured tracker. |
 | Split a spec into executable work | `to-tickets` | Proposes vertical slices and blockers; publishes one ticket per item only after you approve. |
+| Write documents an agent consumes | `writing-for-agents` | Shared reference for context pointers, information hierarchy, pruning, and checkable completion criteria. |
+| Retrospect on the agent's project environment | `retro` | Reads the named session and proposes navigation, checks, standards, and tooling improvements; does not implement the proposals. |
+| Export work for another session or tool | `handoff` | Writes a redacted handoff file to the OS temporary directory, referencing existing artifacts instead of duplicating them. |
+| Diagnose a difficult defect or performance regression | `diagnosing-bugs` | Builds a specific failing feedback loop, minimises reproduction, tests hypotheses, fixes the cause, and removes temporary probes. |
+| Review committed changes against standards and a spec | `code-review` | Runs independent Standards and Spec reviews, reporting the axes separately; does not implement the findings. |
 
-`codebase-design`, `domain-modeling`, `grilling`, and `research` can also be
-invoked by the agent. The other seven require explicit user invocation.
-All eleven remain separately selectable.
+`codebase-design`, `domain-modeling`, `grilling`, `research`, and
+`writing-for-agents`, `diagnosing-bugs`, and `code-review` can also be invoked by
+the agent. The other nine require explicit user invocation. All sixteen remain
+separately selectable.
 
 ## Start an interview
 
@@ -156,16 +169,90 @@ blockers, and `ready-for-agent` status. Remote tracker publication creates real
 issues and blocking relationships where supported. These original capabilities
 do not automatically run an OMS implementation or release workflow.
 
+## Complement the pstack workflows
+
+Use `writing-for-agents` alongside `technical-writing` when editing `AGENTS.md`,
+Skills, or operating documents an agent reaches through a pointer. It supplies
+the agent-facing document reference; `technical-writing` retains the reader's
+task and factual verification. `authoring-a-skill` consults the same reference
+and its bundled `SKILL-MECHANICS.md` for invocation and router choices.
+Read the complete reference, using bounded chunks if a tool truncates it.
+
+For an environment-focused retrospective, explicitly select `retro`:
+
+```text
+/oh-my-stack:retro Review this session for missing navigation pointers, duplicated instructions, and checks that would prevent repeated mistakes. Propose improvements only; do not edit Skills or project files.
+```
+
+The original loads `writing-for-agents` and reports improvement candidates.
+`reflect` remains the pstack workflow for evidence-backed Skill corrections;
+choose the desired output without automatically running both retrospectives.
+Use only the authorized session record, and redact secrets from evidence.
+
+For a portable handoff, explicitly select `handoff`:
+
+```text
+/oh-my-stack:handoff Prepare a handoff for the documentation-cleanup session. Reference the current plan and completed changes, include suggested Skills, redact sensitive information, and report the temporary file path.
+```
+
+Use the corresponding `oh-my-stack:<entry>` picker selection in Codex.
+The handoff writes a file; it does not launch another agent or conversation.
+The receiving session can use `session-pickup` to validate the checkpoint
+against current repository state. `show-me-your-work` remains the canonical
+evidence trail; the handoff points to it rather than replacing it.
+
+## Diagnose or review with the second batch
+
+Choose `diagnosing-bugs` for a hard defect that needs a reproducible feedback
+loop, minimisation, and falsifiable probes. It owns a full diagnosis-and-fix
+process; do not automatically nest that process inside another full workflow.
+`bug-fix` remains the pstack entry for coordinating a bounded fix and verifying
+the final result. Performance work still requires a measured baseline.
+
+```text
+/oh-my-stack:diagnosing-bugs Diagnose the reported export failure in the local fixture. Establish and run a failing command for that exact symptom before testing hypotheses. Preserve unrelated edits and redact captured output.
+```
+
+The optional `scripts/hitl-loop.template.sh` requires Bash and must be copied
+and tailored to the actual reproduction. Its example URL and Export button are
+placeholders. It prints captured observations; never enter credentials in a
+capture prompt. On Windows select an available Bash shell for this fallback.
+Existing provider, production, and billable-operation gates still apply.
+
+Choose `code-review` for two independent reports about repository standards
+and the originating spec. Supply a resolvable fixed ref and tracker instructions
+or spec context; it skips the Spec reviewer when no spec is available. The
+original uses `git diff <fixed-point>...HEAD`, so uncommitted edits are excluded.
+For uncommitted files, a design review, or an adversarial verdict with synthesis,
+choose pstack `interrogate` with its explicit frozen scope.
+
+```text
+/oh-my-stack:code-review Review committed changes since origin/main. Use CONTRIBUTING.md and the originating spec at docs/specs/export.md; keep Standards and Spec findings separate. Do not implement findings or publish comments.
+```
+
+Replace the example spec path with a real source. The original requires actual
+parallel sub-agent support; report unavailable capabilities rather than claiming
+independent review. These entries keep the original automatic invocation modes,
+but do not replace `bug-fix` or `interrogate` in the OMS router. No review grants
+merge or publication authority. In Codex use the corresponding Skill picker.
+
 ## Included source and support
 
-The eleven original directories, references, and UI metadata retain their upstream
-bytes at revision `6fd947921b935b7e1e69293a200400f0fdd5c15f`, with MIT licensing.
+The first fourteen original directories, references, and UI metadata retain
+their bytes at revision `6fd947921b935b7e1e69293a200400f0fdd5c15f`.
+`diagnosing-bugs` and `code-review` retain their complete originals at
+`f3fc5632f401156837ee3872f14fe33ccf1024ea`. Both sources use MIT licensing.
 OMS packaging adds attribution and source receipts without inserting model
 routing or replacing original dependencies with OMS workflows.
+Codex's 7,500-byte wrapper policy applies to portable core entries. Source
+originals, including the longer `writing-for-agents` and `diagnosing-bugs`
+entries, remain intact;
+complete native loading and automatic selection are separate live checks.
 
 This selection does not include original `wayfinder` or `triage`. See the
 [Skill directory](skill-directory.md) for what is installed and the
 [support policy](support-policy.md) for tested tools and remaining limits.
 
 Source hashes, dependency closure, and the reviewed update procedure are in the
-[current import record](maintainers/aihero-imports-0.10.0.md).
+[first-batch record](maintainers/aihero-complements-2026-10-08.md) and
+[second-batch record](maintainers/aihero-complements-second-batch-2026-10-08.md).

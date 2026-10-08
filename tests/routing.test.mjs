@@ -119,7 +119,7 @@ test("generated hook injects a bounded hint only for enabled startup/resume/clea
   for (const source of ["startup", "resume", "clear", "compact"]) {
     const output = await routingHook({ ...input, source }, hookOptions);
     const context = output.hookSpecificOutput.additionalContext;
-    assert.ok(context.includes(join(pluginRoot, "skills", "oms-auto", "SKILL.md")));
+    assert.ok(context.includes(JSON.stringify(join(pluginRoot, "skills", "oms-auto", "SKILL.md"))));
     assert.ok(context.length < 1500);
   }
   assert.deepEqual(await routingHook({ ...input, hook_event_name: "PreToolUse" }, hookOptions), {});
@@ -228,7 +228,7 @@ test("generated Claude plugin hook and setup use the Claude switch and fail clos
   await configureRouting({ ...claude, scope: "user", mode: "auto", apply: true });
   for (const source of ["startup", "resume", "clear", "compact"]) {
     const context = run({ ...input, source }).hookSpecificOutput.additionalContext;
-    assert.ok(context.includes(join(pluginRoot, "skills/oms-auto/SKILL.md")));
+    assert.ok(context.includes(JSON.stringify(join(pluginRoot, "skills/oms-auto/SKILL.md"))));
     assert.match(context, /Skill tool.*oh-my-stack:oms-auto/);
     assert.match(context, /Only enabled=true/);
     assert.match(context, /explicit Skill.*bounded child assignment.*skip OMS/);

@@ -1,0 +1,90 @@
+{
+  "observedAt": "2026-10-08T06:31:40Z",
+  "runtime": "codex-cli 0.161.0",
+  "method": "skills/list",
+  "baseRevision": "3bc672568a8ccba812a804bec082d6d24a1d0cab",
+  "fixture": "G:\\Projects\\oh-my-stack-worktrees\\aihero-complement-20261008\\.tmp\\aihero-complements\\native-discovery",
+  "skills": [
+    {
+      "name": "handoff",
+      "path": "G:\\Projects\\oh-my-stack-worktrees\\aihero-complement-20261008\\.tmp\\aihero-complements\\native-discovery\\.agents\\skills\\handoff\\SKILL.md",
+      "scope": "repo",
+      "enabled": true,
+      "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+      "interface": {
+        "displayName": "Handoff",
+        "shortDescription": "Compact a conversation into a handoff",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": null
+      },
+      "policy": null
+    },
+    {
+      "name": "retro",
+      "path": "G:\\Projects\\oh-my-stack-worktrees\\aihero-complement-20261008\\.tmp\\aihero-complements\\native-discovery\\.agents\\skills\\retro\\SKILL.md",
+      "scope": "repo",
+      "enabled": true,
+      "description": "Conduct a retrospective on a coding session.",
+      "interface": {
+        "displayName": "Retro",
+        "shortDescription": "Conduct a retrospective on a coding session.",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": null
+      },
+      "policy": null
+    },
+    {
+      "name": "writing-for-agents",
+      "path": "G:\\Projects\\oh-my-stack-worktrees\\aihero-complement-20261008\\.tmp\\aihero-complements\\native-discovery\\.agents\\skills\\writing-for-agents\\SKILL.md",
+      "scope": "repo",
+      "enabled": true,
+      "description": "Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.",
+      "interface": {
+        "displayName": "Writing for Agents",
+        "shortDescription": "Write documents agents consume",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": null
+      },
+      "policy": null
+    }
+  ],
+  "errors": [],
+  "modelTurnsStarted": 0,
+  "globalInstallationChanged": false,
+  "schemaVersion": 1,
+  "sourceRevision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+  "sourceFileHashes": {
+    "skills/productivity/writing-for-agents/SKILL.md": "551adca942227b44192edba88acd4e8db911f0121ce58ad16944ccf6a896a74a",
+    "skills/productivity/writing-for-agents/SKILL-MECHANICS.md": "c768e6307c7c10728c401c213f2c4ba71c542127eeb7ad2956aabd15a0fa0059",
+    "skills/productivity/writing-for-agents/agents/openai.yaml": "eacb24b2a618cfb81dacb0416f4fdd75ddf3a8060f8ddb99aae1b1e301907e4b",
+    "skills/engineering/retro/SKILL.md": "33fbc28568e3146f20fd908b12998bc0ab30aa4f4c87288199a40793efa94696",
+    "skills/engineering/retro/agents/openai.yaml": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c",
+    "skills/productivity/handoff/SKILL.md": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3",
+    "skills/productivity/handoff/agents/openai.yaml": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+  },
+  "existingSourceFileHashesPreserved": true,
+  "claims": {
+    "observed": "Repo-local Codex discovery of three generated original Skill entries",
+    "notEstablished": [
+      "global plugin installation",
+      "model invocation",
+      "complete long reference injection",
+      "automatic selection quality",
+      "workflow behavior",
+      "Claude Code native discovery",
+      "OMP native discovery"
+    ]
+  }
+}

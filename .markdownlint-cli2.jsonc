@@ -8,6 +8,33 @@
   ],
   "overrides": [
     {
+      // Preserve the original prose-first entry and its emphasis markers.
+      "filter": ["packages/*/skills/code-review/SKILL.md"],
+      "config": { "MD041": false, "MD049": false },
+      "combine": "merge"
+    },
+    {
+      // The original hypothesis example uses angle-bracket placeholders.
+      "filter": ["packages/*/skills/diagnosing-bugs/SKILL.md"],
+      "config": { "MD033": false },
+      "combine": "merge"
+    },
+    {
+      // These original entries start with prose; preserve their source bytes.
+      "filter": [
+        "packages/*/skills/writing-for-agents/SKILL.md",
+        "packages/*/skills/handoff/SKILL.md"
+      ],
+      "config": { "MD041": false },
+      "combine": "merge"
+    },
+    {
+      // Retro resumes its numbered steps after a category list in the original.
+      "filter": ["packages/*/skills/retro/SKILL.md"],
+      "config": { "MD041": false, "MD029": false },
+      "combine": "merge"
+    },
+    {
       "filter": [
         "packages/*/skills/codebase-design/**/*.md",
         "packages/*/skills/domain-modeling/**/*.md",

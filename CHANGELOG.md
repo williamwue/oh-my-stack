@@ -6,6 +6,18 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.13.0 - 2026-10-08
+
+- Add original AIHero `writing-for-agents`, `retro`, `handoff`,
+  `diagnosing-bugs`, and `code-review`, increasing original entries to sixteen
+  and public entries to 95 across Codex, OMP, and Claude Code.
+- Connect agent-document writing to the shared original reference, document
+  complementary diagnosis and review choices, and preserve upstream resources.
+- Preserve long original entries byte for byte while keeping the Codex core
+  entry budget. Pin newer diagnosis and review originals separately.
+- Support the pinned local release pipeline on Windows with native npm and
+  Python layouts; fix executable fixture launching and Windows path assertions.
+
 ## 0.11.0 - 2026-10-07
 
 - Add optional Codex automatic routing: describe an engineering task without

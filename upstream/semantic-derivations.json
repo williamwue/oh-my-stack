@@ -880,7 +880,7 @@
         {
           "path": "src/core/skills/authoring-a-skill/SKILL.md",
           "owner": "derived",
-          "sha256": "036002492856330f4068d4fa49dd4ef2432321311fa7e5521a0ce40647b77bbc"
+          "sha256": "dde10dc5fff6d9a6c3ccfdc7323a578e798926fac66f94d078d8ea60944159ea"
         },
         {
           "path": "src/core/skills/authoring-a-skill/skill.json",
@@ -1058,7 +1058,7 @@
           "sha256": "cdee1577017e3190fcc43333ebe6583cb7e85198d6d8d710119c3c2b037b2b0a"
         }
       ],
-      "transformation": "Eleven upstream main entries and nine nested playbooks become twenty directly invocable portable Skills. Preserve safety proofs, auditable work, verification drivers, scoped history, TypeScript discipline, blind evals, measured performance, trace diagnosis, visual parity, and deletion gates. Replace source-host model IDs, transcript paths, webhook credential cards, mandatory cloud lanes, forced PRs and broad destructive cleanup with runtime capability checks and bounded fallbacks. The webhook capability remains unknown until authenticated runtime verification. All source documents and linked references are frozen with hashes; the portable documents are semantic adaptations."
+      "transformation": "Eleven upstream main entries and nine nested playbooks become twenty directly invocable portable Skills. Preserve safety proofs, auditable work, verification drivers, scoped history, TypeScript discipline, blind evals, measured performance, trace diagnosis, visual parity, and deletion gates. Replace source-host model IDs, transcript paths, webhook credential cards, mandatory cloud lanes, forced PRs and broad destructive cleanup with runtime capability checks and bounded fallbacks. The webhook capability remains unknown until authenticated runtime verification. All source documents and linked references are frozen with hashes; the portable documents are semantic adaptations. The 2026-10-08 local integration consults the unchanged AIHero writing-for-agents reference only for agent-consumed documents."
     },
     {
       "id": "pstack-october-06-port",

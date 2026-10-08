@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { access, chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { delimiter, join } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 
@@ -185,13 +185,18 @@ test("Git promotion appends history, is idempotent, and rejects concurrent branc
   const remote = join(root, "remote.git");
   await exec("git", ["init", "--bare", remote]);
   const { assets, release } = await fixture(root);
-  const bin = join(root, "bin"); await mkdir(bin);
-  const realGit = (await exec("which", ["git"])).stdout.trim();
-  const wrapper = join(bin, "git");
-  await writeFile(wrapper, `#!/bin/sh\n[ "$OMS_PUBLISH_ENV" = "native" ] && [ -z "$GH_TOKEN$GITHUB_TOKEN" ] || exit 71\nexec "${realGit}" "$@"\n`);
-  await chmod(wrapper, 0o755);
   const env = nativePublisherEnvironment({ ...process.env, GH_TOKEN: "fixture-override",
-    OMS_PUBLISH_ENV: "native", PATH: `${bin}:${process.env.PATH}` });
+    OMS_PUBLISH_ENV: "native" });
+  assert.equal(env.GH_TOKEN, undefined);
+  assert.equal(env.GITHUB_TOKEN, undefined);
+  if (process.platform !== "win32") {
+    const bin = join(root, "bin"); await mkdir(bin);
+    const realGit = (await exec("which", ["git"])).stdout.trim();
+    const wrapper = join(bin, "git");
+    await writeFile(wrapper, `#!/bin/sh\n[ "$OMS_PUBLISH_ENV" = "native" ] && [ -z "$GH_TOKEN$GITHUB_TOKEN" ] || exit 71\nexec "${realGit}" "$@"\n`);
+    await chmod(wrapper, 0o755);
+    env.PATH = `${bin}${delimiter}${process.env.PATH}`;
+  }
   const snapshot = join(root, "snapshot");
   await buildStableMarketplace({ assets, release, out: snapshot });
   const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env });
