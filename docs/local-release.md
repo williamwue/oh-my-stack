@@ -90,7 +90,8 @@ only after success. Logs and the review file are retained with hashes. Failed
 checks retain evidence and never produce a success receipt.
 
 With `--publish`, it verifies the existing native GitHub account and exact
-repository, pushes only the unchanged release tag, creates or resumes a draft,
+repository, acquires a repository publication lease, pushes the unchanged release
+tag, creates or resumes a draft,
 downloads and verifies all seven draft assets, publishes a non-prerelease,
 verifies public downloads again, and runs the gated stable publisher with the
 same Node process environment. The archive byte check is unchanged. Published
@@ -98,6 +99,36 @@ assets are never overwritten. An existing identical release can resume stable
 promotion; differing existing content stops the command. Remote failure may
 leave a pushed tag, draft or published release; retained evidence states the
 completed stage, and recovery requires another new evidence directory.
+
+## Publication coordination and recovery
+
+Git uses the official `gh auth git-credential` helper with the same native login
+as the account check. Token overrides, global Git credential helpers and
+authorization headers are excluded for these invocations; user configuration
+is not modified. All stable Git reads and writes receive that environment.
+
+The command acquires `refs/heads/oms-release-lock` with an explicit absent-ref
+lease before inspecting or mutating release state. It holds ownership across
+latest-version checks, publication and stable promotion, and removes only its
+exact commit afterward. Competing commands stop before release mutations.
+This coordinates participating publishers on different computers; manual
+GitHub edits and other tools are outside this protocol.
+
+An interrupted or ambiguous push may leave the lock in place. Inspect
+`github/publication-lease/lease.json`, the remote lock commit and its
+`OMS_PUBLICATION_LEASE.json` before recovery. Confirm the recorded owner is no
+longer publishing, then remove only the inspected commit from a neutral directory
+using the same native Git authentication and an explicit expected-head lease:
+
+```bash
+git push --force-with-lease=refs/heads/oms-release-lock:INSPECTED_OWNER_COMMIT \
+  https://github.com/williamwue/oh-my-stack.git :refs/heads/oms-release-lock
+```
+
+Never remove a different owner or automatically steal a stale lock. A recovery
+command must use the native gh credential helper; configure it through the
+official `gh auth setup-git --hostname github.com` command when operating
+manually. The publisher itself configures the helper only for its subprocesses.
 
 ## Receipt and trust boundary
 

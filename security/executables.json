@@ -518,6 +518,17 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Maintainer source tooling; not installed in runtime plugin packages. Evidence and published artifacts remain independently managed."
+    },
+    {
+      "path": "tools/release-publisher.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind HTTPS Git authentication to the native gh login and serialize participating maintainers with a repository publication lease.",
+      "network": true,
+      "writes": [
+        "explicit external lease evidence and temporary Git checkout",
+        "williamwue/oh-my-stack refs/heads/oms-release-lock only through an authorized publication caller"
+      ],
+      "uninstallBehavior": "Maintainer library is not installed in plugin packages. Interrupted leases require owner-led recovery."
     }
   ]
 }

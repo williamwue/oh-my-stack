@@ -10,6 +10,8 @@ import { sha256 } from "./release-lib.mjs";
 import { assertBuildEnvironment, assertReview, fileBytes, readLocalVerification, REPOSITORY,
   requireThat, snapshotAssets } from "./local-release-lib.mjs";
 
+import { nativePublisherEnvironment, withPublicationLease } from "./release-publisher.mjs";
+
 const exec = promisify(execFile);
 const trustedTools = dirname(fileURLToPath(import.meta.url));
 const encode = (value) => `${JSON.stringify(value, null, 2)}\n`;
@@ -101,9 +103,7 @@ async function publishRelease({ options, source, receiptPath, manifest, records,
   const origin = await git(options.source, "remote", "get-url", "origin");
   requireThat([url, `https://github.com/${REPOSITORY}`, `git@github.com:${REPOSITORY}.git`, `ssh://git@github.com/${REPOSITORY}.git`].includes(origin), "source origin is not the official repository");
   const neutral = join(out, "github"); await mkdir(neutral);
-  const env = { ...process.env, GH_HOST: "github.com", GH_PROMPT_DISABLED: "1" };
-  // Use the maintainer's native login rather than application token overrides.
-  for (const key of ["GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "GH_REPO"]) delete env[key];
+  const env = nativePublisherEnvironment();
   const gh = async (...args) => (await exec("gh", args, { cwd: neutral, env, maxBuffer: 16 * 1024 * 1024 })).stdout;
   const api = async (endpoint) => JSON.parse(await gh("api", "--hostname", "github.com", endpoint));
   const optional = async (endpoint) => {
@@ -145,59 +145,62 @@ async function publishRelease({ options, source, receiptPath, manifest, records,
     }
     return directory;
   };
-  let release = await releaseByTag();
-  if (release) await download(release, "existing-downloads");
-  await stage("remote-inspected", { existingRelease: release ? (release.draft ? "draft" : "published") : "absent" });
-  const remoteTag = async () => {
-    const lines = (await exec("git", ["ls-remote", "--tags", url, `refs/tags/${options.tag}`, `refs/tags/${options.tag}^{}`], { cwd: neutral, env })).stdout.trim().split("\n").filter(Boolean);
-    if (!lines.length) return null;
-    const peeled = lines.find((line) => line.endsWith("^{}"));
-    return (peeled ?? lines[0]).split(/\s/)[0];
-  };
-  const before = await remoteTag();
-  requireThat(!before || before === source.commit, "remote tag resolves to another commit");
-  requireThat(!release || before === source.commit, "existing release must have the exact remote tag");
-  if (release && !release.draft) {
-    await verify();
-    await stage("published-release-verified", { resumed: true });
-  } else {
-    assertNoDowngrade(options.tag, await optional(`repos/${REPOSITORY}/releases/latest`));
-    await verify();
-    if (!before) {
-      await exec("git", ["-C", options.source, "-c", "core.hooksPath=/dev/null", "push", url, `refs/tags/${options.tag}:refs/tags/${options.tag}`], { cwd: neutral, env });
-      await stage("tag-pushed");
+  return withPublicationLease({ remote: url, env, directory: join(neutral, "publication-lease"), source, account }, async (assertLease) => {
+    const check = async () => { await assertLease(); await verify(); };
+    let release = await releaseByTag();
+    if (release) await download(release, "existing-downloads");
+    await stage("remote-inspected", { existingRelease: release ? (release.draft ? "draft" : "published") : "absent" });
+    const remoteTag = async () => {
+      const lines = (await exec("git", ["ls-remote", "--tags", url, `refs/tags/${options.tag}`, `refs/tags/${options.tag}^{}`], { cwd: neutral, env })).stdout.trim().split("\n").filter(Boolean);
+      if (!lines.length) return null;
+      const peeled = lines.find((line) => line.endsWith("^{}"));
+      return (peeled ?? lines[0]).split(/\s/)[0];
+    };
+    const before = await remoteTag();
+    requireThat(!before || before === source.commit, "remote tag resolves to another commit");
+    requireThat(!release || before === source.commit, "existing release must have the exact remote tag");
+    if (release && !release.draft) {
+      await check();
+      await stage("published-release-verified", { resumed: true });
+    } else {
+      assertNoDowngrade(options.tag, await optional(`repos/${REPOSITORY}/releases/latest`));
+      await check();
+      if (!before) {
+        await exec("git", ["-C", options.source, "-c", "core.hooksPath=/dev/null", "push", url, `refs/tags/${options.tag}:refs/tags/${options.tag}`], { cwd: neutral, env });
+        await stage("tag-pushed");
+      }
+      requireThat(await remoteTag() === source.commit, "remote tag changed before draft creation");
+      if (!release) {
+        await check();
+        await gh("release", "create", options.tag, "--repo", REPOSITORY, "--verify-tag", "--draft", "--title", options.tag, "--notes-file", frozenNotes);
+        await stage("draft-created"); release = await releaseByTag();
+      }
+      // Reinspect before adding missing assets. Never overwrite any existing asset.
+      release = await releaseByTag();
+      requireThat(release.draft === true, "draft was published concurrently; rerun to verify it");
+      const missing = assertReleaseCompatible(release, records, options.tag, notes);
+      if (missing.length) {
+        await check();
+        await gh("release", "upload", options.tag, ...missing.map((entry) => join(out, "assets", entry.name)), "--repo", REPOSITORY);
+        await stage("draft-assets-uploaded", { assets: missing.map((entry) => entry.name) });
+      }
+      release = await releaseByTag();
+      requireThat(assertReleaseCompatible(release, records, options.tag, notes).length === 0 && release.draft, "draft asset inventory is incomplete or state changed");
+      await download(release, "draft-downloads"); await stage("draft-assets-verified");
+      assertNoDowngrade(options.tag, await optional(`repos/${REPOSITORY}/releases/latest`));
+      requireThat(await remoteTag() === source.commit, "remote tag changed before publication");
+      await check();
+      await gh("release", "edit", options.tag, "--repo", REPOSITORY, "--draft=false", "--prerelease=false", "--latest");
+      await stage("release-published");
+      release = await releaseByTag();
+      requireThat(release.draft === false, "release remains a draft");
+      await download(release, "published-downloads"); await stage("published-release-verified", { resumed: false });
     }
-    requireThat(await remoteTag() === source.commit, "remote tag changed before draft creation");
-    if (!release) {
-      await verify();
-      await gh("release", "create", options.tag, "--repo", REPOSITORY, "--verify-tag", "--draft", "--title", options.tag, "--notes-file", frozenNotes);
-      await stage("draft-created"); release = await releaseByTag();
-    }
-    // Reinspect before adding missing assets. Never overwrite any existing asset.
-    release = await releaseByTag();
-    requireThat(release.draft === true, "draft was published concurrently; rerun to verify it");
-    const missing = assertReleaseCompatible(release, records, options.tag, notes);
-    if (missing.length) {
-      await verify();
-      await gh("release", "upload", options.tag, ...missing.map((entry) => join(out, "assets", entry.name)), "--repo", REPOSITORY);
-      await stage("draft-assets-uploaded", { assets: missing.map((entry) => entry.name) });
-    }
-    release = await releaseByTag();
-    requireThat(assertReleaseCompatible(release, records, options.tag, notes).length === 0 && release.draft, "draft asset inventory is incomplete or state changed");
-    await download(release, "draft-downloads"); await stage("draft-assets-verified");
-    assertNoDowngrade(options.tag, await optional(`repos/${REPOSITORY}/releases/latest`));
-    requireThat(await remoteTag() === source.commit, "remote tag changed before publication");
-    await verify();
-    await gh("release", "edit", options.tag, "--repo", REPOSITORY, "--draft=false", "--prerelease=false", "--latest");
-    await stage("release-published");
-    release = await releaseByTag();
-    requireThat(release.draft === false, "release remains a draft");
-    await download(release, "published-downloads"); await stage("published-release-verified", { resumed: false });
-  }
-  await verify();
-  await exec(process.execPath, [join(trustedTools, "stable-marketplace.mjs"), "--tag", options.tag,
-    "--verification", receiptPath, "--out", join(out, "stable-promotion"), "--publish"], { cwd: neutral, env, maxBuffer: 16 * 1024 * 1024 });
-  await stage("stable-marketplace-promoted");
+    await check();
+    await exec(process.execPath, [join(trustedTools, "stable-marketplace.mjs"), "--tag", options.tag,
+      "--verification", receiptPath, "--out", join(out, "stable-promotion"), "--publish"], { cwd: neutral, env, maxBuffer: 16 * 1024 * 1024 });
+    await stage("stable-marketplace-promoted");
+  });
 }
 
 export async function main(argv = process.argv.slice(2)) {

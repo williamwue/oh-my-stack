@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -8,6 +8,8 @@ import test from "node:test";
 
 import { createArchive, packageInventory, sha256 } from "../tools/release-lib.mjs";
 import { buildStableMarketplace, assertPromotion, assertPublisherIdentity, assertTaggedRebuild, promoteSnapshot, REPOSITORY } from "../tools/stable-marketplace.mjs";
+
+import { nativePublisherEnvironment } from "../tools/release-publisher.mjs";
 
 const exec = promisify(execFile);
 const commit = "a".repeat(40);
@@ -183,21 +185,28 @@ test("Git promotion appends history, is idempotent, and rejects concurrent branc
   const remote = join(root, "remote.git");
   await exec("git", ["init", "--bare", remote]);
   const { assets, release } = await fixture(root);
+  const bin = join(root, "bin"); await mkdir(bin);
+  const realGit = (await exec("which", ["git"])).stdout.trim();
+  const wrapper = join(bin, "git");
+  await writeFile(wrapper, `#!/bin/sh\n[ "$OMS_PUBLISH_ENV" = "native" ] && [ -z "$GH_TOKEN$GITHUB_TOKEN" ] || exit 71\nexec "${realGit}" "$@"\n`);
+  await chmod(wrapper, 0o755);
+  const env = nativePublisherEnvironment({ ...process.env, GH_TOKEN: "fixture-override",
+    OMS_PUBLISH_ENV: "native", PATH: `${bin}:${process.env.PATH}` });
   const snapshot = join(root, "snapshot");
   await buildStableMarketplace({ assets, release, out: snapshot });
-  const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true });
-  const second = await promoteSnapshot({ snapshot, remote, expectedHead: first.commit, publish: true });
+  const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env });
+  const second = await promoteSnapshot({ snapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal(second.status, "unchanged");
-  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true }), /changed/);
+  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env }), /changed/);
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable"])).stdout.trim(), first.commit);
   const next = join(root, "next");
   await mkdir(next);
   const newer = await fixture(next, "1.2.4");
   const nextSnapshot = join(next, "snapshot");
   await buildStableMarketplace({ ...newer, out: nextSnapshot });
-  const third = await promoteSnapshot({ snapshot: nextSnapshot, remote, expectedHead: first.commit, publish: true });
+  const third = await promoteSnapshot({ snapshot: nextSnapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable^"])).stdout.trim(), first.commit);
-  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true }), /downgrade/);
+  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true, env }), /downgrade/);
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable"])).stdout.trim(), third.commit);
 });
 

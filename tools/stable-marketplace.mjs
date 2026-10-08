@@ -9,8 +9,11 @@ import { promisify } from "node:util";
 import { packageInventory, parseArchive, sha256 } from "./release-lib.mjs";
 import { assertBuildEnvironment, BUILD_ENVIRONMENT, readLocalVerification, REQUIRED_CHECKS } from "./local-release-lib.mjs";
 
+import { nativePublisherEnvironment } from "./release-publisher.mjs";
+
 export const REPOSITORY = "williamwue/oh-my-stack";
 const URL = `https://github.com/${REPOSITORY}`;
+
 const exec = promisify(execFile);
 const encode = (value) => Buffer.from(`${JSON.stringify(value, null, 2)}\n`);
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
@@ -178,8 +181,8 @@ export async function buildStableMarketplace({ assets, release, out }) {
   return { manifest, receipt };
 }
 
-async function head(remote, cwd) {
-  return (await exec("git", ["ls-remote", remote, "refs/heads/stable"], { cwd })).stdout.trim().split(/\s/)[0];
+async function head(remote, cwd, env = process.env) {
+  return (await exec("git", ["ls-remote", remote, "refs/heads/stable"], { cwd, env })).stdout.trim().split(/\s/)[0];
 }
 async function verifySnapshot(directory) {
   const bytes = await readFile(join(directory, "STABLE_RELEASE.json"));
@@ -193,12 +196,12 @@ async function verifySnapshot(directory) {
 }
 
 // The exported remote argument allows disposable bare-repository tests. The CLI pins GitHub coordinates.
-export async function promoteSnapshot({ snapshot, remote, expectedHead, publish = false }) {
+export async function promoteSnapshot({ snapshot, remote, expectedHead, publish = false, env = process.env }) {
   const receipt = await verifySnapshot(snapshot);
   const workspace = await mkdtemp(join(tmpdir(), "oms-stable-git-"));
   const checkout = join(workspace, "checkout");
   const oldTree = join(workspace, "previous");
-  const git = async (...args) => (await exec("git", args, { cwd: checkout })).stdout.trim();
+  const git = async (...args) => (await exec("git", args, { cwd: checkout, env })).stdout.trim();
   try {
     await mkdir(checkout);
     await git("init", "--quiet");
@@ -206,7 +209,7 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
     await git("config", "core.eol", "lf");
     await git("config", "user.name", "Oh My Stack release");
     await git("config", "user.email", "release@users.noreply.github.com");
-    requireThat(await head(remote, checkout) === expectedHead, "stable branch changed since planning");
+    requireThat(await head(remote, checkout, env) === expectedHead, "stable branch changed since planning");
     let previous = null;
     if (expectedHead) {
       await git("fetch", "--quiet", remote, "refs/heads/stable");
@@ -227,7 +230,7 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
     const commit = await git("rev-parse", "HEAD");
     if (!publish) return { status: "prepared", version: receipt.version, previous: previous?.version ?? null, expectedHead, commit };
     await git("push", `--force-with-lease=refs/heads/stable:${expectedHead}`, remote, "HEAD:refs/heads/stable");
-    requireThat(await head(remote, checkout) === commit, "remote stable ref does not match the published commit");
+    requireThat(await head(remote, checkout, env) === commit, "remote stable ref does not match the published commit");
     return { status: "published", version: receipt.version, previous: previous?.version ?? null, commit };
   } finally { await rm(workspace, { recursive: true, force: true }); }
 }
@@ -255,8 +258,7 @@ async function main(argv) {
   const evidence = resolve(options.out);
   try { await lstat(evidence); throw new Error("evidence output already exists"); } catch (error) { if (error.code !== "ENOENT") throw error; }
   const workspace = await mkdtemp(join(tmpdir(), "oms-stable-admin-"));
-  const nativeEnv = { ...process.env, GH_HOST: "github.com", GH_PROMPT_DISABLED: "1" };
-  for (const key of ["GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "GH_REPO"]) delete nativeEnv[key];
+  const nativeEnv = nativePublisherEnvironment();
   const run = async (binary, args) => (await exec(binary, args, { cwd: workspace, env: nativeEnv, maxBuffer: 20 * 1024 * 1024 })).stdout.trim();
   const ghJson = async (...args) => JSON.parse(await run("gh", args));
   try {
@@ -281,15 +283,15 @@ async function main(argv) {
     // Independently reproduce the published assets using the release's own clean tagged tools.
     const source = join(workspace, "source");
     await run("git", ["clone", "--quiet", "--depth", "1", "--branch", options.tag, `${URL}.git`, source]);
-    requireThat((await exec("git", ["rev-parse", "HEAD"], { cwd: source })).stdout.trim() === tagCommit, "tag moved during clone");
+    requireThat((await exec("git", ["rev-parse", "HEAD"], { cwd: source, env: nativeEnv })).stdout.trim() === tagCommit, "tag moved during clone");
     const rebuilt = join(workspace, "rebuilt");
-    await exec(process.execPath, ["tools/build-release.mjs", "--tag", options.tag, "--out", rebuilt], { cwd: source });
+    await exec(process.execPath, ["tools/build-release.mjs", "--tag", options.tag, "--out", rebuilt], { cwd: source, env: nativeEnv });
     const gzipOperatingSystemNormalized = await assertTaggedRebuild({ assets, rebuilt });
     const remote = `${URL}.git`;
-    const expectedHead = await head(remote, workspace);
+    const expectedHead = await head(remote, workspace, nativeEnv);
     await readLocalVerification({ path: resolve(options.verification), manifest, tagCommit, tagTree, assets });
     requireThat(sha256(await readFile(resolve(options.verification))) === verificationSha256, "local verification changed during promotion");
-    const result = await promoteSnapshot({ snapshot, remote, expectedHead, publish: options.publish });
+    const result = await promoteSnapshot({ snapshot, remote, expectedHead, publish: options.publish, env: nativeEnv });
     const report = { repository: REPOSITORY, account, identity, release: options.tag, sourceCommit: tagCommit, verification: { kind: verification.kind, sha256: verificationSha256,
       tree: verification.source.tree, environment: verification.environment },
       taggedRebuildMatched: true, gzipOperatingSystemNormalized, ...result };
