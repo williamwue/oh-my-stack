@@ -38,6 +38,13 @@ async function fixture(root, version = "1.2.3") {
     const payload = join(root, target);
     await mkdir(join(payload, "skills", "original"), { recursive: true });
     await writeFile(join(payload, "skills", "original", "SKILL.md"), `original ${target}\n`);
+    for (const source of ["aihero", "aihero-20261008"]) {
+      await mkdir(join(payload, "licenses", source), { recursive: true });
+      await writeFile(join(payload, "licenses", source, "LICENSE"), `${source} license\n`);
+    }
+    await mkdir(join(payload, "scripts"));
+    await writeFile(join(payload, "scripts", "original.sh"), "#!/bin/sh\nexit 0\n");
+    await chmod(join(payload, "scripts", "original.sh"), 0o755);
     await json(join(payload, "GENERATION.json"), { generatedBy: "tools/generate.mjs", target, sourceVersion: version });
     const directory = target === "codex" ? ".codex-plugin" : ".claude-plugin";
     await mkdir(join(payload, directory));
@@ -199,7 +206,15 @@ test("Git promotion appends history, is idempotent, and rejects concurrent branc
   }
   const snapshot = join(root, "snapshot");
   await buildStableMarketplace({ assets, release, out: snapshot });
+  const receipt = JSON.parse(await readFile(join(snapshot, "STABLE_RELEASE.json")));
+  const walked = (await packageInventory(snapshot)).filter((entry) => entry.path !== "STABLE_RELEASE.json");
+  assert.notDeepEqual(walked, receipt.files);
+  assert.deepEqual(walked.sort((a, b) => a.path.localeCompare(b.path)), receipt.files);
   const first = await promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env });
+  for (const host of ["codex", "claude-code"]) {
+    const entry = (await exec("git", ["--git-dir", remote, "ls-tree", "stable", `plugins/${host}/scripts/original.sh`])).stdout;
+    assert.match(entry, /^100755 blob [a-f0-9]{40}\t/);
+  }
   const second = await promoteSnapshot({ snapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal(second.status, "unchanged");
   await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: "", publish: true, env }), /changed/);
@@ -212,6 +227,8 @@ test("Git promotion appends history, is idempotent, and rejects concurrent branc
   const third = await promoteSnapshot({ snapshot: nextSnapshot, remote, expectedHead: first.commit, publish: true, env });
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable^"])).stdout.trim(), first.commit);
   await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true, env }), /downgrade/);
+  await writeFile(join(snapshot, "plugins", "codex", "licenses", "aihero", "LICENSE"), "tampered\n");
+  await assert.rejects(promoteSnapshot({ snapshot, remote, expectedHead: third.commit, publish: true, env }), /inventory mismatch/);
   assert.equal((await exec("git", ["--git-dir", remote, "rev-parse", "stable"])).stdout.trim(), third.commit);
 });
 

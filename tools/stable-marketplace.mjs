@@ -191,7 +191,9 @@ async function verifySnapshot(directory) {
     "stable branch has no recognized ownership receipt");
   cleanSource(receipt);
   const actual = await packageInventory(directory);
-  requireThat(JSON.stringify(actual.filter((entry) => entry.path !== "STABLE_RELEASE.json")) === JSON.stringify(receipt.files), "stable snapshot inventory mismatch");
+  const payload = actual.filter((entry) => entry.path !== "STABLE_RELEASE.json")
+    .sort((a, b) => a.path.localeCompare(b.path));
+  requireThat(JSON.stringify(payload) === JSON.stringify(receipt.files), "stable snapshot inventory mismatch");
   return receipt;
 }
 
@@ -226,6 +228,17 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
     }
     await cp(snapshot, checkout, { recursive: true });
     await git("add", ".");
+    for (const file of receipt.files.filter((entry) => entry.mode === "0755")) {
+      await git("update-index", "--chmod=+x", "--", file.path);
+    }
+    const stagedModes = new Map((await git("ls-files", "--stage", "-z")).split("\0").filter(Boolean).map((entry) => {
+      const match = /^(\d{6}) [a-f0-9]+ 0\t([\s\S]+)$/.exec(entry);
+      requireThat(match, "unexpected stable index entry");
+      return [match[2], match[1]];
+    }));
+    const expectedModes = [...receipt.files, { path: "STABLE_RELEASE.json", mode: "0644" }];
+    requireThat(stagedModes.size === expectedModes.length && expectedModes.every((file) =>
+      stagedModes.get(file.path) === (file.mode === "0755" ? "100755" : "100644")), "stable Git index mode mismatch");
     await git("commit", "--quiet", "-m", `Publish stable marketplace v${receipt.version}`);
     const commit = await git("rev-parse", "HEAD");
     if (!publish) return { status: "prepared", version: receipt.version, previous: previous?.version ?? null, expectedHead, commit };
