@@ -231,6 +231,14 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
     for (const file of receipt.files.filter((entry) => entry.mode === "0755")) {
       await git("update-index", "--chmod=+x", "--", file.path);
     }
+    const stagedModes = new Map((await git("ls-files", "--stage", "-z")).split("\0").filter(Boolean).map((entry) => {
+      const match = /^(\d{6}) [a-f0-9]+ 0\t([\s\S]+)$/.exec(entry);
+      requireThat(match, "unexpected stable index entry");
+      return [match[2], match[1]];
+    }));
+    const expectedModes = [...receipt.files, { path: "STABLE_RELEASE.json", mode: "0644" }];
+    requireThat(stagedModes.size === expectedModes.length && expectedModes.every((file) =>
+      stagedModes.get(file.path) === (file.mode === "0755" ? "100755" : "100644")), "stable Git index mode mismatch");
     await git("commit", "--quiet", "-m", `Publish stable marketplace v${receipt.version}`);
     const commit = await git("rev-parse", "HEAD");
     if (!publish) return { status: "prepared", version: receipt.version, previous: previous?.version ?? null, expectedHead, commit };
