@@ -19,7 +19,7 @@ async function inventory(root, runtime) {
   const path = join(root, `${runtime}-models.json`);
   await writeFile(path, `${JSON.stringify({
     schemaVersion: 1, runtime, observedAt: "2026-09-24T00:00:00Z", source: "test inventory",
-    models: ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+    models: ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"].map((name) => ({
       id: `${prefix}${name}`, reasoningEfforts: ["low", "medium", "high", "xhigh"],
     })),
   })}\n`);
@@ -48,7 +48,7 @@ test("user setup is inherited in two projects and a project manifest overrides o
     const globalBefore = await readFile(globalPath, "utf8");
     const extension = runtime === "omp" ? "md" : "toml";
     assert.match(await readFile(join(nativeUser, "agents", `ohmystack-code-bug-fix.${extension}`), "utf8"),
-      /gpt-6-sol/);
+      /gpt-6.1-sol/);
     assert.match(await readFile(join(nativeUser, "agents", `ohmystack-role-reviewer.${extension}`), "utf8"),
       /ohmystack-role-reviewer/);
     const inheritedA = await resolveActiveResolution({ runtime, cwd: join(projectA, "src"), userRoot: root });
@@ -89,7 +89,7 @@ test("user setup is inherited in two projects and a project manifest overrides o
       const fromB = await prepareDelegation({ ...task, cwd: projectB, userRoot: root });
       assert.equal(fromA.model, "gpt-6-luna");
       assert.equal(fromA.audit.resolutionScope, "project");
-      assert.equal(fromB.model, "gpt-6-sol");
+      assert.equal(fromB.model, "gpt-6.1-sol");
       assert.equal(fromB.audit.resolutionScope, "user");
     }
   }

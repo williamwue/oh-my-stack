@@ -562,7 +562,7 @@ function renderSkillDocument(skill, adapter) {
       "If `--preset pstack` fails because its Cursor model IDs are absent, check",
       "the observed inventory for every ID in the bundled `pstack-openai-codex`",
       "preset. Only if all are present, preview that preset without `--apply`.",
-      "Its fast/balanced/deep choices are respectively GPT-6 Luna/Sol/Astra:",
+      "Its fast/balanced/deep choices are GPT-6 Luna, GPT-6.1 Sol, and GPT-6 Astra:",
       "a provider-specific proposal, not an equivalence claim or silent fallback.",
       "Use current OMP model metadata for prices when available; otherwise state",
       "that price is unknown. Explain that Astra is the expensive deep/panel",

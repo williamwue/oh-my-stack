@@ -1,11 +1,11 @@
 # Project status
 
-Current source version: [0.11.1](releases/0.11.1.md), with 90 public Skills.
-The [release checklist](acceptance/setup-routing-0.11.1/release-checklist.md)
-separates candidate, publication, stable promotion and installed acceptance.
+Current source version: [0.11.2](releases/0.11.2.md), with 90 public Skills.
+The [release checklist](acceptance/model-recommendations-0.11.2/release-checklist.md)
+separates model recommendations, configuration migration, publication and installed acceptance.
 
-Previous source version: [0.11.0](releases/0.11.0.md), with optional Codex automatic
-routing and 90 public Skills.
+Previous source version: [0.11.1](releases/0.11.1.md), with choice-based optional
+Codex routing setup and 90 public Skills.
 
 Version [0.10.0](releases/0.10.0.md) added eleven original AIHero entries and
 provided 89 public Skills. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)

@@ -86,11 +86,11 @@ export function normalizeClaudeProbe(alias, result) {
   const id = result.modelUsage[models[0]].canonicalModel ?? models[0];
   assert(id.startsWith(`claude-${alias}-`), `${alias}: observed model ${id} is a different family or fallback`);
   let reasoningEfforts;
-  if (/^claude-(?:opus-5-5|opus-5|sonnet-5|opus-4-8|opus-4-7)$/.test(id)) {
+  if (/^claude-(?:opus-5-5|sonnet-5-5|haiku-5-5|opus-5|sonnet-5|opus-4-8|opus-4-7)$/.test(id)) {
     reasoningEfforts = claudeEfforts;
   } else if (/^claude-(?:opus-4-6|sonnet-4-6)$/.test(id)) {
     reasoningEfforts = ["low", "medium", "high", "max"];
-  } else if (alias === "haiku") {
+  } else if (/^claude-haiku-4-5(?:-20251001)?$/.test(id)) {
     reasoningEfforts = ["none"];
   } else {
     throw new Error(`${alias}: ${id} has no reviewed effort policy; stop before configuration`);
