@@ -6,7 +6,9 @@
       "owner": "oh-my-stack",
       "purpose": "Expose, count observations of, and independently release one pinned local provider revision for the scheduled-wake fixture.",
       "network": false,
-      "writes": ["disposable autonomous-run wake provider state on observation or release"],
+      "writes": [
+        "disposable autonomous-run wake provider state on observation or release"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -14,7 +16,9 @@
       "owner": "oh-my-stack",
       "purpose": "Initialize the disposable waiting provider state for the scheduled-wake fixture.",
       "network": false,
-      "writes": ["disposable autonomous-run wake fixture copy"],
+      "writes": [
+        "disposable autonomous-run wake fixture copy"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -46,7 +50,9 @@
       "owner": "oh-my-stack",
       "purpose": "Persist and validate the runtime-issued heartbeat handoff, wake count, decision trail, and completion receipt.",
       "network": false,
-      "writes": ["disposable autonomous-run wake checkpoint, decision log, provider state, and report"],
+      "writes": [
+        "disposable autonomous-run wake checkpoint, decision log, provider state, and report"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -54,7 +60,9 @@
       "owner": "oh-my-stack",
       "purpose": "Expose one active local unit at a time and advance the immutable predicate only after one clean verified commit.",
       "network": false,
-      "writes": ["disposable autonomous-run state on advance"],
+      "writes": [
+        "disposable autonomous-run state on advance"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -62,7 +70,9 @@
       "owner": "oh-my-stack",
       "purpose": "Initialize the disposable three-unit repository and bounded autonomous-run controller state.",
       "network": false,
-      "writes": ["disposable autonomous-run fixture copy"],
+      "writes": [
+        "disposable autonomous-run fixture copy"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -86,7 +96,9 @@
       "owner": "oh-my-stack",
       "purpose": "Initialize the disposable label repository, local bare origin, feature branch, and one completed uncommitted atomic unit.",
       "network": false,
-      "writes": ["disposable session-pickup fixture copy"],
+      "writes": [
+        "disposable session-pickup fixture copy"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -110,7 +122,9 @@
       "owner": "oh-my-stack",
       "purpose": "Act as a deterministic local status provider that accepts one pushed repair wave and recomputes the disposable pull-request verdict.",
       "network": false,
-      "writes": ["disposable babysit-drive forge state"],
+      "writes": [
+        "disposable babysit-drive forge state"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -118,7 +132,9 @@
       "owner": "oh-my-stack",
       "purpose": "Initialize the disposable Git repository, bare origin, defective feature branch, and blocked pull-request state for babysit drive.",
       "network": false,
-      "writes": ["disposable babysit-drive fixture copy"],
+      "writes": [
+        "disposable babysit-drive fixture copy"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -142,7 +158,9 @@
       "owner": "oh-my-stack",
       "purpose": "Initialize the disposable Git branches and frozen pre-run hashes for the babysit check fixture.",
       "network": false,
-      "writes": ["disposable babysit-check fixture copy"],
+      "writes": [
+        "disposable babysit-check fixture copy"
+      ],
       "uninstallBehavior": "Removed with the disposable fixture copy."
     },
     {
@@ -158,7 +176,9 @@
       "owner": "oh-my-stack",
       "purpose": "Compile runtime-specific evidence into deterministic same-scenario semantic conformance records.",
       "network": false,
-      "writes": ["conformance/results"],
+      "writes": [
+        "conformance/results"
+      ],
       "uninstallBehavior": "Not installed in target packages."
     },
     {
@@ -166,7 +186,9 @@
       "owner": "local-core",
       "purpose": "Build deterministic target archives, their file inventories, checksums, and the release manifest.",
       "network": false,
-      "writes": ["dist"],
+      "writes": [
+        "dist"
+      ],
       "uninstallBehavior": "Not installed in target packages; generated dist files may be deleted independently."
     },
     {
@@ -174,7 +196,9 @@
       "owner": "local-core",
       "purpose": "Verify OMP release bytes, then install, inspect, load one Skill, and uninstall in a randomly named isolated OMP profile.",
       "network": false,
-      "writes": ["new isolated OMP profile plugin state; retained empty probe profile for inspection"],
+      "writes": [
+        "new isolated OMP profile plugin state; retained empty probe profile for inspection"
+      ],
       "uninstallBehavior": "Uninstalls only the Oh My Stack probe link from the generated isolated profile; does not target the user profile."
     },
     {
@@ -182,7 +206,9 @@
       "owner": "local-core",
       "purpose": "Install, atomically update, or uninstall one target archive in an explicit dedicated directory.",
       "network": false,
-      "writes": ["explicit user-selected target package directory"],
+      "writes": [
+        "explicit user-selected target package directory"
+      ],
       "uninstallBehavior": "Removes only a directory whose generated ownership marker matches the selected target."
     },
     {
@@ -190,7 +216,9 @@
       "owner": "local-core",
       "purpose": "Provide deterministic archive, checksum, safe extraction, ownership, rollback, and installed-tree verification primitives.",
       "network": false,
-      "writes": ["caller-selected release or installation directories"],
+      "writes": [
+        "caller-selected release or installation directories"
+      ],
       "uninstallBehavior": "Library is not installed in target packages."
     },
     {
@@ -198,7 +226,9 @@
       "owner": "local-core",
       "purpose": "Persist and recover a provider-independent durable run state with atomic, revision-bound, idempotent event appends.",
       "network": false,
-      "writes": ["explicit caller-selected durable run store"],
+      "writes": [
+        "explicit caller-selected durable run store"
+      ],
       "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; caller-selected run stores remain user-owned."
     },
     {
@@ -206,7 +236,9 @@
       "owner": "local-core",
       "purpose": "Record revision-bound verification receipts and report current, unknown, failed, or stale run evidence.",
       "network": false,
-      "writes": ["explicit caller-selected durable evidence store when recording"],
+      "writes": [
+        "explicit caller-selected durable evidence store when recording"
+      ],
       "uninstallBehavior": "Not installed in target packages; caller-selected evidence stores remain user-owned."
     },
     {
@@ -230,7 +262,9 @@
       "owner": "derived",
       "purpose": "Append one sanitized, single-line decision row to a user-selected TSV log.",
       "network": false,
-      "writes": ["user-selected decision log"],
+      "writes": [
+        "user-selected decision log"
+      ],
       "uninstallBehavior": "Removed with the owning generated Skill package; decision logs remain user-owned."
     },
     {
@@ -246,7 +280,9 @@
       "owner": "local-core",
       "purpose": "Collect and normalize the current OMP or Codex model inventory before model-role configuration.",
       "network": true,
-      "writes": ["optional user-selected model inventory file"],
+      "writes": [
+        "optional user-selected model inventory file"
+      ],
       "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected inventory files remain user-owned."
     },
     {
@@ -254,7 +290,9 @@
       "owner": "local-core",
       "purpose": "Validate an observed model inventory and write target-native role model overrides into an explicitly selected user or project configuration scope.",
       "network": false,
-      "writes": ["user-level or project-level Oh My Stack runtime configuration directory"],
+      "writes": [
+        "user-level or project-level Oh My Stack runtime configuration directory"
+      ],
       "uninstallBehavior": "Not installed as a repository tool; generated package copies are removed with their package, while user-selected configuration remains user-owned."
     },
     {
@@ -270,7 +308,9 @@
       "owner": "local-core",
       "purpose": "Derive explicit Codex spawn parameters and complete role tasks, then verify persisted parent and child runtime records.",
       "network": false,
-      "writes": ["optional user-selected prepared request or verification report file"],
+      "writes": [
+        "optional user-selected prepared request or verification report file"
+      ],
       "uninstallBehavior": "Generated Codex package copy is removed with its package; user-selected outputs remain user-owned."
     },
     {
@@ -278,7 +318,9 @@
       "owner": "local-core",
       "purpose": "Capture only a Claude Code child identity, tool name, and effective effort from a user-selected diagnostic PreToolUse hook.",
       "network": false,
-      "writes": ["explicit absolute JSONL diagnostic path supplied to --output"],
+      "writes": [
+        "explicit absolute JSONL diagnostic path supplied to --output"
+      ],
       "uninstallBehavior": "Generated Claude package copy is removed with its package; a user-selected diagnostic log remains user-owned."
     },
     {
@@ -302,7 +344,11 @@
       "owner": "local-core",
       "purpose": "Generate deterministic runtime target packages.",
       "network": false,
-      "writes": ["packages/omp", "packages/codex", "packages/claude-code"],
+      "writes": [
+        "packages/omp",
+        "packages/codex",
+        "packages/claude-code"
+      ],
       "uninstallBehavior": "Not installed in target packages."
     },
     {
@@ -310,7 +356,13 @@
       "owner": "local-core",
       "purpose": "Plan, merge, stage, and verify pinned upstream workflow imports.",
       "network": false,
-      "writes": ["src/core/skills", "upstream/snapshots", "upstream/patches", "upstream/ownership.yaml", "upstream/sources.yaml"],
+      "writes": [
+        "src/core/skills",
+        "upstream/snapshots",
+        "upstream/patches",
+        "upstream/ownership.yaml",
+        "upstream/sources.yaml"
+      ],
       "uninstallBehavior": "Not installed in target packages."
     },
     {
@@ -326,7 +378,9 @@
       "owner": "oh-my-stack",
       "purpose": "Run a provider-independent disposable Git branch, pull-request, CI, approval, retry, and merge state machine for autopilot verification.",
       "network": false,
-      "writes": ["explicit caller-selected durable run store"],
+      "writes": [
+        "explicit caller-selected durable run store"
+      ],
       "uninstallBehavior": "Removed with the owning Oh My Stack package."
     },
     {
@@ -418,7 +472,7 @@
     {
       "path": "tools/stable-marketplace.mjs",
       "owner": "oh-my-stack",
-      "purpose": "Build a stable Git marketplace only from verified published assets; optionally advance its one pinned GitHub branch after clean-tag rebuild and CI gates.",
+      "purpose": "Build a stable Git marketplace from verified published assets; optionally advance its pinned GitHub branch after exact local validation receipt and clean-tag rebuild gates.",
       "network": true,
       "writes": [
         "explicit new evidence directory",
@@ -458,6 +512,103 @@
         "Explicit output PNG path"
       ],
       "uninstallBehavior": "Removed with the checkout; generated artifacts and caller-supplied assets remain separately owned."
+    },
+    {
+      "path": "tools/routing.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Inspect or preview/apply separately owned Codex and Claude Code automatic-routing switches; defaults to manual and uses no model or credentials.",
+      "network": false,
+      "writes": [
+        "only the explicitly selected runtime user or project OMS routing configuration on set --apply"
+      ],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "tools/codex-routing-hook.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Inject a bounded installed-entry pointer on native SessionStart only when the current routing switch is enabled; fail closed without blocking the session.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "tools/local-release.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run maintainer local checks in a pinned Node/zlib environment; bind a source review and seven assets to a receipt, and publish through native gh/Git only with --publish.",
+      "network": true,
+      "writes": [
+        "explicit new external evidence directory",
+        "development dependencies in the explicit clean source checkout",
+        "owned tags, draft/release assets and stable branch in williamwue/oh-my-stack only with --publish"
+      ],
+      "uninstallBehavior": "Maintainer source tooling; not installed in runtime plugin packages. Evidence and published artifacts remain independently managed."
+    },
+    {
+      "path": "tools/local-release-lib.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Verify pinned build environment and source-bound local check, review, log and asset evidence before publication.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Maintainer source tooling; not installed in runtime plugin packages. Evidence and published artifacts remain independently managed."
+    },
+    {
+      "path": "tools/release-publisher.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind HTTPS Git authentication to the native gh login and serialize participating maintainers with a repository publication lease.",
+      "network": true,
+      "writes": [
+        "explicit external lease evidence and temporary Git checkout",
+        "williamwue/oh-my-stack refs/heads/oms-release-lock only through an authorized publication caller"
+      ],
+      "uninstallBehavior": "Maintainer library is not installed in plugin packages. Interrupted leases require owner-led recovery."
+    },
+    {
+      "path": "tools/routing-hook.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Shared bounded SessionStart context and fail-closed input handling for Codex and Claude Code; reads only the selected runtime routing switch.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "tools/claude-routing-hook.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Run the shared SessionStart hook with the Claude Code runtime; inject the installed oms-auto entry only when its switch is enabled.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Plugin removal deletes the packaged helper and hook; personal and project routing preferences remain user-owned."
+    },
+    {
+      "path": "upstream/snapshots/aihero-20261008/f3fc5632f401156837ee3872f14fe33ccf1024ea/skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/omp/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/codex/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "packages/claude-code/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash human-in-the-loop template; prompts for reproduction observations and prints them to stdout. Review and edit the copied steps before use; never capture credentials.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
     }
   ]
 }

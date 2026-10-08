@@ -55,3 +55,11 @@ For a temporary package check, the
 [release process](../release-process.md#install-the-claude-code-plugin) also
 provides `claude --plugin-dir`. That option loads a local package for the
 session and does not create a persistent user installation.
+
+## Optional automatic routing
+
+A plugin containing the Claude routing adapter offers enable, disable, or keep
+in `/oh-my-stack:setup-oh-my-stack`, followed by user or project scope.
+Installation alone does not enable routing or alter model configuration.
+Review the plugin hook and verify a fresh session. See [automatic routing](../automatic-routing.md)
+for paths, commands, and the current source versus published-installation boundary.

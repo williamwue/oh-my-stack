@@ -255,14 +255,10 @@ function validateAdapter(adapter, project, profiles, path) {
   for (const id of adapter.profiles) assert(profiles.has(id), `${path}: missing profile ${id}`);
   if (adapter.id === "codex") {
     assert(adapter.manifestPath === ".codex-plugin/plugin.json", `${path}: invalid Codex manifest path`);
-    assert(adapter.portableManifestPath === "plugin.json", `${path}: invalid portable Codex manifest path`);
-    assert(
-      adapter.portableManifest?.$schema === "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-      `${path}: portable Codex schema is required`,
-    );
-    assert(adapter.portableManifest.name === project.name, `${path}: portable manifest name must match project name`);
+    assert(!adapter.portableManifestPath && !adapter.portableManifest,
+      `${path}: the verified native Codex hook loader requires compatibility-only packaging`);
     assert(adapter.manifest.interface, `${path}: Codex interface metadata is required`);
-    assert(!("hooks" in adapter.manifest), `${path}: unsupported Codex manifest field hooks`);
+    assert(adapter.manifest.hooks === "./hooks/hooks.json", `${path}: invalid Codex hook path`);
   }
   if (adapter.id === "claude-code") {
     assert(adapter.manifestPath === ".claude-plugin/plugin.json", `${path}: invalid Claude manifest path`);
@@ -566,7 +562,7 @@ function renderSkillDocument(skill, adapter) {
       "If `--preset pstack` fails because its Cursor model IDs are absent, check",
       "the observed inventory for every ID in the bundled `pstack-openai-codex`",
       "preset. Only if all are present, preview that preset without `--apply`.",
-      "Its fast/balanced/deep choices are respectively GPT-6 Luna/Sol/Astra:",
+      "Its fast/balanced/deep choices are GPT-6 Luna, GPT-6.1 Sol, and GPT-6 Astra:",
       "a provider-specific proposal, not an equivalence claim or silent fallback.",
       "Use current OMP model metadata for prices when available; otherwise state",
       "that price is unknown. Explain that Astra is the expensive deep/panel",
@@ -585,22 +581,39 @@ function renderSkillDocument(skill, adapter) {
       "## Claude Code setup boundary",
       "",
       "There is no complete read-only account model catalog in this adapter.",
-      "For the two-model setup, probe `sonnet` and `opus` only, using",
-      "`--claude-models sonnet,opus",
+      "For default model setup, probe all three families using",
+      "`--claude-models haiku,sonnet,opus",
       "--confirm-claude-probes`. Disclose usage and obtain approval first.",
-      "Haiku is optional only when the user wants it; do not add it to this",
-      "two-model mapping. Never probe Fable or arbitrary IDs through this path; some requests can",
+      "The collector defaults to these three aliases when no subset is supplied.",
+      "An explicitly requested subset remains valid; describe it as a partial",
+      "inventory, not the account's complete model catalog. If a probe fails,",
+      "report the family and failure; do not silently replace Haiku with Sonnet.",
+      "A reviewed explicit family pin such as `haiku=claude-haiku-5-5` is",
+      "supported in `--claude-models` when the user chooses it after an alias",
+      "mismatch. Verify the returned ID exactly; do not automatically pin a",
+      "version or rewrite the user's global alias settings.",
+      "Never probe Fable or arbitrary IDs through this path; some requests can",
       "incur separate usage credits without a terminal consent prompt.",
       "The probe observes canonical model IDs. Its effort list comes from",
       "reviewed Claude Code documentation, not a live capability API; account",
       "or organization caps may lower effective effort.",
       "",
-      "There is no static Claude pstack model preset. The observed Sonnet ID",
-      "may fill both `--fast` and `--balanced`; use the observed Opus ID for",
-      "`--deep`. For ordered three-worker panels, an Opus/Sonnet/Opus proposal",
-      "preserves three positions but only two model identities. It does not",
-      "establish three-model or cross-provider diversity. Preview every route",
-      "and panel before `--apply`.",
+      "Preview `--preset pstack` with the three-family inventory. This dynamic",
+      "preset uses observed IDs rather than pinning model versions: Haiku for",
+      "`fast` (including how.explorer and why.investigator), Sonnet for",
+      "`balanced`, and Opus for `deep`. Its ordered three-worker panels are",
+      "Opus/Sonnet/Haiku, analogous to the Codex Astra/Sol/Luna arrangement.",
+      "The initial efforts are low/medium/high, reduced to the highest supported",
+      "effort below each target when necessary; the user's budget then applies.",
+      "Haiku 4.5 uses `none` (no native effort override), not a claimed high.",
+      "The preset requires one observed ID per family; missing or ambiguous",
+      "families require a refreshed inventory or explicit workload choices.",
+      "For an explicit two-model subset, Sonnet can still fill fast/balanced",
+      "and Opus deep. Preserve deliberate existing choices; offer the new",
+      "three-family recommendation before replacing an older mapping.",
+      "Re-running the same preset preserves explicit overrides and budget.",
+      "Three configured families do not prove execution or cross-provider",
+      "diversity. Preview every route and panel before `--apply`.",
       "Setup defaults to `--user` (`~/.claude/`, or the absolute",
       "`CLAUDE_CONFIG_DIR` when set); `--project-root` writes a complete",
       "project override and `--output` remains detached. Resolve the active",
@@ -675,7 +688,58 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding].filter(Boolean).join("\n").trimEnd();
+  const routingBinding = ["oms-auto", "setup-oh-my-stack"].includes(skill.metadata.name)
+    ? (adapter.id === "codex" ? [
+      "## Codex automatic routing binding",
+      "",
+      "Run `node ../../scripts/routing.mjs status` from the user's project, resolving",
+      "the script path relative to this installed Skill, before automatic routing.",
+      "Use the returned `enabled` flag; errors mean automatic routing is unavailable.",
+      "The nearest project switch overrides the user switch; absence defaults to manual.",
+      "For a routing setup request, preview `node ../../scripts/routing.mjs set",
+      "--scope user|project --mode auto|manual`, then use the same command with",
+      "`--apply` only when applying that switch is authorized. Replace the choice",
+      "placeholders with the requested values. Report the returned effective mode",
+      "and any project override. Routing setup does not require model setup.",
+      "The bundled SessionStart hook adds a short routing hint only in auto mode.",
+      "Native hook trust and observed hook execution are separate from configuration.",
+      "Read [the routing guide](../../docs/automatic-routing.md) for exact scope paths",
+      "and hook verification. Do not modify native hook trust automatically.",
+      "",
+    ].join("\n") : adapter.id === "claude-code" ? [
+      "## Claude Code automatic routing binding",
+      "",
+      "Run `node ../../scripts/routing.mjs status --runtime claude-code` from the",
+      "user's project, resolving the script path relative to this installed Skill,",
+      "before automatic routing. Use the returned `enabled` flag; errors disable routing.",
+      "The nearest Claude project switch overrides the user switch; absence is manual.",
+      "The user directory is the absolute CLAUDE_CONFIG_DIR, or ~/.claude when unset.",
+      "Claude uses .oh-my-stack/routing.claude-code.json for project overrides;",
+      "Codex's .oh-my-stack/routing.json is independent and must not be rewritten.",
+      "For a routing setup request, preview `node ../../scripts/routing.mjs",
+      "set --runtime claude-code --scope user|project --mode auto|manual`, then",
+      "use the same command with `--apply` for the authorized selection.",
+      "Report saved scope, effective mode, and project overrides separately.",
+      "Routing-only setup needs no model inventory, paid probes, or model mapping changes.",
+      "The plugin's SessionStart hook adds the oms-auto entry pointer only in auto mode.",
+      "Use the Skill tool for oh-my-stack:oms-auto when available; otherwise read its",
+      "installed file. Always recheck the switch before reading poteto-mode or a workflow.",
+      "After enabled=true, read ../poteto-mode/SKILL.md and follow its workflow routing.",
+      "When enabling, review the plugin SessionStart hook through Claude Code's /hooks",
+      "and start a fresh session. Do not bypass host hook permissions or alter trust.",
+      "Saving a switch does not prove hook execution or workflow selection.",
+      "Read [the routing guide](../../docs/automatic-routing.md) for verification.",
+      "",
+    ].join("\n") : [
+      "## Automatic routing availability",
+      "",
+      "Automatic routing is not configured on this target. For oms-auto or a",
+      "routing-only setup request, return control to the host without automatic",
+      "execution. Use the explicit poteto-mode entry for engineering work.",
+      "For ordinary model setup, continue with the procedure below.",
+      "",
+    ].join("\n")) : "";
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding, routingBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -756,7 +820,9 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     await cp(skill.directory, skillTarget, { recursive: true });
     if (!skill.source) await rm(join(skillTarget, "skill.json"));
     const document = renderSkillDocument(skill, adapter);
-    if (adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
+    // Source originals retain their complete upstream bytes, including long
+    // references without an H1. Only portable core instructions use the wrapper.
+    if (!skill.source && adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
       await writeText(join(skillTarget, "WORKFLOW.md"), document);
       const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];
@@ -846,7 +912,26 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   }
   if (adapter.id === "codex") {
     await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+  }
+  if (["codex", "claude-code"].includes(adapter.id)) {
+    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
+    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
+      await cp(join(model.root, "tools", name), join(target, "scripts", name));
+    }
+    await writeJson(join(target, "hooks", "hooks.json"), {
+      hooks: { SessionStart: [{ matcher: "startup|resume|clear|compact", hooks: [{
+        type: "command",
+        command: adapter.id === "codex"
+          ? 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"'
+          : 'node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-routing-hook.mjs"',
+        timeout: 10,
+        ...(adapter.id === "codex" ? { additionalContextLimit: 500 } : {}),
+      }] }] },
+    });
     await mkdir(join(target, "docs"), { recursive: true });
+    await cp(join(model.root, "docs", "automatic-routing.md"), join(target, "docs", "automatic-routing.md"));
+  }
+  if (adapter.id === "codex") {
     await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
     for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
       await cp(join(model.root, "tools", name), join(target, "scripts", name));
@@ -933,7 +1018,19 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
   }
+  if (["codex", "claude-code"].includes(adapter.id)) {
+    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
+    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
+      assert(await exists(join(target, "scripts", name)), `${adapter.id}: ${name} is missing`);
+    }
+    assert(await exists(join(target, "hooks", "hooks.json")), `${adapter.id}: routing hook is missing`);
+    assert(await exists(join(target, "docs", "automatic-routing.md")), `${adapter.id}: routing guide is missing`);
+  }
   if (adapter.id === "codex") {
+    assert(!await exists(join(target, "plugin.json")), "codex: root Agent Plugins manifest bypasses the verified hook loader");
+    assert(manifest.hooks === "./hooks/hooks.json", "codex: native manifest must name the routing hook");
+    assert(await exists(join(target, "hooks", "hooks.json")), "codex: routing hook is missing");
+    assert(await exists(join(target, "docs", "automatic-routing.md")), "codex: routing guide is missing");
     assert(await exists(join(target, "docs", "github-workflow.md")), "codex: GitHub workflow documentation is missing");
     for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
       assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);

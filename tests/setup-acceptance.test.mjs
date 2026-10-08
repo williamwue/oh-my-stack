@@ -20,8 +20,8 @@ async function fixture(target) {
   const packageRoot = join(repoRoot, "packages", target);
   const inventoryPath = join(root, "inventory.json");
   const models = target === "omp"
-    ? ["openai-codex/gpt-6-luna", "openai-codex/gpt-6-sol", "openai-codex/gpt-6-astra"]
-    : ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"];
+    ? ["openai-codex/gpt-6-luna", "openai-codex/gpt-6.1-sol", "openai-codex/gpt-6-astra"]
+    : ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"];
   await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: target,
     observedAt: "2026-09-24T00:00:00Z", source: "fixture native inventory",
     models: models.map((id) => ({ id, reasoningEfforts: ["low", "medium", "high", "max"] })),

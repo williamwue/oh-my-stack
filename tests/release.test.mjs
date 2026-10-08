@@ -143,15 +143,20 @@ test("Codex plugin bundle exposes the generated package through one local market
       .map((file) => file.path)
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
     const sourceManifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
-    assert.equal(packagedSkills.length, 78 + sourceManifest.sources.reduce((count, source) => count + source.skills.length, 0));
+    assert.equal(packagedSkills.length, 79 + sourceManifest.sources.reduce((count, source) => count + source.skills.length, 0));
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
       codexArtifact.files,
     );
     assert.equal(
-      JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", "plugin.json"), "utf8")).version,
+      JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", ".codex-plugin", "plugin.json"), "utf8")).version,
       manifest.version,
+    );
+    assert.equal(await exists(join(extracted, "plugins", "oh-my-stack", "plugin.json")), false);
+    assert.equal(
+      JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", ".codex-plugin", "plugin.json"), "utf8")).hooks,
+      "./hooks/hooks.json",
     );
   } finally {
     await rm(root, { recursive: true, force: true });

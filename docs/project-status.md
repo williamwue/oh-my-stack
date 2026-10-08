@@ -1,7 +1,14 @@
 # Project status
 
-Current source version: [0.10.0](releases/0.10.0.md), with 89 public Skills and
-eleven original AIHero entries. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
+Current source version: [0.11.2](releases/0.11.2.md), with 90 public Skills.
+The [release checklist](acceptance/model-recommendations-0.11.2/release-checklist.md)
+separates model recommendations, configuration migration, publication and installed acceptance.
+
+Previous source version: [0.11.1](releases/0.11.1.md), with choice-based optional
+Codex routing setup and 90 public Skills.
+
+Version [0.10.0](releases/0.10.0.md) added eleven original AIHero entries and
+provided 89 public Skills. See the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)
 for publication status and the [release checklist](acceptance/aihero-0.10.0/release-checklist.md)
 for gates and version-specific acceptance.
 See the [current import record](maintainers/aihero-imports-0.10.0.md).

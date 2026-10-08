@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-08T06:49:42.085662+00:00",
+  "sourceRevision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
+  "bash": "C:/Program Files/Git/bin/bash.exe",
+  "scriptSha256": "35103539fc36873eea36074769ad454f9379d6fc8b2dc0e26ce987fd3bfe5503",
+  "syntaxExitCode": 0,
+  "syntheticInputExitCode": 0,
+  "stdout": "\n>>> Open the app at http://localhost:3000 and sign in.\n\n>>> Click the 'Export' button. Did it throw an error? (y/n)\n\n>>> Paste the error message (or 'none'):\n\n--- Captured ---\nERRORED=y\nERROR_MSG=fixture-observation\n",
+  "humanInputUsed": false,
+  "claims": {
+    "observed": "Original Bash syntax and prompt/capture helpers with synthetic stdin",
+    "notEstablished": [
+      "actual app interaction",
+      "real defect reproduction",
+      "HITL user experience"
+    ]
+  }
+}

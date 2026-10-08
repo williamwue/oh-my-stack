@@ -36,7 +36,7 @@ test("Codex delegation derives explicit parameters and complete role instruction
     taskName: "review_two", task: "Review the frozen diff only.",
   });
   const contract = JSON.parse(await readFile(join(bundleRoot, "config", "role-contracts.json"), "utf8")).roles.reviewer;
-  assert.equal(request.model, "gpt-6-sol");
+  assert.equal(request.model, "gpt-6.1-sol");
   assert.equal(request.reasoning_effort, "high");
   assert.equal(request.fork_turns, "none");
   assert.equal(request.task_name, "review_two");

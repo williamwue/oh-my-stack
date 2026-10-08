@@ -2,11 +2,17 @@
 
 [English](../../aihero-original-skills.md) | [简体中文](aihero.md)
 
-OMS 收录了 Matt Pocock 的十一个原版 Skill。直接选择对应入口即可使用，
+OMS 当前源码收录了 Matt Pocock 的十六个原版 Skill。直接选择对应入口即可使用，
 无需先进入 `poteto-mode`。
 
 新增的调研、问卷、项目配置、规格和工单能力需要 **0.10.0 或更高版本**。
 使用前对照[正式发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)检查实际安装版本。
+
+`writing-for-agents`、`retro`、`handoff`、`diagnosing-bugs`、`code-review`
+需要 **0.13.0 或更高版本**，0.12.0 或更早版本不包含它们。
+使用前核对实际技能清单；验证和发布
+边界见[本次导入记录](../../maintainers/aihero-complements-2026-10-08.md)。
+诊断和审查技能的较新来源见[第二批记录](../../maintainers/aihero-complements-second-batch-2026-10-08.md)。
 
 ## 按任务选择
 
@@ -23,9 +29,15 @@ OMS 收录了 Matt Pocock 的十一个原版 Skill。直接选择对应入口即
 | 为项目配置原版工程技能 | `setup-matt-pocock-skills` | 提供任务存放位置和领域文档配置草案，确认后才写入。 |
 | 把已讨论的需求整理为规格 | `to-spec` | 整理已有共识，确认测试边界，再写入配置的任务系统。 |
 | 将规格拆成可执行工单 | `to-tickets` | 提议纵向切片及阻塞关系，等你确认后逐项创建工单。 |
+| 编写代理需要阅读的文档 | `writing-for-agents` | 关于文档引用条件、信息层次、去重和可检查完成条件的共享参考。 |
+| 复盘代理使用的项目环境 | `retro` | 读取指定会话，提出导航、检查、规范和工具改进候选，不直接实施建议。 |
+| 把工作移交给其他会话或工具 | `handoff` | 在操作系统临时目录写入脱敏交接文件，引用已有成果，避免重复保存。 |
+| 诊断难复现的缺陷或性能退化 | `diagnosing-bugs` | 建立针对症状的失败反馈循环，缩小复现、验证假设、修复原因并清理临时探针。 |
+| 按规范和需求审查已提交改动 | `code-review` | 独立审查规范与需求两个维度，分别报告发现，不直接实施建议。 |
 
-`codebase-design`、`domain-modeling`、`grilling` 和 `research` 也可由代理调用。
-其余七个需要用户明确调用；十一个都能单独选择。
+`codebase-design`、`domain-modeling`、`grilling`、`research` 和
+`writing-for-agents`、`diagnosing-bugs` 和 `code-review` 也可由代理调用。
+其余九个需要用户明确调用；十六个都能单独选择。
 
 ## 先体验一次访谈
 
@@ -126,12 +138,75 @@ Design It Twice 过程比较接口方案。该过程要求至少三个独立的�
 包含验收条件、阻塞关系和状态；远程任务系统则创建实际工单及支持的阻塞关系。
 这些原版入口不会自动进入 OMS 的实现或发布流程。
 
+## 补充 pstack 工作流
+
+整理 `AGENTS.md`、Skill 和代理通过引用读取的操作文档时，将
+`writing-for-agents` 与 `technical-writing` 配合使用：前者提供代理文档的
+组织参考，后者保留面向读者的表达和事实检查。`authoring-a-skill` 同样读取
+该参考及配套的 `SKILL-MECHANICS.md`，用于调用方式和路由入口的选择。
+应读取完整参考；工具截断时分段继续读取。
+
+需要复盘项目环境时，明确选择 `retro`。Claude Code 示例：
+
+```text
+/oh-my-stack:retro 复盘本次会话中的导航缺口、重复指令和本可防止错误的检查。只提出改进建议，不修改技能或项目文件。
+```
+
+原版会读取 `writing-for-agents` 并列出改进候选。pstack 的 `reflect` 继续
+负责有证据的技能修正；按目标选择入口，避免自动重复执行两轮复盘。
+只读取已授权的会话记录，证据中应隐去秘密。
+
+需要跨会话或跨工具移交时，明确选择 `handoff`：
+
+```text
+/oh-my-stack:handoff 为文档清理的下一次会话准备交接文件。引用现有计划和已完成改动，列出建议技能，隐去敏感信息，并报告临时文件路径。
+```
+
+在 Codex 中选择对应的 `oh-my-stack:<入口>`。`handoff` 只写交接文件，不
+启动其他代理或对话。接收方可使用 `session-pickup` 核对交接锚点与当前仓库。
+`show-me-your-work` 仍是正式证据记录；交接文件引用它，不替代它。
+
+## 第二批：诊断和审查
+
+难复现的缺陷需要反馈循环、最小复现和可证伪的假设时，选择 `diagnosing-bugs`。
+它包含完整的诊断、修复和清理过程，不应自动嵌套在另一个完整工作流中。
+pstack `bug-fix` 继续负责协调范围明确的修复及最终验证；性能问题仍需先测量基线。
+
+```text
+/oh-my-stack:diagnosing-bugs 在本地夹具中诊断已报告的导出失败。先建立并运行能捕获该症状的失败命令，再验证假设。保留无关改动，并隐去输出中的敏感信息。
+```
+
+可选的 `scripts/hitl-loop.template.sh` 需要 Bash；先复制并按实际复现步骤修改。
+示例网址和 Export 按钮都是占位内容。脚本会输出收集到的观察结果，不能在
+capture 提示中输入凭据。Windows 使用可用的 Bash；既有生产和计费操作门禁仍适用。
+
+需要分别核对仓库规范和原始需求时，选择 `code-review`。提供可解析的比较基准，
+以及任务系统说明或需求上下文；没有需求文档时会跳过需求审查并明确报告。
+原版比较命令是 `git diff <fixed-point>...HEAD`，不包含未提交改动。
+审查未提交文件、设计方案，或需要对抗性审查和综合裁决时，使用 pstack
+`interrogate` 并冻结明确范围。
+
+```text
+/oh-my-stack:code-review 审查自 origin/main 起的已提交改动。依据 CONTRIBUTING.md 及 docs/specs/export.md 中的原始需求，分别报告规范和需求发现。不要实施建议或发布评论。
+```
+
+将示例需求路径替换为真实来源。原版需要实际并行子代理能力；能力不可用时应
+报告限制，不能声称完成独立审查。两项保留上游的自动调用方式，OMS 路由仍使用
+既有的 `bug-fix` 和 `interrogate`。审查不授予合并或发布权限。
+Codex 使用对应的技能选择入口。
+
 ## 原版范围
 
-十一个 Skill 的正文、引用资源和 UI 元数据保持原版字节，固定来源版本为
-`6fd947921b935b7e1e69293a200400f0fdd5c15f`，遵循 MIT 许可。
+前十四个 Skill 的正文、引用资源和 UI 元数据保持原版字节，固定来源版本为
+`6fd947921b935b7e1e69293a200400f0fdd5c15f`。第二批的 `diagnosing-bugs`
+和 `code-review` 固定为 `f3fc5632f401156837ee3872f14fe33ccf1024ea`。
+两批均遵循 MIT 许可。
 OMS 没有为其插入模型路由，也没有自动串接 pstack 工作流。
+Codex 的 7,500 字节包装入口规则用于 pstack 核心技能；原版保持完整，包括
+较长的 `writing-for-agents` 和 `diagnosing-bugs`。
+原生完整加载及自动选择效果需另做实际工具验证。
 
 当前未收录原版 `wayfinder` 和 `triage`。完整清单见[技能目录](../../skill-directory.md)。
 测试工具与限制见[支持范围](../../support-policy.md)，来源与更新流程见
-[维护者记录](../../maintainers/aihero-imports-0.10.0.md)。这两份参考文档为英文。
+[第一批记录](../../maintainers/aihero-complements-2026-10-08.md)及
+[第二批记录](../../maintainers/aihero-complements-second-batch-2026-10-08.md)。维护者记录为英文。

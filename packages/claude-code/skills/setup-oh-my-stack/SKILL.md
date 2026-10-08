@@ -1,6 +1,6 @@
 ---
 name: setup-oh-my-stack
-description: "Preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory."
+description: "Configure optional automatic routing, or preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory."
 disable-model-invocation: true
 ---
 
@@ -9,22 +9,39 @@ disable-model-invocation: true
 ## Claude Code setup boundary
 
 There is no complete read-only account model catalog in this adapter.
-For the two-model setup, probe `sonnet` and `opus` only, using
-`--claude-models sonnet,opus
+For default model setup, probe all three families using
+`--claude-models haiku,sonnet,opus
 --confirm-claude-probes`. Disclose usage and obtain approval first.
-Haiku is optional only when the user wants it; do not add it to this
-two-model mapping. Never probe Fable or arbitrary IDs through this path; some requests can
+The collector defaults to these three aliases when no subset is supplied.
+An explicitly requested subset remains valid; describe it as a partial
+inventory, not the account's complete model catalog. If a probe fails,
+report the family and failure; do not silently replace Haiku with Sonnet.
+A reviewed explicit family pin such as `haiku=claude-haiku-5-5` is
+supported in `--claude-models` when the user chooses it after an alias
+mismatch. Verify the returned ID exactly; do not automatically pin a
+version or rewrite the user's global alias settings.
+Never probe Fable or arbitrary IDs through this path; some requests can
 incur separate usage credits without a terminal consent prompt.
 The probe observes canonical model IDs. Its effort list comes from
 reviewed Claude Code documentation, not a live capability API; account
 or organization caps may lower effective effort.
 
-There is no static Claude pstack model preset. The observed Sonnet ID
-may fill both `--fast` and `--balanced`; use the observed Opus ID for
-`--deep`. For ordered three-worker panels, an Opus/Sonnet/Opus proposal
-preserves three positions but only two model identities. It does not
-establish three-model or cross-provider diversity. Preview every route
-and panel before `--apply`.
+Preview `--preset pstack` with the three-family inventory. This dynamic
+preset uses observed IDs rather than pinning model versions: Haiku for
+`fast` (including how.explorer and why.investigator), Sonnet for
+`balanced`, and Opus for `deep`. Its ordered three-worker panels are
+Opus/Sonnet/Haiku, analogous to the Codex Astra/Sol/Luna arrangement.
+The initial efforts are low/medium/high, reduced to the highest supported
+effort below each target when necessary; the user's budget then applies.
+Haiku 4.5 uses `none` (no native effort override), not a claimed high.
+The preset requires one observed ID per family; missing or ambiguous
+families require a refreshed inventory or explicit workload choices.
+For an explicit two-model subset, Sonnet can still fill fast/balanced
+and Opus deep. Preserve deliberate existing choices; offer the new
+three-family recommendation before replacing an older mapping.
+Re-running the same preset preserves explicit overrides and budget.
+Three configured families do not prove execution or cross-provider
+diversity. Preview every route and panel before `--apply`.
 Setup defaults to `--user` (`~/.claude/`, or the absolute
 `CLAUDE_CONFIG_DIR` when set); `--project-root` writes a complete
 project override and `--output` remains detached. Resolve the active
@@ -36,6 +53,84 @@ effective effort through `scripts/claude-effort-hook.mjs`; pass that
 JSONL with `--hook-record`. Use an isolated project and do not install a
 diagnostic hook into the user's global settings. Without hook evidence,
 treat child effort as unverified even when the agent file specifies it.
+
+## Claude Code automatic routing binding
+
+Run `node ../../scripts/routing.mjs status --runtime claude-code` from the
+user's project, resolving the script path relative to this installed Skill,
+before automatic routing. Use the returned `enabled` flag; errors disable routing.
+The nearest Claude project switch overrides the user switch; absence is manual.
+The user directory is the absolute CLAUDE_CONFIG_DIR, or ~/.claude when unset.
+Claude uses .oh-my-stack/routing.claude-code.json for project overrides;
+Codex's .oh-my-stack/routing.json is independent and must not be rewritten.
+For a routing setup request, preview `node ../../scripts/routing.mjs
+set --runtime claude-code --scope user|project --mode auto|manual`, then
+use the same command with `--apply` for the authorized selection.
+Report saved scope, effective mode, and project overrides separately.
+Routing-only setup needs no model inventory, paid probes, or model mapping changes.
+The plugin's SessionStart hook adds the oms-auto entry pointer only in auto mode.
+Use the Skill tool for oh-my-stack:oms-auto when available; otherwise read its
+installed file. Always recheck the switch before reading poteto-mode or a workflow.
+After enabled=true, read ../poteto-mode/SKILL.md and follow its workflow routing.
+When enabling, review the plugin SessionStart hook through Claude Code's /hooks
+and start a fresh session. Do not bypass host hook permissions or alter trust.
+Saving a switch does not prove hook execution or workflow selection.
+Read [the routing guide](../../docs/automatic-routing.md) for verification.
+
+## Choose automatic routing
+
+On a target with the generated routing binding, a general setup invocation starts
+with automatic routing choices. The user need not write an enable command or
+know the configuration script. A request specifically for model setup goes
+straight to the model procedure below; a routing status or preview request stays
+read-only. If the user already specified a routing mode or scope, reuse it and
+ask only for the missing choice.
+
+Inspect the effective routing mode and scope through the binding before offering
+choices. Show that current state in the user's language, including any project
+override. If inspection fails, report the error before changing configuration.
+Use the host's native fixed-choice question tool when available and allowed in
+the current mode. Otherwise show the same explicit text choices in the conversation
+and wait for a selection. Do not ask the user to compose a configuration prompt.
+
+Offer these routing choices:
+
+- **Enable automatic routing**: match ordinary engineering tasks to OMS workflows.
+- **Disable automatic routing**: use explicit workflow entries.
+- **Keep current settings**: leave all routing configuration untouched.
+
+Recommend keeping the current settings when routing is already enabled;
+otherwise recommend enabling it. A recommendation or preselected option is not
+a submitted choice. If the user chooses enable or disable and has not specified
+the destination, offer these scope choices:
+
+- **Default across projects (recommended)**: save the personal default;
+  existing project overrides still take precedence.
+- **Only this project**: save a project override without changing the personal
+  default. Show the actual destination project before asking.
+
+Explain that selecting a mode and scope saves that setting. Map enable to
+`auto`, disable to `manual`, personal default to `user`, and this project to
+`project`. Preview the selected change through the generated binding, then
+apply that same choice without asking the user to repeat an enable instruction
+or reconfirm a completed selection. An explicit preview-only request still
+stops before apply. Keep, cancellation, and an unanswered question authorize no
+routing write. A free-text answer that leaves mode or scope ambiguous requires
+clarification before apply.
+
+Report the saved scope separately from the actual effective mode and any project
+override. Preserve model mappings and native hook trust. Give the exact native
+hook review and fresh-session step from the binding when enabling; saving the
+switch does not prove hook execution or automatic workflow selection.
+
+A routing-only request ends here without model inventory, mapping changes, or
+a paid worker probe. After a general setup invocation completes these choices,
+offer **Configure models and reasoning budget** or **Finish setup**; continue
+below only when model setup is selected or was already requested. Finishing or
+not answering this optional question leaves model configuration untouched.
+On targets without automatic routing support, skip the routing menu during
+ordinary model setup. If routing was requested, report the unsupported target
+without changing model configuration.
 
 Use this workflow to give Oh My Stack opinionated, editable per-workflow model
 choices without assuming Cursor model names work on another runtime.

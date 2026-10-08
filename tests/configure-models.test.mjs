@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { promisify } from "node:util";
 import test from "node:test";
 
 import { configure } from "../tools/configure-models.mjs";
+import { normalizeClaudeProbe } from "../tools/collect-model-inventory.mjs";
 import { repoRoot } from "../tools/generate.mjs";
 
 const selections = {
@@ -15,6 +16,70 @@ const selections = {
   deep: "observed-deep@high",
 };
 const execFileAsync = promisify(execFile);
+
+async function claudeInventoryFile(root, haiku = "claude-haiku-5-5", extraModels = []) {
+  const path = join(root, "claude-three-family.json");
+  await writeFile(path, JSON.stringify({
+    schemaVersion: 1, runtime: "claude-code", observedAt: "2026-10-08T00:00:00Z", source: "fixture probes",
+    models: [haiku && { id: haiku, reasoningEfforts: haiku.includes("4-5") ? ["none"] : ["low", "medium", "high", "xhigh", "max"] },
+      ...["claude-sonnet-5-5", "claude-opus-5-5"].map((id) => ({ id, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] })),
+      ...extraModels].filter(Boolean),
+  }));
+  return path;
+}
+
+test("Claude pstack builds fast Haiku and ordered three-family panels from observed IDs", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-claude-preset-"));
+  const inventoryPath = await claudeInventoryFile(root);
+  const outputRoot = join(root, "output");
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const options = { packageRoot, inventoryPath, outputRoot, presetName: "pstack", budget: "medium" };
+  const preview = await configure({ ...options, apply: false });
+  await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+  assert.deepEqual(preview.manifest.workloads, {
+    fast: { model: "claude-haiku-5-5", reasoning: "high" },
+    balanced: { model: "claude-sonnet-5-5", reasoning: "high" },
+    deep: { model: "claude-opus-5-5", reasoning: "high" },
+  });
+  for (const name of ["how.explorer", "why.investigator"]) {
+    assert.equal(preview.manifest.routes[name].entries[0].model, "claude-haiku-5-5");
+  }
+  assert.equal(preview.manifest.routes["code.delegates"].entries[0].model, "claude-sonnet-5-5");
+  for (const route of Object.values(preview.manifest.routes).filter((value) => value.kind === "panel")) {
+    assert.deepEqual(route.entries.map(({ model }) => model),
+      ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"]);
+    assert.ok(route.entries.every(({ reasoning }) => reasoning === "high"));
+  }
+  const applied = await configure({ ...options, apply: true,
+    routeSelections: { "how.explorer": "claude-sonnet-5-5@low" },
+    panelSelections: { "interrogate.reviewers": "claude-opus-5-5@high,claude-sonnet-5-5@medium" } });
+  assert.equal(applied.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  const rerun = await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: false });
+  assert.equal(rerun.manifest.budget, "medium");
+  assert.equal(rerun.manifest.routes["how.explorer"].entries[0].model, "claude-sonnet-5-5");
+  assert.equal(rerun.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(rerun.manifest.routes["why.investigator"].entries[0].model, "claude-haiku-5-5");
+  assert.match(await readFile(join(outputRoot, "agents", "ohmystack-why-investigator.md"), "utf8"),
+    /model: "claude-haiku-5-5"\neffort: "high"/);
+});
+
+test("Claude pstack handles Haiku without effort and refuses absent or ambiguous families", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-claude-preset-gap-"));
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const outputRoot = join(root, "output");
+  const options = { packageRoot, outputRoot, presetName: "pstack", budget: "medium", apply: true };
+  const inventoryPath = await claudeInventoryFile(root, "claude-haiku-4-5-20251001");
+  const applied = await configure({ ...options, inventoryPath });
+  assert.equal(applied.manifest.workloads.fast.reasoning, "none");
+  assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-how-explorer.md"), "utf8"), /effort:/);
+  const before = await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8");
+  await assert.rejects(configure({ ...options, inventoryPath, uniformReasoning: "high" }), /did not advertise uniform reasoning/);
+  await claudeInventoryFile(root, null);
+  await assert.rejects(configure({ ...options, inventoryPath }), /exactly one observed haiku model; found 0/);
+  await claudeInventoryFile(root, "claude-haiku-5-5", [{ id: "claude-haiku-4-5", reasoningEfforts: ["none"] }]);
+  await assert.rejects(configure({ ...options, inventoryPath }), /exactly one observed haiku model; found 2/);
+  assert.equal(await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8"), before);
+});
 
 async function inventoryFile(root, runtime) {
   const path = join(root, `${runtime}-inventory.json`);
@@ -212,7 +277,7 @@ test("pstack preset creates named workflow routes and ordered native panels on b
   }
 });
 
-test("OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5", async () => {
+test("OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5 or GPT-6 Sol", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-omp-openai-preset-"));
   const inventoryPath = join(root, "inventory.json");
   const outputRoot = join(root, "output");
@@ -222,7 +287,7 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
     runtime: "omp",
     observedAt: "2026-09-24T00:16:46.021Z",
     source: "fixture omp models --json --no-extensions",
-    models: ["gpt-5.5", "gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+    models: ["gpt-5.5", "gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol", "gpt-6-astra"].map((name) => ({
       id: `openai-codex/${name}`,
       reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
     })),
@@ -239,14 +304,15 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
   assert.equal(preview.applied, false);
   assert.deepEqual(preview.manifest.workloads, {
     fast: { model: "openai-codex/gpt-6-luna", reasoning: "high" },
-    balanced: { model: "openai-codex/gpt-6-sol", reasoning: "high" },
+    balanced: { model: "openai-codex/gpt-6.1-sol", reasoning: "high" },
     deep: { model: "openai-codex/gpt-6-astra", reasoning: "high" },
   });
-  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "openai-codex/gpt-6-sol");
+  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "openai-codex/gpt-6.1-sol");
   assert.deepEqual(preview.manifest.routes["arena.runners"].entries.map((entry) => entry.model), [
-    "openai-codex/gpt-6-astra", "openai-codex/gpt-6-sol", "openai-codex/gpt-6-luna",
+    "openai-codex/gpt-6-astra", "openai-codex/gpt-6.1-sol", "openai-codex/gpt-6-luna",
   ]);
   assert.ok(!preview.manifest.configuredModelIds.includes("openai-codex/gpt-5.5"));
+  assert.ok(!preview.manifest.configuredModelIds.includes("openai-codex/gpt-6-sol"));
   await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 
   observed.models = observed.models.filter((model) => model.id !== "openai-codex/gpt-6-astra");
@@ -258,6 +324,63 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
   await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 });
 
+test("Codex previews the Sol default upgrade, preserves explicit pins, and never falls back silently", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-sol-upgrade-"));
+  const packageRoot = join(repoRoot, "packages", "codex");
+  const oldPackage = join(root, "old-package");
+  await cp(packageRoot, oldPackage, { recursive: true });
+  const descriptorPath = join(oldPackage, "config", "runtime-resolution.json");
+  await writeFile(descriptorPath, (await readFile(descriptorPath, "utf8")).replaceAll("gpt-6.1-sol", "gpt-6-sol"));
+  const inventoryPath = await presetInventoryFile(root, "codex");
+  const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+  inventory.models.push({ id: "gpt-6-sol", reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] });
+  await writeFile(inventoryPath, JSON.stringify(inventory));
+  const outputRoot = join(root, "output");
+  await configure({ packageRoot: oldPackage, inventoryPath, outputRoot, presetName: "pstack", budget: "medium", apply: true });
+  const manifestPath = join(outputRoot, "oh-my-stack.resolution.json");
+  const original = await readFile(manifestPath, "utf8");
+  const options = { packageRoot, inventoryPath, outputRoot, presetName: "pstack" };
+  const preview = await configure({ ...options, apply: false });
+  assert.equal(await readFile(manifestPath, "utf8"), original);
+  assert.equal(preview.manifest.budget, "medium");
+  assert.deepEqual(preview.manifest.workloads.balanced, { model: "gpt-6.1-sol", reasoning: "high" });
+  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "gpt-6.1-sol");
+  for (const name of ["arena.runners", "arena.cross-judge-pool", "architect.runners", "interrogate.reviewers"]) {
+    assert.deepEqual(preview.manifest.routes[name].entries.map(({ model, reasoning }) => ({ model, reasoning })), [
+      { model: "gpt-6-astra", reasoning: "high" },
+      { model: "gpt-6.1-sol", reasoning: "high" },
+      { model: "gpt-6-luna", reasoning: "high" },
+    ]);
+  }
+  await configure({ ...options, apply: true });
+  await configure({ ...options, routeSelections: { "code.bug-fix": "gpt-6-sol@medium" }, apply: true });
+  assert.equal((await configure({ ...options, apply: false })).manifest.routes["code.bug-fix"].entries[0].model, "gpt-6-sol");
+  const beforeMissing = await readFile(manifestPath, "utf8");
+  inventory.models = inventory.models.filter(({ id }) => id !== "gpt-6.1-sol");
+  await writeFile(inventoryPath, JSON.stringify(inventory));
+  await assert.rejects(configure({ ...options, apply: true }), /gpt-6\.1-sol was not present in the observed inventory/);
+  assert.equal(await readFile(manifestPath, "utf8"), beforeMissing);
+});
+
+test("Claude 5.5 observations configure current models with real effort support", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-claude-55-"));
+  const inventoryPath = join(root, "inventory.json");
+  const models = ["haiku", "sonnet", "opus"].map((alias) => {
+    const id = `claude-${alias}-5-5`;
+    return normalizeClaudeProbe(alias, { is_error: false, subtype: "success", modelUsage: { [id]: { canonicalModel: id } } });
+  });
+  await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: "claude-code",
+    observedAt: "2026-10-08T00:00:00Z", source: "fixture canonical Claude observations", models }));
+  const outputRoot = join(root, "output");
+  const result = await configure({ packageRoot: join(repoRoot, "packages", "claude-code"), inventoryPath, outputRoot,
+    selections: { fast: "claude-haiku-5-5@low", balanced: "claude-sonnet-5-5@medium", deep: "claude-opus-5-5@medium" },
+    budget: "medium", apply: true });
+  assert.deepEqual(result.manifest.workloads.fast, { model: "claude-haiku-5-5", reasoning: "high" });
+  assert.deepEqual(result.manifest.workloads.balanced, { model: "claude-sonnet-5-5", reasoning: "high" });
+  assert.deepEqual(result.manifest.workloads.deep, { model: "claude-opus-5-5", reasoning: "high" });
+  assert.match(await readFile(join(outputRoot, "agents", "reviewer.md"), "utf8"), /model: "claude-opus-5-5"/);
+});
+
 test("OMP and Codex raise matching OpenAI route efforts to the budget target", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-cross-runtime-effort-"));
   const previews = {};
@@ -265,7 +388,7 @@ test("OMP and Codex raise matching OpenAI route efforts to the budget target", a
     const inventoryPath = join(root, `${runtime}-inventory.json`);
     await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime,
       observedAt: "2026-09-24T00:00:00Z", source: "fixture native inventory",
-      models: ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+      models: ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"].map((name) => ({
         id: runtime === "omp" ? `openai-codex/${name}` : name,
         reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
       })),
@@ -293,7 +416,7 @@ test("uniform high override is explicit, checked against inventory and budget, a
   const inventoryPath = join(root, "omp-inventory.json");
   await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: "omp",
     observedAt: "2026-09-24T00:00:00Z", source: "fixture native inventory",
-    models: ["gpt-6-luna", "gpt-6-sol", "gpt-6-astra"].map((name) => ({
+    models: ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"].map((name) => ({
       id: `openai-codex/${name}`, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"],
     })),
   })}\n`);
@@ -326,7 +449,7 @@ test("budget, inheritance, route overrides, and panel shrink stay owned and dete
     packageRoot, inventoryPath, outputRoot, presetName: "pstack", budget: "small",
     roleSelections: { reviewer: "inherit-parent" },
     routeSelections: { "how.explainer": "auto" },
-    panelSelections: { "interrogate.reviewers": "gpt-6-sol@max,inherit-parent" },
+    panelSelections: { "interrogate.reviewers": "gpt-6.1-sol@max,inherit-parent" },
     apply: true,
   };
   const first = await configure(options);
@@ -339,7 +462,7 @@ test("budget, inheritance, route overrides, and panel shrink stay owned and dete
   assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-how-explainer.toml"), "utf8"), /^model =/m);
   assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-interrogate-reviewers-2.toml"), "utf8"), /^model =/m);
 
-  const smaller = { ...options, panelSelections: { "interrogate.reviewers": "gpt-6-sol@medium" } };
+  const smaller = { ...options, panelSelections: { "interrogate.reviewers": "gpt-6.1-sol@medium" } };
   await configure(smaller);
   await assert.rejects(readFile(join(outputRoot, "agents", "ohmystack-interrogate-reviewers-2.toml")));
   assert.equal((await configure({ ...smaller, apply: false })).manifest.routes["interrogate.reviewers"].entries.length, 1);
@@ -361,7 +484,7 @@ test("unobserved preset and modified obsolete panel agent fail without partial w
   const stale = join(outputRoot, "agents", "ohmystack-interrogate-reviewers-3.toml");
   await writeFile(stale, "user modification\n");
   await assert.rejects(
-    configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack", panelSelections: { "interrogate.reviewers": "gpt-6-sol@medium" }, apply: true }),
+    configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack", panelSelections: { "interrogate.reviewers": "gpt-6.1-sol@medium" }, apply: true }),
     /refusing to remove a modified owned file/,
   );
   assert.equal(await readFile(stale, "utf8"), "user modification\n");

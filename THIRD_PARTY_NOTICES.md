@@ -123,3 +123,15 @@ a skill does not establish behavioral parity.
 The unreleased 0.10.0 source candidate adds original `research`,
 `to-questionnaire`, `setup-matt-pocock-skills`, `to-spec`, and `to-tickets`
 from the same pinned revision. All resources and UI metadata are retained.
+
+The 2026-10-08 source additions select original `writing-for-agents`, `retro`,
+and `handoff` from the same revision. Their seven original files remain intact,
+including `SKILL-MECHANICS.md` and UI metadata. `retro` retains its original
+`writing-for-agents` dependency. The added references in pstack document-writing
+workflows are local integration changes; they do not change AIHero originals.
+
+The second 2026-10-08 batch selects original `diagnosing-bugs` and `code-review`
+at `f3fc5632f401156837ee3872f14fe33ccf1024ea`, under source ID
+`aihero-20261008`. Their five resources and the MIT license are retained in a
+separate immutable snapshot. This includes the original Bash HITL template;
+existing AIHero originals and source hashes are unchanged.

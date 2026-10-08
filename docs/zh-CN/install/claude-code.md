@@ -47,3 +47,9 @@ Claude Code 会拒绝模型主动调用这些仅显式使用的原版技能。�
 
 [发布流程，英文](../../release-process.md#install-the-claude-code-plugin)还提供 `claude --plugin-dir` 方法。
 它为当前会话加载本地安装包，不创建持久的用户级安装。
+
+## 可选自动路由
+
+包含 Claude 自动路由适配的插件，可通过 `/oh-my-stack:setup-oh-my-stack`
+选择开启并保存范围。安装本身不启用路由，也不修改模型配置。请检查插件 hook
+并在新会话中验证；步骤和当前发布边界见[自动路由说明](../automatic-routing.md)。

@@ -153,7 +153,7 @@
       "path": "src/core/skills/technical-writing/SKILL.md",
       "status": "imported",
       "sourceSha256": "6d6d9e625ae412ee8f36df8deb6fd9203d7c6acca776d5ee3cabbb9126f8b84c",
-      "resultSha256": "da92b2ce5bb19e6261047ddfda43ae1e55a75717a4b9a3c803f5e1c92f164040",
+      "resultSha256": "6dd9822cb60c7cc3e7d92f1fadb73038bf7f81ce73a57432fa7039191ac982c0",
       "localAdaptation": {
         "date": "2026-10-03",
         "previousResultSha256": "80ac29b8816fececee62c5f308fb5cd4a242a403f2e4c1f8be7d5c5f0d3b9baf",
@@ -162,7 +162,18 @@
           "src/core/skills/technical-writing/references/document-structure.md",
           "src/core/skills/technical-writing/references/sentence-style.md"
         ]
-      }
+      },
+      "localAdaptations": [
+        {
+          "date": "2026-10-08",
+          "previousResultSha256": "da92b2ce5bb19e6261047ddfda43ae1e55a75717a4b9a3c803f5e1c92f164040",
+          "reason": "Consult the separately packaged original writing-for-agents reference only for documents agents consume; preserve the technical-writing workflow and task scope.",
+          "references": [
+            "upstream/source-skills.json",
+            "docs/maintainers/aihero-complements-2026-10-08.md"
+          ]
+        }
+      ]
     },
     {
       "path": "src/core/skills/unslop/SKILL.md",

@@ -141,6 +141,34 @@
         {
           "path": "skills/productivity/to-questionnaire/agents/openai.yaml",
           "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2"
+        },
+        {
+          "path": "skills/productivity/writing-for-agents/SKILL.md",
+          "sha256": "551adca942227b44192edba88acd4e8db911f0121ce58ad16944ccf6a896a74a"
+        },
+        {
+          "path": "skills/productivity/writing-for-agents/SKILL-MECHANICS.md",
+          "sha256": "c768e6307c7c10728c401c213f2c4ba71c542127eeb7ad2956aabd15a0fa0059"
+        },
+        {
+          "path": "skills/productivity/writing-for-agents/agents/openai.yaml",
+          "sha256": "eacb24b2a618cfb81dacb0416f4fdd75ddf3a8060f8ddb99aae1b1e301907e4b"
+        },
+        {
+          "path": "skills/engineering/retro/SKILL.md",
+          "sha256": "33fbc28568e3146f20fd908b12998bc0ab30aa4f4c87288199a40793efa94696"
+        },
+        {
+          "path": "skills/engineering/retro/agents/openai.yaml",
+          "sha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c"
+        },
+        {
+          "path": "skills/productivity/handoff/SKILL.md",
+          "sha256": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3"
+        },
+        {
+          "path": "skills/productivity/handoff/agents/openai.yaml",
+          "sha256": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
         }
       ],
       "skills": [
@@ -280,6 +308,108 @@
             "skills.discover",
             "skills.invoke.explicit",
             "workspace.write",
+            "interaction.free_text"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/productivity/writing-for-agents",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "resources.relative_paths"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/retro",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect"
+          ],
+          "dependencies": [
+            "writing-for-agents"
+          ]
+        },
+        {
+          "path": "skills/productivity/handoff",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write"
+          ],
+          "dependencies": []
+        }
+      ],
+      "adaptations": []
+    },
+    {
+      "id": "aihero-20261008",
+      "name": "AIHero / Matt Pocock Skills: review and diagnosis",
+      "repository": "https://github.com/mattpocock/skills",
+      "revision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
+      "snapshot": "upstream/snapshots/aihero-20261008/f3fc5632f401156837ee3872f14fe33ccf1024ea",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        {
+          "path": "skills/engineering/code-review/SKILL.md",
+          "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357"
+        },
+        {
+          "path": "skills/engineering/code-review/agents/openai.yaml",
+          "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352"
+        },
+        {
+          "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+          "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d"
+        },
+        {
+          "path": "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+          "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b"
+        },
+        {
+          "path": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+          "sha256": "35103539fc36873eea36074769ad454f9379d6fc8b2dc0e26ce987fd3bfe5503"
+        }
+      ],
+      "skills": [
+        {
+          "path": "skills/engineering/diagnosing-bugs",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "commands.run",
+            "workspace.write",
+            "resources.relative_paths",
+            "scripts.execute",
+            "interaction.free_text"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/code-review",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "commands.run",
+            "agents.spawn",
+            "agents.spawn_parallel",
+            "agents.read_result",
+            "agents.wait",
             "interaction.free_text"
           ],
           "dependencies": []

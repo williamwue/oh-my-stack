@@ -5,7 +5,6 @@
   "packageDir": "packages/codex",
   "skillsDir": "skills",
   "manifestPath": ".codex-plugin/plugin.json",
-  "portableManifestPath": "plugin.json",
   "profiles": ["codex-desktop", "codex-cli", "codex-cli-interactive", "codex-ide"],
   "manifest": {
     "name": "oh-my-stack",
@@ -23,6 +22,7 @@
       "verification"
     ],
     "skills": "./skills/",
+    "hooks": "./hooks/hooks.json",
     "interface": {
       "displayName": "Oh My Stack",
       "shortDescription": "Portable engineering workflows for Codex.",
@@ -35,17 +35,5 @@
         "Use $prove-it-works to verify this installation."
       ]
     }
-  },
-  "portableManifest": {
-    "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-    "name": "oh-my-stack",
-    "description": "Portable, verifiable engineering workflows for Codex.",
-    "license": "MIT",
-    "author": {
-      "name": "Oh My Stack contributors",
-      "url": "https://github.com/williamwue/oh-my-stack"
-    },
-    "homepage": "https://github.com/williamwue/oh-my-stack#readme",
-    "repository": "https://github.com/williamwue/oh-my-stack"
   }
 }
