@@ -117,6 +117,28 @@ function validateSelection(selection, models, label) {
   );
 }
 
+function claudePreset(inventory, descriptor) {
+  const choices = {};
+  for (const [workload, family, target] of [["fast", "haiku", "low"],
+    ["balanced", "sonnet", "medium"], ["deep", "opus", "high"]]) {
+    const models = inventory.models.filter((model) => model.id.startsWith(`claude-${family}-`));
+    assert(models.length === 1,
+      `Claude pstack requires exactly one observed ${family} model; found ${models.length}. Refresh the three-family inventory or choose explicit workloads`);
+    const model = models[0];
+    const effort = model.reasoningEfforts.filter((value) => effortOrder.includes(value)
+      && effortOrder.indexOf(value) <= effortOrder.indexOf(target))
+      .sort((left, right) => effortOrder.indexOf(right) - effortOrder.indexOf(left))[0];
+    assert(effort, `${model.id}: no supported effort at or below ${target}`);
+    choices[workload] = `${model.id}@${effort}`;
+  }
+  return {
+    workloads: choices,
+    routes: Object.fromEntries(Object.entries(descriptor.routes ?? {})
+      .filter(([, route]) => route.kind === "panel")
+      .map(([name]) => [name, [choices.deep, choices.balanced, choices.fast]])),
+  };
+}
+
 function applyBudget(selection, models, budget, label, uniformReasoning) {
   if (selection.inheritParent) return selection;
   const model = models.get(selection.model);
@@ -212,8 +234,6 @@ export async function configure({
   assert(!budget || Object.hasOwn(budgetCaps, budget), `unknown budget ${budget}`);
   assert(!uniformReasoning || uniformReasoning === "preset" || effortOrder.includes(uniformReasoning),
     `unknown uniform reasoning ${uniformReasoning}`);
-  const preset = presetName ? descriptor.presets?.[presetName] : null;
-  assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
   assert(!projectDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "project role activation is unsupported for this target");
   assert(!userDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "user role activation is unsupported for this target");
   assert(!userDirectory || descriptor.target !== "claude-code" || !claudeConfigDir || isAbsolute(claudeConfigDir),
@@ -232,12 +252,16 @@ export async function configure({
   const inventory = JSON.parse(inventoryRaw);
   validateInventory(inventory);
   assert(inventory.runtime === descriptor.target, `inventory runtime ${inventory.runtime} does not match ${descriptor.target}`);
+  const preset = presetName === "pstack" && descriptor.target === "claude-code"
+    ? claudePreset(inventory, descriptor)
+    : presetName ? descriptor.presets?.[presetName] : null;
+  assert(!presetName || preset, `preset ${presetName} is unavailable for ${descriptor.target}; choose explicit models from the observed inventory`);
 
   const manifestPath = join(outputDirectory, "oh-my-stack.resolution.json");
   await assertNotSymlink(manifestPath);
   const prior = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
-  const retainChoices = ["omp", "codex"].includes(descriptor.target) && presetName && prior?.target === descriptor.target && prior?.preset === presetName;
+  const retainChoices = ["omp", "codex", "claude-code"].includes(descriptor.target) && presetName && prior?.target === descriptor.target && prior?.preset === presetName;
   const effectiveBudget = budget ?? (retainChoices ? prior.budget : null) ?? "unlimited";
   const effectiveUniformReasoning = uniformReasoning === "preset" ? null
     : uniformReasoning ?? (retainChoices ? prior.uniformReasoning : null) ?? null;

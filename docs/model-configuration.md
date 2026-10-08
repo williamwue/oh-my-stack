@@ -34,8 +34,18 @@ unavailable, setup stops for an explicit observed choice instead of silently
 falling back. Re-running model setup previews updated preset defaults while
 preserving explicit model overrides, reasoning budgets, and panel order.
 
-Claude Code has no static version-pinned pstack preset. Setup observes the
-canonical models behind `sonnet` and `opus`; Haiku remains an optional choice.
+Claude Code's dynamic `pstack` recommendation observes the canonical models
+behind `haiku`, `sonnet`, and `opus`. Haiku fills fast exploration, Sonnet
+balanced implementation, and Opus deep analysis. Ordered three-worker panels
+use Opus/Sonnet/Haiku. The preset uses observed IDs rather than fixed versions.
+Initial efforts are low/medium/high; the selected reasoning budget then applies.
+Explicit overrides and budgets survive a same-preset rerun. Existing two-model
+configurations are preserved until the user accepts a new mapping. An explicitly
+requested probe subset is a partial inventory; missing or ambiguous families
+stop the three-family preset instead of silently substituting another model.
+When a native alias returns another family, an explicitly selected reviewed pin
+such as `--claude-models haiku=claude-haiku-5-5,sonnet,opus` can be observed
+without rewriting global settings. The returned pinned ID must match exactly.
 Aliases can resolve to different versions by provider or local configuration.
 The collector recognizes Opus, Sonnet, and Haiku 5.5 with configurable effort;
 Haiku 4.5 has no native effort override. An unreviewed version stops collection

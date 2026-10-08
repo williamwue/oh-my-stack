@@ -78,12 +78,7 @@ export function normalizeCodexModels(models) {
 
 const claudeEfforts = ["low", "medium", "high", "xhigh", "max"];
 
-export function normalizeClaudeProbe(alias, result) {
-  assert(["haiku", "sonnet", "opus"].includes(alias), `${alias}: only haiku, sonnet, and opus may be probed without a separate usage-credit policy`);
-  assert(result?.is_error === false && result?.subtype === "success", `${alias}: Claude model probe did not complete successfully`);
-  const models = Object.keys(result.modelUsage ?? {});
-  assert(models.length === 1, `${alias}: expected one observed model, found ${models.length}`);
-  const id = result.modelUsage[models[0]].canonicalModel ?? models[0];
+function claudeReasoningEfforts(alias, id) {
   assert(id.startsWith(`claude-${alias}-`), `${alias}: observed model ${id} is a different family or fallback`);
   let reasoningEfforts;
   if (/^claude-(?:opus-5-5|sonnet-5-5|haiku-5-5|opus-5|sonnet-5|opus-4-8|opus-4-7)$/.test(id)) {
@@ -95,7 +90,16 @@ export function normalizeClaudeProbe(alias, result) {
   } else {
     throw new Error(`${alias}: ${id} has no reviewed effort policy; stop before configuration`);
   }
-  return { id, reasoningEfforts };
+  return reasoningEfforts;
+}
+
+export function normalizeClaudeProbe(alias, result) {
+  assert(["haiku", "sonnet", "opus"].includes(alias), `${alias}: only haiku, sonnet, and opus may be probed without a separate usage-credit policy`);
+  assert(result?.is_error === false && result?.subtype === "success", `${alias}: Claude model probe did not complete successfully`);
+  const models = Object.keys(result.modelUsage ?? {});
+  assert(models.length === 1, `${alias}: expected one observed model, found ${models.length}`);
+  const id = result.modelUsage[models[0]].canonicalModel ?? models[0];
+  return { id, reasoningEfforts: claudeReasoningEfforts(alias, id) };
 }
 
 function run(command, args, timeoutMs = 60_000) {
@@ -128,17 +132,23 @@ async function collectOmp(binary) {
 async function collectClaude(binary, aliases, confirmed) {
   assert(confirmed, "Claude model probes consume account usage; pass --confirm-claude-probes after reviewing the aliases");
   assert(Array.isArray(aliases) && aliases.length > 0, "provide --claude-models haiku,sonnet,opus (or a reviewed subset)");
-  assert(new Set(aliases).size === aliases.length, "Claude model probe aliases must be unique");
-  for (const alias of aliases) {
+  const requests = aliases.map((entry) => {
+    const [alias, pin, ...extra] = entry.split("=");
+    assert(extra.length === 0 && (!entry.includes("=") || pin), `invalid Claude family pin ${entry}`);
     assert(["haiku", "sonnet", "opus"].includes(alias), `${alias}: Fable and other models require a separate usage-credit policy`);
-  }
+    if (pin) claudeReasoningEfforts(alias, pin);
+    return { alias, model: pin ?? alias, pinned: Boolean(pin) };
+  });
+  assert(new Set(requests.map(({ alias }) => alias)).size === requests.length, "Claude model probe aliases must be unique");
   const models = [];
-  for (const alias of aliases) {
-    const { stdout } = await run(binary, ["-p", "Reply with exactly OK.", "--model", alias,
+  for (const { alias, model, pinned } of requests) {
+    const { stdout } = await run(binary, ["-p", "Reply with exactly OK.", "--model", model,
       "--output-format", "json", "--max-turns", "1", "--permission-mode", "plan",
       "--permission-prompts", "none", "--restricted"]);
     const result = JSON.parse(stdout);
-    models.push(normalizeClaudeProbe(alias, result));
+    const observed = normalizeClaudeProbe(alias, result);
+    assert(!pinned || observed.id === model, `${alias}: requested ${model} but observed ${observed.id}; refusing fallback`);
+    models.push(observed);
   }
   return {
     source: `${binary} --model <${aliases.join(",")}> bounded live probes; effort support from https://code.claude.com/docs/en/model-config (account caps require runtime acceptance)`,
@@ -226,7 +236,7 @@ function collectCodex(binary) {
 }
 
 export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", claudeBin = "claude",
-  claudeModels, confirmClaudeProbes = false, now = new Date() }) {
+  claudeModels = ["haiku", "sonnet", "opus"], confirmClaudeProbes = false, now = new Date() }) {
   let observed;
   if (runtime === "omp") observed = await collectOmp(ompBin);
   else if (runtime === "codex") observed = await collectCodex(codexBin);

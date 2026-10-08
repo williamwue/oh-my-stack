@@ -17,6 +17,70 @@ const selections = {
 };
 const execFileAsync = promisify(execFile);
 
+async function claudeInventoryFile(root, haiku = "claude-haiku-5-5", extraModels = []) {
+  const path = join(root, "claude-three-family.json");
+  await writeFile(path, JSON.stringify({
+    schemaVersion: 1, runtime: "claude-code", observedAt: "2026-10-08T00:00:00Z", source: "fixture probes",
+    models: [haiku && { id: haiku, reasoningEfforts: haiku.includes("4-5") ? ["none"] : ["low", "medium", "high", "xhigh", "max"] },
+      ...["claude-sonnet-5-5", "claude-opus-5-5"].map((id) => ({ id, reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] })),
+      ...extraModels].filter(Boolean),
+  }));
+  return path;
+}
+
+test("Claude pstack builds fast Haiku and ordered three-family panels from observed IDs", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-claude-preset-"));
+  const inventoryPath = await claudeInventoryFile(root);
+  const outputRoot = join(root, "output");
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const options = { packageRoot, inventoryPath, outputRoot, presetName: "pstack", budget: "medium" };
+  const preview = await configure({ ...options, apply: false });
+  await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
+  assert.deepEqual(preview.manifest.workloads, {
+    fast: { model: "claude-haiku-5-5", reasoning: "high" },
+    balanced: { model: "claude-sonnet-5-5", reasoning: "high" },
+    deep: { model: "claude-opus-5-5", reasoning: "high" },
+  });
+  for (const name of ["how.explorer", "why.investigator"]) {
+    assert.equal(preview.manifest.routes[name].entries[0].model, "claude-haiku-5-5");
+  }
+  assert.equal(preview.manifest.routes["code.delegates"].entries[0].model, "claude-sonnet-5-5");
+  for (const route of Object.values(preview.manifest.routes).filter((value) => value.kind === "panel")) {
+    assert.deepEqual(route.entries.map(({ model }) => model),
+      ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"]);
+    assert.ok(route.entries.every(({ reasoning }) => reasoning === "high"));
+  }
+  const applied = await configure({ ...options, apply: true,
+    routeSelections: { "how.explorer": "claude-sonnet-5-5@low" },
+    panelSelections: { "interrogate.reviewers": "claude-opus-5-5@high,claude-sonnet-5-5@medium" } });
+  assert.equal(applied.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  const rerun = await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: false });
+  assert.equal(rerun.manifest.budget, "medium");
+  assert.equal(rerun.manifest.routes["how.explorer"].entries[0].model, "claude-sonnet-5-5");
+  assert.equal(rerun.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(rerun.manifest.routes["why.investigator"].entries[0].model, "claude-haiku-5-5");
+  assert.match(await readFile(join(outputRoot, "agents", "ohmystack-why-investigator.md"), "utf8"),
+    /model: "claude-haiku-5-5"\neffort: "high"/);
+});
+
+test("Claude pstack handles Haiku without effort and refuses absent or ambiguous families", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-claude-preset-gap-"));
+  const packageRoot = join(repoRoot, "packages", "claude-code");
+  const outputRoot = join(root, "output");
+  const options = { packageRoot, outputRoot, presetName: "pstack", budget: "medium", apply: true };
+  const inventoryPath = await claudeInventoryFile(root, "claude-haiku-4-5-20251001");
+  const applied = await configure({ ...options, inventoryPath });
+  assert.equal(applied.manifest.workloads.fast.reasoning, "none");
+  assert.doesNotMatch(await readFile(join(outputRoot, "agents", "ohmystack-how-explorer.md"), "utf8"), /effort:/);
+  const before = await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8");
+  await assert.rejects(configure({ ...options, inventoryPath, uniformReasoning: "high" }), /did not advertise uniform reasoning/);
+  await claudeInventoryFile(root, null);
+  await assert.rejects(configure({ ...options, inventoryPath }), /exactly one observed haiku model; found 0/);
+  await claudeInventoryFile(root, "claude-haiku-5-5", [{ id: "claude-haiku-4-5", reasoningEfforts: ["none"] }]);
+  await assert.rejects(configure({ ...options, inventoryPath }), /exactly one observed haiku model; found 2/);
+  assert.equal(await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8"), before);
+});
+
 async function inventoryFile(root, runtime) {
   const path = join(root, `${runtime}-inventory.json`);
   await writeFile(path, `${JSON.stringify({
