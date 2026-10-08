@@ -191,7 +191,9 @@ async function verifySnapshot(directory) {
     "stable branch has no recognized ownership receipt");
   cleanSource(receipt);
   const actual = await packageInventory(directory);
-  requireThat(JSON.stringify(actual.filter((entry) => entry.path !== "STABLE_RELEASE.json")) === JSON.stringify(receipt.files), "stable snapshot inventory mismatch");
+  const payload = actual.filter((entry) => entry.path !== "STABLE_RELEASE.json")
+    .sort((a, b) => a.path.localeCompare(b.path));
+  requireThat(JSON.stringify(payload) === JSON.stringify(receipt.files), "stable snapshot inventory mismatch");
   return receipt;
 }
 
