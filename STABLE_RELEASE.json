@@ -2,44 +2,44 @@
   "schemaVersion": 1,
   "generatedBy": "tools/stable-marketplace.mjs",
   "repository": "williamwue/oh-my-stack",
-  "version": "0.11.3",
-  "releaseId": 406305200,
-  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.11.3",
-  "publishedAt": "2026-10-08T01:15:26Z",
+  "version": "0.12.0",
+  "releaseId": 406367994,
+  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.12.0",
+  "publishedAt": "2026-10-08T03:11:31Z",
   "source": {
-    "ref": "v0.11.3",
-    "commit": "570db48665bb6b6c09ddbea03795f138880eacb2",
+    "ref": "v0.12.0",
+    "commit": "3bc672568a8ccba812a804bec082d6d24a1d0cab",
     "worktreeDirty": false,
     "cleanTaggedCheckout": true
   },
   "assets": [
     {
       "name": "SHA256SUMS",
-      "sha256": "acd8baa7efb6e48d88e0af6b16bf0aa68b50c8d4bc9b7e52a528553d93264a95"
+      "sha256": "be954823a4e0fd42185062691038bb9847afa0020e1873719fb3800d570ce21d"
     },
     {
-      "name": "oh-my-stack-claude-code-0.11.3.tar.gz",
-      "sha256": "39c1ce7b0f34ace7e3881fccf10e9c76cdce8020f45e5b4ac65c7141a49704f7"
+      "name": "oh-my-stack-claude-code-0.12.0.tar.gz",
+      "sha256": "54e52fc722b14fa337dcd835fff347028d91c21d707124f9be2ae18731fb880c"
     },
     {
-      "name": "oh-my-stack-claude-plugin-0.11.3.tar.gz",
-      "sha256": "b02676c3b8c47de2eb53dec85a5ceaab7cf59b2b101f79f1b80135ff81fbc443"
+      "name": "oh-my-stack-claude-plugin-0.12.0.tar.gz",
+      "sha256": "120e31d621bf02f04051469a8e1c7e57d0ffc08f56eca58d4d8ccbd7fadc9758"
     },
     {
-      "name": "oh-my-stack-codex-0.11.3.tar.gz",
-      "sha256": "b9ef353a376d880780f4634baf30c2083252f71f40a5492421ca795ce58019a4"
+      "name": "oh-my-stack-codex-0.12.0.tar.gz",
+      "sha256": "0d904f85fb5dbef20abe131e40b4705e29c1b9bf7842c281ec1f10413f52b1de"
     },
     {
-      "name": "oh-my-stack-codex-plugin-0.11.3.tar.gz",
-      "sha256": "6e00fd4f5b8c59541d698858a7994e520b92cb98a0996bf70ee06bb398326fc6"
+      "name": "oh-my-stack-codex-plugin-0.12.0.tar.gz",
+      "sha256": "e48af0a57a7266dfdba48c4e3be71c11c0c3eb0630d46da48d44f4fe0f0d1f8a"
     },
     {
-      "name": "oh-my-stack-omp-0.11.3.tar.gz",
-      "sha256": "7b4c16f7acfa357e0ad9c6084815c945e1673a027406bdac3185664617b6d50b"
+      "name": "oh-my-stack-omp-0.12.0.tar.gz",
+      "sha256": "3378529ea1103385629fd35a669e290cb386cf8e3e83ef8293ff97bf73cb880c"
     },
     {
       "name": "release-manifest.json",
-      "sha256": "1d2f4fddd6c75fd0297a44b518267c1fc601a7f4223a5a52a7a19971ac0f9497"
+      "sha256": "27905c54f5ee524ae6704129df8cca9b33df3468b5314106a908b7d191485ed4"
     }
   ],
   "files": [
@@ -59,7 +59,7 @@
       "path": "plugins/claude-code/.claude-plugin/plugin.json",
       "size": 392,
       "mode": "0644",
-      "sha256": "dda977961647578eb230896c35877daaa39437e8faf44523509f5e26387ab311"
+      "sha256": "6af8cf5fad5fafec10a0f9127ba3d3f6c0d746b43ea8286b02cfba419e431314"
     },
     {
       "path": "plugins/claude-code/agents/evidence-reader.md",
@@ -110,10 +110,22 @@
       "sha256": "53a2d8379197636c2000dc6c7352665eaa0d34d9d65baae5a7904334483cac15"
     },
     {
+      "path": "plugins/claude-code/docs/automatic-routing.md",
+      "size": 9223,
+      "mode": "0644",
+      "sha256": "b9f7fde100cb0717d32400ae0a81693efe456b4f6a46b065ac55aaf0ab61fd0e"
+    },
+    {
       "path": "plugins/claude-code/GENERATION.json",
       "size": 318,
       "mode": "0644",
-      "sha256": "1bc66881d435f20e5560fb803d099f1b5a49c2416dc7bfbf223cbaa4b7298426"
+      "sha256": "53e88a53c73bf32c8da5bfd1714ed458155bbf67e265e26ba6177fecd2756bd0"
+    },
+    {
+      "path": "plugins/claude-code/hooks/hooks.json",
+      "size": 315,
+      "mode": "0644",
+      "sha256": "4893f06020c9e61838b6ad2f51342b0c43be564c5f8031a6c2efcd840509bcca"
     },
     {
       "path": "plugins/claude-code/LICENSE",
@@ -134,6 +146,12 @@
       "sha256": "7937512756d9a5bd57686988c65406ac71b55938a75c0e24959dc621c5dfa0a0"
     },
     {
+      "path": "plugins/claude-code/scripts/claude-routing-hook.mjs",
+      "size": 383,
+      "mode": "0644",
+      "sha256": "a295f0b506df9fec3184e6a03968a2439648d031173c60f8bd4029b5eccde74a"
+    },
+    {
       "path": "plugins/claude-code/scripts/collect-model-inventory.mjs",
       "size": 11398,
       "mode": "0644",
@@ -150,6 +168,18 @@
       "size": 3236,
       "mode": "0644",
       "sha256": "78c28e2ebcc2705ad1a5f0a25ca2f795c779b6afe2fc0d6e107ad24153830172"
+    },
+    {
+      "path": "plugins/claude-code/scripts/routing-hook.mjs",
+      "size": 2578,
+      "mode": "0644",
+      "sha256": "91cfe299a88acfe9fd16cdb1720bfdafb35425fc4a1a3921361ee293c1c4f913"
+    },
+    {
+      "path": "plugins/claude-code/scripts/routing.mjs",
+      "size": 6361,
+      "mode": "0644",
+      "sha256": "b9333af1a6f8ac42ad00a1e02e3f2a232f0210b9691d23a319e089d54d892a94"
     },
     {
       "path": "plugins/claude-code/scripts/setup-acceptance.mjs",
@@ -531,9 +561,9 @@
     },
     {
       "path": "plugins/claude-code/skills/oms-auto/SKILL.md",
-      "size": 2517,
+      "size": 3787,
       "mode": "0644",
-      "sha256": "6d2c65bbd4bdfa47f3bc3ac9ff00450a5ac8f539de4f35f9a64384c8f257592d"
+      "sha256": "fb0f7137635e3104f85306f14f96e6cbd97538c4238db752bd11f6d1f025736f"
     },
     {
       "path": "plugins/claude-code/skills/opening-a-pr/SKILL.md",
@@ -903,9 +933,9 @@
     },
     {
       "path": "plugins/claude-code/skills/setup-oh-my-stack/SKILL.md",
-      "size": 17010,
+      "size": 18280,
       "mode": "0644",
-      "sha256": "aa467ebc23a82be26bdff0c9442099ab5604415c8bda49b1ca487bb7dace75eb"
+      "sha256": "fe09f6837772f300891411c22c23469f853c9c2bebd758bac4f6d73e1e6b69b2"
     },
     {
       "path": "plugins/claude-code/skills/shipping/SKILL.md",
@@ -1103,7 +1133,7 @@
       "path": "plugins/codex/.codex-plugin/plugin.json",
       "size": 1018,
       "mode": "0644",
-      "sha256": "c85412aac325b55e108279f833cbe942e1dd50f330dbb793727554c914dfe27d"
+      "sha256": "444d3e76ffd76b96b63ec932800cc6864d88403a027dc1020840f24dda94e1af"
     },
     {
       "path": "plugins/codex/agents/evidence-reader.toml",
@@ -1161,9 +1191,9 @@
     },
     {
       "path": "plugins/codex/docs/automatic-routing.md",
-      "size": 7117,
+      "size": 9223,
       "mode": "0644",
-      "sha256": "7058483086cac47960425441eaad02716020bc7aefebff4fbb9a885e4ea46f63"
+      "sha256": "b9f7fde100cb0717d32400ae0a81693efe456b4f6a46b065ac55aaf0ab61fd0e"
     },
     {
       "path": "plugins/codex/docs/github-workflow.md",
@@ -1175,7 +1205,7 @@
       "path": "plugins/codex/GENERATION.json",
       "size": 369,
       "mode": "0644",
-      "sha256": "308cf06ca7d278d39dc7b5329687d9bd96d3b7b6e8b9e0981e43ca2b1adfc846"
+      "sha256": "9beda662f80770aa2473fb9b7c87415b58566eaf2c4817588b77257f68be2c40"
     },
     {
       "path": "plugins/codex/hooks/hooks.json",
@@ -1203,9 +1233,9 @@
     },
     {
       "path": "plugins/codex/scripts/codex-routing-hook.mjs",
-      "size": 2393,
+      "size": 377,
       "mode": "0644",
-      "sha256": "451202b46b0ec97d288cdbda129fdaf6179e23e4f3d28304add916dad871820f"
+      "sha256": "dc0b20fd2439ac9a25120d0fc7aea7b58de0a5d9990f5a0b4b0489fdf185a564"
     },
     {
       "path": "plugins/codex/scripts/collect-model-inventory.mjs",
@@ -1244,10 +1274,16 @@
       "sha256": "78c28e2ebcc2705ad1a5f0a25ca2f795c779b6afe2fc0d6e107ad24153830172"
     },
     {
-      "path": "plugins/codex/scripts/routing.mjs",
-      "size": 5608,
+      "path": "plugins/codex/scripts/routing-hook.mjs",
+      "size": 2578,
       "mode": "0644",
-      "sha256": "a2e165232ccda71c064aaea9668e6379ea71f28a416820b9f5ba12fa1ac34295"
+      "sha256": "91cfe299a88acfe9fd16cdb1720bfdafb35425fc4a1a3921361ee293c1c4f913"
+    },
+    {
+      "path": "plugins/codex/scripts/routing.mjs",
+      "size": 6361,
+      "mode": "0644",
+      "sha256": "b9333af1a6f8ac42ad00a1e02e3f2a232f0210b9691d23a319e089d54d892a94"
     },
     {
       "path": "plugins/codex/scripts/setup-acceptance.mjs",
@@ -2717,7 +2753,7 @@
       "path": "README.md",
       "size": 689,
       "mode": "0644",
-      "sha256": "e82eb32e8dae1d957266f77d609aead471198b91756400bd452f89515401b17b"
+      "sha256": "f208d4b63e7ab2cc8dd6d76749d7efdc43c1af6982cb996f139983c2da607bd9"
     }
   ]
 }
