@@ -32,13 +32,17 @@ The user's actual request supplies the scope and authority; automatic selection
 does not authorize writes, delegation, publication, merge, deployment, or
 credential access. Do not route AIHero explicit-only entries automatically.
 
-Prefer the existing simple path when the affected behavior and check are local.
+Prefer the existing simple path when the affected behavior and check are local
+and full execution was not requested. Name a simplified path and its omitted
+stages before work; do not present it as complete pstack-style execution.
 Escalate exploration or design when evidence reveals unknown causes, changed
 interfaces, or independent subsystem boundaries. Explicit independent-review
 requests retain the selected workflow's complete review contract. Verification
 of the actual result is required at every size; fewer agents never means less
 evidence. Do not lower configured model effort or shrink an explicitly requested
-panel as a consequence of automatic routing.
+panel as a consequence of automatic routing. Nontrivial changes retain the
+selected workflow's mandatory stages. Reference-matching UI work includes
+visual acceptance even when another workflow owns the overall task.
 
 Name the selected workflow in one short sentence when it helps the user, then
 execute within scope. Do not expose an internal routing analysis or ask the

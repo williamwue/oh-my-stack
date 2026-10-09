@@ -1,6 +1,6 @@
 ---
 name: poteto-mode
-description: Route a software-engineering request to the smallest admitted Oh My Stack workflow while preserving root ownership and evidence boundaries.
+description: Route a software-engineering request to its owning workflow while preserving required design, judgment, and verification stages.
 ---
 
 # Poteto Mode
@@ -30,7 +30,7 @@ Use the first matching row:
 | Improve one metric through sustained measured attempts | `hillclimb` |
 | Diagnose an existing trace or profile artifact | `trace-forensics` |
 | Diagnose a live process with captured runtime evidence | `runtime-forensics` |
-| Migrate components against a frozen visual baseline | `visual-parity` |
+| Match a reference UI or migrate components against a frozen visual baseline | `visual-parity` |
 | Audit and reclaim scoped worktrees or simulator state | `worktree-cleanup` |
 | Write a dependency plan for several verifiable units without executing it | `multi-phase-plan` |
 | Investigate downstream risks and prove the safety assumption behind a diff | `blast-radius` |
@@ -65,6 +65,14 @@ state and record the secondary concern inside it. A discovered bug or feature
 must not be hidden inside a behavior-preserving refactor. A prototype decides;
 it does not silently become production code.
 
+When reference matching is secondary to a feature or complex task, include
+`visual-parity` as its visual acceptance stage. Explicit pstack-style or full
+execution retains the selected workflow's required exploration, configured
+candidate panel, independent judgment, and final verification. Automatically
+routed narrow work may use a simplified path when full execution was not
+requested; name the omitted stages before work and keep its claim separate
+from complete-workflow execution.
+
 `autopilot-full` requires an explicit bounded full-autonomy grant and keeps
 verdict authority in the root while each change owner performs its own
 authorized merge. `autonomous-run` owns one bounded predicate and does not grant shipping
@@ -88,6 +96,9 @@ bounded task.
   panels; absent it, inherit the runtime model. Portable workflow text does
   not name concrete providers or model identifiers.
 - Report fallbacks and evidence gaps where they affect confidence.
+- Delivery uses the [frozen evidence contract](references/delivery-evidence.md)
+  where the selected workflow requires it. Check actual files and behavior;
+  unknown task provenance cannot satisfy independent acceptance.
 - Before trusting a measured performance or eval result, apply
   [Explain the Number](../principle-explain-the-number/SKILL.md). Performance
   comparisons use [benchmark-checklist](../benchmark-checklist/SKILL.md).

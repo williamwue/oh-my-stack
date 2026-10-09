@@ -41,28 +41,59 @@ Keep its task handles and attribution receipts. Do not use a backing child
 conversation as a new delegated review, or claim native-record verification
 for a host-owned child. Report attribution evidence gaps explicitly.
 
-The root owns design, integration, and proof.
+## Local delivery evidence binding
+
+Read [the delivery guide](../../docs/delivery-evidence.md) for the frozen
+plan/evidence shapes and supported provenance protocol. The portable CLI is
+`../../scripts/delivery-evidence.mjs` relative to this installed Skill.
+Freeze before implementation, retain the lock digest, then inspect or run
+explicitly selected checks against the actual final artifact. Unknown
+required provenance stays unverified; local success does not certify release.
+
+The root owns design, integration, and proof. Use the complete workflow for
+nontrivial changes and explicit pstack-style or full execution. An automatically
+routed narrow change with a known local boundary may use a simplified root
+pass when full execution was not requested. Name that simplification and its
+omitted stages before work; it cannot support a full-workflow equivalence claim.
+Freeze the [delivery evidence contract](../poteto-mode/references/delivery-evidence.md)
+before implementation. Run its actual local acceptance checks on the integrated
+revision; missing or unverified required evidence prevents a complete-delivery
+claim. A root-owned narrow change uses the separately labeled narrow contract.
 
 1. Inspect the affected subsystem with the `how` workflow. Name the user-visible
    behavior, current boundary, and the data shape that should organize the new
    behavior.
-2. Compare multiple designs only when the choice is consequential. Use a
-   `prototype` for an empirical fork and `interrogate` for a contested design.
-   Otherwise record why the direct design is sufficient.
+2. In the complete workflow, use [architect](../architect/SKILL.md) for parallel
+   design exploration. Preserve structurally distinct candidates, a comparison
+   by a distinct judge, and the chosen design rationale. Honor the configured
+   candidate panel. Use a `prototype` for an empirical fork and `interrogate`
+   for a contested design.
 3. Write a throughput checkpoint covering blocking gates, independent work,
    shared mutable state, and the smallest safe decomposition. Use one writer
    when ownership overlaps.
 4. Establish failing or absent behavior with a test or executable reproduction
    before implementation when practical.
-5. Assign one bounded writer or implement at the root. A delegated writer gets
+5. In the complete workflow, assign bounded implementation writers. When
+   multiple valid implementation shapes remain, use [arena](../arena/SKILL.md)
+   before accepting one; a good first candidate does not remove the comparison.
+   A delegated writer gets
    exact paths, the named data shape, constraints, and success commands. Use an
    isolated workspace when available. Use the configured `code.feature-refactoring` route
    when active; otherwise inherit the runtime model. If isolation is missing,
-   serialize writes and disclose it.
+   serialize writes and disclose it. A bounded child that cannot delegate
+   implements its own unit while its parent supplies independent judgment.
+   If required delegation is unavailable, disclose the fallback and leave
+   complete-workflow execution unverified.
 6. The root inspects the actual diff, rejects unrelated changes, and runs the
    stated checks on the matching surface. Do not accept a child summary as
    verification.
-7. Keep commits small and independently verifiable. Do not publish or open a
+7. Pair each delegated output with a distinct independent judge of the frozen
+   artifact revision before acceptance. Root inspection complements this review.
+   Preserve findings and repair responses; changed artifacts require fresh
+   review and verification. Reference-matching UI work includes
+   [visual-parity](../visual-parity/SKILL.md) as an acceptance stage.
+8. Verify and save each independently usable small unit before dependent work.
+   Keep commits small and independently verifiable. Do not publish or open a
    pull request unless the user explicitly requested that external action.
 
 Return what changed for the user, the chosen structure and tradeoffs, the

@@ -17,9 +17,9 @@
   ],
   "fallbacks": {
     "agents.custom_roles": "inline_the_implementer_contract",
-    "agents.read_result": "root_implements_and_verifies",
-    "agents.spawn": "root_implements_and_verifies",
-    "agents.wait": "root_implements_and_verifies",
+    "agents.read_result": "disclose_root_fallback_and_leave_complete_execution_unverified",
+    "agents.spawn": "disclose_root_fallback_and_leave_complete_execution_unverified",
+    "agents.wait": "disclose_root_fallback_and_leave_complete_execution_unverified",
     "workspace.isolate": "serialize_one_writer_and_disclose_shared_workspace"
   }
 }

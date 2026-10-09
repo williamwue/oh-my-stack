@@ -1,15 +1,65 @@
 ---
 name: visual-parity
-description: "Migrate a UI against frozen visual baselines."
+description: "Match a reference UI or migrate against frozen visual baselines."
 ---
 
 # Visual parity
+
+## Codex delegation binding
+
+For every delegated worker in this workflow, derive the exact `model`,
+`reasoning_effort`, and complete role-plus-task `message` with
+`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
+the nearest project manifest first, then the user manifest. Supply the named
+route/panel entry where configured; otherwise supply the canonical role
+and the observed parent model and effort. Pass
+the returned `task_name`, `fork_turns=none`, model, effort, and message
+explicitly to the spawn call. Do not use a generated custom-role name as a selector or
+claim its TOML was activated. After the worker finishes, run the helper's
+`verify` mode on the persisted parent and child records when available; it
+checks the spawn metadata, parent link, and child `turn_context`.
+The persisted spawn message may be encrypted; disclose when its exact
+role/task text cannot be audited. If records are unavailable, state that
+runtime model resolution is unverified.
+
+## Child session handoff
+
+Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
+New tasks, repair rounds, retries, and queue items use fresh child sessions
+with the original brief, every later directive, prior findings and responses,
+and unresolved objections. Reuse only for required costly live state, and
+only when the host allows it. Stop and fence active writers before replacement.
+A host-owned orchestrator's model catalog, workspace binding, child tools,
+and review-round rules take precedence over the native binding above.
+Keep its task handles and attribution receipts. Do not use a backing child
+conversation as a new delegated review, or claim native-record verification
+for a host-owned child. Report attribution evidence gaps explicitly.
+
+## Local delivery evidence binding
+
+Read [the delivery guide](../../docs/delivery-evidence.md) for the frozen
+plan/evidence shapes and supported provenance protocol. The portable CLI is
+`../../scripts/delivery-evidence.mjs` relative to this installed Skill.
+Freeze before implementation, retain the lock digest, then inspect or run
+explicitly selected checks against the actual final artifact. Unknown
+required provenance stays unverified; local success does not certify release.
+
+Freeze the visual inputs in the
+[delivery evidence contract](../poteto-mode/references/delivery-evidence.md)
+before changing the UI. Run the packaged checker on the actual final captures;
+its pixel result is separate from capture authenticity and independent review.
 
 Capture the baseline before migration. Freeze component states, viewport,
 device scale, fonts, data, timing, and the image comparison method. Treat the
 baseline as the current specification unless the user explicitly approves a
 new appearance. Do not edit the baseline or loosen the harness to make a
 failure pass.
+
+For an adapted reference, freeze both the reference and the target capture
+configuration. Declare authorized branding, copy, or media changes and their
+bounded regions before implementation; keep those separate from areas that
+must remain equivalent. A changed exception or tolerance starts an explicitly
+revised acceptance boundary, not a hidden rerun of the original comparison.
 
 Identify shared primitives and migrate them first when they affect multiple
 components. Give each component an owner and distinct workspace if work is
@@ -22,6 +72,11 @@ Pixel-exact zero is the default when the request truly calls for exact parity.
 If nondeterministic rendering makes zero impossible, surface the measured
 variance and obtain an agreed tolerance before accepting it. Keep behavior
 and accessibility checks alongside pixels when the migration touches them.
+
+Retain image hashes, the capture-configuration hash, a calculated difference
+artifact, measured counts, and a distinct review of residual differences.
+Report every intentional region and per-component verdict. A sampled browser
+playback alone does not prove visual equivalence.
 
 Return baseline location, configuration, per-component diff result, approved
 exceptions, and remaining components. Pull requests or publication need

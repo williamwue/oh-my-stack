@@ -72,7 +72,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`pause-safely`](../packages/codex/skills/pause-safely/SKILL.md) | Checkpoint in-flight work when the user requests a pause. | explicit | OMS core |
 | [`perf-issue`](../packages/codex/skills/perf-issue/SKILL.md) | Fix one performance issue with before and after traces. | explicit | OMS core |
 | [`poteto-help`](../packages/codex/skills/poteto-help/SKILL.md) | Answer setup and workflow questions with a usable prompt and verified source. | explicit | OMS core |
-| [`poteto-mode`](../packages/codex/skills/poteto-mode/SKILL.md) | Route an engineering request to the appropriate Oh My Stack workflow. | explicit | OMS core |
+| [`poteto-mode`](../packages/codex/skills/poteto-mode/SKILL.md) | Route engineering work while preserving required design, judgment, and proof. | explicit | OMS core |
 | [`prototype`](../packages/codex/skills/prototype/SKILL.md) | Test a design decision with an isolated throwaway experiment. | explicit | OMS core |
 | [`prove-it-works`](../packages/codex/skills/prove-it-works/SKILL.md) | Check Skill loading and workspace facts without changing files. | automatic | OMS core |
 | [`recall`](../packages/codex/skills/recall/SKILL.md) | Rebuild recent work context from history and live state. | explicit | OMS core |
@@ -99,7 +99,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`triage-issue-reports`](../packages/codex/skills/triage-issue-reports/SKILL.md) | Benny triage automation only: assess Slack reports and deduplicate tickets. | explicit | OMS core |
 | [`typescript-best-practices`](../packages/codex/skills/typescript-best-practices/SKILL.md) | Apply type and boundary guidance to TS or TSX work. | explicit | OMS core |
 | [`unslop`](../packages/codex/skills/unslop/SKILL.md) | Remove AI writing patterns when editing prose. | explicit | OMS core |
-| [`visual-parity`](../packages/codex/skills/visual-parity/SKILL.md) | Migrate a UI against frozen visual baselines. | explicit | OMS core |
+| [`visual-parity`](../packages/codex/skills/visual-parity/SKILL.md) | Match a reference UI or migrate against frozen visual baselines. | explicit | OMS core |
 | [`why`](../packages/codex/skills/why/SKILL.md) | Investigate design rationale using cited history and available evidence sources. | explicit | OMS core |
 | [`worktree-cleanup`](../packages/codex/skills/worktree-cleanup/SKILL.md) | Audit and reclaim scoped worktrees while preserving active work. | explicit | OMS core |
 | [`writing-for-agents`](../packages/codex/skills/writing-for-agents/SKILL.md) | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. | automatic | aihero original |

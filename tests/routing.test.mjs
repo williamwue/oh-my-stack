@@ -10,7 +10,7 @@ import { routingHook } from "../tools/codex-routing-hook.mjs";
 import { loadModel, renderTarget, repoRoot } from "../tools/generate.mjs";
 
 async function fixture(run) {
-  const root = await mkdtemp(join(tmpdir(), "oms-routing-"));
+  const root = realpathSync(await mkdtemp(join(tmpdir(), "oms-routing-")));
   try {
     const cwd = join(root, "project");
     const configHome = join(root, "codex-home");

@@ -114,6 +114,7 @@ It is off by default and keeps explicit entries and model configuration intact.
 
 - [First task](docs/getting-started.md)
 - [Complete Skill directory](docs/skill-directory.md)
+- [Local delivery evidence checker (unreleased)](docs/delivery-evidence.md)
 - [Updates and removal](docs/guides/update-and-uninstall.md)
 - [FAQ and troubleshooting](docs/faq.md)
 - [Support policy](docs/support-policy.md)

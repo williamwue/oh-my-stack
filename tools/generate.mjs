@@ -17,6 +17,10 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+export const deliveryRuntimeScripts = [
+  "delivery-evidence.mjs", "delivery-image-diff.mjs",
+  "delivery-native-attribution.mjs", "codex-delegation.mjs", "model-resolution.mjs",
+];
 
 export const forbiddenCorePatterns = [
   { label: "runtime name OMP", pattern: /\bOMP\b/i },
@@ -739,7 +743,16 @@ function renderSkillDocument(skill, adapter) {
       "For ordinary model setup, continue with the procedure below.",
       "",
     ].join("\n")) : "";
-  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding, routingBinding].filter(Boolean).join("\n").trimEnd();
+  const deliveryBinding = ["feature", "figure-it-out", "visual-parity", "poteto-mode"].includes(skill.metadata.name)
+    ? ["## Local delivery evidence binding", "",
+      "Read [the delivery guide](../../docs/delivery-evidence.md) for the frozen",
+      "plan/evidence shapes and supported provenance protocol. The portable CLI is",
+      "`../../scripts/delivery-evidence.mjs` relative to this installed Skill.",
+      "Freeze before implementation, retain the lock digest, then inspect or run",
+      "explicitly selected checks against the actual final artifact. Unknown",
+      "required provenance stays unverified; local success does not certify release.", ""].join("\n")
+    : "";
+  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding, routingBinding, deliveryBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
@@ -910,9 +923,11 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     await cp(join(model.root, "tools", "model-resolution.mjs"), join(target, "scripts", "model-resolution.mjs"));
     await cp(join(model.root, "tools", "setup-acceptance.mjs"), join(target, "scripts", "setup-acceptance.mjs"));
   }
-  if (adapter.id === "codex") {
-    await cp(join(model.root, "tools", "codex-delegation.mjs"), join(target, "scripts", "codex-delegation.mjs"));
+  for (const name of deliveryRuntimeScripts) {
+    await cp(join(model.root, "tools", name), join(target, "scripts", name));
   }
+  await mkdir(join(target, "docs"), { recursive: true });
+  await cp(join(model.root, "docs", "delivery-evidence.md"), join(target, "docs", "delivery-evidence.md"));
   if (["codex", "claude-code"].includes(adapter.id)) {
     const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
     for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
@@ -1014,6 +1029,10 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
   assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
+  for (const name of deliveryRuntimeScripts) {
+    assert(await exists(join(target, "scripts", name)), `${adapter.id}: delivery dependency ${name} is missing`);
+  }
+  assert(await exists(join(target, "docs", "delivery-evidence.md")), `${adapter.id}: delivery guide is missing`);
   if (["omp", "codex", "claude-code"].includes(adapter.id)) {
     assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
     assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);

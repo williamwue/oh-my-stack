@@ -31,7 +31,10 @@ task normally, without selecting a Skill. OMS routes it through the existing
 `poteto-mode` rules. Ordinary chat, translation, and tool-use help remain outside
 engineering execution. An explicit Skill or a request to skip OMS takes
 precedence. Routing adds no action authority. Narrow tasks use the existing
-root-only paths; explicit independent review retains its complete contract.
+root-only paths when full execution was not requested, explicitly naming omitted
+stages. Nontrivial work and explicit pstack-style execution retain required
+design panels, independent judgment and final verification. Reference-matching
+UI work includes visual acceptance even within another primary workflow.
 The switch controls the new `oms-auto` entry and its hook hint. Some existing
 OMS Skills already permit implicit invocation; switching to manual does not
 change those Skills' native invocation policies.

@@ -609,6 +609,34 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "tools/delivery-evidence.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Freeze task requirements, inspect revision-bound artifacts and execute explicitly selected local delivery checks; never certify remote release.",
+      "network": false,
+      "writes": [
+        "explicit new acceptance lock and report paths; selected frozen check commands may have task-authorized side effects"
+      ],
+      "uninstallBehavior": "Removed with the owned plugin package; caller evidence remains separately owned."
+    },
+    {
+      "path": "tools/delivery-image-diff.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Decode a bounded supported PNG subset and calculate actual normalized pixel differences; no workflow or capture authenticity claims.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the owned plugin package; caller evidence remains separately owned."
+    },
+    {
+      "path": "tools/delivery-native-attribution.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bind recorded native explicit task completion declarations to frozen assignments and actual artifacts; unsupported or encrypted provenance fails closed.",
+      "network": false,
+      "writes": [
+        "disposable local record snapshots removed after verification"
+      ],
+      "uninstallBehavior": "Removed with the owned plugin package; caller evidence remains separately owned."
     }
   ]
 }

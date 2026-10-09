@@ -54,12 +54,12 @@
         {
           "path": "src/core/skills/feature/SKILL.md",
           "owner": "derived",
-          "sha256": "1c3ae2f965fc3b7cea6dd93580c7a56e8848643593cd1bddfa724de3a0959bf1"
+          "sha256": "ea58c3fb2873c10758c6b9abf8f62c097c08a4d231019adf34960915716d1e99"
         },
         {
           "path": "src/core/skills/feature/skill.json",
           "owner": "local-core",
-          "sha256": "537f9438d29e232b91c223b9677d1270c698a678e81342f02d3751e9ae207a15"
+          "sha256": "4bea84b14bd1aa19e9063d2339bb8679d9a8fbf4322231dca43ccdad2a98b2cd"
         },
         {
           "path": "src/core/skills/refactoring/SKILL.md",
@@ -183,12 +183,12 @@
         {
           "path": "src/core/skills/how/SKILL.md",
           "owner": "derived",
-          "sha256": "9321598a420351b313dc5cb22dac1b046f8de903a2a15bb0db73455490255fee"
+          "sha256": "241ce6409fd6f763bc17c7a596e703e2bd76e4e1c289b44d38f4ad9286bcb684"
         },
         {
           "path": "src/core/skills/how/skill.json",
           "owner": "local-core",
-          "sha256": "f0664b85b96b6034fe9a0c4b0f6892a02f1f7b295a978c987b7fbc09a8ce370d"
+          "sha256": "c6166cfac6cfbb80e45bbdfd4243370ec150cc735fcf4e402f5d7f8c3374bb9e"
         },
         {
           "path": "src/core/skills/how/references/explainer.md",
@@ -940,12 +940,12 @@
         {
           "path": "src/core/skills/figure-it-out/SKILL.md",
           "owner": "derived",
-          "sha256": "91ff20665df9f1d1be8da2951be2afc09da39527edfeb6ae4858d4a4d6b2908b"
+          "sha256": "6ed531ac6a3f10a5fc11c9269256bae7c062a0d0f3c4a6cecc4d62e21f39bf8f"
         },
         {
           "path": "src/core/skills/figure-it-out/skill.json",
           "owner": "local-core",
-          "sha256": "29d0c9241c996f131a1514b4d4d5a30f98b8d35d5e5808d709b19a719e308c70"
+          "sha256": "f1061c62ef93754a8db6e6a673cc7e7fbeb896099d00557a8fb7269dc6ca1bc4"
         },
         {
           "path": "src/core/skills/hillclimb/skill.json",
@@ -1040,12 +1040,12 @@
         {
           "path": "src/core/skills/visual-parity/SKILL.md",
           "owner": "derived",
-          "sha256": "b10fa3fab3a503522d466703af81d7c0624c3a57a3b743a0c61320c1b457fac4"
+          "sha256": "c43d91c3f2a43d51c5c1c8292d2584bd5c69663a9822739aebc6a25760f25685"
         },
         {
           "path": "src/core/skills/visual-parity/skill.json",
           "owner": "local-core",
-          "sha256": "fd2f344b6631ca6236395a62ab691bb0d509d6d5db6a1bf962d87e142790c846"
+          "sha256": "8a7535d09d62c1e6f1a56e2c14cc3ed19775922df1ffbb002f31085f82938b29"
         },
         {
           "path": "src/core/skills/worktree-cleanup/SKILL.md",
@@ -1286,7 +1286,7 @@
         {
           "path": "src/core/skills/poteto-mode/SKILL.md",
           "owner": "derived",
-          "sha256": "72cee0ff628d5e4de2ce05e2d69a5bb018b9efcb659ed3dc1a76df2e65ae48fc"
+          "sha256": "1d1eaac3ccd528893d61f3e49c484bec9571021b037a9cec4c430792c99dfa8f"
         },
         {
           "path": "src/core/skills/poteto-mode/references/subagent-handoff.md",

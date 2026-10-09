@@ -14,9 +14,9 @@
     "workspace.inspect"
   ],
   "fallbacks": {
-    "agents.read_result": "root_runs_separated_exploration_passes_then_explains",
-    "agents.spawn": "root_runs_separated_exploration_passes_then_explains",
+    "agents.read_result": "disclose_separated_root_passes_and_unverified_complete_execution",
+    "agents.spawn": "disclose_separated_root_passes_and_unverified_complete_execution",
     "agents.spawn_parallel": "run_independent_exploration_angles_sequentially",
-    "agents.wait": "root_runs_separated_exploration_passes_then_explains"
+    "agents.wait": "disclose_separated_root_passes_and_unverified_complete_execution"
   }
 }

@@ -33,20 +33,23 @@ actions.
 
 Classify the question:
 
-- **Simple:** one module, utility, or narrow call path. Explore and explain in
-  one root pass or one read-only explainer session.
+- **Simple:** one module, utility, or narrow call path. Complete pstack-style
+  execution uses one distinct read-only explainer session. Automatically routed
+  narrow work may use a root pass when full execution was not requested; label
+  that simplified path and the omitted independent explanation.
 - **Complex:** a subsystem spanning multiple files, services, or boundaries.
   Use the staged exploration below.
 
-When uncertain, start with the simple path. Escalate only when the evidence
-shows independent slices are necessary.
+Classify from actual boundaries, not prompt length. Escalate to the staged path
+when tracing reveals multiple independent slices.
 
 ## 2. Explore from code
 
 For a simple question, trace the entry point, calls, data transformations,
-boundaries, and relevant tests. If a read-only explainer session is available,
-give it the question and [explainer contract](references/explainer.md). If not,
-the root performs the same contract.
+boundaries, and relevant tests. In complete execution, give a distinct read-only
+explainer the question and [explainer contract](references/explainer.md).
+If required delegation is unavailable, the root performs the same contract,
+discloses the fallback, and leaves complete execution unverified.
 
 For a complex question:
 
@@ -87,6 +90,8 @@ The explainer reconciles overlap and contradictions by re-reading cited code.
 It must not rely on majority opinion. If a distinct session is unavailable,
 the root explains only after all exploration passes are frozen and discloses
 that fallback.
+It leaves distinct-session explanation unverified; a root fallback cannot be
+reported as complete pstack-style execution.
 
 ## 5. Root verification
 

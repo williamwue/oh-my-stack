@@ -6,12 +6,18 @@
   "deliveryTarget": "D3",
   "workflowTarget": "W3",
   "requires": [
+    "agents.read_result",
+    "agents.spawn",
+    "agents.wait",
     "commands.run",
     "media.capture",
     "workspace.inspect",
     "workspace.write"
   ],
   "fallbacks": {
+    "agents.read_result": "disclose_missing_independent_visual_review_and_leave_acceptance_unverified",
+    "agents.spawn": "disclose_missing_independent_visual_review_and_leave_acceptance_unverified",
+    "agents.wait": "disclose_missing_independent_visual_review_and_leave_acceptance_unverified",
     "media.capture": "stop_before_claiming_visual_parity_and_report_missing_capture"
   }
 }
