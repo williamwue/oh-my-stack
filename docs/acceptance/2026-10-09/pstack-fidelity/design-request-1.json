@@ -1,0 +1,20 @@
+{
+  "redaction": "Display-only path-normalized prepared request; audit digests refer to original private input",
+  "originalSha256": "dfc6aa4aedf6fc372ec38c95830a0d83567c4e53afd8203ff654c6df0e73e17a",
+  "request": {
+    "task_name": "fidelity_design_1",
+    "fork_turns": "none",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "message": "Oh My Stack role: explorer\nRole purpose: Read-only investigator of one bounded code path or subsystem angle.\n\nComplete role instructions:\n# Explorer\n\nInvestigate only the assigned question and angle. Read actual implementations,\ntests, and boundaries; distinguish evidence from inference and state gaps. Do\nnot modify files, contact other explorers, or write the final explanation. End\nwith `ROLE_POLICY=independent-read-only-exploration`.\n\nAssigned task:\nDesign-only candidate for OMS pstack-fidelity repair. User authorized implementing the previously proposed remedy: restore pstack key workflow constraints, route visual proof correctly, pair delegated implementation with independent judging, add executable evidence acceptance and realistic behavioral verification. Repository WORKTREE_ROOT at baseline 991ad15; installed/working version 0.13.0. You are not alone. Read-only code investigation; write ONLY your assigned candidate Markdown under .tmp/pstack-fidelity. Do not edit code, install, run external services, use credentials, publish, or spawn children.\n\nRead AGENTS.md, src/core/skills/architect/references/design-contract.md, src/core/skills/{feature,figure-it-out,poteto-mode,oms-auto,visual-parity}/SKILL.md, tools/generate.mjs (package script/resource copying), tools/build-conformance.mjs, tests/conformance.test.mjs, and relevant schema/test files. Ground the data/ownership boundary before proposing code. Existing historical conformance must not be relabelled as current live proof. Existing model-resolution/native/host-owned task receipts remain provenance authorities. Canonical core stays host-neutral, installed caches untouched; generated packages come from source. Publication remains explicitly authorized only.\n\nNeed a small portable delivery-evidence checker that rejects absent required design candidates/reviews, stale source/evidence, self-reviewed delegated outputs, unsupported visual claims, and unverified combined behavior. It must not certify arbitrary self-reported JSON as truth or pretend a local checker controls an external deployment. Full pstack-style execution and explicitly simplified narrow work must have different claim boundaries. Proposed visual acceptance needs frozen comparison configuration, evidence of actual image difference, and predeclared intentional changes/tolerance. CLI should run locally and in generated packages without external dependencies. Prefer fixture tests that execute failing/pass behaviors over text-only assertions.\n\nProduce preferred caller-first design and one structurally different alternative, modules/ownership, minimum input shape, executable check semantics, real-file revision/hash binding, task/model attribution limits, packaging hooks, realistic test plan, acceptance limitations and tradeoffs. Follow all six sections of design-contract.md. Preserve exact source references. Do not invent an independent judge verdict. Root will integrate and test. End ROLE_POLICY=read-only-candidate.\n\nAssigned output ONLY: .tmp/pstack-fidelity/design-1.md",
+    "audit": {
+      "role": "explorer",
+      "route": "architect.runners",
+      "entry": 1,
+      "contractSha256": "3c70c15aaf142fe05429142f2faeb6087cf1095b316c87f52dd97914b8fb7e6e",
+      "taskSha256": "a1cef769712855a28d80bfd1e324ccad0c1fd1b1d3f798f9d3def2ab1f72bc34",
+      "resolutionInventorySha256": "92e643c4a8851d6172ab79cc84d79a68e6f4ea0f16b0a8e7baeea01d5e941a9f",
+      "resolutionScope": "user"
+    }
+  }
+}

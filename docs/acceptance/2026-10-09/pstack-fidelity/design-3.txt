@@ -1,0 +1,135 @@
+Path-redacted display copy; original and display digests are retained in design-freeze.json.
+
+# Candidate 3: caller-owned delivery manifest with an executable checker
+
+## 1. Problem and preserved constraints
+
+The requested repair is to make pstack execution preserve its workflow gates in current behavior: write a grounded design candidate for consequential work, freeze and independently judge delegated changes, route visual migrations to the `visual-parity` workflow, and verify the resulting behavior on the requested artifact. The checker should reject a missing design or judge artifact, stale file evidence, same-task writer/reviewer attribution, visual claims without measured image deltas, and a claimed combined result that was never exercised.
+
+The current documents establish the intended boundaries. `feature` assigns design, integration, and proof to the root; requires a bounded writer when delegating; and says a child summary is not verification (`src/core/skills/feature/SKILL.md:8-30`). `figure-it-out` requires a falsifiable predicate, named artifacts and checks, independent units, and inspection of the real final artifact (`src/core/skills/figure-it-out/SKILL.md:8-30`). `poteto-mode` selects visual-parity for a visual migration and sets root ownership of scope and final claims, while treating child reports as evidence rather than proof (`src/core/skills/poteto-mode/SKILL.md:33-35,77-90`). `visual-parity` requires a frozen capture configuration, measured image difference, and pre-agreed tolerance where exact equality is impractical (`src/core/skills/visual-parity/SKILL.md:8-27`). `oms-auto` expressly leaves authorization and verification obligations with the selected workflow (`src/core/skills/oms-auto/SKILL.md:8-27`).
+
+Historical conformance must remain historical. `build-conformance.mjs` re-hashes fixture files now, reads old evidence JSON, checks authored assertion strings marked `pass`, and then deterministically renders a conformance result (`tools/build-conformance.mjs:18-35,49-69,75-99`). `tests/conformance.test.mjs` checks that generated records match and align across two profiles (`tests/conformance.test.mjs:9-23`); it does not rerun the historical workflow. In particular, `evals/evidence/*/architecture-candidates.json` records 2026-09-21 run details and limitations, and the generated conformance record reports model resolution as `not-recorded`. Do not reinterpret those records as current execution or live reviewer proof.
+
+The new checker owns only portable local validation and execution. It must not elevate user-authored JSON to truth, claim that it authenticated a host identity, or claim external deployment or publication. Native model-resolution manifests, native task receipts, and host-owned task records remain the attribution/provenance authorities. A missing or unavailable native receipt yields an explicit `unverified-attribution` result even if the local files and behavior checks pass. Core workflow text remains host-neutral; installed caches are not edited. Source Skills remain canonical, generated packages come from `tools/generate.mjs`, and publication remains a separate explicit action.
+
+## 2. Caller usage
+
+Full pstack-style feature with delegated implementation and independent judge:
+
+```sh
+node scripts/check-delivery-evidence.mjs --root . --manifest .oms/evidence/delivery.json
+# exit 0: local artifact and behavioral gates pass; attribution is reported separately
+# exit 1: missing/stale files, missing review, failed behavior command, or failed visual gate
+```
+
+The task owner creates `.oms/evidence/delivery.json` from a reviewed task brief before work begins. Its source manifest freezes the design candidate, required test command, changed-path scope, and (if visual) baseline/config/tolerance. The checker hashes these files before the candidate work, then checks actual current files and runs the frozen behavioral command. The result names each gate as `passed`, `failed`, or `unverified`; no one `PASS` field can hide an attribution gap.
+
+A narrow task with no delegation and no design comparison declares its workflow and exclusions explicitly:
+
+```sh
+node scripts/check-delivery-evidence.mjs --root . --manifest .oms/evidence/label-fix.json
+# design is not applicable only if the frozen task mode is narrow and has no design-choice gate
+# reviewer is not applicable only if no delegated output exists
+```
+
+A visual-parity task routes and proves pixels on a controlled capture surface:
+
+```sh
+node scripts/check-delivery-evidence.mjs --root . --manifest .oms/evidence/theme-migration.json
+# prints compared images, config hash, differing-pixel count, declared exceptions, and behavior run
+```
+
+The manifest pins capture configuration, baseline, candidate image, intended-change mask/regions, and maximum global/per-region difference before the candidate capture. Unsupported PNG features, missing files, a stale hash, or an absent tolerance declaration fail closed. The checker computes a pixel delta itself; a prose claim or supplied `diff: 0` is ignored.
+
+## 3. Shape
+
+### Domain types and minimal input
+
+```ts
+type TaskMode = "full-pstack" | "narrow";
+type ClaimScope = "local-files" | "behavior-command" | "visual-delta" | "host-attribution" | "external-release";
+type FilePin = { path: string; sha256: string };
+type TaskReceiptRef = { provider: string; taskId: string; receiptPath: string; receiptSha256: string };
+type CommandCheck = {
+  id: string; argv: string[]; cwd: string; timeoutMs: number;
+  expectedExitCode: number; stdoutIncludes?: string[]; stderrExcludes?: string[];
+};
+type VisualCheck = {
+  config: FilePin; baseline: FilePin; candidate: FilePin;
+  allowed: { maxChangedPixels: number; maxChangedFraction: number;
+    intentionalRegions: Array<{ id: string; rect: [number, number, number, number]; maxChangedPixels: number }>;
+    channelDelta: number };
+};
+type DeliveryManifest = {
+  schemaVersion: 1; taskId: string; mode: TaskMode; taskBrief: FilePin;
+  workflow: string; changedPaths: string[]; design?: { candidate: FilePin; frozenBefore: string };
+  writer?: { receipt: TaskReceiptRef; output: FilePin[] };
+  review?: { receipt: TaskReceiptRef; reviewedOutput: FilePin[]; verdictFile: FilePin };
+  checks: CommandCheck[]; visual?: VisualCheck;
+  combinedBehavior?: CommandCheck;
+  externalRelease?: { requested: boolean; receipt?: TaskReceiptRef };
+};
+```
+
+`taskBrief` is the pre-work acceptance boundary and includes task mode, user-visible predicate, scope, and success checks. `frozenBefore` is a timestamp informational field; ordering is established by a separately stored pre-work manifest pin (or root commit) and actual file hashes, not by trusting a timestamp. The caller writes a baseline manifest snapshot before work. Checker input can name that snapshot and compare the current delivery manifest to its hash. `design` is required for `full-pstack`; it can be omitted for a frozen narrow task only when the task brief says there is no consequential design fork. Any delegated output requires both a writer receipt reference and a distinct reviewer receipt reference. Checker rejects identical IDs and output hash sets that do not match the reviewed output list.
+
+### Signatures and flow
+
+```ts
+async function checkDeliveryEvidence(input: {
+  root: string; manifestPath: string; baselineManifest: FilePin;
+}): Promise<DeliveryReport>;
+async function runCommandCheck(root: string, check: CommandCheck): Promise<CommandResult>;
+async function comparePngs(root: string, check: VisualCheck): Promise<PixelDelta>;
+```
+
+`parseManifest` validates shape, closed enums, unique check IDs, nonempty argv, relative safe paths, and a bounded timeout before touching subprocesses. `pinFiles` reads actual files and checks SHA-256 against frozen values. `runCommandCheck` uses `spawn(argv[0], argv.slice(1), { shell: false })`, fixed `cwd` under root, bounded timeout, and captured exit/output checks; it never executes manifest text through a shell. `comparePngs` decodes supported non-interlaced 8-bit RGB/RGBA PNG using Node built-ins, checks equal dimensions against the pinned config, applies the frozen channel threshold, and calculates per-pixel and declared-region counts. Unknown PNG encodings fail with a specific unsupported-format result. A config cannot silently change after baseline capture because its file pin is checked.
+
+`checkDeliveryEvidence` then builds a report from observed filesystem hashes, subprocess exit/output, and measured pixels. It validates required candidate/review artifacts and path coverage against changed paths. It never uses caller-supplied `result`, `pass`, or `delta` values as an observation. Receipt references are checked for existence and hash only; identity authentication is delegated to the owning host/provenance validator and represented as `unverified` unless that validator's result is supplied through its authoritative interface. The local report must not label itself `host-attribution: verified` from a JSON `taskId` field alone.
+
+Recommended modules and ownership:
+
+- `tools/delivery-evidence/schema.mjs`: pure boundary validation and path normalization; owns manifest invariants.
+- `tools/delivery-evidence/check.mjs`: orchestrates pins, presence, command runs, review correspondence, claim-boundary result; owns the single report model.
+- `tools/delivery-evidence/png.mjs`: tightly scoped PNG decode/difference implementation; owns visual metric definitions.
+- `tools/check-delivery-evidence.mjs`: CLI parsing, exit code, human-readable report; no policy duplicated here.
+- `src/schemas/delivery-evidence.schema.json`: documented manifest shape; runtime semantic checks still reside in the domain parser.
+- `tests/delivery-evidence-fixture.test.mjs` and `evals/fixtures/delivery-evidence/`: fixture-based executable behavior tests.
+
+Generated-package hook: copy the CLI and its three modules plus schema into `packages/{omp,codex,claude-code}/scripts` and `schemas` from `tools/generate.mjs`, beside existing runtime scripts (`tools/generate.mjs:907-941`). Add source-to-generated consistency checks through `generate:check`; do not hand-edit generated package caches. The package script should accept an explicit project root so the tool can run from an installed package against a caller checkout without importing generated settings or hidden host state.
+
+Explicit non-goals: authenticating native actor identity; guessing resolved models; modifying host task history; creating worktrees; deciding whether a design is good; certifying accessibility, usability, production deployment, or external publication; granting permission; translating a successful local command into W3/W4 claims. Full pstack versus narrow mode changes required evidence and report claim ceiling, not the truth guarantees of self-reported fields.
+
+### Executable check semantics
+
+- `full-pstack`: requires a pre-frozen task brief and design candidate for consequential work; requires root integration files and actual current changed-path pins; requires a separate review artifact for each delegated output, with writer/reviewer receipt refs distinct and reviewed hashes equal to output pins; requires frozen acceptance commands, including a combined behavior command for multi-unit work. It reports local execution success while keeping provider attribution and external completion independent.
+- `narrow`: requires its own predicate and matching command(s); the task brief must freeze why design comparison/review is inapplicable. It cannot claim pstack full-flow, independent judgment, multi-unit integration, or delegation properties.
+- `visual-parity`: always follows the full visual workflow requirements. It requires frozen state/viewport/device-scale/font/data/timing/image method in a hash-pinned config; hashes actual baseline and current candidate image; computes nonzero deltas; applies only predeclared intentional regions and tolerances. `visual parity` passes only when computed differences fit the frozen allowance and the behavior/accessibility command checks pass. Nonzero deltas are reported even when accepted.
+- `combinedBehavior`: required when more than one owned unit or output is combined. It executes a task-shaped integration check after all referenced output pins exist; individual unit tests do not satisfy this gate.
+- All statuses are evidence-scoped. A local command can be `observed-pass`; file presence and hash can be `locally-verified`; an unvalidated receipt remains `attribution-unverified`; a deployment claim remains `external-unverified`. No aggregate boolean may collapse these scopes.
+
+### Error and partial failure behavior
+
+Validation errors collect independent manifest defects but stop before commands. File/hash failures skip dependent command and image checks while retaining unrelated diagnostics. Command checks run in manifest order; timeout and nonzero exit are failures, and the report identifies which later checks were skipped due to dependency. PNG parse failures are `failed` or `unsupported`, never pass-by-default. Report writing is atomic to a caller-selected output path; no persistent state store or retries are needed for this bounded checker. A rerun re-executes commands and remeasures current files rather than rewriting historical source records.
+
+## 4. Interface depth
+
+The caller names the task brief, candidate, actual writer/reviewer outputs, expected commands, visual capture pins, and the attribution receipt coordinates. The checker hides schema validation, path traversal checks, hash computation, process capture/timeouts, pixel decoding, difference metrics, and claim ceilings. That keeps callers from having to reimplement security and scoring policy while preserving evidence ownership.
+
+The design avoids a generic `EvidenceProvider` plug-in abstraction: all local evidence is ordinary files and commands; only native identity comes from the existing provider authority. It also avoids generic workflow inference. The caller must state `full-pstack` or `narrow` and route through the selected workflow. This makes the accepted claim boundary explicit and prevents a broad but shallow checker from trying to infer task semantics from arbitrary prose.
+
+## 5. Accepted tradeoffs and rejected alternative
+
+Accepted: a modest JSON manifest repeats some task context that exists in prose, because executable checks need stable IDs, paths, and frozen acceptance criteria. SHA-256 pins and behavior command executions catch staleness and broken outcomes but cannot prove that a human-authored predicate is sufficient or that a visual exception is product-correct. Native receipt trust stays outside this CLI. PNG support is intentionally narrow and fails closed; initially accepting only deterministic RGB/RGBA 8-bit PNG avoids a new dependency and a false claim for unhandled color profiles/interlacing. The checker does not publish, merge, install, or deploy.
+
+Structurally different alternative: use append-only JSONL event sourcing (`candidate-frozen`, `writer-started`, `writer-returned`, `review-frozen`, `integration-verified`) and derive a report by replay. This can model retries and recovery more naturally, but for the current bounded task it introduces sequence ordering, partial-log repair, and duplicate-event policy without reducing the need for hashes, native receipts, or executable final checks. It also risks duplicating existing durable run-state ownership. I prefer one frozen manifest plus one disposable observed report because the primary caller pattern is one task owner invoking a local checker at acceptance time.
+
+## 6. Open questions, risks, and first independently verifiable unit
+
+Open decisions: exact policy for what qualifies as “consequential” and therefore requires a design candidate; whether the native receipt interfaces expose immutable receipt hashes suitable for local cross-reference; a stable schema for command expectations without encouraging brittle output-substring checks; the PNG decoder's permitted color type and alpha normalization; and whether generated installations should also expose this checker through a `check-delivery-evidence` Skill or only as a CLI. None should change the provenance rule: host task/model records remain authoritative.
+
+Risks: evidence files can be fabricated; source pins establish byte identity and freshness, not authorship; a separately named receipt can still be misrepresented if the host verifier is absent; weak acceptance commands can pass while missing the user predicate; image tolerances can be manipulated unless candidate and config pins are frozen before migration. Report those limits in schema and CLI output. Require the checker to receive a pre-work manifest hash and not let a post-hoc manifest self-assert its own freeze time. A local check cannot prove a remote deployment or externally installed package is running these files.
+
+First implementation unit: add the pure manifest parser plus a temporary-directory fixture harness for task-mode constraints, path/hash staleness, writer/reviewer ID equality, missing candidate/review, and changed-path coverage. Each test should create real files and call the parser/checker, assert the concrete rejection code, then repair the input and assert acceptance. This provides a fast independent executable test of core evidence semantics before subprocess or PNG code. Next add command execution fixture tests that prove a failing behavior command rejects and a corrected implementation passes, followed by controlled PNG fixtures for a real measured difference and allowed intentional region. Keep historical conformance generation unchanged and label its scope as derived historical records until new live runs are actually captured.
+
+ROLE_POLICY=read-only-candidate

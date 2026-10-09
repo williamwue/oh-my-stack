@@ -1,0 +1,56 @@
+Path-redacted display copy; original digest 5563757c930cbddedf8f41f372e12875dfc114363abfecd258425c71babb66ae.
+
+Fresh bounded forward test, 2026-10-09
+
+Fixture root: WORKTREE_ROOT/.tmp/pstack-fidelity/live
+Packaged CLI: WORKTREE_ROOT/.tmp/pstack-fidelity/preview-packages/packages/codex/scripts/delivery-evidence.mjs
+Read generated codex/skills/feature/SKILL.md in full, codex/docs/delivery-evidence.md, and the linked subagent-handoff.md. No feature/WORKFLOW.md exists; the attempted read reported ENOENT. The CLI has no --help command; that probe exited 1 with "Use freeze, inspect or verify". These documentation probes were not acceptance checks.
+
+Scope and throughput
+User predicate: public receipt output preserves trimmed optional delivery notes and omits blank notes. This child owns only src/receipt.mjs and the assigned task report/evidence/observation files. Source ownership overlaps no other writer. Baseline, repair, inventory, inspect, and selected combined verification were sequential. The frozen narrow plan explicitly omits design. The parent owns independent judging and integration; no delegation, publication, cache changes, task review, or runtime completion declaration was invented here.
+
+Frozen inputs retained before implementation
+task/lock.json SHA-256: 2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a
+task/plan.json SHA-256: 753ffb020dc155850e3d77595bc1a86023d32ca572e93a8527a15f906ae8ab31
+test/public-output.mjs SHA-256: e0b84520a95c22d1630d5538e03c10c809c9b473f41c37bfe8e8d31611e993d9
+Baseline src/receipt.mjs SHA-256: 2a0d98c3da4fe5ebfae2b45c1b2d44edb36de6459f419ed33112be541410c111
+The lock digest was calculated from the existing lock before repair and retained in the child tool state and sent separately to the parent. Freeze was not rerun. Post-verification hashes of lock, plan, and public harness match these values.
+
+Baseline and actual diff
+Command (fixture cwd): node test/public-output.mjs
+Exit: 1. ERR_ASSERTION at test/public-output.mjs:3; actual 'Total: 17', expected 'Total: 17\nNote: deliver after 5'. The same command was captured with spawnSync before repair in task/observed-baseline.json, retaining the original stderr and input hashes.
+createReceipt already trims optional note and collapses whitespace-only note to undefined. renderReceipt always discarded that normalized note.
+Only source diff:
+- export function renderReceipt(receipt) { return `Total: ${receipt.total}`; }
++ export function renderReceipt(receipt) {
++   return `Total: ${receipt.total}${receipt.note ? `\nNote: ${receipt.note}` : ''}`;
++ }
+The formatter appends the normalized nonblank note; missing/blank notes retain total-only output. Existing total 0 behavior is retained.
+
+Final inventory and unit evidence
+task/evidence.json inventories every actual file under frozen sourceRoots ["src"], sorted by path.localeCompare(other, 'en'), with fields ordered path then sha256. The unit outputDigest is SHA-256(JSON.stringify(ordered finalSource entries covered by ownedPaths ["src"])). No unsupported authority fields were invented. artifacts and reviews are empty because no independent review artifact is available to this bounded child.
+Final src/receipt.mjs SHA-256: fc79edd8b63f19402cd9904f433497481be4853a841ccf836340dd1195beb8c4
+receipt unit outputDigest / finalSourceSha256: d81e6fbfa02c2ea897d28cc34b63d0fdd0b413212147d3672a77ccb2983b5df4
+task/evidence.json SHA-256: 6164a7cf5758fac76e4ee77ea4a19d4d6a3b238790fd7534519c056e6e8c675e
+
+Exact packaged inspection command (fixture cwd)
+node WORKTREE_ROOT/.tmp/pstack-fidelity/preview-packages/packages/codex/scripts/delivery-evidence.mjs inspect --root WORKTREE_ROOT/.tmp/pstack-fidelity/live --lock task/lock.json --expected-lock-sha256 2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a --evidence task/evidence.json > task/observed-inspect.json
+Exit: 1. structure rejected: "Missing delegated review: receipt". behavior unverified, no observations (inspect never runs checks). provenance unverified; external unassessed. Inventory and unit digest were accepted far enough to report finalSourceSha256 d81e6fbfa02c2ea897d28cc34b63d0fdd0b413212147d3672a77ccb2983b5df4. acceptance remains not-assessed.
+
+Exact packaged selected verification command (fixture cwd)
+node WORKTREE_ROOT/.tmp/pstack-fidelity/preview-packages/packages/codex/scripts/delivery-evidence.mjs verify --root WORKTREE_ROOT/.tmp/pstack-fidelity/live --lock task/lock.json --expected-lock-sha256 2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a --evidence task/evidence.json --run-check combined --out task/observed-verify.json
+CLI exit: 1. Observed frozen combined command ["node","test/public-output.mjs"] in cwd "." exited 0, signal null, timedOut false, outputLimited false, error null. durationMs 47, observedOutputBytes 0. stdout/stderr empty, both SHA-256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855. behavior passed; missingRequiredChecks []. structure rejected with the same missing review; provenance unverified; visual not-required; external unassessed. The checker reports acceptance rejected. This is the observed tool classification, not a child integration or final acceptance decision.
+
+Actual public outputs recorded in task/observed-public-output.json
+{total:17,note:'  deliver after 5  '} => 'Total: 17\nNote: deliver after 5'
+{total:17,note:'   '} => 'Total: 17'
+{total:0} => 'Total: 0'
+
+Post-verification immutable/source hash command (fixture cwd)
+shasum -a 256 task/lock.json task/plan.json test/public-output.mjs src/receipt.mjs task/evidence.json
+Exit: 0; hashes are listed above.
+
+Claim boundary
+The packaged CLI executed the selected immutable public check on the pinned repaired source and observed a pass. Its missing delegated review prevents a complete-delivery claim. The frozen plan reserves no nativeParentId/assignments, and this child has no prepared delivery assignment block or independent reviewer artifact; the guide's native completion protocol cannot be fabricated or retrofitted by changing the lock. Independent judgment, integration, runtime attribution/completion certification, full-workflow equivalence, installation, production behavior, and external release remain outside this bounded result. No publication occurred.
+
+ROLE_POLICY=bounded-implementation-only

@@ -1,0 +1,400 @@
+{
+  "baseline": "991ad1573e9fdf07dac54374f38956412d389f57",
+  "stagedPatchSha256": "8f510f7211b563e15e841ed9f3ad021ba2a9bf37e9dc5ce0c5095d19c8e3808f",
+  "files": [
+    {
+      "path": ".tmp/pstack-fidelity/live/src/receipt.mjs",
+      "sha256": "fc79edd8b63f19402cd9904f433497481be4853a841ccf836340dd1195beb8c4"
+    },
+    {
+      "path": ".tmp/pstack-fidelity/live/task/final-checker-report.json",
+      "sha256": "3e0d8d365dd178c90a51c0c6a1c22fca68dd38324425fb1d7baf29787998a707"
+    },
+    {
+      "path": ".tmp/pstack-fidelity/live/task/forward-report.txt",
+      "sha256": "5563757c930cbddedf8f41f372e12875dfc114363abfecd258425c71babb66ae"
+    },
+    {
+      "path": ".tmp/pstack-fidelity/live/task/lock.json",
+      "sha256": "2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a"
+    },
+    {
+      "path": ".tmp/pstack-fidelity/live/test/public-output.mjs",
+      "sha256": "e0b84520a95c22d1630d5538e03c10c809c9b473f41c37bfe8e8d31611e993d9"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5363bbcdcf08fba9d90b60c622ac5c6d95d58cb49960d78bbb58a8eabc975070"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/adversarial-observation-adjustment.txt",
+      "sha256": "0e5d3865004bf8e5cf089dcf25de9ac15139555f635a9acbaa11158e4f9d2131"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/adversarial-round-1.json",
+      "sha256": "e6cb621692e0fee5d6be7b4490f28f2a0fdb9b828495296c6a9afe870e86739b"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/adversarial-round-2.json",
+      "sha256": "fe4dd8127feee4768bfa0e254a315f726c4a51ff68df9df1563ff8c25b6cd76c"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/decisions.tsv",
+      "sha256": "13568fd7c63fa052e75b056b7fc0caa2ee5ba976e88b1105e6b7e3a5bc18aa3b"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-1.txt",
+      "sha256": "8b633ef2de7f3725f209b0a18a581bd03d0ba23c825c9b1729dbbb328aadbb23"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-2.txt",
+      "sha256": "62ae86e02441d78eb2251a122555830cf045af85197a7623877d0bb21da453ab"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-3.txt",
+      "sha256": "6b19a6b80483e755e82f5d64cc0aac28b76f3d091ed80d1613c08c19878e1814"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-freeze.json",
+      "sha256": "82c5a33defb010a93f292c392d78dbf6dc57d4edfb11ddb91d5a977c47247c32"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-judgment.txt",
+      "sha256": "251710ac7cadebefdb0d46e275f4df9f8fbfe91fb2838ce4a49b8936e3366898"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-request-1.json",
+      "sha256": "b7898e8eedb4f74e754053490c841b0b7bbdeb08f63ccb676d41c52d3dfc5c24"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-request-2.json",
+      "sha256": "082a2adb503e861b81fe285352c1ed5e320086f1f6ac4cd4c00a9856ce3b28ca"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-request-3.json",
+      "sha256": "e4259b6d312c950b3445ecd454f58f4b04015fe50b91b269dcbde1177e95bc4d"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/forward-after-repair.json",
+      "sha256": "96b93a5d84cb82734cd16fe270a111739ca3d850cc7c3becf2638fbe8708eb87"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/forward-final-checker.json",
+      "sha256": "3e0d8d365dd178c90a51c0c6a1c22fca68dd38324425fb1d7baf29787998a707"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/forward-freeze.json",
+      "sha256": "739459312016e492184fbc25fcc7bd6f2e43badd1454f96ddbd654f2918d5aac"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/forward-report.txt",
+      "sha256": "4eee31867bd38aa17e8759d75b33edd46376a177e877690d5d7a43495aa73d88"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/native-design-observations.json",
+      "sha256": "5fae4be2162ecdb312cc16f04e36d0aa3b61cf69c2a5627aca260b70bc18f718"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/native-followup-observations.json",
+      "sha256": "499c76c0404a8249163960df6498cfa9951021a9727dc33e713b8c6ce2bfdbac"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/native-implementation-observations.json",
+      "sha256": "6a6ed7f70c53738746c2fbe51c76f2415826a8991bacb58e2e9d5b9976d2da2c"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/native-repair-observations.json",
+      "sha256": "5274ba0088ac7d8152803c7f38c6e4d78ac0b9ffd30c7bdecb0ff2d1c6a05a47"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/native-review-round-1.json",
+      "sha256": "21f0f7eac06a3d35cc7a44b1458386a8cdf50959396a5d4a5037477813728e50"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/provenance-addendum.txt",
+      "sha256": "c063c4b37d70e555a4d54ad429575a4e99ddb4d8ba547409f2b1acdbea64f60d"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/review-round-1-scope.json",
+      "sha256": "eecc13cfb502a2673645d7fc55aa5bbbd1c5960cba65409462bee5c455be956c"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/review-round-1.txt",
+      "sha256": "41007e6840534333a8c588dfefbceebe260f4d7617bb37525388578b96bd0888"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/rubric.json",
+      "sha256": "b8bcd0de1a5e14f31fa249e1212103c4bed964735fab62551ef434a4aebfea6d"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/synthesis.md",
+      "sha256": "ecb8e0575d47bc031cfc0c608f56fb108d01d187b77fa3d00408fff23ebd7ff4"
+    },
+    {
+      "path": "docs/automatic-routing.md",
+      "sha256": "7961d3b0f5daf9ad514ea60fb7d7999ae38f063111c31c573468ec631ada646e"
+    },
+    {
+      "path": "docs/delivery-evidence.md",
+      "sha256": "3ae2e7b6867e1f778d3c975ab32277d406fd3dc494487976a91b68786108f4ad"
+    },
+    {
+      "path": "docs/skill-directory.md",
+      "sha256": "d645d5cedd28f43134d4ff6fa937c66c7b37599ee4c5c674bd3559540d6f0c20"
+    },
+    {
+      "path": "packages/claude-code/docs/automatic-routing.md",
+      "sha256": "7961d3b0f5daf9ad514ea60fb7d7999ae38f063111c31c573468ec631ada646e"
+    },
+    {
+      "path": "packages/claude-code/docs/delivery-evidence.md",
+      "sha256": "3ae2e7b6867e1f778d3c975ab32277d406fd3dc494487976a91b68786108f4ad"
+    },
+    {
+      "path": "packages/claude-code/scripts/codex-delegation.mjs",
+      "sha256": "800166a4b296c3680f87984789cb7c72c0f2f1a6359c0766d71aaefaeb479a0c"
+    },
+    {
+      "path": "packages/claude-code/scripts/delivery-evidence.mjs",
+      "sha256": "e39011038e1a6e236bf0de80e71129f4ac25464f2fcc5871b5a1cb8049546fdb"
+    },
+    {
+      "path": "packages/claude-code/scripts/delivery-image-diff.mjs",
+      "sha256": "0f89bb4bf645a48063d5a1bd860e6edc2f88cea3b2361daff1a04380ab0577e3"
+    },
+    {
+      "path": "packages/claude-code/scripts/delivery-native-attribution.mjs",
+      "sha256": "cb516480cee02cc71e7b6f7dbc308e863777073d4fb2564d35a0698f9cc69f67"
+    },
+    {
+      "path": "packages/claude-code/skills/feature/SKILL.md",
+      "sha256": "cbb1eb05ee3f1b8237998d8a767219bbda8a79795aa1eba237a7a678fe9462ba"
+    },
+    {
+      "path": "packages/claude-code/skills/figure-it-out/SKILL.md",
+      "sha256": "2be2c1d63bcbef327e6763409c51e43fd4faad77d543f0904bc26bd32fd5c3f3"
+    },
+    {
+      "path": "packages/claude-code/skills/how/SKILL.md",
+      "sha256": "fa2e9f0f711a748a9b9105ca1e09f253747cb62c3a1870e85b171bf280d614f1"
+    },
+    {
+      "path": "packages/claude-code/skills/oms-auto/SKILL.md",
+      "sha256": "bfe6bb27d64d346465f7c198227dabc6f560887670d5df718918bc66c98f2609"
+    },
+    {
+      "path": "packages/claude-code/skills/poteto-mode/SKILL.md",
+      "sha256": "570ce6b02b276d0d6265faae697591d999fda1b3ea49ac38210ee0845895be87"
+    },
+    {
+      "path": "packages/claude-code/skills/poteto-mode/references/delivery-evidence.md",
+      "sha256": "7342c8475ae18e486d00fc3757bd5bf545d59029f24bfbddcfa6750160117e8e"
+    },
+    {
+      "path": "packages/claude-code/skills/visual-parity/SKILL.md",
+      "sha256": "2a89e38cb5c3c2b816f0f46e388f1f7309c0fcbe382c5bf2edc0a443ed946213"
+    },
+    {
+      "path": "packages/codex/docs/automatic-routing.md",
+      "sha256": "7961d3b0f5daf9ad514ea60fb7d7999ae38f063111c31c573468ec631ada646e"
+    },
+    {
+      "path": "packages/codex/docs/delivery-evidence.md",
+      "sha256": "3ae2e7b6867e1f778d3c975ab32277d406fd3dc494487976a91b68786108f4ad"
+    },
+    {
+      "path": "packages/codex/scripts/delivery-evidence.mjs",
+      "sha256": "e39011038e1a6e236bf0de80e71129f4ac25464f2fcc5871b5a1cb8049546fdb"
+    },
+    {
+      "path": "packages/codex/scripts/delivery-image-diff.mjs",
+      "sha256": "0f89bb4bf645a48063d5a1bd860e6edc2f88cea3b2361daff1a04380ab0577e3"
+    },
+    {
+      "path": "packages/codex/scripts/delivery-native-attribution.mjs",
+      "sha256": "cb516480cee02cc71e7b6f7dbc308e863777073d4fb2564d35a0698f9cc69f67"
+    },
+    {
+      "path": "packages/codex/skills/feature/SKILL.md",
+      "sha256": "309bd89fe5d1a97bcfd0f64299a47467021751bce042a663f1e768b286e25aa6"
+    },
+    {
+      "path": "packages/codex/skills/figure-it-out/SKILL.md",
+      "sha256": "ec38b99b7ab5a133d376000d614b6cf3cd451efd756b2a1c2e25567d0219caff"
+    },
+    {
+      "path": "packages/codex/skills/how/SKILL.md",
+      "sha256": "5c897cf69054eed11c84fabef20be4605379c8caffefd9fd93f4a94a8a5b6836"
+    },
+    {
+      "path": "packages/codex/skills/oms-auto/SKILL.md",
+      "sha256": "6d019abc163bc6ebbe4a143333d772d09a3cf6ee041561843d1decafc2f0446d"
+    },
+    {
+      "path": "packages/codex/skills/poteto-mode/SKILL.md",
+      "sha256": "a06246d4a19cd3b2a575490b3818f4fbd17e3a65dcfa74e1e00e8302d28800d9"
+    },
+    {
+      "path": "packages/codex/skills/poteto-mode/WORKFLOW.md",
+      "sha256": "30258648feb38c009cb99ca14f3248fab5c4f32c7e822a2bfecc5c34d4f35bb2"
+    },
+    {
+      "path": "packages/codex/skills/poteto-mode/agents/openai.yaml",
+      "sha256": "f65e61d34161b6cd571aa00dff775638cb6ec00f30a03325f02169b52f3e6717"
+    },
+    {
+      "path": "packages/codex/skills/poteto-mode/references/delivery-evidence.md",
+      "sha256": "7342c8475ae18e486d00fc3757bd5bf545d59029f24bfbddcfa6750160117e8e"
+    },
+    {
+      "path": "packages/codex/skills/visual-parity/SKILL.md",
+      "sha256": "e8afffc8e7100efa536d4a29725351a588db9b6b0c4d80cebd4b26ce43f40e49"
+    },
+    {
+      "path": "packages/codex/skills/visual-parity/agents/openai.yaml",
+      "sha256": "f716de396a2fa478a9b31f7587c06e0f0558f6ee8bf2958b8273a3c6d8419eb9"
+    },
+    {
+      "path": "packages/omp/docs/delivery-evidence.md",
+      "sha256": "3ae2e7b6867e1f778d3c975ab32277d406fd3dc494487976a91b68786108f4ad"
+    },
+    {
+      "path": "packages/omp/scripts/codex-delegation.mjs",
+      "sha256": "800166a4b296c3680f87984789cb7c72c0f2f1a6359c0766d71aaefaeb479a0c"
+    },
+    {
+      "path": "packages/omp/scripts/delivery-evidence.mjs",
+      "sha256": "e39011038e1a6e236bf0de80e71129f4ac25464f2fcc5871b5a1cb8049546fdb"
+    },
+    {
+      "path": "packages/omp/scripts/delivery-image-diff.mjs",
+      "sha256": "0f89bb4bf645a48063d5a1bd860e6edc2f88cea3b2361daff1a04380ab0577e3"
+    },
+    {
+      "path": "packages/omp/scripts/delivery-native-attribution.mjs",
+      "sha256": "cb516480cee02cc71e7b6f7dbc308e863777073d4fb2564d35a0698f9cc69f67"
+    },
+    {
+      "path": "packages/omp/skills/feature/SKILL.md",
+      "sha256": "56da9ded617cc4dbef451f14cb064156cf55c2fbfa064a6385f5d8c4626e42b4"
+    },
+    {
+      "path": "packages/omp/skills/figure-it-out/SKILL.md",
+      "sha256": "8ca49bf28fb9bae1184a058be59390ee6dc9d06afee8888029a7da8f81c16477"
+    },
+    {
+      "path": "packages/omp/skills/how/SKILL.md",
+      "sha256": "62c791da149787189cfdfc716b0a6f0483ca3fb914701203fb01454fd99fa8af"
+    },
+    {
+      "path": "packages/omp/skills/oms-auto/SKILL.md",
+      "sha256": "2f4273f5c68fe0bad289204660929c4708a3ce1d36047351253547793ad6472a"
+    },
+    {
+      "path": "packages/omp/skills/poteto-mode/SKILL.md",
+      "sha256": "29ea22d48dec0a12d1f883f76a13a731541950c7ec7c0741a006a889f7c82a41"
+    },
+    {
+      "path": "packages/omp/skills/poteto-mode/references/delivery-evidence.md",
+      "sha256": "7342c8475ae18e486d00fc3757bd5bf545d59029f24bfbddcfa6750160117e8e"
+    },
+    {
+      "path": "packages/omp/skills/visual-parity/SKILL.md",
+      "sha256": "a47f4879291362e936d1216d4e6dd3f61fafa0889c57037f53134803559c7932"
+    },
+    {
+      "path": "security/executables.json",
+      "sha256": "f5b70a678dd9ff8bce152f5a056e3940bf409dfeed1cb8c5430b46528fd9f177"
+    },
+    {
+      "path": "src/core/skills/feature/SKILL.md",
+      "sha256": "ea58c3fb2873c10758c6b9abf8f62c097c08a4d231019adf34960915716d1e99"
+    },
+    {
+      "path": "src/core/skills/feature/skill.json",
+      "sha256": "4bea84b14bd1aa19e9063d2339bb8679d9a8fbf4322231dca43ccdad2a98b2cd"
+    },
+    {
+      "path": "src/core/skills/figure-it-out/SKILL.md",
+      "sha256": "6ed531ac6a3f10a5fc11c9269256bae7c062a0d0f3c4a6cecc4d62e21f39bf8f"
+    },
+    {
+      "path": "src/core/skills/figure-it-out/skill.json",
+      "sha256": "f1061c62ef93754a8db6e6a673cc7e7fbeb896099d00557a8fb7269dc6ca1bc4"
+    },
+    {
+      "path": "src/core/skills/how/SKILL.md",
+      "sha256": "241ce6409fd6f763bc17c7a596e703e2bd76e4e1c289b44d38f4ad9286bcb684"
+    },
+    {
+      "path": "src/core/skills/how/skill.json",
+      "sha256": "c6166cfac6cfbb80e45bbdfd4243370ec150cc735fcf4e402f5d7f8c3374bb9e"
+    },
+    {
+      "path": "src/core/skills/oms-auto/SKILL.md",
+      "sha256": "e07b74469dc4cc68b3071d7f300861adb0cf331d9dd99f7055ae1b9a2d17ba53"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/SKILL.md",
+      "sha256": "1d1eaac3ccd528893d61f3e49c484bec9571021b037a9cec4c430792c99dfa8f"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/references/delivery-evidence.md",
+      "sha256": "7342c8475ae18e486d00fc3757bd5bf545d59029f24bfbddcfa6750160117e8e"
+    },
+    {
+      "path": "src/core/skills/visual-parity/SKILL.md",
+      "sha256": "c43d91c3f2a43d51c5c1c8292d2584bd5c69663a9822739aebc6a25760f25685"
+    },
+    {
+      "path": "src/core/skills/visual-parity/skill.json",
+      "sha256": "8a7535d09d62c1e6f1a56e2c14cc3ed19775922df1ffbb002f31085f82938b29"
+    },
+    {
+      "path": "tests/delivery-evidence.test.mjs",
+      "sha256": "d8c7ca684ef4a86afdb28ee88976afd02fe9cde31ebfbb948e16fd83e406bf79"
+    },
+    {
+      "path": "tests/delivery-image-diff.test.mjs",
+      "sha256": "28ddefa107b373968d27e5f7cf4840f256b4e193a9988e2a1aabdcb6c3ad0e37"
+    },
+    {
+      "path": "tests/delivery-native-attribution.test.mjs",
+      "sha256": "46638d99d8726509e4babb799b8b3c4a04f138a1a86ae2ca5532bd1dce56602b"
+    },
+    {
+      "path": "tests/delivery-packaging.test.mjs",
+      "sha256": "f232a93f2fd67891a58d13729f1f32e19915d444281dc4e27d4e975438ff0d4e"
+    },
+    {
+      "path": "tests/routing.test.mjs",
+      "sha256": "3ddee67c98fb51e74ebdf77f3a9a77596534932cb41c18bc4a39edd37d5a5486"
+    },
+    {
+      "path": "tools/codex-skill-descriptions.mjs",
+      "sha256": "bbd42b31a5ddedbda9c3a1b8cb41cec1c7b0010827436543c07746a2c97aa34b"
+    },
+    {
+      "path": "tools/delivery-evidence.mjs",
+      "sha256": "e39011038e1a6e236bf0de80e71129f4ac25464f2fcc5871b5a1cb8049546fdb"
+    },
+    {
+      "path": "tools/delivery-image-diff.mjs",
+      "sha256": "0f89bb4bf645a48063d5a1bd860e6edc2f88cea3b2361daff1a04380ab0577e3"
+    },
+    {
+      "path": "tools/delivery-native-attribution.mjs",
+      "sha256": "cb516480cee02cc71e7b6f7dbc308e863777073d4fb2564d35a0698f9cc69f67"
+    },
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "20a89bc3f2c4081551071f477941e38dd8157310e1b3f77792a3240ece35bbb1"
+    },
+    {
+      "path": "upstream/semantic-derivations.json",
+      "sha256": "84f5c54b55a55de48946bab3a63c26bb80254874ef49b5ef78c72f933c2b110c"
+    }
+  ],
+  "scopeManifestSha256": "612301987a949446e344997cf284afca210e563de4807aaa46bde003e05b2e7b",
+  "acceptance": "changes-required; superseded by repair"
+}

@@ -1,0 +1,13 @@
+{
+  "modelAndEffortVerified": true,
+  "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+  "childId": "01a120bd-5e33-70c1-bbba-dea1d929a106",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "high",
+  "role": "implementer",
+  "route": "code.feature-refactoring",
+  "checkedChildContexts": 1,
+  "messageVerified": false,
+  "messageAudit": "encrypted-in-parent-record",
+  "roleSelectionClaim": false
+}

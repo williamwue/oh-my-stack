@@ -1,0 +1,313 @@
+Path-redacted display copy; original and display digests are retained in design-freeze.json.
+
+# Candidate 1: contract-bound local delivery acceptance
+
+## 1. Problem and preserved constraints
+
+Grounding revision: `991ad1573e9fdf07dac54374f38956412d389f57` (observed HEAD).
+This is a design sketch, not an implementation or an independent judge verdict.
+
+The missing owner is a delivery acceptance boundary: workflow instructions
+describe evidence, but no portable executable joins the frozen requirement,
+actual current artifacts, independent review, and combined behavior. The
+preferred boundary owns that join, not delegation, release, or task history.
+
+Observed source facts:
+
+- `src/core/skills/feature/SKILL.md:10–28` permits a direct design and root or
+  delegated implementation, and requires root diff inspection and verification;
+  it does not require a separate judge for each delegated implementation.
+- `src/core/skills/figure-it-out/SKILL.md` requires the original complete outcome
+  predicate, but has no executable acceptance artifact.
+- `src/core/skills/poteto-mode/SKILL.md` routes frozen-baseline migration to
+  `visual-parity`; `src/core/skills/oms-auto/SKILL.md` prefers a simple local path.
+  Neither fact means a simplified task has completed full pstack execution.
+- `src/core/skills/visual-parity/SKILL.md:8–24` already requires a frozen capture
+  configuration, calculated image difference, and prior agreed tolerance.
+- `tools/build-conformance.mjs:39–100` projects historical evidence assertions
+  into deterministic conformance records. Its fixture digest is calculated
+  from the current fixture bytes; that does not establish that the historical
+  session executed those current bytes. Its explicit model resolution status is
+  `not-recorded`. `tests/conformance.test.mjs` checks deterministic alignment,
+  not fresh runtime behavior. Preserve these historical facts and confidence.
+- `tools/setup-acceptance.mjs:50–148` verifies native/explicit delegation against
+  task records and explicitly returns `taskOutcome: "not-assessed"`.
+  `tools/run-evidence.mjs:31–57,103–109` validates caller-supplied receipts and
+  commit/revision consistency. Neither is a general delivery oracle.
+- `tools/generate.mjs:818–843` recursively copies Skill resources;
+  `906–941` copies portable executables; `1015–1040` validates their presence.
+  `AGENTS.md` requires source edits, regeneration, and `npm run check`.
+
+Preserve host-neutral core, configured panels and effort, existing provenance
+authorities, root integration, bounded writers, source-generated packages,
+untouched installed caches, and separate explicit publication authorization.
+No historical record is upgraded to live proof by this change.
+
+## 2. Caller usage
+
+These are proposed interfaces; they are not implemented.
+
+**Full execution, composed outcome:** Before work, the root writes the scope,
+required designs, delegated units, review expectations, and combined acceptance
+command into a contract, then freezes it against a baseline snapshot:
+
+```sh
+node tools/delivery-evidence.mjs freeze --root . --contract .oms/task/contract.json --out .oms/task/frozen.json
+node tools/delivery-evidence.mjs verify --root . --frozen .oms/task/frozen.json --evidence .oms/task/delivery.json --execute
+```
+
+The first call captures actual baseline bytes and the contract digest. The
+second reads and hashes actual artifacts, inspects supported authority records,
+replays the approved local acceptance command, and returns JSON with
+`acceptance: "pass"`, `claim: "local-full-workflow-evidence"`, explicit scope,
+source digest, and limitations. It never returns `deployed: true`.
+
+Removing one required design returns nonzero `MISSING_DESIGN`. Reusing a writer
+as that unit's judge returns `SELF_REVIEW`. Changing code after review returns
+`STALE_REVIEW`. Passing each unit while the combined command fails returns
+`COMBINED_BEHAVIOR_FAILED`, even if the supplied JSON says every check passed.
+
+**Explicit narrow work:** A one-file wording correction declares
+`mode: "narrow"`, a concrete simplification reason, and its actual local check.
+The same verifier returns `claim: "local-narrow-evidence"`. Omitted design
+panels are legal only in that mode; requesting a full-workflow claim against
+this receipt fails. Delegated narrow implementation still requires a distinct
+reviewer, or its acceptance remains incomplete. Root-only narrow work does not
+invent an independent reviewer.
+
+**Installed package, visual change:**
+
+```sh
+node /installed/oh-my-stack/scripts/delivery-evidence.mjs verify --root /project --frozen .oms/ui/frozen.json --evidence .oms/ui/delivery.json --execute
+```
+
+An exact-parity case with one changed pixel and zero tolerance fails. An
+intentional redesign uses a frozen approved reference and predeclared allowed
+regions/tolerance; it is reported as approved visual change, not exact parity.
+Missing images, unsupported formats, configuration drift, or only a screenshot
+path plus `diff: 0` fails. Reading a report without `--execute` is a consistency
+inspection and cannot emit current behavioral acceptance.
+
+## 3. Shape, ownership, and executable semantics
+
+The root owns one frozen contract and one final evidence inventory. Workers
+write only their assigned artifacts; judges write separate review artifacts.
+No concurrent shared JSON append log, database, cache, or daemon is needed.
+
+Minimum proposed inputs, derived from those calls:
+
+```ts
+type FileRef = { path: string; sha256: string };
+type Contract = {
+  schemaVersion: 1;
+  taskId: string;
+  mode: "full" | "narrow";
+  scope: string;
+  sourcePaths: string[]; // explicit file/directory scope, expanded by freeze
+  simplification?: { reason: string; omittedRequirements: string[] };
+  requirements: {
+    designCandidates: number;
+    designComparison: boolean;
+    units: { id: string; paths: string[]; delegated: boolean }[];
+    combined: { argv: string[]; cwd: string; harness: string[] };
+    visual?: VisualContract;
+  };
+};
+type Delivery = {
+  schemaVersion: 1;
+  frozenContractSha256: string;
+  source: { files: FileRef[]; revision: string };
+  designs: { id: string; artifact: FileRef; task: AuthorityRef }[];
+  designReview?: Review;
+  units: { id: string; writer: AuthorityRef; review?: Review }[];
+};
+type Review = {
+  artifact: FileRef;
+  reviewedRevision: string;
+  reviewedArtifacts: FileRef[];
+  reviewer: AuthorityRef;
+};
+// AuthorityRef names an existing supported native/host-owned authority record.
+// A plain claimed actor/model string is not an AuthorityRef.
+```
+
+`freezeContract(input, filesystem) -> FrozenContract` and
+`verifyDelivery({root, frozen, evidence, execute}) -> AcceptanceReport` are the
+only exported application operations. Shapes are illustrative pseudocode, not
+unfinished production scaffolding. `VisualContract` contains capture method,
+states, viewport, scale, fonts/data/timing hashes, baseline files, pixel format,
+comparison algorithm/version, tolerance, and approved intentional changes with
+approval artifact references. No default wildcard exemption.
+
+**Modules:**
+
+- `tools/delivery-evidence.mjs`: one coherent owner of parsing, requirements,
+  source/evidence binding, replay, reports, and CLI. Internally separate pure
+  validation from filesystem/process effects; no extra pass-through service.
+- `tools/image-difference.mjs`: optional private pixel decoder/comparator,
+  imported only by the above. A pragmatic dependency-free v1 accepts bounded
+  binary PPM RGB files exported by the capture harness, with dimensions and
+  strict length validation. Preserve original screenshots and their hashes as
+  companion evidence; unsupported PNG input fails clearly rather than
+  pretending two file hashes measure pixel difference. If PNG support is chosen,
+  implement and test a clearly bounded decoder rather than a filename heuristic.
+- `src/core/skills/poteto-mode/references/delivery-evidence.md`: the one portable
+  contract reference, linked by the affected workflows. Do not hand-copy the
+  requirement table into five Skills. Core text names the contract and portable
+  workflow obligations; generated bindings supply executable locations.
+- `tools/generate.mjs`: copy the checker and its private comparator into every
+  package, validate the same derived resource list, add invocation bindings.
+- `tests/delivery-evidence.test.mjs`: actual subprocess and real-file fixtures;
+  generated-package invocation checks belong here or in generator tests.
+
+Use strict boundary parsing with discriminated modes, exact fields, unique
+IDs, nonempty required artifacts, finite bounded numbers, and deterministic
+errors. An optional schema must not become a second validator with drifting
+rules; export the structural specification once or test exact schema/parser
+agreement. Normalize paths, reject absolute paths/traversal, and verify real
+paths stay under the selected root; reject symlink artifacts. Explicit existing
+host receipt paths outside the project are read through their authority adapter,
+not silently opened as generic artifact paths.
+
+**Real-file binding:** Hash sorted `(relative path, byte SHA-256)` pairs for the
+declared source tree, including newly added files and deletions. Git HEAD is
+supplemental provenance, insufficient for dirty trees. Include the acceptance
+harness and configuration in the digest. Recompute hashes before and after
+verification; changes during replay fail `SOURCE_CHANGED_DURING_CHECK`. Reviews
+bind the candidate/current artifact revision they saw; final delivery checks
+bind the integrated revision. Contract and review artifact hashes must match
+the frozen references. Missing or modified evidence fails. Content hashes bind
+bytes; they do not make a mutable local folder tamper-proof or prove chronology.
+
+**Behavior:** Only `verify --execute` launches the contract's approved argv,
+with `shell: false`, bounded timeout/output, and fixed cwd. It records observed
+exit status and output digests itself. It rejects timeout/signal/nonzero exit
+and ignores caller-supplied success flags. A combined requirement must execute
+the final integrated public path, not merely enumerate unit passes. The root
+and independent reviewer remain responsible for whether the harness exercises
+the real requested behavior; `node -e 'process.exit(0)'` cannot establish that.
+This limitation is a report field, not an undocumented assumption. Do not run
+untrusted contracts automatically on load; execution is the explicit local
+acceptance action within the existing task authorization.
+
+**Visual:** Recompute differences from actual decoded pixel bytes, report
+changed pixels and maximum channel error, and apply the frozen rule. Emit or
+retain a difference artifact for inspection. Intentional region changes must
+be declared in the pre-work contract and bounded; no post-hoc blanket mask.
+Exact parity uses zero by default. Input dimensions/configuration mismatch is
+a failure, not a larger tolerance. A frozen updated target reference is cleaner
+than broad masks for intentional redesign. Pixel comparison proves only those
+images; browser capture authenticity and behavior require separate evidence.
+
+**Attribution:** Reuse existing setup/delegation verification when native
+records are available; preserve host-owned task handles/receipts as authorities.
+Compare observed canonical task identities, not self-reported aliases, to
+reject writer/judge identity equality. A design judge must differ from every
+candidate it reviews; delegated implementation judges must differ from the
+writer they review. Require complete reviewed artifact hashes. Unsupported or
+missing authority yields `INDEPENDENCE_UNVERIFIED`, never fabricated identity.
+Do not infer actual model from a configured role, or historical model from the
+currently strongest available model. Same-model different-task independence
+is not model diversity. Model/effort claims remain the existing authority's
+result, separate from delivery acceptance.
+
+**Partial failure:** Verification writes a new temporary report and atomically
+renames it on completion; never overwrites frozen contracts or reviews. Each
+attempt is independent and names its exact inputs. Failure may produce a report
+but never an accepted receipt. Root coordinates writers; pre/post hashes detect
+interference without adding locks. No automatic retries of commands with side
+effects. A retry reruns acceptance explicitly after a failure is understood.
+
+## 4. Interface depth
+
+Callers supply one task contract and artifact inventory. The module hides
+canonical hashing, path validation, mode rules, missing/stale evidence checks,
+authority linkage, replay bookkeeping, and pixel calculations behind one call.
+Callers still must choose meaningful behavior, affected surface, source scope,
+approved visual target, and authorization. Those are domain decisions, not
+details a generic checker can truthfully infer.
+
+Screened red flags: no separate manager per phase, no new model-resolution
+database, no public parser/hash/comparator internals, no duplicated workflow
+requirement lists, and no second acceptance command that bypasses the same
+policy. Packaging is adaptation; provenance parsing stays with its existing
+owner. A CLI wrapper and pure internal logic are justified by I/O testing,
+not a reason to create multiple shallow modules.
+
+## 5. Tradeoffs and structurally different alternative
+
+Preferred: immutable contract plus stateless replay. It is small, portable,
+works on dirty local worktrees, and lets failing fixtures exercise the actual
+CLI. Its limits are explicit: local contract authenticity, meaningful test
+coverage, capture provenance, and remote state are not secured by hashing.
+Full acceptance fails closed if required independent evidence is unavailable;
+narrow mode remains a separately labeled honest outcome.
+
+Alternative: extend `tools/run-evidence.mjs`/`DurableRunState` into an event-led
+workflow state machine with `design-frozen`, `review-observed`, `unit-integrated`,
+and `combined-verified` transitions. A command runner owns append-only events;
+review events cite earlier frozen revisions and provenance authorities. Replay
+derives acceptance, and recovery detects partial work. This differs structurally
+because ordered durable state owns the workflow instead of a final stateless
+contract checker. It better supports long programs and controlled ordering.
+
+Reject that alternative for this repair: it couples bounded feature acceptance
+to orchestration stores/generations, increases package dependencies and retry
+semantics, and risks treating existing caller-submitted receipt consistency as
+observed truth. It still cannot authenticate a writable local history or
+control a deployment. Revisit only when long-running orchestration needs this
+same domain owner; do not support both as parallel delivery authorities.
+
+Also reject a JSON-only `status: pass` schema, text-regex-only tests, and making
+`build-conformance` the live acceptance checker. These would validate labels
+or regenerate projections without observing the claimed behavior.
+
+## 6. Open questions, risks, and independently verifiable first unit
+
+The first implementation unit is `delivery-evidence.mjs` source/evidence
+binding and mode enforcement with a temporary real project. Its acceptance
+test runs a real combined fixture command: establish a failure, fix a bounded
+implementation, then verify; mutate implementation or harness afterward and
+assert stale failure. No runtime or provider access is needed.
+
+Subsequent executable acceptance matrix:
+
+1. Full passes only with every required candidate and complete distinct judge;
+   missing/duplicate candidate, writer-as-judge, unread review, or stale
+   candidate hash fails. Unsupported authority cannot pass via JSON aliases.
+2. Narrow passes its actual check but cannot produce a full claim. A full
+   contract cannot be changed to narrow after freeze without a new contract.
+3. Two units pass separately while the integration fixture fails (for example,
+   normalized note is dropped at rendering); verifier must fail. Actual fix
+   through the public `createReceipt` path must pass. Existing
+   `evals/fixtures/feature-routing/project/test/receipt.test.mjs` illustrates
+   this normalization/rendering boundary; use a new fixture, preserve history.
+4. Actual tiny pixel fixtures test equal images, one changed pixel, configured
+   tolerance, invalid dimensions, corrupt/truncated image, missing screenshot,
+   changed comparison configuration, and undeclared exception.
+5. Tampered source, changed evidence, removed/new scoped file, traversal,
+   symlink, and mutation during execution fail. Subprocess nonzero, signal,
+   timeout, and a forged success JSON fail.
+6. Generate each adapter into a temporary directory and execute its packaged
+   checker with no source-tree imports and no npm dependencies. Compare source
+   and package exit codes/report semantics; run repository `npm run check`.
+
+Open decisions: which native/host-owned authority record forms are available
+portably today; whether v1 supports only PPM exports or a narrow PNG subset;
+and how an installation supplies its existing provenance verifier without
+duplicating its logic. Resolve these before claiming full runtime acceptance.
+
+Workflow changes accompany the executable: full pstack feature/complex work
+must carry architecture comparison where required, distinct delegated judging,
+root integration, and combined proof; explicitly simplified work records its
+omissions. Visual changes route to either controlled parity or approved changed
+appearance acceptance, not automatically to exact parity. Restore these rules
+without bypassing OMS Auto's first-command routing gate or permission boundary.
+
+Local fixtures prove checker behavior and generated-package consistency only.
+A future live workflow trial must record its actual package/source revision,
+task/model authorities, failures, and final combined artifact independently.
+It does not retroactively strengthen old conformance, attest production, or
+authorize publication. No judge verdict has been supplied in this candidate.
+
+ROLE_POLICY=read-only-candidate

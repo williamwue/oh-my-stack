@@ -1,0 +1,272 @@
+[
+  {
+    "child": "design-1",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a1209d-78cf-70e3-8961-2648a04a3c1c",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "explorer",
+    "route": "architect.runners",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "design-2",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a1209d-b022-76e0-af97-39a148428726",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "explorer",
+    "route": "architect.runners",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "design-3",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a1209d-e73a-7e70-b641-33d599cfc309",
+    "model": "gpt-6-luna",
+    "reasoningEffort": "high",
+    "role": "explorer",
+    "route": "architect.runners",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "design-judge",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120a2-330d-7fc3-804b-29189981ef99",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "reviewer",
+    "route": "arena.cross-judge-pool",
+    "checkedChildContexts": 2,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      },
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_checker",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120a6-3189-7292-8af4-762c03c9e585",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "implementer",
+    "route": "code.feature-refactoring",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_images",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120a6-653d-7313-a8fe-a41d85528527",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "implementer",
+    "route": "code.feature-refactoring",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_native",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120a9-5208-72d0-81c9-bde7f44466e5",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "implementer",
+    "route": "code.feature-refactoring",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_forward",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120b1-c6c8-7631-922b-46a00108f7b5",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "implementer",
+    "route": "code.feature-refactoring",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_repair",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120bd-5e33-70c1-bbba-dea1d929a106",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "implementer",
+    "route": "code.feature-refactoring",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_final_judge",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120b7-0e07-7e11-8842-57bb2ffb87c5",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "reviewer",
+    "route": null,
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_final_judge_2",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120c7-219e-7e22-80ba-e73af5b3e698",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "reviewer",
+    "route": null,
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  },
+  {
+    "child": "fidelity_final_judge_3",
+    "modelAndEffortVerified": true,
+    "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+    "childId": "01a120ce-4f65-7343-9137-ff4b07244562",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "reviewer",
+    "route": null,
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false,
+    "finalEnvelopes": [
+      {
+        "phase": "final_answer",
+        "contentTypes": [
+          "output_text"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "mode": "narrow",
+  "acceptance": "rejected",
+  "structure": {
+    "status": "rejected",
+    "errors": [
+      "Missing delegated review: receipt"
+    ]
+  },
+  "behavior": {
+    "status": "passed",
+    "observations": [
+      {
+        "id": "combined",
+        "argv": [
+          "node",
+          "test/public-output.mjs"
+        ],
+        "cwd": ".",
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimited": false,
+        "error": null,
+        "durationMs": 43,
+        "observedOutputBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "",
+        "stderr": "",
+        "passed": true
+      }
+    ],
+    "missingRequiredChecks": []
+  },
+  "visual": {
+    "status": "not-required",
+    "observations": [],
+    "captureAuthenticity": "unverified"
+  },
+  "provenance": {
+    "status": "unverified",
+    "gaps": [],
+    "parentRecordLifecycle": []
+  },
+  "external": {
+    "status": "unassessed"
+  },
+  "claimCeiling": "local-narrow-delivery-evidence",
+  "upstreamEquivalence": "unassessed",
+  "sourceExcludes": [],
+  "requiredCandidateSlots": [],
+  "finalSourceSha256": "d81e6fbfa02c2ea897d28cc34b63d0fdd0b413212147d3672a77ccb2983b5df4"
+}

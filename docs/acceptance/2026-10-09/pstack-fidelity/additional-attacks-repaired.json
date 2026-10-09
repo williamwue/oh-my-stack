@@ -1,0 +1,89 @@
+{
+  "source-alias": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-2/fixture-qJaN98",
+    "aliasExisted": true,
+    "sourceUnchanged": true,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "rejected",
+      "structure": {
+        "status": "rejected",
+        "errors": [
+          "Report or diff cannot be inside a source root"
+        ]
+      },
+      "behavior": {
+        "status": "unverified",
+        "observations": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  },
+  "executable-gap": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-2/fixture-J17qeu",
+    "originalAcceptance": "rejected",
+    "originalExit": 1,
+    "mutated": true,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "rejected",
+      "structure": {
+        "status": "rejected",
+        "errors": [
+          "Executable changed before execution"
+        ]
+      },
+      "behavior": {
+        "status": "unverified",
+        "observations": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  }
+}

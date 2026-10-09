@@ -1,0 +1,61 @@
+{
+  "observations": [
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a1209d-78cf-70e3-8961-2648a04a3c1c",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "explorer",
+      "route": "architect.runners",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    },
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a1209d-b022-76e0-af97-39a148428726",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "high",
+      "role": "explorer",
+      "route": "architect.runners",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    },
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a1209d-e73a-7e70-b641-33d599cfc309",
+      "model": "gpt-6-luna",
+      "reasoningEffort": "high",
+      "role": "explorer",
+      "route": "architect.runners",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    },
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a120a2-330d-7fc3-804b-29189981ef99",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "high",
+      "role": "reviewer",
+      "route": "arena.cross-judge-pool",
+      "checkedChildContexts": 2,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  ],
+  "limitations": [
+    "Actual native records verified model/effort and distinct child identities",
+    "Parent task message is encrypted; exact role/task message is not auditable",
+    "No historical or independent artifact authorship claim"
+  ]
+}

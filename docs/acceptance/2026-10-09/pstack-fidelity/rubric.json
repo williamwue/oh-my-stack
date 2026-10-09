@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "criteria": [
+    "Reject missing, stale, self-reviewed and unverified combined delivery evidence from real files",
+    "Separate local consistency, observed behavior, independent task provenance and external release claims",
+    "Preserve full versus explicitly simplified workflow requirements and configured panel cardinality",
+    "Provide a small caller-first portable API with deterministic packaging and executable failure fixtures",
+    "Measure frozen visual inputs and reject unsupported formats or post-hoc acceptance changes",
+    "Keep historical conformance and installed plugin caches unchanged"
+  ],
+  "timing": "Frozen after candidate production, before any judge verdict; candidates were not given this rubric"
+}

@@ -1,0 +1,128 @@
+{
+  "source-alias": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-2/fixture-JV87Tt",
+    "aliasExisted": true,
+    "sourceUnchanged": false,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "node",
+              "harness/combined.mjs"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 47,
+            "observedOutputBytes": 26,
+            "stdoutSha256": "95650d1211ed92a1f8ff9c083decdeb03eec59ad8cc7d2cbc3c3ee746f4be5e3",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "combined user path passed\n",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  },
+  "executable-gap": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-2/fixture-NMgHeq",
+    "originalAcceptance": "rejected",
+    "originalExit": 1,
+    "mutated": true,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "[worktree]/.tmp/pstack-fidelity/judge-round-2/fixture-NMgHeq/task/check.sh"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 5,
+            "observedOutputBytes": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  }
+}

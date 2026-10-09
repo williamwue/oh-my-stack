@@ -1,0 +1,33 @@
+{
+  "task": "/root/fidelity_forward",
+  "taskId": "live-receipt-forward-test",
+  "mode": "narrow",
+  "lockSha256": "2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a",
+  "predicate": "Public receipt output preserves trimmed optional delivery notes and omits whitespace-only notes",
+  "generatedPreviewScripts": [
+    {
+      "name": "delivery-evidence.mjs",
+      "sha256": "c02583a3d7db04736f72c970eda3aca7efe01f599b35f14e63738b04bfbce8e6"
+    },
+    {
+      "name": "delivery-image-diff.mjs",
+      "sha256": "0f89bb4bf645a48063d5a1bd860e6edc2f88cea3b2361daff1a04380ab0577e3"
+    },
+    {
+      "name": "delivery-native-attribution.mjs",
+      "sha256": "cb516480cee02cc71e7b6f7dbc308e863777073d4fb2564d35a0698f9cc69f67"
+    },
+    {
+      "name": "codex-delegation.mjs",
+      "sha256": "800166a4b296c3680f87984789cb7c72c0f2f1a6359c0766d71aaefaeb479a0c"
+    },
+    {
+      "name": "model-resolution.mjs",
+      "sha256": "78c28e2ebcc2705ad1a5f0a25ca2f795c779b6afe2fc0d6e107ad24153830172"
+    }
+  ],
+  "limitations": [
+    "Generated preview snapshot; final package will be checked separately",
+    "Parent owns independent judging; child cannot claim final independent acceptance"
+  ]
+}

@@ -1,0 +1,517 @@
+{
+  "edge-results.json": [
+    {
+      "name": "directory excluded nested absent parents",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "directory excluded alias",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "included alias existing",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "included alias absent parent",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "included dot-prefixed file",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "excluded dot-prefixed directory",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "case-mismatched exclusion cannot exclude existing source",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "excluded file exact",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "excluded prefix boundary",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "multiple roots permitted exclusion",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "multiple roots protect second root",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "overlapping alias roots retain included scope",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "file roots protect aliases",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Report or diff cannot be inside a source root"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "file roots allow adjacent output",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "whole workspace uppercase output is not a lexical frozen exclusion",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Task output overlaps source: TASK/new/report.json"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "whole workspace declared excluded output",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errors": [],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "excluded immutable normal and error output",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Task output overlaps source: HARNESS/config.json"
+      ],
+      "protectedBytesUnchanged": true
+    },
+    {
+      "name": "excluded evidence normal and error output",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errors": [
+        "Task output overlaps source: TASK/evidence.json"
+      ],
+      "protectedBytesUnchanged": true
+    }
+  ],
+  "visual-results.json": [
+    {
+      "name": "valid retained diff inside excluded directory",
+      "acceptance": "inconclusive",
+      "visual": "passed",
+      "errors": []
+    },
+    {
+      "name": "invalid-input error destination preserves excluded capture",
+      "acceptance": "rejected",
+      "errors": [
+        "External lock digest mismatch"
+      ]
+    },
+    {
+      "name": "protected diff inside excluded directory",
+      "acceptance": "rejected",
+      "visual": "unverified",
+      "errors": [
+        "Report or diff cannot replace locked evidence, authority or harness"
+      ]
+    },
+    {
+      "name": "invalid-input error destination preserves excluded capture",
+      "acceptance": "rejected",
+      "errors": [
+        "External lock digest mismatch"
+      ]
+    }
+  ],
+  "source-alias.json": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-4/fixture-i0HLeU",
+    "aliasExisted": true,
+    "sourceUnchanged": true,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "rejected",
+      "structure": {
+        "status": "rejected",
+        "errors": [
+          "Report or diff cannot be inside a source root"
+        ]
+      },
+      "behavior": {
+        "status": "unverified",
+        "observations": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  },
+  "executable-gap-rerun.json": {
+    "root": "[worktree]/.tmp/pstack-fidelity/judge-round-4/fixture-SpaoDp",
+    "originalAcceptance": "rejected",
+    "originalExit": 1,
+    "mutated": true,
+    "result": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "rejected",
+      "structure": {
+        "status": "rejected",
+        "errors": [
+          "Executable changed before execution"
+        ]
+      },
+      "behavior": {
+        "status": "unverified",
+        "observations": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  },
+  "exclusion-probe.json": {
+    "before": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "node",
+              "harness/combined.mjs"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 47,
+            "observedOutputBytes": 26,
+            "stdoutSha256": "95650d1211ed92a1f8ff9c083decdeb03eec59ad8cc7d2cbc3c3ee746f4be5e3",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "combined user path passed\n",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [
+        "src/reports"
+      ],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    },
+    "after": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "node",
+              "harness/combined.mjs"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 45,
+            "observedOutputBytes": 26,
+            "stdoutSha256": "95650d1211ed92a1f8ff9c083decdeb03eec59ad8cc7d2cbc3c3ee746f4be5e3",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "combined user path passed\n",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [
+        "src/reports"
+      ],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  },
+  "root-exclusion-probe.json": {
+    "before": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "node",
+              "harness/combined.mjs"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 45,
+            "observedOutputBytes": 26,
+            "stdoutSha256": "95650d1211ed92a1f8ff9c083decdeb03eec59ad8cc7d2cbc3c3ee746f4be5e3",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "combined user path passed\n",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [
+        "task",
+        "harness",
+        "src/reports"
+      ],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    },
+    "after": {
+      "version": 1,
+      "mode": "narrow",
+      "acceptance": "accepted",
+      "structure": {
+        "status": "passed",
+        "errors": []
+      },
+      "behavior": {
+        "status": "passed",
+        "observations": [
+          {
+            "id": "combined",
+            "argv": [
+              "node",
+              "harness/combined.mjs"
+            ],
+            "cwd": ".",
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimited": false,
+            "error": null,
+            "durationMs": 44,
+            "observedOutputBytes": 26,
+            "stdoutSha256": "95650d1211ed92a1f8ff9c083decdeb03eec59ad8cc7d2cbc3c3ee746f4be5e3",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "combined user path passed\n",
+            "stderr": "",
+            "passed": true
+          }
+        ],
+        "missingRequiredChecks": []
+      },
+      "visual": {
+        "status": "not-required",
+        "observations": [],
+        "captureAuthenticity": "unverified"
+      },
+      "provenance": {
+        "status": "not-required",
+        "gaps": [],
+        "observations": [],
+        "panelSelection": {
+          "status": "not-required",
+          "observations": []
+        },
+        "parentRecordLifecycle": []
+      },
+      "external": {
+        "status": "unassessed"
+      },
+      "claimCeiling": "local-narrow-delivery-evidence",
+      "upstreamEquivalence": "unassessed",
+      "sourceExcludes": [
+        "task",
+        "harness",
+        "src/reports"
+      ],
+      "requiredCandidateSlots": [],
+      "finalSourceSha256": "64bd3e0fb4a99ba9900b4defc7614baab437baa0069fa62f6072486a18548e02"
+    }
+  }
+}

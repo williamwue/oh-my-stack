@@ -1,0 +1,35 @@
+{
+  "observations": [
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a120a6-3189-7292-8af4-762c03c9e585",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "high",
+      "role": "implementer",
+      "route": "code.feature-refactoring",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    },
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a120a6-653d-7313-a8fe-a41d85528527",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "high",
+      "role": "implementer",
+      "route": "code.feature-refactoring",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  ],
+  "limitations": [
+    "Actual child model/effort and parent linkage verified",
+    "Exact assignment message encrypted; full independent artifact provenance unverified",
+    "Not installed or published"
+  ]
+}

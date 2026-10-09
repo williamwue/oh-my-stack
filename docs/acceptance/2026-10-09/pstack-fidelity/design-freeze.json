@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "baseline": "991ad1573e9fdf07dac54374f38956412d389f57",
+  "files": [
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-1.txt",
+      "sha256": "8b633ef2de7f3725f209b0a18a581bd03d0ba23c825c9b1729dbbb328aadbb23",
+      "task": "/root/fidelity_design_1",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "attribution": "explicit-tool-selection; native-record verification pending",
+      "originalSha256": "6c4924dc16c236f6baa9a9443870d25d281ce897147e5650593ce2ddffdbad1f",
+      "redaction": "Local absolute paths normalized; original remains in private scratch"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-2.txt",
+      "sha256": "62ae86e02441d78eb2251a122555830cf045af85197a7623877d0bb21da453ab",
+      "task": "/root/fidelity_design_2",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "attribution": "explicit-tool-selection; native-record verification pending",
+      "originalSha256": "fa8ee28736c5af36cb273881afc06d76408c8b2105914658662fc100a9d186af",
+      "redaction": "Local absolute paths normalized; original remains in private scratch"
+    },
+    {
+      "path": "docs/acceptance/2026-10-09/pstack-fidelity/design-3.txt",
+      "sha256": "6b19a6b80483e755e82f5d64cc0aac28b76f3d091ed80d1613c08c19878e1814",
+      "task": "/root/fidelity_design_3",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "attribution": "explicit-tool-selection; native-record verification pending",
+      "originalSha256": "440e3c3272025adde5ea291acf2c8608a18e277662c698be13fbb3b28aa8ab51",
+      "redaction": "Local absolute paths normalized; original remains in private scratch"
+    }
+  ],
+  "limitations": [
+    "Candidates are design artifacts, not runtime acceptance",
+    "Rubric frozen after candidates, before judge"
+  ]
+}

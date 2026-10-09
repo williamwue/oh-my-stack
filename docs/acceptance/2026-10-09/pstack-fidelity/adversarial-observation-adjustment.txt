@@ -1,0 +1,20 @@
+--- .tmp/pstack-fidelity/judge/adversarial.mjs
++++ .tmp/pstack-fidelity/repair-observation/adversarial.mjs
+@@ -75,13 +75,13 @@
+ const results=[];
+ {
+  const f=await fixture({after(){}}); await write(f.root,'task/authority.json','{"original":true}');await addArtifact(f,'note','note',{kind:'unknown',recordPath:'task/authority.json',taskId:'unrelated'});await f.refresh();
+- const r=await verifyDelivery({...f.options,runChecks:['combined'],out:'task/authority.json'});
+- results.push({probe:'report fallback overwrites authority',root:f.root,acceptance:r.acceptance,errors:r.structure.errors,after:JSON.parse(await fs.readFile(path.join(f.root,'task/authority.json'),'utf8')).acceptance});
++ const beforeSha=sha(await fs.readFile(path.join(f.root,'task/authority.json'))); const r=await verifyDelivery({...f.options,runChecks:['combined'],out:'task/authority.json'});
++ results.push({probe:'report fallback overwrites authority',root:f.root,acceptance:r.acceptance,errors:r.structure.errors,unchanged:sha(await fs.readFile(path.join(f.root,'task/authority.json')))===beforeSha});
+ }
+ {
+  const f=await full('alias'); const ref=f.evidence.artifacts[0].authority;ref.childRecordPath=path.join(f.root,ref.childRecordPath);await f.refresh();
+- const r=await verifyDelivery({...f.options,runChecks:['combined'],out:'task/candidate_a-child.jsonl'});
+- results.push({probe:'absolute native coordinate report alias',root:f.root,acceptance:r.acceptance,errors:r.structure.errors,after:JSON.parse(await fs.readFile(path.join(f.root,'task/candidate_a-child.jsonl'),'utf8')).acceptance});
++ const beforeSha=sha(await fs.readFile(path.join(f.root,'task/candidate_a-child.jsonl'))); const r=await verifyDelivery({...f.options,runChecks:['combined'],out:'task/candidate_a-child.jsonl'});
++ results.push({probe:'absolute native coordinate report alias',root:f.root,acceptance:r.acceptance,errors:r.structure.errors,unchanged:sha(await fs.readFile(path.join(f.root,'task/candidate_a-child.jsonl')))===beforeSha});
+ }
+ {
+  const harness="import {readFileSync,writeFileSync} from 'node:fs'; let p='task/shared-parent.jsonl'; let x=readFileSync(p,'utf8').trim().split('\\n').map(JSON.parse); x.at(-1).payload.arguments='{}'; writeFileSync(p,x.map(JSON.stringify).join('\\n')+'\\n');";

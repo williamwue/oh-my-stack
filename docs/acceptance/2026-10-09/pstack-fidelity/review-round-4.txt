@@ -1,0 +1,49 @@
+# Independent fourth frozen review: accepted within scope
+
+**No findings.** The round-three exclusion regression is resolved without reopening the previously repaired source-alias or executable-snapshot defects. This is acceptance of the exact local implementation scope below, not original-pstack equivalence or complete live native-provenance acceptance.
+
+Reviewed baseline `991ad1573e9fdf07dac54374f38956412d389f57`, staged patch SHA-256 `b59ab7116fec9fd47b5f19554d0b091aca617da8646eaa9027f54b454d075630`, and scope manifest SHA-256 `5e1faaed25526d9e382c2cfe81944971d711c0f1ee7d2307a12f8e05e921bc63`. All **108 scoped files matched before and after review**; the staged diff matched `review-round-4.patch` byte for byte both times. Evidence: `judge-round-4/preflight.json` and `postflight.json`.
+
+## Bounded repair and independent probes
+
+Comparison with the round-three manifest and patch confirms the only implementation changes are the logical/canonical source-root mapping in `tools/delivery-evidence.mjs`, one regression test, and the three generated checker copies. The remaining delta is appended acceptance evidence and synthesis. Image/native modules, their tests, canonical Skills, router, generator, packaging tests and operational delivery documentation are unchanged.
+
+The destination owner maps each physical destination beneath every canonical source root back into that root's logical inventory path, then applies the frozen exclusions with the same `under` predicate used by inventory. It rejects the destination if any root still includes it. Locked evidence, native authority, immutable harness and executable protection remain separate canonical-path/inode checks. Ordinary reports, reserved image diffs and error reports retain the same owner.
+
+I independently ran fresh equivalents of both original round-three exclusion probes, changing only their disposable fixture directory and removing the obsolete round-two comparison invocation. A directory source root with `src/reports` excluded and a whole-workspace source root with explicit task/harness exclusions both accept their valid report outputs. Their no-output baselines also accept. Results: `judge-round-4/exclusion-probe.json` and `root-exclusion-probe.json`.
+
+An additional **18-case matrix** verifies nested absent parents, existing case aliases, dot-prefixed names, exclusion-prefix boundaries, exact excluded files, multiple roots, overlapping alias roots, file roots, included physical source and excluded protected inputs. Every expected result matched, and included source/harness/evidence bytes stayed unchanged. Results: `edge-results.json`. The first probe draft expected uppercase `TASK/...` to match the frozen lowercase `task` exclusion under `sourceRoots: ['.']`; the existing lexical guard correctly does not grant that unlisted spelling. I retained that failed probe expectation in `edge-first-attempt.log`, classified it as conservative case-sensitive logical-path behavior, and tested both its rejection and the declared `task/...` path's acceptance. This is not a newly inferred exclusion or a source bypass.
+
+Separate fresh PNG probes verified actual diff retention inside an excluded output directory, rejection of a reserved diff that would replace authority inside that directory, and preservation of an excluded capture when invalid lock input prevents establishing an error writer. Actual equal-image math passes while the result remains `inconclusive` for capture authenticity, as required. Results: `visual-results.json`.
+
+Fresh source-alias and executable-gap reproductions retain the original attack logic, changing only the disposable fixture root. The alias is present on this filesystem, the write is rejected before execution, and source bytes remain unchanged. The executable replacement is rejected with `Executable changed before execution` and zero spawned behavior observations. The first disposable executable baseline reported a null exit; I retained it and reran the unchanged script sequentially, obtaining the expected ordinary exit-1 baseline and the same pre-spawn replacement rejection. Results: `source-alias.json`, `executable-gap.json`, and `executable-gap-rerun.json`.
+
+Round one's prefix aggregation, authority overwrite and panel-binding fixes remain attributed to the earlier independent reviewers. Their implementation is unchanged by this repair, and their regression cases passed again; I do not relabel their historical attack runs as my own.
+
+## Checks and per-unit verdicts
+
+`node --test tests/delivery-evidence.test.mjs` passed **32/32**, with no skips. `npm run check` exited 0: **341 tests, 339 passed, 2 skipped, 0 failed**, including generated packages, standalone all-host execution, documentation, historical conformance, release consistency, validation, books and Markdown checks. Logs: `judge-round-4/focused.log` and `check.log`.
+
+| Frozen unit | Exact scope verdict | Evidence boundary |
+| --- | --- | --- |
+| delivery-evidence and three generated copies | Accepted; no findings | Frozen excluded output support restored; included physical source and protected destinations preserved; focused and independent probes pass. |
+| delivery-image-diff | No findings | Source, tests and package copies match prior reviewed scopes. Actual PNG tests ran again through the required check; previous bounded decoder/comparator judgments retain their attribution. Capture authenticity remains unverified. |
+| delivery-native-attribution | No separate findings | Source, tests and package copies match prior reviewed scopes; native declaration/linkage fixtures ran again. No broader host support or authorship claim is implied. |
+| Root Skills/router/generator/packaging/docs | Accepted within local scope; no findings | Unchanged semantic/runtime closure preserves reference-UI routing, explicit narrow omissions, distinct delegated judging and fail-closed full delivery; generated and standalone checks pass. New evidence retains prior failures and pending judgment. |
+| Actual forward receipt | Exact source behavior accepted; complete-delivery evidence rejected | Fresh final packaged CLI observes the combined public path exiting 0 and rejects `Missing delegated review: receipt`. |
+
+The forward source remains SHA-256 `fc79edd8b63f19402cd9904f433497481be4853a841ccf836340dd1195beb8c4`, its public harness `e0b84520a95c22d1630d5538e03c10c809c9b473f41c37bfe8e8d31611e993d9`, and retained lock `2abbbf199fe38b363178532613fcd9de8129e103f6502fe70194f22f8869dc8a`. Inspected source and fresh public verification preserve trimmed optional notes, blank/missing notes and total zero. Result: `judge-round-4/live-verification.json`. This source verdict does not retrofit missing native assignments or review evidence into that lock.
+
+## Independent decision-trail review
+
+Reviewed the pre-verdict frozen log through `2026-10-09T13:23:19Z`, full design candidates/judgment/rubric/addendum, all three full prior verdicts, failed and repaired archives, synthesis, actual forward artifacts and explicitly mapped native observations. No author contact, delegation, installation, unrelated history discovery or raw native transcript export occurred.
+
+**No new trail finding.** Every earlier frozen decision log is an exact byte prefix of this log. All three archived verdicts equal their original private review files. Original and display candidate hashes match the design freeze. Failed authority/prefix/panel, source-alias/executable, and exclusion results remain alongside their repaired outcomes. Evidence: `judge-round-4/trail-verification.json`.
+
+The prior missing-checkpoint flag remains resolved only as **disclosed late catch-up evidence**. The synthesis explicitly acknowledges late insertion and append-time timestamps; this review does not establish timely historical logging. The final frozen row says fourth review pending, which accurately preserves the pre-verdict state. No false full-success ending is present.
+
+I independently reran the existing delegation verifier on **12 explicitly mapped children**, including all three prior implementation reviewers. Observed native identity/model/effort agrees with the retained observations: design panel astra/sol/luna, all high; prior final reviewers astra/high; implementation and repair children sol/high. Every actual parent assignment is encrypted and returns `messageVerified: false`. Exact assigned task/role text and full runtime-recorded artifact attribution therefore remain unverified. Observed final envelopes use `phase: final_answer` and `output_text`, consistent with the disclosed correction to the addendum. Sanitized results: `judge-round-4/native-observations.json`.
+
+No original-pstack equivalence, installation, publication, authentic browser capture, production behavior or complete live native-provenance success is established. Supported synthetic full-native acceptance remains distinct from the actual forward fixture's complete-delivery refusal. The reviewed trail ends at the frozen pre-verdict log. Appending this verdict/native observation as evidence-only ending and committing locally may preserve this source boundary; changed source, tests or generated bytes require fresh review.
+
+ROLE_POLICY=independent-frozen-review

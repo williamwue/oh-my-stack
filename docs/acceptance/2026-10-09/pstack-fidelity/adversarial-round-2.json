@@ -1,0 +1,82 @@
+[
+  {
+    "probe": "report fallback overwrites authority",
+    "root": "[worktree]/.tmp/pstack-fidelity/judge/fixture-mQSsGS",
+    "acceptance": "rejected",
+    "errors": [
+      "Report or diff cannot replace locked evidence, authority or harness"
+    ],
+    "unchanged": true
+  },
+  {
+    "probe": "absolute native coordinate report alias",
+    "root": "[worktree]/.tmp/pstack-fidelity/judge/fixture-rCBU45",
+    "acceptance": "rejected",
+    "errors": [
+      "Report or diff cannot replace locked evidence, authority or harness"
+    ],
+    "unchanged": true
+  },
+  {
+    "probe": "later verified spawn prefix mutated",
+    "root": "[worktree]/.tmp/pstack-fidelity/judge/fixture-otFrKJ",
+    "acceptance": "rejected",
+    "errors": [
+      "Native parent spawn prefix mutated: review output"
+    ],
+    "behavior": "unverified",
+    "provenance": "unverified",
+    "audits": [
+      {
+        "name": "writer output",
+        "index": 4
+      },
+      {
+        "name": "review output",
+        "index": 5
+      },
+      {
+        "name": "candidate 0",
+        "index": 1
+      },
+      {
+        "name": "candidate 1",
+        "index": 2
+      },
+      {
+        "name": "design judgment",
+        "index": 3
+      }
+    ]
+  },
+  {
+    "probe": "frozen panel model mismatch",
+    "root": "[worktree]/.tmp/pstack-fidelity/judge/fixture-ovY1Hg",
+    "acceptance": "rejected",
+    "errors": [
+      "Configured panel model or effort mismatch: candidate 0"
+    ],
+    "expectedPanel": {
+      "entries": [
+        {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "high"
+        },
+        {
+          "model": "gpt-6-luna",
+          "reasoning_effort": "high"
+        }
+      ]
+    },
+    "observed": [
+      {
+        "name": "candidate 0",
+        "model": "gpt-6.1-sol"
+      },
+      {
+        "name": "candidate 1",
+        "model": "gpt-6.1-sol"
+      }
+    ]
+  }
+]

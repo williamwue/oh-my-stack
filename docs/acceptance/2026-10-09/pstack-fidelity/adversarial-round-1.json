@@ -1,0 +1,76 @@
+[
+  {
+    "probe": "report fallback overwrites authority",
+    "root": "WORKTREE_ROOT/.tmp/pstack-fidelity/judge/fixture-IMlPqe",
+    "acceptance": "rejected",
+    "errors": [
+      "Report or diff cannot replace locked evidence or harness"
+    ],
+    "after": "rejected"
+  },
+  {
+    "probe": "absolute native coordinate report alias",
+    "root": "WORKTREE_ROOT/.tmp/pstack-fidelity/judge/fixture-6cM16q",
+    "acceptance": "accepted",
+    "errors": [],
+    "after": "accepted"
+  },
+  {
+    "probe": "later verified spawn prefix mutated",
+    "root": "WORKTREE_ROOT/.tmp/pstack-fidelity/judge/fixture-1dbjXG",
+    "acceptance": "accepted",
+    "errors": [],
+    "behavior": "passed",
+    "provenance": "verified",
+    "audits": [
+      {
+        "name": "writer output",
+        "index": 4
+      },
+      {
+        "name": "review output",
+        "index": 5
+      },
+      {
+        "name": "candidate 0",
+        "index": 1
+      },
+      {
+        "name": "candidate 1",
+        "index": 2
+      },
+      {
+        "name": "design judgment",
+        "index": 3
+      }
+    ]
+  },
+  {
+    "probe": "frozen panel model mismatch",
+    "root": "WORKTREE_ROOT/.tmp/pstack-fidelity/judge/fixture-H8au9f",
+    "acceptance": "accepted",
+    "errors": [],
+    "expectedPanel": {
+      "entries": [
+        {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "high"
+        },
+        {
+          "model": "gpt-6-luna",
+          "reasoning_effort": "high"
+        }
+      ]
+    },
+    "observed": [
+      {
+        "name": "candidate 0",
+        "model": "gpt-6.1-sol"
+      },
+      {
+        "name": "candidate 1",
+        "model": "gpt-6.1-sol"
+      }
+    ]
+  }
+]

@@ -1,0 +1,192 @@
+# Native completion declaration addendum
+
+This read-only follow-up accepts a bounded extension to the selected stateless
+contract. It does not reopen the design comparison. Grounding remains
+`991ad1573e9fdf07dac54374f38956412d389f57`; source code and existing fixture
+formats were inspected, not a new live delegation run.
+
+## Decision and exact claim
+
+A completion declaration inside an actual native child's assistant final
+response can establish **runtime-recorded task attribution** when combined with
+the existing native delegation verifier and actual file hashes. It is a task's
+recorded claim about its outputs and review scope, not proof of code authorship,
+file reading, review quality, correct conclusions or malicious-local tamper
+resistance. Distinct verified child IDs establish distinct recorded tasks;
+they do not establish model diversity or unbiased judgment.
+
+Permit the full local evidence gate to use this bounded claim, provided the
+report labels it `runtime-recorded-task-attribution` and exposes these limits.
+Do not call it authenticated authorship. Local behavior and image calculations
+still need their own observed checks; external release remains unassessed.
+
+Support only the documented-and-observed **native explicit Codex** path first.
+Host-owned children, native-role spawns, inherited/full-history spawns, OMP and
+Claude records stay unsupported by this adapter. In particular, a host-owned
+child's native backing conversation cannot become its authority.
+
+## Existing verifier and required stronger preconditions
+
+`tools/codex-delegation.mjs:102-140` requires a prepared explicit request,
+`fork_turns: none`, a matching parent `spawn_agent` function call, child metadata
+linking to that parent/task path, and matching model/effort in every recorded
+turn context. It returns canonical `parentId`, `childId` and `messageVerified`.
+It accepts some encrypted parent messages with `messageVerified: false`.
+The new adapter must require **`messageVerified === true`**, because it needs
+the actual assigned lock, output slots and review-target digests.
+
+`tools/setup-acceptance.mjs:77-92` additionally compares the route entry and
+inventory to the resolution, but still reports `taskOutcome: not-assessed`.
+Use it for configuration claims when applicable. Do not duplicate model
+resolution in this adapter. Never read a saved JSON result saying
+`modelAndEffortVerified: true` instead of invoking the existing verifier on
+actual record inputs.
+
+Also require the verifier's parent ID to equal the expected native parent ID
+anchored in the task's frozen plan. A matching arbitrary parent/child pair is
+insufficient. Require exactly one session metadata identity per input record,
+one matching spawn, and an exact expected task name. Reject the same child ID
+for a writer and any judge reviewing it, including copied files under aliases.
+
+## Assignment and completion protocol
+
+The pre-work lock reserves stable assignment IDs, task names, kinds and output
+slots. A reviewer assignment is formed only after its target artifacts have
+been frozen. The actual parent spawn message contains exactly one structured
+`oms-delivery-assignment-v1` fenced block, alongside the normal complete role
+instructions. Example shape:
+
+```json
+{
+  "schemaVersion": 1,
+  "taskId": "feature-example",
+  "lockSha256": "<64 lowercase hex characters>",
+  "assignmentId": "review-unit-a",
+  "taskName": "review_unit_a",
+  "kind": "review",
+  "outputs": [{ "id": "unit-a-review", "path": "task/unit-a-review.md" }],
+  "reviews": [{ "id": "unit-a-tree", "sha256": "<frozen target digest>" }]
+}
+```
+
+Use `kind: writer` for output producers, including design candidates; writer
+assignments have an empty `reviews` list. Review assignments require a nonempty
+exact target digest set. A design judge's targets include all required complete
+candidate digests. Output IDs and paths are already reserved by the lock;
+review-target digests are matched against actual frozen evidence at verification.
+The same assignment is carried inside the prepared request's message and must
+match the actual parent-record spawn message byte for byte via the verifier.
+Audit fields outside the actual spawn message are not assignment authority.
+
+The child final response includes exactly one `oms-delivery-completion-v1`
+fenced block with this shape:
+
+```json
+{
+  "schemaVersion": 1,
+  "taskId": "feature-example",
+  "lockSha256": "<64 lowercase hex characters>",
+  "assignmentId": "review-unit-a",
+  "kind": "review",
+  "outputs": [{ "id": "unit-a-review", "path": "task/unit-a-review.md", "sha256": "<actual output digest>" }],
+  "reviews": [{ "id": "unit-a-tree", "sha256": "<frozen target digest>" }],
+  "verdict": "accepted"
+}
+```
+
+Writer completion omits `verdict` and has empty `reviews`; review verdict is
+`accepted` or `changes-required`. Only accepted reviews satisfy the gate.
+Reject unknown keys, duplicate IDs, malformed digests, missing/excess targets,
+wrong assignment/lock, unexpected output paths and multiple declaration blocks.
+Compute every output hash from the referenced real file. Never take identity,
+model or authority from fields inside this declaration. The enclosing record
+supplies task identity; the assignment supplies expected scope. Prose can
+surround the block, including the existing role-policy terminator.
+
+Bind full source snapshots with the existing sorted path/digest tree hash;
+review `reviews` entries can refer to a frozen tree digest as well as individual
+artifacts. A judge may not declare only one file when its assigned unit target
+was the complete tree. Root integration changes after review require matching
+new review scope or remain stale; independently passing unit checks do not
+cover the final combined revision.
+
+## Native envelope and parsing boundary
+
+The proposed supported envelope is a JSONL record with `type: response_item`
+and payload `type: message`, `role: assistant`, `channel: final`, and content
+items `type: output_text` carrying `text`. Extract declaration text only from
+that envelope. Never search arbitrary JSONL strings, tool outputs, user
+messages, commentary, reasoning or assistant function-call arguments.
+
+Repository tests currently establish session/spawn/turn-context shapes but do
+not contain this final-message envelope. Before enabling this exact shape, the
+root must confirm the keys using only the current thread's known native record.
+This addendum does not assert that such inspection has already happened. If the
+observed envelope differs or final text is encrypted, unsupported provenance
+must remain inconclusive. Do not invent a second permissive fallback parser.
+
+For the first implementation require one fresh child session and one final
+response containing its declaration, with no later turn context, user message,
+assistant content or tool operation. Reject multiple final responses rather
+than selecting a convenient older one. Benign task-completed event records may
+follow; they are not alternative declaration authorities. Retries use a new
+assignment/task and retain previous failures. This bounds ambiguity without a
+new session-history state machine.
+
+Use only explicit known parent/child record coordinates; do not crawl session
+history. Record their hashes and selected record index in the report, not their
+raw text. Parent records normally append while root work continues: hash and
+validate a bounded prefix ending at the matched spawn, retain its byte length
+and digest, and verify that prefix is unchanged on reread. Unrelated trailing
+parent records do not invalidate that spawn. Child records must be complete and
+stable for the verification pass; recheck bytes and reject new task activity.
+The existing verifier should inspect the same parent/child input content used
+for declaration extraction; detect concurrent changes rather than mixing
+snapshots from different reads.
+
+## Required executable acceptance
+
+1. Real-shaped native fixture: exact assigned spawn, linked distinct writer and
+   judge sessions, matching final declaration and actual file digests. Verify
+   the bounded attribution field succeeds; fixture success is not live proof.
+2. Swap a child record from another parent, task name or assignment. Reject.
+   Swap both parent and child from another run. Reject expected-parent or lock
+   mismatch. Copy one child record under two filenames. Reject self-review.
+3. Attach unrelated valid native child records to local artifacts. Missing or
+   wrong completion declaration must reject even when `verifyDelegation` passes.
+4. Put the valid-looking block only in a user message, function-call argument,
+   tool output or commentary. Reject. An encrypted or missing final response
+   stays unsupported; encrypted parent message cannot satisfy exact assignment.
+5. Modify output bytes, reviewed target bytes, output path, lock digest,
+   assignment ID or declared target set. Reject. Another task's passing review
+   and an old review of a prior tree must not satisfy current evidence.
+6. `changes-required`, two completion blocks, duplicate final responses or
+   later child task activity do not pass. A detached `verified: true` JSON has
+   no authority and is rejected.
+7. Model/effort drift, missing turn contexts, multiple matching spawns and
+   malformed/multiple session identities fail via existing or stronger checks.
+   Distinct tasks using the same model may satisfy task distinction but must
+   report no model-diversity claim.
+8. Parent append after the selected spawn preserves the verified prefix;
+   mutation inside that prefix fails. Child mutation between linkage checking
+   and final extraction fails. Reports include hashes/coordinates, not logs.
+9. Packaged checker invokes the same native owner and contains its import
+   closure; unavailable supported verifier yields inconclusive, never a fake
+   success. Host-owned authority references never enter this native path.
+
+## Ownership and completion boundary
+
+Put the bounded adapter with the acceptance owner, preferably a private
+`tools/delivery-native-attribution.mjs` if it materially keeps the checker
+readable; its focused fixture test belongs to the same implementation owner.
+Use `verifyDelegation` as the existing identity/model owner, without weakening
+its contract. Root retains generator, inventory, workflow instructions and
+completion-protocol documentation. The adapter does not authorize inspection
+of unrelated histories or retrospectively manufacture missing declarations.
+
+This extension can remove the permanent full-attribution blocker for supported
+future native tasks. Existing tasks lacking the recorded protocol remain
+unverified. A live trial must produce its own genuine declarations; fixture
+records and schema proposals cannot be relabeled as that trial.
+
+ROLE_POLICY=independent-frozen-review

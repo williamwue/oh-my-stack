@@ -1,0 +1,13 @@
+{
+  "modelAndEffortVerified": true,
+  "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+  "childId": "01a120c7-219e-7e22-80ba-e73af5b3e698",
+  "model": "gpt-6-astra",
+  "reasoningEffort": "high",
+  "role": "reviewer",
+  "route": null,
+  "checkedChildContexts": 1,
+  "messageVerified": false,
+  "messageAudit": "encrypted-in-parent-record",
+  "roleSelectionClaim": false
+}

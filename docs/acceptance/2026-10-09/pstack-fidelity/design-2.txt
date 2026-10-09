@@ -1,0 +1,368 @@
+Path-redacted display copy; original and display digests are retained in design-freeze.json.
+
+# Candidate 2: frozen acceptance packet, locally observed verification
+
+## 1. Problem and preserved constraints
+
+The caller needs to know which delivery requirements have actual evidence for
+the final artifact. A receipt saying `pass` is not that evidence. Prefer one
+portable acceptance owner that freezes the required evidence graph, reads the
+actual files, and optionally runs explicitly selected local checks. Its result
+is a bounded acceptance report, never a certificate that a product deployed or
+that a reviewer was independent merely because JSON says so.
+
+Grounding at `991ad1573e9fdf07dac54374f38956412d389f57`:
+
+- `AGENTS.md:19-26` assigns semantic instructions to `src/core/skills`, package
+  generation to the generator, and distinguishes local consistency from live
+  model, installation, and production evidence.
+- `src/core/skills/feature/SKILL.md:13-28` currently makes competing designs
+  conditional and permits either a bounded delegate or root implementation.
+  Root diff inspection and matching-surface proof are already explicit. Preserve
+  those boundaries while restoring the stronger full-execution contract.
+- `src/core/skills/figure-it-out/SKILL.md:14-29` already requires baseline,
+  per-unit measurement, and final complete-outcome proof. The checker should
+  enforce evidence of that last integration check rather than infer it from
+  separately passing unit checks.
+- `src/core/skills/poteto-mode/SKILL.md:33,77-96` routes visual migration to
+  `visual-parity` and preserves root ownership, matching surfaces, runtime model
+  resolution, and fresh-session handoff. New appearance work still belongs to
+  its primary feature workflow, with an appropriate visual acceptance gate.
+- `src/core/skills/oms-auto/SKILL.md:8-26,28-34` owns admission only. Its simple
+  path must not silently advertise the full pstack contract or shrink an
+  explicitly requested panel. Bounded children override automatic admission.
+- `src/core/skills/visual-parity/SKILL.md:8-24` already freezes captures and
+  comparison configuration, requires actual image differences, defaults exact
+  parity to zero, and requires agreed tolerance before acceptance.
+- `src/core/skills/architect/SKILL.md:22-36` requires structurally distinct
+  candidates and derives their count from the configured ordered panel.
+  `src/core/skills/arena/SKILL.md:44-60,77-86` requires frozen full artifacts,
+  a distinct judge or an explicitly degraded fallback, and final synthesized
+  verification. These are requirements to preserve, not claims this candidate
+  has already satisfied.
+- `tools/build-conformance.mjs:18-31,49-99` hashes current fixture files but
+  derives records from existing assertion JSON. It explicitly records model
+  attribution as not recorded. `tests/conformance.test.mjs:9-23` tests generated
+  consistency and trace alignment, not fresh live execution. Preserve historical
+  evidence as historical; never relabel it as a current full-workflow run.
+- `tools/run-evidence.mjs:31-57,103-109,136-158` validates supplied receipts and
+  a supplied commit ID. It does not run their commands, read their stdout files,
+  or hash dirty source files. Its existing durable-run responsibilities remain
+  separate; a new checker must not reinterpret its caller declarations as
+  observed truth.
+- `tools/setup-acceptance.mjs:50-92,95-148,151-193` already verifies native task
+  linkage/model/effort against runtime records while leaving task outcome
+  unassessed. `tools/generate.mjs:671-675` gives host-owned task handles and
+  attribution receipts precedence over backing native child conversations.
+
+Confidence: the code ownership and current limitations above are directly
+observed. Historical live results remain as strong as their original dated
+records and coordinates; I did not rerun any host or install a package. This is
+a design candidate, with no independent judge verdict.
+
+Preserve host-neutral canonical Skills, existing native/model/host authorities,
+installed caches, unrelated work, release gates, and explicit publication
+authorization. The checker should protect against missing evidence, drift, and
+overclaiming by cooperative callers. A local administrator can forge local
+files; there is no cryptographic attestation service in this scope.
+
+## 2. Caller usage
+
+These are proposed calls, not implemented commands. One supported CLI is
+`delivery-evidence.mjs`; generated packages expose the same file in `scripts`.
+
+```sh
+# Before implementation: hash requirements, baseline and declared acceptance.
+node tools/delivery-evidence.mjs freeze --workspace . \
+  --plan .tmp/task/plan.json --out .tmp/task/acceptance.lock.json
+
+# After all units are integrated: observe the named local behavioral checks.
+node tools/delivery-evidence.mjs verify --workspace . \
+  --lock .tmp/task/acceptance.lock.json --evidence .tmp/task/evidence.json \
+  --run-check integration --run-check accessibility --out .tmp/task/report.json
+
+# Read-only audit, including from a generated package; executes no check argv.
+node /path/to/package/scripts/delivery-evidence.mjs inspect --workspace . \
+  --lock .tmp/task/acceptance.lock.json --evidence .tmp/task/evidence.json
+```
+
+The full feature example freezes two design-candidate requirements (or every
+configured ordered entry), a complete-artifact design judgment, a delegated
+writer/independent review pairing, visual acceptance when relevant, and final
+integration behavior. Missing `candidate-2.md` gives
+`MISSING_REQUIRED_ARTIFACT`; reviewing a different patch gives
+`REVIEW_SCOPE_MISMATCH`; supplying only unit receipts gives
+`COMBINED_BEHAVIOR_UNVERIFIED`. Changing a source file after verification gives
+`STALE_SOURCE`, even when HEAD did not move. The final result states the artifact
+digest and the gates actually observed.
+
+A narrow, root-owned correction instead freezes
+`execution: {kind: "narrow", reason: "one local string correction"}` and its
+single concrete behavior check. It can return `narrow-local-checks-accepted`,
+never `full-pstack-evidence-accepted`. A delegated correction still needs a
+distinct review task; narrow mode removes broad design overhead, not delegated
+self-review protection or final-artifact verification. Mode is frozen before
+work, not selected in the final evidence file to excuse missing gates.
+
+An inspection of unknown host receipt formats returns `ATTRIBUTION_UNVERIFIED`
+and a readable gap. It can still show pixel differences and stale-file results;
+it cannot accept a full independent-review claim. A matching configured model
+name alone does not establish observed execution or model diversity.
+
+## 3. Shape, ownership, and executable semantics
+
+Minimum input, derived from those calls:
+
+```js
+// Pseudocode domain sketches; no implementation bodies exist yet.
+type FileRef = { path: RelativePath, sha256: Sha256 };
+type Plan = {
+  schemaVersion: 1, taskId: StableId,
+  execution: { kind: "full", workflow: WorkflowId }
+           | { kind: "narrow", workflow: WorkflowId, reason: NonEmptyString },
+  predicate: NonEmptyString,
+  // Count/order is derived from effective routes, never supplied as a waiver.
+  resolution?: FileRef,
+  sourceRoots: NonEmptyArray<RelativeDirectory>,
+  checks: NonEmptyArray<{
+    id: StableId, role: "unit" | "integration" | "user-path" | "accessibility",
+    surface: NonEmptyString, argv: NonEmptyArray<string>, timeoutMs: PositiveInt
+  }>,
+  visual?: {
+    config: FileRef, baselines: NonEmptyArray<FileRef>,
+    acceptance: {kind: "exact"}
+              | {kind: "tolerance", changedPixels: NonNegativeInt,
+                 maxChannelDelta: Byte, agreement: FileRef},
+    intentionalChanges: Array<{stateId: StableId, rect: Rectangle,
+                               reason: NonEmptyString, agreement: FileRef}>
+  }
+};
+type Evidence = {
+  schemaVersion: 1, taskId: StableId, lockSha256: Sha256,
+  artifacts: Array<{id: StableId, kind: "candidate" | "synthesis" | "patch"
+                         | "review" | "root-decision", file: FileRef,
+                    taskAuthority?: AuthorityRef, reviews?: ArtifactDigest}>,
+  captures?: Array<{stateId: StableId, current: FileRef,
+                    configSha256: Sha256, captureRecord: FileRef}>,
+  observedRuns: Array<FileRef>
+};
+type AuthorityRef = {
+  kind: "native" | "host-owned", record: FileRef,
+  // Selectors are references to authority-owned fields, not identity claims.
+  taskSelector: NonEmptyString
+};
+```
+
+The checker does not need a generic extension registry, event bus, queue, remote
+deployment client, or another durable store. One module owns acceptance policy
+and state:
+
+| Module | Ownership and public surface |
+| --- | --- |
+| `tools/delivery-evidence.mjs` | CLI, strict parsing, frozen policy, evidence graph, final bounded report; public `freezeAcceptance`, `inspectDelivery`, `verifyDelivery` only |
+| `tools/delivery-image-diff.mjs` | Internal pure PNG decoding and pixel difference; no workflow state or model logic |
+| `src/schemas/delivery-evidence.schema.json` | Documentation/schema for plan, lock, evidence, generated observation and report shapes; strict runtime checks enforce the same contract |
+| Existing `setup-acceptance.mjs` / model and host task authorities | Sole owners of runtime attribution; no copied model resolver or new "verified model" boolean |
+| `tools/generate.mjs` | Copies supported executable closure and schema to each target; validates presence and deterministic bytes |
+
+Keep the image module internal: callers use the delivery CLI, not alternate
+image APIs that bypass frozen policy. The build should reject imports of this
+internal helper outside the checker and its focused tests. Schema definitions
+should be one shared `oneOf` document rather than four hand-maintained field
+lists. Runtime parsing must reject unknown keys, empty strings, invalid enum
+states, duplicate IDs, unsupported schema versions, and unexpected references.
+
+`freezeAcceptance` reads the plan, applies built-in full/narrow policy and the
+effective route panel cardinality/order, hashes configuration/baselines/agreements,
+and records the initial source tree. It refuses to overwrite an existing lock;
+changing the acceptance plan starts a new generation with an explicit reason.
+The plan is an instruction boundary, not proof. Full-mode requirements cannot
+be removed by setting evidence counts to zero.
+
+Real-file binding is mandatory. Read file bytes through confined relative
+paths; refuse traversal, symlinks escaping the workspace, nonregular files,
+duplicates, missing files, and bounded-size violations. Hash sorted
+`relative-path + NUL + content-digest` entries, with directories and paths
+normalized once. Source roots freeze a discovered set, so additions and
+deletions also change the revision. Exclude only explicit checker output roots
+and intrinsic metadata/dependencies; report those exclusions. Broad product
+claims require all relevant source/test/config roots. Scope coverage remains a
+root responsibility; the checker cannot discover an omitted dependency by
+magic. Git HEAD may be recorded when available, but actual content hashes are
+the freshness authority. The CLI's core remains Node-only and also works
+without a Git binary.
+
+Each candidate and review is a nonempty real artifact bound by digest. A review
+must name the exact frozen artifact digest or final patch/tree digest it
+examined. Candidate output and judge output stay attributable and complete;
+root summaries cannot substitute for full frozen inputs. A delegated artifact
+must have a paired reviewer task whose authority-owned task identity differs
+from every writer identity for that artifact. Distinct display names are
+insufficient. Compare generation and parent task boundaries too. Native
+attribution uses existing setup acceptance against referenced runtime records;
+host-owned attribution preserves the host's exported task handles/receipts and
+never substitutes a native backing conversation. Unsupported host export
+formats remain unverified rather than being normalized from arbitrary JSON.
+An initial implementation can support native evidence and structurally inspect
+host receipts while refusing a full attribution claim until a real documented
+host adapter exists. Model and effort remain separate observed/configured/
+unverified fields. Session independence does not imply model-family diversity.
+
+`verifyDelivery` executes only explicitly selected frozen check IDs, using
+`spawn`/`execFile` with argv and no shell interpolation. `inspect` runs nothing.
+Freeze/read/hash alone never executes plan commands. The checker itself does
+not require credentials or network. The selected commands can have side
+effects; authorization still comes from the actual task and matching surface,
+not this executable. Capture exit/signal/timeout, stdout/stderr hashes, command,
+surface, checker version/hash, lock hash, and source hashes before and after.
+A changed source tree during a check invalidates the observation. Write a new
+immutable observation atomically; final reports can be replaced atomically and
+do not become a new provenance authority. Keep one writer per evidence output
+directory; refusal of duplicate IDs and partial files beats adding locks.
+Interrupted commands and output truncation cannot produce passing evidence.
+
+Reject caller-authored `result: pass` as command proof. Older locally observed
+records are audit inputs; fresh acceptance should rerun the required behavioral
+checks rather than treat a JSON producer tag as authentication. Imported
+authoritative CI/host runs need their own concrete adapters and explicit claim
+boundaries, outside the first unit. Require at least one integration/user-path
+check for the combined final artifact, not a union of unit results. An exit-zero
+test only proves the assertions that test contains; fixture acceptance must
+exercise a realistic trigger and observable output.
+
+Visual verification freezes state ID, viewport, device scale, fonts, data,
+timing, capture surface, decoding method, comparator, exact tolerance, and
+predeclared intentional rectangles/agreements. The checker decodes original
+baseline/current PNG bytes itself using Node `zlib` and a small supported PNG
+subset (8-bit RGB/RGBA, noninterlaced, standard filters); reject unsupported or
+malformed input, verify chunk CRCs, and cap decoded bytes. Compare dimensions
+and actual decoded pixels. Report total and unexplained changed pixels, maximum
+channel delta, and a changed-pixel bounding box. Exact mode accepts zero
+unexplained changes. Any masking/tolerance must already be in the frozen lock;
+retain and count all masked changes so a large intentional area stays visible.
+Reject post hoc config, tolerance, baseline, or agreement edits. Actual capture
+records tie state/config to image bytes, but image pixels alone cannot establish
+which page produced them. Without observable capture provenance, label that
+boundary unverified. A compile, textual assertion, or visual glance cannot
+replace this comparison.
+
+Final reports distinguish `rejected`, `inconclusive`,
+`narrow-local-checks-accepted`, and `full-pstack-evidence-accepted`; always
+include separate structural, behavioral, visual, attribution, and external
+boundaries. A full label requires every full-mode gate, trustworthy task
+attribution for delegated independence, actual comparison where requested,
+and checker-observed final behavioral runs. External deployment is always
+unassessed unless a separately authorized external authority supplies evidence;
+the local checker controls no remote release.
+
+Packaging follows `tools/generate.mjs:806-843,906-941`: core references copy
+automatically, shared scripts require explicit copying. Add the executable
+closure/schema for all three adapters, presence checks near lines 1015-1041,
+and generated equivalence tests. Add inventory entries required by
+`tools/validate.mjs:96-117`, documenting possible local writes and command
+execution. Avoid importing `generate.mjs` or repository-only paths from the
+portable checker. Update a local package script, regenerate from source, and
+run `npm run check`; do not edit installed caches.
+
+## 4. Interface depth
+
+The caller supplies the product predicate, applicable surfaces, source scope,
+selected commands, complete artifacts, and genuine authority references. The
+module hides strict parsing, policy cardinalities, immutable reference binding,
+dirty-source detection, graph validation, controlled local execution,
+comparison math, and claim classification. These belong to one acceptance
+owner because separate candidate/review/visual CLIs would duplicate freshness
+and mode invariants.
+
+The caller still must choose meaningful assertions, judge product tradeoffs,
+ensure capture fidelity, and grant only appropriate execution authority. The
+checker cannot prove a design is structurally different by counting Markdown
+files or decide whether a review finding was properly resolved. Require the
+full synthesis/root decision artifact and expose those semantic decisions as
+reviewed evidence, not automatically verified mathematics.
+
+## 5. Accepted tradeoffs and different alternative
+
+Accepted costs: a frozen lock and generated observations add several files;
+strict support for an initial PNG subset may reject valid unusual captures;
+unknown host provenance blocks the full acceptance label; source-root hashing
+costs O(files + bytes) per actual verification. No cache/index is justified for
+the dominant access pattern of one final check. Re-running proof is more honest
+than authenticating unsigned local producer strings. Serial evidence writes
+avoid premature concurrency infrastructure.
+
+Structurally different alternative: an append-only delivery ledger within the
+existing `DurableRunState` owner. Each baseline/candidate/review/run is an event
+bound to run ID/generation/revision, and acceptance is a projection over that
+ledger. Caller usage would be `delivery append candidate --run-store ...`,
+`delivery append review ...`, then `delivery accept ...`. This naturally
+integrates session pickup and rejects old generations; it is appropriate if
+delivery evidence must survive multi-session orchestration.
+
+Reject that as the first shape here: it makes a small portable final checker
+depend on a durable lifecycle and command/event serialization; it tempts a
+reuse of the supplied-commit/supplied-pass semantics in `run-evidence`; and it
+creates two owners if lock policy is also kept separately. If selected instead,
+all delivery policy must live in the ledger owner and existing consumers must
+migrate, with no parallel lock path. Another rejected shortcut is a schema-only
+validator that accepts `independent: true`, `visualDiff: 0`, and `result: pass`:
+it checks syntax while leaving the requested failures executable and unchecked.
+
+## 6. Questions, risks, and first implementation unit
+
+Open questions: which documented host-owned receipt export is available to the
+installed host; whether common capture tooling emits the supported PNG subset;
+and exactly which established full feature gates the restored policy adopts.
+Resolve these from actual interfaces and the accepted workflow contract,
+without hard-coding concrete models or pretending a host receipt parser exists.
+Local histories may contain secrets: consume only explicitly scoped records and
+never copy raw credential-bearing logs into evidence reports.
+
+First independent unit: implement the Node-only reader/hash owner and full vs
+narrow policy with a disposable realistic feature fixture. Freeze requirements,
+observe one integration command, and prove source edits without HEAD changes
+invalidate evidence. This unit can ship locally without host adapters or PNG
+support; full-mode visual/delegation requests must fail with explicit missing
+capability gaps until those units exist.
+
+Executable acceptance plan:
+
+1. Copy a small product fixture with a real input-normalization/render boundary,
+   following `tests/feature-routing-fixture.test.mjs:13-53`. Run its behavioral
+   test before implementation (fail), after only one unit is fixed (combined
+   fail), and after integration (pass). Execute the checker CLI against each.
+2. Remove candidate/review files, use the writer's actual task identity as the
+   judge, change a reviewed patch, alter a required panel count, or omit final
+   integration. Assert nonzero exit and specific gate codes. Known native
+   provenance uses real-shaped fixture records; explicitly label them fixtures,
+   never current live agent receipts.
+3. Reuse a passing record after editing source/test/config bytes at the same
+   commit, adding/deleting a file, changing the lock, or modifying evidence
+   bytes. Assert stale rejection. Test path escape, outside symlink, duplicate
+   ID, malformed JSON, size bounds, timeout and source changes during checks.
+4. Run tiny real PNG pairs: identical, one changed pixel, wrong dimensions,
+   supported filter variants, bad CRC, and unsupported color/interlace.
+   Assert measured pixel counts and exact/tolerance results. Declare an
+   intentional region before freeze and show changes both inside and outside
+   it; changing tolerance or baseline afterward must fail.
+5. Set arbitrary `pass`/zero-diff/independence JSON fields and assert rejection.
+   Unknown host formats remain unverified. A narrow passing task must never
+   get the full label; unavailable provenance cannot become model diversity.
+6. Generate every package to an isolated temporary tree and run the same checker
+   fixture from each package's scripts directory with the working directory
+   outside the package. Assert identical decisions and missing-resource
+   failure, not just matching text. Test no shell interpolation and that
+   `inspect` never executes even a sentinel command.
+7. Run required repository checks after integration. Existing conformance must
+   remain deterministic and historically attributed. Any new live behavioral
+   evidence needs its own date, host/version, task authority, exact source,
+   permissions and limitations; fixture passes establish only fixture behavior.
+
+Acceptance remains bounded: this design can reject absent/stale proof and
+observe local tests/image math. It cannot automatically assess prose quality,
+prove upstream screenshot authenticity, detect all omitted source dependencies,
+authenticate malicious local file authors, or authorize/control deployment.
+Those limitations are report fields and full-claim gates where relevant, not
+small-print exceptions to a passing certificate.
+
+ROLE_POLICY=read-only-candidate

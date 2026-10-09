@@ -1,0 +1,225 @@
+# Independent design judgment
+
+Reviewed all three complete candidates and the frozen rubric at source revision
+`991ad1573e9fdf07dac54374f38956412d389f57`. This is a design review, not a
+runtime result. No implementation, model execution, installation or release
+was verified. The rubric supplies criteria, not a numerical scoring scale;
+the judgments below are qualitative.
+
+Select **candidate 2**, with the simplifications and corrections below.
+Graft candidate 1's single portable workflow reference and explicit separation
+of parity from intentional redesign. Reject candidate 3's single-manifest
+lifecycle and successful exit when required independence is unverified.
+
+## Findings attributable to candidates
+
+1. **Candidate 3 cannot preserve configured panels or multiple delegated
+   units.** Its `DeliveryManifest` in section 3 has singular `design`, `writer`
+   and `review` fields, no ordered panel mapping, and no unit inventory. The
+   prose nevertheless requires one review per delegated output and combined
+   behavior for multiple units. Current `architect/SKILL.md:22-29` derives the
+   candidate count from the configured ordered panel; `arena/SKILL.md:17-25`
+   preserves entry order and repeats only for an explicit larger request.
+   The proposed shape cannot represent that contract. Candidate 1 has plural
+   units/designs, but its caller-supplied `designCandidates` and
+   `designComparison` need a policy floor. Candidate 2 explicitly derives the
+   count/order from effective resolution and is the strongest base here.
+
+2. **Candidate 3 leaves freezing circular and absent from its CLI.** Section 2
+   pins the future candidate image before its capture; its CLI examples omit
+   the baseline-manifest input required by its function signature. Section 3
+   subsequently makes the baseline snapshot optional in prose. A separate
+   pre-work requirements lock must pin baseline/configuration/acceptance, while
+   final artifact and candidate-image hashes belong in later evidence.
+   Candidates 1 and 2 already provide the appropriate two-phase boundary.
+
+3. **Candidate 3's exit-zero contract can admit incomplete full execution.**
+   Its first CLI example returns zero for local gates while keeping attribution
+   separate. A caller requesting full execution must receive a nonzero result
+   when required independent provenance is unavailable, even while the report
+   retains successful local observations. Candidate 2's explicit inconclusive
+   state and candidate 1's closed full gate avoid this failure.
+
+4. **All three need a narrower, concrete provenance implementation claim.**
+   `setup-acceptance.mjs:151-193` verifies resolution and runtime activation;
+   returned records explicitly have `taskOutcome: "not-assessed"`. It does not
+   bind the child to the delivery artifact or to the review's reviewed digest.
+   `codex-delegation.mjs:102-140` proves a specific parent/child spawn linkage
+   and model/effort under its supported format, but it can accept an encrypted
+   parent message with `messageVerified: false`. Candidate 2's reuse proposal
+   is directionally correct, not a complete artifact-authorship adapter.
+   Two unrelated valid child records must not certify two arbitrarily attached
+   Markdown files as an independent writer/judge pair. Candidate 1 leaves the
+   same question open; candidate 3 explicitly validates only receipt hashes.
+
+5. **Candidate 2's stated lock/evidence API needs an external expected lock
+   digest.** `lockSha256` in an equally editable evidence file detects ordinary
+   drift, not replacement of both files. Candidate 1 has the same limitation;
+   candidate 3 acknowledges a separately held pre-work pin but omits it from
+   caller examples. Preserve an expected lock digest in the root's pre-work
+   task record and require it as a CLI input. This protects cooperative
+   workflow continuity, not malicious-local-author attestation. No local file
+   protocol proves chronology against an administrator rewriting every input.
+
+6. **The proposals converge on one principal architecture.** They are not
+   three structurally distinct preferred designs. Each does, however, describe
+   the structurally different event-ledger alternative. The comparison below
+   explicitly evaluates that alternative; do not claim three different
+   architectures or an independently observed live panel from these documents.
+
+## Rubric assessment
+
+| Frozen criterion | Candidate 1 | Candidate 2 | Candidate 3 |
+| --- | --- | --- | --- |
+| Missing/stale/self-review/combined evidence | Strong file and execution rules; provenance adapter unresolved | Strongest graph/freshness/combined rules; authorship binding still unresolved | Singular graph and exit-zero attribution gap block selection |
+| Local behavior versus provenance versus release | Clear bounded claims | Explicit rejected/inconclusive and per-boundary reports | Clear prose, but CLI success does not enforce full boundary |
+| Full/narrow and configured panel size | Caller-controlled counts need policy correction | Explicit effective-route cardinality and frozen narrow mode | No representable panel or multi-unit contract |
+| Small portable API and executable fixtures | Small owner and useful real-file fixtures | Strong acceptance cases and packaging inventory; reduce initial schema/observation scope | More modules and public helpers than needed; lifecycle incomplete |
+| Frozen visual measurement | Honest bounded PPM option, requires conversion provenance | Practical original-PNG subset, CRC/size/filter failure cases | Original PNG but candidate-before-capture circularity |
+| Historical/cache preservation | Explicitly preserved | Explicitly preserved | Explicitly preserved |
+
+## Structural choice
+
+Choose one frozen acceptance lock plus stateless verification. One root owns
+requirements; workers and judges own separate artifacts; the verifier reads
+bytes and observes explicitly selected checks. This fits the current generator
+and requires no run-store migration.
+
+The alternative is delivery events inside `DurableRunState`, with one owner
+for generations, transitions and acceptance projection. It helps recovery and
+multi-session ordering, but requires event schema, retry and migration policy.
+`run-evidence.mjs:31-57,103-109,136-158` presently validates supplied receipts
+and commits rather than executing checks or hashing dirty source. Reusing that
+store does not supply the missing observation semantics. Reject the ledger for
+this first implementation; do not add a parallel ledger beside the lock.
+
+## Chosen first implementation contract
+
+### API and lifecycle
+
+Use one CLI, `tools/delivery-evidence.mjs`, copied to each package's `scripts`.
+Export only `freezeAcceptance`, `inspectDelivery`, and `verifyDelivery`.
+Keep parsing, hashing and graph helpers private. Use one private image module.
+Do not add a Skill, a provider registry, a database, or public per-check helpers.
+An external JSON Schema is optional for this first unit; a second untested
+validator is not. Runtime strict parsing is authoritative.
+
+```sh
+node tools/delivery-evidence.mjs freeze --root . --plan task/plan.json --out task/lock.json
+node tools/delivery-evidence.mjs inspect --root . --lock task/lock.json --expected-lock-sha256 SHA --evidence task/evidence.json
+node tools/delivery-evidence.mjs verify --root . --lock task/lock.json --expected-lock-sha256 SHA --evidence task/evidence.json --run-check combined --out task/report.json
+```
+
+`freeze` refuses an existing output, hashes the immutable baseline/config,
+check harness and applicable route panel, and returns the lock digest to retain
+in the pre-work task record. It freezes *requirements*, not future output
+hashes. `inspect` never spawns. `verify` executes only named frozen check IDs;
+omitted required checks remain unverified. Use argv with `shell: false`, a
+confined cwd, timeout and output limits. Record observed exit/signal/digests;
+never trust imported pass flags. A report is disposable and atomically written.
+No persistent observation ledger in v1; verification reruns behavioral proof.
+
+Minimum plan fields are version, task ID, full/narrow mode, predicate,
+source roots, immutable harness/config paths, ordered candidate requirements,
+unit IDs with owned paths and delegation flag, required combined check, and
+optional visual contract. Narrow mode requires a reason and explicit omitted
+full requirements. Full mode uses the selected panel's whole ordered entries;
+without a configured panel, require at least two candidates. Preserve an
+explicit requested larger count and its ordered repeats. Evidence cannot lower
+these requirements. A consequential full task requires candidate artifacts,
+complete comparative judgment, root decision and per-delegate review.
+
+Evidence carries the expected lock digest, actual final source inventory,
+artifact IDs and hashes, review target digest sets, task-authority references,
+and candidate capture files. Source trees include additions/deletions, tests
+and config; compare them with the final inventory, **not** the pre-work source
+snapshot. The initial source snapshot records the baseline and may legitimately
+differ after implementation. Reviews bind their exact frozen output revision;
+the combined check binds the integrated revision. Pre/post execution hashing
+covers immutable evidence and config as well as source. Refuse path escapes,
+symlinks and nonregular files. Keep task output directories outside source roots
+or explicitly exclude and report them. New arbitrary exclusions are not allowed
+in the evidence file.
+
+Exit zero from `verify` means the requested mode's requirements are satisfied;
+nonzero means rejected or inconclusive. `inspect` may return zero for a valid
+inspection but must say `acceptance: not-assessed`. Full and narrow results
+remain distinct; include separate structure, behavior, visual, provenance and
+external sections. External is always unassessed in this tool.
+
+### Provenance decision
+
+**V1 does not invent a host receipt adapter.** Support structural presence,
+missing-authority gaps, and self-review rejection whenever the same canonical
+authority coordinate is supplied. Native setup verification may be reported as
+an additional linkage/model observation through the existing owner, but it is
+not artifact authorship or independent-review verification. Arbitrary actor
+strings, receipt hashes and a supplied `verified: true` cannot upgrade this.
+Host-owned records must never be replaced by native backing conversations.
+
+Until an actual supported authority record binds task identity to both the
+produced artifact digest and, for a judge, the frozen reviewed digest, report
+`INDEPENDENCE_UNVERIFIED`. This makes full workflows and delegated narrow work
+inconclusive, rather than falsely accepted; root-owned narrow local verification
+can pass. This is an explicit implementation limitation, not a complete repair
+of live full-execution provenance. The follow-up adapter must use a documented
+existing authority interface or a new task-completion declaration demonstrably
+recorded in that authority; it cannot accept a fabricated local certificate.
+Model diversity remains separate from distinct task identity.
+
+Do not build a passing full-provenance fixture by falsely treating an invented
+host JSON format as supported. Fixtures can verify full graph rejection and
+local checks, and separately exercise the existing native-linkage validator.
+A future supported adapter needs valid-format success and swapped/unrelated
+receipt failure tests before enabling full acceptance.
+
+### Visual-format decision
+
+Choose candidate 2's bounded **original PNG** decoding: noninterlaced 8-bit RGB
+and RGBA, standard filters 0–4, zlib with decoded-size cap, valid chunks/CRC and
+strict image dimensions. Normalize RGB to RGBA with alpha 255; compare raw
+normalized RGBA samples, including alpha. State explicitly that v1 does not
+perform color-management equivalence. Reject unsupported color encodings,
+interlace, malformed chunks and unsupported color-profile transformations;
+never fall back to file-hash equality or PPM conversion.
+
+Freeze state IDs, dimensions, capture configuration, comparator version,
+baseline hashes and either exact-zero or explicit changed-pixel/channel bounds.
+For v1 prefer a separately approved frozen target image for intentional
+redesign. Defer rectangle masks and multiple overlapping regional thresholds;
+reject those unsupported fields instead of ignoring them. Report changed
+pixels, maximum channel delta and bounding box. PNG math verifies supplied
+images; page/capture authenticity remains separately unverified. Passing a
+pixel calculation alone cannot certify visual workflow completion.
+
+## File ownership and executable acceptance
+
+| Bounded owner | Files | Required acceptance |
+| --- | --- | --- |
+| Acceptance implementation | `tools/delivery-evidence.mjs`, `tests/delivery-evidence.test.mjs` | Real temporary files and CLI subprocesses for freeze/inspect/verify, full/narrow floors, stale/absent evidence, review-target mismatch, unknown provenance, combined failure and source mutation |
+| Image implementation | `tools/delivery-image-diff.mjs`, `tests/delivery-image-diff.test.mjs` | Generated tiny actual PNG bytes: equal, changed pixel/alpha, filters, dimensions, CRC/truncation, unsupported format and decompression bounds |
+| Root integration | `tools/generate.mjs`, `security/executables.json`, affected canonical Skills, one `poteto-mode/references/delivery-evidence.md`, generator/packaging tests, generated `packages` | Same fixture through all three packaged CLIs outside repository cwd; no source-tree imports; deterministic resource bytes; source regeneration and full `npm run check` |
+
+Ownership names are implementation units, not authorization to spawn agents.
+Root owns any shared package metadata and schema decision. Update workflow
+text in `feature`, `figure-it-out`, `poteto-mode`, `oms-auto`, and
+`visual-parity` only where needed; link the shared contract instead of copying
+its rules. Preserve OMS routing admission and task authorization boundaries.
+
+Required behavior tests must include a realistic two-step public output path:
+normalization alone and rendering alone are insufficient; the integrated
+user-path check fails until both cooperate. Reuse the shape of
+`tests/feature-routing-fixture.test.mjs:13-53` in a new temporary fixture;
+do not mutate historical fixtures. Assert that a forged pass receipt does not
+replace execution, `inspect` cannot run a sentinel command, a nonzero/timeout
+cannot pass, dirty edits at unchanged HEAD and added/deleted files invalidate
+pins, lock/config changes fail against the separately retained expected digest,
+and source/evidence mutation during checks invalidates the run. Tests asserting
+root-owned narrow local success must never call it full pstack success.
+
+Keep `tools/build-conformance.mjs`, historical `evals/evidence`, conformance
+results and installed plugin caches unchanged. `generate` and fixture/check
+success establish local consistency and observed fixture behavior only.
+Do not publish, install, migrate production data or relabel historical evidence.
+
+ROLE_POLICY=independent-frozen-review

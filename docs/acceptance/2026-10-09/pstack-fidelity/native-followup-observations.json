@@ -1,0 +1,35 @@
+{
+  "observations": [
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a120a9-5208-72d0-81c9-bde7f44466e5",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "high",
+      "role": "implementer",
+      "route": "code.feature-refactoring",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    },
+    {
+      "modelAndEffortVerified": true,
+      "parentId": "01a1204e-7197-7502-812f-0ce041edbd0a",
+      "childId": "01a120b1-c6c8-7631-922b-46a00108f7b5",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "high",
+      "role": "implementer",
+      "route": "code.feature-refactoring",
+      "checkedChildContexts": 1,
+      "messageVerified": false,
+      "messageAudit": "encrypted-in-parent-record",
+      "roleSelectionClaim": false
+    }
+  ],
+  "limitations": [
+    "Actual model/effort and linked child identity verified",
+    "Encrypted parent task message; exact prompt not audited",
+    "Artifact/review runtime declarations absent; no full attribution claim"
+  ]
+}
