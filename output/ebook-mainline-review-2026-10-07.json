@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-07",
+  "reviewedCodeHead": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+  "artifactFreeze": "bd4e0eebe332e07419304808762c64ee51e38b80",
+  "artifactBuildSource": "b0bebb12497fa20a67ec9449a4571bb874754428",
+  "review": {
+    "method": "independent read-only frozen trail and source/artifact review",
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "attributionEvidence": "T3 task runtime metadata; native Codex parent/child records not audited",
+    "rounds": [
+      {
+        "taskId": "node:delegated-task:command%3Amcp%3A15a4a36b-dca1-4d7a-87f4-63c38ee95a55%3Adelegate-task%3Aohmystack-ebook-mainline-frozen-review-20261007-r1",
+        "frozenHead": "bd4e0eebe332e07419304808762c64ee51e38b80",
+        "findings": [
+          "P2 Windows EPUB resource names",
+          "P3 historical validation overwrite instructions"
+        ]
+      },
+      {
+        "taskId": "node:delegated-task:command%3Amcp%3A15a4a36b-dca1-4d7a-87f4-63c38ee95a55%3Adelegate-task%3Aohmystack-ebook-mainline-frozen-review-20261007-r2",
+        "frozenHead": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+        "result": "No remaining flags or blockers",
+        "priorFindingsResolved": true
+      }
+    ]
+  },
+  "checks": {
+    "nodeTests": 257,
+    "pythonTests": 17,
+    "epubcheck": "zero errors and warnings for both EPUBs",
+    "chinesePdfPages": 542,
+    "windowsPathSimulation": "failed before, passed after; native Windows build not tested"
+  },
+  "boundaries": {
+    "readerAcceptance": "deferred by maintainer; not performed",
+    "humanEditorialReview": "pending",
+    "fullRootTranscriptAvailable": false,
+    "postReviewReceiptAndIntegration": "root-audited separately; outside frozen independent code scope",
+    "artifactsRebuiltAfterPathNormalization": false,
+    "pushed": false,
+    "published": false
+  }
+}

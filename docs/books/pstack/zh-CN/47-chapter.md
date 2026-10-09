@@ -171,21 +171,21 @@ Feature Map 包含：
 
 <details><summary>示例：点餐应用的 README</summary><div class="details-content">
 <p class="code-line" data-line="117">只写用户视角的用法，暂不讨论实现。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="119"><span class="line"><span style="color:#79B8FF;font-weight:bold"># かんたん注文</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="119"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 便捷点餐</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">近所の店に、スマートフォンから料理を注文できるアプリです。</span></span>
+<span class="line"><span style="color:#E1E4E8">这是一款用手机向附近店铺点餐的应用。</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">## できること</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 可以做什么</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> メニューから料理を選んで、注文する</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 注文の状況（受付済み、調理中、受け取り可能）を確かめる</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 受け取る前なら、注文を取り消す</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 从菜单选择餐品并下单</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 查看订单状态（已接单、制作中、可取餐）</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 取餐前可以取消订单</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">## 使い方</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 使用方法</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">1.</span><span style="color:#E1E4E8"> アプリを開き、店を選ぶ</span></span>
-<span class="line"><span style="color:#FFAB70">2.</span><span style="color:#E1E4E8"> メニューから料理を選び、「注文する」を押す</span></span>
-<span class="line"><span style="color:#FFAB70">3.</span><span style="color:#E1E4E8"> 状況が「受け取り可能」になったら、店で受け取る</span></span>
+<span class="line"><span style="color:#FFAB70">1.</span><span style="color:#E1E4E8"> 打开应用，选择店铺</span></span>
+<span class="line"><span style="color:#FFAB70">2.</span><span style="color:#E1E4E8"> 从菜单选择餐品，点击「下单」</span></span>
+<span class="line"><span style="color:#FFAB70">3.</span><span style="color:#E1E4E8"> 状态变为「可取餐」后，到店取餐</span></span>
 <span class="line"></span></code></pre></div>
 </div></details>
 
@@ -273,15 +273,15 @@ RGDD 把这一阶段放在最前面，是<strong>为了先给下一阶段的 `/g
 <p class="code-line" data-line="205">开发者回答 Q1 和 Q2 后，Q3 和 Q4 就可回答。Agent 在第二轮提出 Q3 和 Q4。</p>
 <p class="code-line" data-line="207"><strong>第一轮示例</strong></p>
 <p class="code-line" data-line="209">这是按 <code>/grilling</code> 的 <a href="https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md" rel="nofollow noopener noreferrer" target="_blank"><code>SKILL.md</code></a> 的格式（为问题编号并附推荐答案），写出的上面决策树的第一轮（Q1、Q2）。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="211"><span class="line"><span style="color:#E1E4E8">❓ </span><span style="color:#E1E4E8;font-weight:bold">**Q1**</span><span style="color:#E1E4E8"> - </span><span style="color:#E1E4E8;font-weight:bold">**取り消せる期間**</span><span style="color:#E1E4E8">: READMEには「受け取る前なら、注文を取り消す」とあります。調理中の注文も取り消せますか？</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="211"><span class="line"><span style="color:#E1E4E8">❓ </span><span style="color:#E1E4E8;font-weight:bold">**Q1**</span><span style="color:#E1E4E8"> - </span><span style="color:#E1E4E8;font-weight:bold">**可取消的阶段**</span><span style="color:#E1E4E8">: README 写着「取餐前可以取消订单」。制作中的订单也可以取消吗？</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">➡️ 取り消せるのは「受付済み」の注文だけにする（調理を始めた料理が無駄になるため）</span></span>
+<span class="line"><span style="color:#E1E4E8">➡️ 只有「已接单」的订单可以取消（避免浪费已经开始制作的餐品）</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">❓ </span><span style="color:#E1E4E8;font-weight:bold">**Q2**</span><span style="color:#E1E4E8"> - </span><span style="color:#E1E4E8;font-weight:bold">**受け取り可能の知らせ方**</span><span style="color:#E1E4E8">: 状況が「受け取り可能」になったことを、客にどう知らせますか？</span></span>
+<span class="line"><span style="color:#E1E4E8">❓ </span><span style="color:#E1E4E8;font-weight:bold">**Q2**</span><span style="color:#E1E4E8"> - </span><span style="color:#E1E4E8;font-weight:bold">**如何通知可以取餐**</span><span style="color:#E1E4E8">: 如何告知顾客订单状态已变为「可取餐」？</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">➡️ アプリのプッシュ通知で知らせる</span></span>
+<span class="line"><span style="color:#E1E4E8">➡️ 通过应用推送通知</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="223">当开发者对 Q1 回答「仅在已接单时」，「取消」这一术语的定义便确定。于是 <code>/domain-modeling</code> 会将定义写入 <code>GLOSSARY.md</code>。</p>
 </div></details>
@@ -314,28 +314,28 @@ RGDD 把这一阶段放在最前面，是<strong>为了先给下一阶段的 `/g
 
 <details><summary>示例：GLOSSARY.md</summary><div class="details-content">
 <p class="code-line" data-line="253">写法参照 <code>/domain-modeling</code> 的 <code>GLOSSARY-FORMAT.md</code>，每个术语附上简短定义与应避免的说法。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="255"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 注文</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="255"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 订单</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">客が店に料理を注文し、受け取るまでを扱う。</span></span>
+<span class="line"><span style="color:#E1E4E8">涵盖顾客向店铺点餐到取餐的过程。</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">## 用語</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 术语</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**注文**</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#E1E4E8">客が店に出した、料理の注文。</span></span>
-<span class="line"><span style="color:#E1E4E8;font-style:italic">_避ける言い方_</span><span style="color:#E1E4E8">: 購入、取引</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**订单**</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">顾客向店铺提交的餐品订单。</span></span>
+<span class="line"><span style="color:#E1E4E8;font-style:italic">_应避免的说法_</span><span style="color:#E1E4E8">: 购买、交易</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**取り消し**</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#E1E4E8">「受付済み」の注文を、客がやめること。調理中の注文は取り消せない。</span></span>
-<span class="line"><span style="color:#E1E4E8;font-style:italic">_避ける言い方_</span><span style="color:#E1E4E8">: キャンセル</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**取消订单**</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">顾客取消「已接单」的订单。制作中的订单不能取消。</span></span>
+<span class="line"><span style="color:#E1E4E8;font-style:italic">_应避免的说法_</span><span style="color:#E1E4E8">: 取消</span></span>
 <span class="line"></span></code></pre></div>
 </div></details>
 
 
 <details><summary>示例：ADR（docs/adr/0001-separate-database-per-store.md）</summary><div class="details-content">
 <p class="code-line" data-line="273">写法参照 <code>/domain-modeling</code> 的 <a href="https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/ADR-FORMAT.md" rel="nofollow noopener noreferrer" target="_blank"><code>ADR-FORMAT.md</code></a>。ADR 是记录决定及其理由的短文，一段文字也可以。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="275"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 注文のデータは、店ごとに別のデータベースに保存する</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="275"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 按店铺分别在独立数据库中保存订单数据</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">1つの店で障害が起きても、ほかの店の注文に影響しないようにするため、注文のデータを店ごとに別のデータベースに分けて保存する。1つのデータベースにまとめる案も比べたが、障害の影響が全店に広がるので採らなかった。</span></span>
+<span class="line"><span style="color:#E1E4E8">为了避免一家店发生故障时影响其他店铺的订单，按店铺分别在独立数据库中保存订单数据。也比较过集中到一个数据库的方案，但因故障会波及所有店铺而未采用。</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="281">这份 ADR 记录的是折叠内容「示例：创建 ADR 的三个条件」中的表格所分析的决定。</p>
 </div></details>
@@ -426,30 +426,30 @@ RGDD 加入这一阶段，是<strong>为了在权宜性的绕路办法（不修�
 
 <details><summary>示例：功能文件（pstack 范例摘录）</summary><div class="details-content">
 <p class="code-line" data-line="360">这是 <code>/create-verification-skill</code> 的 <a href="https://github.com/cursor/plugins/tree/main/pstack/skills/create-verification-skill/references/feature-map-example" rel="nofollow noopener noreferrer" target="_blank"><code>references/feature-map-example/</code></a> 中，笔记应用「创建笔记」功能文件的节译，略去了一部分内容。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="362"><span class="line"><span style="color:#79B8FF;font-weight:bold"># メモを作る</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="362"><span class="line"><span style="color:#79B8FF;font-weight:bold"># 创建笔记</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">ブラウザかCLIから、タイトル付きのメモを保存できる。書きかけの下書きを取り消すことも、保存したメモを別の画面から確かめることもできる。</span></span>
+<span class="line"><span style="color:#E1E4E8">可以从浏览器或 CLI 保存带标题的笔记。也可以放弃未完成的草稿，并从其他页面查看已保存的笔记。</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF;font-weight:bold">## Sub-features</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#79B8FF"> `create-open`</span><span style="color:#E1E4E8"> ブラウザの各入口から、空の編集画面を開く</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#79B8FF"> `create-save`</span><span style="color:#E1E4E8"> タイトルと本文を保存する</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#79B8FF"> `create-open`</span><span style="color:#E1E4E8"> 从浏览器的各入口打开空白编辑页</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#79B8FF"> `create-save`</span><span style="color:#E1E4E8"> 保存标题和正文</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF;font-weight:bold">## How to get to it (user POV)</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ブラウザのツールバーの </span><span style="color:#79B8FF">`New note`</span><span style="color:#E1E4E8"> ボタンを選ぶ</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 入力欄の外にフォーカスがあるときに、ブラウザで </span><span style="color:#79B8FF">`n`</span><span style="color:#E1E4E8"> を押す</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ターミナルで </span><span style="color:#79B8FF">`notes create --title &lt;title&gt; --body &lt;body&gt;`</span><span style="color:#E1E4E8"> を実行する</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 在浏览器工具栏中选择 </span><span style="color:#79B8FF">`New note`</span><span style="color:#E1E4E8"> 按钮</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 当焦点在输入框外时，在浏览器中按 </span><span style="color:#79B8FF">`n`</span><span style="color:#E1E4E8"> 键</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 在终端运行 </span><span style="color:#79B8FF">`notes create --title &lt;title&gt; --body &lt;body&gt;`</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF;font-weight:bold">## Driving it with control-notes</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **編集画面を開く。**</span><span style="color:#79B8FF"> `New note`</span><span style="color:#E1E4E8"> を選ぶ。</span><span style="color:#79B8FF">`control-notes browser click --role button --name "New note"`</span><span style="color:#E1E4E8"> を実行する。</span><span style="color:#79B8FF">`Note editor`</span><span style="color:#E1E4E8"> という名前のフォームが現れ、</span><span style="color:#79B8FF">`Title`</span><span style="color:#E1E4E8"> の入力欄にフォーカスが移る。</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **内容を入れる。**</span><span style="color:#E1E4E8"> タイトルと本文を入力する。</span><span style="color:#79B8FF">`control-notes browser fill --role textbox --name "Title" --value "Release checklist"`</span><span style="color:#E1E4E8"> と </span><span style="color:#79B8FF">`control-notes browser fill --role textbox --name "Body" --value "Tag and publish"`</span><span style="color:#E1E4E8"> を実行する。</span><span style="color:#79B8FF">`Save note`</span><span style="color:#E1E4E8"> ボタンが押せるようになる。</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **メモを保存する。**</span><span style="color:#79B8FF"> `Save note`</span><span style="color:#E1E4E8"> を選ぶ。</span><span style="color:#79B8FF">`control-notes browser click --role button --name "Save note"`</span><span style="color:#E1E4E8"> を実行する。</span><span style="color:#79B8FF">`Note saved`</span><span style="color:#E1E4E8"> という表示が現れ、見出しが </span><span style="color:#79B8FF">`Release checklist`</span><span style="color:#E1E4E8"> になる。</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **打开编辑页。**</span><span style="color:#E1E4E8"> 选择 </span><span style="color:#79B8FF">`New note`</span><span style="color:#E1E4E8">，运行 </span><span style="color:#79B8FF">`control-notes browser click --role button --name "New note"`</span><span style="color:#E1E4E8">。</span><span style="color:#79B8FF">`Note editor`</span><span style="color:#E1E4E8"> 表单出现，</span><span style="color:#79B8FF">`Title`</span><span style="color:#E1E4E8"> 输入框获得焦点。</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **填写内容。**</span><span style="color:#E1E4E8"> 输入标题和正文，分别运行 </span><span style="color:#79B8FF">`control-notes browser fill --role textbox --name "Title" --value "Release checklist"`</span><span style="color:#E1E4E8"> 和 </span><span style="color:#79B8FF">`control-notes browser fill --role textbox --name "Body" --value "Tag and publish"`</span><span style="color:#E1E4E8">。</span><span style="color:#79B8FF">`Save note`</span><span style="color:#E1E4E8"> 按钮变为可点击。</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **保存笔记。**</span><span style="color:#E1E4E8"> 选择 </span><span style="color:#79B8FF">`Save note`</span><span style="color:#E1E4E8">，运行 </span><span style="color:#79B8FF">`control-notes browser click --role button --name "Save note"`</span><span style="color:#E1E4E8">。</span><span style="color:#79B8FF">`Note saved`</span><span style="color:#E1E4E8"> 提示出现，标题变为 </span><span style="color:#79B8FF">`Release checklist`</span><span style="color:#E1E4E8">。</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF;font-weight:bold">## Gotchas</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 入力欄にフォーカスがあるときに </span><span style="color:#79B8FF">`n`</span><span style="color:#E1E4E8"> を押すと、新しい編集画面は開かず、文字が入力される。</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 当焦点位于输入框内时，按 </span><span style="color:#79B8FF">`n`</span><span style="color:#E1E4E8">，不会打开新的编辑页，而是输入字符。</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="389">标题下的说明段落对应「功能是什么」；<code>How to get to it (user POV)</code> 对应「如何进入」；<code>Driving it with control-notes</code> 对应「如何操作」及「看到什么结果才算功能正常」。</p>
 <p class="code-line" data-line="391"><code>control-notes</code> 是范例验证 Skill 自带的应用操作 CLI。<code>Sub-features</code> 是以短 ID 逐行列出的细分功能；<code>Gotchas</code> 是可能使验证工作白费或结果无效的陷阱。四个标题在所有功能文件中都使用相同的英文名称和顺序。</p>
@@ -569,9 +569,9 @@ Feature Map 的 `features/README.md` 则是应用完成后，Agent 按 `/create-
 <span class="line"><span style="color:#85E89D">status</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">superseded by ADR-0002</span></span>
 <span class="line"><span style="color:#E1E4E8">---</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold"># 注文のデータは、店ごとに別のデータベースに保存する</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold"># 按店铺分别在独立数据库中保存订单数据</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">1つの店で障害が起きても、ほかの店の注文に影響しないようにするため、注文のデータを店ごとに別のデータベースに分けて保存する。1つのデータベースにまとめる案も比べたが、障害の影響が全店に広がるので採らなかった。</span></span>
+<span class="line"><span style="color:#E1E4E8">为了避免一家店发生故障时影响其他店铺的订单，按店铺分别在独立数据库中保存订单数据。也比较过集中到一个数据库的方案，但因故障会波及所有店铺而未采用。</span></span>
 <span class="line"></span></code></pre>
 </div>
 <p class="code-line" data-line="477">新 ADR 写明重新决定了什么，以及原因。</p>
@@ -581,9 +581,9 @@ Feature Map 的 `features/README.md` 则是应用完成后，Agent 按 `/create-
 <span class="line"><span style="color:#85E89D">status</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">accepted</span></span>
 <span class="line"><span style="color:#E1E4E8">---</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold"># 注文のデータを、1つのデータベースにまとめる</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold"># 将订单数据集中到一个数据库</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">店が300を超え、店ごとのデータベースを運用しきれなくなったため、注文のデータを1つのデータベースにまとめる。0001で避けようとした、障害の影響が全店に広がる問題は、データベースを複数の場所に複製しておくことで抑える。</span></span>
+<span class="line"><span style="color:#E1E4E8">店铺超过 300 家后，已无法继续维护每店一个数据库，因此将订单数据集中到一个数据库。对于 0001 曾试图避免的故障波及所有店铺的问题，通过在多处复制数据库来降低影响。</span></span>
 <span class="line"></span></code></pre>
 </div>
 <p class="code-line" data-line="489">下一名 Agent 阅读 0002 就能知道当前决策，阅读 0001 则能了解为何过去按店铺分开存储。</p>

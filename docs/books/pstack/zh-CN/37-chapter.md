@@ -156,15 +156,15 @@ Comment Sicko 会删除解释自身代码意外行为的注释，并在报告中
 ```
 type User = { name: string; email: string };
 
-// 前：自分たちの関数の意外な挙動を、コメントで説明している
-// 注意：この関数は、保存に加えて確認メールも送る
+// 修改前：用注释说明自家函数的意外行为
+// 注意：此函数除了保存，还会发送确认邮件
 function saveUser(user: User) { /* ... */ }
 ```
 
 ```
 type User = { name: string; email: string };
 
-// 後：2つの仕事を、名前で分かる2つの関数に切り出す
+// 修改后：将两项工作拆成两个名称清楚的函数
 function saveUser(user: User) { /* ... */ }
 function sendConfirmationMail(user: User) { /* ... */ }
 ```
@@ -264,20 +264,25 @@ async function onClose(): Promise<void> {
 例如，遇到「不得修改措辞」的注释，`/no-comments` 会提出编写一个措辞变化时会失败的测试。有了这个测试，即使没有注释，也能维持约束。
 
 ```
-// 前：制約をコメントだけで主張している
-// 文言を変えないこと
+// 修改前：只用注释声明约束
+// 不要更改显示文字
 function stockLabel(count: number): string {
   return count === 0 ? "在庫切れです" : `残り${count}点`;
 }
 ```
 
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：函数输出中的日文分别表示「缺货」和「剩余若干件」；原值是被要求保持不变的显示文字。
+<!-- book-code-note:end -->
+
+
 ```
-// テストを1件登録する
+// 添加一个测试
 declare function test(name: string, fn: () => void): void;
-// 値を確かめる
+// 检查值
 declare function expect(value: unknown): { toBe(expected: unknown): void };
 
-// 後：制約をテストで表し、コメントを消す
+// 修改后：用测试表达约束，并删除注释
 function stockLabel(count: number): string {
   return count === 0 ? "在庫切れです" : `残り${count}点`;
 }
@@ -286,6 +291,11 @@ test("在庫が0のときの文言は「在庫切れです」から変わらな�
   expect(stockLabel(0)).toBe("在庫切れです");
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：函数输出中的日文分别表示「缺货」和「剩余若干件」；测试名称要求库存为零时的「缺货」文字不变，断言也直接比较该原值。
+<!-- book-code-note:end -->
+
 
 这样，如果注释声称存在约束，就需要用测试等代码表达该约束。
 
@@ -317,7 +327,7 @@ test("在庫が0のときの文言は「在庫切れです」から変わらな�
 
 ```
 /no-comments the diff
-// 差分に対して
+// 针对差异
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

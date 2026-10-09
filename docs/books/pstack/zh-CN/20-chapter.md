@@ -247,7 +247,7 @@ poteto 在[「The Complete Guide to pstack」Part 2](https://x.com/poteto/status
 
 ```
 /poteto-mode open source these skills as a plugin. nothing internal leaks, work in a temp dir, show me the dependency graph first.
-// これらのSkillをプラグインとして公開して。社内のものは何も漏らさず、一時ディレクトリで作業して、先に依存関係のグラフを見せて。
+// 将这些 Skill 作为插件发布。不要泄露任何公司内部资料；在临时目录中工作，并先展示依赖关系图。
 ```
 
 <a id="%E3%80%8Eorchestrate%E3%80%8F%E3%81%AF%E3%80%81%E4%BD%95%E6%97%A5%E3%82%82%E7%B6%9A%E3%81%8F%E5%A4%9A%E6%95%B0%E3%81%AEpr%E3%81%AE%E4%BD%9C%E6%A5%AD%E3%82%92%E3%80%81%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E6%9B%B8%E3%81%8B%E3%81%AA%E3%81%841%E4%BD%93%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%8D%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%8C%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B"></a>
@@ -476,20 +476,20 @@ head SHA 变更后，PR 内容可能已不同于判定记录时。因此，<stro
 在 PR 栈（由父子关系连接的一列 PR）中，下层 PR 内容改变后，上层 PR 也需要重新叠放在改变后的 PR 上（见下图）。这项操作称为 restack。
 
 ```
-更新前
+更新之前
 main
-└─ PR #1（親はmain）
-   └─ PR #2（親はPR #1）
-      └─ PR #3（親はPR #2）
+└─ PR #1（父分支是 main）
+   └─ PR #2（父分支是 PR #1）
+      └─ PR #3（父分支是 PR #2）
 
-PR #1に変更Aを加えた後の更新順
+对 PR #1 添加改动 A 后的更新顺序
 PR #1 → PR #2 → PR #3
 
-更新後
+更新之后
 main
-└─ PR #1（変更A）
-   └─ PR #2（更新後の親PR #1を反映）
-      └─ PR #3（更新後の親PR #2を反映）
+└─ PR #1（改动 A）
+   └─ PR #2（已纳入更新后的父 PR #1）
+      └─ PR #3（已纳入更新后的父 PR #2）
 ```
 
 在「Orchestrate」中，每个 PR 栈只安排一位负责 restack 的 Agent，称为 stacker（PR 栈管理者）。
@@ -553,7 +553,7 @@ Workers 不使用 `gt`，也不进行 rebase。多个 Agent 同时重排同一 P
 
 ```
 /poteto-mode orchestrate the store migration. own it until every package is converted and merged. i'll check in twice a day.
-// ストアの移行を orchestrate して。すべてのパッケージが変換されてマージされるまで持っていて。1日2回確認する。
+// 统筹存储系统迁移，直到所有软件包都完成转换并合并。每天检查两次。
 ```
 
 <a id="%E3%80%8Eautopilot-full%E3%80%8F%E3%81%AF%E3%80%81pr%E3%81%94%E3%81%A8%E3%81%AE%E3%82%AA%E3%83%BC%E3%83%8A%E3%83%BC%E3%81%8C%E3%83%9E%E3%83%BC%E3%82%B8%E3%81%BE%E3%81%A7%E9%80%B2%E3%82%81%E3%80%81%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%8D%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%AF%E6%A4%9C%E8%A8%BC%E3%81%AE%E5%88%A4%E5%AE%9A%E3%81%A0%E3%81%91%E3%82%92%E5%8F%97%E3%81%91%E6%8C%81%E3%81%A4"></a>
@@ -667,7 +667,7 @@ Workers 不使用 `gt`，也不进行 rebase。多个 Agent 同时重排同一 P
 
 ```
 /poteto-mode full autopilot on this queue. each item is independent. i want them merged by morning.
-// このキューを full autopilot で進めて。各項目は独立している。朝までにマージしておいて。
+// 用 full autopilot 处理这个队列。各项任务相互独立，早上之前完成合并。
 ```
 
 <a id="%E3%80%8Eautopilot-stack%E3%80%8F%E3%81%AF%E3%80%81autopilot-full%E3%81%A8%E5%90%8C%E3%81%98%E6%89%8B%E9%A0%86%E3%81%A7pr%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%A6%E6%A4%9C%E8%A8%BC%E3%81%97%E3%80%81%E3%83%9E%E3%83%BC%E3%82%B8%E3%81%9B%E3%81%9A%E3%81%AB1%E6%9C%AC%E3%81%AE%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF%E3%81%A8%E3%81%97%E3%81%A6%E9%81%8B%E7%94%A8%E8%80%85%E3%81%AB%E6%B8%A1%E3%81%99"></a>
@@ -718,7 +718,7 @@ PR 栈的排列是所有负责人共享的信息。若多个负责人同时改�
 
 ```
 /poteto-mode autopilot these five changes but stack them, don't ship. i'll land the stack in the morning.
-// この5つの変更を autopilot で進めて。ただしスタックにして、本番には入れないで。朝に自分でスタックを入れる。
+// 用 autopilot 处理这五项改动，但要组成 PR 堆栈，不要投入生产。早上我会亲自合入整个堆栈。
 ```
 
 <a id="%E9%95%B7%E3%81%8F%E5%8B%95%E3%81%8F%E4%BD%9C%E6%A5%AD%E3%81%AE5%E3%81%A4%E3%81%AE%E9%81%B8%E6%8A%9E%E8%82%A2%E3%81%AF%E3%80%81%E8%AA%B0%E3%81%8C%E3%83%9E%E3%83%BC%E3%82%B8%E3%81%97%E3%80%81%E4%BD%95%E3%82%92%E5%8D%98%E4%BD%8D%E3%81%AB%E3%81%99%E3%82%8B%E3%81%8B%E3%81%A7%E9%81%B8%E3%81%B6"></a>

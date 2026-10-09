@@ -238,7 +238,7 @@
 
 ```
 use subtract before you add. delete the obsolete adapters first, then design what's left.
-// subtract before you add を使って。まず古くなったアダプタを消して。それから残ったものを設計して。
+// 使用 subtract before you add。先删除过时的适配器，再设计剩余部分。
 ```
 
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
@@ -285,13 +285,13 @@ type User = { name: string };
 declare const db: { save(user: User): Promise<void> };
 declare const user: User;
 
-// 前：saveUser は db.save を呼ぶだけで、使われているのはここ1か所
+// 修改前：saveUser 只调用 db.save，而且只有这里用到它
 function saveUser(user: User) {
   return db.save(user);
 }
 await saveUser(user);
 
-// 後：saveUser をなくし、db.save を直接呼ぶ
+// 修改后：删除 saveUser，直接调用 db.save
 await db.save(user);
 ```
 
@@ -302,7 +302,7 @@ await db.save(user);
 ```
 declare const aPayClient: { charge(amount: number): Promise<void> };
 
-// 前：取り替え用の窓口を挟んでいるが、実装は A社用の1つしかない
+// 修改前：多了一层可替换接口，但只有 A 公司的一种实现
 interface PaymentGateway {
   pay(amount: number): Promise<void>;
 }
@@ -316,7 +316,7 @@ class APayPaymentGateway implements PaymentGateway {
 const gateway: PaymentGateway = new APayPaymentGateway();
 await gateway.pay(1000);
 
-// 後：窓口をなくし、A社の決済を直接呼ぶ
+// 修改后：去掉接口层，直接调用 A 公司的支付实现
 await aPayClient.charge(1000);
 ```
 
@@ -344,19 +344,19 @@ await aPayClient.charge(1000);
 <p class="code-line" data-line="228">例如，接收订单表单金额的函数，只检查一次「金额是否大于或等于零」，再把已验证的值作为名为 <code>NonNegativeAmount</code>（非负金额）的类型传递。</p>
 <p class="code-line" data-line="230">使用金额的函数（如计算总额或创建发票的函数）接收 <code>NonNegativeAmount</code> 类型，无须重复检查相同条件。</p>
 <p class="code-line" data-line="232">只看类型名就能知道「这个金额已在边界验证为非负」。这样，<strong>读者只需阅读边界的一处和类型名，就能一次记住该条件</strong>。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="234"><span class="line"><span style="color:#a0aab5">// 0以上だと確かめ済みの金額を表す型</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="234"><span class="line"><span style="color:#a0aab5">// 表示已经验证不小于 0 的金额类型</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> NonNegativeAmount</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> number</span><span style="color:#F97583"> &amp;</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">readonly</span><span style="color:#FFAB70"> __brand</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "NonNegativeAmount"</span><span style="color:#E1E4E8"> };</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 境界：注文フォームから受け取った金額を、ここで一度だけ確かめる</span></span>
+<span class="line"><span style="color:#a0aab5">// 边界：在这里对订单表单传来的金额只验证一次</span></span>
 <span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> parseAmount</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">input</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NonNegativeAmount</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (input </span><span style="color:#F97583">&lt;</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) {</span></span>
 <span class="line"><span style="color:#F97583">    throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"金額は0以上で入力してください"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">  }</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> input </span><span style="color:#F97583">as</span><span style="color:#B392F0"> NonNegativeAmount</span><span style="color:#E1E4E8">; </span><span style="color:#a0aab5">// 確かめた直後なので、ここでだけ型を付ける</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> input </span><span style="color:#F97583">as</span><span style="color:#B392F0"> NonNegativeAmount</span><span style="color:#E1E4E8">; </span><span style="color:#a0aab5">// 刚完成验证，所以只在这里赋予该类型</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 使う側：NonNegativeAmount で受け取るので、「0以上か」を確かめ直さない</span></span>
+<span class="line"><span style="color:#a0aab5">// 使用方接收 NonNegativeAmount，无须再次验证是否不小于 0</span></span>
 <span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> calcTotal</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">price</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NonNegativeAmount</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">quantity</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> price </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> quantity;</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
@@ -365,6 +365,12 @@ await aPayClient.charge(1000);
 <span class="line"><span style="color:#F97583">  return</span><span style="color:#9ECBFF"> `ご請求金額：${</span><span style="color:#E1E4E8">amount</span><span style="color:#9ECBFF">}円`</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span></code></pre></div>
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：异常消息要求金额不小于 0；账单模板输出「应付金额：若干日元」。这些是函数的原始输出值，故保留。
+<!-- book-code-note:end -->
+
+
 <p class="code-line" data-line="257"><code>calcTotal</code> 和 <code>createInvoice</code> 中没有 <code>if (amount &lt; 0)</code> 这样的检查。未经过 <code>parseAmount</code> 的数值在传入时会产生编译错误，因此使用方无须再次验证。</p>
 </div></aside>
 
@@ -414,14 +420,14 @@ poteto 在《The Complete Guide to pstack》[Part 2](https://x.com/poteto/status
 例如，制作商品列表功能时，先确定「商品包含名称、价格、库存数量」，之后再考虑如何展示或加入购物车。确定数据形态后，使用它的处理逻辑就容易编写。
 
 ```
-// 先に決める：商品は名前、価格、在庫数を持つ
+// 先确定结构：商品有名称、价格和库存数量
 type Product = {
   name: string;
   price: number;
   stock: number;
 };
 
-// 形が決まっているので、表示やカートへの追加は迷わずに書ける
+// 结构确定后，显示商品和加入购物车的代码就能明确编写
 function formatProduct(product: Product): string {
   return `${product.name}　${product.price}円（在庫 ${product.stock}）`;
 }
@@ -430,6 +436,10 @@ function canAddToCart(product: Product): boolean {
   return product.stock > 0;
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：`formatProduct` 的原始模板输出为「商品名、日元价格（库存数量）」；其中「円」表示日元，「在庫」表示库存。保留该函数的实际输出值。
+<!-- book-code-note:end -->
 
 <a id="%E3%82%B3%E3%83%BC%E3%83%89%E3%81%A7%E3%81%AF%E3%80%81%E8%A1%8C%E3%81%AE%E9%87%8D%E8%A4%87%E3%82%88%E3%82%8A%E6%A7%8B%E9%80%A0%E3%81%AE%E9%87%8D%E8%A4%87%E3%82%92%E3%81%AA%E3%81%8F%E3%81%99"></a>
 
@@ -473,17 +483,17 @@ declare function processJob(job: Job): Promise<void>;
 declare const jobsForA: Job[];
 declare const jobsForB: Job[];
 
-// 前：全Workerで1つの「処理済み件数」を共有し、読んでから書き込む
+// 修改前：所有 Worker 共享一个「已处理数量」，先读取再写入
 async function countUp() {
-  // A と B がほぼ同時に 10 を読む
+  // A 和 B 几乎同时读取到 10
   const current = await store.get("processedCount"); 
-  // どちらも 11 を書き込み、1件分が消える
+  // 两者都写入 11，导致少算一项
   await store.set("processedCount", current + 1);
 }
 
-// 後：Workerごとに自分の件数を持たせ、全体が必要なときだけ合計する
+// 修改后：每个 Worker 保存自己的计数，只在需要总数时求和
 async function runWorker(jobs: Job[]): Promise<number> {
-  let processedCount = 0; // このWorker専用の値
+  let processedCount = 0; // 这个 Worker 专用的计数
 
   for (const job of jobs) {
     await processJob(job);
@@ -562,7 +572,7 @@ const total = counts[0] + counts[1];
 最后，为体现重新设计的结果，所有使用金额的位置、类型和文档都应改用这一形态。
 
 ```
-// 後付け：金額は円の数値のまま、使う箇所ごとに「ドルなら」の分岐を追加する
+// 事后补丁：金额仍只是以日元表示的数字，每个使用处都加上「如果是美元」的分支
 function formatPrice(amount: number, isDollar: boolean): string {
   if (isDollar) {
     return `$${amount.toFixed(2)}`;
@@ -572,8 +582,12 @@ function formatPrice(amount: number, isDollar: boolean): string {
 }
 ```
 
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：返回值末尾的「円」表示日元，是原示例的实际显示值。
+<!-- book-code-note:end -->
+
 ```
-// 設計し直す：金額を「数値と通貨の組」として持ち、使う箇所はすべてこの型を受け取る
+// 重新设计：金额表示为「数值与币种」的组合，所有使用处都接收这种类型
 type Currency = "JPY" | "USD";
 type Money = { amount: number; currency: Currency };
 
@@ -585,6 +599,10 @@ function formatPrice(price: Money): string {
   return `${price.amount}円`;
 }
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：返回值末尾的「円」表示日元，是原示例的实际显示值。
+<!-- book-code-note:end -->
 
 这条 Principle 将上述四步视为<strong>把变更融入现有设计，同时保留未来选择余地</strong>的方法。如果只是在原设计上追加，新加部分会一直与原设计不一致。之后的修改只能绕开这种不一致，未来可选的设计路线也会减少。
 
@@ -846,7 +864,7 @@ Agent 在写出前提、完成 census 前，不开始下一次修复。如果 ce
 
 ```
 /poteto-mode build two prototypes of the markdown renderer so we can compare. spawn an agent for each.
-// 比べられるように、markdown レンダラーのプロトタイプを2つ作って。それぞれにエージェントを1つずつ立てて。
+// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。
 ```
 
 <a id="%E3%80%8Ebuild-the-lever%E3%80%8F%E3%81%AF%E3%80%81%E6%89%8B%E4%BD%9C%E6%A5%AD%E3%81%A7%E3%81%AF%E3%81%AA%E3%81%8F%E4%BD%9C%E6%A5%AD%E3%82%92%E3%81%99%E3%82%8B%E9%81%93%E5%85%B7%E3%82%92%E4%BD%9C%E3%82%8B"></a>
@@ -931,14 +949,14 @@ Agent 在写出前提、完成 census 前，不开始下一次修复。如果 ce
 从首次手工操作到工具处理全部目标的流程，如下图所示。
 
 ```
-1回目を手で行い、手順を学ぶ
+手动完成第一项，了解步骤
    ↓
-道具（codemod、スクリプトなど）を作る
+制作工具（codemod、脚本等）
    ↓
-道具で1回目の再実行をし、手でやった版と出力を比べる
-   ↓ 一致したら
-道具を自分で実行し、残りのすべての単位を処理する
-（サブエージェントに1つずつ手作業で行わせない）
+用工具重新执行第一项，并将输出与手动完成的版本比较
+   ↓ 如果结果一致
+自己运行工具，处理剩余的所有单元
+（不要让子 Agent 逐个手动处理）
 ```
 
 <strong>Agent 应用这条 Principle 时，差异中会增加工具文件</strong>。如果 Agent 引用了这条 Principle，差异中却没有 codemod、脚本、生成器或委派用 Skill，那么 Agent 并未实际应用它。
@@ -990,7 +1008,7 @@ pstack 的 README 中有以下请求示例。README 将它列为 `/figure-it-out
 
 ```
 /poteto-mode i'm stepping away. migrate every caller from the synchronous store to the new async one, keeping behavior identical. i want to trust it was done right when i'm back.
-// 席を外す。すべての呼び出し元を、同期ストアから新しい非同期ストアへ移して。振る舞いは同じに保って。戻ったとき、正しくできたと信じられるようにしたい。
+// 我暂时离开。把所有调用方从同步存储迁移到新的异步存储，保持行为不变。我回来时需要有证据相信迁移正确。
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

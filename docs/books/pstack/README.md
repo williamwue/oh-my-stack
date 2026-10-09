@@ -25,12 +25,22 @@ provides all four files and SHA-256 checksums as downloadable attachments.
 
 | Edition | PDF | EPUB |
 | --- | --- | --- |
-| Simplified Chinese | [538 pages](../../../output/pdf/pstack-zh-CN.pdf) | [Download EPUB](../../../output/epub/pstack-zh-CN.epub) |
+| Simplified Chinese | [542 pages](../../../output/pdf/pstack-zh-CN.pdf) | [Download EPUB](../../../output/epub/pstack-zh-CN.epub) |
 | Author's English | [622 pages](../../../output/pdf/pstack-en.pdf) | [Download EPUB](../../../output/epub/pstack-en.epub) |
 
-Both EPUBs passed EPUBCheck 5.4.0 with no errors or warnings. The PDFs passed
-text-boundary checks and representative visual inspection. Native ebook reader
-testing and human editorial review of the Chinese translation remain pending.
+The local files above are unpublished October 7 candidates rebuilt from the
+ported correction on the current 0.10.0 source baseline: EPUB
+tables use labelled paragraph rows, and Chinese code comments and explanatory
+templates have been translated. Runtime-sensitive Japanese values retain their
+original spelling with Chinese notes. The October 3 release remains historical;
+its Chinese PDF has 538 pages. The English PDF is unchanged.
+
+Both new EPUBs passed EPUBCheck 5.4.0 with no errors or warnings. The new Chinese
+PDF passed text-boundary checks and representative visual inspection; the
+English PDF retains its historical bytes and validation. Native ebook reader
+testing, including reimporting the corrected file into WeChat Read, was deferred
+by the maintainer for this run. Human editorial review of the Chinese
+translation also remains pending.
 See the [ebook notes and checksums](../../../output/README.md).
 
 ## Source and attribution

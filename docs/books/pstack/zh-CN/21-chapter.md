@@ -82,7 +82,7 @@ Principle 不是由用户明确调用的，而是<strong>由 Agent 判断工作�
 
 ```
 apply prove it works. run the real import flow and show me the written records.
-// prove it works を適用して。実際のインポートを流して、書き込まれたレコードを見せて。
+// 使用 prove it works。实际运行导入，并展示写入的记录。
 ```
 
 <a id="%E3%81%93%E3%81%AE%E9%83%A8%E3%81%AE%E7%AB%A0"></a>

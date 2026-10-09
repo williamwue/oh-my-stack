@@ -90,6 +90,13 @@ def audit(root):
                 issues.append({'chapter': order, 'lang': lang, 'kind': kind})
 
     assets = json.loads((book / 'assets/sources.json').read_text())
+    correction_path = book / 'reviews/ebook-comment-translations.json'
+    corrections = {}
+    if correction_path.exists():
+        correction_report = json.loads(correction_path.read_text())
+        for row in correction_report['chapters']:
+            require(row['order'] not in corrections, 'duplicate code translation correction chapter')
+            corrections[row['order']] = row
     translations = []
     tags = ['h2', 'h3', 'h4', 'p', 'li', 'th', 'td', 'aside', 'details', 'img', 'iframe']
     for chapter in chapters:
@@ -104,14 +111,44 @@ def audit(root):
             body = body.replace('src="../assets/' + asset['file'] + '"', 'src="' + asset['source_url'] + '"')
         source_body = (snap / f'ja/{order:02}.md').read_text()
         receipt = json.loads((book / f'reviews/translator/{order:02}.json').read_text())
-        a, b = (BeautifulSoup(RENDER(text), 'html.parser') for text in [source_body, body])
+        correction = corrections.get(order)
+        translation_hash = receipt['translation_sha256'] == digest(body.encode())
+        if correction:
+            review = json.loads((root / chapter['review']['report']).read_text())
+            translation_hash = (correction['before_body_sha256'] == receipt['translation_sha256']
+                                and correction['after_body_sha256'] == digest(body.encode())
+                                and review['translation_sha256'] == digest(body.encode())
+                                and review['verdict'] == 'reviewed' and not review['unresolved'])
+        structural_body = (re.sub(r'<!-- book-code-note:start -->[\s\S]*?<!-- book-code-note:end -->', '', body)
+                           if correction else body)
+        a, b = (BeautifulSoup(RENDER(text), 'html.parser') for text in [source_body, structural_body])
+        full_translation = BeautifulSoup(RENDER(body), 'html.parser')
+        original_codes = [x.get_text() for x in a.select('pre code')]
+        translated_codes = [x.get_text() for x in full_translation.select('pre code')]
+        code_valid = original_codes == translated_codes
+        if correction:
+            approved = {}
+            for item in correction['rendered_code_changes']:
+                require(item['block'] not in approved and item['rationale'].strip(),
+                        f'chapter{order}: duplicate or unexplained code correction')
+                approved[item['block']] = item
+            changed = set()
+            code_valid = len(original_codes) == len(translated_codes)
+            for block, (before, after) in enumerate(zip(original_codes, translated_codes), 1):
+                if before == after:
+                    continue
+                changed.add(block)
+                item = approved.get(block)
+                code_valid = code_valid and bool(item and item['before_sha256'] == digest(before.encode())
+                                                and item['after_sha256'] == digest(after.encode()))
+            code_valid = code_valid and changed == set(approved)
         checks = {
             'source_hash': receipt['source_sha256'] == digest(source_body.encode()),
-            'translation_hash': receipt['translation_sha256'] == digest(body.encode()),
-            'code': [x.get_text() for x in a.select('pre code')] == [x.get_text() for x in b.select('pre code')],
+            'translation_hash': translation_hash,
+            'code': code_valid,
             'structure': {tag: len(a.select(tag)) for tag in tags} == {tag: len(b.select(tag)) for tag in tags},
         }
-        original, translated = destinations(a), destinations(b)
+        original, translated = destinations(a), destinations(full_translation)
         checks.update({kind: original[kind] == translated[kind] for kind in original})
         translations.append({'chapter': order, 'checks': checks})
         for kind, passed in checks.items():

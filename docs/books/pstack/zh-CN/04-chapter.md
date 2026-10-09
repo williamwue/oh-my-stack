@@ -279,7 +279,7 @@ Agent 有证据时就附上证据；没有证据时，就如实写明「这是�
 
 ```
 /poteto-mode add json output to this command. text output stays byte-identical, the json parses, both run against the sample project. show me the evidence.
-// このコマンドにJSON出力を加えて。テキスト出力は1バイトも変えない。JSONはパースできる。どちらもサンプルプロジェクトで実行する。証拠を見せて。
+// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。
 ```
 
 指南解释说，这样写，<strong>Agent 得到的就是三个能够执行并检查的条件，而不是只能凭感觉判断是否达到的目标</strong>。

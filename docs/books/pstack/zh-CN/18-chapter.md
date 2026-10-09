@@ -91,12 +91,12 @@
 
 ```
 /poteto-mode babysit this pr. get it green.
-// このPRを babysit して。緑にして。
+// 照看这个 PR，直到所有检查通过。
 ```
 
 ```
 /poteto-mode land the stack.
-// スタックを trunk に取り込んで。
+// 将这组堆叠的 PR 合入 trunk。
 ```
 
 <strong>仅打开 PR 不会启动「Babysit」</strong>。
@@ -135,9 +135,9 @@ PR 栈的形态如下：子 PR 以父 PR 的分支为 base。
 
 ```
 main  ← trunk
- └─ PR #1 (base: main) ← ルートのPRだけが trunk を向く
-     └─ PR #2 (base: PR #1 のブランチ)
-         └─ PR #3 (base: PR #2 のブランチ)
+ └─ PR #1 (base: main) ← 只有最底层的 PR 以 trunk 为目标
+     └─ PR #2 (base: PR #1 的分支)
+         └─ PR #3 (base: PR #2 的分支)
 ```
 
 <a id="pr%E3%81%AE%E6%9C%AC%E6%96%87%E3%81%AF%E3%80%8Cbriefing%E3%80%8D%E3%81%A8%E3%81%97%E3%81%A6%E6%9B%B8%E3%81%8F"></a>
@@ -173,7 +173,7 @@ main  ← trunk
 
 ```
 /poteto-mode open the pr. small ordered commits, evidence in the description.
-// PRを開いて。コミットは小さく順序立てて、証拠はPRの説明に書いて。
+// 创建 PR。提交要小而有序，并在 PR 描述中写出证据。
 ```
 
 <a id="%E3%80%8Ebabysit%E3%80%8F%E3%81%AF%E3%80%81%E6%9C%AA%E3%83%9E%E3%83%BC%E3%82%B8%E3%81%AE%E6%9C%80%E5%89%8D%E7%B7%9A%E3%81%AEpr%E3%81%8B%E3%82%89%E9%A0%86%E3%81%AB%E5%95%8F%E9%A1%8C%E3%82%92%E7%89%87%E4%BB%98%E3%81%91%E3%80%81merge-ready-%E3%81%AB%E3%81%99%E3%82%8B"></a>
@@ -304,14 +304,14 @@ Cursor 也有监视 PR 状态的内置 `/autopilot` Skill（旧名 babysit），
 
 ```
 /poteto-mode babysit this pr. get it green.
-// このPRを babysit して。緑にして。
+// 照看这个 PR，直到所有检查通过。
 ```
 
 若只想知道状态，就提出较小的请求。以下请求会使用 `check` 回答，而不启动循环。
 
 ```
 /poteto-mode check on pr 123. anything outstanding?
-// PR 123 の状態を確認して。残っていることはある？
+// 检查 PR 123 的状态。还有什么事没完成？
 ```
 
 <a id="%E3%80%8Eshipping%E3%80%8F%E3%81%AF%E3%80%81%E5%88%A5%E3%81%AE%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%AE%E6%A4%9C%E8%A8%BC%E3%82%92%E9%80%9A%E3%81%A3%E3%81%9Fpr%E3%81%AE%E7%AF%84%E5%9B%B2%E3%81%A0%E3%81%91%E3%82%92-trunk-%E3%81%AB%E5%8F%96%E3%82%8A%E8%BE%BC%E3%82%80"></a>
@@ -370,10 +370,10 @@ Cursor 也有监视 PR 状态的内置 `/autopilot` Skill（旧名 babysit），
 步骤 2 的「连续范围」确定方式如下。
 
 ```
-PR #4  PASS      ← 検証済みだが、下に未検証がある
-PR #3  (未検証)  ← ここで連続が切れる
+PR #4  PASS      ← 已验证，但下面还有未验证的 PR
+PR #3  (未验证)  ← 连续通过的区间在这里中断
 PR #2  PASS
-PR #1  PASS      ← 最前線
+PR #1  PASS      ← 已验证连续区间的最前端
 main
 ```
 
@@ -418,7 +418,7 @@ main
 
 ```
 /poteto-mode land the stack.
-// スタックを trunk に取り込んで。
+// 将这组堆叠的 PR 合入 trunk。
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

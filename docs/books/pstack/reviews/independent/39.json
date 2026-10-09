@@ -1,13 +1,32 @@
 {
   "chapter": 39,
-  "reviewer": "root independent AI review; translator translate_a",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator. Localized figures are reviewed separately.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "174f03e45bd9f458285b4fecd65b8434d1f8805aa92fd130dbc830052e782071",
-  "translation_sha256": "c59abbeeb2ea4d92b584cfcb75d097a49f961b451ec1a56745cdc07a72cbbd0b",
+  "translation_sha256": "02d3864386d193c710715550a8b17ba6b3694e73c31c1daed104fae0c29e5a17",
   "findings_resolved": [
-    "没有随附用于验证 <code>SKILL.md</code> 的脚本工具"
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 39,
+    "reviewer": "root independent AI review; translator translate_a",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; all source code checked byte-for-byte by separate structural audit. English cross-check performed by translator. Localized figures are reviewed separately.",
+    "source_sha256": "174f03e45bd9f458285b4fecd65b8434d1f8805aa92fd130dbc830052e782071",
+    "translation_sha256": "c59abbeeb2ea4d92b584cfcb75d097a49f961b451ec1a56745cdc07a72cbbd0b",
+    "findings_resolved": [
+      "没有随附用于验证 <code>SKILL.md</code> 的脚本工具"
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

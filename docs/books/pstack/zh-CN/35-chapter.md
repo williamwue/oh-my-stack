@@ -168,13 +168,13 @@ discriminated union 是用 `kind` 等标识种类的字段，区分各形态（v
 反例允许写出同时包含 `loading: true` 和 `error` 的值，即「正在加载却同时出错」的矛盾状态。正例按 `kind` 限定每种状态可包含的字段，只能写出三种有效状态。
 
 ```
-// 差分（変更されたファイルの一覧）
+// 差异（修改过的文件清单）
 type GitDiff = { files: string[] };
 
-// 悪い例：真偽値と省略できる項目の組み合わせでは、矛盾した状態も書けてしまう
+// 错误示例：布尔值加可选字段的组合，也能表示相互矛盾的状态
 type DiffStateLoose = { loading: boolean; diff?: GitDiff; error?: string };
 
-// 良い例：正しい状態だけが存在できる
+// 正确示例：只能表示有效状态
 type DiffState =
   | { kind: "loading" }
   | { kind: "ready"; diff: GitDiff }
@@ -195,24 +195,24 @@ type DiffState =
 ```
 type AgentId = string & { readonly __brand: "AgentId" };
 
-// 文字列がUUIDの形かを確かめる
+// 检查字符串是否符合 UUID 格式
 declare function isUUID(input: string): boolean;
 
-// 境界：文字列を確かめてから、AgentId にする
+// 边界：验证字符串后再将其转为 AgentId
 function parseAgentId(input: string): AgentId {
   if (!isUUID(input)) throw new Error(`Invalid agent id: ${input}`);
-  // 確かめた後なので、as を使ってよい
+  // 已经验证，所以这里可以使用 as
   return input as AgentId;
 }
 
-// 内側：AgentId しか受け取らず、IDを確かめ直さない
+// 内部：只接收 AgentId，不重复验证 ID
 function focusAgent(id: AgentId): void {
-  /* 入力は確かめ済みとして扱う */
+  /* 视为已经验证的输入 */
 }
 
-// 通る
+// 可以通过
 focusAgent(parseAgentId("3f2b8c1e-9a4d-4e6b-8f1a-2c5d7e9b0a13"));
-// 確かめていない文字列なので、コンパイルでエラーになる
+// 未经验证的字符串会导致编译错误
 focusAgent("3f2b8c1e-9a4d-4e6b-8f1a-2c5d7e9b0a13");
 ```
 
@@ -228,21 +228,21 @@ focusAgent("3f2b8c1e-9a4d-4e6b-8f1a-2c5d7e9b0a13");
 这条规则（原文称 Constructive modeling）要求用有效的组成部分构造类型，而不是先用宽松类型，再靠运行时检查拦截无效值。
 
 ```
-// 空でない配列：最初の要素が必ずある
+// 非空数组：第一个元素一定存在
 type NonEmpty<T> = [T, ...T[]];
 
-// 悪い例：T[] で受け、空かどうかのチェックを、呼び出す側がそれぞれ繰り返す
+// 错误示例：接收 T[]，让各调用方重复检查数组是否为空
 function pickWinnerLoose(entries: string[]): string {
   if (entries.length === 0) throw new Error("no entries");
   return entries[Math.floor(Math.random() * entries.length)];
 }
 
-// 良い例：空の値は、この型では存在できない
+// 正确示例：这种类型无法表示空数组
 function pickWinner(entries: NonEmpty<string>): string {
   return entries[Math.floor(Math.random() * entries.length)];
 }
 
-// T[] で受け取った値は、型ガードで一度だけ絞り込む。その後は型が事実を運ぶ
+// 接收 T[] 后，用类型守卫只缩小一次类型；此后类型会承载已验证的事实
 const isNonEmpty = <T>(arr: T[]): arr is NonEmpty<T> => arr.length > 0;
 ```
 
@@ -261,15 +261,15 @@ const isNonEmpty = <T>(arr: T[]): arr is NonEmpty<T> => arr.length > 0;
 type NonEmpty<T> = [T, ...T[]];
 type Session = { id: string; startedAt: Date };
 
-// T[] のままでよい例：空の配列でも 0 を返せる
+// 可以继续使用 T[] 的例子：空数组也能返回 0
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 
-// 悪い例：配列が空のときの扱いを、! でコンパイラから隠している
+// 错误示例：用 ! 向编译器隐藏数组为空时的处理问题
 function newestSessionLoose(sessions: Session[]): Session {
   return sessions.at(0)!;
 }
 
-// 良い例：引数の型を強くすると、! が要らなくなる
+// 正确示例：强化参数类型后，不再需要 !
 function newestSession(sessions: NonEmpty<Session>): Session {
   return sessions[0];
 }
@@ -287,16 +287,16 @@ function newestSession(sessions: NonEmpty<Session>): Session {
 用 `any` 接收的值，无需验证也能使用；用 `unknown` 接收的值，在确认类型前不能使用，Agent 因而无法跳过验证。
 
 ```
-// 悪い例：any で受けると、確かめずに使えてしまう
+// 错误示例：接收 any 后，无须验证就能使用
 function handleLoose(input: any) {
-  // foo がなくても、コンパイルは通る
+  // 即使没有 foo，也能通过编译
   return input.foo.bar;
 }
 
-// 良い例：unknown で受け、型を絞り込んでから使う
+// 正确示例：接收 unknown，缩小类型后再使用
 function handle(input: unknown) {
   if (typeof input === "object" && input !== null && "foo" in input) {
-    // ここでは、input に foo があることをコンパイラが確かめている
+    // 此处编译器已经确认 input 有 foo 字段
   }
 }
 ```
@@ -320,7 +320,7 @@ const UserSchema = z.object({
   role: z.enum(["admin", "member"]),
 });
 
-// 型は、スキーマから導く
+// 从 schema 推导类型
 type User = z.infer<typeof UserSchema>;
 
 function parseUser(input: unknown): User {
@@ -341,10 +341,10 @@ function parseUser(input: unknown): User {
 type User = { id: string; name: string };
 declare const data: unknown;
 
-// 悪い例：確かめずに、User だと言い切っている
+// 错误示例：未经验证就断言它是 User
 const user = data as User;
 
-// 良い例：境界で確かめてから、as を使う
+// 正确示例：在边界验证后使用 as
 function parseUser(data: unknown): User {
   if (typeof data !== "object" || data === null) {
     throw new Error("expected object");
@@ -352,8 +352,8 @@ function parseUser(data: unknown): User {
   if (!("id" in data) || typeof data.id !== "string") {
     throw new Error("expected id");
   }
-  // ...残りの項目もすべて確かめる
-  // すべて確かめた後なので、as を使ってよい
+  // ……其余字段也全部验证
+  // 所有字段均已验证，因此可以使用 as
   return data as User;
 }
 ```
@@ -387,7 +387,7 @@ type Shape =
   | { kind: "circle"; radius: number }
   | { kind: "rect"; width: number; height: number };
 
-// 1. 種類を示すフィールドでの switch：kind を見れば、コンパイラが自動で絞り込む
+// 1. 对表示类别的字段使用 switch：检查 kind 后，编译器会自动缩小类型
 function area(s: Shape): number {
   switch (s.kind) {
     case "circle":
@@ -397,27 +397,27 @@ function area(s: Shape): number {
   }
 }
 
-// 2. in 演算子：radius を持つのは円だけなので、ここでは円に絞り込まれる
+// 2. in 运算符：只有圆形有 radius，因此这里缩小到圆形
 function areaByIn(s: Shape): number {
   if ("radius" in s) return Math.PI * s.radius ** 2;
-  // ここでは長方形に絞り込まれる
+  // 这里缩小到矩形
   return s.width * s.height;
 }
 
-// 3. typeof と instanceof：基本的な値や、クラスのインスタンスに絞り込む
+// 3. typeof 与 instanceof：缩小到基本类型或类实例
 function describe(value: string | number | Date): string {
   if (typeof value === "string") return value;
   if (value instanceof Date) return value.toISOString();
-  // ここでは number に絞り込まれる
+  // 这里缩小到 number
   return value.toFixed(2);
 }
 
-// 4. 自作の型ガード：上の3つでは確かめられない条件（空でない文字列か）を、関数で確かめる
+// 4. 自定义类型守卫：用函数检查前三种方法无法确认的条件（是否为非空字符串）
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.length > 0;
 }
 
-// 5. as：値を確かめた後だけに使う
+// 5. as：只在值经过验证后使用
 type AgentId = string & { readonly __brand: "AgentId" };
 declare function isUUID(input: string): boolean;
 
@@ -441,7 +441,7 @@ type Shape =
   | { kind: "circle"; radius: number }
   | { kind: "rect"; width: number; height: number };
 
-// 種類を示すフィールドを実際に確かめている
+// 实际检查了表示类别的字段
 function isCircle(s: Shape): s is Shape & { kind: "circle" } {
   return s.kind === "circle";
 }
@@ -468,7 +468,7 @@ function area(s: Shape): number {
     case "rect":
       return s.width * s.height;
     default: {
-      // Shape に variant を追加して case を書き忘れると、ここでコンパイルエラーになる
+      // 若在 Shape 中增加 variant 却忘记添加 case，这里会出现编译错误
       const _exhaustive: never = s;
       return _exhaustive;
     }
@@ -490,12 +490,12 @@ function area(s: Shape): number {
 ```
 type Config = { theme: "dark" | "light"; cols: number };
 
-// 悪い例：as では theme の型が "dark" | "light" に広がり、"dark" だという情報が失われる
+// 错误示例：使用 as 会把 theme 的类型扩大为 "dark" | "light"，丢失它确为 "dark" 的信息
 const configLoose = { theme: "dark", cols: 3 } as Config;
 
-// 良い例：satisfies は型に合うかを確かめ、リテラル型も保つ
+// 正确示例：satisfies 验证是否符合类型，同时保留字面量类型
 const config = { theme: "dark", cols: 3 } satisfies Config;
-// config.theme の型は string ではなく "dark"
+// config.theme 的类型是 "dark"，不是 string
 ```
 
 因此，如果只是要检查值是否符合类型，应使用 `satisfies` 而非 `as`。
@@ -513,10 +513,10 @@ const config = { theme: "dark", cols: 3 } satisfies Config;
 </div></aside>
 
 ```
-// ドメイン型：注文が持つ項目と、各項目の型が決まっている
+// 领域类型：明确订单有哪些字段，以及每个字段的类型
 type Order = { id: string; userId: string; total: number };
 
-// ドメイン型ではない：どんな項目があるかが分からず、使うたびに確かめる必要がある
+// 不是领域类型：字段不确定，每次使用都得检查
 type RawOrder = Record<string, unknown>;
 ```
 
@@ -532,14 +532,14 @@ type RawOrder = Record<string, unknown>;
 如果 OpenAPI 定义、GraphQL schema 或数据库迁移已经规定了数据结构，Agent 不应重新编写同样结构的类型，而要从据此生成的类型中推导。
 
 ```
-// 生成された型（本来は生成されたモジュールから import する）
+// 生成的类型（实际应从生成的模块中 import）
 type ChecksMessage = {
   totalCount: number;
   checks: { name: string; status: string }[];
   updatedAt: string;
 };
 
-// 悪い例：同じ形を書き直しているので、スキーマが変わると食い違う
+// 错误示例：重复手写同样的结构，schema 改变时就会不一致
 type CheckSummary = {
   totalCount: number;
   checks: { name: string; status: string }[];
@@ -548,7 +548,7 @@ function renderChecksLoose(s: CheckSummary) {
   /* ... */
 }
 
-// 良い例：生成された型から、必要な項目だけを取り出す
+// 正确示例：从生成的类型中取出所需字段
 function renderChecks(s: Pick<ChecksMessage, "totalCount" | "checks">) {
   /* ... */
 }
@@ -576,7 +576,7 @@ declare const uri: string;
 declare function openFileLoose(uri: string, selection: Selection): void;
 declare function openFile(args: { uri: string; selection: Selection }): void;
 
-// 悪い例：2つの引数を入れ替えても、型が合えばコンパイルが通る
+// 错误示例：即使调换两个参数，只要类型相符就能通过编译
 openFileLoose(uri, {
   startLineNumber: 10,
   startColumn: 1,
@@ -584,7 +584,7 @@ openFileLoose(uri, {
   endColumn: 1,
 });
 
-// 良い例：順番に左右されず、それぞれの値が何かが名前で分かる
+// 正确示例：不受顺序影响，名称能说明每个值的含义
 openFile({
   uri,
   selection: {
@@ -626,19 +626,24 @@ declare function saveNote(dir: string, text: string): Promise<void>;
 declare function loadNote(dir: string): Promise<string>;
 declare const fakeFs: { writeFile: { calledTimes: number } };
 
-// 悪い例：手元で動かせるファイルの保存まで偽物に置き換え、偽物が呼ばれた回数だけを確かめている
+// 错误示例：连可在本机运行的文件保存都替换成 mock，只检查 mock 被调用的次数
 test("メモを保存する", async () => {
   await saveNote("/notes", "買い物");
   expect(fakeFs.writeFile.calledTimes).toBe(1);
 });
 
-// 良い例：一時ディレクトリに本物のファイルを書き、読み戻して中身を確かめる
+// 正确示例：在临时目录写入真实文件，重新读出并检查内容
 test("保存したメモを読み戻せる", async () => {
   const dir = await makeTempDir();
   await saveNote(dir, "買い物");
   expect(await loadNote(dir)).toBe("買い物");
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：测试名称分别表示「保存笔记」和「能读回已保存的笔记」；输入及预期内容「買い物」意为「购物」。它们是测试使用的原始字符串，保留以维持示例断言。
+<!-- book-code-note:end -->
+
 
 <a id="16.-%E8%A8%BA%E6%96%AD%E3%81%AE%E6%83%85%E5%A0%B1%E3%81%AF%E3%80%81%E6%A7%8B%E9%80%A0%E5%8C%96%E3%81%97%E3%81%9F%E3%83%AD%E3%82%B0%E3%81%A7%E6%AE%8B%E3%81%99"></a>
 
@@ -655,10 +660,10 @@ declare const orderId: string;
 declare const userId: string;
 declare const err: Error;
 
-// 悪い例：文字列だけでは、どの注文で、なぜ失敗したのかを後から探せない
+// 错误示例：只有字符串，事后无法查出哪个订单因何失败
 console.log("payment failed");
 
-// 良い例：出来事の名前と、調べるときに使うIDや理由を、決まった項目で残す
+// 正确示例：用固定字段记录事件名称、供调查使用的 ID 和原因
 logger.error("payment_failed", { orderId, userId, reason: err.message });
 ```
 

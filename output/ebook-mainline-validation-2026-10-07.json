@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-07",
+  "baseRevision": "3b650a271a300d269e9060455a2c6d352bb312dc",
+  "sourceRevision": "b0bebb12497fa20a67ec9449a4571bb874754428",
+  "sourceCleanBeforeBuild": true,
+  "version": "0.10.0",
+  "execution": "root-only migration and artifact verification",
+  "bookSnapshot": "2026-10-03",
+  "changes": "Ported reviewed unboxed EPUB table fields and hash-bound Chinese explanatory-text corrections; retained current runtime source and Windows-safe links.",
+  "artifacts": {
+    "pdf/pstack-zh-CN.pdf": "0d6de4004fb00645c60f2cefff98f37d22bbe4371400cd8bb38b59fa6ef6e8bf",
+    "pdf/pstack-en.pdf": "fbb4c034293506d2e0b621ecd876dff31b3a75e3b7963a492380012a21da8ba8",
+    "epub/pstack-zh-CN.epub": "bd8c50026d825ca452b5a83c176ce21d09d28c076a37e0f4fe67ea631b924f14",
+    "epub/pstack-en.epub": "06d0d236031dbcd51fbfa27b851aa80c3adeb3691ca2dadddaf176a932733f33"
+  },
+  "englishPdf": "unchanged historical artifact",
+  "ebookChecks": {
+    "epubcheck": "5.4.0; zero errors/warnings for both fresh EPUBs",
+    "eachLanguage": {
+      "chapters": 48,
+      "codeBlocks": 222,
+      "tableRows": 574
+    },
+    "artifactRegressionBefore": "exit 1; table containers present",
+    "artifactRegressionAfter": "exit 0 for both EPUBs",
+    "layoutTests": 7,
+    "sourceAuditTests": 8,
+    "pdf": {
+      "pages": 542,
+      "bookmarks": 382,
+      "links": 2604,
+      "outsidePageText": [],
+      "replacementCharacterPages": [],
+      "representativeVisualInspection": {
+        "reviewer": "root",
+        "pages": [
+          1,
+          22,
+          189,
+          275,
+          542
+        ],
+        "result": "no observed clipping, missing glyphs or overlaps in rendered samples"
+      }
+    }
+  },
+  "readerAcceptance": {
+    "WeChatRead": "deferred by maintainer; not performed",
+    "originalReportedOverlapExactlyReproduced": false,
+    "humanEditorialReview": "pending"
+  },
+  "historicalRecords": "Original ebooks-validation.json and translator receipts unchanged; previous independent review nested in previous_review for corrected entries.",
+  "publication": {
+    "pushed": false,
+    "released": false,
+    "pluginVersionChanged": false
+  },
+  "independentReview": {
+    "receipt": "ebook-mainline-review-2026-10-07.json",
+    "reviewedCodeHead": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+    "result": "No remaining flags or blockers"
+  },
+  "toolingFollowUp": {
+    "revision": "f9b338e9af8e4d96021481d3316cd007e2c9f961",
+    "changes": "POSIX archive/resource/URL paths; dated validation instructions",
+    "windowsPathRegressionTests": 2,
+    "nativeWindowsBuildTested": false,
+    "artifactsUnchangedFromRecordedBuild": true
+  }
+}

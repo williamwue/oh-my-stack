@@ -33,7 +33,14 @@
       "english_file": "en/01-preface.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/01.json"
+        "report": "docs/books/pstack/reviews/independent/01.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+          }
+        ]
       }
     },
     {
@@ -105,7 +112,14 @@
       "english_file": "en/04-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/04.json"
+        "report": "docs/books/pstack/reviews/independent/04.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。"
+          }
+        ]
       }
     },
     {
@@ -249,7 +263,49 @@
       "english_file": "en/10-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/10.json"
+        "report": "docs/books/pstack/reviews/independent/10.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 1 行；例如「# 遇到新任务时，如果符合 Playbook 或需要严谨处理，就使用 /poteto-mode。闲聊回合以及用户要求停止时不要使用。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 就按这个继续。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续，直到完成。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。继续处理，直到迁移检查报告旧调用方为零，并记录决策。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。"
+          }
+        ]
       }
     },
     {
@@ -273,7 +329,19 @@
       "english_file": "en/11-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/11.json"
+        "report": "docs/books/pstack/reviews/independent/11.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+          }
+        ]
       }
     },
     {
@@ -345,7 +413,19 @@
       "english_file": "en/14-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/14.json"
+        "report": "docs/books/pstack/reviews/independent/14.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 有时因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。"
+          }
+        ]
       }
     },
     {
@@ -369,7 +449,24 @@
       "english_file": "en/15-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/15.json"
+        "report": "docs/books/pstack/reviews/independent/15.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果能方便地编写测试，就使用 /tdd。然后修复并重新运行。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用这个固定的测试输入，启动需要 1.8 秒。采集追踪，修复测得的原因，并展示修改前后的结果。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。"
+          }
+        ]
       }
     },
     {
@@ -393,7 +490,29 @@
       "english_file": "en/16-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/16.json"
+        "report": "docs/books/pstack/reviews/independent/16.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 添加 --json 标志。文本输出保持逐字节一致。验证两种输出形式。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把解析逻辑移到一个模块，行为变化必须为零。先记录当前输出，再证明修改后没有变化。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启用这个标志时，行距太大。第二张图才是正确效果。先复现，再修到一致。」。"
+          }
+        ]
       }
     },
     {
@@ -417,7 +536,19 @@
       "english_file": "en/17-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/17.json"
+        "report": "docs/books/pstack/reviews/independent/17.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写一个 Skill，验证这个代码库中的数据库迁移。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对这个 Skill 的修改运行 Eval Playbook。给两个版本安排相同任务，并保持候选版本盲测。」。"
+          }
+        ]
       }
     },
     {
@@ -441,7 +572,49 @@
       "english_file": "en/18-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/18.json"
+        "report": "docs/books/pstack/reviews/independent/18.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「└─ PR #1 (base: main) ← 只有最底层的 PR 以 trunk 为目标」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建 PR。提交要小而有序，并在 PR 描述中写出证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查 PR 123 的状态。还有什么事没完成？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「PR #4 PASS ← 已验证，但下面还有未验证的 PR」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。"
+          }
+        ]
       }
     },
     {
@@ -465,7 +638,19 @@
       "english_file": "en/19-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/19.json"
+        "report": "docs/books/pstack/reviews/independent/19.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 接手这个分支。阅读决策日志，了解已经完成的工作，然后从那里继续。不要重做已完成的工作。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 什么占用了磁盘空间？删除可以安全删除的 worktree。」。"
+          }
+        ]
       }
     },
     {
@@ -489,7 +674,34 @@
       "english_file": "en/20-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/20.json"
+        "report": "docs/books/pstack/reviews/independent/20.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这些 Skill 作为插件发布。不要泄露任何公司内部资料；在临时目录中工作，并先展示依赖关系图。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 9 行；例如「更新之前」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 统筹存储系统迁移，直到所有软件包都完成转换并合并。每天检查两次。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 full autopilot 处理这个队列。各项任务相互独立，早上之前完成合并。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 autopilot 处理这五项改动，但要组成 PR 堆栈，不要投入生产。早上我会亲自合入整个堆栈。」。"
+          }
+        ]
       }
     },
     {
@@ -513,7 +725,14 @@
       "english_file": "en/21-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/21.json"
+        "report": "docs/books/pstack/reviews/independent/21.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。实际运行导入，并展示写入的记录。」。"
+          }
+        ]
       }
     },
     {
@@ -537,7 +756,64 @@
       "english_file": "en/22-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/22.json"
+        "report": "docs/books/pstack/reviews/independent/22.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 subtract before you add。先删除过时的适配器，再设计剩余部分。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：saveUser 只调用 db.save，而且只有这里用到它」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：多了一层可替换接口，但只有 A 公司的一种实现」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 先确定结构：商品有名称、价格和库存数量」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 修改前：所有 Worker 共享一个「已处理数量」，先读取再写入」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 事后补丁：金额仍只是以日元表示的数字，每个使用处都加上「如果是美元」的分支」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重新设计：金额表示为「数值与币种」的组合，所有使用处都接收这种类型」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「手动完成第一项，了解步骤」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。把所有调用方从同步存储迁移到新的异步存储，保持行为不变。我回来时需要有证据相信迁移正确。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「// 表示已经验证不小于 0 的金额类型」。"
+          }
+        ]
       }
     },
     {
@@ -561,7 +837,94 @@
       "english_file": "en/23-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/23.json"
+        "report": "docs/books/pstack/reviews/independent/23.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// order.ts：用三个布尔值保存订单状态（分散的布尔值）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// order.ts：集中定义订单结构与可能的状态」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：可以表示相互矛盾的状态组合」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改前：两个函数各自列出相同的三个参数」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：只定义一次 User 类型，两个函数都接收它」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：页面、计费和邮件三个文件中都有相同的 if/else」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：任何支付方式都可以包含全部字段」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：三个页面分别直接修改购物车」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 6 行；例如「let stock = 10; // 库存数量」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「let stock = 10; // 库存数量」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 边界：读取配置文件时只验证一次，并转成 Config 类型的值」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 12,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 纯函数：相同的 items 总返回相同的总价，不访问页面」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 13,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 两者内部都是字符串，但传入 OrderId 会导致编译错误」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 14,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 已给任务类型添加 canceled」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 15,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「拆分前（各主体共享同一个写入位置）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 16,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 separate before serializing shared state。给每次尝试分配专用 worktree，不要加锁。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 17,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 表达领域的结构：状态只能取 status 的四种值之一」。"
+          }
+        ]
       }
     },
     {
@@ -585,7 +948,104 @@
       "english_file": "en/24-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/24.json"
+        "report": "docs/books/pstack/reviews/independent/24.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// check-export.ts：比较导出文件的各行与预期内容」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。展示真实输出，而非构建日志。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「declare function writeRow(row: Row): void; // 向文件写入一行」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 当前代码预期的中间状态结构」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「提交顺序（越靠下越早）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 将字符串转换成适合 URL 的形式」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 计算总金额（存在忘记乘以数量的缺陷）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 代码：将工具数量上限设为 8」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「const user = { name: \"taro\" }; // 测试自己创建的数据」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 12,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 13,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 每页显示条数的配置值（当前为 20）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 14,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 注册用户，并通过 mailer 发送注册感谢邮件」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 15,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 16,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 导出原始行 input；中途失败时重试」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 17,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 验证行为的测试」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 18,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 19,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 将字符串转换为适合 URL 的形式」。"
+          }
+        ]
       }
     },
     {
@@ -609,7 +1069,14 @@
       "english_file": "en/25-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/25.json"
+        "report": "docs/books/pstack/reviews/independent/25.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「修改前：把每次使用的报告模板放在单独文件中」。"
+          }
+        ]
       }
     },
     {
@@ -633,7 +1100,44 @@
       "english_file": "en/26-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/26.json"
+        "report": "docs/books/pstack/reviews/independent/26.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「修改前：在规则文件中用文字说明」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改后：添加以下配置，并删除规则文件中的文字（假设已引入 typescript-eslint）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 3 行；例如「## 必须遵守」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 订单列表页面：自行格式化日期，并在显示前检查格式」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// date.ts：只在标准辅助函数 formatDate() 中格式化日期」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 在 eslint.config.js 中添加以下配置，禁止在 date.ts 外格式化日期（假设已引入 typescript-eslint）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 在页面上显示的日期字符串」。"
+          }
+        ]
       }
     },
     {
@@ -681,7 +1185,44 @@
       "english_file": "en/28-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/28.json"
+        "report": "docs/books/pstack/reviews/independent/28.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 2 行；例如「# 显示最后修改目标行的提交」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「Preserve: 不超过上游 API 允许的重试次数（该上限的理由已有记录）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为什么把重试上限设为 5？当初的理由现在仍成立吗？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明这个 PR 如何改变重试，并让我相信修复的是原因而非症状。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 10 行；例如「- 把 CSV 导出从页面处理流程移到异步任务中」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明上周导出工作的进展」。"
+          }
+        ]
       }
     },
     {
@@ -705,7 +1246,14 @@
       "english_file": "en/29-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/29.json"
+        "report": "docs/books/pstack/reviews/independent/29.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 我暂时离开。把同步存储的所有调用方迁移到新的异步存储。」。"
+          }
+        ]
       }
     },
     {
@@ -729,7 +1277,69 @@
       "english_file": "en/30-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/30.json"
+        "report": "docs/books/pstack/reviews/independent/30.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 要查找的用户 ID」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 深模块：只公开一个函数，将读取、验证和保存隐藏在内部」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 用类型表达：shipped 状态的订单必须有 trackingNo」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// load.ts：读取 CSV，并将每行转为字符串数组（浅模块）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 12 行；例如「// 预先建立导入所用数据库连接的函数」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 写代码前先设计导入流程。我最关心调用方会怎样使用它。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 请设置确认环节：在实现前停下来，给我看设计。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给出五个候选方案。缓存键格式事后修改代价很高。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /arena 对这个讨论及我们的工作方式提出第二意见。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用各自的 check.sh 检查 packages/ 下的全部软件包。每个软件包安排一个 Agent，最后提交一份报告。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 12,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。"
+          }
+        ]
       }
     },
     {
@@ -753,7 +1363,14 @@
       "english_file": "en/31-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/31.json"
+        "report": "docs/books/pstack/reviews/independent/31.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 利用上次编辑以来的所有信息，更新我的 mode Skill。」。"
+          }
+        ]
       }
     },
     {
@@ -777,7 +1394,24 @@
       "english_file": "en/32-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/32.json"
+        "report": "docs/books/pstack/reviews/independent/32.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「<!-- 仍有占位内容：下一个 Agent 不知道该运行什么、点击什么 -->」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：按屏幕坐标点击；按钮位置变化后可能点到其他地方」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查验证 Skill。」。"
+          }
+        ]
       }
     },
     {
@@ -801,7 +1435,14 @@
       "english_file": "en/33-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/33.json"
+        "report": "docs/books/pstack/reviews/independent/33.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 以怀疑的态度审阅整个分支。只有真正的缺陷或回归才需要指出，不必纠缠细枝末节。」。"
+          }
+        ]
       }
     },
     {
@@ -825,7 +1466,34 @@
       "english_file": "en/34-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/34.json"
+        "report": "docs/books/pstack/reviews/independent/34.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「- decisions.tsv 中 11:15 的记录：pixel-diff 0 的证据只有首页的一张截图；其他使用该组件的页面尚未验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 留下决策记录，方便我回来后复查。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 告诉我昨晚完成了什么。」。"
+          }
+        ]
       }
     },
     {
@@ -849,7 +1517,89 @@
       "english_file": "en/35-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/35.json"
+        "report": "docs/books/pstack/reviews/independent/35.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 差异（修改过的文件清单）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 检查字符串是否符合 UUID 格式」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 非空数组：第一个元素一定存在」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 可以继续使用 T[] 的例子：空数组也能返回 0」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：接收 any 后，无须验证就能使用」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 从 schema 推导类型」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：未经验证就断言它是 User」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 1. 对表示类别的字段使用 switch：检查 kind 后，编译器会自动缩小类型」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 实际检查了表示类别的字段」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 若在 Shape 中增加 variant 却忘记添加 case，这里会出现编译错误」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 错误示例：使用 as 会把 theme 的类型扩大为 \"dark\" | \"light\"，丢失它确为 \"dark\" 的信息」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 12,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 领域类型：明确订单有哪些字段，以及每个字段的类型」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 13,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 生成的类型（实际应从生成的模块中 import）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 14,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：即使调换两个参数，只要类型相符就能通过编译」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 15,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：连可在本机运行的文件保存都替换成 mock，只检查 mock 被调用的次数」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 16,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：只有字符串，事后无法查出哪个订单因何失败」。"
+          }
+        ]
       }
     },
     {
@@ -873,7 +1623,34 @@
       "english_file": "en/36-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/36.json"
+        "report": "docs/books/pstack/reviews/independent/36.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 8 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：检查预期行为（只送达一条通知）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 /tdd 实现。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果容易编写测试，就使用 /tdd；然后修复并重新运行。」。"
+          }
+        ]
       }
     },
     {
@@ -897,7 +1674,34 @@
       "english_file": "en/37-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/37.json"
+        "report": "docs/books/pstack/reviews/independent/37.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：用注释说明自家函数的意外行为」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：将两项工作拆成两个名称清楚的函数」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：只用注释声明约束」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 添加一个测试」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 针对差异」。"
+          }
+        ]
       }
     },
     {
@@ -921,7 +1725,24 @@
       "english_file": "en/38-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/38.json"
+        "report": "docs/books/pstack/reviews/independent/38.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对 README 的修改运行 unslop。不要使用 em dash。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对它运行 unslop，让文字更精练。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 审阅 README 的修改。」。"
+          }
+        ]
       }
     },
     {
@@ -945,7 +1766,14 @@
       "english_file": "en/39-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/39.json"
+        "report": "docs/books/pstack/reviews/independent/39.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 花费太久了。记录经验，避免下次执行时重蹈覆辙。」。"
+          }
+        ]
       }
     },
     {
@@ -993,7 +1821,39 @@
       "english_file": "en/41-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/41.json"
+        "report": "docs/books/pstack/reviews/independent/41.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「按照 Fix Root Causes，修复了每次重试都重复写入已导出行的根本问题，没有在导出后增加去重步骤。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「遵循了 Fix Root Causes 和 Make Operations Idempotent」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写有状态逻辑、多分支代码，或在多个文件中重复相同前提时，用结构（状态机、带类型的模型、表或注册表、reducer、边界、合适的集合）表达领域，而非散落的条件分支。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「修改前：修好了：原因是定时器，所以我把它停了；我想现在大概没问题了。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 修改前：用描述阶段的注释表示操作步骤」。"
+          }
+        ]
       }
     },
     {
@@ -1041,7 +1901,29 @@
       "english_file": "en/43-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/43.json"
+        "report": "docs/books/pstack/reviews/independent/43.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「├─ SKILL.md（从启动到清理的步骤）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它用 /poteto-mode 创建<功能说明和有用的上下文>；用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。"
+          }
+        ]
       }
     },
     {
@@ -1065,7 +1947,29 @@
       "english_file": "en/44-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/44.json"
+        "report": "docs/books/pstack/reviews/independent/44.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 阅读这个 Slack 讨论串，用自己的话简明复述你认为根本问题是什么。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 虚拟化是怎样实现的？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 回忆昨天完成的虚拟化工作，然后阅读 Slack 上的这份缺陷报告。」。"
+          }
+        ]
       }
     },
     {
@@ -1089,7 +1993,24 @@
       "english_file": "en/45-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/45.json"
+        "report": "docs/books/pstack/reviews/independent/45.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 回忆过去七天修复虚拟化缺陷与性能问题的工作。用 /how 和 /why 理解当前虚拟化实现的运行方式。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为<功能需求>制作几个候选原型。用 /control-app* 录制视频并截图，让我比较后选择。」。"
+          }
+        ]
       }
     },
     {
@@ -1113,7 +2034,114 @@
       "english_file": "en/46-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/46.json"
+        "report": "docs/books/pstack/reviews/independent/46.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 设计这个新的<功能需求>。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// price.ts（修改前）：只返回金额」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// UserPage.ts（修改前）：页面代码持有缓存」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// userApi.ts（修改后）：获取数据的模块持有缓存」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 骨架中定义的类型：没有币种字段」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把这个设计写成计划。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 5 行；例如「# webhook 限流计划文档」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 8,
+            "rationale": "将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 17 行；例如「## 添加按发送方限流的功能（PR 2）」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 9,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 周期性因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 10,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 外部 webhook 需要限流。先用 /architect 做设计，用原型解答未决问题，再让我审阅后继续。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 11,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制定将整个 UI 库迁移到 StyleX 的计划，拆成可小步验证的 PR。每个 PR 都要有视觉回归测试和在运行中应用验证的步骤。最终效果要与原来 100% …」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 12,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// （讨论串中已有足够上下文）请照此执行。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 13,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /control-app 复现这个问题。在 main 上复现后修复，并用视频展示证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 14,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 15,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 仅对旧格式订单另行计算」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 16,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架的前提：每个发送方的计数只由一个处理过程读写」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 17,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 实现过程中：试图加入骨架中没有的锁」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 18,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「limiter.init(); // 内部约定要求先调用此方法」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 19,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架：只接收订单」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 20,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 实现 invoice.ts 时：发现需要骨架中没有的 locale 参数」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 21,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 36 行；例如「# webhook 限流计划文档」。"
+          }
+        ]
       }
     },
     {
@@ -1137,7 +2165,44 @@
       "english_file": "en/47-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/47.json"
+        "report": "docs/books/pstack/reviews/independent/47.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 10 行；例如「# 便捷点餐」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「❓ **Q1** - **可取消的阶段**: README 写着「取餐前可以取消订单」。制作中的订单也可以取消吗？」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 9 行；例如「# 订单」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 4,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 5,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 11 行；例如「# 创建笔记」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 6,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 7,
+            "rationale": "将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 将订单数据集中到一个数据库」。"
+          }
+        ]
       }
     },
     {
@@ -1161,7 +2226,24 @@
       "english_file": "en/48-chapter.md",
       "review": {
         "status": "reviewed",
-        "report": "docs/books/pstack/reviews/independent/48.json"
+        "report": "docs/books/pstack/reviews/independent/48.json",
+        "code_deviations": [
+          {
+            "language": "zh-CN",
+            "block": 1,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 2,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。"
+          },
+          {
+            "language": "zh-CN",
+            "block": 3,
+            "rationale": "将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写 any 时 lint 应报错（假设已引入 typescript-eslint）。」。"
+          }
+        ]
       }
     }
   ]

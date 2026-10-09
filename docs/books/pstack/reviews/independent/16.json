@@ -1,13 +1,32 @@
 {
   "chapter": 16,
-  "reviewer": "root independent AI review; translator translate_b",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "f5085511a3dc4c1266fc6e729cce81e439be735feb3ba2b78190df9e43c9dbbb",
-  "translation_sha256": "6c6ab709c4858c599f5dd9bc70ce056cb3b2b95727e8baee6f7661796c293766",
+  "translation_sha256": "82ebeeb3f01b8d50933975fa0dc469727147d40ece602d4fd8ecbcb7eae75c09",
   "findings_resolved": [
-    "确定数据形态并写下吞吐量检查点，必须将实现工作交给另一位 Agent。"
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 16,
+    "reviewer": "root independent AI review; translator translate_b",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator.",
+    "source_sha256": "f5085511a3dc4c1266fc6e729cce81e439be735feb3ba2b78190df9e43c9dbbb",
+    "translation_sha256": "6c6ab709c4858c599f5dd9bc70ce056cb3b2b95727e8baee6f7661796c293766",
+    "findings_resolved": [
+      "确定数据形态并写下吞吐量检查点，必须将实现工作交给另一位 Agent。"
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

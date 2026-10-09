@@ -136,14 +136,14 @@
 
 ```
 /poteto-mode new task. figure out why the cache entry survives logout. don't change any code yet.
-// 新しいタスク。ログアウト後もキャッシュのエントリが残る理由を突き止めて。まだコードは変えないで。
+// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。
 ```
 
 也可以在请求中指定回答形式。「The Complete Guide to pstack」的 [Part 2](https://x.com/poteto/status/2097732320606507506) 给出了以下示例。
 
 ```
 /poteto-mode investigate why background workers periodically fail with timeout errors. give me a breakdown of what we know, what data you used, and your best hypotheses.
-// バックグラウンドのワーカーがときどきタイムアウトのエラーで失敗する理由を調べて。分かっていること、使ったデータ、有力な仮説を分けて示して。
+// 调查后台 Worker 有时因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。
 ```
 
 这种请求方式与 `/poteto-mode` 中「[Writing the reply](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md#writing-the-reply)」一节的要求相同：<strong>每项主张都要在同一句中附上证据，或标明它是测量所得、推断所得还是猜测</strong>。在请求中也要求作这种区分，便能辨认回答中的哪些句子是经确认的事实，哪些只是猜测。

@@ -195,7 +195,7 @@ explorer 不应编造未知或未追踪到的部分，而应如实写下「无�
 
 ```
 /how do we cancel runs? do we have an n+1 when we look up every run to cancel?
-// 実行のキャンセルはどう動いてる？キャンセル対象の実行を1件ずつ引いていて、N+1になっていない？
+// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？
 ```
 
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
@@ -307,10 +307,10 @@ Agent 首先调查连接到使用者 Cursor 的 MCP（Model Context Protocol，�
 启动调查者前，Agent 使用如下命令收集目标文件的行、提交与 PR，再把线索交给所有调查者，让他们从具体代码开始调查。
 
 ```
-# 対象の行を最後に変えたコミットを表示する
+# 显示最后修改目标行的提交
 git blame -L <start>,<end> <file>
 
-# PRの説明と議論を表示する
+# 显示 PR 描述和讨论
 gh pr view <number> --json title,body,author,createdAt,mergedAt,labels,closingIssuesReferences,comments,reviews
 ```
 
@@ -391,10 +391,10 @@ poteto 在「The Complete Guide to pstack」[Part 2](https://x.com/poteto/status
 例如，若调查重试上限的原因是为了修改它，可以得到以下约束。
 
 ```
-Preserve: 上流のAPIが拒む回数を超えない（上限の理由として記録がある）
-Change:   上限の値をコードに直接書かず、上流のAPIの制限と同じ場所で決める
-Avoid:    上限をなくして、成功するまで再試行し続ける
-Risk:     上流のAPIの制限が変わっていれば、今の5という値は合わなくなる
+Preserve: 不超过上游 API 允许的重试次数（该上限的理由已有记录）
+Change:   不在代码中写死上限，而是在定义上游 API 限制的同一处确定它
+Avoid:    去掉上限，一直重试直到成功
+Risk:     如果上游 API 的限制变化，当前数值 5 就可能不合适
 ```
 
 这样把调查结果分为四类约束，可以避免在制定变更计划时因不了解应保留的理由而无意中将其删除。
@@ -410,7 +410,7 @@ Risk:     上流のAPIの制限が変わっていれば、今の5という値は
 
 ```
 /why was the retry limit set to five? does the reason still hold?
-// リトライ上限はなぜ5にしたの？その理由は今も成り立つ？
+// 为什么把重试上限设为 5？当初的理由现在仍成立吗？
 ```
 
 同一页面指出，「没人留下理由」本身也是一种答案。
@@ -531,7 +531,7 @@ poteto 在「The Complete Guide to pstack」Part 2 中写道，和比自己聪�
 
 ```
 /teach me how this PR changes retries. convince me it fixes the cause and not the symptom.
-// このPRがリトライをどう変えるか教えて。症状ではなく原因を直していると納得させて。
+// 说明这个 PR 如何改变重试，并让我相信修复的是原因而非症状。
 ```
 
 指南建议使用「说服我」（convince me）这一说法，让解释成为可以提出反驳并检验的论证，而非单向讲解。
@@ -629,19 +629,19 @@ Threads 使用以下六种状态标签。
 
 ```
 Capsule
-- CSVエクスポートを、画面の処理から非同期のジョブに移す作業
-- ジョブへの移行はマージ済みで、再試行すると同じ行がもう一度書き出される問題が残っている
+- 把 CSV 导出从页面处理流程移到异步任务中
+- 迁移到任务的改动已经合并，但重试会重复写入相同行的问题仍存在
 Threads
-- [merged #412] エクスポートをジョブに移す
-- [reverted #418] 再試行を追加する（同じ行がもう一度書き出されたため差し戻し）
-- [open PR #421] 行のキーで書き込みを冪等にする
-- [in flight export-progress] 進み具合を画面に表示する
-- [verified, uncommitted] 大きなファイルでのタイムアウトを延ばす
-- [planned, not started] 古い同期のエクスポートを消す
+- [merged #412] 将导出移到异步任务
+- [reverted #418] 添加重试（因重复写入相同行而撤回）
+- [open PR #421] 以行键实现幂等写入
+- [in flight export-progress] 在页面显示进度
+- [verified, uncommitted] 延长大文件处理的超时时间
+- [planned, not started] 删除旧的同步导出逻辑
 Problems
-- 再試行すると、1回目の試行で書いた行の後ろに、同じ行がもう一度書き出される。#418 はこれで差し戻された
+- 重试时，首次尝试写入的行后面会再次出现相同行；#418 因此被撤回
 Next move
-- #421 のレビューの指摘に答え、マージする
+- 回应 #421 的审阅意见并合并
 ```
 
 这样，若 Problems 中保留被撤回的修复及其原因，下一次尝试便能从上次失败处开始。
@@ -655,7 +655,7 @@ Next move
 
 ```
 /recall catch me up on the export work from last week
-// 先週のエクスポートの作業について、状況を教えて
+// 说明上周导出工作的进展
 ```
 
 如何把工作交接给新的会话，将在[第 37 章](https://zenn.dev/sc30gsw/books/080faba713547b/viewer/b4b9a1)介绍。

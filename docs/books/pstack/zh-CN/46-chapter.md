@@ -124,7 +124,7 @@ poteto 在「Architecting bigger changes」一节写道：<strong>在 Agent 时�
 
 ```
 /architect this new <feature request>
-// この新しい<機能の要望>を設計して
+// 设计这个新的<功能需求>。
 ```
 
 文章将 [`/architect`](https://github.com/cursor/plugins/blob/main/pstack/skills/architect/SKILL.md) 的流程分为五个阶段。
@@ -206,7 +206,7 @@ Agent 让多个模型并行制作设计方案，彼此不看对方的方案（`/
 <p class="code-line" data-line="147">这里以限制同一发送方（向我们发送 webhook 的外部系统）每分钟最多提交 60 个 webhook 为例。</p>
 </blockquote>
 <p class="code-line" data-line="149">这个例子按以下顺序编写。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="151"><span class="line"><span style="color:#a0aab5">// 1. 先に、呼び出し側の使い方を書く</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="151"><span class="line"><span style="color:#a0aab5">// 1. 先写调用方的用法</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> limiter</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> createRateLimiter</span><span style="color:#E1E4E8">({ perMinute: </span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> handleWebhook</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">webhook</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">senderId</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8"> })</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Response</span><span style="color:#E1E4E8"> {</span></span>
@@ -216,7 +216,7 @@ Agent 让多个模型并行制作设计方案，彼此不看对方的方案（`/
 <span class="line"><span style="color:#F97583">  return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Response</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OK"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// 2. 使い方から骨組みを導く：型と関数の形だけを書き、中身はまだ書かない</span></span>
+<span class="line"><span style="color:#a0aab5">// 2. 从用法推导骨架：只写类型和函数形式，暂不写实现</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> RateLimiterOptions</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">perMinute</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> };</span></span>
 <span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> RateLimiter</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { </span><span style="color:#B392F0">tryAcquire</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">senderId</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> };</span></span>
 <span class="line"></span>
@@ -279,12 +279,12 @@ Agent 将骨架中临时代替函数体的代码（例如 `throw new Error("not 
 假设返回商品金额的函数 `getPrice`，改为返回「金额和币种」，而非仅返回金额。
 
 ```
-// price.ts（変更前）：金額だけを返す
+// price.ts（修改前）：只返回金额
 function getPrice(itemId: string): number {
   // ...
 }
 
-// price.ts（変更後）：金額と通貨を返す
+// price.ts（修改后）：返回金额和币种
 function getPrice(itemId: string): { amount: number; currency: string } {
   // ...
 }
@@ -297,7 +297,7 @@ function getPrice(itemId: string): { amount: number; currency: string } {
 变更前，界面代码自己持有缓存（保存已获取数据的容器）。
 
 ```
-// UserPage.ts（変更前）：画面のコードがキャッシュを持つ
+// UserPage.ts（修改前）：页面代码持有缓存
 const cache = new Map<string, User>();
 
 async function showUser(id: string) {
@@ -310,7 +310,7 @@ async function showUser(id: string) {
 变更后，获取数据的模块持有缓存，界面代码只负责调用。
 
 ```
-// userApi.ts（変更後）：データを取得するモジュールがキャッシュを持つ
+// userApi.ts（修改后）：获取数据的模块持有缓存
 const cache = new Map<string, User>();
 
 export async function fetchUser(id: string): Promise<User> {
@@ -321,7 +321,7 @@ export async function fetchUser(id: string): Promise<User> {
   return user;
 }
 
-// UserPage.ts（変更後）：キャッシュを気にせず、呼ぶだけ
+// UserPage.ts（修改后）：无须考虑缓存，只管调用
 async function showUser(id: string) {
   render(await fetchUser(id));
 }
@@ -370,19 +370,19 @@ async function showUser(id: string) {
 但 Agent 实际编写后发现，发票、邮件和管理界面这三个互不相关的地方都需要币种。
 
 ```
-// 骨組みで決めた型：通貨の項目がない
+// 骨架中定义的类型：没有币种字段
 type Order = { id: string; total: number };
 
-// 表示や送信の対象になる注文
+// 要显示或发送的订单
 declare const order: Order;
 
-// invoice.ts：型の逃げ道（as any）で、型にない項目を読む
+// invoice.ts：通过类型逃生口（as any）读取类型中不存在的字段
 const invoiceCurrency = (order as any).currency ?? "JPY";
 
-// mail.ts：同じ回避策を、無関係な別の箇所でも書く
+// mail.ts：在另一处不相关的代码中使用相同规避办法
 const mailCurrency = (order as any).currency ?? "JPY";
 
-// admin.ts：さらに別の箇所でも、同じ回避策を書く
+// admin.ts：在第三处使用相同规避办法
 const adminCurrency = (order as any).currency ?? "JPY";
 ```
 
@@ -415,15 +415,21 @@ Agent 在三个位置重复同一种绕路办法，<strong>并非各位置都写
 <details><summary>示例 1：无关边缘情况各自增加专用分支</summary><div class="details-content">
 <p class="code-line" data-line="341">一个显示订单总额的函数，为三个互不相关的边缘情况分别增加专用分支。</p>
 <div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="343"><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> formatTotal</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">order</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Order</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8"> {</span></span>
-<span class="line"><span style="color:#a0aab5">  // 古い形式の注文だけ、別の計算をする</span></span>
+<span class="line"><span style="color:#a0aab5">  // 仅对旧格式订单另行计算</span></span>
 <span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (order.id.</span><span style="color:#B392F0">startsWith</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"legacy-"</span><span style="color:#E1E4E8">)) </span><span style="color:#F97583">return</span><span style="color:#B392F0"> formatLegacyTotal</span><span style="color:#E1E4E8">(order);</span></span>
-<span class="line"><span style="color:#a0aab5">  // 返金の注文だけ、別の表示にする</span></span>
+<span class="line"><span style="color:#a0aab5">  // 仅对退款订单另行显示</span></span>
 <span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (order.total </span><span style="color:#F97583">&lt;</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> `返金 ${</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">order</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">total</span><span style="color:#9ECBFF">}円`</span><span style="color:#E1E4E8">;</span></span>
-<span class="line"><span style="color:#a0aab5">  // ギフトの注文だけ、金額を隠す</span></span>
+<span class="line"><span style="color:#a0aab5">  // 仅对礼品订单隐藏金额</span></span>
 <span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (order.id.</span><span style="color:#B392F0">endsWith</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"-gift"</span><span style="color:#E1E4E8">)) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> "ギフト"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#F97583">  return</span><span style="color:#9ECBFF"> `${</span><span style="color:#E1E4E8">order</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">total</span><span style="color:#9ECBFF">}円`</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span></code></pre></div>
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：示例中的日文输出分别表示「退款若干日元」「礼品」和「若干日元」；它们是 formatTotal 的实际返回值，故保留。
+<!-- book-code-note:end -->
+
+
 <p class="code-line" data-line="355">各分支都从 <code>id</code> 字符串或金额正负号推测订单类型，因为 <code>Order</code> 类型缺少表示订单种类的字段。这是应重新设计类型，而非继续加分支的迹象。</p>
 </div></details>
 
@@ -431,12 +437,12 @@ Agent 在三个位置重复同一种绕路办法，<strong>并非各位置都写
 
 <details><summary>示例 2：原本认为不共享的状态，结果需要加锁</summary><div class="details-content">
 <p class="code-line" data-line="359">骨架假设各发送方的计数只由一个处理过程读写。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="361"><span class="line"><span style="color:#a0aab5">// 骨組みの前提：送り手ごとの件数は、1つの処理だけが読み書きする</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="361"><span class="line"><span style="color:#a0aab5">// 骨架的前提：每个发送方的计数只由一个处理过程读写</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> counts</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">string</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">number</span><span style="color:#E1E4E8">&gt;();</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="366">但实现时发现，多个服务器会同时改写共享存储（<code>store</code>）里的同一计数。</p>
 <p class="code-line" data-line="368">于是试图加锁，避免从读取到写回期间被其他服务器插入。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="370"><span class="line"><span style="color:#a0aab5">// 実装の途中：骨組みになかったロックを足そうとしている</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="370"><span class="line"><span style="color:#a0aab5">// 实现过程中：试图加入骨架中没有的锁</span></span>
 <span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> tryAcquire</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">senderId</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">boolean</span><span style="color:#E1E4E8">&gt; {</span></span>
 <span class="line"><span style="color:#F97583">  await</span><span style="color:#E1E4E8"> lock.</span><span style="color:#B392F0">acquire</span><span style="color:#E1E4E8">(senderId);</span></span>
 <span class="line"><span style="color:#F97583">  try</span><span style="color:#E1E4E8"> {</span></span>
@@ -457,8 +463,8 @@ Agent 在三个位置重复同一种绕路办法，<strong>并非各位置都写
 <p class="code-line" data-line="388">必须先调用 <code>init()</code>，否则 <code>tryAcquire</code> 就会报错的设计。</p>
 <div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="390"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> limiter</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> createRateLimiter</span><span style="color:#E1E4E8">({ perMinute: </span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8">limiter.</span><span style="color:#B392F0">init</span><span style="color:#E1E4E8">(); </span><span style="color:#a0aab5">// これを先に呼ぶ、という内部の決まりがある</span></span>
-<span class="line"><span style="color:#E1E4E8">limiter.</span><span style="color:#B392F0">tryAcquire</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"sender-a"</span><span style="color:#E1E4E8">); </span><span style="color:#a0aab5">// init() を忘れると、ここでエラーになる</span></span>
+<span class="line"><span style="color:#E1E4E8">limiter.</span><span style="color:#B392F0">init</span><span style="color:#E1E4E8">(); </span><span style="color:#a0aab5">// 内部约定要求先调用此方法</span></span>
+<span class="line"><span style="color:#E1E4E8">limiter.</span><span style="color:#B392F0">tryAcquire</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"sender-a"</span><span style="color:#E1E4E8">); </span><span style="color:#a0aab5">// 若忘记调用 init()，这里就会报错</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="397">调用方若不知道「先调用 <code>init()</code>」这一内部约定，就无法正确使用。该约定既不体现在类型中，也不体现在函数形式中。</p>
 </div></details>
@@ -467,16 +473,16 @@ Agent 在三个位置重复同一种绕路办法，<strong>并非各位置都写
 
 <details><summary>示例 4：相同形式的偏差在两个独立位置出现</summary><div class="details-content">
 <p class="code-line" data-line="401">骨架中，格式化金额的函数 <code>formatPrice</code> 只接受订单参数。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="403"><span class="line"><span style="color:#a0aab5">// 骨組み：注文だけを受け取る</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="403"><span class="line"><span style="color:#a0aab5">// 骨架：只接收订单</span></span>
 <span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> formatPrice</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">order</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Order</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#F97583">  throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"not implemented"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="410">但实现发票和邮件这两个独立部分时，两边都需要显示语言（<code>locale</code>）参数。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="412"><span class="line"><span style="color:#a0aab5">// invoice.ts を実装中：骨組みにない引数 locale が必要になった</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="412"><span class="line"><span style="color:#a0aab5">// 实现 invoice.ts 时：发现需要骨架中没有的 locale 参数</span></span>
 <span class="line"><span style="color:#B392F0">formatPrice</span><span style="color:#E1E4E8">(order, locale);</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#a0aab5">// mail.ts を実装中：別の箇所でも、同じ形で locale が必要になった</span></span>
+<span class="line"><span style="color:#a0aab5">// 实现 mail.ts 时：另一处也需要同样的 locale 参数</span></span>
 <span class="line"><span style="color:#B392F0">formatPrice</span><span style="color:#E1E4E8">(order, locale);</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="420">相同形式的偏差出现在两个不相关的位置，说明不只是某处的特殊需要，而可能是骨架遗漏了 <code>locale</code>。</p>
@@ -505,7 +511,7 @@ poteto 在「Okay but I really want a planning doc」一节说，pstack 没有�
 
 ```
 /poteto-mode turn this design into a plan
-// この設計を計画にして
+// 把这个设计写成计划。
 ```
 
 使用这一 Playbook 后，Agent 会围绕完成证据及其验证方法，安排计划中的每项任务。
@@ -560,13 +566,13 @@ poteto 在「Okay but I really want a planning doc」一节说，pstack 没有�
 计划文档用标题（`##`）逐份划分 PR。例如，包含两份 PR 的计划文档形式如下。
 
 ```
-# webhook のレート制限の計画書
+# webhook 限流计划文档
 
-## 送り手ごとに件数を数える RateLimiter を作る（PR 1）
-（PR 1 について、下の欄を書く）
+## 创建按发送方计数的 RateLimiter（PR 1）
+（请为 PR 1 填写以下各栏）
 
-## 送り手ごとのレート制限を追加する（PR 2）
-（PR 2 について、同じ欄を書く）
+## 添加按发送方限流的功能（PR 2）
+（请为 PR 2 填写相同各栏）
 ```
 
 每个标题下都按顺序填写以下字段。本节末尾会展示填完内容的示例。
@@ -584,32 +590,32 @@ poteto 在「Okay but I really want a planning doc」一节说，pstack 没有�
 例如，在上面骨架的 PR 2 标题下填入这些字段，结果如下。
 
 ```
-## 送り手ごとのレート制限を追加する（PR 2）
+## 添加按发送方限流的功能（PR 2）
 
-**依存するPR**：PR 1（送り手ごとに件数を数える RateLimiter を作る）
+**依赖的 PR**：PR 1（创建按发送方计数的 RateLimiter）
 
-**変更するファイル**
-- [ ] `src/webhooks/handleWebhook.ts` を編集する
+**要修改的文件**
+- [ ] 编辑 `src/webhooks/handleWebhook.ts`
 
-**行う変更**
-- [ ] `handleWebhook` で `limiter.tryAcquire(senderId)` を呼び、上限を超えたら 429 を返す
+**要做的改动**
+- [ ] 在 `handleWebhook` 中调用 `limiter.tryAcquire(senderId)`，超过上限时返回 429
 
-**観察できる結果**
-- [ ] 同じ送り手から1分に61件送ると、61件目でログに `rate_limited sender=sender-a` が出る
+**可观察的结果**
+- [ ] 同一发送方在 1 分钟内发送 61 次，第 61 次的日志出现 `rate_limited sender=sender-a`
 
-**単体テスト**（テストだけでは検証済みにしない）
-- [ ] `handleWebhook.test.ts` に「61件目は 429 を返す」ケースを足し、`npm test` を実行する
+**单元测试**（单元测试不能单独算作验证完成）
+- [ ] 在 `handleWebhook.test.ts` 中添加「第 61 次返回 429」测试，并运行 `npm test`
 
-**ライブ確認**
-- [ ] 動いているサーバーに webhook を61件送り、61件目が 429 になることを確かめる
+**实际运行验证**
+- [ ] 向运行中的服务器发送 61 次 webhook 请求，确认第 61 次返回 429
 
-**性能の確認**
-- [ ] webhook 1件あたりの処理時間を、変更前と変更後で比べる
+**性能验证**
+- [ ] 比较修改前后每次 webhook 请求的处理时间
 
-**利用者のレビュー**：なし（利用者の操作の流れは変わらない）
+**用户审阅**：无（用户操作流程未改变）
 
-**マージ**
-- [ ] 単体テスト、ライブ確認、性能の確認にすべてチェックが入ってから、マージする
+**合并**
+- [ ] 单元测试、实际运行验证和性能验证全部完成后再合并
 ```
 
 <a id="%E3%83%86%E3%82%B9%E3%83%88%E3%81%A0%E3%81%91%E3%81%A7%E3%81%AF%E6%A4%9C%E8%A8%BC%E6%B8%88%E3%81%BF%E3%81%AB%E3%81%97%E3%81%AA%E3%81%84"></a>
@@ -639,62 +645,62 @@ Agent 将计划文档的位置和格式检查（`check-plan.mjs`）结果交给�
 
 <details><summary>示例：webhook 限流计划文档（两份 PR）</summary><div class="details-content">
 <p class="code-line" data-line="553">将上述两份 PR 骨架的各字段填入内容后，结果如下。</p>
-<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="555"><span class="line"><span style="color:#79B8FF;font-weight:bold"># webhook のレート制限の計画書</span></span>
+<div class="code-block-container"><pre class="shiki github-dark" style="background-color:#151e2c;color:#e1e4e8"><code class="code-line" data-line="555"><span class="line"><span style="color:#79B8FF;font-weight:bold"># webhook 限流计划文档</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">## 送り手ごとに件数を数える RateLimiter を作る（PR 1）</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 创建按发送方计数的 RateLimiter（PR 1）</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**依存するPR**</span><span style="color:#E1E4E8">：なし</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**依赖的 PR**</span><span style="color:#E1E4E8">：无</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**変更するファイル**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`src/webhooks/rateLimiter.ts`</span><span style="color:#E1E4E8"> を作る</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`src/webhooks/rateLimiter.test.ts`</span><span style="color:#E1E4E8"> を作る</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**要修改的文件**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">新建 </span><span style="color:#79B8FF">`src/webhooks/rateLimiter.ts`</span></span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">新建 </span><span style="color:#79B8FF">`src/webhooks/rateLimiter.test.ts`</span></span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**行う変更**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`createRateLimiter`</span><span style="color:#E1E4E8"> を実装し、送り手ごとに1分あたりの件数を数える</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**要做的改动**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">实现 </span><span style="color:#79B8FF">`createRateLimiter`</span><span style="color:#E1E4E8">，按发送方统计每分钟的请求数</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**観察できる結果**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 検証用のスクリプトで同じ送り手として61回呼ぶと、61回目で </span><span style="color:#79B8FF">`false`</span><span style="color:#E1E4E8"> が表示される</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**可观察的结果**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 用验证脚本以同一发送方身份调用 61 次，第 61 次显示 </span><span style="color:#79B8FF">`false`</span><span style="color:#E1E4E8"></span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**単体テスト**</span><span style="color:#E1E4E8">（テストだけでは検証済みにしない）</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 「60回目までは true、61回目は false」「1分たつと数え直す」の2つのケースを書き、</span><span style="color:#79B8FF">`npm test`</span><span style="color:#E1E4E8"> を実行する</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**单元测试**</span><span style="color:#E1E4E8">（单元测试不能单独算作验证完成）</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 添加「前 60 次返回 true、第 61 次返回 false」和「1 分钟后重新计数」两个测试，并运行 </span><span style="color:#79B8FF">`npm test`</span><span style="color:#E1E4E8"> </span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**ライブ確認**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 検証用のスクリプトを実際に動かし、観察できる結果のとおりになることを確かめる</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**实际运行验证**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 实际运行验证脚本，确认观察结果符合预期</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**性能の確認**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 10,000回呼んだときの時間を測り、1回あたりの時間を記録する</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**性能验证**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 测量调用 10,000 次的耗时，记录单次调用时间</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**利用者のレビュー**</span><span style="color:#E1E4E8">：なし（利用者の操作の流れは変わらない）</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**用户审阅**</span><span style="color:#E1E4E8">：无（用户操作流程未改变）</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**マージ**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 単体テスト、ライブ確認、性能の確認にすべてチェックが入ってから、マージする</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**合并**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 单元测试、实际运行验证和性能验证全部完成后再合并</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">## 送り手ごとのレート制限を追加する（PR 2）</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 添加按发送方限流的功能（PR 2）</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**依存するPR**</span><span style="color:#E1E4E8">：PR 1（送り手ごとに件数を数える RateLimiter を作る）</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**依赖的 PR**</span><span style="color:#E1E4E8">：PR 1（创建按发送方计数的 RateLimiter）</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**変更するファイル**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`src/webhooks/handleWebhook.ts`</span><span style="color:#E1E4E8"> を編集する</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**要修改的文件**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">编辑 </span><span style="color:#79B8FF">`src/webhooks/handleWebhook.ts`</span></span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**行う変更**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`handleWebhook`</span><span style="color:#E1E4E8"> で </span><span style="color:#79B8FF">`limiter.tryAcquire(senderId)`</span><span style="color:#E1E4E8"> を呼び、上限を超えたら 429 を返す</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**要做的改动**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">在 </span><span style="color:#79B8FF">`handleWebhook`</span><span style="color:#E1E4E8"> 中调用 </span><span style="color:#79B8FF">`limiter.tryAcquire(senderId)`</span><span style="color:#E1E4E8">；超过上限时返回 429</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**観察できる結果**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 同じ送り手から1分に61件送ると、61件目でログに </span><span style="color:#79B8FF">`rate_limited sender=sender-a`</span><span style="color:#E1E4E8"> が出る</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**可观察的结果**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 同一发送方在 1 分钟内发送 61 次，第 61 次在日志中出现 </span><span style="color:#79B8FF">`rate_limited sender=sender-a`</span><span style="color:#E1E4E8"></span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**単体テスト**</span><span style="color:#E1E4E8">（テストだけでは検証済みにしない）</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#79B8FF">`handleWebhook.test.ts`</span><span style="color:#E1E4E8"> に「61件目は 429 を返す」ケースを足し、</span><span style="color:#79B8FF">`npm test`</span><span style="color:#E1E4E8"> を実行する</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**单元测试**</span><span style="color:#E1E4E8">（单元测试不能单独算作验证完成）</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] </span><span style="color:#E1E4E8">在 </span><span style="color:#79B8FF">`handleWebhook.test.ts`</span><span style="color:#E1E4E8"> 中添加「第 61 次返回 429」测试，并运行 </span><span style="color:#79B8FF">`npm test`</span><span style="color:#E1E4E8"> </span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**ライブ確認**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 動いているサーバーに webhook を61件送り、61件目が 429 になることを確かめる</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**实际运行验证**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 向运行中的服务器发送 61 次 webhook 请求，确认第 61 次返回 429</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**性能の確認**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] webhook 1件あたりの処理時間を、変更前と変更後で比べる</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**性能验证**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 比较修改前后每次 webhook 请求的处理时间</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**利用者のレビュー**</span><span style="color:#E1E4E8">：なし（利用者の操作の流れは変わらない）</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**用户审阅**</span><span style="color:#E1E4E8">：无（用户操作流程未改变）</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E1E4E8;font-weight:bold">**マージ**</span></span>
-<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 単体テスト、ライブ確認、性能の確認にすべてチェックが入ってから、マージする</span></span>
+<span class="line"><span style="color:#E1E4E8;font-weight:bold">**合并**</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> [ ] 单元测试、实际运行验证和性能验证全部完成后再合并</span></span>
 <span class="line"></span></code></pre></div>
 <p class="code-line" data-line="614">真正的 Playbook 模板要求更细致。例如，现场验证分为十个方面，每方面都要写出截图及通过条件。PR 部分之前还有说明整体计划如何推进的章节，之后则附上原型证据等附录。</p>
 </div></details>
@@ -755,7 +761,7 @@ poteto 写道，对于持续一周的大型项目，为让其他 Agent 了解进
 
 ```
 /poteto-mode investigate why background workers periodically fail with timeout errors. give me a breakdown of what we know, what data you used, and your best hypotheses.
-// バックグラウンドワーカーが定期的にタイムアウトエラーで失敗する理由を調べて。分かっていること、使ったデータ、有力な仮説を分けて示して。
+// 调查后台 Worker 周期性因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。
 ```
 
 请求除了目标，还指定了结果格式：已知事实、所用数据和最有力的假设。
@@ -773,7 +779,7 @@ poteto 要求为外部发来的 webhook 设计限流机制（限制一定时间�
 
 ```
 /poteto-mode we need to add rate limiting for external webhooks. /architect this first, and answer any open questions with prototypes. let me review before proceeding.
-// 外部の webhook にレート制限を追加する必要がある。まず /architect で設計して、未解決の疑問はプロトタイプで答えて。進める前に私にレビューさせて。
+// 外部 webhook 需要限流。先用 /architect 做设计，用原型解答未决问题，再让我审阅后继续。
 ```
 
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">
@@ -793,7 +799,7 @@ Agent 会调查现有 webhook 机制，让多个模型竞争设计方案，用�
 
 ```
 /poteto-mode create a plan to migrate our entire UI library to StyleX. break the migration into small, verifiable PRs. each PR must have its visual regression tests and live verification steps. i want the final result to be 100% identical compared to the original - bugs included
-// UIライブラリ全体をStyleXへ移す計画を作って。移行は、小さく検証できるPRに分けて。各PRには、見た目の回帰テストと、動くアプリで確かめる検証手順を必ず持たせて。最終結果は、不具合も含めて元と100%同じにしたい。
+// 制定将整个 UI 库迁移到 StyleX 的计划，拆成可小步验证的 PR。每个 PR 都要有视觉回归测试和在运行中应用验证的步骤。最终效果要与原来 100% 一致，包括已有缺陷。
 ```
 
 除目标（整个 UI 库迁至 StyleX）外，请求还规定了以下三点，但没有指定具体迁移步骤。
@@ -818,14 +824,14 @@ Agent 会把工作拆成彼此独立的阶段，写出可检查的清单，并�
 ```
 # thread already has sufficient context
 /poteto-mode do it
-// （スレッドには十分なコンテキストがすでにある）これをやって。
+// （讨论串中已有足够上下文）请照此执行。
 ```
 
 第二个指定重现方法与证据。
 
 ```
 /poteto-mode repro this with /control-app. if it repros on main, fix it and show me a video as proof
-// /control-app でこれを再現して。main で再現したら、直して、証拠として動画を見せて。
+// 用 /control-app 复现这个问题。在 main 上复现后修复，并用视频展示证据。
 ```
 
 <aside class="msg message"><span class="msg-symbol">!</span><div class="msg-content">

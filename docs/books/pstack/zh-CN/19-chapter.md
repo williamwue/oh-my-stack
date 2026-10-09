@@ -276,7 +276,7 @@ Playbook 要求使用先前记录区分已完成与未完成的工作，从剩�
 
 ```
 /poteto-mode take over this branch. read the decision log, figure out what's done, and continue from there. don't redo finished work.
-// このブランチを引き継いで。判断ログを読み、何が済んでいるかを把握して、そこから続けて。終わった作業はやり直さないで。
+// 接手这个分支。阅读决策日志，了解已经完成的工作，然后从那里继续。不要重做已完成的工作。
 ```
 
 <a id="%E3%80%8Eworktree-and-simulator-cleanup%E3%80%8F%E3%81%AF%E3%80%81worktree%E3%82%92%E6%B6%88%E3%81%99%E5%89%8D%E3%81%AB%E3%80%8C%E4%BD%BF%E3%82%8F%E3%82%8C%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84%E3%80%8D%E3%82%92%E8%A8%BC%E6%98%8E%E3%81%99%E3%82%8B"></a>
@@ -384,7 +384,7 @@ Playbook 要求使用先前记录区分已完成与未完成的工作，从剩�
 
 ```
 /poteto-mode what's eating my disk? prune the worktrees that are safe to prune.
-// 何がディスクを食っている？ 安全に消せるworktreeを消して。
+// 什么占用了磁盘空间？删除可以安全删除的 worktree。
 ```
 
 <a id="%E3%81%BE%E3%81%A8%E3%82%81"></a>

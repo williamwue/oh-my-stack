@@ -1,14 +1,33 @@
 {
   "chapter": 15,
-  "reviewer": "root independent AI review; translator translate_b",
+  "reviewer": "Codex AI follow-up translation correction, 2026-10-04",
   "human_review": false,
-  "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator.",
+  "coverage": "Translated Japanese reader-facing text inside code examples and manually compared each changed block with source; historical independent review preserved under previous_review. No new independent or human review claimed.",
   "source_sha256": "afbe97580f600cc39e9a176c2346f887d274aec1528cdf7efd6d57a00511e27a",
-  "translation_sha256": "98f4454efb34086986bb3e11e4f010d1ebf99dad579c9fa7205761c3c16f0306",
+  "translation_sha256": "379a42dfaff777a5128e0cc9c36e21e6d29a3b1f773e8a2c8dacd95f806c87b1",
   "findings_resolved": [
-    "演讲中提到",
-    "/control-app 是文章中创建的验证 Skill 的名称"
+    "Japanese natural language in code examples corrected; behavior-bearing literal values documented nearby."
   ],
   "unresolved": [],
-  "verdict": "reviewed"
+  "verdict": "reviewed",
+  "followup_review": {
+    "date": "2026-10-04",
+    "reason": "Reader report: Japanese comments and template text remained inside Chinese book code blocks.",
+    "reviewer": "Codex AI translation correction session",
+    "scope": "Changed code examples and nearby explanatory notes only; independent follow-up remains with coordinator."
+  },
+  "previous_review": {
+    "chapter": 15,
+    "reviewer": "root independent AI review; translator translate_b",
+    "human_review": false,
+    "coverage": "Full Japanese/Chinese paragraph, list and table-cell comparison; code, anchors and links checked by separate structural audit. English cross-check performed by translator.",
+    "source_sha256": "afbe97580f600cc39e9a176c2346f887d274aec1528cdf7efd6d57a00511e27a",
+    "translation_sha256": "98f4454efb34086986bb3e11e4f010d1ebf99dad579c9fa7205761c3c16f0306",
+    "findings_resolved": [
+      "演讲中提到",
+      "/control-app 是文章中创建的验证 Skill 的名称"
+    ],
+    "unresolved": [],
+    "verdict": "reviewed"
+  }
 }

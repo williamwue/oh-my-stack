@@ -145,21 +145,26 @@
 ```
 declare function test(name: string, fn: () => void): void;
 declare function expect<T>(actual: T): { toBe(expected: T): void };
-// 確かめたい関数：通知を送り、失敗したら再試行する。送った通知の一覧を返す
+// 待验证函数：发送通知，失败时重试，返回已发送通知列表
 declare function sendWithRetry(message: string): string[];
 
-// 正しい理由で失敗するテスト：修正前は「1のはずが2だった」で失敗する
+// 因正确原因失败的测试：修复前会因「预期 1，实际 2」而失败
 test("再試行しても、通知は1通だけ届く", () => {
   const sent = sendWithRetry("注文を受け付けました");
   expect(sent.length).toBe(1);
 });
 
-// 別の理由で失敗するテスト：関数名を書き間違えているので、不具合と関係なく失敗する
+// 因其他原因失败的测试：函数名拼错，与缺陷无关也会失败
 test("再試行しても、通知は1通だけ届く", () => {
   const sent = sendAndRetry("注文を受け付けました");
   expect(sent.length).toBe(1);
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：测试名称表示「即使重试，也只送达一条通知」；通知内容表示「已接受订单」。原字符串是测试调用和断言的值，故保留。
+<!-- book-code-note:end -->
+
 
 因此，如果修复前的测试因与故障无关的原因而失败，Agent 必须先修正测试，再修改实现。
 
@@ -196,33 +201,38 @@ Agent 在最终报告中说明，修复前哪项测试（或其他验证）如�
 declare function test(name: string, fn: () => void): void;
 declare function expect<T>(actual: T): { toBe(expected: T): void };
 type Transport = { send(message: string): void };
-// 確かめたい関数：通知を送り、失敗したら再試行する。送った通知の一覧を返す
+// 待验证函数：发送通知，失败时重试，返回已发送通知列表
 declare function sendWithRetry(message: string, transport?: Transport): string[];
-// 送信の部品の偽物（モック）。send が呼ばれた回数を数える
+// 发送组件的替身（mock），统计 send 被调用的次数
 declare const mockTransport: Transport & { calls: number };
-// 関数の内部で使っている、再試行の回数を数える変数
+// 函数内部使用的重试计数变量
 declare const retryState: { attempts: number };
 
-// 悪いテスト1（モックばかりを確かめる）：偽物の send が呼ばれた回数しか見ておらず、
-// 実際に届いた通知の数を確かめていない
+// 错误测试 1（只验证 mock）：只检查替身的 send 被调用的次数，
+// 没有检查实际送达的通知数量
 test("送信の部品を1回呼ぶ", () => {
   sendWithRetry("注文を受け付けました", mockTransport);
   expect(mockTransport.calls).toBe(1);
 });
 
-// 悪いテスト2（実装の細部を固定する）：内部の変数の値に頼るので、
-// 届く通知の数を変えない書き換え（例：変数名の変更など）でも壊れる
+// 错误测试 2（绑定实现细节）：依赖内部变量的值，
+// 即使重构不改变送达通知的数量（如重命名变量），测试仍会失败
 test("再試行の回数が1回になる", () => {
   sendWithRetry("注文を受け付けました");
   expect(retryState.attempts).toBe(1);
 });
 
-// 良いテスト：外から見える挙動（届いた通知の数）を確かめる
+// 正确测试：检查外部可见的行为（送达的通知数量）
 test("再試行しても、通知は1通だけ届く", () => {
   const sent = sendWithRetry("注文を受け付けました");
   expect(sent.length).toBe(1);
 });
 ```
+
+<!-- book-code-note:start -->
+> **Oh My Stack 项目注（代码示例）**：测试名称分别表示「调用发送组件一次」「重试次数为一次」「即使重试，也只送达一条通知」；通知内容表示「已接受订单」。这些原字符串是测试输入，故保留。
+<!-- book-code-note:end -->
+
 
 Agent 使测试符合预期行为，不会为了迁就错误实现而修改测试。此外，除非预期行为本身确实改变且理由明确，也不会减弱现有断言（例如 `expect(sent.length).toBe(1)`，用于判断结果是否符合预期）。
 
@@ -233,10 +243,10 @@ declare function expect<T>(actual: T): {
   toBeGreaterThanOrEqual(expected: number): void;
 };
 
-// 前：意図した挙動（通知は1通だけ届く）を確かめる
+// 修改前：检查预期行为（只送达一条通知）
 expect(sent.length).toBe(1);
 
-// 後（してはいけない書き換え）：2通届く間違った実装でも通るよう、アサーションを弱めた
+// 修改后（不该这样改）：弱化断言，让错误地送达两条通知的实现也能通过
 expect(sent.length).toBeGreaterThanOrEqual(1);
 ```
 
@@ -249,14 +259,14 @@ expect(sent.length).toBeGreaterThanOrEqual(1);
 
 ```
 /tdd implement
-// /tdd で実装して
+// 使用 /tdd 实现。
 ```
 
 若希望只有在具备简便测试途径时才使用 `/tdd`，可按 `docs/guide/10-recipes-and-pitfalls.md` 中的示例附上条件。
 
 ```
 /poteto-mode repro the duplicate write first. if there's a cheap test path, /tdd it. then fix and rerun.
-// まず二重書き込みを再現して。手軽なテストの経路があれば /tdd で。それから直して、再実行して。
+// 先复现重复写入。如果容易编写测试，就使用 /tdd；然后修复并重新运行。
 ```
 
 由于附有「if there's a cheap test path」（如果有简便测试途径）的条件，若没有此途径，Agent 可以跳过 `/tdd`，采用最接近的验证方法。

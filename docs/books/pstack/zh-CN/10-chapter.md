@@ -46,7 +46,7 @@ pstack 的 [README](https://github.com/cursor/plugins/blob/main/pstack/README.md
 
 ```
 /poteto-mode this pr has a subtle bug where the scroll drifts every 750ms even when idle. repro first, then fix and verify.
-// このPRには気づきにくいバグがある。アイドル中でも750msごとにスクロールがずれる。まず再現して、それから直して、確かめて。
+// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。
 ```
 
 这段请求没有写要使用哪个 Playbook 或 Skill，只写了出现的症状（即使空闲，每隔 750 ms 滚动位置仍会偏移）和希望完成的工作（先复现、再修复并验证）。
@@ -71,7 +71,7 @@ pstack 的 [README](https://github.com/cursor/plugins/blob/main/pstack/README.md
 ```
 mode: true
 reminder: New task? Playbook match or rigor needed -> apply /poteto-mode. Casual turn or user opts out -> don't.
-# 新しいタスクで、Playbookに当てはまるか厳密さが必要なら /poteto-mode を適用する。雑談のターンや、利用者がやめると言った場合は適用しない。
+# 遇到新任务时，如果符合 Playbook 或需要严谨处理，就使用 /poteto-mode。闲聊回合以及用户要求停止时不要使用。
 ```
 
 <strong>有了这一行，即使固定在 [Custom Mode](https://cursor.com/ja/changelog/0-48-x) 中，面对闲聊等轻量请求或问题，或用户表示要退出该模式时，Agent 也不会执行 Playbook 的步骤</strong>。
@@ -91,17 +91,17 @@ README 将 `/poteto-mode` 称为持续模式（原文为 sticky mode）。意思
 
 ```
 /poteto-mode do it
-// それで進めて
+// 就按这个继续。
 ```
 
 ```
 continue
-// 続けて
+// 继续。
 ```
 
 ```
 keep going until done
-// 終わるまで続けて
+// 继续，直到完成。
 ```
 
 同一页面解释说，简短请求之所以足够，是因为模式持续有效，而 Playbook 已经提供组织工作的步骤。<strong>用户的话说明想做什么（意图），Skill 负责按步骤严谨地推进</strong>。
@@ -285,7 +285,7 @@ Agent <strong>会优先根据工作规模，而非请求的措辞，决定分配
 
 ```
 /poteto-mode users get two notifications after a retry. repro first, then fix and verify.
-// 再試行の後、ユーザーに通知が2回届く。まず再現して、それから直して、確かめて。
+// 重试后，用户收到了两次通知。先复现，再修复，然后验证。
 ```
 
 指南指出，其中的「先复现」不是礼貌性的修饰，而是<strong>Playbook 必须遵守的真实约束</strong>。实际上，该请求会分配给「[<strong>Bug fix</strong>](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)」Playbook，TODO 列表从复现步骤开始。
@@ -320,7 +320,7 @@ Agent <strong>会优先根据工作规模，而非请求的措辞，决定分配
 
 ```
 /poteto-mode im stepping away. keep going until the migration check reports zero old callers. log your decisions.
-// 席を外す。移行チェックが古い呼び出し元ゼロを報告するまで続けて。判断を記録して。
+// 我暂时离开。继续处理，直到迁移检查报告旧调用方为零，并记录决策。
 ```
 
 随附指南的夜间运行页面（[`07-overnight.md`](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/07-overnight.md)）将<strong>把时间当作完成条件列为陷阱</strong>。
@@ -338,7 +338,7 @@ Agent <strong>会优先根据工作规模，而非请求的措辞，决定分配
 
 ```
 /poteto-mode new task. figure out why the cache entry survives logout. don't change any code yet.
-// 新しいタスク。ログアウト後もキャッシュのエントリが残る理由を突き止めて。まだコードは変えないで。
+// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。
 ```
 
 也就是说，<strong>「新任务」是让系统重新选择 Playbook 的信号</strong>。

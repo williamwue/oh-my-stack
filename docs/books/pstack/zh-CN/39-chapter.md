@@ -212,7 +212,7 @@ Skill 的改动会影响组织未来所有的 Agent。因此，<strong>Agent 不
 
 ```
 /reflect that took way too long. capture what we learned so the next run doesn't repeat it.
-// 時間がかかりすぎた。次の実行で繰り返さないよう、学んだことを残して。
+// 花费太久了。记录经验，避免下次执行时重蹈覆辙。
 ```
 
 这项请求写明了发生什么事（花了太多时间），以及用户想保留什么（避免下一次执行重蹈覆辙的经验）。

@@ -209,7 +209,7 @@ Skill 是<strong>完成特定工作所需能力与步骤的集合</strong>。
 
 ```
 /how do we cancel runs? do we have an n+1 when we look up every run to cancel?
-// 実行のキャンセルはどうやっている？キャンセルする実行を1件ずつ引くとき、n+1になっていない？
+// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？
 ```
 
 <strong>由用户调用的十项 Skill 未被纳入 Playbook 步骤</strong>。
@@ -334,7 +334,7 @@ Comment Sicko（[`agents/comment-sicko.md`](https://github.com/cursor/plugins/bl
 
 ```
 /poteto-mode the export writes duplicate rows when a retry lands mid-run. repro first, then fix and verify.
-// 再試行が実行の途中に入ると、エクスポートが重複した行を書き出す。まず再現して、それから直して、確かめて。
+// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。
 ```
 
 该请求会分配给「<strong>Bug fix</strong>」Playbook，TODO 列表以它的六个步骤开头（第六步是执行「[<strong>Opening a PR</strong>](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md)」来创建 PR，所以下表省略该步）。这里我们追踪每一步何时调用 Skill、何时运用 Principle。

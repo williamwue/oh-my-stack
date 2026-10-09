@@ -137,12 +137,12 @@ Agent 应把每次使用 Skill 都要阅读的模板和参考资料写在 `SKILL
 例如，一个审查 Skill 每次都按相同格式写报告，文件可以这样安排。
 
 ```
-前：毎回使う報告の形を、別ファイルに分けている
-skills/review/SKILL.md             ← 手順と「報告は templates/report.md の形で書く」という一文
-skills/review/templates/report.md  ← 報告の形
+修改前：把每次使用的报告模板放在单独文件中
+skills/review/SKILL.md             ← 步骤以及「按 templates/report.md 的格式编写报告」这一句话
+skills/review/templates/report.md  ← 报告模板
 
-後：毎回使う報告の形を、SKILL.md 本体に書く
-skills/review/SKILL.md             ← 手順と、報告の形
+修改后：把每次使用的报告模板写进 SKILL.md 本体
+skills/review/SKILL.md             ← 步骤和报告模板
 ```
 
 采用前一种方式，Agent 每次使用 Skill 都要先读 `SKILL.md`，再读 `templates/report.md`。采用后一种方式，只读一次 `SKILL.md` 即可。
