@@ -1,7 +1,6 @@
 ---
 name: poteto-mode
-description: "Route a software-engineering request to its owning workflow while preserving required design, judgment, and verification stages."
-disable-model-invocation: true
+description: "Route engineering work while preserving required design, judgment, and proof."
 ---
 
 # Poteto Mode
