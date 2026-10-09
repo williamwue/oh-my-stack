@@ -6,6 +6,17 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.14.0 - 2026-10-09
+
+- Restore pstack delivery contracts for `poteto-mode`, `feature`,
+  `figure-it-out`, `how`, and `visual-parity` across all three runtime packages.
+- Add frozen acceptance evidence, independent review requirements, protected
+  source checks, PNG comparison, and native worker attribution verification.
+- Make automatic routing load the shared poteto contract and document the
+  boundary between startup hints and guaranteed host dispatch.
+- Preserve historical failed probes alongside repairs and four independent
+  review rounds; keep runtime installation and live attribution claims separate.
+
 ## 0.13.0 - 2026-10-08
 
 - Add original AIHero `writing-for-agents`, `retro`, `handoff`,
