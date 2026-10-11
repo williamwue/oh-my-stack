@@ -1,14 +1,77 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import test from "node:test";
 
 import { prepareDelegation, verifyDelegation } from "../tools/codex-delegation.mjs";
-import { repoRoot } from "../tools/generate.mjs";
+import { loadModel, renderTarget, repoRoot } from "../tools/generate.mjs";
 import { configure } from "../tools/configure-models.mjs";
 
 const bundleRoot = join(repoRoot, "packages", "codex");
+
+test("current packaged route contracts override stale roles without changing saved model effort or order", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-current-codex-contract-"));
+  try {
+    const model = await loadModel();
+    const currentRoot = await renderTarget(root, model, model.adapters.find((adapter) => adapter.id === "codex"));
+    const contractsPath = join(currentRoot, "config", "role-contracts.json");
+    const contracts = JSON.parse(await readFile(contractsPath, "utf8"));
+    const resolutionPath = join(root, "saved.json");
+    const resolution = { schemaVersion: 1, owner: "oh-my-stack", target: "codex", routes: {
+      "code.feature-refactoring": { kind: "single", role: "implementer", entries: [{ model: "saved-code-model", reasoning: "low" }] },
+      "code.delegates": { kind: "single", role: "implementer", entries: [{ model: "saved-playbook-model", reasoning: "medium" }] },
+      "architect.runners": { kind: "panel", role: "explorer", entries: [
+        { model: "saved-design-one", reasoning: "low" },
+        { model: "saved-design-two", reasoning: "high" },
+        { model: "saved-design-three", reasoning: "medium" },
+      ] },
+      "hardest.tasks": { kind: "single", role: "implementer", entries: [{ model: "saved-hardest-model", reasoning: "high" }] },
+    } };
+    await writeFile(resolutionPath, JSON.stringify(resolution));
+    for (const routeName of ["code.feature-refactoring", "code.delegates"]) {
+      const request = await prepareDelegation({ bundleRoot: currentRoot, resolutionPath, cwd: root, routeName,
+        taskName: "code_worker", task: "Implement the assigned bounded change." });
+      assert.equal(request.audit.role, "poteto-agent");
+      assert.equal(request.model, resolution.routes[routeName].entries[0].model);
+      assert.equal(request.reasoning_effort, resolution.routes[routeName].entries[0].reasoning);
+      assert.ok(request.message.includes(contracts.roles["poteto-agent"].instructions));
+      assert.ok(request.message.includes(`Package root: ${resolve(currentRoot)}`));
+      assert.ok(request.message.includes(`Skill root: ${join(currentRoot, "skills")}`));
+      const modePath = join(currentRoot, "skills", "poteto-mode", "SKILL.md");
+      assert.ok(request.message.includes(modePath));
+      assert.match(await readFile(modePath, "utf8"), /complete workflow/);
+      const workflowPath = join(currentRoot, "skills", "poteto-mode", "WORKFLOW.md");
+      assert.ok(request.message.includes(workflowPath));
+      assert.match(await readFile(workflowPath, "utf8"), /## Principles/);
+      assert.match(await readFile(join(currentRoot, "skills", "principle-model-the-domain", "SKILL.md"), "utf8"), /Model the Domain/i);
+      assert.equal(request.fork_turns, "none");
+    }
+    for (let entry = 1; entry <= 3; entry++) {
+      const request = await prepareDelegation({ bundleRoot: currentRoot, resolutionPath, routeName: "architect.runners", entry,
+        taskName: "design_worker", task: "Write the candidate at the assigned output path." });
+      const saved = resolution.routes["architect.runners"].entries[entry - 1];
+      assert.equal(request.audit.role, "design-runner");
+      assert.equal(request.model, saved.model);
+      assert.equal(request.reasoning_effort, saved.reasoning);
+      assert.ok(request.message.includes(contracts.roles["design-runner"].instructions));
+      assert.match(request.message, /Write only the candidate artifacts at the explicitly assigned output/);
+      assert.match(request.message, /Do not implement or modify application code/);
+    }
+    const hardest = await prepareDelegation({ bundleRoot: currentRoot, resolutionPath, routeName: "hardest.tasks",
+      taskName: "hard_worker", task: "Implement the hard task." });
+    assert.equal(hardest.audit.role, "implementer");
+    delete contracts.routeRoles["code.delegates"];
+    await writeFile(contractsPath, JSON.stringify(contracts));
+    await assert.rejects(prepareDelegation({ bundleRoot: currentRoot, resolutionPath, routeName: "code.delegates",
+      taskName: "missing_worker", task: "Implement." }), /unknown packaged route/);
+    delete contracts.routeRoles;
+    await writeFile(contractsPath, JSON.stringify(contracts));
+    const legacy = await prepareDelegation({ bundleRoot: currentRoot, resolutionPath, routeName: "code.delegates",
+      taskName: "legacy_worker", task: "Implement." });
+    assert.equal(legacy.audit.role, "implementer", "only legacy contract files use saved roles");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
 
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), "ohmystack-codex-delegation-"));

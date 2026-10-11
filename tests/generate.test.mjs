@@ -20,6 +20,50 @@ import {
 
 const execFileAsync = promisify(execFile);
 
+test("all host descriptors preserve Poteto code contracts and bounded Architect writers", async () => {
+  const stage = await mkdtemp(join(tmpdir(), "oms-worker-role-generation-"));
+  try {
+    const model = await loadModel();
+    for (const adapter of model.adapters) {
+      const target = await renderTarget(stage, model, adapter);
+      const descriptor = JSON.parse(await readFile(join(target, "config/runtime-resolution.json"), "utf8"));
+      for (const [name, route] of Object.entries(descriptor.routes).filter(([name]) => name.startsWith("code."))) {
+        assert.equal(route.role, "poteto-agent", `${adapter.id}/${name}`);
+      }
+      assert.equal(descriptor.routes["hardest.tasks"].role, "implementer");
+      assert.equal(descriptor.routes["how.explorer"].role, "explorer");
+      assert.equal(descriptor.routes["architect.runners"].role, "design-runner");
+      assert.equal(descriptor.routes["architect.runners"].defaultCount, 2);
+      const role = descriptor.roles.find((role) => role.name === "design-runner");
+      assert.equal(role.writes, true);
+      assert.equal(role.workload, "deep");
+      assert.ok(!role.constraints.includes("read_only"));
+      if (["codex", "pi"].includes(adapter.id)) {
+        const contracts = JSON.parse(await readFile(join(target, "config/role-contracts.json"), "utf8"));
+        assert.deepEqual(contracts.routeRoles, Object.fromEntries(Object.entries(descriptor.routes).map(([name, route]) => [name, route.role])));
+        assert.match(contracts.roles["poteto-agent"].instructions, /Read the `poteto-mode` skill's `SKILL.md` in full/);
+        assert.match(contracts.roles["design-runner"].instructions, /Do not implement or modify application code/);
+      }
+      const extension = adapter.id === "codex" ? "toml" : adapter.id === "pi" ? "json" : "md";
+      const writer = await readFile(join(target, "agents", `design-runner.${extension}`), "utf8");
+      if (adapter.id === "codex") assert.match(writer, /sandbox_mode = "workspace-write"/);
+      if (adapter.id === "pi") assert.equal(JSON.parse(writer).writes, true);
+      if (adapter.id === "omp") {
+        assert.match(writer, /  - edit\n/);
+        assert.match(writer, /  - write\n/);
+      }
+      if (adapter.id === "claude-code") {
+        assert.match(writer, /tools: Read, Grep, Glob, Bash, Edit, Write/);
+        const setup = await readFile(join(target, "skills/setup-oh-my-stack/SKILL.md"), "utf8");
+        assert.match(setup, /Fresh ordered two-worker panels use\nOpus\/Sonnet/);
+        assert.match(setup, /Haiku remains the fast workload choice/);
+        assert.match(setup, /membership, order and size \(including three-member panels\)/);
+        assert.doesNotMatch(setup, /ordered three-worker panels|Opus\/Sonnet\/Haiku|Astra\/Sol\/Luna arrangement/);
+      }
+    }
+  } finally { await rm(stage, { recursive: true, force: true }); }
+});
+
 test("extension selection controls skills reference closure scripts hooks and manifest declarations", async () => {
   const stage = await mkdtemp(join(tmpdir(), "oms-extension-closure-"));
   try {

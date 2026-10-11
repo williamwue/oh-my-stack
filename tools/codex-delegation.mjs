@@ -53,7 +53,12 @@ export async function prepareDelegation({
     assert(route.kind === "panel" || entry === 1, "single routes have only entry 1");
     selection = route.entries?.[entry - 1];
     assert(selection, `${routeName}: entry ${entry} is unavailable`);
-    role = route.role;
+    if (Object.hasOwn(contracts, "routeRoles")) {
+      role = contracts.routeRoles?.[routeName];
+      assert(typeof role === "string" && role, `unknown packaged route ${routeName}`);
+    } else {
+      role = route.role;
+    }
   } else {
     assert(entry === 1, "canonical roles have only entry 1");
     role = roleName;
@@ -68,6 +73,17 @@ export async function prepareDelegation({
   const message = [
     `Oh My Stack role: ${role}`,
     `Role purpose: ${contract.description}`,
+    "",
+    "Installed package context:",
+    `Package root: ${resolve(bundleRoot)}`,
+    `Skill root: ${resolve(bundleRoot, "skills")}`,
+    `Runtime binding guide: ${resolve(bundleRoot, "docs", "runtime-binding.md")}`,
+    `Model selection guide: ${resolve(bundleRoot, "docs", "model-selection.md")}`,
+    ...(role === "poteto-agent" ? [
+      `Read the full Poteto Mode entry at ${resolve(bundleRoot, "skills", "poteto-mode", "SKILL.md")} before work.`,
+      `Read its complete workflow, including the Principles index, at ${resolve(bundleRoot, "skills", "poteto-mode", "WORKFLOW.md")}.`,
+      `Read each applicable principle leaf at ${resolve(bundleRoot, "skills", "principle-<name>", "SKILL.md")}.`,
+    ] : []),
     "",
     "Complete role instructions:",
     contract.instructions.trim(),

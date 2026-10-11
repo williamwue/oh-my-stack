@@ -8,7 +8,7 @@ import test from "node:test";
 
 import { configure } from "../tools/configure-models.mjs";
 import { normalizeClaudeProbe } from "../tools/collect-model-inventory.mjs";
-import { repoRoot } from "../tools/generate.mjs";
+import { loadModel, renderTarget, repoRoot } from "../tools/generate.mjs";
 
 const selections = {
   fast: "observed-fast@low",
@@ -16,6 +16,74 @@ const selections = {
   deep: "observed-deep@high",
 };
 const execFileAsync = promisify(execFile);
+
+test("upgrading saved code and Architect roles refreshes native contracts while retaining model effort and panel size", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-native-contract-upgrade-"));
+  try {
+    const model = await loadModel();
+    for (const adapter of model.adapters) {
+      const packageRoot = await renderTarget(root, model, adapter);
+      const descriptorPath = join(packageRoot, "config/runtime-resolution.json");
+      const current = JSON.parse(await readFile(descriptorPath, "utf8"));
+      const legacy = structuredClone(current);
+      for (const [name, route] of Object.entries(legacy.routes)) {
+        if (name.startsWith("code.")) route.role = "implementer";
+      }
+      legacy.routes["architect.runners"].role = "explorer";
+      await writeFile(descriptorPath, JSON.stringify(legacy));
+      const inventoryPath = join(root, `${adapter.id}-inventory.json`);
+      await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: adapter.id,
+        observedAt: "2026-10-11T00:00:00Z", source: "saved contract upgrade fixture",
+        models: Object.values(selections).map((value) => ({ id: value.split("@")[0], reasoningEfforts: ["low", "medium", "high"] })) }));
+      const outputRoot = join(root, "configured", adapter.id);
+      const routeSelections = Object.fromEntries(Object.keys(current.routes).filter((name) => name.startsWith("code.")).map((name) => [name, "observed-fast@low"]));
+      const initial = await configure({ packageRoot, inventoryPath, outputRoot, selections, routeSelections,
+        panelSelections: { "architect.runners": "observed-fast@low,observed-deep@high,observed-balanced@medium" }, apply: true });
+      assert.equal(initial.manifest.routes["code.delegates"].role, "implementer");
+      assert.equal(initial.manifest.routes["architect.runners"].role, "explorer");
+      await writeFile(descriptorPath, JSON.stringify(current));
+      const upgraded = await configure({ packageRoot, inventoryPath, outputRoot, apply: true });
+      const extension = adapter.id === "codex" ? "toml" : adapter.id === "pi" ? "json" : "md";
+      for (const [name, route] of Object.entries(upgraded.manifest.routes)) {
+        if (!name.startsWith("code.") && name !== "architect.runners") continue;
+        assert.deepEqual(route.entries, initial.manifest.routes[name].entries, `${adapter.id}/${name}: preserve saved entries`);
+        assert.equal(route.role, name.startsWith("code.") ? "poteto-agent" : "design-runner");
+        for (const entry of route.entries) {
+          const rendered = await readFile(join(outputRoot, "agents", `${entry.agent}.${extension}`), "utf8");
+          const instructions = adapter.id === "pi" ? JSON.parse(rendered).instructions : rendered;
+          if (name.startsWith("code.")) {
+            assert.match(instructions, /Read the `poteto-mode` skill's `SKILL.md` in full/);
+            assert.match(instructions, /Navigate to a leaf `principle-\*` skill/);
+          } else {
+            assert.match(instructions, /Write only the candidate artifacts at the explicitly assigned output/);
+            assert.match(instructions, /Do not implement or modify application code/);
+          }
+        }
+      }
+      assert.equal(upgraded.manifest.routes["hardest.tasks"].role, "implementer");
+      assert.equal(upgraded.manifest.routes["architect.runners"].entries.length, 3);
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("current Claude setup uses all three workload families and fresh Opus Sonnet panels", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-current-claude-preset-"));
+  try {
+    const model = await loadModel();
+    const packageRoot = await renderTarget(root, model, model.adapters.find((adapter) => adapter.id === "claude-code"));
+    const inventoryPath = join(root, "inventory.json");
+    await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: "claude-code",
+      observedAt: "2026-10-11T00:00:00Z", source: "three-family fixture",
+      models: ["claude-haiku-test", "claude-sonnet-test", "claude-opus-test"].map((id) => ({ id, reasoningEfforts: ["low", "medium", "high"] })) }));
+    const configured = await configure({ packageRoot, inventoryPath, outputRoot: join(root, "configured"), presetName: "pstack", apply: false });
+    assert.equal(configured.manifest.workloads.fast.model, "claude-haiku-test");
+    assert.equal(configured.manifest.workloads.balanced.model, "claude-sonnet-test");
+    assert.equal(configured.manifest.workloads.deep.model, "claude-opus-test");
+    for (const route of Object.values(configured.manifest.routes).filter((route) => route.kind === "panel")) {
+      assert.deepEqual(route.entries.map((entry) => entry.model), ["claude-opus-test", "claude-sonnet-test"]);
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
 
 test("fresh generic and every available preset panel has two members on all hosts", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-fresh-all-hosts-"));
