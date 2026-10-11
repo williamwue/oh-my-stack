@@ -42,7 +42,7 @@ traced to the frozen scope or an executable path.
 
 ## feature
 
-Freeze the [delivery evidence contract](../poteto-mode/references/delivery-evidence.md)
+Freeze the [delivery evidence contract](poteto-mode/delivery-evidence.md)
 before implementation. Run its actual local acceptance checks on the integrated
 revision; missing or unverified required evidence prevents a complete-delivery
 claim.
@@ -53,4 +53,4 @@ claim.
    artifact revision before acceptance. Root inspection complements this review.
    Preserve findings and repair responses; changed artifacts require fresh
    review and verification. Reference-matching UI work includes
-   [visual-parity](../visual-parity/SKILL.md) as an acceptance stage.
+   [visual-parity](../../visual-parity/SKILL.md) as an acceptance stage.
