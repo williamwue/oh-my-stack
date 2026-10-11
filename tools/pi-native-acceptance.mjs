@@ -13,6 +13,7 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
   const agentDir = join(temporary, 'native-agent');
   const bundle = packageRoot ? resolve(packageRoot) : join(temporary, 'package');
   const cwd = join(temporary, 'checkout');
+  let routeName = 'fixture';
   await mkdir(agentDir); await mkdir(cwd);
   const manifest = { schemaVersion: 1, owner: 'oh-my-stack', target: 'pi', routes: {
     fixture: { kind: 'single', role: 'reader', entries: [{ model: 'oms-local/child', reasoning: 'none' }] },
@@ -31,9 +32,12 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     } }));
   } else {
     const contracts = JSON.parse(await readFile(join(bundle, 'config/role-contracts.json'), 'utf8'));
-    const role = Object.entries(contracts.roles).find(([, value]) => value.writes === false);
-    assert(role, 'packaged acceptance needs a readonly role');
-    manifest.routes.fixture.role = role[0];
+    const mapped = Object.entries(contracts.routeRoles ?? {}).filter(([, role]) => contracts.roles[role]?.writes === false);
+    const route = mapped.find(([name]) => name === 'how.explorer') ?? mapped[0]
+      ?? (!Object.hasOwn(contracts, 'routeRoles') && contracts.roles.explorer?.writes === false ? ['how.explorer', 'explorer'] : null);
+    assert(route, 'packaged acceptance needs a canonical readonly route');
+    routeName = route[0];
+    manifest.routes = { [routeName]: { ...manifest.routes.fixture, role: route[1] } };
     await writeFile(join(cwd, '.pi', 'oh-my-stack.resolution.json'), JSON.stringify(manifest));
   }
   const requests = [];
@@ -54,7 +58,7 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
       if (text.includes('shutdown-parent') && parentRound > 0) return;
       nativeToolObserved ||= body.tools?.some(tool => tool.function?.name === 'oms_delegate') === true;
       if (parentRound === 0) {
-        delta = { tool_calls: [{ index: 0, id: 'oms-start', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'start', route: 'fixture', task: text.includes('shutdown-parent') ? 'hold-child' : 'Read the local fixture', cwd }) } }] }; finish = 'tool_calls';
+        delta = { tool_calls: [{ index: 0, id: 'oms-start', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'start', route: routeName, task: text.includes('shutdown-parent') ? 'hold-child' : 'Read the local fixture', cwd }) } }] }; finish = 'tool_calls';
       } else if (parentRound === 1) {
         const result = [...body.messages].reverse().find(message => message.role === 'tool');
         if (!nativeToolObserved) { response.end('data: [DONE]\n\n'); return; }
@@ -91,10 +95,10 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     const inventory = await collectPiInventory({ binary, cwd, env });
     assert.deepEqual(inventory.models.filter(model => model.id.startsWith('oms-local/')).map(model => model.reasoningEfforts), [['none'], ['none']]);
     assert.equal(await readFile(join(agentDir, 'settings.json'), 'utf8'), settings, 'native inventory must not persist settings');
-    const start = await manager.execute({ action: 'start', route: 'fixture', task: 'Read the local fixture', cwd }, { cwd });
+    const start = await manager.execute({ action: 'start', route: routeName, task: 'Read the local fixture', cwd }, { cwd });
     const normal = await manager.execute({ action: 'collect', id: start.id, wait: true });
     assert.equal(normal.status, 'completed'); assert.deepEqual(normal.selected, normal.observed);
-    const hold = await manager.execute({ action: 'start', route: 'fixture', task: 'hold-child', cwd }, { cwd });
+    const hold = await manager.execute({ action: 'start', route: routeName, task: 'hold-child', cwd }, { cwd });
     const deadline = Date.now() + 15000;
     while (!requests.some(request => request.hold)) {
       if (Date.now() >= deadline) throw new Error('native cancellation fixture request did not start');
@@ -102,7 +106,7 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     }
     const cancelled = await manager.execute({ action: 'cancel', id: hold.id });
     assert.equal(cancelled.status, 'cancelled'); assert.throws(() => process.kill(hold.pid, 0));
-    const retry = await manager.execute({ action: 'start', route: 'fixture', task: 'retry-child', cwd }, { cwd });
+    const retry = await manager.execute({ action: 'start', route: routeName, task: 'retry-child', cwd }, { cwd });
     const rejected = await manager.execute({ action: 'collect', id: retry.id, wait: true });
     assert.equal(rejected.status, 'failed');
     assert.equal(requests.filter(request => request.retry).length, 1, 'native retry must be stopped before a second provider request');
@@ -142,7 +146,7 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     if (fixtureError) throw fixtureError;
     assert.equal(await readFile(join(agentDir, 'settings.json'), 'utf8'), settings, 'acceptance must preserve native settings');
     return { native: true, provider: 'simulated local OpenAI-compatible fixture', liveAccount: false,
-      fixtureHostResolver: !packageRoot, extensionDiscovery: true, nativeToolStartCollect: true,
+      fixtureHostResolver: !packageRoot, route: routeName, extensionDiscovery: true, nativeToolStartCollect: true,
       childExecution: normal.status, childCancellation: cancelled.status, nativeParentShutdown: true, retryRequests: 1,
       inventoryModels: inventory.models.length, selected: normal.selected, observed: normal.observed };
   } finally {

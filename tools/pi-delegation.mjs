@@ -1,9 +1,13 @@
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { readFile, realpath, stat } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { EventEmitter } from 'node:events';
+import { promisify } from 'node:util';
+import { StringDecoder } from 'node:string_decoder';
+
+const execFileAsync = promisify(execFile);
 
 export const PI_ISOLATION_ARGS = ['--mode', 'rpc', '--no-session', '--no-extensions', '--no-skills',
   '--no-mcp', '--no-context-files', '--no-prompt-templates', '--no-themes'];
@@ -32,6 +36,7 @@ export function createPiRpcConnection({ binary, cwd, args = [], signal, timeoutM
   });
   const events = new EventEmitter();
   const pending = new Map();
+  const decoder = new StringDecoder('utf8');
   let buffer = '', bytes = 0, sequence = 0, ended = false, failure = null, closing = false;
   let resolveClosed;
   const closed = new Promise(resolvePromise => { resolveClosed = resolvePromise; });
@@ -59,7 +64,7 @@ export function createPiRpcConnection({ binary, cwd, args = [], signal, timeoutM
   child.stdout.on('data', chunk => {
     bytes += chunk.length;
     if (bytes > outputLimitBytes) { terminate(new Error('Pi output limit exceeded')); return; }
-    buffer += chunk.toString('utf8');
+    buffer += decoder.write(chunk);
     let index;
     while ((index = buffer.indexOf('\n')) !== -1) {
       const line = buffer.slice(0, index); buffer = buffer.slice(index + 1);
@@ -73,6 +78,10 @@ export function createPiRpcConnection({ binary, cwd, args = [], signal, timeoutM
         else entry.reject(new Error(`Pi ${entry.type} failed: ${message.error ?? 'unknown error'}`));
       } else events.emit('event', message);
     }
+  });
+  child.stdout.on('end', () => {
+    buffer += decoder.end();
+    if (buffer.trim()) fail(new Error('Pi exited with incomplete RPC JSON'));
   });
   child.on('close', (code, exitSignal) => {
     ended = true;
@@ -107,6 +116,20 @@ function requireModel(value) {
   const index = value.indexOf('/');
   return { provider: value.slice(0, index), id: value.slice(index + 1) };
 }
+async function gitWorktreeRoot(cwd, label, signal, timeoutMs) {
+  const gitEnv = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
+  try {
+    const { stdout } = await execFileAsync('git', ['rev-parse', '--show-toplevel'], {
+      cwd, env: gitEnv, signal, timeout: timeoutMs, maxBuffer: 65536, windowsHide: true,
+    });
+    const root = stdout.trim();
+    if (!root) throw new Error('empty Git worktree root');
+    return await realpath(root);
+  } catch (error) {
+    if (signal?.aborted) throw abortError();
+    throw new Error(`Pi writing ${label} requires a verified Git worktree`, { cause: error });
+  }
+}
 const snapshot = task => structuredClone({ id: task.id, status: task.status, route: task.route, member: task.member,
   role: task.role, requested: task.requested, selected: task.selected, observed: task.observed,
   output: task.output, outputTruncated: task.outputTruncated === true, error: task.error, pid: task.connection?.pid ?? null });
@@ -114,6 +137,7 @@ const snapshot = task => structuredClone({ id: task.id, status: task.status, rou
 export function createPiDelegationManager({ binary, packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..'),
   resolveResolution, env, timeoutMs = 20000, taskTimeoutMs = 300000, maxTasks = 32, maxActiveTasks = 4,
   maxOutputChars = 32768, connectionFactory = createPiRpcConnection } = {}) {
+  packageRoot = resolve(packageRoot);
   const tasks = new Map();
   const lifetime = new AbortController();
   async function active(cwd) {
@@ -137,14 +161,30 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
     if (!route || !Number.isInteger(member) || member < 1 || member > (route.entries?.length ?? 0)) throw new Error('Pi route/member is not configured');
     const contracts = JSON.parse(await readFile(join(packageRoot, 'config', 'role-contracts.json'), 'utf8'));
     if (contracts.schemaVersion !== 1 || contracts.target !== 'pi') throw new Error('invalid Pi role contracts');
-    const role = contracts.roles?.[route.role];
+    const hasRouteRoles = Object.hasOwn(contracts, 'routeRoles');
+    if (hasRouteRoles && (!contracts.routeRoles || typeof contracts.routeRoles !== 'object'
+      || Array.isArray(contracts.routeRoles) || !Object.hasOwn(contracts.routeRoles, params.route))) throw new Error('Pi route is absent from the current packaged role map');
+    const roleName = hasRouteRoles ? contracts.routeRoles[params.route] : route.role;
+    const role = contracts.roles?.[roleName];
     if (!role || typeof role.instructions !== 'string' || typeof role.writes !== 'boolean') throw new Error('Pi route has no checked role contract');
+    const systemPrompt = [role.instructions, '', 'Installed package references:',
+      `Runtime binding: ${join(packageRoot, 'docs', 'runtime-binding.md')}`,
+      `Model selection: ${join(packageRoot, 'docs', 'model-selection.md')}`,
+      `Skills directory: ${join(packageRoot, 'skills')}`,
+      ...(roleName === 'poteto-agent' ? [
+        `Full Poteto Mode skill (read in full as required above): ${join(packageRoot, 'skills', 'poteto-mode', 'SKILL.md')}`,
+        `Full Poteto Mode workflow (read in full, including its Principles index): ${join(packageRoot, 'skills', 'poteto-mode', 'WORKFLOW.md')}`,
+      ] : []),
+    ].join('\n');
+    let writingWorktree = null;
     if (role.writes) {
       if (params.independentCheckout !== true) throw new Error('Pi writing role requires explicit independentCheckout:true');
       const parentCwd = await realpath(resolve(context.cwd ?? process.cwd()));
-      if (cwd === parentCwd) throw new Error('Pi writing role requires a separate checkout from the parent');
-      const git = await stat(join(cwd, '.git')).catch(() => null);
-      if (!git) throw new Error('Pi writing role requires an independent Git checkout');
+      const parentRoot = await gitWorktreeRoot(parentCwd, 'parent', context.signal, timeoutMs);
+      const childRoot = await gitWorktreeRoot(cwd, 'child', context.signal, timeoutMs);
+      const identity = root => process.platform === 'win32' ? root.toLowerCase() : root;
+      if (identity(parentRoot) === identity(childRoot)) throw new Error('Pi writing role requires a separate Git worktree from the parent checkout');
+      writingWorktree = identity(childRoot);
     }
     const entry = route.entries[member - 1];
     const requested = { model: entry.model ?? null, thinking: entry.reasoning ?? null, inheritParent: entry.inheritParent === true };
@@ -153,15 +193,16 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
     const chosen = requireModel(selectedModel);
     const controller = new AbortController();
     const combined = AbortSignal.any([lifetime.signal, controller.signal, ...(context.signal ? [context.signal] : [])]);
-    const task = { id: randomUUID(), route: params.route, member, role: route.role, status: 'running',
+    const task = { id: randomUUID(), route: params.route, member, role: roleName, status: 'running',
       requested, selected: { model: selectedModel, thinking: selectedThinking },
-      observed: { model: null, thinking: null }, output: '', error: null, controller };
+      observed: { model: null, thinking: null }, output: '', error: null, controller, writingWorktree };
     if (combined.aborted) throw abortError();
     if (tasks.size >= maxTasks || [...tasks.values()].filter(item => item.status === 'running').length >= maxActiveTasks) throw new Error('Pi task capacity reached');
+    if (writingWorktree && [...tasks.values()].some(item => item.status === 'running' && item.writingWorktree === writingWorktree)) throw new Error('Pi Git worktree already has an active writer');
     const connection = connectionFactory({ binary, cwd, env, signal: combined, timeoutMs,
       args: ['--provider', chosen.provider, '--model', chosen.id, '--thinking', selectedThinking,
         '--tools', role.writes ? 'read,grep,find,ls,bash,edit,write' : 'read,grep,find,ls',
-        '--system-prompt', role.instructions] });
+        '--system-prompt', systemPrompt] });
     task.connection = connection;
     tasks.set(task.id, task);
     let settled = false;
