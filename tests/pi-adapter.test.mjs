@@ -246,7 +246,6 @@ test('packaged route roles replace a stale saved role while preserving model and
   await writeFile(contractsPath, JSON.stringify(contracts));
   await mkdir(join(f.root, 'skills', 'poteto-mode'), { recursive: true }); await mkdir(join(f.root, 'docs'));
   await writeFile(join(f.root, 'skills', 'poteto-mode', 'SKILL.md'), 'Full mode fixture\n');
-  await writeFile(join(f.root, 'skills', 'poteto-mode', 'WORKFLOW.md'), 'Full workflow including Principles index\n');
   await writeFile(join(f.root, 'docs', 'runtime-binding.md'), 'Pi runtime fixture\n');
   await writeFile(join(f.root, 'docs', 'model-selection.md'), 'Pi model fixture\n');
   const before = structuredClone(f.manifest.routes['code.bug-fix']);
@@ -260,7 +259,7 @@ test('packaged route roles replace a stale saved role while preserving model and
   const prompt = request.args[request.args.indexOf('--system-prompt') + 1];
   assert(prompt.startsWith(contracts.roles['poteto-agent'].instructions));
   assert(prompt.includes(join(f.root, 'skills', 'poteto-mode', 'SKILL.md')));
-  assert(prompt.includes(join(f.root, 'skills', 'poteto-mode', 'WORKFLOW.md')));
+  assert(!prompt.includes('WORKFLOW.md'));
   assert(prompt.includes('read in full, including its Principles index'));
   assert(prompt.includes(join(f.root, 'docs', 'runtime-binding.md')));
   assert(prompt.includes(join(f.root, 'docs', 'model-selection.md')));

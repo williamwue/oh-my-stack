@@ -172,8 +172,7 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
       `Model selection: ${join(packageRoot, 'docs', 'model-selection.md')}`,
       `Skills directory: ${join(packageRoot, 'skills')}`,
       ...(roleName === 'poteto-agent' ? [
-        `Full Poteto Mode skill (read in full as required above): ${join(packageRoot, 'skills', 'poteto-mode', 'SKILL.md')}`,
-        `Full Poteto Mode workflow (read in full, including its Principles index): ${join(packageRoot, 'skills', 'poteto-mode', 'WORKFLOW.md')}`,
+        `Full Poteto Mode skill (read in full, including its Principles index): ${join(packageRoot, 'skills', 'poteto-mode', 'SKILL.md')}`,
       ] : []),
     ].join('\n');
     let writingWorktree = null;
