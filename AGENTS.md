@@ -12,8 +12,12 @@ Use the existing maintainer account through official OAuth/CLI login. Do not req
 ## Development entry
 
 Use the [README](README.md) for architecture and local commands. Edit semantic
-Skill instructions in `src/core/skills`; regenerate `packages` with
-`npm run generate` instead of changing runtime copies by hand.
+Skill instructions through the pinned source mappings and exact replacements in
+`upstream/parity-derivations.json`. Run `node tools/derive-pstack.mjs` to materialize
+the pstack bodies in `src/core/skills`; do not hand-edit their generated bodies.
+Local adapter and extension instructions retain their declared source owner.
+Regenerate `packages` with `npm run generate` instead of changing runtime copies
+by hand. See [the distribution boundary](docs/pstack-parity.md).
 
 For Skill or generator changes, run `npm run check` and fix failures caused by
 the change. Generated packages and fixture checks establish local consistency;

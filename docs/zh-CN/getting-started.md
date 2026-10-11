@@ -16,20 +16,21 @@ OMP 使用[独立 profile 安装指南](install/omp.md)。
 
 ## 2. 确认 Skill 已加载
 
-在 Codex 输入 `$`，选择 `oh-my-stack:prove-it-works`，再发送：
+在 Codex 输入 `$`，选择 `oh-my-stack:poteto-help`，再发送：
 
 ```text
-检查 Skill 加载情况和当前工作区。只读检查，不修改文件。
+说明当前可用的工作流，并指出核对时使用的已安装目录。不修改配置。
 ```
 
 在 Claude Code 对话中输入：
 
 ```text
-/oh-my-stack:prove-it-works 检查 Skill 加载情况和当前工作区。只读检查，不修改文件。
+/oh-my-stack:poteto-help 说明当前可用的工作流，并指出核对时使用的已安装目录。不修改配置。
 ```
 
-你应看到已加载的 Skill、工作区路径、是否处于版本控制仓库，以及各项判断的依据。
+你应看到已加载的帮助入口、可用工作流及其目录来源。
 无法确认的事实应标记为未知。此检查不安装依赖，也不修改配置。
+0.15.0 源码候选中的独立 `prove-it-works` 诊断需要可选的 `extras` 扩展。
 
 如果找不到入口，按 [FAQ 中的安装排查步骤](faq.md#找不到-skill)检查。
 

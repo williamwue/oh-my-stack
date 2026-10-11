@@ -34,13 +34,13 @@ test("0.15.17 decisions account for all 45 exact source blobs", async () => {
   }
 });
 
-test("ketchup is an explicit public skill on all three generated hosts", async () => {
+test("ketchup is an explicit public skill on all four generated hosts", async () => {
   const model = await loadModel();
   const skill = model.skills.find((item) => item.metadata.name === "ketchup");
   assert.ok(skill);
   assert.equal(skill.metadata.invocation, "explicit");
   const core = await read("src/core/skills/ketchup/SKILL.md");
-  for (const host of ["codex", "omp", "claude-code"]) {
+  for (const host of ["codex", "omp", "claude-code", "pi"]) {
     const root = `packages/${host}`;
     const catalog = await json(`${root}/SKILL_CATALOG.json`);
     assert.ok(catalog.skills.some((item) => item.name === "ketchup"));
@@ -55,11 +55,14 @@ test("ketchup is an explicit public skill on all three generated hosts", async (
   }
 });
 
-test("the full delivery workflow remains present after upstream prose distillation", async () => {
-  const feature = await read("src/core/skills/feature/SKILL.md");
-  assert.match(feature, /delivery evidence contract/);
-  assert.match(feature, /configured.*candidate panel/s);
-  assert.match(feature, /distinct independent judge/);
-  const contract = await read("src/core/skills/poteto-mode/references/delivery-evidence.md");
-  assert.match(contract, /inconclusive/);
+test("the complete pinned parity source remains independently verifiable", async () => {
+  const receipt = await json("docs/acceptance/2026-10-11-parity/upstream-files.json");
+  assert.equal(receipt.revision, "978ca6e9c0e012047cd5058b8e829240336e704e");
+  assert.equal(receipt.files.length, 165);
+  assert.equal(new Set(receipt.files.map((file) => file.upstreamPath)).size, 165);
+  for (const file of receipt.files) {
+    const bytes = await readFile(join(repoRoot, file.path));
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), file.sha256);
+    assert.equal(createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex"), file.blobSha1);
+  }
 });

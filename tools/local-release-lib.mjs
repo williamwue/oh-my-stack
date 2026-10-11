@@ -23,7 +23,7 @@ export function assertReview(review, tree) {
 }
 export function assetNames(version) {
   requireThat(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version), "release version must be plain semver");
-  return ["omp", "codex", "claude-code", "codex-plugin", "claude-plugin"]
+  return ["omp", "codex", "claude-code", "pi", "codex-plugin", "claude-plugin"]
     .map((target) => `oh-my-stack-${target}-${version}.tar.gz`).concat("release-manifest.json", "SHA256SUMS").sort();
 }
 // Resolve only system ancestors (for example macOS /var -> /private/var).
@@ -50,7 +50,7 @@ export async function regularFile(root, name) {
 export async function fileBytes(path) { return regularFile(dirname(resolve(path)), basename(path)); }
 export async function snapshotAssets(assets, version) {
   const names = assetNames(version);
-  requireThat(JSON.stringify((await readdir(assets)).sort()) === JSON.stringify(names), "assets must contain exactly seven release files");
+  requireThat(JSON.stringify((await readdir(assets)).sort()) === JSON.stringify(names), `assets must contain exactly ${names.length} release files`);
   return Promise.all(names.map(async (name) => {
     const bytes = await regularFile(assets, name);
     return { name, sha256: sha256(bytes), size: bytes.length };
@@ -102,7 +102,7 @@ export async function readLocalVerification({ path, manifest, tagCommit, tagTree
   const review = assertReview(JSON.parse(reviewBytes), source.tree);
   requireThat(JSON.stringify(review) === JSON.stringify(receipt.review), "review file differs from receipt review");
   const actual = await snapshotAssets(assets, storedManifest.version);
-  requireThat(Array.isArray(receipt.assets) && receipt.assets.length === 7, "missing release assets");
+  requireThat(Array.isArray(receipt.assets) && receipt.assets.length === actual.length, "missing release assets");
   const records = new Map();
   for (const entry of receipt.assets) {
     requireThat(!records.has(entry.name) && hash.test(entry.sha256) && Number.isSafeInteger(entry.size) && entry.size >= 0,

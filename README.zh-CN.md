@@ -6,7 +6,8 @@
 
 pstack 工程工作流，移植到 Codex 和 Claude Code。
 
-同时包含 Matt Pocock 的精选 AIHero 原版技能。
+0.15.0 源码候选还提供独立 Pi 与 OMP 适配。默认分发以固定的 pstack 0.15.17 为准；
+AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。现有安装版本可能不同。
 
 描述任务、澄清需求、审阅改动或检查模块设计。Oh My Stack 为 agent 提供执行步骤，并要求它用实际证据说明结果。
 
@@ -53,8 +54,8 @@ pstack 工程工作流，移植到 Codex 和 Claude Code。
 
 ## 完成第一个任务
 
-在新会话中打开你的项目，先选择 `prove-it-works`。
-它只检查 Skill 是否加载及工作区事实，不修改项目文件。
+在新会话中打开你的项目，先选择 `poteto-help` 核对已安装入口。
+`prove-it-works` 位于可选的 `extras` 分发中。
 
 然后通过 `poteto-mode` 完成一个只读任务。
 
@@ -88,19 +89,20 @@ pstack 工程工作流，移植到 Codex 和 Claude Code。
 在 Codex 选择 `oh-my-stack:<入口>`，在 Claude Code 输入 `/oh-my-stack:<入口>`。
 [常见任务示例](docs/zh-CN/guides/common-tasks.md)提供提示词，并说明哪些任务会修改文件。
 
-`poteto-mode` 负责选择 pstack 衍生的工程工作流。需要 AIHero 原版能力时，直接调用对应入口。
+`poteto-mode` 负责选择 pstack 衍生的工程工作流。表中的 AIHero 入口在本候选中需要 `aihero` 扩展，安装后可直接调用。
 目前没有自动串联 AIHero 与 pstack 的流程。[AIHero 指南](docs/zh-CN/guides/aihero.md)说明已引入的原版技能及依赖。
 
 未配置 Oh My Stack 模型映射时，基础使用继承 agent 的模型。
 需要为角色和审阅面板选择模型、推理预算时，使用[可选模型配置指南](docs/zh-CN/model-configuration.md)。
 
-0.11.0 也提供 [Codex 可选自动路由](docs/zh-CN/automatic-routing.md)。
-默认关闭；现有显式入口和模型配置继续保留。
+[自动路由](docs/zh-CN/automatic-routing.md)在本候选中需要 `auto-routing` 扩展。
+加入扩展后仍需配置才能启用；已有模型选择继续保留。
 
 ## 更多文档
 
 - [首次使用](docs/zh-CN/getting-started.md)
 - [完整技能目录](docs/skill-directory.md)
+- [固定上游与可选扩展](docs/pstack-parity.md)
 - [更新和卸载](docs/zh-CN/guides/update-and-uninstall.md)
 - [FAQ 与故障排查](docs/zh-CN/faq.md)
 - [支持范围](docs/support-policy.md)

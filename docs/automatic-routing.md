@@ -1,5 +1,10 @@
 # Optional automatic routing in Codex and Claude Code
 
+The 0.15.0 source candidate requires the explicit `auto-routing` extension.
+Use `oms-auto` with a request to configure routing. Ordinary `setup-oh-my-stack`
+configures models and does not offer this menu. The older setup invocations
+below describe previous installed versions. See [distribution selection](pstack-parity.md).
+
 This feature is available in version 0.11.0. Installing or upgrading OMS
 does not enable it. Existing `poteto-mode` and other explicit entries remain
 available. The current source adds Claude Code routing; this does not establish

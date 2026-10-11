@@ -2,9 +2,13 @@
 
 [English](aihero-original-skills.md) | [简体中文](zh-CN/guides/aihero.md)
 
-The current source includes sixteen selected original skills from Matt Pocock's
+The `aihero` extension includes sixteen selected original skills from Matt Pocock's
 [skills repository](https://github.com/mattpocock/skills). Select one directly
 when you want its original process. You do not need to enter `poteto-mode` first.
+
+The 0.15.0 source candidate excludes these entries from its default distribution.
+See [explicit extension selection](pstack-parity.md). Earlier installed versions
+may include them by default; inspect the installed catalog.
 
 The five research, questionnaire, setup, spec, and ticket entries below require
 **0.10.0 or later**. Check the [published release](https://github.com/williamwue/oh-my-stack/releases/latest)

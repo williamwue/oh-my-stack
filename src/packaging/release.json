@@ -76,6 +76,16 @@
         "lifecycle": "verified",
         "endToEnd": "deferred"
       }
+    },
+    {
+      "id": "pi",
+      "packageDir": "packages/pi",
+      "verification": {
+        "static": "verified",
+        "discovery": "deferred",
+        "lifecycle": "deferred",
+        "endToEnd": "deferred"
+      }
     }
   ]
 }

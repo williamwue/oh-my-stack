@@ -2,7 +2,9 @@
 
 The unreleased delivery checker has three operations: `freeze`, `inspect` and
 `verify`. It requires Node.js 20 or later and has no npm runtime dependencies.
-Each generated package contains the same executable closure under `scripts`.
+Packages generated with the explicit `enhanced-delivery` extension contain
+the executable closure under `scripts`. The default pstack distribution does
+not require this protocol. See [distribution selection](pstack-parity.md).
 
 Use it for local delivery evidence, separately from historical conformance,
 runtime installation and external publication. It reads actual files and runs

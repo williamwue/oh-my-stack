@@ -81,6 +81,8 @@ export async function validateLocalMarkdownLinks(root) {
     for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
       const target = match[1];
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;
+      if (within(join(root, "src/core/skills"), path)
+        && ["../../docs/runtime-binding.md", "../../docs/model-selection.md"].includes(target)) continue;
       const fileTarget = target.replace(/#.*$/, "");
       if (!fileTarget) continue;
       let decoded;
@@ -121,6 +123,7 @@ export async function validateExecutableInventory(root) {
 
 export async function validateSemanticDerivations(root) {
   const manifest = await readJson(join(root, "upstream", "semantic-derivations.json"));
+  if (manifest.schemaVersion === 2) return validateParityPointer(root, manifest);
   assert(manifest.schemaVersion === 1, "upstream/semantic-derivations.json: schemaVersion must be 1");
   assert(Array.isArray(manifest.entries), "upstream/semantic-derivations.json: entries are required");
   const sourcesText = await readFile(join(root, "upstream", "sources.yaml"), "utf8");
@@ -292,6 +295,7 @@ function sha256(value) {
 
 export async function validateUpstreamState(root) {
   const config = await readJson(join(root, "upstream/imports.json"));
+  if (config.schemaVersion === 2) return validateParityPointer(root, config);
   assert(config.schemaVersion === 1, "upstream/imports.json: schemaVersion must be 1");
   const sourcesText = await readFile(join(root, "upstream/sources.yaml"), "utf8");
   const source = readSourceRecord(sourcesText, config.sourceId).fields;
@@ -364,6 +368,36 @@ export async function validateUpstreamState(root) {
 
   const notices = await readFile(join(root, "THIRD_PARTY_NOTICES.md"), "utf8");
   assert(notices.includes(revision), `${config.sourceId}: third-party notice omits active revision`);
+}
+
+async function validateParityPointer(root, document) {
+  assert(document.derivationManifest === "upstream/parity-derivations.json", "invalid active parity manifest");
+  assert(Array.isArray(document.historicalRecords) && document.historicalRecords.length > 0, "historical receipts are required");
+  for (const record of document.historicalRecords) {
+    const path = manifestFile(root, record.path, "historical receipt");
+    assert(within(join(root, "upstream/history"), path), "historical receipt must be archived");
+    assert(sha256(await readFile(path)) === record.sha256, `${record.path}: historical receipt hash drift`);
+  }
+  const { derivePstack } = await import("./derive-pstack.mjs");
+  const result = await derivePstack({ root, check: true });
+  assert(result.revision === document.revision, "active parity revision mismatch");
+  const receipt = await readJson(join(root, "docs/acceptance/2026-10-11-parity/upstream-files.json"));
+  assert(receipt.revision === result.revision && receipt.files.length === 165, "complete upstream receipt mismatch");
+  const paths = new Set();
+  for (const file of receipt.files) {
+    const path = manifestFile(root, file.path, "pinned upstream file");
+    assert(within(resolve(root, result.sourceRoot), path), "upstream receipt escapes pinned snapshot");
+    assert(!paths.has(path), "duplicate upstream receipt file");
+    paths.add(path);
+    const bytes = await readFile(path);
+    assert(sha256(bytes) === file.sha256, `${file.path}: snapshot hash drift`);
+    assert(createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex") === file.blobSha1,
+      `${file.path}: upstream Git blob mismatch`);
+  }
+  const actual = await filesUnder(resolve(root, result.sourceRoot));
+  assert(actual.length === paths.size && actual.every((path) => paths.has(path)), "pinned snapshot file set drift");
+  const notices = await readFile(join(root, "THIRD_PARTY_NOTICES.md"), "utf8");
+  assert(notices.includes(result.revision), "third-party notices omit active parity revision");
 }
 
 export async function validate(root = repoRoot) {

@@ -50,6 +50,7 @@ test("release archives and manifest are byte-reproducible", async () => {
     `oh-my-stack-codex-${version}.tar.gz`,
     `oh-my-stack-codex-plugin-${version}.tar.gz`,
     `oh-my-stack-omp-${version}.tar.gz`,
+    `oh-my-stack-pi-${version}.tar.gz`,
     "release-manifest.json",
   ]);
 });
@@ -142,8 +143,10 @@ test("Codex plugin bundle exposes the generated package through one local market
     const packagedSkills = codexArtifact.files
       .map((file) => file.path)
       .filter((path) => /^skills\/[^/]+\/SKILL\.md$/.test(path));
-    const sourceManifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
-    assert.equal(packagedSkills.length, 80 + sourceManifest.sources.reduce((count, source) => count + source.skills.length, 0));
+    const selectedCatalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
+    assert.deepEqual(packagedSkills.sort(), selectedCatalog.skills.filter((skill) => skill.audience === "public")
+      .map((skill) => `skills/${skill.name}/SKILL.md`).sort());
+    assert.equal(packagedSkills.includes("skills/oms-auto/SKILL.md"), false);
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
@@ -156,7 +159,7 @@ test("Codex plugin bundle exposes the generated package through one local market
     assert.equal(await exists(join(extracted, "plugins", "oh-my-stack", "plugin.json")), false);
     assert.equal(
       JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", ".codex-plugin", "plugin.json"), "utf8")).hooks,
-      "./hooks/hooks.json",
+      undefined,
     );
   } finally {
     await rm(root, { recursive: true, force: true });

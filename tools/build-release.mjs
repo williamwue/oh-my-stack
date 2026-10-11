@@ -95,12 +95,14 @@ async function buildPluginBundle({ root, out, project, bundle }) {
   const compatibilityManifest = JSON.parse(
     await readFile(join(packageRoot, ".codex-plugin", "plugin.json"), "utf8"),
   );
+  const generation = JSON.parse(await readFile(join(packageRoot, "GENERATION.json"), "utf8"));
+  const routingEnabled = generation.selection?.extensions?.includes("auto-routing") === true;
   if (
     compatibilityManifest.name !== project.name
     || compatibilityManifest.version !== project.version
-    || compatibilityManifest.hooks !== "./hooks/hooks.json"
+    || compatibilityManifest.hooks !== (routingEnabled ? "./hooks/hooks.json" : undefined)
   ) {
-    throw new Error("Codex plugin manifest name or version drift");
+    throw new Error("Codex plugin manifest identity or selected routing hooks drift");
   }
 
   const staging = await mkdtemp(join(tmpdir(), "oh-my-stack-marketplace-"));
@@ -183,8 +185,8 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
   const config = JSON.parse(await readFile(join(root, "src/packaging/release.json"), "utf8"));
   if (config.schemaVersion !== 1 || config.archiveRoot !== project.name) throw new Error("invalid release configuration");
   const ids = config.targets.map((target) => target.id);
-  if (JSON.stringify(ids) !== JSON.stringify(["omp", "codex", "claude-code"])) {
-    throw new Error("release configuration must contain omp, codex, and claude-code in order");
+  if (JSON.stringify(ids) !== JSON.stringify(["omp", "codex", "claude-code", "pi"])) {
+    throw new Error("release configuration must contain omp, codex, claude-code, and pi in order");
   }
   if (JSON.stringify(config.pluginBundles?.map((bundle) => bundle.id)) !== JSON.stringify(["codex-marketplace", "claude-marketplace"])) {
     throw new Error("release configuration must contain Codex and Claude marketplace bundles in order");
@@ -208,6 +210,7 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
       file,
       ...archiveMetadata(archive, files),
       profiles: generation.profiles,
+      selection: generation.selection,
       verification: target.verification,
       conformance: await collectConformance(root, target.id),
     });

@@ -6,7 +6,9 @@
 
 pstack engineering workflows, ported to Codex and Claude Code.
 
-Includes selected original AIHero skills from Matt Pocock.
+The 0.15.0 source candidate also adds independent Pi and OMP adapters. Its
+default distribution follows pinned pstack 0.15.17; AIHero and OMS additions
+are [explicit extensions](docs/pstack-parity.md). Installed releases may differ.
 
 Describe a task, clarify a requirement, review a change, or inspect a module's
 design. Oh My Stack gives your agent a workflow and asks it to show evidence
@@ -60,8 +62,9 @@ and separates a read-only update check from an authorized update.
 
 ## Quick start
 
-First, open your project in a new agent session and select `prove-it-works`.
-It checks Skill loading and workspace facts without changing project files.
+First, open your project in a new agent session and select `poteto-help` to
+confirm the installed entries. `prove-it-works` is available in the optional
+`extras` distribution.
 
 Then try a read-only task through `poteto-mode`.
 
@@ -98,8 +101,9 @@ Select `oh-my-stack:<entry>` in Codex, or type `/oh-my-stack:<entry>` in
 Claude Code. [Common task examples](docs/guides/common-tasks.md) give you
 prompts and describe their expected file changes.
 
-`poteto-mode` routes the pstack-derived engineering workflows. Invoke AIHero
-originals directly when you want them. There is no automatic AIHero-to-pstack
+`poteto-mode` routes the pstack-derived engineering workflows. The AIHero entries
+in the table require the `aihero` extension in the source candidate. Invoke those
+originals directly when installed. There is no automatic AIHero-to-pstack
 pipeline. The [AIHero guide](docs/aihero-original-skills.md) explains the
 selected originals and their dependencies.
 
@@ -107,14 +111,15 @@ Basic use inherits the agent's model when no Oh My Stack mapping is configured.
 Use [optional model configuration](docs/model-configuration.md) to choose models
 and reasoning budgets for roles and review panels.
 
-Version 0.11.0 also provides [optional automatic routing in Codex](docs/automatic-routing.md).
-It is off by default and keeps explicit entries and model configuration intact.
+[Automatic routing](docs/automatic-routing.md) requires the `auto-routing`
+extension in this candidate. Packaging it leaves routing off until configured.
 
 ## More documentation
 
 - [First task](docs/getting-started.md)
 - [Complete Skill directory](docs/skill-directory.md)
-- [Local delivery evidence checker (unreleased)](docs/delivery-evidence.md)
+- [Pinned core and optional extensions](docs/pstack-parity.md)
+- [Optional local delivery evidence checker](docs/delivery-evidence.md)
 - [Updates and removal](docs/guides/update-and-uninstall.md)
 - [FAQ and troubleshooting](docs/faq.md)
 - [Support policy](docs/support-policy.md)

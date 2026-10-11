@@ -1,7 +1,8 @@
 # Support policy
 
-The latest published release is 0.9.1. The AIHero guide and generated directory
-also describe five additions in the unreleased 0.10.0 source candidate. Support is limited to the
+The current source is a local 0.15.0 candidate with a [pinned pstack core and
+explicit extensions](pstack-parity.md). Historical observations below apply to
+their named versions and tasks. Support is limited to the
 observed tools, installation surfaces, and tasks below. Entry discovery and
 intact source files do not certify every workflow on every model.
 
@@ -58,7 +59,7 @@ live internet research, automatic selection quality, or live OMP behavior.
 - Release archives, integrity receipts, and tool-specific installation guidance.
 - Optional setup preview and apply, scoped defaults, role mappings, and review
   panels for the pstack-derived workflows that use them.
-- Six selected AIHero originals with their original dependencies and resources.
+- Sixteen selected AIHero originals in the explicit `aihero` extension, with their original dependencies and resources.
   They do not receive inserted OMS model-routing instructions.
 
 Model access, authentication, pricing, and delegation APIs belong to the host

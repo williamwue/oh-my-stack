@@ -11,10 +11,10 @@ import { deliveryRuntimeScripts, loadModel, renderTarget, repoRoot, validateRend
 const execute = promisify(execFile);
 const sha = value => createHash("sha256").update(value).digest("hex");
 
-test("every standalone package rejects broken public behavior and accepts repaired narrow output", async t => {
+test("explicit enhanced-delivery packages reject broken public behavior and accept repaired narrow output", async t => {
   const temporary = await realpath(await mkdtemp(join(tmpdir(), "oms-delivery-packages-")));
   t.after(() => rm(temporary, { recursive: true, force: true }));
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["enhanced-delivery"] });
   for (const adapter of model.adapters) {
     const target = await renderTarget(join(temporary, "bundles"), model, adapter);
     await validateRenderedTarget(target, adapter, model);

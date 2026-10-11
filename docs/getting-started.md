@@ -18,22 +18,23 @@ model when no Oh My Stack mapping is configured.
 
 ## 2. Confirm that the Skill loads
 
-In Codex, type `$` and select `oh-my-stack:prove-it-works` from the picker.
+In Codex, type `$` and select `oh-my-stack:poteto-help` from the picker.
 Send this request with the selection:
 
 ```text
-Verify Skill loading and the current workspace. Read only; do not change files.
+Show the available workflows and the installed catalog used to identify them. Do not change configuration.
 ```
 
 In Claude Code, send:
 
 ```text
-/oh-my-stack:prove-it-works Verify Skill loading and the current workspace. Read only; do not change files.
+/oh-my-stack:poteto-help Show the available workflows and the installed catalog used to identify them. Do not change configuration.
 ```
 
-Expect a report naming the loaded Skill, workspace path, whether the workspace
-is in a version-control repository, and the evidence used. Unknown facts must
-remain unknown. This check does not install dependencies or edit configuration.
+Expect the loaded help entry, available workflows and its catalog source.
+Unknown facts must remain unknown. This check does not install dependencies or
+edit configuration. The separate `prove-it-works` diagnostic is optional and
+requires the `extras` extension in the 0.15.0 source candidate.
 
 If the entry is missing, follow [the installation troubleshooting steps](faq.md#the-skill-is-missing).
 

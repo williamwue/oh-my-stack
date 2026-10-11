@@ -29,12 +29,12 @@ test("Actions identity cannot publish through the local-only gate", () => {
     account: "maintainer", automation: { repository: REPOSITORY } }), /local pipeline/);
 });
 
-async function fixture(root, version = "1.2.3") {
+async function fixture(root, version = "1.2.3", includePi = false) {
   const assets = join(root, "assets");
   await mkdir(assets);
   const manifest = { schemaVersion: 1, name: "oh-my-stack", version, archiveRoot: "oh-my-stack",
     source: { ref: `v${version}`, commit, worktreeDirty: false, cleanTaggedCheckout: true }, artifacts: [], pluginBundles: [] };
-  for (const target of ["omp", "codex", "claude-code"]) {
+  for (const target of ["omp", "codex", "claude-code", ...(includePi ? ["pi"] : [])]) {
     const payload = join(root, target);
     await mkdir(join(payload, "skills", "original"), { recursive: true });
     await writeFile(join(payload, "skills", "original", "SKILL.md"), `original ${target}\n`);
@@ -53,7 +53,7 @@ async function fixture(root, version = "1.2.3") {
     const file = `oh-my-stack-${target}-${version}.tar.gz`;
     await writeFile(join(assets, file), bytes);
     manifest.artifacts.push({ target, file, sha256: sha256(bytes), size: bytes.length, files: await packageInventory(payload) });
-    if (target === "omp") continue;
+    if (["omp", "pi"].includes(target)) continue;
     const bundleRoot = join(root, `${target}-bundle`);
     const { cp } = await import("node:fs/promises");
     await cp(payload, join(bundleRoot, "plugins", "oh-my-stack"), { recursive: true });
@@ -88,6 +88,16 @@ test("stable snapshot keeps released host payloads separate and byte-identical",
   assert.equal(codex.plugins[0].source.path, "./plugins/codex");
   assert.equal(claude.plugins[0].source, "./plugins/claude-code");
   await assert.rejects(buildStableMarketplace({ assets, release, out }), /already exists/);
+});
+
+test("stable snapshot accepts the independent Pi artifact without treating it as a marketplace plugin", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "oms-stable-pi-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const { assets, release } = await fixture(root, "1.2.3", true);
+  const out = join(root, "snapshot");
+  await buildStableMarketplace({ assets, release, out });
+  assert.deepEqual(await packageInventory(join(out, "plugins", "codex")), await packageInventory(join(root, "codex")));
+  await assert.rejects(access(join(out, "plugins", "pi")), { code: "ENOENT" });
 });
 
 test("tagged rebuild allows only gzip OS metadata and refuses all other byte or manifest drift", async (t) => {

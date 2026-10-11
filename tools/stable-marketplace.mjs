@@ -101,11 +101,13 @@ export async function buildStableMarketplace({ assets, release, out }) {
   requireThat(release.draft === false && release.prerelease === false && release.published_at
     && Number.isSafeInteger(release.id) && semver.test(version) && release.tag_name === `v${version}`
     && release.html_url === `${URL}/releases/tag/v${version}`, "not a published stable release of the expected repository");
-  const archiveNames = ["omp", "codex", "claude-code", "codex-plugin", "claude-plugin"]
+  const targets = ["omp", "codex", "claude-code"];
+  if (release.assets.some((asset) => asset.name === `oh-my-stack-pi-${version}.tar.gz`)) targets.push("pi");
+  const archiveNames = [...targets, "codex-plugin", "claude-plugin"]
     .map((target) => `oh-my-stack-${target}-${version}.tar.gz`);
   const names = [...archiveNames, "release-manifest.json", "SHA256SUMS"].sort();
   requireThat(JSON.stringify(release.assets.map((asset) => asset.name).sort()) === JSON.stringify(names),
-    "release assets must contain exactly the five archives, manifest, and checksums");
+    "release assets must contain exactly the supported archives, manifest, and checksums");
   const downloads = new Map();
   for (const asset of release.assets) {
     requireThat(asset.state === "uploaded" && /^sha256:[a-f0-9]{64}$/.test(asset.digest), `missing GitHub asset digest: ${asset.name}`);
@@ -129,7 +131,7 @@ export async function buildStableMarketplace({ assets, release, out }) {
   cleanSource(manifest);
   const entries = [...manifest.artifacts, ...manifest.pluginBundles];
   requireThat(JSON.stringify(entries.map((entry) => entry.file).sort()) === JSON.stringify(archiveNames.sort()), "manifest archive inventory mismatch");
-  requireThat(JSON.stringify(manifest.artifacts.map((entry) => entry.target).sort()) === JSON.stringify(["claude-code", "codex", "omp"])
+  requireThat(JSON.stringify(manifest.artifacts.map((entry) => entry.target).sort()) === JSON.stringify([...targets].sort())
     && JSON.stringify(manifest.pluginBundles.map((entry) => entry.target).sort()) === JSON.stringify(["claude-code", "codex"]), "manifest target inventory mismatch");
   const unpacked = new Map();
   for (const entry of entries) unpacked.set(entry.file, validateArchive(downloads.get(entry.file), entry, entry.archiveRoot ?? manifest.archiveRoot));

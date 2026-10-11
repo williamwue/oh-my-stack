@@ -110,7 +110,7 @@ test("CLI honors CODEX_HOME and rejects malformed actions without writes", () =>
 }));
 
 test("generated hook injects a bounded hint only for enabled startup/resume/clear/compact", () => fixture(async (options) => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["auto-routing"] });
   const pluginRoot = await renderTarget(options.root, model, model.adapters.find((entry) => entry.id === "codex"));
   const hookOptions = { ...options, pluginRoot };
   const input = { hook_event_name: "SessionStart", source: "startup", cwd: options.cwd };
@@ -205,7 +205,7 @@ test("Claude CLI uses CLAUDE_CONFIG_DIR and leaves Codex and model settings unto
 }));
 
 test("generated Claude plugin hook and setup use the Claude switch and fail closed", () => fixture(async (options) => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["auto-routing"] });
   const pluginRoot = await renderTarget(options.root, model, model.adapters.find((entry) => entry.id === "claude-code"));
   const definition = JSON.parse(await readFile(join(pluginRoot, "hooks/hooks.json")));
   const hook = definition.hooks.SessionStart[0];
