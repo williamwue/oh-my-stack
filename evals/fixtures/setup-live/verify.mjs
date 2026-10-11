@@ -41,10 +41,27 @@ assert.deepEqual(manifest.workloads, {
 assert.equal(manifest.budget, "medium");
 assert.equal(manifest.budgetPolicy.level, "high");
 
-const extension = descriptor.adapter.format === "toml" ? "toml" : "md";
+const extension = descriptor.adapter.format === "toml" ? "toml" : descriptor.adapter.format === "json" ? "json" : "md";
 const roleNames = descriptor.roles.map((role) => role.name).sort();
 assert.deepEqual(Object.keys(manifest.roles).sort(), roleNames);
-assert.deepEqual(Object.keys(manifest.ownedFiles).sort(), roleNames.map((name) => `agents/${name}.${extension}`));
+assert.deepEqual(Object.keys(manifest.routes).sort(), Object.keys(descriptor.routes).sort(), "configured route membership drift");
+const expectedFiles = roleNames.map((name) => `agents/${name}.${extension}`);
+
+for (const [name, specification] of Object.entries(descriptor.routes)) {
+  const route = manifest.routes[name];
+  assert.equal(route.kind, specification.kind, `${name}: route kind drift`);
+  assert.equal(route.role, specification.role, `${name}: route role drift`);
+  assert.equal(route.entries.length, specification.kind === "panel" ? specification.defaultCount : 1, `${name}: fresh membership drift`);
+  if (specification.kind === "panel") assert.equal(route.entries.length, 2, `${name}: fresh panels have two members`);
+  for (const [index, entry] of route.entries.entries()) {
+    const agent = `ohmystack-${name.replaceAll(".", "-")}${route.kind === "panel" ? `-${index + 1}` : ""}`;
+    assert.equal(entry.agent, agent, `${name}: ordered agent selector drift`);
+    assert.equal(entry.model, selected.id, `${name}: selected model drift`);
+    assert.equal(entry.reasoning, manifest.workloads[specification.workload].reasoning, `${name}: selected effort drift`);
+    expectedFiles.push(`agents/${agent}.${extension}`);
+  }
+}
+assert.deepEqual(Object.keys(manifest.ownedFiles).sort(), expectedFiles.sort(), "configured owned-file membership drift");
 
 for (const role of descriptor.roles) {
   const expectedEffort = manifest.workloads[role.workload].reasoning;
@@ -58,12 +75,18 @@ for (const role of descriptor.roles) {
 }
 
 assert.equal(await readFile(join(output, "keep-me.txt"), "utf8"), "user-owned\n");
-assert.deepEqual((await readdir(join(output, "agents"))).sort(), roleNames.map((name) => `${name}.${extension}`));
+assert.deepEqual((await readdir(join(output, "agents"))).sort(), expectedFiles.map((path) => path.slice("agents/".length)));
+for (const path of expectedFiles) {
+  const bytes = await readFile(join(output, path));
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), manifest.ownedFiles[path], `${path}: configured hash drift`);
+  assert.ok(bytes.toString("utf8").includes(selected.id), `${path}: selected model missing`);
+  assert.ok(bytes.toString("utf8").includes("high"), `${path}: selected effort missing`);
+}
 
 const allowed = new Set([
   "workspace/inventory.json",
   "workspace/configured/oh-my-stack.resolution.json",
-  ...roleNames.map((name) => `workspace/configured/agents/${name}.${extension}`),
+  ...expectedFiles.map((path) => `workspace/configured/${path}`),
 ]);
 const status = execFileSync("git", ["status", "--short", "--untracked-files=all"], {
   cwd: root,
@@ -79,5 +102,7 @@ console.log(JSON.stringify({
   inventoryCount: inventory.models.length,
   selectedModel: selected.id,
   roleCount: roleNames.length,
+  routeCount: Object.keys(manifest.routes).length,
+  ownedFileCount: expectedFiles.length,
   changedPaths: changed.sort(),
 }, null, 2));

@@ -215,9 +215,12 @@ test("generated Claude plugin hook and setup use the Claude switch and fail clos
   const setup = await readFile(join(pluginRoot, "skills/setup-oh-my-stack/SKILL.md"), "utf8");
   assert.match(entry, /status --runtime claude-code/);
   assert.doesNotMatch(entry, /disable-model-invocation: true|not configured on this target/);
-  assert.match(setup, /set --runtime claude-code/);
-  assert.match(setup, /Enable automatic routing/);
-  assert.match(setup, /routing-only request ends here without model inventory/);
+  const menu = await readFile(join(pluginRoot, "skills/oms-auto/references/routing-setup.md"), "utf8");
+  assert.match(entry, /set --runtime claude-code/);
+  assert.match(entry, /references\/routing-setup\.md/);
+  assert.match(menu, /Enable automatic routing/);
+  assert.match(menu, /routing-only request ends here without model inventory/);
+  assert.doesNotMatch(setup, /Enable automatic routing|set --runtime claude-code/);
   const script = join(pluginRoot, "scripts/claude-routing-hook.mjs");
   const env = { ...process.env, CLAUDE_CONFIG_DIR: options.configHome };
   const run = (input) => JSON.parse(execFileSync(process.execPath, [script],

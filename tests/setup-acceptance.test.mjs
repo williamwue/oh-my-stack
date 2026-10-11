@@ -41,8 +41,9 @@ test("configuration audit is read-only and never promotes files to activation", 
   assert.equal(audit.expected.reasoning, "high");
   assert.match(audit.budget.meaning, /target, not a cost limit/);
   assert.equal(audit.budget.level, "high");
-  assert.equal(audit.ownedFilesVerified, 35);
   const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+  assert.equal(audit.ownedFilesVerified, Object.keys(manifest.ownedFiles).length);
+  for (const route of Object.values(manifest.routes)) if (route.kind === "panel") assert.equal(route.entries.length, 2);
   const rolePath = join(dirname(resolutionPath), "agents", "ohmystack-how-explorer.md");
   await writeFile(rolePath, "changed\n");
   await assert.rejects(inspectSetup({ resolutionPath }), /hash differs/);
@@ -94,7 +95,9 @@ test("setup receipt renders every configured role and route without summarizatio
         assert.ok(route.entries.every((entry, index) => row.includes(`${index + 1}. ${entry.model}@${entry.reasoning}`)));
       }
     }
-    assert.match(receipt, /Route count: 20 = 16 single \+ 4 panels\./);
+    const panels = Object.values(manifest.routes).filter((route) => route.kind === "panel").length;
+    const singles = Object.keys(manifest.routes).length - panels;
+    assert.ok(receipt.includes(`Route count: ${singles + panels} = ${singles} single + ${panels} panels.`));
   }
 });
 
@@ -113,7 +116,10 @@ test("installed setup CLIs run through a symlinked package directory", async () 
     assert.equal(preview.configuration.status, "preview");
     const receipt = await invoke("setup-acceptance.mjs", "--resolution", resolutionPath,
       "--cwd", projectRoot, "--format", "markdown");
-    assert.match(receipt, /Route count: 20 = 16 single \+ 4 panels\./);
+    const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+    const panels = Object.values(manifest.routes).filter((route) => route.kind === "panel").length;
+    const singles = Object.keys(manifest.routes).length - panels;
+    assert.ok(receipt.includes(`Route count: ${singles + panels} = ${singles} single + ${panels} panels.`));
   }
 });
 
