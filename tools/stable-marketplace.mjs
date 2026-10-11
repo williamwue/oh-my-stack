@@ -186,7 +186,7 @@ export async function buildStableMarketplace({ assets, release, out }) {
 async function head(remote, cwd, env = process.env) {
   return (await exec("git", ["ls-remote", remote, "refs/heads/stable"], { cwd, env })).stdout.trim().split(/\s/)[0];
 }
-async function verifySnapshot(directory) {
+async function verifySnapshot(directory, gitTree = null) {
   const bytes = await readFile(join(directory, "STABLE_RELEASE.json"));
   const receipt = JSON.parse(bytes);
   requireThat(receipt.schemaVersion === 1 && receipt.generatedBy === "tools/stable-marketplace.mjs" && receipt.repository === REPOSITORY,
@@ -195,6 +195,16 @@ async function verifySnapshot(directory) {
   const actual = await packageInventory(directory);
   const payload = actual.filter((entry) => entry.path !== "STABLE_RELEASE.json")
     .sort((a, b) => a.path.localeCompare(b.path));
+  if (process.platform === "win32" && gitTree !== null) {
+    const modes = new Map(gitTree.split("\0").filter(Boolean).map((line) => {
+      const match = /^(100644|100755) blob [a-f0-9]{40}\t(.+)$/.exec(line);
+      requireThat(match, "unsupported stable Git tree entry");
+      return [match[2], match[1] === "100755" ? "0755" : "0644"];
+    }));
+    requireThat(modes.size === actual.length && actual.every((entry) => modes.has(entry.path)),
+      "stable Git tree inventory mismatch");
+    for (const entry of payload) entry.mode = modes.get(entry.path);
+  }
   requireThat(JSON.stringify(payload) === JSON.stringify(receipt.files), "stable snapshot inventory mismatch");
   return receipt;
 }
@@ -220,7 +230,7 @@ export async function promoteSnapshot({ snapshot, remote, expectedHead, publish 
       requireThat(await git("rev-parse", "FETCH_HEAD") === expectedHead, "stable branch changed during fetch");
       await git("checkout", "--quiet", "--detach", expectedHead);
       await cp(checkout, oldTree, { recursive: true, filter: (path) => path !== join(checkout, ".git") });
-      previous = await verifySnapshot(oldTree);
+      previous = await verifySnapshot(oldTree, await git("ls-tree", "-r", "-z", "HEAD"));
       requireThat(compare(receipt.version, previous.version) >= 0, "stable cannot downgrade");
       if (receipt.version === previous.version) {
         requireThat(JSON.stringify(await packageInventory(snapshot)) === JSON.stringify(await packageInventory(oldTree)), "same-version stable payload cannot change");
