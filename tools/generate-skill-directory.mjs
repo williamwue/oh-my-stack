@@ -25,7 +25,7 @@ export async function generateSkillDirectory({ root = repoRoot, check = false } 
     const path = `packages/codex/skills/${entry.name}/SKILL.md`;
     const frontmatter = parseSkillFrontmatter(await readFile(join(root, path), "utf8"), path);
     if (frontmatter.name !== entry.name) throw new Error(`Packaged Skill name mismatch: ${path}`);
-    const source = entry.source ? `${entry.source.id} original` : "OMS core";
+    const source = entry.source ? `${entry.source.id} original` : "pstack core / host binding";
     rows.push({ ...entry, row: `| [\`${entry.name}\`](../${path}) | ${escapeCell(frontmatter.description)} | ${entry.invocation} | ${escapeCell(source)} |` });
   }
   const workflows = rows.filter((entry) => entry.category === "workflow");
@@ -51,7 +51,7 @@ export async function generateSkillDirectory({ root = repoRoot, check = false } 
     "to invoke the Skill when appropriate. It does not guarantee automatic selection.", "",
     "The links below open packaged Skill instructions. Those files are instructions for",
     "agents; the user guides explain how to start tasks and what results to expect.", "",
-    "`OMS core` includes pstack-derived workflows and OMS additions. `aihero original`",
+    "The default catalog contains pinned pstack workflows and necessary host bindings. `aihero original`",
     "identifies the selected original source directories. See the",
     "[AIHero guide](aihero-original-skills.md), [source notices](../THIRD_PARTY_NOTICES.md),",
     "and [support policy](support-policy.md) for source and testing boundaries.", "",

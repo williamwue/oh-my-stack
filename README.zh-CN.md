@@ -22,7 +22,7 @@ AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。�
 ```text
 请在本机为 Codex 安装最新版正式发布的 Oh My Stack。
 先阅读并遵循 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
-保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话显式加载 prove-it-works 做只读验证。
+保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话加载 poteto-help 并核对已安装目录。
 最后报告实际安装版本及已完成的检查；需要我重启或手动操作时，给出明确的下一步。
 ```
 
@@ -31,7 +31,7 @@ AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。�
 ```text
 请在本机为 Claude Code 安装 Oh My Stack，使用用户范围。
 先阅读并遵循 https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
-使用最新版正式发布版本，保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话显式加载 prove-it-works 做只读验证。
+使用最新版正式发布版本，保留我已有的模型配置和项目文件。完成安装与版本核对，条件允许时在新会话加载 poteto-help 并核对已安装目录。
 最后报告实际安装版本及已完成的检查；需要我重启或手动操作时，给出明确的下一步。
 ```
 

@@ -488,6 +488,7 @@ export async function applyPlan(root, plan) {
 
 export async function acceptCandidate(root = repoRoot, { runChecks = true, checkRunner = null } = {}) {
   const config = JSON.parse(await readFile(join(root, "upstream/imports.json"), "utf8"));
+  assert(config.schemaVersion !== 2, "Strict parity uses upstream/parity-derivations.json and tools/derive-pstack.mjs; legacy acceptance cannot advance its source pin");
   const sourcePath = join(root, "upstream/sources.yaml");
   const sourceText = await readFile(sourcePath, "utf8");
   const record = readSourceRecord(sourceText, config.sourceId).fields;

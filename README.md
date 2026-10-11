@@ -27,7 +27,7 @@ machine. The agent can download, install, and check the plugin for you.
 ```text
 Install Oh My Stack for Codex on this machine using the latest published release.
 Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
-Preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Preserve my existing model configuration and project files. Complete installation and version checks, then load poteto-help in a fresh session and confirm the installed catalog.
 Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
 ```
 
@@ -36,7 +36,7 @@ Report the installed version and checks performed. If I need to restart or take 
 ```text
 Install Oh My Stack for Claude Code on this machine at user scope.
 Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
-Use the latest published release and preserve my existing model configuration and project files. Complete installation and version checks, then verify prove-it-works in a fresh session if possible.
+Use the latest published release and preserve my existing model configuration and project files. Complete installation and version checks, then load poteto-help in a fresh session and confirm the installed catalog.
 Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
 ```
 

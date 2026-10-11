@@ -28,7 +28,7 @@ reviewed semantic patches
 portable core
 ```
 
-`upstream/sources.yaml` records sources and revisions. `upstream/ownership.yaml` records ownership at file or region granularity. `upstream/snapshots/` contains only the immutable source slices needed to reproduce an import. `upstream/patches/` records deliberate semantic or portability changes. Raw upstream content is never shipped directly as a portable target.
+`upstream/sources.yaml` records sources and revisions. `upstream/parity-derivations.json` owns active pinned-source transformations; `src/core/skill-catalog.json` owns distribution selection. The complete pinned pstack snapshot is retained under `upstream/snapshots/`. Earlier import, ownership and semantic records remain historical receipts under `upstream/history/`; their output claims do not describe the current candidate. See [pstack parity](pstack-parity.md).
 
 An inspected revision is not automatically a baseline. The import baseline advances only after the derived core and all affected target packages pass their gates.
 
