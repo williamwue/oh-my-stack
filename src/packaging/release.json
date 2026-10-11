@@ -35,7 +35,9 @@
       "marketplace": {
         "name": "oh-my-stack",
         "description": "Oh My Stack workflows for Claude Code",
-        "owner": { "name": "Oh My Stack contributors" },
+        "owner": {
+          "name": "Oh My Stack contributors"
+        },
         "plugins": [
           {
             "name": "oh-my-stack",
@@ -52,9 +54,9 @@
       "packageDir": "packages/omp",
       "verification": {
         "static": "verified",
-        "discovery": "verified",
+        "discovery": "deferred",
         "lifecycle": "verified",
-        "endToEnd": "verified"
+        "endToEnd": "deferred"
       }
     },
     {
@@ -62,9 +64,9 @@
       "packageDir": "packages/codex",
       "verification": {
         "static": "verified",
-        "discovery": "verified",
+        "discovery": "deferred",
         "lifecycle": "verified",
-        "endToEnd": "verified"
+        "endToEnd": "deferred"
       }
     },
     {

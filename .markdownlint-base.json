@@ -1,0 +1,175 @@
+{
+  "ignores": [
+    ".git/**",
+    ".tmp/**",
+    "node_modules/**",
+    "upstream/snapshots/**",
+    "upstream/books/**"
+  ],
+  "overrides": [
+    {
+      "filter": [
+        "packages/*/skills/code-review/SKILL.md"
+      ],
+      "config": {
+        "MD041": false,
+        "MD049": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/diagnosing-bugs/SKILL.md"
+      ],
+      "config": {
+        "MD033": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/writing-for-agents/SKILL.md",
+        "packages/*/skills/handoff/SKILL.md"
+      ],
+      "config": {
+        "MD041": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/retro/SKILL.md"
+      ],
+      "config": {
+        "MD041": false,
+        "MD029": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/codebase-design/**/*.md",
+        "packages/*/skills/domain-modeling/**/*.md",
+        "packages/*/skills/grilling/**/*.md",
+        "packages/*/skills/grill-me/**/*.md",
+        "packages/*/skills/grill-with-docs/**/*.md",
+        "packages/*/skills/improve-codebase-architecture/**/*.md",
+        "packages/*/skills/research/**/*.md",
+        "packages/*/skills/setup-matt-pocock-skills/**/*.md"
+      ],
+      "config": {
+        "MD040": false,
+        "MD041": false,
+        "MD049": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/to-questionnaire/**/*.md"
+      ],
+      "config": {
+        "MD012": false,
+        "MD033": false,
+        "MD041": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/to-spec/**/*.md"
+      ],
+      "config": {
+        "MD029": false,
+        "MD033": false,
+        "MD041": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "packages/*/skills/to-tickets/**/*.md"
+      ],
+      "config": {
+        "MD025": false,
+        "MD033": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/acceptance/2026-10-06/review/reviewer-*.md",
+        "docs/acceptance/2026-10-06/review/synthesis.md"
+      ],
+      "config": {
+        "MD041": false,
+        "MD036": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "src/core/skills/principle-*/**/*.md",
+        "packages/*/skills/principle-*/**/*.md"
+      ],
+      "config": {
+        "MD032": false,
+        "MD036": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "src/core/skills/unslop/SKILL.md",
+        "packages/*/skills/unslop/SKILL.md"
+      ],
+      "config": {
+        "MD029": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/books/pstack/en/*-*.md",
+        "docs/books/pstack/zh-CN/*-*.md"
+      ],
+      "config": {
+        "MD012": false,
+        "MD024": false,
+        "MD029": false,
+        "MD033": false,
+        "MD036": false,
+        "MD040": false,
+        "MD010": false,
+        "MD031": false,
+        "MD051": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/omp-18.2.9-live-test-plan.md"
+      ],
+      "config": {
+        "MD041": false
+      },
+      "combine": "merge"
+    },
+    {
+      "filter": [
+        "docs/operations/cloud-management-acceptance-2026-10-01.md"
+      ],
+      "config": {
+        "MD060": false,
+        "MD012": false
+      },
+      "combine": "merge"
+    }
+  ],
+  "config": {
+    "MD013": false,
+    "MD024": {
+      "siblings_only": true
+    }
+  }
+}

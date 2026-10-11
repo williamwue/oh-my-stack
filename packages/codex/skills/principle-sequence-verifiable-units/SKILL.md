@@ -3,6 +3,8 @@ name: principle-sequence-verifiable-units
 description: "Order multi-step work into small, independently verified units."
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Sequence work into verifiable units
 
 Order work as a sequence of small units, each ending in a state you can check, and don't advance until the current one is green.
@@ -12,10 +14,5 @@ Order work as a sequence of small units, each ending in a state you can check, a
 **Execution.** In a sweep, migration, or any run of similar edits, verify each change before starting the next. Each unit is a before/after bracket: known-good state, one change, run the check, then proceed. Rebase onto clean trunk first so every check measures against the real baseline. When a lever does the edits, the per-unit check is nearly free. Run it anyway.
 
 **Delivery.** Stack commits and PRs in the order that proves the work. The canonical shape is the failing test first, then the fix on top. Other story orders are a subtraction before the reshape, a baseline capture before the treatment, the scaffold before the feature. Each commit lands on its own and the sequence reads as an argument.
-
-**Pattern:**
-- Pick the smallest unit that ends in a check: an edit plus its test, or a commit that stands alone.
-- Verify before advancing. Red to green per unit, never deferred to a final batch.
-- Order the units so the sequence builds confidence on its own, for you while executing and for a reviewer reading the stack.
 
 The sequencing complement to the **prove-it-works** principle skill, which keeps each check real, and the **build-the-lever** principle skill, which makes the per-unit check cheap.

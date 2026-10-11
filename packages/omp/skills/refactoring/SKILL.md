@@ -1,10 +1,8 @@
 ---
 name: refactoring
-description: "Improve code structure while pinning and proving unchanged externally observable behavior."
+description: "Follow the upstream Refactoring playbook for its named task."
 disable-model-invocation: true
 ---
-
-# Refactoring
 
 ## OMP model routing
 
@@ -28,39 +26,21 @@ is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 For this workflow's implementers use `code.feature-refactoring`.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+### Refactoring
 
-The root owns the behavior contract. Structure may change; behavior may not.
+**You own the contract. The structure changes. The behavior does not.** Distinct from Feature, which adds behavior, and Bug fix, which corrects it.
 
-1. Use `how` to trace the affected behavior and callers. Pin the current
-   contract with a characterization test, snapshot, equivalence harness, or
-   recorded real-surface result before structural edits. Type checking alone is
-   not a behavior pin.
-2. Name the current reader-load problem and the target shape. The target should
-   remove branches, invalid states, duplication, or needless layers rather than
-   add speculative abstraction.
-3. Remove dead code and redundant indirection before introducing the target
-   structure. For an API reshape, migrate all in-scope callers and delete the
-   obsolete path in the same verified wave.
-4. Assign one bounded writer or implement at the root. A delegated writer uses
-   the active `code.feature-refactoring` route when configured. Use isolation when
-   available; otherwise serialize writes. Keep each step behavior-preserving and
-   rerun the pin after each independently meaningful slice.
-5. The root reviews the diff and runs an equivalence check on the real artifact.
-   If behavior changes, split it into a separately requested feature or bug fix.
-6. Keep the refactor only if the final code measurably lowers reader load.
-7. Do not publish or open a pull request unless the user explicitly requested it.
+If the cleanup reveals a missing feature or a real bug, split it out and ship the structural change first against the pinned contract. A redesign is allowed, but name it and route to Feature. Large or cross-cutting structural work belongs to the **figure-it-out** skill. This playbook is the focused-to-medium change.
 
-Return the pinned contract, structural before and after, exact equivalence
-proof, reader-load reduction, reverted experiments, and verification boundary.
+1. Pin the behavior contract first. Run the **how** skill over the affected subsystem to learn the contract, then write a characterization test, snapshot, or equivalence harness that captures current behavior before any structure moves. If the area has no coverage, write the pin before touching structure. Type check and lint are not a pin.
+2. Name the structure the code is missing per **principle-model-the-domain**. Boring code stays when the shape is already clear and local. The reshape must delete branches or invalid states, not add indirection.
+3. Name the target shape. State what the module layout, types, and call graph should be if built today (**principle-foundational-thinking**, **principle-redesign-from-first-principles**). If the target crosses a function boundary, run the **architect** skill for parallel design exploration of the shape before the move.
+4. Subtract before you add. Delete dead code, collapse one-caller wrappers, drop redundant validators, and remove orphan references before introducing the new shape (**principle-subtract-before-you-add**). The smallest change that reaches the target shape ships (**principle-laziness-protocol**). A speculative cleanup that "might help" gets reverted.
+5. Move in small behavior-preserving steps, each keeping the pin green. For API reshapes, migrate every caller and delete the old API in the same wave (**principle-migrate-callers-then-delete-legacy-apis**). No compatibility shims, no parallel old-and-new paths. Spot-check every rename against the actual files. Renames silently miss usages in strings, prose, and back-references. Delegate the mechanical edits to a subagent using your configured refactoring model (default `observed code-model choice`) with a specific scope (file paths, the names being moved, the behavior to hold).
+6. Prove behavior is unchanged on the real artifact, not "it compiles" (**principle-prove-it-works**). For larger reshapes, run an equivalence check: a script that diffs old-vs-new outputs, a recorded baseline replayed against the new code, or a smoke run on the matching surface via the relevant control skill.
+7. Confirm the change is worth keeping. The success measure is reduced reader load (**principle-minimize-reader-load**). If the diff does not lower reader load somewhere, revert it.
+8. Rebase into small ordered commits. A subtraction commit, then the reshape, then any follow-on cleanup. Shape them with the **sequence-verifiable-units** principle skill, so each behavior-preserving slice stays green before the next. Run **Opening a PR**.
+
+**Reply:** the structure that changed, the pin you held it against, the equivalence proof, the reader-load delta, what shipped and what got reverted. No new behavior.

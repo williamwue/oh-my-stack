@@ -3,35 +3,29 @@ name: typescript-best-practices
 description: "Apply type and boundary guidance to TS or TSX work."
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # TypeScript best practices
 
-Apply [type-system-discipline](../principle-type-system-discipline/SKILL.md)
-when reading or changing `.ts` or `.tsx` files. Keep this Skill directly
-invocable; the runtime adapter may offer path-scoped discovery only where its
-native Skill format supports it. Do not broaden it to unrelated languages.
+Apply the **type-system-discipline** principle skill first.
 
-- Model variants with discriminated unions; use branded primitives only where
-  mixing identifiers would be a real bug. Construct shapes that exclude invalid
-  states, but keep simple total types such as `T[]` until a stronger type removes
-  casts, non-null assertions, or impossible branches.
-- Treat external values as `unknown` and parse once at boundaries. Prefer the
-  repository's existing schema library to a handwritten guard. A type guard
-  must actually check the shape it claims. Inside validated code, trust the
-  domain type. Derive the domain type from its schema where possible. If the
-  type comes first, type the validator against that complete type so removing
-  a required field fails compilation. Parse with the schema that already owns
-  the shape; add a new schema only where none exists. A partial field check
-  cannot justify a claim that the whole object matches the domain type.
-- Prefer discriminant switches, then property or primitive checks. Use casts
-  only when evidence or validation justifies them. Use `satisfies` when checking
-  an object without widening its literals. Check union exhaustiveness with
-  `never` where a missing case would be harmful.
-- Reuse `Pick`, `Omit`, `Parameters`, `ReturnType`, `Awaited`, and `typeof` when
-  they express the same source of truth. Prefer named object arguments where
-  positional order is error-prone; measure before changing hot paths.
-- Test observable behavior with real local primitives when practical. Log
-  useful structured identifiers rather than stray debugging output. Follow
-  project style and actual library versions over generic examples.
+| Rule | Summary |
+|------|---------|
+| Discriminated unions | Model variants with a `kind` literal discriminant so impossible states can't be represented. No optional-field bags. |
+| Branded types | Brand primitives with `& { readonly __brand: "X" }` so they can't be mixed up. Validate once at the boundary. |
+| Constructive modeling | Build the shape so the illegal value can't be constructed. `[T, ...T[]]` for non-empty, `[T, T][]` for even length, `start` plus `duration` for a range. Not a runtime guard, not a wish for refinement types. |
+| Simplest total type | Keep `T[]` while every operation on it stays total. Strengthen to `NonEmpty<T>` only where the loose type forces `!`, a cast, or a "should never happen" throw. |
+| `unknown` over `any` | External data is `unknown`. |
+| Schemas before guards | Before hand-writing a property-by-property type guard, use the repository's runtime schema library and infer the type from the schema, such as `z.infer`. |
+| No `as` casts | Every `as` is a runtime crash waiting. Cast only after validation. |
+| Narrowing hierarchy | Discriminant switch > `in` operator > `typeof`/`instanceof` > user-defined type guard > `as`. |
+| Type guards | Must verify the claim. A lying guard is worse than `as` because the bug hides behind a name that says it's safe. Name them `isX` or `hasX`. |
+| Exhaustiveness | Inline `const _exhaustive: never = x;` in default arms so the compiler errors when a new variant is added. |
+| `satisfies` over `as` | Validates the value without widening literal types. |
+| Boundary validation | Parse where data crosses in, into a named domain type. `Record<string, unknown>` (however spelled) stops at that parse. Trust types inside. See the **boundary-discipline** principle skill. |
+| Schema-derived types | Reach for `Pick`/`Omit`/`Parameters`/`ReturnType`/`Awaited`/`typeof` before declaring a new interface. |
+| Object args | Pass objects, not positional, so argument order is self-documenting. Skip on hot paths (per-frame render, tokenizers, parsers). |
+| Real tests | Don't mock what you can run. Prefer the framework's real test primitives with leak/disposable checks, and verify UI in a running build. Mock only what you can't run locally. |
+| Structured telemetry | Prefer structured logger diagnostics with enough context to debug from an id. No `console.log` in shipped code. |
 
-Report specific changed or risky types, the boundary that validates them, and
-checks run. Avoid a checklist recital for code that needs no change.
+Examples: `references/patterns.md`.

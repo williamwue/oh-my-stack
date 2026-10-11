@@ -1,0 +1,27 @@
+{
+  "name": "oh-my-stack",
+  "description": "Native engineering workflows for Pi.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamwue/oh-my-stack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/williamwue/oh-my-stack/issues"
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ],
+    "extensions": [
+      "./extensions/oms.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "version": "0.15.0"
+}

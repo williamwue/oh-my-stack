@@ -1,53 +1,34 @@
 ---
 name: correct
-description: "Eliminate repeated repository mistakes through architecture, types, diagnostic checks, and behavior tests, with proof against real past failures."
+description: "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
 disable-model-invocation: true
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Correct
 
-Use for repeated mistakes in this repository. Editing a workflow Skill belongs
-to [reflect](../reflect/SKILL.md) or [authoring-a-skill](../authoring-a-skill/SKILL.md).
-The user's request bounds the investigation and changes; a correction does not
-itself authorize unrelated edits, publication, or changes to global rules.
+The operator keeps correcting agents in this repo for the same mistakes. Change the repo so the next agent can't make them.
+
+Assume every contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Design the repo so a change that looks right from one file is right for the whole repo.
 
 ## Find the mistake classes
 
-Read scoped recent commits, reverts, available review comments, repository
-instructions, and workaround comments. Group mistakes by mechanism. A repeated
-class needs at least two attributable occurrences, with paths or revisions.
-If history is unavailable, report the gap rather than inventing occurrences.
-A single observed defect can still be fixed within the user's authorized scope.
+First, read recent commits, reverts, review comments, agent instruction files, and comments that explain workarounds. Group the mistakes into classes. A class counts once it has happened twice.
 
-Assume a contributor sees only the files it opened, copies the nearest example,
-and takes the shortest path that compiles. Prefer a structure where a change
-that looks right from one file is right across the repository.
+## Fix each class at the highest level that works
 
-## Eliminate each class at the highest useful level
-
-1. Architecture: give state one owner and tasks one supported path. Hide
-   internals, derive duplicated lists, migrate callers, and delete obsolete ways.
-2. Types: make invalid states unrepresentable. When types cannot enforce the
-   constraint, add a diagnostic lint or CI check that names the supported fix.
-   For an existing widespread pattern, reject new occurrences without hiding
-   current debt.
-3. Behavior: assert the result a user observes. Reject a test that still passes
-   when every function it calls returns nothing.
-4. Documentation: use instructions only for judgment calls a check cannot
-   enforce. Explain why a higher level is insufficient.
+1. **Eliminate it with architecture.** Give each piece of state one owner and each task one supported way. Hide internals so the wrong import fails. Replace hand-synced lists with one source of truth. Delete old ways and dead code an agent would copy.
+2. **Enforce it with types so the bad state can't be written.** If bad code still compiles, add a lint or CI check whose error names the file, type, or function to use instead. If the pattern is already common, fail only when a change adds more.
+3. **Test the behavior.** Fix or delete any test that would still pass if every function it calls returned nothing.
+4. **Write docs or agent rules last, only for judgment calls.** Nothing fails when an agent skips them.
 
 ## Fix and prove
 
-Fix one class per verifiable unit. Preserve unrelated edits. Prove the new
-constraint fails on a real past mistake, then passes on the correction using
-local commands and the same CI command when CI exists. Keep the historical
-example and observed output with the result. If no authentic failing example
-is available, mark that proof incomplete; a made-up example is not history.
+Then fix the most frequent classes now, one commit each. Prove each new check fails on a real past mistake. Run the same command locally and in CI. Exceptions go on the offending line with a reason, an expiry date, and a human's approval.
 
-Maintain a scoped rule-to-enforcement table in repository instructions when
-useful. Remove redundant prose only after the corresponding check proves the
-mistake impossible. Exceptions name the reason, expiry, and approval required
-by repository policy; do not invent approval or expand the task's authority.
+## Keep the rule table
 
-Return each class, its occurrences, chosen enforcement level, why higher levels
-were insufficient, actual failing and passing commands, changed paths, and gaps.
+Last, keep a table in the agent instruction file that pairs each rule with what enforces it. When the operator corrects you, fix the mistake and add the rule. If the rule was already there and nothing enforces it, that's a repeat, so fix it at the highest level in the same change. Drop a rule once its mistake can't happen.
+
+**Reply:** each class with its evidence, the level you picked, and why a higher level didn't work.

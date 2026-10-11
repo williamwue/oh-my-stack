@@ -3,14 +3,13 @@ name: principle-model-the-domain
 description: "Model state and repeated assumptions in explicit data structures."
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Model the Domain
 
-Encode the real domain in a data structure instead of scattering it across
-conditionals. A structure that matches the domain makes invalid states
-unrepresentable and deletes branches. Choosing it at write time is cheap.
-Recovering it later reads as a refactor and gets deferred.
+Encode the real domain in a data structure instead of scattering it across conditionals. A structure that matches the domain makes invalid states unrepresentable and deletes branches. Choosing it at write time is cheap. Recovering it later reads as a refactor and gets deferred.
 
-Reach for structures like these:
+Reach for:
 
 - A state machine instead of scattered booleans, phases, or lifecycle checks.
 - A typed model instead of loose parameters or repeated shape assumptions.
@@ -18,7 +17,7 @@ Reach for structures like these:
 - A reducer or command/event model instead of ad hoc state mutations.
 - A module organized around one body of domain knowledge instead of a sequence such as load, validate, transform, and save. Execution order is not ownership.
 - A small module boundary that gathers repeated behavior, ownership, or invariants.
-- A queue, cache, index, graph, tree, or normalized collection where the data access pattern calls for it.
+- A queue, cache, index, graph, tree, or normalized collection where the access pattern calls for it.
 - Any other structure that fits. When none fits, work out what the code must never allow and how the data gets read, then find the structure that encodes exactly that.
 
 Do not force an abstraction. Prefer boring code if the current shape is already clear, local, and unlikely to grow. Be skeptical of an abstraction that adds indirection without removing branches, duplicated rules, invalid states, or lifecycle risk.

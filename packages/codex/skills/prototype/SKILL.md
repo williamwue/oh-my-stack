@@ -3,26 +3,19 @@ name: prototype
 description: "Test a design decision with an isolated throwaway experiment."
 ---
 
-# Prototype
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-A prototype is a decision instrument, not production implementation.
+### Prototype
 
-1. State the single decision, alternatives, and observable result that will
-   distinguish them. If there is no decision, route to `feature`.
-2. Gather prior art only when the design space is genuinely open. Separate
-   external inspiration from repository constraints.
-3. Build the smallest experiment in an isolated scratch directory outside
-   production source. Do not modify shipping code, introduce production
-   abstractions, or disguise the prototype as a finished feature.
-4. When comparing alternatives, expose them through one repeatable switch or
-   command and label each variant.
-5. Observe the decision variable on the matching surface. Capture screenshots
-   for visual differences or exact output, timing, and environment for
-   behavioral differences.
-6. Recommend one direction from the evidence. Preserve rejected alternatives
-   only when they explain the decision.
-7. Hand the decision to a separate `feature` run for production implementation.
+**You own the design decision, not the code. The prototype is a throwaway instrument. The real build follows Feature.**
 
-Return the decision, variants, observed evidence, tradeoffs, recommendation,
-scratch path, cleanup status, and a plain statement that the artifact is
-throwaway.
+The one playbook where the Laziness Protocol's "smallest change" and the verification bar invert. Speed over polish, code quality does not matter, no planning. The rigor is in picking the right design cheaply. Propose variations the user didn't ask for, throw an approach away and try another.
+
+1. Scope the decision the prototype exists to make: which layout, which interaction, which density, or for an empirical fork which behavior, timing, or approach. No decision means no prototype. Route to Feature.
+2. Gather references when the design space is open. Search for prior art, summarize a moodboard of themes, palettes, and layouts, let the user pick directions before building. Skip when the direction is set.
+3. Build throwaway in an isolated scratch dir, separate from production source. For a visual decision, vanilla HTML/CSS/JS or the lightest stack that renders the idea, CDN deps, a dev server with hot reload. For a behavioral or timing decision, the smallest script that exercises the question. No production framework, no tests, no abstractions.
+4. When comparing alternatives, build them behind one switcher (buttons or a keypress), each variant labeled. This is the **exhaust-the-design-space** principle skill made cheap.
+5. Verify on the matching surface. For a visual decision, screenshot each variant via the control skill and drive the interaction. For a behavioral or timing decision, observe the thing you are deciding by logging the timing, printing the output, or watching the render. The observation is the test here, not an assertion.
+6. Present alternatives, tradeoffs, and a recommendation. The output is the decision plus the throwaway artifact, not shippable code. Hand the chosen direction to **Feature** (or `architect` for the shape) for the real build.
+
+**Reply:** the variants explored, the evidence (screenshots for a visual decision, the observed output or timing for a behavioral one), tradeoffs, your recommendation, and the scratch path. Say plainly that the prototype is throwaway.

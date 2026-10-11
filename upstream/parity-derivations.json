@@ -568,7 +568,7 @@
       "source": "skills/poteto-help/SKILL.md",
       "output": "src/core/skills/poteto-help/SKILL.md",
       "sourceSha256": "3fe669c7c3b8f52c18b7c68ecce01c8691e844b9d2b41a8a6ff6432341451986",
-      "outputSha256": "e384136a53ec5060098d7072cf989431f2b59ea24dae9eb86099c7344164324b",
+      "outputSha256": "49b3468ef67c2848c0ed4021547ba08dc714374d732372c60ecc6b26634c6f32",
       "replacements": [
         {
           "before": "---\nname: poteto-help\ndescription: Guides users through pstack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.\ndisable-model-invocation: true\n---\n\n",
@@ -660,6 +660,13 @@
           "expectedOccurrences": 1,
           "category": "authorization",
           "reason": "Preserve the selected request scope and authorized continuation."
+        },
+        {
+          "before": "../../README.md",
+          "after": "https://github.com/cursor/plugins/blob/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/README.md",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Link the upstream README at the exact pinned revision instead of a missing source or generated-package relative README."
         }
       ]
     },
@@ -3041,8 +3048,16 @@
       "source": "skills/why/references/synthesizer-prompt.md",
       "output": "src/core/skills/why/references/synthesizer-prompt.md",
       "sourceSha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb",
-      "outputSha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb",
-      "replacements": []
+      "outputSha256": "3a45a4df428b1e8f1f00d15203aee8634653d97e8a5b3e1ca69e80dcbfdc848f",
+      "replacements": [
+        {
+          "before": "[PR #123](url)",
+          "after": "`[PR #123](url)`",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Mark the source citation placeholder as literal template text rather than an unresolved package resource."
+        }
+      ]
     },
     {
       "source": "skills/why/SKILL.md",

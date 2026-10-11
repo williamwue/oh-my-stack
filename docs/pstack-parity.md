@@ -12,6 +12,11 @@ inputs through exact, reviewed replacements. The derivation record explains
 each changed span. Hashes establish source integrity; they do not establish
 that an agent followed the instructions.
 
+Markdown style checks exclude exactly the derived Markdown paths and their
+generated host copies, as listed in the derivation manifest. Their source
+wording and formatting are checked by derivation hashes instead. Local prose,
+adapter code and optional additions keep their usual checks.
+
 ## Select a distribution
 
 Ordinary generation selects no extensions.

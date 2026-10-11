@@ -1904,6 +1904,9 @@
       "origin": "oms-host",
       "distribution": "core",
       "targets": [
+        "omp",
+        "codex",
+        "claude-code",
         "pi"
       ]
     },

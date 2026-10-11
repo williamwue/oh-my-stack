@@ -3,7 +3,7 @@ name: orchestrate
 description: "Coordinate ongoing engineering work with bounded tasks and independent checks."
 ---
 
-# Orchestrate
+# orchestrate
 
 Read the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying
 this Skill. Read it through the end; if a tool truncates output, continue with

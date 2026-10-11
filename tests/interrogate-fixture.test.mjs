@@ -19,18 +19,35 @@ test("interrogate fixture contains both intended reachable defects", async () =>
   assert.doesNotMatch(source, /throw|eval|process|globalThis/);
 });
 
-test("interrogate requires root-verified runtime metadata for model claims", async () => {
+test("interrogate preserves independent reviewers, source evidence, and lead synthesis", async () => {
   const skill = await readFile(join(repoRoot, "src/core/skills/interrogate/SKILL.md"), "utf8");
   const reviewerPrompt = await readFile(join(repoRoot, "src/core/skills/interrogate/references/reviewer-prompt.md"), "utf8");
-  assert.match(skill, /runtime\s+metadata inspected by the root/);
-  assert.match(skill, /record each model as\s*`unverified`/);
-  assert.match(skill, /even\s+when a reviewer says it read its own runtime metadata/);
-  assert.match(reviewerPrompt, /Do not report your own model, provider, or reasoning level/);
+  assert.deepEqual([...skill.matchAll(/^## Step (\d[^\n]*)/gm)].map((match) => match[1].trim()),
+    ["1, Scope", "2, Intent", "3, Spawn Reviewers", "4, Synthesize", "5, Lead Judgment"]);
+  assert.match(skill, /Launch all reviewers in a single message/);
+  assert.match(skill, /read-only workspace authority/);
+  assert.match(skill, /fill in the same template for every reviewer/);
+  assert.match(skill, /references\/rubric.md/);
+  assert.match(skill, /references\/code-quality-review.md/);
+  assert.match(skill, /As results come back, build a unified picture/);
+  assert.match(skill, /You are the lead reviewer/);
+  assert.match(skill, /Do NOT auto-apply changes/);
+  assert.match(reviewerPrompt, /\*\*Location\*\*: file:line or function name/);
+  assert.match(reviewerPrompt, /\*\*Evidence\*\*: Why this matters/);
+  assert.doesNotMatch(skill, /new read-only synthesizer|frozen synthesis/);
+  const binding = await readFile(join(repoRoot, "packages/pi/docs/runtime-binding.md"), "utf8");
+  assert.match(binding, /observed model and effort remain unknown unless independently returned/);
 });
 
-test("arena cross-judge receives complete frozen candidate artifacts", async () => {
+test("arena judges completed candidate artifacts against the common task rubric", async () => {
   const skill = await readFile(join(repoRoot, "src/core/skills/arena/SKILL.md"), "utf8");
-  assert.match(skill, /Pass each candidate's full\s+frozen output verbatim/);
-  assert.match(skill, /root-written summaries are not a substitute/);
-  assert.match(skill, /do not claim an\s+independent cross-judge comparison/);
+  assert.match(skill, /Every candidate gets the same prompt/);
+  assert.match(skill, /Give each candidate its own output location/);
+  assert.match(skill, /After all Phase B candidates complete/);
+  assert.match(skill, /Spawn one readonly judge subagent/);
+  assert.match(skill, /sees the rubric and the candidates by path label/);
+  assert.match(skill, /Don't spawn it while candidates are still writing/);
+  assert.match(skill, /Read every candidate end to end before picking/);
+  assert.match(skill, /Score each against the rubric criterion by criterion/);
+  assert.match(skill, /Verify the synthesized artifact like any other output/);
 });

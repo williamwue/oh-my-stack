@@ -3,7 +3,7 @@ name: poteto-mode
 description: "Route engineering work while preserving required design, judgment, and proof."
 ---
 
-# Poteto Mode
+# Poteto mode
 
 Read the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying
 this Skill. Read it through the end; if a tool truncates output, continue with

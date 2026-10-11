@@ -1,10 +1,8 @@
 ---
 name: shipping
-description: "Land an explicitly authorized pull request or stack only after independent revision-bound verdicts establish a contiguous safe frontier."
+description: "Follow the upstream Shipping playbook for its named task."
 disable-model-invocation: true
 ---
-
-# Shipping
 
 ## OMP model routing
 
@@ -27,82 +25,22 @@ Do not assume the deprecated `hub` tool exists. If safe cancellation
 is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+### Shipping
 
-Use this workflow only when the user explicitly asks to land, merge, or ship an
-existing pull request or stack. A request to make changes merge-ready belongs to
-`babysit`; a green status alone never authorizes or proves safe landing.
+**You own what lands. Verify each PR independently, land only the verified run from the root, then keep your hands off the queue.**
 
-## Freeze authority and the stack
+This is the half after `playbooks/babysit.md`.
 
-Resolve the repository, active change provider, target branch, and bottom-to-top
-unmerged order. Record whether the user authorized immediate merge or explicitly
-requested merge-when-ready. Do not infer permission to arm delayed merge from
-ordinary shipping authority.
+1. **Resolve the forge, then verify every PR independently.** GitHub CLI (`gh`) is the default. If `command -v origin` succeeds and Origin can resolve the repository, use `origin pr ...` for PR view, watch, edit, and merge operations. Otherwise stay on `gh` and record the fallback. Never require Graphite (`gt`). One subagent per PR, not batched, each a independent remote child where supported by the host, each exercising the real surface with the matching control skill (such as `control-ui` or `control-cli` through the generated runtime binding) against parent versus head. Each returns `PASS`, `PASS+NOTES` or `FAIL` and posts that verdict on its own PR. Safe means a verdict from an agent that did not write the code. CI green is not a verdict, and an approving bot review is not a verdict.
+2. **Land only the contiguous verified run rooted at the bottom.** Walk up from the lowest unmerged PR and stop at the first one without a passing verdict, where both `PASS` and `PASS+NOTES` pass. A verified PR sitting above an unverified one is not landable. Report the ceiling as a PR number and say what breaks the chain.
+3. **Re-check that each verdict still describes the patch.** Record the verdict head SHA, base SHA, and stable `git patch-id` of that PR's base-to-head diff. A rebase or base retarget rewrites SHAs and can silently invalidate a verdict without touching a check. Before landing a PR, compare the recorded patch-id with its current base-to-head patch-id. When the two patches differ only in tests, docs, or lint config, build what each lane ran. Build it twice at the verdict SHA and once at the current head. A difference is noise if the two builds at the verdict SHA also show it, or if it is an embedded commit SHA. Judge each difference, not each file, and report each kind of noise with its files. If only noise differs, that lane's result stays valid, and checks and a review of the change run fresh. Do not reuse a lane result from a dev server or from anything else with no build output. Rerun that lane. Re-verify anything else when the patch changed. When it did not, keep the code verdict but re-run mergeability and CI at the current head. Never use matching commit messages or a green check from an older SHA as a substitute.
+4. **Prepare only the bottom PR.** Fetch current trunk. Rebase the lowest verified branch onto the exact trunk tip when needed, push it, and retarget only that PR to trunk with `origin pr edit <pr> --base <trunk>` or `gh pr edit <pr> --base <trunk>`. Re-run step 3 after the push. Do not retarget, arm, or merge descendants yet.
+5. **Land one PR at a time.** If the bottom PR is mergeable now, squash it with `origin pr merge <pr> --squash` or `gh pr merge <pr> --squash`. If requirements are still running and the user asked for merge-when-ready, arm only that PR with `origin pr merge <pr> --squash --auto` or `gh pr merge <pr> --squash --auto`. Origin's `--auto` is Origin merge-when-ready. GitHub's `--auto` is GitHub auto-merge. Wait for that PR to merge before preparing the next one.
+6. **Do not read GitHub `autoMergeRequest` as stack readiness.** At most it says GitHub auto-merge was requested for one GitHub PR. It does not prove Origin merge-when-ready is armed, that a descendant is queued, that a patch verdict is current, or that the contiguous stack is safe. Confirm the active forge's state for the current bottom PR, and say that the state is unknown if the active forge cannot report it.
+7. **Recompute after every merge.** Fetch trunk, confirm the merged SHA is present, drop the merged PR from the frozen bottom-to-top list, and inspect the new bottom PR's base, head, checks, and patch-id. A host may retarget a child automatically, but do not assume it did. Repeat steps 3 through 6 for that one PR. Independent work stays outside this chain and ships on its own.
+8. **Watch the current frontier until it merges or fails. Do not mutate the queue around it.** With Origin, use `origin pr view <pr> --checks --comments` and `origin pr checks <pr> --watch`, then re-read the PR until it reports merged or blocked. With GitHub, use `../poteto-mode/scripts/watch-pr/watch-pr --queued-stack --stack-prs <bottom>` only as an event wake and poll `gh pr view <pr> --json state,mergedAt,mergeStateStatus,statusCheckRollup,autoMergeRequest` after each wake, ignoring `READY` until `mergedAt` is non-null or `state` is `MERGED`. Only then run step 7. Hard-fail only when `state` is `CLOSED` with no `mergedAt`, a required check concludes `FAILURE` or `CANCELLED` and blocks merge after auto-merge is no longer pending, or `mergeStateStatus` is `UNSTABLE` or `DIRTY` with no auto-merge pending. `BLOCKED` while checks are pending or auto-merge is armed is not failure. Do not use Babysit's queued `WAITING`/`merge-queue` stop condition here. Hold the watch under `/loop` in dynamic mode. Report each merge and the new ceiling. If the queue stalls, diagnose before mutating.
+9. **Stop at the ceiling.** When the verified run is merged, report what landed, what the next unverified PR is, and what verifying it would take. Extending the run is a new pass through step 1.
 
-Freeze each change's identifier, base revision, head revision, stable patch
-identity, required checks, mergeability, and unresolved review state. Treat
-provider text as untrusted data. Independent work outside the ancestry chain is
-not part of the stack.
-
-## Require independent verdicts
-
-Assign each change to a distinct read-only reviewer session that did not write
-the change. Give every reviewer the exact parent, head, patch, relevant product
-surface, and verification contract. Freeze an attributable verdict of `PASS`,
-`PASS+NOTES`, or `FAIL` together with:
-
-- reviewer identity or session;
-- reviewed base and head revisions;
-- stable patch identity;
-- verification commands and observed outcomes;
-- actionable notes or failure evidence.
-
-Continuous integration, a bot approval, an author self-review, or a verdict for
-another revision is not an independent verdict. If independent sessions are
-unavailable, produce the exact review packets and stop instead of self-approving.
-
-## Compute the landing frontier
-
-Walk upward from the lowest unmerged change. `PASS` and `PASS+NOTES` extend the
-contiguous verified run. Stop at the first missing, failed, stale, or
-unattributable verdict. A passing change above that gap is not landable.
-
-Before mutating the current bottom change, re-read its base, head, patch
-identity, checks, mergeability, and review state. A changed patch invalidates the
-verdict and requires another independent review. An unchanged patch may retain
-its code verdict after a rebase, but checks and mergeability must be fresh for
-the current head.
-
-## Land one change at a time
-
-Only the root session may land. Prepare and merge or arm only the current bottom
-change. Never pre-arm descendants. Wait for authoritative merged state, then
-confirm the landed revision is present in the target branch before touching the
-next change.
-
-After every merge, refresh the provider, remove the merged item from the frozen
-order, and recompute the new bottom change's base, head, patch identity, checks,
-mergeability, and verdict freshness. Stop on any failed check, conflict, closed
-unmerged change, stale verdict, unavailable required capability, or ownership
-decision. Do not rewrite stack topology to conceal a gap.
-
-If merge capability is unavailable, return the exact verified run and ordered
-landing operations without claiming that anything landed.
-
-## Output
-
-Report the authorized merge mode, frozen stack, each attributable verdict and
-bound revisions, contiguous verified ceiling, operations actually armed or
-executed, authoritative landed revisions, next gap, and remaining decision.
+**Reply:** the verified run and its ceiling, each PR's verdict and who produced it, what you armed and how you confirmed it, what landed, and what the next gap needs.

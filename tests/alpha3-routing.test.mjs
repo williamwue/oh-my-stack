@@ -9,28 +9,33 @@ async function readSkill(name) {
   return readFile(join(repoRoot, "src/core/skills", name, "SKILL.md"), "utf8");
 }
 
-test("poteto-mode routes every admitted alpha outcome without implicit publication", async () => {
+test("poteto-mode preserves the upstream playbook index, triggers, and authority gates", async () => {
   const router = await readSkill("poteto-mode");
   const expected = [
-    ["read-only engineering question", "investigation"],
-    ["defective behavior", "bug-fix"],
-    ["product behavior", "feature"],
-    ["preserving behavior", "refactoring"],
-    ["throwaway experiment", "prototype"],
-    ["Adversarially review", "interrogate"],
+    ["Investigation", "Read-only question"],
+    ["Bug fix", "reported defect"],
+    ["Feature", "New or changed behavior"],
+    ["Refactoring", "behavior-preserving change"],
+    ["Prototype", "throwaway sketch"],
+    ["Autonomous run", "drive to completion"],
+    ["Orchestrate", "standing project"],
+    ["Autopilot-full", "owner per PR"],
+    ["Autopilot-stack", "operator lands"],
   ];
   for (const [intent, workflow] of expected) {
-    assert.match(router, new RegExp(`${intent}[^\\n]*${workflow}`));
+    assert.match(router, new RegExp(`\\*\\*${intent}\\.\\*\\*[^\\n]*${workflow}`));
   }
-  assert.match(router, /explicitly requested by the user[^\n]*`opening-a-pr`/);
-  assert.match(router, /existing pull request merge-ready[^\n]*`babysit`/);
-  assert.match(router, /land, merge, or ship[^\n]*`shipping`/);
-  assert.match(router, /bounded task to a checkable predicate[^\n]*`autonomous-run`/);
-  assert.match(router, /standing multi-session program[^\n]*`orchestrate`/);
-  assert.match(router, /owner-land a bounded queue[^\n]*`autopilot-full`/);
-  assert.match(router, /linear operator-landed stack[^\n]*`autopilot-stack`/);
-  assert.match(router, /explicit bounded full-autonomy grant/);
-  assert.match(router, /verdict authority in the root while each change owner performs its own\s+authorized merge/);
+  assert.match(router, /Contested design[^\n]*\*\*interrogate\*\*/);
+  assert.match(router, /Before review[^\n]*\*\*no-comments\*\*/);
+  assert.match(router, /Any PR-status request[^\n]*\*\*Babysit\*\*/);
+  assert.match(router, /Never triggered by merely opening a PR/);
+  assert.match(router, /large or cross-cutting effort[^\n]*\*\*figure-it-out\*\*[^\n]*even when a narrower playbook like Feature fits/);
+  assert.match(router, /Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates/);
+  assert.match(router, /A workflow step naming one of these actions does not grant that authority/);
+  assert.match(router, /full-autonomy grant applies only to the named scope/);
+  for (const path of ["investigation", "bug-fix", "feature", "refactoring", "prototype", "autonomous-run", "orchestrate", "autopilot-full", "autopilot-stack"]) {
+    await readFile(join(repoRoot, "src/core/skills/poteto-mode/playbooks", `${path}.md`));
+  }
 });
 
 test("alpha three playbooks preserve their safety boundaries", async () => {
@@ -40,13 +45,17 @@ test("alpha three playbooks preserve their safety boundaries", async () => {
   const prototype = await readSkill("prototype");
   const opening = await readSkill("opening-a-pr");
 
-  assert.match(investigation, /Keep the workspace unchanged/);
-  assert.match(feature, /root inspects the actual diff/);
-  assert.match(feature, /unless the user explicitly requested that external action/);
-  assert.match(refactoring, /Pin the current\s+contract/);
-  assert.match(refactoring, /behavior changes, split it/);
-  assert.match(prototype, /isolated scratch directory outside\s+production source/);
-  assert.match(prototype, /artifact is\s+throwaway/);
-  assert.match(opening, /only when the user explicitly asks/);
-  assert.match(opening, /Never claim a URL that was not returned/);
+  assert.match(investigation, /Investigation requests are read-only/);
+  assert.match(investigation, /No PR, no babysit/);
+  assert.match(feature, /You own the design\. Plan, review, verify/);
+  assert.match(feature, /Delegate implementation\. Stay in the lead/);
+  assert.match(feature, /"Inconclusive" or wrong-surface is not a pass/);
+  assert.match(refactoring, /Pin the behavior contract first/);
+  assert.match(refactoring, /missing feature or a real bug, split it out/);
+  assert.match(refactoring, /Type check and lint are not a pin/);
+  assert.match(prototype, /isolated scratch dir, separate from production source/);
+  assert.match(prototype, /decision plus the throwaway artifact, not shippable code/);
+  assert.match(opening, /Publication, merge, deployment[^\n]*authorization gates/);
+  assert.match(opening, /Opening a PR does not start a babysit/);
+  assert.match(opening, /built-in PR tool, create, edit, retarget, and mark ready through it/);
 });

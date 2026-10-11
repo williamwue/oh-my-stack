@@ -10,6 +10,18 @@ import { loadModel, repoRoot } from "../tools/generate.mjs";
 
 const fixture = join(repoRoot, "evals", "fixtures", "pstack-01513");
 const run = (file, ...args) => spawnSync(process.execPath, [join(fixture, file), ...args], { encoding: "utf8" });
+const movedTargets = {
+  "src/core/skills/poteto-mode/references/subagent-handoff.md": "src/core/skills/oms-enhanced-delivery/references/poteto-mode/subagent-handoff.md",
+  "src/core/skills/architect/references/design-contract.md": "src/core/skills/oms-enhanced-delivery/references/architect/design-contract.md",
+};
+const hosts = ["codex", "omp", "claude-code", "pi"];
+
+async function generatedWorkflow(host, name) {
+  const directory = join(repoRoot, "packages", host, "skills", name);
+  const entry = await readFile(join(directory, "SKILL.md"), "utf8");
+  return entry.includes("[complete workflow](WORKFLOW.md)")
+    ? readFile(join(directory, "WORKFLOW.md"), "utf8") : entry;
+}
 
 test("pstack delta decisions cover exact source blobs and existing target paths", async () => {
   const receipt = JSON.parse(await readFile(join(repoRoot, "docs/acceptance/2026-10-06/upstream-files.json"), "utf8"));
@@ -24,13 +36,16 @@ test("pstack delta decisions cover exact source blobs and existing target paths"
   for (const item of decisions.decisions) {
     assert.ok(receipt.files.some((file) => file.revision === receipt.head && file.path === item.upstreamPath));
     assert.ok(item.rationale.length > 20);
-    for (const path of item.targets) await readFile(join(repoRoot, path));
+    for (const path of item.targets) await readFile(join(repoRoot, movedTargets[path] ?? path));
   }
 });
 
-test("all host catalogs expose the four new explicit entries with readable help and handoff resources", async () => {
+test("all host catalogs expose explicit upstream entries without selecting enhanced handoff resources", async () => {
   const model = await loadModel();
-  for (const host of ["codex", "omp", "claude-code"]) {
+  assert.ok(!model.skills.some((item) => item.metadata.name === "oms-enhanced-delivery"));
+  const enhanced = await loadModel(repoRoot, { extensions: ["enhanced-delivery"] });
+  assert.equal(enhanced.skills.find((item) => item.metadata.name === "oms-enhanced-delivery").metadata.invocation, "explicit");
+  for (const host of hosts) {
     const root = join(repoRoot, "packages", host);
     const catalog = JSON.parse(await readFile(join(root, "SKILL_CATALOG.json"), "utf8"));
     for (const name of ["correct", "poteto-help", "benchmark-checklist", "principle-explain-the-number"]) {
@@ -39,31 +54,45 @@ test("all host catalogs expose the four new explicit entries with readable help 
       const text = await readFile(join(root, "skills", name, "SKILL.md"), "utf8");
       if (host !== "codex") assert.match(text, /disable-model-invocation: true/);
     }
-    const help = await readFile(join(root, "skills/poteto-help/SKILL.md"), "utf8");
-    assert.match(help, /\.\.\/\.\.\/SKILL_CATALOG\.json/);
+    const help = await generatedWorkflow(host, "poteto-help");
+    assert.match(help, /references\/prompting.md/);
     await readFile(join(root, "skills/poteto-help/references/prompting.md"));
-    const swarm = await readFile(join(root, "skills/swarm/SKILL.md"), "utf8");
-    assert.match(swarm, /Child session handoff/);
-    await readFile(join(root, "skills/poteto-mode/references/subagent-handoff.md"));
+    assert.ok(!catalog.skills.some((item) => item.name === "oms-enhanced-delivery"));
+    assert.ok(!catalog.resources.some((item) => item.distribution === "enhanced-delivery"));
+    const swarm = await generatedWorkflow(host, "swarm");
+    assert.doesNotMatch(swarm, /Child session handoff|subagent-handoff.md/);
+    await readFile(join(root, "docs/runtime-binding.md"));
+    await readFile(join(root, "docs/model-selection.md"));
   }
 });
 
-test("optional performance delegates inherit fresh handoff and host precedence on every host", async () => {
-  for (const host of ["codex", "omp", "claude-code"]) {
+test("fresh delegation is upstream policy while enhanced fencing remains optional", async () => {
+  const handoff = await readFile(join(repoRoot, movedTargets["src/core/skills/poteto-mode/references/subagent-handoff.md"]), "utf8");
+  assert.match(handoff, /fresh session for a new task, fix round, follow-up, retry, or queue item/);
+  assert.match(handoff, /Host restrictions still win/);
+  assert.match(handoff, /stop and fence it or use distinct ownership/);
+  assert.match(handoff, /late result from the old generation cannot write or become current evidence/);
+  assert.match(handoff, /does not authorize discarding uncommitted work/);
+  for (const host of hosts) {
+    const mode = await generatedWorkflow(host, "poteto-mode");
+    assert.match(mode, /Fresh subagents by default/);
+    assert.match(mode, /original brief, every later directive, and the prior agent's report and branch/);
+    assert.match(mode, /only when the new work strictly needs state that lives in that agent and is costly to move/);
     for (const name of ["perf-issue", "hillclimb"]) {
-      const text = await readFile(join(repoRoot, "packages", host, "skills", name, "SKILL.md"), "utf8");
-      assert.match(text, /Child session handoff/);
-      assert.match(text, /repair rounds, retries, and queue items use fresh child sessions/);
-      assert.match(text, /prior findings and responses/);
-      assert.match(text, /Stop and fence active writers before replacement/);
-      assert.match(text, /review-round rules take precedence over the native binding/);
+      const text = await generatedWorkflow(host, name);
+      assert.match(text, /\[runtime binding\]\(\.\.\/\.\.\/docs\/runtime-binding.md\)/);
+      assert.match(text, new RegExp(`configured ${name} model`));
+      if (host === "codex" || host === "omp") {
+        assert.ok(text.includes(`For this workflow's implementers use \`code.${name}\``));
+      }
+      assert.doesNotMatch(text, /Child session handoff|subagent-handoff.md|delivery-evidence.md/);
     }
   }
 });
 
 test("generated Codex PR procedures prefer host tools while retaining bounded adapter authority gates", async () => {
   for (const name of ["opening-a-pr", "babysit", "shipping"]) {
-    const text = await readFile(join(repoRoot, "packages/codex/skills", name, "SKILL.md"), "utf8");
+    const text = await generatedWorkflow("codex", name);
     assert.match(text, /host-owned PR tool, use that\ntool first/);
     assert.match(text, /executeGitHubWorkflow\(request\)` only as the bounded fallback/);
     assert.match(text, /does not expand the workflow's authorization or target gates/);

@@ -7,6 +7,13 @@ import { loadModel, repoRoot } from "../tools/generate.mjs";
 
 const read = (path) => readFile(join(repoRoot, path), "utf8");
 const json = async (path) => JSON.parse(await read(path));
+const movedTargets = {
+  "src/core/skills/architect/references/design-contract.md": "src/core/skills/oms-enhanced-delivery/references/architect/design-contract.md",
+  "src/core/skills/technical-writing/references/document-structure.md": "src/core/skills/oms-enhanced-delivery/references/technical-writing/document-structure.md",
+  "src/core/skills/technical-writing/references/sentence-style.md": "src/core/skills/oms-enhanced-delivery/references/technical-writing/sentence-style.md",
+  "src/core/skills/why/references/evidence.md": "src/core/skills/oms-enhanced-delivery/references/why/evidence.md",
+  "src/core/skills/why/references/sources.md": "src/core/skills/oms-enhanced-delivery/references/why/sources.md",
+};
 
 test("0.15.17 decisions account for all 45 exact source blobs", async () => {
   const receipt = await json("docs/acceptance/2026-10-11/upstream-files.json");
@@ -30,7 +37,7 @@ test("0.15.17 decisions account for all 45 exact source blobs", async () => {
     assert.ok(["adapt", "retain", "reference"].includes(item.decision));
     assert.ok(item.rationale.length > 30);
     assert.ok(item.targets.length > 0);
-    for (const path of item.targets) await read(path);
+    for (const path of item.targets) await read(movedTargets[path] ?? path);
   }
 });
 

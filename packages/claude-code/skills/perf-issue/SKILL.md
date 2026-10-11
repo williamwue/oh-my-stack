@@ -1,52 +1,33 @@
 ---
 name: perf-issue
-description: "Fix one performance defect using representative before and after traces and a correctness gate."
+description: "Follow the upstream Perf issue playbook for its named task."
 disable-model-invocation: true
 ---
 
-# Perf issue
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-## Child session handoff
+### Perf issue
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+**You own the measurement story. Plan, review, verify the numbers.** Tie every fix to a measurement, don't read source instead of measuring.
 
-Define the user's slow path, surface, workload, and metric. Capture a baseline
-trace or profile through the real control surface before changing code. Use
-[how](../how/SKILL.md) to connect cost to architecture. Do not claim a ceiling
-or bottleneck by reading source alone.
+1. Capture a baseline trace via the matching control skill. Vet the baseline, and each later number, with the **benchmark-checklist** skill.
+2. `how` to ground hypotheses. Don't claim a perf ceiling without running it first.
+   Try the performance mantras in order, cheapest first:
+   1. Don't do it. Stop work whose result nothing uses rather than cheapening it.
+   2. Do it, but don't do it again.
+   3. Do it less.
+   4. Do it later.
+   5. Do it when they're not looking.
+   6. Do it concurrently.
+   7. Do it cheaper.
 
-Vet the baseline and each later number with
-[benchmark-checklist](../benchmark-checklist/SKILL.md). Record successful and
-failed work counts, tuning, repeated samples, spread, and the measured limiter.
-If the requested task is only measurement validation, stay in that workflow.
+   When an earlier mantra meets the target, stop.
+3. Plan the fix from the trace. If it crosses a function boundary, `architect` first. Delegate implementation to a subagent using your configured perf-issue model (default `observed code-model choice`). Review the diff. Capture a post-fix trace.
+   Apply the **sequence-verifiable-units** principle skill, verifying each attempt before trying the next.
+4. Parse and compare the artifacts (JSON to sqlite, diff). "Inconclusive" or wrong-surface is not a pass. Flag it.
+5. Cite the measurement in the PR.
+6. Run **Opening a PR**.
 
-Try hypotheses supported by the trace in this order: do not do unused work;
-avoid repeated work; do less; do it later; move it outside the interactive
-moment; do it concurrently; then do it cheaper. Stop when an earlier strategy
-meets the target. A source read establishes that work is unused; a trace alone
-does not authorize deletion. More specific mechanisms remain hypothesis tools,
-not a checklist:
- remove unnecessary work; divide
-scaling work; cache repeated work with explicit invalidation; index or add
-indirection; batch fixed overhead; duplicate a dominant wait when capacity
-allows; defer unused work; or schedule necessary work outside the critical
-moment. These are hypothesis families, not a checklist to implement blindly.
+For sustained improvement against a metric rather than a one-off fix, use the Hillclimb playbook (`playbooks/hillclimb.md`).
 
-Make one bounded change, using [architect](../architect/SKILL.md) if it alters
-module boundaries. Review the diff, capture a post-change trace under the same
-workload, compare numeric artifacts using a repeatable command, and run the
-correctness gate. A change that improves one number but breaks the user flow
-does not pass. A noisy or different-surface comparison is inconclusive.
-
-Return baseline, after value, delta, trace paths, correctness result, and
-remaining uncertainty. For sustained repeated iterations, route to
-[hillclimb](../hillclimb/SKILL.md). Publish only when the user requested it.
+**Reply:** baseline number, post-fix number, delta, artifact path.

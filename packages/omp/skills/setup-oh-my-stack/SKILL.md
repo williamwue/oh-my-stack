@@ -1,10 +1,8 @@
 ---
 name: setup-oh-my-stack
-description: "Configure optional automatic routing, or preview and configure pstack-style per-workflow models, review panels, and reasoning budget from the current runtime inventory."
+description: "Configure per-workflow models, ordered panels, and reasoning budget from the current host inventory."
 disable-model-invocation: true
 ---
-
-# Setup Oh My Stack
 
 ## OMP source-style setup
 
@@ -39,261 +37,68 @@ different presets. If any required model is absent, stop and request
 explicit observed choices; never fill a slot with a legacy model merely
 because it appears in the inventory or has a familiar name.
 
-## Automatic routing availability
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Automatic routing is not configured on this target. For oms-auto or a
-routing-only setup request, return control to the host without automatic
-execution. Use the explicit poteto-mode entry for engineering work.
-For ordinary model setup, continue with the procedure below.
+# Setup pstack
 
-## Choose automatic routing
+Configure the installed host's owned resolution manifest, which sets pstack models per role. Follow the generated model selection guide for native inventory and configuration commands.
 
-On a target with the generated routing binding, a general setup invocation starts
-with automatic routing choices. The user need not write an enable command or
-know the configuration script. A request specifically for model setup goes
-straight to the model procedure below; a routing status or preview request stays
-read-only. If the user already specified a routing mode or scope, reuse it and
-ask only for the missing choice.
+## Steps
 
-Inspect the effective routing mode and scope through the binding before offering
-choices. Show that current state in the user's language, including any project
-override. If inspection fails, report the error before changing configuration.
-Use the host's native fixed-choice question tool when available and allowed in
-the current mode. Otherwise show the same explicit text choices in the conversation
-and wait for a selection. Do not ask the user to compose a configuration prompt.
+### 1. Detect available models
 
-Offer these routing choices:
+Enumerate the models accepted by the current host's native child-delegation surface. Run the packaged inventory collector using the generated model selection guide. Use a current observation, not remembered names. If inventory is unavailable, report the missing observation and stop before configuration writes. Never write an unobserved real model. The aliases `inherit-parent` and `auto` omit a native model override.
 
-- **Enable automatic routing**: match ordinary engineering tasks to OMS workflows.
-- **Disable automatic routing**: use explicit workflow entries.
-- **Keep current settings**: leave all routing configuration untouched.
+### 2. Load current state
 
-Recommend keeping the current settings when routing is already enabled;
-otherwise recommend enabling it. A recommendation or preselected option is not
-a submitted choice. If the user chooses enable or disable and has not specified
-the destination, offer these scope choices:
+Read the effective resolution manifest and its reasoning budget through the generated model selection guide. Preserve current models, aliases, panel membership, order, and length on the same target and preset. Start a fresh setup from the host's observed preset. Fresh runner and reviewer panels have two entries. Report retired routes that are removed.
 
-- **Default across projects (recommended)**: save the personal default;
-  existing project overrides still take precedence.
-- **Only this project**: save a project override without changing the personal
-  default. Show the actual destination project before asking.
+### 3. Budget, map, and confirm
 
-Explain that selecting a mode and scope saves that setting. Map enable to
-`auto`, disable to `manual`, personal default to `user`, and this project to
-`project`. Preview the selected change through the generated binding, then
-apply that same choice without asking the user to repeat an enable instruction
-or reconfirm a completed selection. An explicit preview-only request still
-stops before apply. Keep, cancellation, and an unanswered question authorize no
-routing write. A free-text answer that leaves mode or scope ambiguous requires
-clarification before apply.
+**(a) Ask for a budget.** Prefer the host's fixed-choice question tool when available. Reuse a budget already selected in this session. Offer these four options with these exact labels, and name the current budget. With no saved choice, `large` is the upstream target; use only efforts the current host supports.
 
-Report the saved scope separately from the actual effective mode and any project
-override. Preserve model mappings and native hook trust. Give the exact native
-hook review and fresh-session step from the binding when enabling; saving the
-switch does not prove hook execution or automatic workflow selection.
+- `unlimited — max reasoning`
+- `large — xhigh reasoning`
+- `medium — high reasoning`
+- `small — medium reasoning`
 
-A routing-only request ends here without model inventory, mapping changes, or
-a paid worker probe. After a general setup invocation completes these choices,
-offer **Configure models and reasoning budget** or **Finish setup**; continue
-below only when model setup is selected or was already requested. Finishing or
-not answering this optional question leaves model configuration untouched.
-On targets without automatic routing support, skip the routing menu during
-ordinary model setup. If routing was requested, report the unsupported target
-without changing model configuration.
+**(b) Apply it.** Build the working table from the observed host preset. On a re-run preserve each model identity, alias, and ordered panel. `unlimited`, `large`, `medium`, and `small` target `max`, `xhigh`, `high`, and `medium`. Native effort may be a separate setting rather than part of a model slug. For each observed model, choose its highest supported effort at or below the target; mark unsupported choices for selection. `inherit-parent` and `auto` do not change. Report effective effort per route and any route below target. This is a reasoning setting, not a token or money spending cap.
 
-Use this workflow to give Oh My Stack opinionated, editable per-workflow model
-choices without assuming Cursor model names work on another runtime.
+**(c) Show the roles and confirm.** Show every role with its model, marking any real slug not in the detected set as needing a choice. Also list each line step 2 dropped. Ask whether to accept as-is or change specific roles, offering the detected models plus `inherit-parent` and `auto` (both mean: this role runs on the parent chat model, which is how Auto users stay on Auto) as the options. Prefer the host's available fixed-choice question tool over free text. For panel roles (arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per entry, alias entries included, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one value from it whose model family differs from the parent's when possible. `swarm workers` is the default model for every worker unless a race or comparison assigns another model per arm.
 
-## 1. Observe before selecting
+### 4. Validate
 
-Identify the active runtime surface. Locate this package's
-`scripts/collect-model-inventory.mjs` and run it with a dedicated output path.
-The collector calls the native inventory operation verified for the current
-generated target and normalizes its live response. Do not reuse remembered
-model names, examples from documentation, or an inventory from another runtime
-surface.
+Every real slug written must be in the detected set. `inherit-parent` and `auto` always pass. If a chosen real slug is not available, stop and ask again.
 
-The collector deliberately stops when a target has no verified observation.
-If collection fails, report the exact missing observation; do not replace it
-with a guessed model list.
+### 5. Write the host configuration
 
-The resulting JSON inventory contains:
+Preview the complete configuration with the packaged configurator through the generated model selection guide. Show the destination scope and effective project override. Apply only the already accepted choices to an authorized destination. User defaults require user-scope authorization; project setup leaves personal configuration alone. Protect modified or unowned files and reconcile an interrupted apply before retrying. Keep detached previews read-only. The host configuration represents the following role and ordered-panel shape:
 
-- `schemaVersion: 1`;
-- the target runtime identifier;
-- the observation timestamp and exact inventory source;
-- each observed model ID and its supported reasoning efforts, with the
-  provenance of effort support stated for the target.
+```text
+budget: chosen label and observed supported effort
+feature, refactoring: observed code model
+bug-fix: observed code model
+perf-issue: observed code model
+hillclimb: observed code model
+judgment and prose: observed judgment model
+hardest tasks: observed strongest judgment model with implementation authority
+how explorer: observed code model
+how explainer: observed judgment model
+why investigators: observed code model
+why synthesizer: observed judgment model
+reflect tooling: observed code model
+reflect judgment, divergent, synthesizer: observed judgment model
+arena runners: ordered panel with two fresh entries
+arena cross-judge pool: ordered pool with two fresh entries, choose one
+swarm workers: observed code model
+architect runners: ordered panel with two fresh entries
+interrogate reviewers: ordered panel with two fresh entries
+```
 
-If the runtime cannot expose an inventory, stop before writing configuration.
-Return the missing observation instead of guessing a model identifier.
+### 6. Confirm
 
-Before applying, also inspect the live child-delegation tool and its agent/model
-selection fields. A model inventory alone does not prove a child can use those
-models. If this surface cannot delegate or cannot select the proposed route,
-stop and report the capability gap; do not present a written mapping as active.
+Report the files written, destination scope, effective selection, every role and ordered-panel entry, and the reasoning setting. Configuration files prove saved configuration only. Verify native discovery or explicit routing separately through the generated binding, and report worker model and effort from runtime records when observed. A model-consuming smoke requires the relevant authorization. A missing or failed smoke leaves activation unverified. Re-running this skill updates accepted choices for new sessions.
 
-## 2. Preview a pstack-style mapping
+### 7. Offer a verification skill (optional)
 
-Run `scripts/configure-models.mjs` without `--apply`, with the observed inventory
-and the runtime's available pstack preset, if any. Where there is no preset,
-choose `--fast`, `--balanced`, and `--deep` from observed IDs, then use route
-and panel overrides where appropriate. Choose the target-supported user or
-project scope; use `--output` for detached review. When an existing
-configuration is present, inspect its effective scope before previewing changes.
-The target-specific preset recommends separate choices for code, explanation,
-judgment, and ordered review panels. The portable fallback still has three
-workload classes:
-
-- `fast` for narrow reconnaissance and mechanical work;
-- `balanced` for routine implementation;
-- `deep` for architecture, synthesis, and ambiguous judgment.
-
-Show the proposed choice for every named route, including the *ordered* entries
-for `arena.runners`, `arena.cross-judge-pool`, `architect.runners`, and
-`interrogate.reviewers`. One panel entry means one intended worker; do not
-silently add or remove entries. Offer the reasoning budgets:
-`unlimited` (target max), `large` (target xhigh), `medium` (target high),
-or `small` (target medium). A fresh setup with no budget selection defaults to
-`large`; explicit fresh `unlimited` targets `max`, not `ultra`. These are target
-efforts, not promises that every available model supports them.
-
-On a rerun, preserve the saved budget and effective model, effort, inheritance,
-and ordered panel choices unless the user explicitly changes them. This includes
-old defaults absent from sparse overrides and saved three-entry panels. Legacy
-`unlimited` keeps a persisted preserve-effort policy until an explicit budget
-selection, including explicitly reselecting `unlimited`, adopts the new target.
-Legacy records without explicit overrides may establish effective choices but
-not recover their original intent. Keep that limitation visible.
-
-An explicit budget selection raises or lowers every retained non-inherited
-choice toward its target. When that exact observed model selector does not
-advertise the target, use its highest advertised recognized effort at or below
-the target. Exclude `ultra` from budget fallback and stop if no eligible effort
-exists. Do not fabricate an effort suffix, substitute a same-family selector,
-or promise support from a model's name. Missing retained selectors fail before
-writes and need an explicit observed replacement. Budget changes preserve
-model identities and panel membership, order, and length. Change a panel only
-when the user explicitly selects that panel change.
-
-`--uniform-reasoning EFFORT` is an optional
-explicit target override and requires every selected model to advertise that
-exact effort; it cannot exceed the chosen budget target. A target that
-preserves same-preset choices also keeps this explicit override on a re-run;
-use `--uniform-reasoning preset` to remove it and recalculate from the saved
-budget policy. Resolve explicit budget and uniform-effort conflicts before
-writes rather than silently discarding a saved override.
-Name this a reasoning setting, not a token or money spending limit. Show the
-*effective* model and effort for every route after budget processing, explicitly
-calling out any route that fell below the budget target because the model does
-not support it. Do not call a mixed-effort table uniformly `medium`.
-Show meaningful cost/provider tradeoffs before applying. The preset is a
-recommendation, not a silent permission to spend on an expensive model.
-For a target where effort is not configurable on one model, `none` denotes
-no native effort override. It does not claim the model performs no reasoning.
-
-Users may override a workload with `--fast`, `--balanced`, or `--deep`; a
-canonical role with `--role ROLE=MODEL@REASONING`; one workflow slot with
-`--route KEY=MODEL@REASONING`; or an ordered panel with
-`--panel KEY=MODEL@REASONING,MODEL@REASONING`. `inherit-parent` and `auto`
-are aliases that omit the native model override. A changed panel length changes
-the intended fan-out. An unavailable preset model must be replaced by an
-observed choice before applying; never guess a similarly named slug. Re-run
-the preview with the user's selections.
-
-## 3. Preview and apply safely
-
-Inspect the preview's workload, role, route, and panel mappings. If only a
-preview was requested, stop here. Otherwise rerun the same selections with
-`--apply` after the user accepts the choices. The tool writes an owned
-resolution manifest and target-native agent definitions. It refuses model IDs
-or reasoning settings absent from the inventory, refuses to overwrite modified
-or unowned files, and only prunes previously owned unchanged route agents when
-a panel shrinks.
-
-Validate the complete plan, retained choices, and budget policy before any
-write. Unknown policy versions stop before mutation. Applying files is not a
-transaction: if interrupted, report the applied subset as partial and reconcile
-actual file hashes before retrying. An interrupted apply is not saved setup.
-
-When the target supports user scope, prefer it for reusable defaults. This
-writes only Oh My Stack's owned manifest and agent files; it does not edit the
-runtime's other global settings. A project-specific manifest, when present,
-takes precedence as a complete configuration. A project setup must not modify
-the user default, and user setup must not modify existing project overrides.
-Keep `--output` for detached review. Do not treat generated agents as proof of
-native discovery.
-
-After writing configuration files, use a fresh runtime session to verify the actual
-route. Only call native role selection activated when the runtime selects the
-named role. Otherwise pass the selected model and reasoning effort explicitly
-at spawn time together with the complete role instructions and bounded task;
-report this as explicit routing, not native role selection. For panels, verify
-the number of spawned workers and their ordered, attributable model identities.
-Check worker model and reasoning from runtime records, not configured files or
-self-report. If records are unavailable, report resolution as unverified.
-If a target's auditor cannot prove child effort from transcripts, keep child
-model and effort as separate claims until a trustworthy observation exists.
-Distinct configured IDs do not establish multi-model execution or distinct
-provider backends.
-
-Run `scripts/setup-acceptance.mjs --resolution <applied-manifest> --cwd <current-project>` after apply.
-Read `effectiveConfiguration` before describing where the setup will be used.
-If its `matchesAuditedResolution` is false, report the selected manifest path
-and scope separately from the file just written. A user default may be saved
-successfully while the current project continues to use its project override.
-When no `--cwd` check was made, effective scope remains uninspected.
-It verifies the generated role hashes but intentionally reports activation as
-`unverified` until a fresh session supplies parent and child records. Next run
-one bounded, read-only child for a single configured route in that project.
-Give the child an exact existing file to inspect and forbid edits and further
-delegation. In the target project, first resolve the active manifest and its
-scope. Use the native route agent where supported, or the documented
-explicit-spawn fallback. Pass the parent and child record paths, the route,
-and (for an explicit spawn) its prepared request to `setup-acceptance.mjs`.
-Do not run a multi-worker panel merely to certify basic setup. A failed,
-cancelled, or unavailable smoke leaves activation `unverified`; report the
-specific failed check and do not silently retry or reconfigure. Ask before a
-model-consuming smoke when the user requested configuration only.
-
-Report four separate facts: applied files, runtime role discovery or explicit
-spawn mechanism, observed worker model/effort, and workflow-level coverage.
-One successful read-only child proves only its route, not every workflow or
-cross-provider diversity. Where user scope is supported, another project on
-the same runtime inherits that default unless it has its own override. A
-different machine or runtime needs its own inventory and setup.
-
-## Output
-
-Lead with one concrete status: preview only, saved with runtime verification
-pending, or saved with the named route verified. If a project override selects
-a different manifest, lead with that fact alongside the saved status.
-
-Then show a compact receipt in the user's language:
-
-- Destination: user, project, or detached scope and the target manifest path,
-  taken from the configurator's `configuration` result.
-- Effective selection: the manifest selected for the current project, whether
-  it matches the destination, and that project's override when one exists.
-- Choices: inventory source/time, preset, reasoning target, overrides, every
-  named route and canonical role, and every panel entry in order. Group rows
-  only when model and effort match; retain every route name. Distinguish
-  inherited choices and efforts below the requested target.
-- Evidence: owned-file checks, delegation mechanism, observed worker model and
-  effort, and the exact tested route/entry. Label old records as prior evidence;
-  a written table or one tested route does not certify all workflows.
-- Next action: the specific missing verification or a workflow ready to try.
-
-For an existing or newly applied resolution manifest, run
-`scripts/setup-acceptance.mjs --resolution <manifest> --cwd <current-project> --format markdown`
-and retain its complete role, route, and ordered-panel rows in the receipt.
-It checks file hashes and prints counts directly from the manifest. Do not
-reconstruct the list from a truncated JSON read, omit names while grouping,
-or claim a complete receipt if the formatter could not run. The formatter's
-`runtime activation: unverified` line remains separate from any later
-route-specific parent/child verification.
-
-Explain that this setup configures Oh My Stack's workflow agents. It does not
-select the main conversation model or rewrite the host's general model roles.
-Keep native discovery, explicit spawning, and workflow coverage separate in
-the receipt. Do not claim model diversity from configuration alone.
+Check whether the project has a way to drive the real app for proof (a `verify-*` skill, or an existing harness). If not, offer once: "want a project-local verification skill, so agents can drive the app the way a user does and prove changes work? I can generate one with /create-verification-skill." On yes, invoke `/create-verification-skill` (resolves wherever pstack is installed: workspace, user, or plugin). On no, move on without pushing.

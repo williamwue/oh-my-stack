@@ -62,7 +62,7 @@ File paths, line ranges, key symbols. Two or three lines to orient a cold reader
 
 Claims with textual evidence, each quoted or paraphrased and cited precisely:
 
-- **[Direct]** {Claim}. Source: [PR #123](url) / ticket ID / file:line. {Brief quote or paraphrase.}
+- **[Direct]** {Claim}. Source: `[PR #123](url)` / ticket ID / file:line. {Brief quote or paraphrase.}
 - **[Supported]** {Claim}. Evidence: {list of items and what each contributes}.
 
 `[Direct]` is single-source, explicit evidence. `[Supported]` is multiple indirect items converging on a conclusion.

@@ -1,16 +1,9 @@
 ---
 name: bro
-description: "Restate the assistant's immediately preceding message in clear, concise, everyday language."
+description: "Restate the last message in plain human language, with no jargon."
 disable-model-invocation: true
 ---
 
-# Bro
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Restate your own last message for the same user. Keep its answer, factual
-boundary, uncertainty, and any action the user must take. Replace jargon with
-ordinary words, use short sentences, and remove detail that is not needed to
-understand or act. Do not add new facts, recommendations, or permissions.
-
-If the user pointed to a particular earlier passage, restate that passage.
-If there is no identifiable message, ask which passage they mean. Return the
-restatement itself, without process notes.
+Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.

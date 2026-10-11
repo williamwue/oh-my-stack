@@ -9,7 +9,8 @@ import { fileURLToPath } from "node:url";
 const manifestName = "oh-my-stack.resolution.json";
 
 function runtimeDirectory(runtime, scope) {
-  if (!['codex', 'omp', 'claude-code'].includes(runtime)) throw new Error(`unsupported runtime ${runtime}`);
+  if (!['codex', 'omp', 'claude-code', 'pi'].includes(runtime)) throw new Error(`unsupported runtime ${runtime}`);
+  if (runtime === 'pi') return scope === 'user' ? join('.pi', 'agent') : '.pi';
   return runtime === 'codex' ? '.codex' : runtime === 'claude-code' ? '.claude' : scope === 'user' ? join('.omp', 'agent') : '.omp';
 }
 

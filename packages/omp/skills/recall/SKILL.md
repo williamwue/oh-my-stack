@@ -1,10 +1,8 @@
 ---
 name: recall
-description: "Reconstruct recent work from scoped conversation history, current repository state, and available shared records."
+description: "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work."
 disable-model-invocation: true
 ---
-
-# Recall
 
 ## OMP model routing
 
@@ -27,43 +25,34 @@ Do not assume the deprecated `hub` tool exists. If safe cancellation
 is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+# Recall
 
-Use for a current-state briefing across recent work. A single saved task to
-resume belongs to [session-pickup](../session-pickup/SKILL.md); a personal
-working-style Skill belongs to [automate-me](../automate-me/SKILL.md).
+**Before you start or resume work, you rebuild the user's recent working context and hand back a tight capsule of where things stand now and what to do next.**
 
-Fix topic, workspace, and time window first. Use a named window when supplied;
-otherwise state a short recent range. Search only history belonging to that
-workspace and the named topic. Prefer a host task-history API when available,
-otherwise inspect an explicitly identified workspace transcript directory.
-Use modification time rather than opaque IDs for recency. Skip unrelated,
-subagent, and test conversations. If the user supplied a complete state capsule,
-verify it directly without redundant history mining.
+Keep it tight and on-topic. Read only what the in-scope threads need, then stop.
 
-For a named feature or bug, also sweep the shared record through
-[why](../why/SKILL.md) with a current-status question: source history, issues,
-docs, reports, incidents, and errors actually available in this workspace.
-Record inaccessible sources and empty searches. Keep direct customer reports,
-team actions, code changes, deployments, and current symptoms distinct.
+Your context lives in two records. Your own chat history holds what you did and decided. The shared record holds everything that happened around the same code under other names: the symptoms users keep reporting, the fixes that shipped and got reverted, the errors still firing in prod. That second record is what the **why** skill searches, across source control, the issue tracker, chat and issue channels, long-form docs, and error tracking. A feature with a long bug tail keeps most of its story there, so don't reconstruct it from your transcripts alone.
 
-Verify cited branches, PRs, tickets, and runtime state live when possible.
-A conversation that says a fix shipped is not proof it remains deployed.
-Inspect full transcript regions when the answer depends on exact actions,
-errors, or authorization. Label stale or contradictory records.
+Transcripts live at `the active workspace transcript path supplied by the generated runtime binding`, using the host-provided transcript format. Inspect that format before parsing; unavailable transcripts remain an evidence gap.
 
-Return a brief capsule, one status line per relevant thread, up to five active
-problems, and the single most useful next action. Cite task IDs and shared
-records. Mark observed, historical, inferred, and unavailable state clearly.
-This is a read-only briefing, not implicit authorization to resume work.
+1. Classify, then route. One specific prior chat to resume is the `session-pickup` playbook, not this. Turning habits into a durable skill is `automate-me`. A human-readable summary of your work is a different task. Recall loads working context across recent chats before you act. If the user already gave you a full state capsule (paths, branch, the change), use it and skip the mining.
+2. Lock the scope before searching. Pin the window ("recent" is a real range, default the last 7 days), the topic if named, and the workspace (default the active one. Never read another project's transcripts without being asked). State the scope back. Never quietly turn "all" into "recent N".
+3. Fan out across your chat history. Spawn parallel subagents on a fast, cheap model, each taking a slice of the corpus. Tell every subagent to order candidates by real modification time (`ls -t`) and never by UUID name, grep the topic first and then read only the matching chats and only their relevant regions, and skip the current chat plus obvious noise (subagent, eval, and test chats). Each returns the same schema, one block per chat: topic, the user's goal, decisions, open threads, struggles and corrections, and artifacts (PRs, tickets, branches), each citing the chat UUID. For one or two chats, skip the fan-out and search directly. The raw transcripts stay in the subagents. The main thread gets only their findings.
+4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default, not a judgment call, and "my work on X" does not exempt it. Hand it to the **why** skill's source investigators, but steer their question from "why was this built this way" to "what's the current state, what's been tried and didn't hold, and what are users still reporting". Reuse its per-source playbooks, run the investigators in parallel with the chat-history mining, and inherit its posture: one investigator per source, null results are findings, skip an unavailable MCP and say so. Fold what comes back into the brief. Skip this step only for pure activity recall with no named target ("what did I do this week"), where your own history and live state are the entire answer.
+5. Verify against live state. Take the PRs, branches, and tickets that the mining and the sweep surfaced and check them with `git` and `gh`. When the answer hinges on what an agent actually did (the tools it ran, files it read, errors it hit), read the full transcript, not just a trimmed local copy.
+6. Write the brief to the contract below. Group by thread. Stay on the named topic.
+
+## Output contract
+
+Lead with the capsule, then the thread status, then the problems, then the next move. Deeper detail goes below or gets cut.
+
+- **Capsule.** At most 5 bullets. What this work is and where it stands overall.
+- **Threads.** One line each, prefixed with exactly one status tag: `[merged #N]`, `[open PR #N]`, `[in flight <branch>]`, `[verified, uncommitted]`, `[reverted #N]`, or `[planned, not started]`. A thread with no tag is not done yet, so tag it.
+- **Problems.** At most 5, the recurring ones. Include the symptoms users keep reporting and any fix that shipped and was reverted, so the next attempt starts where the last one failed.
+- **Next move.** The single most useful next action, concrete.
+
+An adjacent feature or ticket stays out unless it blocks this one. When the capsule and thread lines outgrow a screen, cut detail before you cut threads. Write the brief through the **unslop** skill, cite chat findings by UUID and shared-record findings by their source (PR #, ticket ID, chat permalink, error-tracker issue), and sanitize private context before any public output.
+
+**Reply:** the brief, to the contract above.

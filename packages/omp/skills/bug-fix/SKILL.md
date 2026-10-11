@@ -1,9 +1,7 @@
 ---
 name: bug-fix
-description: "Diagnose and fix a reproducible software defect with bounded scope, same-surface evidence, and independent root verification."
+description: "Follow the upstream Bug fix playbook for its named task."
 ---
-
-# Bug Fix
 
 ## OMP model routing
 
@@ -27,97 +25,20 @@ is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 For this workflow's implementers use `code.bug-fix`.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+### Bug fix
 
-The root coordinator owns reproduction, scope, decisions, integration, and the
-final verification claim. Delegation can accelerate one bounded implementation
-unit, but a worker report is never sufficient proof that the defect is fixed.
+**You own this task. Plan, review, verify.** Delegate investigation and the fix to subagents, stay in the lead.
 
-## 1. Frame the defect
+Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspenders that "might help" is a hypothesis, not a fix. It does not ship. When evidence refutes a hypothesis, revert what it motivated. The smallest change the evidence justifies ships, nothing more.
 
-State the intended behavior, observed behavior, affected surface, smallest
-known reproduction, and the boundary of the requested fix. Inspect the current
-workspace before accepting assumptions from an issue, prior report, or another
-session.
+1. Reproduce it yourself on the matching surface via the control skill (Non-negotiables), even when a debug or instrumentation protocol says to ask the user to reproduce. Ask the user only with a stated, specific reason the control surface cannot reach the target, and only after driving it as far as it goes. If it won't reproduce directly, synthesize the trigger, tighten conditions, or instrument until it fires.
+2. Binary-search the cause. Form the candidate hypotheses, then rule them out until one survives. Seed them with `how` over the affected subsystem and the **why** skill for regression history. Each pass, take the split that cuts the most remaining problem space, get runtime evidence, eliminate. When program state is unclear, add instrumentation or logging and read it as the code runs. Don't guess. Drive a long or stubborn hunt with the source host's `/loop` command. Confirm the surviving *mechanism* with runtime evidence before the step-3 architect/interrogate fan-out.
+3. Plan the fix. If it crosses a function boundary, `architect` first. Delegate implementation to a subagent using your configured bug-fix model (default `observed code-model choice`) with a specific scope.
+4. Verify on the same surface. The original repro now passes. "Inconclusive" or wrong-surface is not a pass. Flag it. Unit tests show branch behavior, not bug absence.
+5. Stage the commits so the failing repro lands before the fix in git history. See the **tdd** skill for the failing-test-first cadence when the bug has a cheap local test path. Skip it when the test would be expensive, integration-heavy, or unclear.
+   This is the canonical **sequence-verifiable-units** principle skill, the failing test first and the fix on top.
+6. Run **Opening a PR**.
 
-Reproduce the defect on the same user-facing or programmatic surface that will
-be used for the final check. Capture the exact command, input, environment
-facts that affect the result, exit status, and decisive output. If the original
-surface is unreachable, stop claiming an exact reproduction: identify the
-missing authority or environment and use the closest bounded check with that
-limitation stated.
-
-## 2. Establish the cause
-
-Form concrete hypotheses and eliminate them with repository or runtime
-evidence. Prefer the split that removes the most uncertainty. Instrument a
-bounded path when state is otherwise invisible. The surviving explanation
-must account for both the failing observation and the expected behavior.
-
-Do not ship speculative guards or unrelated cleanup. Revert experimental edits
-whose hypotheses were disproved. Preserve user changes outside the fix.
-
-## 3. Choose the verification cadence
-
-Use the `tdd` Skill when the defect has a clear, cheap executable test path or
-the user requested a regression test. Record the failing-before result before
-editing production code. When such a test would be misleading, expensive, or
-unavailable, state why and choose the closest executable regression check.
-
-For a multi-phase or unattended fix, use `show-me-your-work` to keep the
-decision trail. A small direct fix does not need a ceremonial log.
-
-## 4. Implement one bounded change
-
-Prefer root-only execution when the fix is small, tightly coupled to the root's
-context, or cannot be safely isolated. Otherwise start exactly one independent
-implementer session using the active `code.bug-fix` route when configured,
-or the runtime model otherwise, with:
-
-- the confirmed reproduction and root-cause evidence;
-- an explicit file and behavior scope;
-- the required failing and passing checks;
-- instructions to preserve unrelated work;
-- an isolated workspace when the runtime supports it.
-
-If custom roles are unavailable, provide the implementer contract inline. If
-delegation or result collection is unavailable, execute the same bounded unit
-in the root session. If isolation is unavailable, permit only one writer at a
-time. Never let the root and worker edit the same checkout concurrently.
-
-## 5. Review and verify from the root
-
-Collect the worker result if one was used, then inspect the actual diff and
-workspace state yourself. Reject out-of-scope changes and verify that the
-implementation matches the established mechanism rather than merely hiding the
-symptom.
-
-Run the original reproduction again from the root on the same surface with the
-same decisive inputs. Then run the focused regression check and proportionate
-nearby validation. `INCONCLUSIVE`, a different surface, a worker's statement,
-or a test that never demonstrated the failure is not evidence of a fix.
-
-Do not create a commit, publish a branch, open a change request, deploy, or
-perform another external mutation unless the user requested that action.
-
-## Final report
-
-Report:
-
-- what was broken and the confirmed root cause;
-- the bounded implementation change;
-- whether execution was root-only or used one delegated implementer;
-- failing-before and passing-after commands, exit states, and decisive output;
-- nearby validation and any remaining limitation;
-- confirmation that the root inspected the diff and reran the final checks.
+**Reply:** what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.

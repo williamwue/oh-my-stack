@@ -3,8 +3,6 @@ name: swarm
 description: "Run bounded coverage or races, drain workers, and consolidate verified results."
 ---
 
-# Swarm
-
 ## Codex delegation binding
 
 For every delegated worker in this workflow, derive the exact `model`,
@@ -22,85 +20,45 @@ The persisted spawn message may be encrypted; disclose when its exact
 role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+# Swarm
 
-Coordinate one bounded fan-out and return one report. This is not a standing
-program, background monitor, or permission to publish. Keep a checklist: frame,
-fan out, aggregate, report.
+Fan out N parallel cloud workers. They may cover separate slices, race the same brief, or mix both. The parent waits, aggregates, and returns one report.
 
-## Frame
+## Start
 
-State the done predicate, required result, and allowed actions. Choose coverage
-(distinct required slices), race (same brief), or mixed (races within slices).
-For each race declare first pass, rank all, or best-of plus measurable selection
-criteria before dispatch. Define how a PASS is verified, not just self-reported.
+Open a todolist with one entry per phase before launching anything.
 
-Set total worker count and maximum concurrency separately, with an attempt or
-time budget. Every required slice must have an owner. For mixed work, define
-the selection rule per slice and require all slices for overall completion.
-Use `swarm.workers` from the current resolution manifest as the default
-worker route; an explicitly named model for a race arm takes precedence after
-runtime validation. Resolve available roles without inventing models or hosts.
-Local-only dependencies remain local; do not upload workspace data to a remote
-worker merely because the runtime supports it.
+1. Frame
+2. Fan out
+3. Aggregate
+4. Report
 
-Give each writer its own isolated output and explicit resource ownership. Check
-the starting revision and any necessary local changes. If isolation is missing,
-use read-only reports or patch proposals for overlapping scopes; only serialize
-writes when the requested task permits sequential work. Never run conflicting
-writers on the same resource.
+## Phase A: Frame
 
-## Fan out and drain
+1. State the done predicate and the artifact or report the swarm must return.
+2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
+3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
+4. Pick the worker model from the `swarm workers` line in `the effective host model resolution`. If the rule or that line is missing, use `observed code-model choice`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. For a model race, name each arm's model up front.
+5. Give each worker its own writable output when it writes. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
-Each standalone brief states goal, shared grounding, exact slice or race arm,
-ownership, allowed tools/actions, verification, and a PASS / ISSUES / BLOCKED
-report with evidence. When a worker verifies a change, name its exact base and
-head revisions. When it measures a result, also freeze the method: sample
-count, what constitutes one sample, and sample order. Require the worker to
-repeat those coordinates and the method in its result. Dispatch within the
-concurrency limit and track native worker handles. Do not count a launch
-acknowledgment as a terminal result.
+## Phase B: Fan out
 
-Read and drain every started worker, including losers in a first-pass race.
-A verified first-pass result may select a winner early, but cannot justify
-abandoning active writers. If safe cancellation is supported, request it and
-confirm terminal state. Otherwise wait within budget, or report outstanding
-handles and incomplete drainage without claiming completion. Never fabricate
-cancellation or terminate unrelated tasks.
+Spawn all N workers in one message with the bounded role from the generated runtime binding, an independent remote checkout where the host supports it, background execution through the generated runtime binding, and the step 4 model, left unset for `auto` or `inherit-parent`. Use a local isolated checkout only when the worker needs access to something on the user's computer.
 
-If parallel dispatch is unavailable, use bounded sequential workers and say so.
-If delegation is unavailable, run separated root passes only for work that can
-honestly be done that way. A requested genuine race or independent coverage
-remains unverified; do not relabel root passes as workers.
+When a worker must start from a non-default pushed branch, pass the explicit base branch in the native workspace binding.
 
-## Aggregate and report
+Every brief stands alone. Include the goal, scope, exact slice or race arm, how to verify, and what to report. Reports use `PASS`, `ISSUES`, or `BLOCKED` with evidence. A worker that can prove a defect reports `ISSUES` and lists every issue it can prove, not only the first.
 
-Inspect actual terminal artifacts and root-check critical evidence before
-accepting PASS. A dropout leaves a coverage gap; assign a bounded retry or mark
-that slice BLOCKED. Race winners must meet the predeclared rule; no passing arm
-means no winner. A result missing required revisions or measurement method is
-not a PASS: start a fresh worker once with the same frozen contract, including
-prior findings and unresolved objections, then record a
-gap if it still omits them. A worker with a proven defect reports ISSUES with
-every defect it can substantiate, not just the first. Keep failed or
-contradictory evidence visible.
+If a worker drops out, proceed with N-1 and note it.
 
-Apply [the handoff contract](../poteto-mode/references/subagent-handoff.md)
-when retrying or replacing a worker. Fence active writers before replacement.
+## Phase C: Aggregate
 
-Return one table of slice/arm, actual worker identity, status, evidence, and
-remaining gap, followed by concise findings and the applied selection rule.
-Report overall completion only when every required slice passes and all started
-workers are drained. Do not paste raw worker dumps or integrate competing code
-implicitly; use [arena](../arena/SKILL.md) when synthesis is the requested task.
+Read the terminal results. Drop a result that does not record the SHAs and method its brief names, and respawn that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
+
+Keep a compact result table, one-line evidenced issues, and explicit gaps or dropouts.
+
+## Phase D: Report
+
+Return one consolidated in-chat report with the table, issue one-liners, gaps or dropouts, and the race rule when used.

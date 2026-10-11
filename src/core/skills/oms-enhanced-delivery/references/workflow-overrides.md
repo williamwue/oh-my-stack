@@ -47,9 +47,7 @@ before implementation. Run its actual local acceptance checks on the integrated
 revision; missing or unverified required evidence prevents a complete-delivery
 claim.
 
-## feature
-
-7. Pair each delegated output with a distinct independent judge of the frozen
+Pair each delegated output with a distinct independent judge of the frozen
    artifact revision before acceptance. Root inspection complements this review.
    Preserve findings and repair responses; changed artifacts require fresh
    review and verification. Reference-matching UI work includes

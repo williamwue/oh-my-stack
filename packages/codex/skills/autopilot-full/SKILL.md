@@ -3,7 +3,7 @@ name: autopilot-full
 description: "Build, review, and land a queue only with explicit authorization."
 ---
 
-# Autopilot Full
+# autopilot-full
 
 Read the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying
 this Skill. Read it through the end; if a tool truncates output, continue with

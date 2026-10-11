@@ -1,10 +1,8 @@
 ---
 name: automate-me
-description: "Turn a user's recurring working conventions into a concise personal mode Skill with evidence and review."
+description: "Use for \\\"automate me\\\", \\\"create/update/refresh my -mode skill\\\", \\\"turn/capture my preferences or working style into a skill\\\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts."
 disable-model-invocation: true
 ---
-
-# Automate me
 
 ## OMP model routing
 
@@ -27,42 +25,102 @@ Do not assume the deprecated `hub` tool exists. If safe cancellation
 is unavailable, wait or report the unit incomplete; never silently
 treat an unconfirmed worker as cancelled.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+# Automate me
 
-Use when the user wants agents to follow their durable working conventions.
-For one task-specific workflow, use [authoring-a-skill](../authoring-a-skill/SKILL.md)
-directly. Resolve an existing mode Skill before drafting: an update preserves
-uncontradicted rules and considers history since its last edit. A new Skill
-needs the user's chosen name or a simple suggested handle; do not infer a
-personal identity from private records.
+A guided flow for turning the user's working conventions into a skill agents will follow. The output is one `-mode` skill tailored to them (e.g. `jay-mode`, `priya-mode`).
 
-Inspect only authorized current-workspace history. Divide a sizeable period
-into independent slices if available, and collect recurring corrections with
-task citations. One isolated remark is weak evidence; contradictions stay
-visible. Ask the user briefly about areas history cannot reveal, such as
-autonomy, verification, format, and publication boundaries. Do not mine other
-projects or personal accounts by default.
+This skill orchestrates three others: an inline mining pass (see step 1), the host's available skill-authoring workflow (authoring), and the **unslop** skill (prose discipline). It sequences them. It doesn't replace them.
 
-Cluster only non-default, actionable preferences. Draft the Skill using
-[authoring-a-skill](../authoring-a-skill/SKILL.md). Keep its trigger narrow to
-the user or chosen handle; do not make ordinary coding requests activate a
-personal mode. Link to existing workflows rather than duplicating them. Use
-[unslop](../unslop/SKILL.md) to cut generic prose. For an update, show which
-rules were retained, revised, or removed and why.
+## Flow
 
-Show the draft and its evidence for user correction before treating a subjective
-mode as finished. Validate frontmatter, links, and trigger behavior. Put it in
-the runtime's chosen personal or project Skill location; do not overwrite
-unrelated configuration. Commit or publish only when requested. Return path,
-trigger, key rules, weak or disputed findings, and the review status.
+### 0. Check for an existing skill
+
+Look recursively for `<project-skill-root>/**/*-mode/SKILL.md` and `<authorized-user-skill-root>/*-mode/SKILL.md` matching the user's handle. Mode skills can live in a personal category directory (`<project-skill-root>/<handle>/`), not only at the top level. If one exists, confirm intent with the host's available fixed-choice question tool (unless they already said "update my skill" or similar):
+
+- Update the existing skill (default for repeat runs)
+- Start fresh (rare, ask why before doing it)
+
+Update mode changes the rest of the flow:
+- Step 1 mines only history since the skill was last edited (`git log -1 --format=%cI <path>`).
+- Step 2 asks what's changed or missing, not what to capture from zero.
+- Step 4 edits the existing file in place. Preserve sections the user hasn't contradicted. Revise ones with new evidence. Add new sections only for genuinely new rules.
+
+### 1. Mine their history
+
+Locate the active workspace's transcripts before fanning out. The system prompt names the workspace's `agent-transcripts/` directory. Use only that path. Don't glob across `unrelated host workspace transcript roots`. That crosses workspace boundaries and reads private chats from unrelated projects.
+
+Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
+
+- Response preferences (length, tone, format, "dumb it down" corrections)
+- Delegation habits (subagents, models, specialized workflows, parallelism)
+- Verification posture (what "done" means, unit tests vs live repro, reviewers)
+- Code and prose discipline (style, principles cited, lint/format tools)
+- Process conventions (worktrees, commits, PRs, review/merge tooling)
+- Meta preferences (fixing skills mid-task, proposing new ones)
+
+Cross-check across slices before elevating a signal. Patterns seen in 2+ slices are high-confidence. Lone signals are weak and usually get dropped.
+
+### 2. Ask the user directly
+
+Mining misses intent that hasn't come up yet. Use the the host's available fixed-choice question tool tool (structured multi-choice) rather than asking the user to type from scratch.
+
+Shape: one or two questions with 4-6 options each, `allow_multiple: true` for category questions. Start broad ("Which areas matter most?"), then follow up on selected areas with specific options. After the structured rounds, one free-form chat question catches anything the options missed.
+
+Don't dump 20 questions.
+
+### 3. Cluster findings
+
+Group the combined signals into sections. Common ones (use only what applies):
+
+- **Response style**: length, tone, format.
+- **Autonomy**: how much to do without asking, MCP tool use.
+- **Understand first**: which skills to reach for when scoping or investigating a change.
+- **Subagents**: default, parallelism, model-to-task, specialized workflows.
+- **Prose / code discipline**: principles, lint tools, style guides.
+- **Review and verify**: repro posture, verification skills, live-testing tools.
+- **Process**: git worktrees, commits, PRs, review/merge tooling.
+- **Skills**: skill-authoring habits, fix-the-skill-first, proposing new skills.
+
+The **poteto-mode** skill shows the shape. Read it for granularity. Don't copy its content. The user's rules are not the same as poteto-mode's.
+
+### 4. Draft the skill
+
+Use the host's available skill-authoring workflow skill to author the skill. Placement:
+
+- Path: preserve an existing mode skill's category. For a new mode, use `<project-skill-root>/<handle>/<handle>-mode/SKILL.md` when the repo has an established personal category for that handle. Otherwise default to `<project-skill-root>/<handle>-mode/SKILL.md` in the project (or `<authorized-user-skill-root>/<handle>-mode/` if the user prefers a personal skill).
+- Handle: the user's first name or chosen identifier.
+- Frontmatter `description`: trigger on their name + `/<handle>-mode` + "work in their style", not on generic keywords like "write code" or "review PR".
+- Frontmatter formatting: follow the host skill-authoring workflow's YAML rules. Keep `description` as one YAML scalar. Quote it or use `description: >-` with indented continuation lines when punctuation or wrapping requires it.
+- Frontmatter `disable-model-invocation: true` by default. Opt out only if the user explicitly wants their mode to apply on every turn.
+
+### 5. Iterate on prose
+
+Apply the **unslop** skill and the host skill-authoring workflow's writing guidelines to every line.
+
+Show the draft to the user and take feedback. Expect multiple iterations. Cut ruthlessly. A mode skill is not a manual.
+
+### 6. Land it
+
+Work in a worktree off main. Commit and open a PR. Don't push to main directly.
+
+## Guardrails
+
+- **Don't overfit to one conversation.** A preference stated once and contradicted another time is noise. Require multiple instances before codifying it.
+- **Don't be clever.** Restating other skills' contents, inventing metaphors, or writing "poetic" prose for an agent reader is cost without benefit. Keep it operational.
+- **Reference, don't inline.** Other skills the user relies on should appear as path references, not pasted excerpts. Same for any principle docs they maintain elsewhere.
+- **Keep sections minimal.** Only add a section if the user has a specific, non-default rule there. "Communicate clearly" is not a section. "Short paragraphs. Tables when comparing options. Bullets only when items are genuinely parallel." is.
+- **Name conventions generic.** Use "the user" or "the human" in imperatives, not the author's first name.
+- **Don't force symmetry.** If a user has no process rules worth writing down, skip the Process section entirely.
+
+## Evaluation
+
+A `-mode` skill is subjective output. A the host skill-authoring workflow-style test/iterate benchmark loop isn't useful here. Vibe-check with the user: does it read like them? Did it miss anything? Then ship.
+
+Run a description-optimization loop only if the skill's trigger accuracy turns out to be a problem in practice.
+
+## When not to use
+
+- User wants a task-specific skill (not working conventions): the host skill-authoring workflow alone, no mining required.
+- User wants to capture one narrow workflow (e.g. "how I write commit messages"). That's a regular skill, not a mode skill.

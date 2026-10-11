@@ -1,47 +1,26 @@
 ---
 name: no-comments
-description: "Review comments and suppressions in a scoped diff, remove redundant ones, and encode real constraints in structure where feasible."
+description: "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
 disable-model-invocation: true
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # No comments
 
-## Child session handoff
+Spawn Comment Sicko. Act on accepted findings.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+Defer to Comment Sicko's fresh perspective.
 
-Review the files or diff named by the user; otherwise use the current diff
-against the actual base branch, including uncommitted changes. Freeze that
-scope first. Ask a distinct reviewer to flag comments that merely narrate code,
-stale warnings, unexplained suppressions, and constraints that could be types,
-tests, or checks. Root-only review is a fallback, not independent review.
+## Scope
 
-Inspect every finding and the actual diff. Preserve license notices,
-public-interface documentation, external protocol requirements, and necessary
-historical rationale. Do not treat a useful comment as guilty merely because
-it looks emphatic. For disputed constraints, use [how](../how/SKILL.md) or
-[why](../why/SKILL.md) on the symbol and cite the result.
+Use the caller's files or diff. Otherwise use the current diff against the base branch, default `main`, including the working tree.
 
-Delete accepted redundant comments without changing behavior. For a
-suppression, identify the underlying error and the narrowest real fix; never
-remove a safety suppression while leaving the hazard. If changing code is
-authorized, make the minimal root-cause change in scope and run the matching
-checks. A substantial shape change can use a design sketch, but the review
-does not authorize an unrelated refactor.
+## Steps
 
-Offer type, test, lint, or runtime encodings for genuine constraints. Apply an
-encoding only when within the requested edit scope. Where the source of truth
-is external or the constraint remains unenforced, retain a concise useful
-comment. Reinspect the final diff for missed suppressions and accidental code
-edits. Return removed, retained, and revised comments, fixes and checks, plus
-constraints still needing enforcement. Never claim a clean review from a
-reviewer summary that the root has not checked.
+1. Spawn native child delegation with the `comment-sicko` role from the generated runtime binding. Pass the scope. Do not restate its rules.
+2. Inspect its report and diff. Reject application-code edits, scope escapes, exception-protected deletions, misstated `MUST KILL` reasons, and flags that treat kept intentional code as guilty. Reshape flags on our-code surprises stay actionable. Do not restore those comments. A keep survives only with proof it is about something we cannot change. Audit missed scoped lint and TypeScript suppressions. Correctness or safety suppressions stay actionable `MUST KILL`s. Restore deletions only with exact exceptions and scoped proof. Before accepting thin `IMPORTANT` or `do not remove` kills or keeps, run `/how` or `/why` on their symbol. If a kill is ambiguous, do not restore. If a keep is refuted or still ambiguous, delete it. Revert and rerun one rejected report with the failure named. Reject a second, report it open, and fail `/no-comments`.
+3. Fix trivial accepted flags directly by deleting a dead path, dropping a parameter, or using the real API. If any fix needs a shape, run `/architect` once for the accepted set and surrounding code. Stop at the sketch. Architect shapes. Step 4 implements.
+4. Implement the smallest root-cause fix in scope. Remove every named workaround. If the root cause is out of scope, land the smallest in-scope fix and report the rest open. The **principle-fix-root-causes** and **principle-redesign-from-first-principles** skills guide intent only. Neither authorizes widening the fence nor fixing instances outside it. Never bolt on symptom guards.
+5. Constraint comments say `do not remove`, `do not change wording`, or `talk to X before changing`. Leave keeps about things we cannot change. Offer the cheapest in-scope type, runtime, test, or CI lint. Wait for interactive approval. Unattended and eval require caller pre-approval. If approved, encode then delete. Otherwise delete, report the constraint open, and sketch out-of-scope work.
+6. Report the deletion count, restored comments, reruns, architect sketch, fixes, encoding offers, encodings, unenforced constraints, and other open work.

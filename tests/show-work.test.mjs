@@ -1,81 +1,56 @@
-import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+﻿import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { tmpdir } from "node:os";
 import test from "node:test";
 
 import { repoRoot } from "../tools/generate.mjs";
-import { bashExecutable, bashPath } from "./helpers/bash.mjs";
 
-const helper = join(repoRoot, "src/core/skills/show-me-your-work/scripts/log.sh");
+const read = (path) => readFile(join(repoRoot, path));
+const json = async (path) => JSON.parse(await read(path));
+const helper = "src/core/skills/show-me-your-work/scripts/log.sh";
 
-function append(log, fields) {
-  if (process.platform !== "win32") {
-    return spawnSync(bashExecutable(), [helper, log, ...fields], { encoding: "utf8" });
-  }
-  // Windows process arguments split embedded newlines before Git Bash receives them.
-  const env = { ...process.env };
-  for (const [index, value] of fields.entries()) env[`OMS_TEST_FIELD_${index}`] = value;
-  return spawnSync(bashExecutable(), [
-    "-c", 'exec "$1" "$2" "$OMS_TEST_FIELD_0" "$OMS_TEST_FIELD_1" "$OMS_TEST_FIELD_2" "$OMS_TEST_FIELD_3" "$OMS_TEST_FIELD_4"',
-    "show-work-test", bashPath(helper), bashPath(log),
-  ], { encoding: "utf8", env });
-}
-
-test("decision-log helper creates one header and appends sanitized rows", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "oh-my-stack-log-"));
-  try {
-    const log = join(directory, "nested", "decisions.tsv");
-    const first = append(log, ["frame", "choose\tpath", "why\nnow", " =SUM(A1:A2)", "open"]);
-    assert.equal(first.status, 0, first.stderr);
-    const second = append(log, ["verify", "run check", "prove result", "commit abc", "tests green"]);
-    assert.equal(second.status, 0, second.stderr);
-    const lines = (await readFile(log, "utf8")).trimEnd().split("\n");
-    assert.equal(lines.length, 3);
-    assert.equal(lines[0], "ts\tphase\tdecision\twhy\tevidence\tresult");
-    assert.match(lines[1], /\tframe\tchoose path\twhy now\t' =SUM\(A1:A2\)\topen$/);
-    assert.match(lines[2], /\tverify\trun check\tprove result\tcommit abc\ttests green$/);
-  } finally {
-    await rm(directory, { recursive: true, force: true });
+test("the decision-log helper is an exact pinned source reference", async () => {
+  const derivations = await json("upstream/parity-derivations.json");
+  const entry = derivations.entries.find((item) => item.output === helper);
+  assert.ok(entry);
+  assert.equal(entry.source, "skills/show-me-your-work/scripts/log.sh");
+  assert.deepEqual(entry.replacements, []);
+  assert.equal(entry.sourceSha256, entry.outputSha256);
+  const pinned = await read(`${derivations.sourceRoot}/${entry.source}`);
+  assert.equal(createHash("sha256").update(pinned).digest("hex"), entry.sourceSha256);
+  assert.deepEqual(await read(helper), pinned);
+  for (const host of ["codex", "omp", "claude-code", "pi"]) {
+    assert.deepEqual(await read(`packages/${host}/skills/show-me-your-work/scripts/log.sh`), pinned);
   }
 });
 
-test("decision-log helper refuses unexpected headers and symbolic links", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "oh-my-stack-log-safety-"));
-  try {
-    const unexpected = join(directory, "unexpected.tsv");
-    await writeFile(unexpected, "not-a-decision-log\n");
-    const wrongHeader = append(unexpected, ["phase", "decision", "why", "evidence", "result"]);
-    assert.notEqual(wrongHeader.status, 0);
-    assert.equal(await readFile(unexpected, "utf8"), "not-a-decision-log\n");
-
-    const target = join(directory, "target.tsv");
-    const link = join(directory, "link.tsv");
-    await writeFile(target, "ts\tphase\tdecision\twhy\tevidence\tresult\n");
-    await symlink(target, link);
-    const linked = append(link, ["phase", "decision", "why", "evidence", "result"]);
-    assert.notEqual(linked.status, 0);
-    assert.equal((await readFile(target, "utf8")).split("\n").length, 2);
-  } finally {
-    await rm(directory, { recursive: true, force: true });
+test("source and generated catalogs classify the helper as reference-only", async () => {
+  for (const path of ["src/core/skill-catalog.json", ...["codex", "omp", "claude-code", "pi"].map((host) => `packages/${host}/SKILL_CATALOG.json`)]) {
+    const catalog = await json(path);
+    const resources = path.startsWith("src/") ? catalog.entries : catalog.resources;
+    const ownership = resources.find((entry) => entry.path === "src/core/skills/show-me-your-work/**");
+    assert.equal(ownership?.kind, "reference", path);
+    assert.equal(ownership.owner, "show-me-your-work", path);
+    assert.equal(ownership.distribution, "core", path);
+    assert.ok(!resources.some((entry) => entry.kind === "script" && entry.path === helper), path);
+  }
+  for (const host of ["codex", "omp", "claude-code", "pi"]) {
+    const directory = `packages/${host}/skills/show-me-your-work`;
+    const entry = (await read(`${directory}/SKILL.md`)).toString("utf8");
+    const skill = entry.includes("[complete workflow](WORKFLOW.md)")
+      ? (await read(`${directory}/WORKFLOW.md`)).toString("utf8") : entry;
+    assert.match(skill, /Source-host helpers under `scripts\/` are reference-only unless the generated binding identifies supported execution for that exact helper/);
   }
 });
 
-test("decision-log helper initializes an empty file without replacing valid rows", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "oh-my-stack-log-empty-"));
-  try {
-    const log = join(directory, "decisions.tsv");
-    await writeFile(log, "");
-    const first = append(log, ["frame", "first", "reason", "evidence", "open"]);
-    assert.equal(first.status, 0, first.stderr);
-    const before = await readFile(log, "utf8");
-    const second = append(log, ["verify", "second", "reason", "evidence", "pass"]);
-    assert.equal(second.status, 0, second.stderr);
-    const after = await readFile(log, "utf8");
-    assert.ok(after.startsWith(before));
-    assert.equal(after.trimEnd().split("\n").length, 3);
-  } finally {
-    await rm(directory, { recursive: true, force: true });
-  }
+test("the portable log contract preserves append-only evidence and scoped transcript audits", async () => {
+  const skill = (await read("src/core/skills/show-me-your-work/SKILL.md")).toString("utf8");
+  assert.equal((await read("src/core/skills/show-me-your-work/references/decision-log-template.tsv")).toString("utf8"), "ts\tphase\tdecision\twhy\tevidence\tresult\n");
+  assert.match(skill, /Cells stay single-line\. Evidence is a pointer, not prose/);
+  assert.match(skill, /By default the log is a working artifact, not committed/);
+  assert.match(skill, /Append-only[^\n]*Never edit or delete history/);
+  assert.match(skill, /Don't glob across `unrelated host workspace transcript roots`/);
+  assert.match(skill, /This audit does not check rows outside this run's stretches/);
+  assert.match(skill, /spawn a subagent on a different model family/);
 });

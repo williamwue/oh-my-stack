@@ -3,6 +3,8 @@ name: principle-encode-lessons-in-structure
 description: "Turn recurring corrections into executable rules."
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Encode Lessons in Structure
 
 Encode recurring fixes in mechanisms (tools, code, metadata, automation) instead of textual instructions. Every error, human correction, and unexpected outcome is a learning signal. Capture it, route it, and close the loop.
@@ -19,11 +21,7 @@ When you catch yourself writing the same instruction a second time:
 
 **Corollary:** If the fix is structural, only use the structural fix. The instruction is the symptom.
 
-When the human intervenes or tests fail, decide if it is a one-off or a pattern.
-Route a one-off to a session note, a recurring fix to a skill or lint rule, and
-a systemic issue to a principle. Apply the correction within the authorized
-scope or create a concrete todo. Durable personal-memory writes still require
-the user's authorization.
+When the human intervenes or tests fail, decide if it's a one-off or a pattern. Route it: one-off -> brain note, recurring fix -> skill or lint rule, systemic issue -> principle. Close the loop: don't just record; apply now or create a concrete todo.
 
 **Anti-patterns:**
 - Acknowledging without recording ("I'll keep that in mind" does not persist)

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/generate.mjs",
+  "selection": {
+    "base": "pstack",
+    "extensions": []
+  },
+  "target": "pi",
+  "sourceVersion": "0.15.0",
+  "profiles": [
+    "pi-default"
+  ],
+  "skills": {
+    "audience": "public",
+    "included": 75,
+    "omittedProbes": 12
+  },
+  "claims": {
+    "delivery": "D0",
+    "workflow": "W0"
+  }
+}

@@ -14,6 +14,15 @@
   },
   "roles": [
     {
+      "name": "comment-sicko",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
       "name": "evidence-reader",
       "workload": "fast",
       "constraints": [
@@ -43,6 +52,15 @@
     },
     {
       "name": "implementer",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
+      "name": "poteto-agent",
       "workload": "balanced",
       "constraints": [
         "independent_session",
@@ -96,7 +114,7 @@
     },
     "hardest.tasks": {
       "kind": "single",
-      "role": "synthesizer",
+      "role": "implementer",
       "workload": "deep"
     },
     "how.explorer": {
@@ -138,25 +156,25 @@
       "kind": "panel",
       "role": "implementer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "arena.cross-judge-pool": {
       "kind": "panel",
       "role": "reviewer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "architect.runners": {
       "kind": "panel",
       "role": "explorer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "interrogate.reviewers": {
       "kind": "panel",
       "role": "reviewer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "code.feature-refactoring": {
       "kind": "single",
@@ -207,23 +225,19 @@
         "reflect.synthesizer": "gpt-6-astra@low",
         "arena.runners": [
           "gpt-6-astra@low",
-          "gpt-6.1-sol@medium",
-          "gpt-6-luna@high"
+          "gpt-6.1-sol@medium"
         ],
         "arena.cross-judge-pool": [
           "gpt-6-astra@low",
-          "gpt-6.1-sol@medium",
-          "gpt-6-luna@high"
+          "gpt-6.1-sol@medium"
         ],
         "architect.runners": [
           "gpt-6-astra@low",
-          "gpt-6.1-sol@medium",
-          "gpt-6-luna@high"
+          "gpt-6.1-sol@medium"
         ],
         "interrogate.reviewers": [
           "gpt-6-astra@low",
-          "gpt-6.1-sol@medium",
-          "gpt-6-luna@high"
+          "gpt-6.1-sol@medium"
         ]
       }
     }

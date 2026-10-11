@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "generatedBy": "tools/generate.mjs",
+  "selection": {
+    "base": "pstack",
+    "extensions": []
+  },
   "target": "codex",
   "sourceVersion": "0.15.0",
   "profiles": [
@@ -11,7 +15,7 @@
   ],
   "skills": {
     "audience": "public",
-    "included": 96,
+    "included": 75,
     "omittedProbes": 12
   },
   "claims": {

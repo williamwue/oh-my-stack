@@ -77,7 +77,7 @@ export async function validateLocalMarkdownLinks(root) {
         return false;
       }
       return true;
-    }).join("\n");
+    }).join("\n").replace(/(`+)([\s\S]*?)\1/g, "");
     for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
       const target = match[1];
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;
@@ -109,13 +109,15 @@ export async function validateExecutableInventory(root) {
     assert(entry.owner && entry.purpose && entry.uninstallBehavior, `${entry.path}: incomplete inventory entry`);
   }
   const executableRoots = [join(root, "tools"), join(root, "src", "core", "skills")];
+  if (await exists(join(root, "src/runtime"))) executableRoots.push(join(root, "src/runtime"));
   for (const executableRoot of executableRoots) {
     for (const path of await validationFiles(root, executableRoot)) {
       const key = relative(root, path);
       const isTool = within(join(root, "tools"), path) && path.endsWith(".mjs");
       const isSkillScript = relative(join(root, "src", "core", "skills"), path)
         .split(sep).includes("scripts") && /\.(?:mjs|sh)$/.test(path);
-      if (!isTool && !isSkillScript) continue;
+      const isRuntime = within(join(root, "src/runtime"), path) && /\.(?:mjs|js|ts)$/.test(path);
+      if (!isTool && !isSkillScript && !isRuntime) continue;
       assert(seen.has(path), `${key}: executable is missing from security inventory`);
     }
   }
@@ -228,7 +230,8 @@ export async function validatePublicHygiene(root) {
     const macHomePrefix = ["", "Users", ""].join("/");
     // Third-party source is retained byte-for-byte for provenance, including
     // its path examples. It is not part of a generated user-facing Skill.
-    if (!historicalHash && !within(join(root, "upstream", "snapshots"), path)) {
+    if (!historicalHash && !within(join(root, "upstream", "snapshots"), path)
+      && path !== join(root, "upstream", "parity-derivations.json")) {
       assert(!text.includes(macHomePrefix), `${key}: contains an absolute macOS home path`);
     }
     assert(!/-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/.test(text), `${key}: contains a private key`);

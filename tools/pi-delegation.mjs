@@ -23,7 +23,6 @@ export function binaryVector(binary = process.env.OMS_PI_CLI
   throw new Error('Pi binary must be a command or {command,args}');
 }
 
-/** One native CLI/RPC boundary. Does not read or transfer provider credentials. */
 export function createPiRpcConnection({ binary, cwd, args = [], signal, timeoutMs = 20000,
   outputLimitBytes = 1048576, env = process.env } = {}) {
   if (signal?.aborted) throw abortError();

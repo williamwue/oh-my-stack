@@ -11,7 +11,7 @@ import { collectPiInventory } from './pi-inventory.mjs';
 export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
   const temporary = await mkdtemp(join(tmpdir(), 'oms-pi-native-'));
   const agentDir = join(temporary, 'native-agent');
-  const bundle = packageRoot ?? join(temporary, 'package');
+  const bundle = packageRoot ? resolve(packageRoot) : join(temporary, 'package');
   const cwd = join(temporary, 'checkout');
   await mkdir(agentDir); await mkdir(cwd);
   const manifest = { schemaVersion: 1, owner: 'oh-my-stack', target: 'pi', routes: {
@@ -25,7 +25,6 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
     await copyFile(join(sourceRoot, 'src/runtime/pi/extension.ts'), join(bundle, 'extensions/oms.ts'));
     await copyFile(join(sourceRoot, 'tools/pi-delegation.mjs'), join(bundle, 'scripts/pi-delegation.mjs'));
-    // Fixture implements the frozen host resolver interface; integrated package mode uses actual host code.
     await writeFile(join(bundle, 'scripts/model-resolution.mjs'), `import {readFile} from 'node:fs/promises';import {join} from 'node:path';export async function resolveActiveResolution({runtime,cwd}){if(runtime!=='pi')throw Error('wrong runtime');return {manifest:JSON.parse(await readFile(join(cwd,'.pi','oh-my-stack.resolution.json'),'utf8'))}}`);
     await writeFile(join(bundle, 'config/role-contracts.json'), JSON.stringify({ schemaVersion: 1, target: 'pi', roles: {
       reader: { description: 'Local acceptance reader', instructions: 'Read the explicit fixture only.', writes: false, constraints: [] },
