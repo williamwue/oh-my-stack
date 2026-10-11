@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Append one safe row to an Oh My Stack decision log.
+# Append a well-formed row to a show-me-your-work decision log (TSV).
 # Usage: log.sh <logfile> <phase> <decision> <why> <evidence> <result>
 set -euo pipefail
 
@@ -11,43 +11,32 @@ fi
 logfile="$1"
 shift
 
-if [ -L "$logfile" ]; then
-	printf 'refusing to append through a symbolic link: %s\n' "$logfile" >&2
-	exit 1
-fi
-
 logdir="$(dirname "$logfile")"
 if [ -n "$logdir" ] && [ "$logdir" != "." ] && [ ! -d "$logdir" ]; then
 	mkdir -p "$logdir"
 fi
 
-header='ts	phase	decision	why	evidence	result'
-# A network mount can report a populated log as absent. Append the header so a
-# stale existence check can add a stray line but can never truncate prior rows.
+# Use `>>` here, never `>`. A network mount can fail this test for a log
+# that exists. Then the cost is one stray header line, not the rows.
 if [ ! -s "$logfile" ]; then
-	printf '%b\n' "$header" >> "$logfile"
-else
-	IFS= read -r first_line < "$logfile" || true
-	if [ "$first_line" != "$(printf '%b' "$header")" ]; then
-		printf 'refusing to append to a file with an unexpected header: %s\n' "$logfile" >&2
-		exit 1
-	fi
+	printf 'ts\tphase\tdecision\twhy\tevidence\tresult\n' >> "$logfile"
 fi
 
+ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+# Strip tabs/newlines/CR so cells stay on one line, and prefix any cell
+# whose first char a spreadsheet would parse as a formula (=, +, -, @)
+# with a single quote. The skill expects this log to be read in
+# spreadsheets, so attacker-controlled evidence (PR titles, filenames,
+# generated text) must not become formula execution when a reviewer
+# opens the file.
 clean() {
-	local value probe
-	value=$(printf '%s' "$1" | tr '\t\n\r' '   ')
-	probe="$value"
-	while [ "${probe# }" != "$probe" ]; do
-		probe=${probe# }
-	done
-	case "$probe" in
-		=*|+*|-*|@*) printf "'%s" "$value" ;;
-		*) printf '%s' "$value" ;;
+	local v
+	v=$(printf '%s' "$1" | tr '\t\n\r' '   ')
+	case "$v" in
+		=*|+*|-*|@*) printf "'%s" "$v" ;;
+		*) printf '%s' "$v" ;;
 	esac
 }
-
-timestamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
-	"$timestamp" "$(clean "$1")" "$(clean "$2")" "$(clean "$3")" "$(clean "$4")" "$(clean "$5")" \
+	"$ts" "$(clean "$1")" "$(clean "$2")" "$(clean "$3")" "$(clean "$4")" "$(clean "$5")" \
 	>> "$logfile"

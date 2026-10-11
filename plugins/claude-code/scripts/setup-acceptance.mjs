@@ -24,10 +24,12 @@ async function readJsonLines(path) {
 
 async function checkOwnedFiles(resolutionPath, manifest) {
   const root = dirname(resolutionPath);
+  const extension = { codex: "toml", omp: "md", "claude-code": "md", pi: "json" }[manifest.target];
+  assert(extension, "unsupported owned role target");
   const entries = Object.entries(manifest.ownedFiles ?? {});
   assert(entries.length > 0, "resolution has no owned role files");
   for (const [relativePath, expected] of entries) {
-    assert(/^agents\/[a-z0-9.-]+\.(?:md|toml)$/.test(relativePath), `unsafe owned path ${relativePath}`);
+    assert(new RegExp(`^agents/[a-z0-9.-]+\\.${extension}$`).test(relativePath), `unsafe owned path ${relativePath}`);
     const path = join(root, relativePath);
     const stat = await lstat(path);
     assert(stat.isFile() && !stat.isSymbolicLink(), `${path}: expected a regular role file`);
@@ -152,8 +154,8 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
   hookRecord, cwd, userRoot, claudeConfigDir }) {
   const path = resolve(resolutionPath);
   const manifest = JSON.parse(await readFile(path, "utf8"));
-  assert(manifest.schemaVersion === 1 && manifest.owner === "oh-my-stack" && ["omp", "codex", "claude-code"].includes(manifest.target),
-    "an applied OMP, Codex, or Claude Code Oh My Stack resolution is required");
+  assert(manifest.schemaVersion === 1 && manifest.owner === "oh-my-stack" && ["omp", "codex", "claude-code", "pi"].includes(manifest.target),
+    "an applied OMP, Codex, Claude Code, or Pi Oh My Stack resolution is required");
   const ownedFilesVerified = await checkOwnedFiles(path, manifest);
   const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot, claudeConfigDir }) : null;
   const effectiveConfiguration = cwd ? {
@@ -163,6 +165,8 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
     matchesAuditedResolution: active ? active.path === path : false,
   } : null;
   const evidenceSupplied = Boolean(parentRecord || childRecord || requestPath || hookRecord);
+  assert(manifest.target !== "pi" || !evidenceSupplied,
+    "Pi native execution uses pi-native-acceptance.mjs; other hosts' parent/child records cannot verify Pi");
   assert(!evidenceSupplied || (routeName && parentRecord && childRecord),
     "runtime evidence requires --route, --parent-record and --child-record");
   assert(!(manifest.target === "claude-code" && requestPath),
@@ -170,7 +174,9 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
   assert(!hookRecord || manifest.target === "claude-code", "--hook-record is supported only for Claude Code");
   const selected = routeName ? selectedRoute(manifest, routeName, entry) : null;
   const budget = { name: manifest.budget,
-    meaning: manifest.budgetPolicy?.kind === "reasoning-target" || (!manifest.budgetPolicy && manifest.target === "omp")
+    meaning: manifest.budgetPolicy?.kind === "preserve-effort"
+      ? "saved reasoning efforts, not a cost limit"
+      : manifest.budgetPolicy?.kind === "reasoning-target" || (!manifest.budgetPolicy && manifest.target === "omp")
       ? "reasoning target, not a cost limit" : "reasoning ceiling, not a cost limit",
     level: manifest.budgetPolicy?.level ?? null };
   const base = { target: manifest.target, resolutionPath: path, preset: manifest.preset,

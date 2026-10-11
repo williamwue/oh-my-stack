@@ -26,7 +26,7 @@ function parseArguments(argv) {
     const value = argv[index + 1];
     assert(value && !value.startsWith("--"), `${argument}: value is required`);
     index += 1;
-    if (["--runtime", "--output", "--package", "--omp-bin", "--codex-bin", "--claude-bin", "--claude-models"].includes(argument)) {
+    if (["--runtime", "--output", "--package", "--omp-bin", "--codex-bin", "--claude-bin", "--claude-models", "--pi-bin", "--pi-cli"].includes(argument)) {
       result[argument.slice(2).replace("-bin", "Bin")] = value;
     } else {
       throw new Error(`unknown argument ${argument}`);
@@ -238,11 +238,16 @@ function collectCodex(binary) {
 }
 
 export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", claudeBin = "claude",
+  piBin = "pi", piCli, cwd = process.cwd(), signal,
   claudeModels = ["haiku", "sonnet", "opus"], confirmClaudeProbes = false, now = new Date() }) {
   let observed;
   if (runtime === "omp") observed = await collectOmp(ompBin);
   else if (runtime === "codex") observed = await collectCodex(codexBin);
   else if (runtime === "claude-code") observed = await collectClaude(claudeBin, claudeModels, confirmClaudeProbes);
+  else if (runtime === "pi") {
+    const { collectPiInventory } = await import("./pi-inventory.mjs");
+    observed = await collectPiInventory({ binary: piCli ? { command: piBin, args: [resolve(piCli)] } : piBin, cwd, signal });
+  }
   else {
     throw new Error(`unsupported runtime ${runtime}`);
   }
@@ -269,6 +274,8 @@ async function main() {
     ompBin: arguments_.ompBin,
     codexBin: arguments_.codexBin,
     claudeBin: arguments_.claudeBin,
+    piBin: arguments_.piBin,
+    piCli: arguments_["pi-cli"],
     claudeModels: arguments_["claude-models"]?.split(","),
     confirmClaudeProbes: arguments_.confirmClaudeProbes,
   });

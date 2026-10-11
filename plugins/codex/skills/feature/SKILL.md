@@ -3,8 +3,6 @@ name: feature
 description: "Add or change behavior with design and end-to-end verification."
 ---
 
-# Feature
-
 ## Codex delegation binding
 
 For every delegated worker in this workflow, derive the exact `model`,
@@ -23,74 +21,26 @@ role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
 For this workflow's implementers use `code.feature-refactoring`.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+### Feature
 
-## Local delivery evidence binding
+**You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
-Read [the delivery guide](../../docs/delivery-evidence.md) for the frozen
-plan/evidence shapes and supported provenance protocol. The portable CLI is
-`../../scripts/delivery-evidence.mjs` relative to this installed Skill.
-Freeze before implementation, retain the lock digest, then inspect or run
-explicitly selected checks against the actual final artifact. Unknown
-required provenance stays unverified; local success does not certify release.
+1. `how` over the affected subsystem.
+2. `architect` for parallel design exploration.
+3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
+   - **Blocking first steps.** Gates run before fan-out.
+   - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
+   - **Shared mutable state.** Default to splitting the target (the **separate-before-serializing-shared-state** principle skill). Serialize only for real invariants.
+   - **Smallest safe decomposition.** If one worker is best, name why.
+4. Delegate code-writing to a subagent using your configured feature model (default `observed code-model choice`) with a specific scope (file paths, named data shape and its organizing structure per **principle-model-the-domain**, a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions, chosen before the delegate writes logic, and success criteria). When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the runners surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Comments per **Comments**. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
+5. Verify on the matching surface. "Inconclusive" or wrong-surface is not a pass. Flag it.
+6. Rebase into small, ordered commits. Stack follow-ups.
+   Use the **sequence-verifiable-units** principle skill, building, verifying, and committing each small unit before the next.
+7. If the design is contested, `interrogate` before shipping.
+8. Run **Opening a PR**.
 
-The root owns design, integration, and proof. Use the complete workflow for
-nontrivial changes and explicit pstack-style or full execution. An automatically
-routed narrow change with a known local boundary may use a simplified root
-pass when full execution was not requested. Name that simplification and its
-omitted stages before work; it cannot support a full-workflow equivalence claim.
-Freeze the [delivery evidence contract](../poteto-mode/references/delivery-evidence.md)
-before implementation. Run its actual local acceptance checks on the integrated
-revision; missing or unverified required evidence prevents a complete-delivery
-claim. A root-owned narrow change uses the separately labeled narrow contract.
+Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline. That owner fans out internally after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. Spawn a fresh owner rather than chaining interrupts.
 
-1. Inspect the affected subsystem with the `how` workflow. Name the user-visible
-   behavior, current boundary, and the data shape that should organize the new
-   behavior.
-2. In the complete workflow, use [architect](../architect/SKILL.md) for parallel
-   design exploration. Preserve structurally distinct candidates, a comparison
-   by a distinct judge, and the chosen design rationale. Honor the configured
-   candidate panel. Use a `prototype` for an empirical fork and `interrogate`
-   for a contested design.
-3. Write a throughput checkpoint covering blocking gates, independent work,
-   shared mutable state, and the smallest safe decomposition. Use one writer
-   when ownership overlaps.
-4. Establish failing or absent behavior with a test or executable reproduction
-   before implementation when practical.
-5. In the complete workflow, assign bounded implementation writers. When
-   multiple valid implementation shapes remain, use [arena](../arena/SKILL.md)
-   before accepting one; a good first candidate does not remove the comparison.
-   A delegated writer gets
-   exact paths, the named data shape, constraints, and success commands. Use an
-   isolated workspace when available. Use the configured `code.feature-refactoring` route
-   when active; otherwise inherit the runtime model. If isolation is missing,
-   serialize writes and disclose it. A bounded child that cannot delegate
-   implements its own unit while its parent supplies independent judgment.
-   If required delegation is unavailable, disclose the fallback and leave
-   complete-workflow execution unverified.
-6. The root inspects the actual diff, rejects unrelated changes, and runs the
-   stated checks on the matching surface. Do not accept a child summary as
-   verification.
-7. Pair each delegated output with a distinct independent judge of the frozen
-   artifact revision before acceptance. Root inspection complements this review.
-   Preserve findings and repair responses; changed artifacts require fresh
-   review and verification. Reference-matching UI work includes
-   [visual-parity](../visual-parity/SKILL.md) as an acceptance stage.
-8. Verify and save each independently usable small unit before dependent work.
-   Keep commits small and independently verifiable. Do not publish or open a
-   pull request unless the user explicitly requested that external action.
-
-Return what changed for the user, the chosen structure and tradeoffs, the
-throughput checkpoint, exact verification commands and outcomes, evidence
-limitations, and any open product decision.
+**Reply:** what you built, what you chose and why, the throughput checkpoint, open decisions. Tables for design alternatives.

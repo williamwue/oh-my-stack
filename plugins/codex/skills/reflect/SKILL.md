@@ -3,8 +3,6 @@ name: reflect
 description: "Review conversation lessons and propose scoped Skill improvements."
 ---
 
-# Reflect
-
 ## Codex delegation binding
 
 For every delegated worker in this workflow, derive the exact `model`,
@@ -22,46 +20,66 @@ The persisted spawn message may be encrypted; disclose when its exact
 role/task text cannot be audited. If records are unavailable, state that
 runtime model resolution is unverified.
 
-## Child session handoff
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).
-New tasks, repair rounds, retries, and queue items use fresh child sessions
-with the original brief, every later directive, prior findings and responses,
-and unresolved objections. Reuse only for required costly live state, and
-only when the host allows it. Stop and fence active writers before replacement.
-A host-owned orchestrator's model catalog, workspace binding, child tools,
-and review-round rules take precedence over the native binding above.
-Keep its task handles and attribution receipts. Do not use a backing child
-conversation as a new delegated review, or claim native-record verification
-for a host-owned child. Report attribution evidence gaps explicitly.
+# Reflect
 
-Use only when the user asks to reflect on an actual conversation or work run.
-Trivial exchanges and one-off preferences do not justify durable Skill edits.
-Identify the active task transcript through the runtime's task history or the
-workspace-scoped transcript path. Do not search unrelated projects or private
-history. When no full transcript is accessible, create a bounded digest from
-visible context and disclose the loss of tool evidence.
+Mine the current conversation for durable learnings, then route them into skill edits.
 
-Run three independent read-only reviews when delegation is available: judgment
-(wrong decisions and missed evidence), tooling (friction and repeatable checks),
-and divergent alternatives. Give each the same frozen task record and require
-precise citations, counterexamples, and proposed destination. When available,
-use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for
-the respective lenses; keep all three sessions independent. Use
-`reflect.synthesizer` for the later synthesis pass. Use configured routes,
-not assumed model identities. With fewer workers, preserve separate
-lenses and label reduced independence.
+Invoke when the user says "reflect" or "/reflect". Skip when the conversation is trivial, off-topic, or already covered by an existing skill the parent followed correctly. One-offs are not learnings.
 
-Synthesize Accepted, Rejected, and Backlog findings. Root rechecks each accepted
-claim against the transcript and target Skill. Move a finding to Backlog when
-a type, schema, lint rule, test, or runtime check enforces it more reliably than
-prose. Reject duplicated guidance, subjective one-offs, and changes outside the
-user's workspace or intended scope.
+## 1. Locate the active transcript
 
-Show the proposed edit set with exact paths and the evidence before altering
-shared or personal Skills. Apply only changes the user requested or approved;
-otherwise return a reviewable proposal. For approved changes, use
-[authoring-a-skill](../authoring-a-skill/SKILL.md), validate references and
-frontmatter, and test behavioral changes when warranted. Do not assume a team
-tracker exists or file external backlog items without authorization. Return
-applied edits, proposed edits, rejected findings, and open structural work.
+Before fanning out, find this conversation's transcript in the `agent-transcripts/` directory the system prompt names. Do not glob across `unrelated host workspace transcript roots`. That crosses workspace boundaries and reads private chats from unrelated projects.
+
+```bash
+ls -t <agent-transcripts>/*.jsonl <agent-transcripts>/*/*.jsonl <agent-transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10
+```
+
+That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.
+
+## 2. Spawn three reviewers in parallel
+
+One message, three native child delegation calls, the bounded role from the generated runtime binding, agent mode (evidence-tool access with writes bounded by the assignment). Reviewers need MCP access to look up the tickets, chat threads, and observability traces the transcript references, and the source-host readonly mode strips MCPs; preserve evidence access through the host binding.
+
+Each reviewer and the synthesizer name a role line in the `effective host model resolution` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names.
+
+| Lens | Role line | Default `model` | Prompt template |
+|---|---|---|---|
+| Judgment | `reflect judgment, divergent, synthesizer` | `observed judgment-model choice` | `references/judgment-reviewer.md` |
+| Tooling | `reflect tooling` | `observed code-model choice` | `references/tooling-reviewer.md` |
+| Divergent | `reflect judgment, divergent, synthesizer` | `observed judgment-model choice` | `references/divergent-reviewer.md` |
+
+Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the native child delegation response body.
+
+## 3. Synthesize
+
+One native child delegation call, the bounded role from the generated runtime binding, `model` from the `reflect judgment, divergent, synthesizer` line (default `observed judgment-model choice`), agent mode (evidence-tool access with writes bounded by the assignment). It spot-verifies citations through MCP, and the source-host readonly mode strips MCPs; preserve evidence access through the host binding. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
+
+## 4. Structural enforcement check
+
+Move any Accepted item that a lint rule, script, metadata flag, or runtime check would enforce more reliably to Backlog. See the **encode-lessons-in-structure** principle skill.
+
+## 5. Apply
+
+Present the synthesizer's full Accepted / Rejected / Backlog output and wait for explicit approval before applying any Accepted edit. The user picks the subset and may redirect routings. Skill changes affect every future agent in the org. Do not auto-apply.
+
+File each Backlog item to your team's devex or backlog tracker without waiting. Only the Accepted list waits for approval.
+
+Follow each approved row's Routing exactly:
+
+- Trivial existing-skill edit (a one-line bullet, a tightened sentence, a stale fact corrected): the parent does it directly.
+- Substantive existing-skill edit (a new section, a new pattern table, more than ~10 lines): hand to the host's available skill-authoring workflow skill and run its draft / test / iterate loop.
+- `tune description: <skill path>` (the skill exists but didn't trigger when it should have): hand to the host skill-authoring workflow and run its description-optimization loop.
+- `new skill via create-skill: <kebab-name>`: hand creation to the host skill-authoring workflow. Do not invent the shape ad hoc.
+
+If your environment ships a SKILL.md validator, run it on every touched skill before declaring done.
+
+## 6. Summarize for the user
+
+Short list, no preamble:
+
+- Edits applied: `<skill path>`. What changed, one line each.
+- New skills created: `<skill path>`. One line each (rare).
+- Backlog filed to the devex tracker: `<issue title>` (`<tags>`). One line each.
+- Dropped: one line per rejected finding + reason from the synthesizer.

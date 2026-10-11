@@ -1,0 +1,3 @@
+# Model selection
+
+Collect a current inventory with scripts/collect-model-inventory.mjs --runtime claude-code. Review every model and effort before scripts/configure-models.mjs --apply. Preview is the default; --output writes only a detached destination. Native scope is ~/.claude (or CLAUDE_CONFIG_DIR) and project .claude. scripts/model-resolution.mjs resolves nearest project first, then user configuration; each host owns an independent manifest. Fresh panels contain two entries. Same-target/same-preset reruns preserve saved membership, order, model and effort unless an explicit change requests otherwise. Missing observed model/effort selectors fail. Configuration artifacts do not prove native routing.

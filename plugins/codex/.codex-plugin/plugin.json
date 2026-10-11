@@ -14,7 +14,6 @@
     "verification"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
   "interface": {
     "displayName": "Oh My Stack",
     "shortDescription": "Portable engineering workflows for Codex.",
@@ -24,8 +23,8 @@
     "capabilities": [],
     "websiteURL": "https://github.com/williamwue/oh-my-stack",
     "defaultPrompt": [
-      "Use $prove-it-works to verify this installation."
+      "Use $setup-oh-my-stack to configure models."
     ]
   },
-  "version": "0.14.0"
+  "version": "0.15.0"
 }

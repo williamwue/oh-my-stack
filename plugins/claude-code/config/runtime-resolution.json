@@ -14,6 +14,24 @@
   },
   "roles": [
     {
+      "name": "comment-sicko",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
+      "name": "design-runner",
+      "workload": "deep",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
       "name": "evidence-reader",
       "workload": "fast",
       "constraints": [
@@ -43,6 +61,15 @@
     },
     {
       "name": "implementer",
+      "workload": "balanced",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
+      "name": "poteto-agent",
       "workload": "balanced",
       "constraints": [
         "independent_session",
@@ -86,7 +113,7 @@
   "routes": {
     "code.delegates": {
       "kind": "single",
-      "role": "implementer",
+      "role": "poteto-agent",
       "workload": "balanced"
     },
     "judgment.prose": {
@@ -96,7 +123,7 @@
     },
     "hardest.tasks": {
       "kind": "single",
-      "role": "synthesizer",
+      "role": "implementer",
       "workload": "deep"
     },
     "how.explorer": {
@@ -138,25 +165,25 @@
       "kind": "panel",
       "role": "implementer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "arena.cross-judge-pool": {
       "kind": "panel",
       "role": "reviewer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "architect.runners": {
       "kind": "panel",
-      "role": "explorer",
+      "role": "design-runner",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     },
     "interrogate.reviewers": {
       "kind": "panel",
       "role": "reviewer",
       "workload": "deep",
-      "defaultCount": 3
+      "defaultCount": 2
     }
   },
   "presets": {

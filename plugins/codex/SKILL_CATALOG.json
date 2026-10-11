@@ -1,6 +1,1524 @@
 {
   "schemaVersion": 1,
   "target": "codex",
+  "selection": {
+    "base": "pstack",
+    "extensions": []
+  },
+  "resources": [
+    {
+      "kind": "skill",
+      "name": "architect",
+      "path": "src/core/skills/architect",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/architect/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "architect"
+    },
+    {
+      "kind": "skill",
+      "name": "arena",
+      "path": "src/core/skills/arena",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/arena/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "arena"
+    },
+    {
+      "kind": "skill",
+      "name": "authoring-a-skill",
+      "path": "src/core/skills/authoring-a-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/authoring-a-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "authoring-a-skill"
+    },
+    {
+      "kind": "skill",
+      "name": "automate-me",
+      "path": "src/core/skills/automate-me",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/automate-me/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "automate-me"
+    },
+    {
+      "kind": "skill",
+      "name": "autonomous-run",
+      "path": "src/core/skills/autonomous-run",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/autonomous-run/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "autonomous-run"
+    },
+    {
+      "kind": "skill",
+      "name": "autopilot-full",
+      "path": "src/core/skills/autopilot-full",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/autopilot-full/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "autopilot-full"
+    },
+    {
+      "kind": "skill",
+      "name": "autopilot-stack",
+      "path": "src/core/skills/autopilot-stack",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/autopilot-stack/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "autopilot-stack"
+    },
+    {
+      "kind": "skill",
+      "name": "babysit",
+      "path": "src/core/skills/babysit",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/babysit/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "babysit"
+    },
+    {
+      "kind": "skill",
+      "name": "benchmark-checklist",
+      "path": "src/core/skills/benchmark-checklist",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/benchmark-checklist/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "benchmark-checklist"
+    },
+    {
+      "kind": "skill",
+      "name": "blast-radius",
+      "path": "src/core/skills/blast-radius",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/blast-radius/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "blast-radius"
+    },
+    {
+      "kind": "skill",
+      "name": "bro",
+      "path": "src/core/skills/bro",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/bro/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "bro"
+    },
+    {
+      "kind": "skill",
+      "name": "bug-fix",
+      "path": "src/core/skills/bug-fix",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/bug-fix/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "bug-fix"
+    },
+    {
+      "kind": "skill",
+      "name": "correct",
+      "path": "src/core/skills/correct",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/correct/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "correct"
+    },
+    {
+      "kind": "skill",
+      "name": "create-verification-skill",
+      "path": "src/core/skills/create-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/create-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "create-verification-skill"
+    },
+    {
+      "kind": "skill",
+      "name": "eval",
+      "path": "src/core/skills/eval",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/eval/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "eval"
+    },
+    {
+      "kind": "skill",
+      "name": "feature",
+      "path": "src/core/skills/feature",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/feature/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "feature"
+    },
+    {
+      "kind": "skill",
+      "name": "figure-it-out",
+      "path": "src/core/skills/figure-it-out",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/figure-it-out/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "figure-it-out"
+    },
+    {
+      "kind": "skill",
+      "name": "hillclimb",
+      "path": "src/core/skills/hillclimb",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/hillclimb/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "hillclimb"
+    },
+    {
+      "kind": "skill",
+      "name": "how",
+      "path": "src/core/skills/how",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/how/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "how"
+    },
+    {
+      "kind": "skill",
+      "name": "interrogate",
+      "path": "src/core/skills/interrogate",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "skill",
+      "name": "investigation",
+      "path": "src/core/skills/investigation",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/investigation/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "investigation"
+    },
+    {
+      "kind": "skill",
+      "name": "ketchup",
+      "path": "src/core/skills/ketchup",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/ketchup/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "ketchup"
+    },
+    {
+      "kind": "skill",
+      "name": "maintain-verification-skill",
+      "path": "src/core/skills/maintain-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/maintain-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "maintain-verification-skill"
+    },
+    {
+      "kind": "skill",
+      "name": "make-bot-ui",
+      "path": "src/core/skills/make-bot-ui",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/make-bot-ui/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "make-bot-ui"
+    },
+    {
+      "kind": "skill",
+      "name": "multi-phase-plan",
+      "path": "src/core/skills/multi-phase-plan",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/multi-phase-plan/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "multi-phase-plan"
+    },
+    {
+      "kind": "skill",
+      "name": "no-comments",
+      "path": "src/core/skills/no-comments",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/no-comments/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "no-comments"
+    },
+    {
+      "kind": "skill",
+      "name": "opening-a-pr",
+      "path": "src/core/skills/opening-a-pr",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/opening-a-pr/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "opening-a-pr"
+    },
+    {
+      "kind": "skill",
+      "name": "orchestrate",
+      "path": "src/core/skills/orchestrate",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/orchestrate/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "orchestrate"
+    },
+    {
+      "kind": "skill",
+      "name": "pause-safely",
+      "path": "src/core/skills/pause-safely",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/pause-safely/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "pause-safely"
+    },
+    {
+      "kind": "skill",
+      "name": "perf-issue",
+      "path": "src/core/skills/perf-issue",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/perf-issue/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "perf-issue"
+    },
+    {
+      "kind": "skill",
+      "name": "poteto-help",
+      "path": "src/core/skills/poteto-help",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-help/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "poteto-help"
+    },
+    {
+      "kind": "skill",
+      "name": "poteto-mode",
+      "path": "src/core/skills/poteto-mode",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-attack-the-premise",
+      "path": "src/core/skills/principle-attack-the-premise",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-attack-the-premise/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-attack-the-premise"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-boundary-discipline",
+      "path": "src/core/skills/principle-boundary-discipline",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-boundary-discipline/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-boundary-discipline"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-build-the-lever",
+      "path": "src/core/skills/principle-build-the-lever",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-build-the-lever/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-build-the-lever"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-encode-lessons-in-structure",
+      "path": "src/core/skills/principle-encode-lessons-in-structure",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-encode-lessons-in-structure/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-encode-lessons-in-structure"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-exhaust-the-design-space",
+      "path": "src/core/skills/principle-exhaust-the-design-space",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-exhaust-the-design-space/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-exhaust-the-design-space"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-experience-first",
+      "path": "src/core/skills/principle-experience-first",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-experience-first/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-experience-first"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-explain-the-number",
+      "path": "src/core/skills/principle-explain-the-number",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-explain-the-number/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-explain-the-number"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-fix-root-causes",
+      "path": "src/core/skills/principle-fix-root-causes",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-fix-root-causes/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-fix-root-causes"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-foundational-thinking",
+      "path": "src/core/skills/principle-foundational-thinking",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-foundational-thinking/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-foundational-thinking"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-guard-the-context-window",
+      "path": "src/core/skills/principle-guard-the-context-window",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-guard-the-context-window/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-guard-the-context-window"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-laziness-protocol",
+      "path": "src/core/skills/principle-laziness-protocol",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-laziness-protocol/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-laziness-protocol"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-make-operations-idempotent",
+      "path": "src/core/skills/principle-make-operations-idempotent",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-make-operations-idempotent/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-make-operations-idempotent"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-migrate-callers-then-delete-legacy-apis",
+      "path": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-migrate-callers-then-delete-legacy-apis"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-minimize-reader-load",
+      "path": "src/core/skills/principle-minimize-reader-load",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-minimize-reader-load/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-minimize-reader-load"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-model-the-domain",
+      "path": "src/core/skills/principle-model-the-domain",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-model-the-domain/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-model-the-domain"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-never-block-on-the-human",
+      "path": "src/core/skills/principle-never-block-on-the-human",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-never-block-on-the-human/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-never-block-on-the-human"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-outcome-oriented-execution",
+      "path": "src/core/skills/principle-outcome-oriented-execution",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-outcome-oriented-execution/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-outcome-oriented-execution"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-prove-it-works",
+      "path": "src/core/skills/principle-prove-it-works",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-prove-it-works/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-prove-it-works"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-redesign-from-first-principles",
+      "path": "src/core/skills/principle-redesign-from-first-principles",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-redesign-from-first-principles/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-redesign-from-first-principles"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-separate-before-serializing-shared-state",
+      "path": "src/core/skills/principle-separate-before-serializing-shared-state",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-separate-before-serializing-shared-state/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-separate-before-serializing-shared-state"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-sequence-verifiable-units",
+      "path": "src/core/skills/principle-sequence-verifiable-units",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-sequence-verifiable-units/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-sequence-verifiable-units"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-subtract-before-you-add",
+      "path": "src/core/skills/principle-subtract-before-you-add",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-subtract-before-you-add/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-subtract-before-you-add"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-test-behavior-not-implementation",
+      "path": "src/core/skills/principle-test-behavior-not-implementation",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-test-behavior-not-implementation/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-test-behavior-not-implementation"
+    },
+    {
+      "kind": "skill",
+      "name": "principle-type-system-discipline",
+      "path": "src/core/skills/principle-type-system-discipline",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/principle-type-system-discipline/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "principle-type-system-discipline"
+    },
+    {
+      "kind": "skill",
+      "name": "prototype",
+      "path": "src/core/skills/prototype",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/prototype/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "prototype"
+    },
+    {
+      "kind": "skill",
+      "name": "recall",
+      "path": "src/core/skills/recall",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/recall/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "recall"
+    },
+    {
+      "kind": "skill",
+      "name": "refactoring",
+      "path": "src/core/skills/refactoring",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/refactoring/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "refactoring"
+    },
+    {
+      "kind": "skill",
+      "name": "reflect",
+      "path": "src/core/skills/reflect",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/reflect/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "reflect"
+    },
+    {
+      "kind": "skill",
+      "name": "runtime-forensics",
+      "path": "src/core/skills/runtime-forensics",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/runtime-forensics/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "runtime-forensics"
+    },
+    {
+      "kind": "skill",
+      "name": "session-pickup",
+      "path": "src/core/skills/session-pickup",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/session-pickup/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "session-pickup"
+    },
+    {
+      "kind": "skill",
+      "name": "setup-oh-my-stack",
+      "path": "src/core/skills/setup-oh-my-stack",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/setup-oh-my-stack/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "setup-oh-my-stack"
+    },
+    {
+      "kind": "skill",
+      "name": "shipping",
+      "path": "src/core/skills/shipping",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/shipping/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "shipping"
+    },
+    {
+      "kind": "skill",
+      "name": "show-me-your-work",
+      "path": "src/core/skills/show-me-your-work",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/show-me-your-work/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "show-me-your-work"
+    },
+    {
+      "kind": "skill",
+      "name": "swarm",
+      "path": "src/core/skills/swarm",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/swarm/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "swarm"
+    },
+    {
+      "kind": "skill",
+      "name": "tdd",
+      "path": "src/core/skills/tdd",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/tdd/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "tdd"
+    },
+    {
+      "kind": "skill",
+      "name": "teach",
+      "path": "src/core/skills/teach",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/teach/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "teach"
+    },
+    {
+      "kind": "skill",
+      "name": "technical-writing",
+      "path": "src/core/skills/technical-writing",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/technical-writing/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "technical-writing"
+    },
+    {
+      "kind": "skill",
+      "name": "trace-forensics",
+      "path": "src/core/skills/trace-forensics",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/trace-forensics/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "trace-forensics"
+    },
+    {
+      "kind": "skill",
+      "name": "typescript-best-practices",
+      "path": "src/core/skills/typescript-best-practices",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/typescript-best-practices/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "typescript-best-practices"
+    },
+    {
+      "kind": "skill",
+      "name": "unslop",
+      "path": "src/core/skills/unslop",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/unslop/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "unslop"
+    },
+    {
+      "kind": "skill",
+      "name": "visual-parity",
+      "path": "src/core/skills/visual-parity",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/visual-parity/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "visual-parity"
+    },
+    {
+      "kind": "skill",
+      "name": "why",
+      "path": "src/core/skills/why",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/why/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "why"
+    },
+    {
+      "kind": "skill",
+      "name": "worktree-cleanup",
+      "path": "src/core/skills/worktree-cleanup",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/worktree-cleanup/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "worktree-cleanup"
+    },
+    {
+      "kind": "skill",
+      "name": "check-cancellation",
+      "path": "src/core/skills/check-cancellation",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-custom-role",
+      "path": "src/core/skills/check-custom-role",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-delegation",
+      "path": "src/core/skills/check-delegation",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-follow-up",
+      "path": "src/core/skills/check-follow-up",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-interaction",
+      "path": "src/core/skills/check-interaction",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-model-routing",
+      "path": "src/core/skills/check-model-routing",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-panel",
+      "path": "src/core/skills/check-panel",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-parallel",
+      "path": "src/core/skills/check-parallel",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-resources",
+      "path": "src/core/skills/check-resources",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-stale-replay",
+      "path": "src/core/skills/check-stale-replay",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-transcript",
+      "path": "src/core/skills/check-transcript",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "skill",
+      "name": "check-writer-isolation",
+      "path": "src/core/skills/check-writer-isolation",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "probe"
+    },
+    {
+      "kind": "role",
+      "name": "evidence-reader",
+      "path": "src/core/roles/evidence-reader",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "explainer",
+      "path": "src/core/roles/explainer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "explorer",
+      "path": "src/core/roles/explorer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "implementer",
+      "path": "src/core/roles/implementer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "reviewer",
+      "path": "src/core/roles/reviewer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "synthesizer",
+      "path": "src/core/roles/synthesizer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "trail-reviewer",
+      "path": "src/core/roles/trail-reviewer",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "role",
+      "name": "comment-sicko",
+      "path": "src/core/roles/comment-sicko",
+      "origin": "pstack",
+      "distribution": "core",
+      "required": false
+    },
+    {
+      "kind": "role",
+      "name": "poteto-agent",
+      "path": "src/core/roles/poteto-agent",
+      "origin": "pstack",
+      "distribution": "core",
+      "required": false
+    },
+    {
+      "kind": "role",
+      "name": "design-runner",
+      "path": "src/core/roles/design-runner",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
+      "kind": "script",
+      "path": "tools/collect-model-inventory.mjs",
+      "output": "scripts/collect-model-inventory.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/configure-models.mjs",
+      "output": "scripts/configure-models.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/model-resolution.mjs",
+      "output": "scripts/model-resolution.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/setup-acceptance.mjs",
+      "output": "scripts/setup-acceptance.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/codex-delegation.mjs",
+      "output": "scripts/codex-delegation.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ],
+      "conditions": [
+        {
+          "distribution": "core",
+          "targets": [
+            "codex"
+          ]
+        },
+        {
+          "distribution": "enhanced-delivery",
+          "targets": [
+            "omp",
+            "pi",
+            "claude-code"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/pi-delegation.mjs",
+      "output": "scripts/pi-delegation.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/pi-inventory.mjs",
+      "output": "scripts/pi-inventory.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/github-workflow.mjs",
+      "output": "scripts/github-workflow.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/github-autopilot-provider.mjs",
+      "output": "scripts/github-autopilot-provider.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/durable-run-state.mjs",
+      "output": "scripts/durable-run-state.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/github-workflow.md",
+      "output": "docs/github-workflow.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/references/rubric.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/references/lead-judgment.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
+      "path": "generated/docs/runtime-binding.md",
+      "output": "docs/runtime-binding.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ],
+      "generated": true
+    },
+    {
+      "kind": "reference",
+      "path": "generated/docs/model-selection.md",
+      "output": "docs/model-selection.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ],
+      "generated": true
+    },
+    {
+      "kind": "manifest",
+      "path": "generated/config/role-contracts.json",
+      "output": "config/role-contracts.json",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "pi"
+      ],
+      "generated": true
+    },
+    {
+      "kind": "manifest",
+      "path": "generated/config/runtime-resolution.json",
+      "output": "config/runtime-resolution.json",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ],
+      "generated": true
+    }
+  ],
   "skills": [
     {
       "name": "architect",
@@ -75,36 +1593,6 @@
       "invocation": "automatic"
     },
     {
-      "name": "code-review",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero-20261008",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
-        "path": "skills/engineering/code-review",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "codebase-design",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/codebase-design",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
       "name": "correct",
       "audience": "public",
       "category": "workflow",
@@ -115,36 +1603,6 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
-    },
-    {
-      "name": "diagnosing-bugs",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero-20261008",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "f3fc5632f401156837ee3872f14fe33ccf1024ea",
-        "path": "skills/engineering/diagnosing-bugs",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "domain-modeling",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/domain-modeling",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
     },
     {
       "name": "eval",
@@ -165,71 +1623,6 @@
       "invocation": "explicit"
     },
     {
-      "name": "grill-me",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/productivity/grill-me",
-        "license": "MIT",
-        "dependencies": [
-          "grilling"
-        ],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "grill-with-docs",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/grill-with-docs",
-        "license": "MIT",
-        "dependencies": [
-          "grilling",
-          "domain-modeling"
-        ],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "grilling",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/productivity/grilling",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "handoff",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/productivity/handoff",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
       "name": "hillclimb",
       "audience": "public",
       "category": "workflow",
@@ -242,25 +1635,6 @@
       "invocation": "explicit"
     },
     {
-      "name": "improve-codebase-architecture",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/improve-codebase-architecture",
-        "license": "MIT",
-        "dependencies": [
-          "codebase-design",
-          "grilling",
-          "domain-modeling"
-        ],
-        "adaptations": []
-      }
-    },
-    {
       "name": "interrogate",
       "audience": "public",
       "category": "workflow",
@@ -268,6 +1642,12 @@
     },
     {
       "name": "investigation",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "ketchup",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -295,12 +1675,6 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
-    },
-    {
-      "name": "oms-auto",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic"
     },
     {
       "name": "opening-a-pr",
@@ -489,12 +1863,6 @@
       "invocation": "explicit"
     },
     {
-      "name": "prove-it-works",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic"
-    },
-    {
       "name": "recall",
       "audience": "public",
       "category": "workflow",
@@ -513,44 +1881,6 @@
       "invocation": "explicit"
     },
     {
-      "name": "reproduce-and-fix-issues",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit"
-    },
-    {
-      "name": "research",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/research",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "retro",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/retro",
-        "license": "MIT",
-        "dependencies": [
-          "writing-for-agents"
-        ],
-        "adaptations": []
-      }
-    },
-    {
       "name": "runtime-forensics",
       "audience": "public",
       "category": "workflow",
@@ -561,27 +1891,6 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
-    },
-    {
-      "name": "setup-benny",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit"
-    },
-    {
-      "name": "setup-matt-pocock-skills",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/setup-matt-pocock-skills",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
     },
     {
       "name": "setup-oh-my-stack",
@@ -626,58 +1935,7 @@
       "invocation": "explicit"
     },
     {
-      "name": "to-questionnaire",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/productivity/to-questionnaire",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "to-spec",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/to-spec",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
-      "name": "to-tickets",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/engineering/to-tickets",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
-    },
-    {
       "name": "trace-forensics",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "explicit"
-    },
-    {
-      "name": "triage-issue-reports",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -711,21 +1969,6 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
-    },
-    {
-      "name": "writing-for-agents",
-      "audience": "public",
-      "category": "workflow",
-      "invocation": "automatic",
-      "source": {
-        "id": "aihero",
-        "repository": "https://github.com/mattpocock/skills",
-        "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-        "path": "skills/productivity/writing-for-agents",
-        "license": "MIT",
-        "dependencies": [],
-        "adaptations": []
-      }
     }
   ]
 }

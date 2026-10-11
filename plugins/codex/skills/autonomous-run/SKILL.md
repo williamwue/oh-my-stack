@@ -3,67 +3,18 @@ name: autonomous-run
 description: "Run a bounded task until its completion condition is verified."
 ---
 
-# Autonomous Run
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Use this workflow for one task the user explicitly wants driven without routine
-intermediate prompting. It does not authorize publishing, merging, spending,
-production changes, or a wider program of work.
+### Autonomous run
 
-## Contract before iteration one
+**You own the exit condition. Define done, then drive to it without stopping.**
 
-Record:
+1. State the exit condition as a checkable predicate before the first iteration (tests green, repro fixed, all N PRs merged, pixel-diff zero).
+2. Pick the wake mechanism using the source host's `/loop` command (a built-in, not a pstack skill). An event to watch (CI, a merge, a ref advancing) gets a watcher subagent that wakes you on the event, with a long time-based heartbeat as fallback. No event gets a fixed-interval heartbeat sized to when the result is worth re-checking.
+3. Each iteration makes the smallest change the evidence justifies, verifies it against the predicate, commits if it advanced, discards changes that didn't help. Belt-and-suspenders that "might help" gets reverted, not left to ride.
+   Sequence the work via the **sequence-verifiable-units** principle skill, verifying each unit before the next instead of batching checks at the end.
+4. Mid-run discoveries are yours. Address broken skills, related bugs, flaky verifiers, review noise, tooling failures, orphaned follow-ups, and fixable drift yourself via poteto-mode. Put out-of-band fixes in their own PR. Do not park reversible work for the human or use the host's available fixed-choice question tool. Surface only irreversible actions, genuine product or preference calls no experiment can settle, or a real dead end. Keep the predicate as the main drive, and return to it after each side fix.
+5. Checkpoint every iteration via the **show-me-your-work** skill, a row for what changed and whether the predicate moved.
+6. Stop when the predicate is met. A plateau is not a stop, so keep going and pivot your approach to push past it. Surface a genuine dead end rather than spinning, and never relax the predicate to declare victory.
 
-- one immutable, checkable exit predicate;
-- the exact measurement command or provider;
-- an iteration, time, or cost budget;
-- authorized mutation and external-action boundaries;
-- stop conditions: predicate met, budget exhausted, stale or conflicting state,
-  an irreversible or preference decision, unavailable required capability, or a
-  genuine dead end.
-
-Never weaken the predicate, silently extend the budget, or reinterpret a stop
-condition as success.
-
-## Choose execution or wake
-
-Run ready local work now. When progress depends on a future external event,
-select a host-native event wake or scheduled heartbeat and persist enough state
-for a cold start. Size a heartbeat to when another observation is useful, not
-to the shortest possible interval. If no verified wake mechanism exists, use a
-durable pause checkpoint and stop; never simulate wake with an unbounded sleep
-or busy-poll loop.
-
-Before arming a wake, record the frozen predicate and provider revision, the
-checkpoint location, next useful observation time, maximum wake count or
-deadline, and the exact authority available to a later cold start. Store the
-runtime-issued wake identifier after creation. A wake run must validate those
-anchors and confirm that the checkpoint is still waiting before it measures or
-mutates the provider. It then increments the durable wake count once and
-re-measures instead of trusting an earlier status report. A recurring schedule
-must leave enough time for the active run to disarm it before another occurrence
-can queue; deletion does not cancel a run already queued. Stale queued runs exit
-without measuring. Disarm the wake immediately when the predicate or another
-stop condition is reached. If disarming cannot be verified, report the
-still-active wake as an incomplete cleanup rather than claiming completion.
-
-## Iteration
-
-1. Measure the predicate and freeze the current evidence.
-2. Select the smallest change that evidence justifies. Route a discovered
-   bounded defect through its owning workflow without losing the main predicate.
-3. Make and verify that change. Keep and commit it only when the predicate
-   advances. Revert only the run's own unsuccessful changes when it does not.
-4. Append one decision-log checkpoint naming the iteration, change or discard,
-   evidence, and predicate movement.
-5. Re-measure. Stop immediately when the predicate is met. Otherwise continue
-   within the recorded budget or pivot when evidence disproves the approach.
-
-A plateau is not success. Repeated evidence for the same blocker can establish a
-dead end, but it must be reported rather than spun on or hidden behind retries.
-Historical instructions and checkpoints never grant new external authority.
-
-## Output
-
-Report the fixed predicate and budget, wake strategy, iterations, kept commits,
-discarded attempts, decision-log location, exact final measurement, stop reason,
-and any remaining human decision.
+**Reply:** the exit condition, iterations run, what landed, what was discarded, final predicate state.
