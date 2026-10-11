@@ -94,7 +94,7 @@ function legacyOverrides(prior) {
 
 function validateInventory(inventory) {
   assert(inventory.schemaVersion === 1, "inventory schemaVersion must be 1");
-  assert(["omp", "codex", "claude-code"].includes(inventory.runtime), "inventory runtime is invalid");
+  assert(["omp", "codex", "claude-code", "pi"].includes(inventory.runtime), "inventory runtime is invalid");
   assert(!Number.isNaN(Date.parse(inventory.observedAt)), "inventory observedAt must be an ISO timestamp");
   assert(typeof inventory.source === "string" && inventory.source.length > 0, "inventory source is required");
   assert(Array.isArray(inventory.models) && inventory.models.length > 0, "inventory models are required");
@@ -136,7 +136,7 @@ function claudePreset(inventory, descriptor) {
     workloads: choices,
     routes: Object.fromEntries(Object.entries(descriptor.routes ?? {})
       .filter(([, route]) => route.kind === "panel")
-      .map(([name]) => [name, [choices.deep, choices.balanced, choices.fast]])),
+      .map(([name]) => [name, [choices.deep, choices.balanced]])),
   };
 }
 
@@ -227,6 +227,15 @@ function insertTomlFields(text, fields) {
 }
 
 function configuredRole(text, adapter, selection, nativeName) {
+  if (adapter.format === "json") {
+    const role = JSON.parse(text);
+    role.name = nativeName ?? role.name;
+    if (!selection.inheritParent) {
+      role[adapter.modelField] = selection.model;
+      role[adapter.reasoningField] = selection.reasoning;
+    }
+    return `${JSON.stringify(role, null, 2)}\n`;
+  }
   if (adapter.format === "toml") {
     const renamed = nativeName ? text.replace(/^name = .+$/m, `name = ${JSON.stringify(nativeName)}`) : text;
     if (selection.inheritParent) return renamed;
@@ -283,18 +292,18 @@ export async function configure({
   assert(!budget || Object.hasOwn(budgetCaps, budget), `unknown budget ${budget}`);
   assert(!uniformReasoning || uniformReasoning === "preset" || effortOrder.includes(uniformReasoning),
     `unknown uniform reasoning ${uniformReasoning}`);
-  assert(!projectDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "project role activation is unsupported for this target");
-  assert(!userDirectory || ["codex", "omp", "claude-code"].includes(descriptor.target), "user role activation is unsupported for this target");
+  assert(["codex", "omp", "claude-code", "pi"].includes(descriptor.target), "role configuration is unsupported for this target");
   assert(!userDirectory || descriptor.target !== "claude-code" || !claudeConfigDir || isAbsolute(claudeConfigDir),
     "CLAUDE_CONFIG_DIR must be an absolute path for user setup");
   const outputDirectory = projectDirectory
-    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? ".omp" : ".claude")
+    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? ".omp" : descriptor.target === "pi" ? ".pi" : ".claude")
     : userDirectory
       ? descriptor.target === "claude-code" && claudeConfigDir ? resolve(claudeConfigDir)
-        : join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : ".claude")
+        : join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : descriptor.target === "pi" ? join(".pi", "agent") : ".claude")
       : resolve(outputRoot);
   assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
   if (userDirectory && descriptor.target === "omp") await assertNotSymlink(join(userDirectory, ".omp"));
+  if (userDirectory && descriptor.target === "pi") await assertNotSymlink(join(userDirectory, ".pi"));
   await assertNotSymlink(outputDirectory);
   await assertNotSymlink(join(outputDirectory, "agents"));
   const inventoryRaw = await readFile(resolve(inventoryPath));
@@ -310,7 +319,7 @@ export async function configure({
   await assertNotSymlink(manifestPath);
   const prior = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
-  const retainChoices = ["omp", "codex", "claude-code"].includes(descriptor.target)
+  const retainChoices = ["omp", "codex", "claude-code", "pi"].includes(descriptor.target)
     && prior?.target === descriptor.target && prior?.preset === (presetName ?? null);
   const state = normalizeConfiguration({ prior, retainChoices, descriptor, preset, budget, uniformReasoning,
     selections, roleSelections, routeSelections, panelSelections });
@@ -392,8 +401,7 @@ export async function configure({
   for (const name of Object.keys(overrides.panels)) {
     assert(descriptor.routes?.[name]?.kind === "panel", `unknown panel route ${name}`);
   }
-  const routeMode = Boolean(presetName || Object.keys(overrides.routes).length || Object.keys(overrides.panels).length
-    || Object.keys(state.retained.routes ?? {}).length || Object.keys(state.retained.panels ?? {}).length);
+  const routeMode = true;
   const routes = {};
   if (routeMode) {
     for (const [name, route] of Object.entries(descriptor.routes ?? {})) {
@@ -422,7 +430,7 @@ export async function configure({
   }
 
   const priorHashes = new Map(Object.entries(prior?.ownedFiles ?? {}));
-  const extension = descriptor.adapter.format === "toml" ? "toml" : "md";
+  const extension = descriptor.adapter.format === "toml" ? "toml" : descriptor.adapter.format === "json" ? "json" : "md";
   const writes = [];
   for (const role of descriptor.roles) {
     const source = join(packageDirectory, "agents", `${role.name}.${extension}`);
@@ -453,7 +461,7 @@ export async function configure({
     budget: state.budget,
     budgetPolicy: state.policy,
     uniformReasoning: state.uniform,
-    ...(["omp", "codex", "claude-code"].includes(descriptor.target) ? { overrides } : {}),
+    overrides,
     observedInventory: {
       observedAt: inventory.observedAt,
       source: inventory.source,
@@ -479,7 +487,7 @@ export async function configure({
     const obsolete = [];
     for (const [key, hash] of priorHashes) {
       if (Object.hasOwn(manifest.ownedFiles, key)) continue;
-      assert(/^agents\/[a-z0-9.-]+\.(?:toml|md)$/.test(key), `unsafe prior owned path ${key}`);
+      assert(/^agents\/[a-z0-9.-]+\.(?:toml|md|json)$/.test(key), `unsafe prior owned path ${key}`);
       const path = join(outputDirectory, key);
       await assertNotSymlink(path);
       if (await exists(path)) {

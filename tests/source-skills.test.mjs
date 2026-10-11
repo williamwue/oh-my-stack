@@ -8,7 +8,7 @@ import { loadModel, parseSkillFrontmatter, renderTarget, repoRoot, validateRende
 import { loadSourceSkills } from "../tools/source-skills.mjs";
 
 test("all selected AIHero originals ship every resource and their invocation modes on every host", async () => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["aihero"] });
   const expected = {
     "diagnosing-bugs": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
     "code-review": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
@@ -53,7 +53,7 @@ test("all selected AIHero originals ship every resource and their invocation mod
 });
 
 test("a workflow cannot ship when an original invoked dependency is omitted", async () => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["aihero"] });
   const root = await mkdtemp(join(tmpdir(), "oms-aihero-incomplete-"));
   try {
     const manifest = JSON.parse(await readFile(join(repoRoot, "upstream/source-skills.json"), "utf8"));
@@ -73,7 +73,7 @@ test("a workflow cannot ship when an original invoked dependency is omitted", as
 });
 
 test("a packaged original cannot silently change after generation", async () => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["aihero"] });
   const stage = await mkdtemp(join(tmpdir(), "oms-aihero-tamper-"));
   try {
     const adapter = model.adapters.find((entry) => entry.id === "codex");
@@ -89,7 +89,7 @@ test("a packaged original cannot silently change after generation", async () => 
 });
 
 test("source validation rejects changed originals, omitted dependencies, unrecorded resources, and snapshot symlinks", async () => {
-  const model = await loadModel();
+  const model = await loadModel(repoRoot, { extensions: ["aihero"] });
   const root = await mkdtemp(join(tmpdir(), "oms-aihero-provenance-"));
   try {
     await mkdir(join(root, "upstream"));

@@ -15,10 +15,22 @@
         "reflect.tooling": "openai-codex/gpt-6.1-sol@medium",
         "reflect.divergent": "openai-codex/gpt-6-astra@low",
         "reflect.synthesizer": "openai-codex/gpt-6-astra@low",
-        "arena.runners": ["openai-codex/gpt-6-astra@low", "openai-codex/gpt-6.1-sol@medium", "openai-codex/gpt-6-luna@high"],
-        "arena.cross-judge-pool": ["openai-codex/gpt-6-astra@low", "openai-codex/gpt-6.1-sol@medium", "openai-codex/gpt-6-luna@high"],
-        "architect.runners": ["openai-codex/gpt-6-astra@low", "openai-codex/gpt-6.1-sol@medium", "openai-codex/gpt-6-luna@high"],
-        "interrogate.reviewers": ["openai-codex/gpt-6-astra@low", "openai-codex/gpt-6.1-sol@medium", "openai-codex/gpt-6-luna@high"]
+        "arena.runners": [
+          "openai-codex/gpt-6-astra@low",
+          "openai-codex/gpt-6.1-sol@medium"
+        ],
+        "arena.cross-judge-pool": [
+          "openai-codex/gpt-6-astra@low",
+          "openai-codex/gpt-6.1-sol@medium"
+        ],
+        "architect.runners": [
+          "openai-codex/gpt-6-astra@low",
+          "openai-codex/gpt-6.1-sol@medium"
+        ],
+        "interrogate.reviewers": [
+          "openai-codex/gpt-6-astra@low",
+          "openai-codex/gpt-6.1-sol@medium"
+        ]
       }
     }
   },
@@ -37,10 +49,22 @@
         "reflect.tooling": "cursor/grok-4.7-xhigh-fast@high",
         "reflect.divergent": "cursor/claude-opus-5-5@xhigh",
         "reflect.synthesizer": "cursor/claude-opus-5-5@xhigh",
-        "arena.runners": ["cursor/claude-opus-5-5@xhigh", "cursor/grok-4.7-xhigh-fast@high"],
-        "arena.cross-judge-pool": ["cursor/claude-opus-5-5@xhigh", "cursor/grok-4.7-xhigh-fast@high"],
-        "architect.runners": ["cursor/claude-opus-5-5@xhigh", "cursor/grok-4.7-xhigh-fast@high"],
-        "interrogate.reviewers": ["cursor/claude-opus-5-5@xhigh", "cursor/grok-4.7-xhigh-fast@high"]
+        "arena.runners": [
+          "cursor/claude-opus-5-5@xhigh",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "arena.cross-judge-pool": [
+          "cursor/claude-opus-5-5@xhigh",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "architect.runners": [
+          "cursor/claude-opus-5-5@xhigh",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ],
+        "interrogate.reviewers": [
+          "cursor/claude-opus-5-5@xhigh",
+          "cursor/grok-4.7-xhigh-fast@high"
+        ]
       }
     },
     "codex": {
@@ -57,10 +81,22 @@
         "reflect.tooling": "gpt-6.1-sol@medium",
         "reflect.divergent": "gpt-6-astra@low",
         "reflect.synthesizer": "gpt-6-astra@low",
-        "arena.runners": ["gpt-6-astra@low", "gpt-6.1-sol@medium", "gpt-6-luna@high"],
-        "arena.cross-judge-pool": ["gpt-6-astra@low", "gpt-6.1-sol@medium", "gpt-6-luna@high"],
-        "architect.runners": ["gpt-6-astra@low", "gpt-6.1-sol@medium", "gpt-6-luna@high"],
-        "interrogate.reviewers": ["gpt-6-astra@low", "gpt-6.1-sol@medium", "gpt-6-luna@high"]
+        "arena.runners": [
+          "gpt-6-astra@low",
+          "gpt-6.1-sol@medium"
+        ],
+        "arena.cross-judge-pool": [
+          "gpt-6-astra@low",
+          "gpt-6.1-sol@medium"
+        ],
+        "architect.runners": [
+          "gpt-6-astra@low",
+          "gpt-6.1-sol@medium"
+        ],
+        "interrogate.reviewers": [
+          "gpt-6-astra@low",
+          "gpt-6.1-sol@medium"
+        ]
       }
     }
   }

@@ -31,7 +31,7 @@ async function listFiles(directory, prefix = "") {
   return files.sort();
 }
 
-export async function loadSourceSkills(root, parseFrontmatter, registry) {
+export async function loadSourceSkills(root, parseFrontmatter, registry, { include = () => true } = {}) {
   const manifestPath = join(root, "upstream/source-skills.json");
   let manifest;
   try { manifest = JSON.parse(await readFile(manifestPath, "utf8")); }
@@ -89,7 +89,14 @@ export async function loadSourceSkills(root, parseFrontmatter, registry) {
     }
     skills.push(...sourceEntries);
   }
-  return skills;
+  const selected = skills.filter(include);
+  const selectedNames = new Set(selected.map((skill) => skill.metadata.name));
+  for (const skill of selected) {
+    for (const dependency of skill.source.dependencies) {
+      assert(selectedNames.has(dependency), `selected source dependency is missing: ${skill.metadata.name} -> ${dependency}`);
+    }
+  }
+  return selected;
 }
 
 export function sourceCoordinate(source) {

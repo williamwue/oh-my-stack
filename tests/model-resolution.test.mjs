@@ -14,6 +14,27 @@ import { inspectSetup } from "../tools/setup-acceptance.mjs";
 
 const execFileAsync = promisify(execFile);
 
+test("Pi uses independent native user and nearest project resolution without OMP fallthrough", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-pi-native-resolution-"));
+  const project = join(root, "project");
+  await mkdir(join(root, ".omp/agent"), { recursive: true });
+  await mkdir(join(root, ".pi/agent"), { recursive: true });
+  await mkdir(join(project, ".pi"), { recursive: true });
+  await mkdir(join(project, "nested"), { recursive: true });
+  const name = "oh-my-stack.resolution.json";
+  const manifest = { schemaVersion: 1, owner: "oh-my-stack", target: "pi", routes: {} };
+  await writeFile(join(root, ".omp/agent", name), JSON.stringify({ ...manifest, target: "omp" }));
+  assert.equal(await resolveActiveResolution({ runtime: "pi", cwd: project, userRoot: root }), null);
+  await writeFile(join(root, ".pi/agent", name), JSON.stringify(manifest));
+  assert.equal((await resolveActiveResolution({ runtime: "pi", cwd: project, userRoot: root })).scope, "user");
+  await writeFile(join(project, ".pi", name), JSON.stringify(manifest));
+  const resolution = await resolveActiveResolution({ runtime: "pi", cwd: join(project, "nested"), userRoot: root });
+  assert.equal(resolution.scope, "project");
+  assert.equal(resolution.path, join(project, ".pi", name));
+  await writeFile(resolution.path, JSON.stringify({ ...manifest, target: "omp" }));
+  await assert.rejects(resolveActiveResolution({ runtime: "pi", cwd: project, userRoot: root }), /invalid pi/);
+});
+
 async function inventory(root, runtime) {
   const prefix = runtime === "omp" ? "openai-codex/" : "";
   const path = join(root, `${runtime}-models.json`);

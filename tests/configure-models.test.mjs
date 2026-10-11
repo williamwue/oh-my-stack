@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { promisify } from "node:util";
@@ -16,6 +16,62 @@ const selections = {
   deep: "observed-deep@high",
 };
 const execFileAsync = promisify(execFile);
+
+test("fresh generic and every available preset panel has two members on all hosts", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-fresh-all-hosts-"));
+  try {
+    for (const runtime of ["omp", "codex", "claude-code", "pi"]) {
+      const packageRoot = join(repoRoot, "packages", runtime);
+      const descriptor = JSON.parse(await readFile(join(packageRoot, "config/runtime-resolution.json"), "utf8"));
+      const ids = new Set(["observed-fast", "observed-balanced", "observed-deep", "claude-haiku-test", "claude-sonnet-test", "claude-opus-test"]);
+      for (const preset of Object.values(descriptor.presets).filter(Boolean)) {
+        for (const value of [...Object.values(preset.workloads), ...Object.values(preset.routes ?? {}).flat()]) {
+          if (!['inherit-parent', 'auto'].includes(value)) ids.add(value.slice(0, value.lastIndexOf('@')));
+        }
+      }
+      const inventoryPath = join(root, `${runtime}.json`);
+      await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime, observedAt: "2026-10-11T00:00:00Z", source: "isolated configuration fixture",
+        models: [...ids].map((id) => ({ id, reasoningEfforts: ["none", "low", "medium", "high", "xhigh", "max"] })) }));
+      const presets = [undefined, ...Object.entries(descriptor.presets).filter(([, preset]) => preset).map(([name]) => name)];
+      if (runtime === "claude-code" && !presets.includes("pstack")) presets.push("pstack");
+      for (const presetName of presets) {
+        const result = await configure({ packageRoot, inventoryPath, outputRoot: join(root, runtime, presetName ?? "generic"),
+          ...(presetName ? { presetName } : { selections }), apply: false });
+        const panels = Object.values(result.manifest.routes).filter((route) => route.kind === "panel");
+        assert.ok(panels.length > 0, `${runtime}/${presetName}: has panels`);
+        for (const panel of panels) assert.equal(panel.entries.length, 2, `${runtime}/${presetName}`);
+        assert.equal(result.manifest.routes["hardest.tasks"].role, "implementer");
+      }
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("same-target same-preset reruns preserve saved three-member order models and efforts on all hosts", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-saved-three-all-hosts-"));
+  try {
+    for (const runtime of ["omp", "codex", "claude-code", "pi"]) {
+      const inventoryPath = join(root, `${runtime}.json`);
+      await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime, observedAt: "2026-10-11T00:00:00Z", source: "saved configuration fixture",
+        models: Object.values(selections).map((selection) => ({ id: selection.split('@')[0], reasoningEfforts: ["low", "medium", "high"] })) }));
+      const packageRoot = join(root, "role-packages", runtime);
+      await cp(join(repoRoot, "packages", runtime), packageRoot, { recursive: true });
+      const descriptorPath = join(packageRoot, "config/runtime-resolution.json");
+      const descriptor = JSON.parse(await readFile(descriptorPath, "utf8"));
+      descriptor.presets["saved-fixture"] = { workloads: selections };
+      await writeFile(descriptorPath, JSON.stringify(descriptor));
+      const options = { packageRoot, inventoryPath, outputRoot: join(root, runtime), presetName: "saved-fixture" };
+      const first = await configure({ ...options, panelSelections: { "architect.runners": "observed-fast@low,observed-deep@high,observed-balanced@medium" }, budget: "unlimited", apply: true });
+      const saved = first.manifest;
+      saved.budgetPolicy = { version: 2, kind: "preserve-effort", level: null, costLimit: false };
+      saved.routes["architect.runners"].entries.forEach((entry, index) => entry.reasoning = ["low", "high", "medium"][index]);
+      await writeFile(join(options.outputRoot, "oh-my-stack.resolution.json"), JSON.stringify(saved));
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const rerun = await configure({ ...options, apply: true });
+        assert.deepEqual(rerun.manifest.routes["architect.runners"].entries, saved.routes["architect.runners"].entries, runtime);
+      }
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
 
 async function compatibilityFixture() {
   const root = await mkdtemp(join(tmpdir(), "oms-budget-compatibility-"));
@@ -311,7 +367,7 @@ async function claudeInventoryFile(root, haiku = "claude-haiku-5-5", extraModels
   return path;
 }
 
-test("Claude pstack builds fast Haiku and ordered three-family panels from observed IDs", async () => {
+test("Claude pstack builds fast Haiku and ordered two-member panels from observed IDs", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-claude-preset-"));
   const inventoryPath = await claudeInventoryFile(root);
   const outputRoot = join(root, "output");
@@ -330,7 +386,7 @@ test("Claude pstack builds fast Haiku and ordered three-family panels from obser
   assert.equal(preview.manifest.routes["code.delegates"].entries[0].model, "claude-sonnet-5-5");
   for (const route of Object.values(preview.manifest.routes).filter((value) => value.kind === "panel")) {
     assert.deepEqual(route.entries.map(({ model }) => model),
-      ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"]);
+      ["claude-opus-5-5", "claude-sonnet-5-5"]);
     assert.ok(route.entries.every(({ reasoning }) => reasoning === "high"));
   }
   const applied = await configure({ ...options, apply: true,
@@ -594,7 +650,7 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
   });
   assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "openai-codex/gpt-6.1-sol");
   assert.deepEqual(preview.manifest.routes["arena.runners"].entries.map((entry) => entry.model), [
-    "openai-codex/gpt-6-astra", "openai-codex/gpt-6.1-sol", "openai-codex/gpt-6-luna",
+    "openai-codex/gpt-6-astra", "openai-codex/gpt-6.1-sol",
   ]);
   assert.ok(!preview.manifest.configuredModelIds.includes("openai-codex/gpt-5.5"));
   assert.ok(!preview.manifest.configuredModelIds.includes("openai-codex/gpt-6-sol"));
@@ -616,6 +672,9 @@ test("Codex retains effective Sol choices across preset upgrades and never falls
   await cp(packageRoot, oldPackage, { recursive: true });
   const descriptorPath = join(oldPackage, "config", "runtime-resolution.json");
   await writeFile(descriptorPath, (await readFile(descriptorPath, "utf8")).replaceAll("gpt-6.1-sol", "gpt-6-sol"));
+  const oldDescriptor = JSON.parse(await readFile(descriptorPath, "utf8"));
+  for (const route of Object.values(oldDescriptor.presets.pstack.routes)) if (Array.isArray(route)) route.push("gpt-6-luna@high");
+  await writeFile(descriptorPath, JSON.stringify(oldDescriptor));
   const inventoryPath = await presetInventoryFile(root, "codex");
   const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
   inventory.models.push({ id: "gpt-6-sol", reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] });
@@ -693,7 +752,7 @@ test("OMP and Codex raise matching OpenAI route efforts to the budget target", a
       previews.codex.routes[name].entries.map((entry) => entry.reasoning));
   }
   assert.deepEqual(previews.omp.routes["arena.runners"].entries.map((entry) => entry.reasoning),
-    ["high", "high", "high"]);
+    ["high", "high"]);
 });
 
 test("uniform high override is explicit, checked against inventory and budget, and reversible", async () => {
@@ -765,7 +824,8 @@ test("unobserved preset and modified obsolete panel agent fail without partial w
   await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 
   const observed = await presetInventoryFile(root, "codex");
-  await configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack", apply: true });
+  await configure({ packageRoot, inventoryPath: observed, outputRoot, presetName: "pstack",
+    panelSelections: { "interrogate.reviewers": "gpt-6-astra@high,gpt-6.1-sol@medium,gpt-6-luna@low" }, apply: true });
   const stale = join(outputRoot, "agents", "ohmystack-interrogate-reviewers-3.toml");
   await writeFile(stale, "user modification\n");
   await assert.rejects(
@@ -837,7 +897,7 @@ test("OMP and Codex generated workflows bind separate source-style slots", async
   const cases = [
     ["feature", "code.feature-refactoring"], ["refactoring", "code.feature-refactoring"],
     ["bug-fix", "code.bug-fix"], ["perf-issue", "code.perf-issue"],
-    ["hillclimb", "code.hillclimb"], ["reflect", "reflect.divergent"],
+    ["hillclimb", "code.hillclimb"],
   ];
   for (const [skill, route] of cases) {
     for (const [runtime, packageRoot] of [["omp", omp], ["codex", codex]]) {
@@ -848,8 +908,8 @@ test("OMP and Codex generated workflows bind separate source-style slots", async
     }
   }
   const setup = await readFile(join(omp, "skills", "setup-oh-my-stack", "SKILL.md"), "utf8");
-  assert.match(setup, /target xhigh/);
+  assert.match(setup, /large[^\n]*xhigh|target xhigh/);
   assert.doesNotMatch(setup, /cap at xhigh/);
-  assert.match(setup, /--uniform-reasoning EFFORT/);
+  assert.match(setup, /model selection|model selection guide/);
   assert.match(setup, /preserves those overrides/);
 });

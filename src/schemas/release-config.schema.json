@@ -120,7 +120,7 @@
         "additionalProperties": false,
         "required": ["id", "packageDir", "verification"],
         "properties": {
-          "id": { "enum": ["omp", "codex", "claude-code"] },
+          "id": { "enum": ["omp", "codex", "claude-code", "pi"] },
           "packageDir": { "type": "string", "pattern": "^packages/" },
           "verification": {
             "type": "object",

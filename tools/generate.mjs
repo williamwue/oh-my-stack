@@ -47,7 +47,7 @@ const capabilityStatuses = new Set([
   "unknown",
 ]);
 
-const adapterIds = ["omp", "codex", "claude-code"];
+const adapterIds = ["omp", "codex", "claude-code", "pi"];
 
 async function exists(path) {
   try {
@@ -103,6 +103,7 @@ function semver(value) {
 }
 
 export function parseSkillFrontmatter(text, context = "SKILL.md") {
+  text = text.replace(/\r\n/g, "\n");
   const match = text.match(/^---\n([\s\S]*?)\n---\n/);
   assert(match, `${context}: missing YAML frontmatter`);
   const frontmatter = {};
@@ -142,7 +143,7 @@ function validateProject(project) {
 function validateSkillCatalog(catalog, skillNames) {
   assertKeys(
     catalog,
-    new Set(["$schema", "schemaVersion", "public", "probes"]),
+    new Set(["$schema", "schemaVersion", "public", "probes", "extensions", "entries"]),
     "skill catalog",
   );
   assert(catalog.schemaVersion === 1, "skill catalog: schemaVersion must be 1");
@@ -262,7 +263,7 @@ function validateAdapter(adapter, project, profiles, path) {
     assert(!adapter.portableManifestPath && !adapter.portableManifest,
       `${path}: the verified native Codex hook loader requires compatibility-only packaging`);
     assert(adapter.manifest.interface, `${path}: Codex interface metadata is required`);
-    assert(adapter.manifest.hooks === "./hooks/hooks.json", `${path}: invalid Codex hook path`);
+    assert(!adapter.manifest.hooks, `${path}: base Codex manifest must omit extension hooks`);
   }
   if (adapter.id === "claude-code") {
     assert(adapter.manifestPath === ".claude-plugin/plugin.json", `${path}: invalid Claude manifest path`);
@@ -271,6 +272,11 @@ function validateAdapter(adapter, project, profiles, path) {
     assert(adapter.manifestPath === "package.json", `${path}: invalid OMP manifest path`);
     assert(Array.isArray(adapter.manifest.omp?.skills), `${path}: OMP manifest must declare omp.skills`);
     assert(!("pi" in adapter.manifest), `${path}: use the native omp manifest key, not the legacy pi key`);
+  }
+  if (adapter.id === "pi") {
+    assert(adapter.manifestPath === "package.json", `${path}: invalid Pi manifest path`);
+    assert(JSON.stringify(adapter.manifest.pi?.skills) === JSON.stringify(["./skills"]), `${path}: Pi skills declaration is required`);
+    assert(JSON.stringify(adapter.manifest.pi?.extensions) === JSON.stringify(["./extensions/oms.ts"]), `${path}: Pi extension declaration is required`);
   }
 }
 
@@ -306,7 +312,42 @@ async function validateSchemaReferences(root) {
   }
 }
 
-export async function loadModel(root = repoRoot) {
+export const supportedExtensions = ["enhanced-delivery", "auto-routing", "extras", "aihero"];
+
+function normalizeExtensions(extensions = []) {
+  assert(Array.isArray(extensions), "extensions must be an array");
+  assert(new Set(extensions).size === extensions.length, "duplicate extension selection");
+  for (const name of extensions) assert(supportedExtensions.includes(name), `unknown extension ${name}`);
+  return supportedExtensions.filter((name) => extensions.includes(name));
+}
+
+function selectedEntry(entry, extensions) {
+  return entry.distribution === "core" || extensions.includes(entry.distribution);
+}
+
+function validateDistributionCatalog(catalog) {
+  assert(JSON.stringify(catalog.extensions) === JSON.stringify(supportedExtensions), "catalog extension names drift");
+  assert(Array.isArray(catalog.entries), "catalog entries are required");
+  const keys = new Set();
+  for (const entry of catalog.entries) {
+    assert(["skill", "role", "reference", "script", "hook", "manifest"].includes(entry.kind), `unknown catalog kind ${entry.kind}`);
+    assert(["core", "none", ...supportedExtensions].includes(entry.distribution), `unknown catalog distribution ${entry.distribution}`);
+    assert(entry.origin && entry.path && !entry.path.includes("..") && !entry.path.startsWith("/"), "catalog requires safe source path and origin");
+    const key = `${entry.kind}:${entry.path}`;
+    assert(!keys.has(key), `duplicate catalog entry ${key}`);
+    keys.add(key);
+    if (entry.conditions) {
+      assert(Array.isArray(entry.conditions), `${key}: conditions must be an array`);
+      for (const condition of entry.conditions) {
+        assert(["core", ...supportedExtensions].includes(condition.distribution), `${key}: unknown condition distribution`);
+        assert(Array.isArray(condition.targets) && condition.targets.every((target) => adapterIds.includes(target)), `${key}: invalid condition targets`);
+      }
+    }
+  }
+}
+
+export async function loadModel(root = repoRoot, { extensions = [] } = {}) {
+  extensions = normalizeExtensions(extensions);
   const project = await readJson(join(root, "src", "core", "project.json"));
   validateProject(project);
   const resolutionPolicy = await readJson(join(root, "src", "runtime-resolution", "policy.json"));
@@ -351,7 +392,7 @@ export async function loadModel(root = repoRoot) {
     const metadataPath = join(directory, "skill.json");
     const skillPath = join(directory, "SKILL.md");
     const metadata = await readJson(metadataPath);
-    const text = await readFile(skillPath, "utf8");
+    const text = (await readFile(skillPath, "utf8")).replace(/\r\n/g, "\n");
     const frontmatter = parseSkillFrontmatter(text, relative(root, skillPath));
     validateSkillMetadata(metadata, registry, relative(root, metadataPath));
     assert(entry.name === metadata.name, `${relative(root, directory)}: folder and metadata name differ`);
@@ -360,16 +401,36 @@ export async function loadModel(root = repoRoot) {
   }
   assert(skills.length > 0, "portable core has no skills");
   const coreSkillCatalog = await readJson(join(root, "src", "core", "skill-catalog.json"));
-  validateSkillCatalog(coreSkillCatalog, skills.map((skill) => skill.metadata.name));
-  const coreSkills = [...skills];
-  const sourceSkills = await loadSourceSkills(root, parseSkillFrontmatter, registry);
+  validateDistributionCatalog(coreSkillCatalog);
+  validateSkillCatalog(coreSkillCatalog, skills.map((skill) => skill.metadata.name).filter((name) => name !== "oms-enhanced-delivery"));
+  const allCoreSkills = [...skills];
+  const sourceSkills = await loadSourceSkills(root, parseSkillFrontmatter, registry, { include: (skill) => {
+    const entry = coreSkillCatalog.entries.find((entry) => entry.kind === "skill" && entry.name === skill.metadata.name);
+    assert(entry, `source Skill lacks catalog classification: ${skill.metadata.name}`);
+    return selectedEntry(entry, extensions);
+  } });
   for (const skill of sourceSkills) {
     assert(!skills.some((entry) => entry.metadata.name === skill.metadata.name), `source Skill conflicts with existing name: ${skill.metadata.name}`);
     skills.push(skill);
   }
   skills.sort((left, right) => left.metadata.name.localeCompare(right.metadata.name));
-  const skillCatalog = { ...coreSkillCatalog,
-    public: [...coreSkillCatalog.public, ...sourceSkills.map((skill) => skill.metadata.name)].sort() };
+  for (let index = skills.length - 1; index >= 0; index -= 1) {
+    const entry = coreSkillCatalog.entries.find((entry) => entry.kind === "skill" && entry.name === skills[index].metadata.name);
+    assert(entry, `Skill lacks catalog classification: ${skills[index].metadata.name}`);
+    if (!selectedEntry(entry, extensions)) skills.splice(index, 1);
+  }
+  const coreSkills = skills.filter((skill) => !skill.source);
+  const entries = coreSkillCatalog.entries.filter((entry) => selectedEntry(entry, extensions))
+    .map((entry) => entry.conditions ? { ...entry, targets: [...new Set(entry.conditions
+      .filter((condition) => selectedEntry(condition, extensions)).flatMap((condition) => condition.targets))] } : entry);
+  for (const entry of entries.filter((entry) => entry.kind === "skill")) {
+    if (entry.required === false && !extensions.includes(entry.distribution)) continue;
+    assert(skills.some((skill) => skill.metadata.name === entry.name), `selected catalog Skill is missing: ${entry.name}`);
+  }
+  const selection = { base: "pstack", extensions };
+  const skillCatalog = { ...coreSkillCatalog, selection,
+    public: skills.filter((skill) => !skill.metadata.name.startsWith("check-")).map((skill) => skill.metadata.name).sort(),
+    probes: skills.filter((skill) => skill.metadata.name.startsWith("check-")).map((skill) => skill.metadata.name).sort() };
 
   const roles = [];
   const roleRoot = join(root, "src", "core", "roles");
@@ -385,7 +446,9 @@ export async function loadModel(root = repoRoot) {
     validateRoleMetadata(metadata, relative(root, metadataPath));
     assert(entry.name === metadata.name, `${relative(root, directory)}: folder and metadata name differ`);
     assert(instructions.trim().length > 0, `${relative(root, instructionsPath)}: instructions are empty`);
-    roles.push({ directory, metadata, instructions });
+    const classification = coreSkillCatalog.entries.find((entry) => entry.kind === "role" && entry.name === metadata.name);
+    assert(classification, `role lacks catalog classification: ${metadata.name}`);
+    if (selectedEntry(classification, extensions)) roles.push({ directory, metadata, instructions });
   }
   assert(roles.length > 0, "portable core has no roles");
   const roleNames = new Set(roles.map((role) => role.metadata.name));
@@ -410,6 +473,7 @@ export async function loadModel(root = repoRoot) {
 
   for (const path of await filesUnder(join(root, "src", "core"))) {
     if (!/\.(?:md|json)$/.test(path)) continue;
+    if (path === join(root, "src", "core", "skill-catalog.json")) continue;
     validateCoreText(relative(root, path), await readFile(path, "utf8"));
   }
   await validateSchemaReferences(root);
@@ -423,7 +487,7 @@ export async function loadModel(root = repoRoot) {
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
+  return { extensions, selection, entries, allCoreSkills, root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -442,15 +506,9 @@ function codexSkillMetadata(skill) {
   ].join("\n");
 }
 
-function renderSkillDocument(skill, adapter) {
+function renderSkillDocument(skill, adapter, model) {
   if (skill.source) return skill.text;
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
-  if (["omp", "codex"].includes(adapter.id) && skill.metadata.name === "reflect") {
-    body = body.replace(
-      "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",
-      "use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for\nthe respective lenses; keep all three sessions independent. Use\n`reflect.synthesizer` for the later synthesis pass.",
-    );
-  }
   const ompRouteBySkill = {
     feature: "code.feature-refactoring",
     refactoring: "code.feature-refactoring",
@@ -657,26 +715,7 @@ function renderSkillDocument(skill, adapter) {
           "treat an unconfirmed worker as cancelled."] : []),
       ...(Object.hasOwn(ompRouteBySkill, skill.metadata.name)
         ? [`For this workflow's implementers use \`${ompRouteBySkill[skill.metadata.name]}\`.`] : []),
-      ...(skill.metadata.name === "reflect"
-        ? ["For the three reflection lenses use `reflect.tooling`, `reflect.judgment`,",
-          "and `reflect.divergent`; use `reflect.synthesizer` for the final pass."] : []),
-      "",
-    ].join("\n")
-    : "";
-  const handoffBinding = delegates
-    ? [
-      "## Child session handoff",
-      "",
-      "Read [the handoff contract](../poteto-mode/references/subagent-handoff.md).",
-      "New tasks, repair rounds, retries, and queue items use fresh child sessions",
-      "with the original brief, every later directive, prior findings and responses,",
-      "and unresolved objections. Reuse only for required costly live state, and",
-      "only when the host allows it. Stop and fence active writers before replacement.",
-      "A host-owned orchestrator's model catalog, workspace binding, child tools,",
-      "and review-round rules take precedence over the native binding above.",
-      "Keep its task handles and attribution receipts. Do not use a backing child",
-      "conversation as a new delegated review, or claim native-record verification",
-      "for a host-owned child. Report attribution evidence gaps explicitly.",
+
       "",
     ].join("\n")
     : "";
@@ -692,7 +731,7 @@ function renderSkillDocument(skill, adapter) {
       "",
     ].join("\n")
     : "";
-  const routingBinding = ["oms-auto", "setup-oh-my-stack"].includes(skill.metadata.name)
+  const routingBinding = model.extensions.includes("auto-routing") && skill.metadata.name === "oms-auto"
     ? (adapter.id === "codex" ? [
       "## Codex automatic routing binding",
       "",
@@ -743,7 +782,7 @@ function renderSkillDocument(skill, adapter) {
       "For ordinary model setup, continue with the procedure below.",
       "",
     ].join("\n")) : "";
-  const deliveryBinding = ["feature", "figure-it-out", "visual-parity", "poteto-mode"].includes(skill.metadata.name)
+  const deliveryBinding = skill.metadata.name === "oms-enhanced-delivery"
     ? ["## Local delivery evidence binding", "",
       "Read [the delivery guide](../../docs/delivery-evidence.md) for the frozen",
       "plan/evidence shapes and supported provenance protocol. The portable CLI is",
@@ -752,8 +791,17 @@ function renderSkillDocument(skill, adapter) {
       "explicitly selected checks against the actual final artifact. Unknown",
       "required provenance stays unverified; local success does not certify release.", ""].join("\n")
     : "";
-  const extension = [codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, handoffBinding, helpBinding, routingBinding, deliveryBinding].filter(Boolean).join("\n").trimEnd();
-  const extendedBody = extension ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : body;
+  const piBinding = adapter.id === "pi" && (delegates || skill.metadata.name === "poteto-mode" || skill.metadata.name === "setup-oh-my-stack")
+    ? ["## Pi native binding", "", "Read [the native binding](../../docs/runtime-binding.md) and",
+      "[model selection](../../docs/model-selection.md). Use `oms_delegate` with",
+      "`start`, `collect`, and `cancel` for the workflow's explicitly requested",
+      "route/member. Saved Pi resolution and packaged role contracts select",
+      "the child model, thinking level, and permissions. Preserve panel order and",
+      "count. Supply explicit context and an isolated checkout for writing roles.",
+      "Report actual model and effort separately from requested configuration.", ""].join("\n") : "";
+  const extension = [piBinding, codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, helpBinding, routingBinding, deliveryBinding].filter(Boolean).join("\n").trimEnd();
+  const extendedBody = extension ? /^# .+\n/.test(body)
+    ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : `${extension}\n\n${body}` : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
 }
 
@@ -794,6 +842,26 @@ function renderCodexRole(role) {
   ].join("\n");
 }
 
+function renderPiRole(role) {
+  return JSON.stringify({ name: role.metadata.name, description: role.metadata.description,
+    writes: role.metadata.writes, constraints: role.metadata.constraints,
+    instructions: role.instructions.trim() }, null, 2) + "\n";
+}
+
+function runtimeBindingGuide(runtime) {
+  const binding = runtime === "pi" ? "Use the native oms_delegate tool: start a named route/member with explicit task, cwd and context; collect the returned handle until terminal; cancel owned running handles. For a canonical role named by a playbook, use route role.<name>, member 1: poteto-agent maps to role.poteto-agent and comment-sicko maps to role.comment-sicko. Read-only roles receive read,grep,find,ls. Writing roles require an explicit isolated checkout. Native CLI/RPC uses explicit provider/model/thinking and host login. Missing selectors fail; observed model and effort remain unknown unless independently returned."
+    : runtime === "codex" ? "Prepare each worker with scripts/codex-delegation.mjs and pass its model, reasoning_effort, task_name, fork_turns=none and full role/task message to the native spawn tool. Resolve saved configuration with scripts/model-resolution.mjs. Verify observed routing from native records when available."
+      : runtime === "omp" ? "Resolve scripts/model-resolution.mjs --runtime omp --cwd WORKSPACE. Select the manifest role/route agent with the native task tool, preserve panel membership and order, and collect each returned task handle. Use the current host cancellation and return tools."
+        : "Use the native Agent tool with the configured agent role/model. Preserve the workflow's specified worker count and order; distinguish requested model/effort from observed execution. Record unavailable cancellation or effort evidence explicitly.";
+  const helpers = runtime === "codex" ? "The native bounded GitHub helpers scripts/github-workflow.mjs, scripts/github-autopilot-provider.mjs and scripts/durable-run-state.mjs support only their documented single-PR operations and gates. Read docs/github-workflow.md before invoking them." : "Source-host helpers retained under a Skill's scripts directory are reference-only; their presence does not verify execution on this host.";
+  return `# ${runtime} runtime binding\n\n${binding}\n\n${helpers}\n\nRole contracts preserve upstream task semantics. Follow the selected workflow's stages and review standard. Delegate the workers that workflow calls for. Host authorization and available tool contracts continue to apply.\n`;
+}
+
+function modelSelectionGuide(runtime) {
+  const roots = runtime === "pi" ? "~/.pi/agent and project .pi" : runtime === "omp" ? "~/.omp/agent and project .omp" : runtime === "codex" ? "~/.codex and project .codex" : "~/.claude (or CLAUDE_CONFIG_DIR) and project .claude";
+  return `# Model selection\n\nCollect a current inventory with scripts/collect-model-inventory.mjs --runtime ${runtime}. Review every model and effort before scripts/configure-models.mjs --apply. Preview is the default; --output writes only a detached destination. Native scope is ${roots}. scripts/model-resolution.mjs resolves nearest project first, then user configuration; each host owns an independent manifest. Fresh panels contain two entries. Same-target/same-preset reruns preserve saved membership, order, model and effort unless an explicit change requests otherwise. Missing observed model/effort selectors fail. Configuration artifacts do not prove native routing.\n`;
+}
+
 function renderClaudeRole(role) {
   const tools = role.metadata.writes
     ? "Read, Grep, Glob, Bash, Edit, Write"
@@ -819,7 +887,8 @@ function packageSkills(model, includeProbes) {
 export async function renderTarget(stageRoot, model, adapter, { includeProbes = false } = {}) {
   const target = join(stageRoot, adapter.packageDir);
   const skills = packageSkills(model, includeProbes);
-  const manifest = { ...adapter.manifest, version: model.project.version };
+  const manifest = structuredClone({ ...adapter.manifest, version: model.project.version });
+  if (model.entries.some((entry) => entry.kind === "manifest" && entry.path === "manifest/hooks" && entry.targets.includes(adapter.id))) manifest.hooks = "./hooks/hooks.json";
   await writeJson(join(target, adapter.manifestPath), manifest);
   if (adapter.portableManifestPath) {
     await writeJson(join(target, adapter.portableManifestPath), {
@@ -831,15 +900,25 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   for (const skill of skills) {
     const skillTarget = join(target, adapter.skillsDir, skill.metadata.name);
     await cp(skill.directory, skillTarget, { recursive: true });
-    if (!skill.source) await rm(join(skillTarget, "skill.json"));
-    const document = renderSkillDocument(skill, adapter);
+    if (!skill.source) {
+      await rm(join(skillTarget, "skill.json"));
+      const prefix = relative(model.root, skill.directory).split(sep).join("/");
+      for (const path of await filesUnder(skillTarget)) {
+        const sourcePath = `${prefix}/${relative(skillTarget, path).split(sep).join("/")}`;
+        const classification = model.coreSkillCatalog.entries.find((entry) => entry.kind === "reference" && entry.path === sourcePath)
+          ?? model.coreSkillCatalog.entries.find((entry) => entry.kind === "reference" && entry.path === `${prefix}/**`);
+        assert(classification, `resource lacks catalog classification: ${sourcePath}`);
+        if (!selectedEntry(classification, model.extensions)) await rm(path);
+      }
+    }
+    const document = renderSkillDocument(skill, adapter, model);
     // Source originals retain their complete upstream bytes, including long
     // references without an H1. Only portable core instructions use the wrapper.
     if (!skill.source && adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
       await writeText(join(skillTarget, "WORKFLOW.md"), document);
       const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];
-      const heading = document.match(/^# .+$/m)[0];
+      const heading = document.match(/^# .+$/m)?.[0] ?? `# ${skill.metadata.name}`;
       await writeText(join(skillTarget, "SKILL.md"), `${frontmatter}\n${heading}\n\nRead the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying\nthis Skill. Read it through the end; if a tool truncates output, continue with\nbounded chunks until the whole file has been read. Do not execute a partial\nprocedure or infer missing instructions. If the file cannot be read, report\nthe limitation and stop before taking workflow actions.\n\nThe user's request sets the scope and authorization. Loading this Skill does\nnot authorize writes, external actions, or running its workflow when the user\nonly asks to inspect or explain it.\n`);
     } else {
       await writeText(join(skillTarget, "SKILL.md"), document);
@@ -862,6 +941,9 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   await writeJson(join(target, "SKILL_CATALOG.json"), {
     schemaVersion: 1,
     target: adapter.id,
+    selection: model.selection,
+    resources: model.entries.filter((entry) => !entry.targets || entry.targets.includes(adapter.id))
+      .filter((entry) => !entry.owner || skills.some((skill) => skill.metadata.name === entry.owner)),
     skills: skills.map((skill) => ({
       name: skill.metadata.name,
       audience: audiences.get(skill.metadata.name),
@@ -872,27 +954,30 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   });
 
   for (const role of model.roles) {
-    const extension = adapter.id === "codex" ? "toml" : "md";
+    const extension = adapter.id === "codex" ? "toml" : adapter.id === "pi" ? "json" : "md";
     const renderer = adapter.id === "omp"
       ? renderOmpRole
       : adapter.id === "codex"
         ? renderCodexRole
-        : renderClaudeRole;
+        : adapter.id === "pi" ? renderPiRole : renderClaudeRole;
     await writeText(join(target, "agents", `${role.metadata.name}.${extension}`), renderer(role));
   }
 
-  if (adapter.id === "codex") {
+  if (["codex", "pi"].includes(adapter.id)) {
     await writeJson(join(target, "config", "role-contracts.json"), {
       schemaVersion: 1,
-      target: "codex",
+      target: adapter.id,
       roles: Object.fromEntries(model.roles.map((role) => [role.metadata.name, {
         description: role.metadata.description,
         instructions: role.instructions.trim(),
+        writes: role.metadata.writes,
+        constraints: role.metadata.constraints,
       }])),
     });
   }
 
   const resolutionAdapters = {
+    pi: { format: "json", modelField: "model", reasoningField: "reasoning" },
     omp: { format: "yaml", modelField: "model", reasoningField: "thinkingLevel" },
     codex: { format: "toml", modelField: "model", reasoningField: "model_reasoning_effort" },
     "claude-code": { format: "yaml", modelField: "model", reasoningField: "effort" },
@@ -907,7 +992,11 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       constraints: role.metadata.constraints,
       writes: role.metadata.writes,
     })),
-    routes: ["omp", "codex"].includes(adapter.id)
+    routes: adapter.id === "pi" ? { ...model.resolutionPolicy.routes,
+      ...Object.fromEntries(model.roles.map((role) => [`role.${role.metadata.name}`, {
+        kind: "single", role: role.metadata.name, workload: role.metadata.workload,
+      }])) }
+      : ["omp", "codex"].includes(adapter.id)
       ? { ...model.resolutionPolicy.routes, ...model.hostRoutes }
       : model.resolutionPolicy.routes,
     presets: Object.fromEntries(
@@ -916,49 +1005,28 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     ),
     adapter: resolutionAdapters[adapter.id],
   });
-  await mkdir(join(target, "scripts"), { recursive: true });
-  await cp(join(model.root, "tools", "collect-model-inventory.mjs"), join(target, "scripts", "collect-model-inventory.mjs"));
-  await cp(join(model.root, "tools", "configure-models.mjs"), join(target, "scripts", "configure-models.mjs"));
-  if (["omp", "codex", "claude-code"].includes(adapter.id)) {
-    await cp(join(model.root, "tools", "model-resolution.mjs"), join(target, "scripts", "model-resolution.mjs"));
-    await cp(join(model.root, "tools", "setup-acceptance.mjs"), join(target, "scripts", "setup-acceptance.mjs"));
+  for (const entry of model.entries) {
+    if (!entry.output || entry.generated || entry.targets && !entry.targets.includes(adapter.id)) continue;
+    const output = join(target, entry.output);
+    await mkdir(dirname(output), { recursive: true });
+    await cp(join(model.root, entry.path), output);
   }
-  for (const name of deliveryRuntimeScripts) {
-    await cp(join(model.root, "tools", name), join(target, "scripts", name));
-  }
-  await mkdir(join(target, "docs"), { recursive: true });
-  await cp(join(model.root, "docs", "delivery-evidence.md"), join(target, "docs", "delivery-evidence.md"));
-  if (["codex", "claude-code"].includes(adapter.id)) {
-    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
-    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
-      await cp(join(model.root, "tools", name), join(target, "scripts", name));
-    }
+  if (model.entries.some((entry) => entry.kind === "hook" && entry.targets.includes(adapter.id))) {
     await writeJson(join(target, "hooks", "hooks.json"), {
-      hooks: { SessionStart: [{ matcher: "startup|resume|clear|compact", hooks: [{
-        type: "command",
-        command: adapter.id === "codex"
-          ? 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"'
-          : 'node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-routing-hook.mjs"',
-        timeout: 10,
+      hooks: { SessionStart: [{ matcher: "startup|resume|clear|compact", hooks: [{ type: "command",
+        command: adapter.id === "codex" ? 'node "${PLUGIN_ROOT}/scripts/codex-routing-hook.mjs"'
+          : 'node "${CLAUDE_PLUGIN_ROOT}/scripts/claude-routing-hook.mjs"', timeout: 10,
         ...(adapter.id === "codex" ? { additionalContextLimit: 500 } : {}),
       }] }] },
     });
-    await mkdir(join(target, "docs"), { recursive: true });
-    await cp(join(model.root, "docs", "automatic-routing.md"), join(target, "docs", "automatic-routing.md"));
   }
-  if (adapter.id === "codex") {
-    await cp(join(model.root, "docs", "github-workflow.md"), join(target, "docs", "github-workflow.md"));
-    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
-      await cp(join(model.root, "tools", name), join(target, "scripts", name));
-    }
-  }
-  if (adapter.id === "claude-code") {
-    await cp(join(model.root, "tools", "claude-effort-hook.mjs"), join(target, "scripts", "claude-effort-hook.mjs"));
-  }
+  await writeText(join(target, "docs", "runtime-binding.md"), runtimeBindingGuide(adapter.id));
+  await writeText(join(target, "docs", "model-selection.md"), modelSelectionGuide(adapter.id));
 
   await writeJson(join(target, "GENERATION.json"), {
     schemaVersion: 1,
     generatedBy: "tools/generate.mjs",
+    selection: model.selection,
     target: adapter.id,
     sourceVersion: model.project.version,
     profiles: adapter.profiles,
@@ -1018,7 +1086,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(catalog.skills.filter((entry) => entry.audience === "public").length === model.skillCatalog.public.length, `${adapter.id}: generated public Skill catalog drift`);
   assert(catalog.skills.filter((entry) => entry.audience === "probe").length === (includeProbes ? model.skillCatalog.probes.length : 0), `${adapter.id}: generated probe Skill catalog drift`);
   for (const role of model.roles) {
-    const extension = adapter.id === "codex" ? "toml" : "md";
+    const extension = adapter.id === "codex" ? "toml" : adapter.id === "pi" ? "json" : "md";
     assert(
       await exists(join(target, "agents", `${role.metadata.name}.${extension}`)),
       `${adapter.id}: missing generated role ${role.metadata.name}`,
@@ -1029,34 +1097,17 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   assert(resolution.roles.length === model.roles.length, `${adapter.id}: runtime resolution role drift`);
   assert(await exists(join(target, "scripts", "collect-model-inventory.mjs")), `${adapter.id}: inventory tool is missing`);
   assert(await exists(join(target, "scripts", "configure-models.mjs")), `${adapter.id}: setup tool is missing`);
-  for (const name of deliveryRuntimeScripts) {
-    assert(await exists(join(target, "scripts", name)), `${adapter.id}: delivery dependency ${name} is missing`);
+  for (const entry of model.entries) {
+    if (!entry.output || entry.targets && !entry.targets.includes(adapter.id)) continue;
+    assert(await exists(join(target, entry.output)), `${adapter.id}: selected resource is missing: ${entry.output}`);
   }
-  assert(await exists(join(target, "docs", "delivery-evidence.md")), `${adapter.id}: delivery guide is missing`);
-  if (["omp", "codex", "claude-code"].includes(adapter.id)) {
-    assert(await exists(join(target, "scripts", "model-resolution.mjs")), `${adapter.id}: model resolution tool is missing`);
-    assert(await exists(join(target, "scripts", "setup-acceptance.mjs")), `${adapter.id}: setup acceptance tool is missing`);
-  }
-  if (["codex", "claude-code"].includes(adapter.id)) {
-    const hookName = adapter.id === "codex" ? "codex-routing-hook.mjs" : "claude-routing-hook.mjs";
-    for (const name of ["routing.mjs", "routing-hook.mjs", hookName]) {
-      assert(await exists(join(target, "scripts", name)), `${adapter.id}: ${name} is missing`);
-    }
-    assert(await exists(join(target, "hooks", "hooks.json")), `${adapter.id}: routing hook is missing`);
-    assert(await exists(join(target, "docs", "automatic-routing.md")), `${adapter.id}: routing guide is missing`);
-  }
-  if (adapter.id === "codex") {
-    assert(!await exists(join(target, "plugin.json")), "codex: root Agent Plugins manifest bypasses the verified hook loader");
-    assert(manifest.hooks === "./hooks/hooks.json", "codex: native manifest must name the routing hook");
-    assert(await exists(join(target, "hooks", "hooks.json")), "codex: routing hook is missing");
-    assert(await exists(join(target, "docs", "automatic-routing.md")), "codex: routing guide is missing");
-    assert(await exists(join(target, "docs", "github-workflow.md")), "codex: GitHub workflow documentation is missing");
-    for (const name of ["github-workflow.mjs", "github-autopilot-provider.mjs", "durable-run-state.mjs"]) {
-      assert(await exists(join(target, "scripts", name)), `codex: ${name} is missing`);
-    }
-  }
-  if (adapter.id === "claude-code") {
-    assert(await exists(join(target, "scripts", "claude-effort-hook.mjs")), "Claude Code effort hook is missing");
+  const routing = model.entries.some((entry) => entry.kind === "hook" && entry.targets.includes(adapter.id));
+  assert(Boolean(manifest.hooks) === routing, `${adapter.id}: extension hook declaration drift`);
+  assert((await exists(join(target, "hooks", "hooks.json"))) === routing, `${adapter.id}: extension hook files drift`);
+  assert(JSON.stringify(generation.selection) === JSON.stringify(model.selection), `${adapter.id}: selection drift`);
+  if (adapter.id === "pi") {
+    assert(await exists(join(target, "extensions", "oms.ts")), "pi: native extension is missing");
+    assert(await exists(join(target, "config", "role-contracts.json")), "pi: role contracts are missing");
   }
 }
 
@@ -1103,8 +1154,10 @@ async function installGeneratedTargets(root, stageRoot, adapters) {
   }
 }
 
-export async function generate({ root = repoRoot, check = false } = {}) {
-  const model = await loadModel(root);
+export async function generate({ root = repoRoot, check = false, extensions = [], outputRoot = root } = {}) {
+  const model = await loadModel(root, { extensions });
+  outputRoot = resolve(outputRoot);
+  await mkdir(join(outputRoot, ".tmp"), { recursive: true });
   await mkdir(join(root, ".tmp"), { recursive: true });
   const stageRoot = await mkdtemp(join(root, ".tmp", "generate-"));
   try {
@@ -1116,12 +1169,12 @@ export async function generate({ root = repoRoot, check = false } = {}) {
     if (check) {
       const drift = [];
       for (const adapter of model.adapters) {
-        const differences = await compareTrees(join(stageRoot, adapter.packageDir), join(root, adapter.packageDir));
+        const differences = await compareTrees(join(stageRoot, adapter.packageDir), join(outputRoot, adapter.packageDir));
         drift.push(...differences.map((path) => `${adapter.packageDir}/${path}`));
       }
       assert(drift.length === 0, `generated packages are stale:\n${drift.map((path) => `- ${path}`).join("\n")}`);
     } else {
-      await installGeneratedTargets(root, stageRoot, model.adapters);
+      await installGeneratedTargets(outputRoot, stageRoot, model.adapters);
     }
     return model;
   } finally {
@@ -1131,9 +1184,9 @@ export async function generate({ root = repoRoot, check = false } = {}) {
 
 export async function generateProbeTargets({
   root = repoRoot,
-  out = join(root, ".tmp", "probe-packages"),
+  out = join(root, ".tmp", "probe-packages"), extensions = [],
 } = {}) {
-  const model = await loadModel(root);
+  const model = await loadModel(root, { extensions });
   await rm(out, { recursive: true, force: true });
   await mkdir(out, { recursive: true });
   for (const adapter of model.adapters) {
@@ -1144,19 +1197,26 @@ export async function generateProbeTargets({
 }
 
 async function main() {
-  const unknown = process.argv.slice(2).filter(
-    (argument) => !["--check", "--include-probes"].includes(argument),
-  );
-  assert(unknown.length === 0, `unknown arguments: ${unknown.join(" ")}`);
+  const options = { extensions: [] };
+  const argv = process.argv.slice(2);
+  for (let index = 0; index < argv.length; index += 1) {
+    const argument = argv[index];
+    if (["--check", "--include-probes"].includes(argument)) continue;
+    assert(["--extensions", "--output-root"].includes(argument), `unknown argument ${argument}`);
+    const value = argv[++index]; assert(value && !value.startsWith("--"), `${argument}: value is required`);
+    if (argument === "--extensions") options.extensions = value.split(",");
+    else options.outputRoot = resolve(value);
+  }
+  normalizeExtensions(options.extensions);
   const check = process.argv.includes("--check");
   const includeProbes = process.argv.includes("--include-probes");
   assert(!(check && includeProbes), "--check cannot be combined with --include-probes");
   if (includeProbes) {
-    const model = await generateProbeTargets();
+    const model = await generateProbeTargets({ extensions: options.extensions, ...(options.outputRoot ? { out: options.outputRoot } : {}) });
     console.log(`Generated test-only targets from ${model.skills.length} Skill under .tmp/probe-packages/.`);
     return;
   }
-  const model = await generate({ check });
+  const model = await generate({ check, ...options });
   console.log(`${check ? "Verified" : "Generated"} ${model.adapters.length} public targets with ${model.skillCatalog.public.length} of ${model.skills.length} source Skill.`);
 }
 

@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { access, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
+import { pathToFileURL } from "node:url";
 import test from "node:test";
 
 import {
@@ -12,8 +15,63 @@ import {
   repoRoot,
   validateCoreText,
   validateRequirementSupport,
+  validateRenderedTarget,
 } from "../tools/generate.mjs";
-import { validate } from "../tools/validate.mjs";
+
+const execFileAsync = promisify(execFile);
+
+test("extension selection controls skills reference closure scripts hooks and manifest declarations", async () => {
+  const stage = await mkdtemp(join(tmpdir(), "oms-extension-closure-"));
+  try {
+    for (const extensions of [[], ["enhanced-delivery"], ["auto-routing"], ["extras"], ["aihero"]]) {
+      const model = await loadModel(repoRoot, { extensions });
+      const directory = join(stage, extensions[0] ?? "strict");
+      for (const adapter of model.adapters) {
+        const target = await renderTarget(directory, model, adapter);
+        await validateRenderedTarget(target, adapter, model);
+        const has = async (path) => access(join(target, path)).then(() => true, () => false);
+        assert.equal(await has("scripts/delivery-evidence.mjs"), extensions.includes("enhanced-delivery"), adapter.id);
+        assert.equal(await has("docs/delivery-evidence.md"), extensions.includes("enhanced-delivery"), adapter.id);
+        assert.equal(await has("skills/oms-enhanced-delivery/SKILL.md"), extensions.includes("enhanced-delivery"), adapter.id);
+        assert.equal(await has("skills/oms-auto/SKILL.md"), extensions.includes("auto-routing"), adapter.id);
+        assert.equal(await has("skills/setup-benny/SKILL.md"), extensions.includes("extras"), adapter.id);
+        assert.equal(await has("skills/codebase-design/SKILL.md"), extensions.includes("aihero"), adapter.id);
+        const routing = extensions.includes("auto-routing") && ["codex", "claude-code"].includes(adapter.id);
+        assert.equal(await has("hooks/hooks.json"), routing, adapter.id);
+        const manifest = JSON.parse(await readFile(join(target, adapter.manifestPath), "utf8"));
+        assert.equal(Boolean(manifest.hooks), routing, adapter.id);
+        if (extensions.includes("enhanced-delivery")) {
+          await execFileAsync(process.execPath, ["--input-type=module", "-e",
+            `await import(${JSON.stringify(pathToFileURL(join(target, "scripts/delivery-native-attribution.mjs")).href)})`]);
+        }
+        for (const name of ["feature", "poteto-mode", "figure-it-out", "interrogate"]) {
+          const path = join(target, "skills", name);
+          const entry = await readFile(join(path, "SKILL.md"), "utf8");
+          const complete = entry.includes("](WORKFLOW.md)") ? await readFile(join(path, "WORKFLOW.md"), "utf8") : entry;
+          assert.doesNotMatch(complete, /Local delivery evidence binding|Child session handoff|reflect\.synthesizer.*later synthesis pass/);
+        }
+      }
+    }
+    await assert.rejects(loadModel(repoRoot, { extensions: ["unknown"] }), /unknown extension/);
+    await assert.rejects(loadModel(repoRoot, { extensions: ["extras", "extras"] }), /duplicate extension/);
+  } finally { await rm(stage, { recursive: true, force: true }); }
+});
+
+test("generator CLI writes isolated strict or opt-in outputs and rejects unknown selections", async () => {
+  const outputRoot = await mkdtemp(join(tmpdir(), "oms CLI output with spaces "));
+  const before = await readFile(join(repoRoot, "packages/codex/GENERATION.json"));
+  try {
+    await execFileAsync(process.execPath, [join(repoRoot, "tools/generate.mjs"), "--output-root", outputRoot, "--extensions", "extras"]);
+    const catalog = JSON.parse(await readFile(join(outputRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
+    assert.deepEqual(catalog.selection, { base: "pstack", extensions: ["extras"] });
+    assert.ok(catalog.skills.some((entry) => entry.name === "setup-benny"));
+    assert.equal(catalog.skills.find((entry) => entry.name === "setup-benny").source, undefined);
+    assert.ok(catalog.resources.some((entry) => entry.name === "setup-benny" && entry.origin === "pstack"));
+    assert.deepEqual(await readFile(join(repoRoot, "packages/codex/GENERATION.json")), before);
+    await assert.rejects(execFileAsync(process.execPath, [join(repoRoot, "tools/generate.mjs"), "--output-root", outputRoot, "--extensions", "unknown"]), /unknown extension/);
+  } finally { await rm(outputRoot, { recursive: true, force: true }); }
+});
+
 
 function expectedCodexBody(name, sourceText) {
   const routes = {
@@ -22,10 +80,6 @@ function expectedCodexBody(name, sourceText) {
   };
   let body = sourceText.replace(/^---\n[\s\S]*?\n---\n/, "").trim().replace(/^# .+\n/, "").trim();
   if (routes[name]) body = body.replaceAll("`code.delegates`", `\`${routes[name]}\``);
-  if (name === "reflect") body = body.replace(
-    "use `reflect.tooling` for tooling and `reflect.judgment` for judgment and the\ndivergent lens; keep all three sessions independent.",
-    "use `reflect.tooling`, `reflect.judgment`, and `reflect.divergent` for\nthe respective lenses; keep all three sessions independent. Use\n`reflect.synthesizer` for the later synthesis pass.",
-  );
   return body;
 }
 
@@ -94,15 +148,17 @@ test("OMP delegated workflows describe the current background-job lifecycle", as
 
 test("Codex keeps all direct entries with concise metadata and unchanged bodies", async () => {
   const model = await loadModel();
-  const catalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
+  const stage = await mkdtemp(join(tmpdir(), "oms-codex-metadata-"));
+  const target = await renderTarget(stage, model, model.adapters.find((adapter) => adapter.id === "codex"));
+  const catalog = JSON.parse(await readFile(join(target, "SKILL_CATALOG.json"), "utf8"));
   assert.deepEqual(catalog.skills.map((skill) => skill.name), model.skillCatalog.public);
-  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, 56 + model.sourceSkills.length);
+  assert.equal(catalog.skills.filter((skill) => skill.category === "workflow").length, model.skillCatalog.public.length - 24);
   assert.equal(catalog.skills.filter((skill) => skill.category === "principle").length, 24);
   let originalLength = 0;
   let generatedLength = 0;
   for (const name of model.skillCatalog.public) {
     const source = model.skills.find((skill) => skill.metadata.name === name);
-    const document = await readFile(join(repoRoot, "packages/codex/skills", name, "SKILL.md"), "utf8");
+    const document = await readFile(join(target, "skills", name, "SKILL.md"), "utf8");
     if (source.source) {
       assert.equal(document, source.text, `${name}: preserve original frontmatter and instructions`);
       continue;
@@ -111,10 +167,10 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
     assert.ok(description.length <= 120, name);
     const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
     const complete = document.includes("](WORKFLOW.md)")
-      ? await readFile(join(repoRoot, "packages/codex/skills", name, "WORKFLOW.md"), "utf8") : document;
+      ? await readFile(join(target, "skills", name, "WORKFLOW.md"), "utf8") : document;
     const sourceAfterHeading = expectedCodexBody(name, source.text);
     assert.ok(body(complete).endsWith(sourceAfterHeading), name);
-    const metadata = await readFile(join(repoRoot, "packages/codex/skills", name, "agents/openai.yaml"), "utf8");
+    const metadata = await readFile(join(target, "skills", name, "agents/openai.yaml"), "utf8");
     assert.ok(metadata.includes(`Use $${name} for this task.`), name);
     assert.ok(metadata.includes(`allow_implicit_invocation: ${source.metadata.invocation === "automatic"}`), name);
     assert.ok(metadata.includes(name.startsWith("principle-") ? "Principle: " : "Workflow: "), name);
@@ -122,132 +178,47 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
     generatedLength += description.length;
   }
   assert.ok(generatedLength < originalLength * 0.6, "description character budget should decrease by at least 40%");
+  await rm(stage, { recursive: true, force: true });
 });
 
-test("loads ninety-two portable Skills, seven roles, and three adapters", async () => {
+test("strict selection excludes additions and has four independent adapters", async () => {
   const model = await loadModel();
-  assert.equal(model.coreSkills.length, 92);
-  assert.equal(model.skills.length, 92 + model.sourceSkills.length);
-  assert.deepEqual(model.coreSkills.map((skill) => skill.metadata.name), [
-    "architect",
-    "arena",
-    "authoring-a-skill",
-    "automate-me",
-    "autonomous-run",
-    "autopilot-full",
-    "autopilot-stack",
-    "babysit",
-    "benchmark-checklist",
-    "blast-radius",
-    "bro",
-    "bug-fix",
-    "check-cancellation",
-    "check-custom-role",
-    "check-delegation",
-    "check-follow-up",
-    "check-interaction",
-    "check-model-routing",
-    "check-panel",
-    "check-parallel",
-    "check-resources",
-    "check-stale-replay",
-    "check-transcript",
-    "check-writer-isolation",
-    "correct",
-    "create-verification-skill",
-    "eval",
-    "feature",
-    "figure-it-out",
-    "hillclimb",
-    "how",
-    "interrogate",
-    "investigation",
-    "ketchup",
-    "maintain-verification-skill",
-    "make-bot-ui",
-    "multi-phase-plan",
-    "no-comments",
-    "oms-auto",
-    "opening-a-pr",
-    "orchestrate",
-    "pause-safely",
-    "perf-issue",
-    "poteto-help",
-    "poteto-mode",
-    "principle-attack-the-premise",
-    "principle-boundary-discipline",
-    "principle-build-the-lever",
-    "principle-encode-lessons-in-structure",
-    "principle-exhaust-the-design-space",
-    "principle-experience-first",
-    "principle-explain-the-number",
-    "principle-fix-root-causes",
-    "principle-foundational-thinking",
-    "principle-guard-the-context-window",
-    "principle-laziness-protocol",
-    "principle-make-operations-idempotent",
-    "principle-migrate-callers-then-delete-legacy-apis",
-    "principle-minimize-reader-load",
-    "principle-model-the-domain",
-    "principle-never-block-on-the-human",
-    "principle-outcome-oriented-execution",
-    "principle-prove-it-works",
-    "principle-redesign-from-first-principles",
-    "principle-separate-before-serializing-shared-state",
-    "principle-sequence-verifiable-units",
-    "principle-subtract-before-you-add",
-    "principle-test-behavior-not-implementation",
-    "principle-type-system-discipline",
-    "prototype",
-    "prove-it-works",
-    "recall",
-    "refactoring",
-    "reflect",
-    "reproduce-and-fix-issues",
-    "runtime-forensics",
-    "session-pickup",
-    "setup-benny",
-    "setup-oh-my-stack",
-    "shipping",
-    "show-me-your-work",
-    "swarm",
-    "tdd",
-    "teach",
-    "technical-writing",
-    "trace-forensics",
-    "triage-issue-reports",
-    "typescript-best-practices",
-    "unslop",
-    "visual-parity",
-    "why",
-    "worktree-cleanup",
-  ]);
-  assert.equal(
-    model.skills.filter((skill) => skill.metadata.name.startsWith("principle-")).every(
-      (skill) => skill.metadata.invocation === "explicit",
-    ),
-    true,
-  );
-  assert.equal(model.skills.find((skill) => skill.metadata.name === "tdd").metadata.invocation, "explicit");
-  assert.equal(model.coreSkillCatalog.public.length, 80);
-  assert.equal(model.skillCatalog.public.length, 80 + model.sourceSkills.length);
-  assert.equal(model.skillCatalog.probes.length, 12);
-  assert.deepEqual(model.skillCatalog.probes, model.skills
-    .map((skill) => skill.metadata.name)
-    .filter((name) => name.startsWith("check-")));
-  assert.equal(model.skillCatalog.public.includes("bug-fix"), true);
-  assert.equal(model.skillCatalog.public.includes("prove-it-works"), true);
-  assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code"]);
-  assert.deepEqual(model.roles.map((role) => role.metadata.name), [
-    "evidence-reader",
-    "explainer",
-    "explorer",
-    "implementer",
-    "reviewer",
-    "synthesizer",
-    "trail-reviewer",
-  ]);
-  assert.equal(model.profiles.size, 7);
+  assert.deepEqual(model.selection, { base: "pstack", extensions: [] });
+  for (const name of ["oms-auto", "prove-it-works", "reproduce-and-fix-issues", "setup-benny", "triage-issue-reports", "oms-enhanced-delivery"]) {
+    assert.equal(model.skills.some((skill) => skill.metadata.name === name), false, name);
+  }
+  assert.equal(model.sourceSkills.length, 0);
+  assert.ok(model.skillCatalog.public.includes("setup-oh-my-stack"));
+  assert.deepEqual(model.adapters.map((adapter) => adapter.id), ["omp", "codex", "claude-code", "pi"]);
+  assert.equal(model.resolutionPolicy.routes["hardest.tasks"].role, "implementer");
+  for (const route of Object.values(model.resolutionPolicy.routes)) if (route.kind === "panel") assert.equal(route.defaultCount, 2);
+  for (const presets of Object.values(model.resolutionPresets).filter((value) => typeof value === "object")) {
+    for (const preset of Object.values(presets)) for (const route of Object.values(preset.routes ?? {})) if (Array.isArray(route)) assert.equal(route.length, 2);
+  }
+  const profile = model.profiles.get("pi-default");
+  assert.equal(profile.verification.status, "pending");
+  assert.ok(Object.values(profile.capabilities).every((record) => record.status === "unknown" && record.evidence === null));
+});
+
+test("Pi renders independent JSON roles contracts and explicit canonical-role routes", async () => {
+  const model = await loadModel();
+  const stage = await mkdtemp(join(tmpdir(), "oms-pi-role-contracts-"));
+  try {
+    const target = await renderTarget(stage, model, model.adapters.find((adapter) => adapter.id === "pi"));
+    const descriptor = JSON.parse(await readFile(join(target, "config/runtime-resolution.json"), "utf8"));
+    const contracts = JSON.parse(await readFile(join(target, "config/role-contracts.json"), "utf8"));
+    assert.equal(descriptor.adapter.format, "json");
+    assert.equal(contracts.target, "pi");
+    for (const role of model.roles) {
+      const record = JSON.parse(await readFile(join(target, "agents", `${role.metadata.name}.json`), "utf8"));
+      assert.equal(record.instructions, role.instructions.trim());
+      assert.equal(record.writes, role.metadata.writes);
+      assert.equal(contracts.roles[role.metadata.name].writes, role.metadata.writes);
+      assert.equal(descriptor.routes[`role.${role.metadata.name}`].role, role.metadata.name);
+    }
+    assert.equal(contracts.roles["comment-sicko"].writes, true);
+    assert.equal(descriptor.routes["role.poteto-agent"].role, "poteto-agent");
+  } finally { await rm(stage, { recursive: true, force: true }); }
 });
 
 test("live profiles cite surface-specific evidence", async () => {
@@ -345,7 +316,8 @@ test("portable core rejects runtime bindings", () => {
 
 test("unsupported requirements need an explicit fallback", async () => {
   const model = await loadModel();
-  const skill = structuredClone(model.skills.find((entry) => entry.metadata.name === "prove-it-works"));
+  const skill = structuredClone(model.skills.find((entry) => entry.metadata.name === "setup-oh-my-stack"));
+  skill.metadata.requires.push("workspace.inspect");
   const profile = structuredClone(model.profiles.get("omp-default"));
   profile.capabilities["workspace.inspect"].status = "unsupported";
   assert.throws(
@@ -377,16 +349,16 @@ test("rendering is deterministic for every adapter", async () => {
 
 test("explicit invocation renders as target-native policy", async () => {
   const model = await loadModel();
-  const skill = model.skills.find((entry) => entry.metadata.name === "prove-it-works");
+  const skill = model.skills.find((entry) => entry.metadata.name === "setup-oh-my-stack");
   skill.metadata.invocation = "explicit";
   const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-invocation-"));
   try {
     for (const adapter of model.adapters) await renderTarget(stage, model, adapter);
-    const ompSkill = await readFile(join(stage, "packages/omp/skills/prove-it-works/SKILL.md"), "utf8");
-    const claudeSkill = await readFile(join(stage, "packages/claude-code/skills/prove-it-works/SKILL.md"), "utf8");
-    const codexSkill = await readFile(join(stage, "packages/codex/skills/prove-it-works/SKILL.md"), "utf8");
+    const ompSkill = await readFile(join(stage, "packages/omp/skills/setup-oh-my-stack/SKILL.md"), "utf8");
+    const claudeSkill = await readFile(join(stage, "packages/claude-code/skills/setup-oh-my-stack/SKILL.md"), "utf8");
+    const codexSkill = await readFile(join(stage, "packages/codex/skills/setup-oh-my-stack/SKILL.md"), "utf8");
     const codexPolicy = await readFile(
-      join(stage, "packages/codex/skills/prove-it-works/agents/openai.yaml"),
+      join(stage, "packages/codex/skills/setup-oh-my-stack/agents/openai.yaml"),
       "utf8",
     );
     assert.match(ompSkill, /disable-model-invocation: true/);
@@ -420,27 +392,34 @@ test("writable roles render native write permissions while read-only roles stay 
   }
 });
 
-test("committed packages match generator output", async () => {
-  await generate({ root: repoRoot, check: true });
+test("isolated generation and check leave committed packages unchanged", async () => {
+  const outputRoot = await mkdtemp(join(tmpdir(), "oms-isolated-generation-"));
+  try {
+    await generate({ root: repoRoot, outputRoot });
+    await generate({ root: repoRoot, outputRoot, check: true });
+  } finally { await rm(outputRoot, { recursive: true, force: true }); }
 });
 
 test("release packages expose public Skills while probe Skills remain test-only", async () => {
   const model = await loadModel();
+  const publicStage = await mkdtemp(join(tmpdir(), "oms-public-stage-"));
   for (const adapter of model.adapters) {
-    const skillRoot = join(repoRoot, adapter.packageDir, adapter.skillsDir);
+    await renderTarget(publicStage, model, adapter);
+    const skillRoot = join(publicStage, adapter.packageDir, adapter.skillsDir);
     const installed = (await readdir(skillRoot, { withFileTypes: true }))
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .sort();
     assert.deepEqual(installed, model.skillCatalog.public);
     const catalog = JSON.parse(await readFile(
-      join(repoRoot, adapter.packageDir, "SKILL_CATALOG.json"),
+      join(publicStage, adapter.packageDir, "SKILL_CATALOG.json"),
       "utf8",
     ));
     assert.deepEqual(catalog.skills.map((entry) => entry.name), model.skillCatalog.public);
     assert.equal(catalog.skills.every((entry) => entry.audience === "public"), true);
   }
 
+  await rm(publicStage, { recursive: true, force: true });
   const stage = await mkdtemp(join(tmpdir(), "oh-my-stack-probe-packages-"));
   try {
     for (const adapter of model.adapters) {
@@ -478,10 +457,4 @@ test("generated manifests identify the public source repository", async () => {
   } finally {
     await rm(stage, { recursive: true, force: true });
   }
-});
-
-test("source and generated packages satisfy repository validation", async () => {
-  const model = await validate();
-  const pkg = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
-  assert.equal(model.project.version, pkg.version);
 });

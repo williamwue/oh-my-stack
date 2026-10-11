@@ -5,7 +5,12 @@
   "packageDir": "packages/codex",
   "skillsDir": "skills",
   "manifestPath": ".codex-plugin/plugin.json",
-  "profiles": ["codex-desktop", "codex-cli", "codex-cli-interactive", "codex-ide"],
+  "profiles": [
+    "codex-desktop",
+    "codex-cli",
+    "codex-cli-interactive",
+    "codex-ide"
+  ],
   "manifest": {
     "name": "oh-my-stack",
     "description": "Portable, verifiable engineering workflows for Codex.",
@@ -22,7 +27,6 @@
       "verification"
     ],
     "skills": "./skills/",
-    "hooks": "./hooks/hooks.json",
     "interface": {
       "displayName": "Oh My Stack",
       "shortDescription": "Portable engineering workflows for Codex.",
@@ -32,7 +36,7 @@
       "capabilities": [],
       "websiteURL": "https://github.com/williamwue/oh-my-stack",
       "defaultPrompt": [
-        "Use $prove-it-works to verify this installation."
+        "Use $setup-oh-my-stack to configure models."
       ]
     }
   }
