@@ -4,7 +4,7 @@ Benny does not know how to start or drive every app. The user must configure one
 
 Set its skill name in `control.skill_name`.
 
-Set the completed user-facing feature map path in `control.feature_map_path`. Copy and fill [`feature-map.example.md`](./feature-map.example.md) outside the imported skill directories, for example at `.benny/feature-map.md`, instead of editing the imported example.
+Set the completed user-facing feature map path in `control.feature_map_path`. Copy and fill [`feature-map.example.md`](./feature-map.example.md) outside `<project-automation-root>/benny/` instead of editing the copied example.
 
 If the skill, feature map, or a required capability is absent, ambiguous, or incomplete, repro and fix work must fail closed.
 

@@ -3,6 +3,8 @@ name: triage-issue-reports
 description: Triage Slack issue reports with one thread-only verdict, evidence review, cause-aware routing, tracker dedupe, and fail-closed ticket creation. Use only from the configured Benny triage automation.
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Triage issue reports
 
 Classify one Slack report and post one useful verdict in its source thread. Create a tracker issue only for a clear, new bug. Do not reproduce or fix it here.
@@ -23,8 +25,8 @@ Load the external Benny configuration supplied by the automation. If the config 
 - If worker isolation cannot enforce those limits, do the work in the coordinator.
 - Never create an issue that cannot link back to the source thread.
 - Prefer no ticket over a guessed or duplicate ticket.
-- Apply the sibling **principle-separate-before-serializing-shared-state** Skill to source coordinates.
-- Apply the sibling **principle-minimize-reader-load** and **unslop** Skills to the final verdict.
+- Apply pstack's `principle-separate-before-serializing-shared-state` to source coordinates.
+- Apply pstack's `principle-minimize-reader-load` and `unslop` skills to the final verdict.
 
 ## 1. Freeze source coordinates
 
@@ -60,17 +62,14 @@ Inspect every relevant attachment.
 - Read screenshots at full useful resolution.
 - Review video for the state transition that separates correct and broken behavior.
 - Read logs, traces, and crash text for concrete signatures.
-- If media needs specialist review, use a read-only canonical `reviewer` child with a standalone narrow brief. The child returns findings only. If the host lacks child execution, perform the same bounded review locally and do not claim independent review.
+- If media needs specialist review, use a read-only media worker and ask a narrow question. The worker returns findings only.
 - If an attachment cannot be read, say so in the verdict. Do not invent what it shows.
 
 Use evidence already in the thread before asking the reporter for more.
 
 ## 3. Trace cause before routing
 
-Do a bounded source and history pass before choosing an owner or destination.
-Invoke the sibling **how** Skill to trace the path from the reported action to
-the observed result. Apply **principle-fix-root-causes** when the report looks
-like a regression or touches defensive code.
+Do a bounded source and history pass before choosing an owner or destination. Use pstack's `how` skill to trace the path from the reported action to the observed result. Use `why` when the report looks like a regression or touches defensive code.
 
 1. Identify the likely code path from the reported action to the observed result.
 2. Check whether the visible symptom belongs to that code path or a dependency below it.
@@ -231,7 +230,7 @@ If this run created a tracker issue and the verdict did not land, use the adapte
 
 ## 10. Watch one follow-up window
 
-Watch the source thread for the configured follow-up window through the host's watcher or durable-loop facility, then stop. If neither exists, preserve the exact predicate and checkpoint using the runtime contract's local fallback.
+Watch the source thread for the configured follow-up window, then stop.
 
 - Answer only a direct question to the triage identity.
 - Apply a concrete correction to the tracker issue when safe.

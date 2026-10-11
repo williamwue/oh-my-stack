@@ -1,86 +1,49 @@
 ---
 name: arena
-description: Compare independent candidates for the same artifact, cross-judge them, select a base, integrate stronger ideas, and verify the result.
+description: "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
 ---
+
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Arena
 
-Produce competing solutions to one task, then one coherent verified result.
-For partitioned coverage or a race with no synthesis, use [swarm](../swarm/SKILL.md).
-Keep a phase checklist: frame, fan out, cross-judge, pick, graft, verify.
+Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
 
-## Frame
+## Phase A: Frame
 
-Define the artifact, scope, source revision, constraints, and verification.
-Freeze a rubric of three to six gradeable criteria before seeing candidates.
-Keep it for the parent and judge; candidates receive the same task contract and
-grounding, not the judging rubric or other candidates' work.
+Every candidate gets the same prompt, so the prompt is the contract.
 
-Use the requested candidate count, or the length of an active
-`arena.runners` panel in the current resolution manifest; without one, start
-with two independent attempts. Assign entries in panel order, repeating only
-when the user explicitly requests more candidates than configured entries.
-For a separate cross-judge, select one entry from `arena.cross-judge-pool`,
-preferably a different resolved model family when observable. Bound total
-attempts and concurrency. Disclose same-model execution and unsupported
-diversity. Give each
-candidate an isolated output location. For implementation candidates, ensure
-each checkout has the same intended base and required local changes; a clean
-checkout that omits relevant uncommitted work is not the same starting state.
-Do not share writable branches, databases, ports, or external resources.
+1. State the artifact each candidate is producing.
+2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
+3. Pick the runners. Use the `arena runners` line in `the effective host model resolution`. If the rule or that line is missing, default to one each on `observed judgment-model choice` and `observed code-model choice`. An `auto` or `inherit-parent` entry in this line or the cross-judge line means the parent model, so omit `model` for it. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. Spawn more runners when the arena covers multiple design directions. Use the same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Give each candidate its own output location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
 
-If isolation is unavailable, candidates may return designs or patches without
-editing the shared tree. If delegation is unavailable, use clearly separated
-root candidate passes and disclose that they are not independent agents. Do
-not imply a multi-agent or multi-model result from that fallback.
+## Phase B: Fan out
 
-## Fan out and freeze
+Spawn all N subagents in one message with background execution through the generated runtime binding, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
 
-Start independent candidates within the runtime limit before waiting. Each
-brief includes the common task, immutable grounding, ownership, allowed actions,
-verification command or check, and required artifact plus rationale naming
-rejected alternatives. Workers may not publish or expand task authority.
+If a candidate produces no output, proceed with N-1 and note the dropout.
 
-Drain every started candidate; retain attributable outputs, exact revisions,
-checks, and failures. Freeze artifacts before judgment. A dropout remains a
-dropout, not a passing candidate. With fewer than two usable candidates, retry
-within the declared budget or report a single-candidate result, not a completed
-comparison. Do not let a timed-out writer continue changing a judged artifact.
+## Phase C: Cross-judge
 
-## Cross-judge and pick
+After all Phase B candidates complete, choose one model from the `arena cross-judge pool` line in `the effective host model resolution`. If the rule or that line is missing, choose from `observed judgment-model choice` and `observed code-model choice`. Prefer a different model family from the parent's. Spawn one readonly judge subagent on that model. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
-After candidates are frozen, start a distinct read-only judge with the rubric
-and path-labeled complete candidate artifacts. Pass each candidate's full
-frozen output verbatim, or give the judge a readable immutable artifact path;
-root-written summaries are not a substitute. If the runtime cannot deliver
-every complete artifact to the judge, disclose the gap and do not claim an
-independent cross-judge comparison. The parent reads every candidate end to end while
-the judge scores them. Prefer configured model diversity only when supported.
-Without a separate judge, run a distinct root critique after freezing and
-explicitly mark the independent cross-judge as unavailable.
+## Phase D: Pick a base
 
-Score every criterion with evidence. Compare the judge's recommendation with
-the parent's scores. Resolve disagreement against artifacts and constraints,
-not majority opinion. Prefer maintainable boundaries and smaller public APIs
-when otherwise tied. Record the selected base and rationale.
+Read every candidate end to end before picking. Score each against the rubric criterion by criterion, not on holistic feel, and compare with the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-## Graft and verify
+Pick the base a future maintainer can extend most easily without breaking invariants. When two feel tied, prefer the cleaner boundary or smaller API, per the Laziness Protocol.
 
-Revisit each losing candidate. Adapt valuable ideas into the base under one
-coherent design, recording source candidate, accepted grafts, and rejections.
-Convergence may need no graft; wildly incompatible assumptions require reframing
-within the budget, not averaging. One root integrator owns the final artifact.
-For an explanation or design-only request, return that artifact without code
-changes. Integrate code only when implementation is in scope; preserve unrelated
-user edits and never mechanically overwrite the working tree.
+## Phase E: Graft
 
-Verify the synthesized artifact itself, not just its winning precursor. Run
-relevant tests or evaluate the complete design against realistic usage and
-invariants. A failed check sends work back to framing or grafting within the
-budget, otherwise report the unresolved failure. No implicit commit, push,
-release, or merge is authorized by this workflow.
+Walk each losing candidate once more for what is worth porting into the base, usually one or two things per candidate, not most of it. Fold each graft in by hand, per the **redesign-from-first-principles** principle skill, so the result stays coherent under one mental model. Don't paste mechanically.
 
-Return the artifact and compact synthesis record: candidate statuses, rubric
-scores, judge verdict and disagreement resolution, base, grafts, rejected ideas,
-verification evidence, dropouts, and execution fallbacks. Do not claim verified
-success when the final check or a required candidate is missing.
+If the candidates converge on one shape, that is strong agreement. Note it and ship the consensus shape. No graft is needed. If they wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
+
+## Phase F: Verify
+
+Verify the synthesized artifact like any other output, per the **prove-it-works** principle skill. If verification finds a problem the arena missed, either Phase A was wrong (re-frame and re-run) or a candidate caught it and you missed the graft (go back to Phase E). Don't paper over it.
+
+## Outputs
+
+One synthesized artifact, with a short synthesis note alongside naming the base and why, the cross-judge's verdict, each graft with its source candidate, what was rejected and why, any convergence or dropouts, and the verification result.

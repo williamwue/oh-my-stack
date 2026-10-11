@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "poteto-agent",
+  "description": "Full upstream Poteto Mode worker for bounded authorized tasks.",
+  "workload": "balanced",
+  "constraints": [
+    "independent_session",
+    "reasoning_required"
+  ],
+  "writes": true
+}

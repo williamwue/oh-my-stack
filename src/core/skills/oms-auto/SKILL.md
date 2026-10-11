@@ -5,6 +5,8 @@ description: Route an opted-in repository engineering task to OMS; honor explici
 
 # OMS Auto
 
+For an explicit automatic-routing setup request, read [routing setup](references/routing-setup.md). The menu belongs to this optional entry. General model setup starts at [Setup Oh My Stack](../setup-oh-my-stack/SKILL.md).
+
 This is an optional automatic entry, not a separate engineering workflow.
 Before routing, use the generated target binding to read the effective routing
 switch as a separate first command. Do not read poteto-mode or an engineering

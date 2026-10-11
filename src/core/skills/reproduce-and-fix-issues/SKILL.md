@@ -3,6 +3,8 @@ name: reproduce-and-fix-issues
 description: Reproduce triaged Slack bugs through a configured app-control adapter, verify existing fixes, and open a bounded draft pull request only after before-and-after proof. Use only from the configured Benny repro automation.
 ---
 
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
+
 # Reproduce and fix issues
 
 Wait for a trusted triage marker in the source thread. Reproduce the exact symptom through the target app's real UI. Verify an existing fix when one exists. Attempt a bounded fix only after a confirmed repro.
@@ -27,8 +29,8 @@ Load the external Benny configuration supplied by the automation. If the config,
 - Existing pull requests or commits switch the run to verify mode. Do not author over them.
 - Use `github.com` pull request links.
 - Keep captures, recordings, logs, and tokens out of source control.
-- Use the sibling **principle-guard-the-context-window** Skill for delegated analysis.
-- Apply the sibling **principle-sequence-verifiable-units**, **principle-fix-root-causes**, and **principle-prove-it-works** Skills through repro, fix, and verification.
+- Use pstack's `principle-guard-the-context-window` for delegated analysis.
+- Apply pstack's `principle-sequence-verifiable-units`, `principle-fix-root-causes`, and `principle-prove-it-works` through repro, fix, and verification.
 
 ## 1. Freeze source coordinates
 
@@ -118,13 +120,13 @@ Use the configured plain Unicode status strings. Keep status text short:
 - Draft pull request opened
 - Fix did not land
 
-Prefer Slack actions exposed and configured by the current host. Use `BENNY_SLACK_BOT_TOKEN` only when the user configured it for a narrow missing capability such as editing this one status message. Never expose the token to a worker.
+Prefer configured the source host Slack actions. Use `BENNY_SLACK_BOT_TOKEN` only when the user configured it for a narrow missing capability such as editing this one status message. Never expose the token to a worker.
 
 If no operations channel is configured, keep detailed status in the automation run output. Do not substitute a source-channel root message.
 
 ## 5. Load and check the control adapter
 
-Read `references/control-adapter.md` and the completed map at `control.feature_map_path`, then invoke the skill named by `control.skill_name` through the host-supported skill syntax.
+Read `references/control-adapter.md` and the completed map at `control.feature_map_path`, then invoke the skill named by `control.skill_name`.
 
 Find the feature-map section that matches the reported user path. Read it before driving the app. If no section covers the feature, mark the run blocked instead of inventing a path or selector.
 
@@ -155,11 +157,9 @@ Collect:
 - Attachments and error signatures
 - Candidate code area
 
-Inspect screenshots and video. Use read-only parallel `explorer` or `reviewer` children for code history, test ideas, blast-radius mapping, and media review when useful. Each child gets a standalone narrow brief and the Slack-write prohibition. If the host lacks child execution, perform the same bounded checks locally without claiming delegated review.
+Inspect screenshots and video. Use read-only parallel workers for code history, test ideas, blast-radius mapping, and media review when useful. Each worker gets a narrow question and the Slack-write prohibition.
 
-Use the sibling **how** Skill to trace the action through the repository. Apply
-**principle-fix-root-causes** to regression history and defensive code. Form
-competing cause hypotheses and identify evidence that would separate them.
+Use pstack's `how` skill to trace the action through the repository. Use `why` for regression history and defensive code. Form competing cause hypotheses and identify evidence that would separate them.
 
 ## 7. Reproduce
 
@@ -192,7 +192,7 @@ For a successful repro:
 - Save a short note with the exact steps and observed state.
 - Keep artifacts in the configured temporary artifact directory.
 
-Have a read-only canonical `reviewer` child answer one question when the host supports it; otherwise perform and label a local media review: does the evidence visibly show the discriminating broken state?
+Have a read-only media reviewer answer one question: does the evidence visibly show the discriminating broken state?
 
 If the answer is no or uncertain, the repro is not confirmed. Capture better evidence or use `Could not reproduce`.
 
@@ -254,13 +254,13 @@ Read-only workers may:
 
 They do not edit, run external writes, post status, or own the fix.
 
-A tightly scoped code edit may be delegated to a canonical `implementer` child during this phase only when the host can prove that its tool isolation removes Slack credentials and every Slack write action from that worker. Its prompt must still carry the explicit Slack-write ban. The coordinator reviews the edit and runs or verifies the required tests. If tool isolation is uncertain, keep the edit in the coordinator.
+A tightly scoped code edit may be delegated during this phase only when tool isolation removes Slack credentials and every Slack write action from that worker. Its prompt must still carry the explicit Slack-write ban. The coordinator reviews the edit and runs or verifies the required tests. If tool isolation is uncertain, keep the edit in the coordinator.
 
 Confirm the mechanism with runtime evidence. Eliminate competing hypotheses before editing.
 
 Fix the root cause with the smallest justified change.
 
-- Invoke the sibling **tdd** Skill when there is a cheap local test target, and write the failing test before the fix.
+- Invoke pstack's `tdd` skill when there is a cheap local test target, and write the failing test before the fix.
 - State why TDD was skipped when the path is expensive, unclear, or integration-heavy.
 - Keep unrelated cleanup out.
 - Stop if the change grows beyond the configured effort or risk budget.
@@ -293,7 +293,7 @@ Only after before-and-after proof:
 - Link the configured tracker issue using the tracker's supported pull request syntax.
 - Use the configured public URL form, normally `https://github.com/{owner}/{repo}/pull/{number}`.
 - Include the repro steps, root cause, test result, before and after evidence, and blast-radius checks.
-- Run the pull request text and all Slack updates through the sibling **unslop** Skill.
+- Run the pull request text and all Slack updates through pstack's `unslop` skill.
 
 If pull request creation fails, do not claim success. Keep the commit or branch state in the run output and mark operations status `Fix did not land`.
 

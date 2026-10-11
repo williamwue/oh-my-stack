@@ -2,7 +2,7 @@
 
 Map every user-facing feature Benny may reproduce. Read the relevant section before driving the app. Keep this map at the user point of view. Discover internals and current code paths at runtime instead of freezing them here.
 
-Copy this file outside the imported skill directories, for example to `.benny/feature-map.md`, and set `control.feature_map_path` to the copy. Pack refreshes must not overwrite it.
+Copy this file outside `<project-automation-root>/benny/`, for example to `<project-benny-config-root>/feature-map.md`, and set `control.feature_map_path` to the copy. Pack refreshes must not overwrite it.
 
 ## Per-feature template
 

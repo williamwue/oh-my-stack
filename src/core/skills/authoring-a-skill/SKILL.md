@@ -1,31 +1,19 @@
 ---
 name: authoring-a-skill
-description: Create or revise a scoped, discoverable Skill and validate that its instructions change useful decisions.
+description: Follow the upstream Authoring or modifying a skill playbook for its named task.
 ---
 
-# Authoring a Skill
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `../poteto-mode/scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
-Identify the user request, owning runtime, intended trigger, and the decision
-the Skill should improve. Reuse an installed authoring workflow when available.
-Create or update a discoverable `SKILL.md` with `name` and a precise
-`description`; keep platform-specific invocation policy in the target adapter.
-Preserve an existing Skill's trigger and metadata unless the user asks to
-change them.
+### Authoring or modifying a skill
 
-Consult `writing-for-agents` for context pointers, completion criteria, and
-pruning; read its `SKILL-MECHANICS.md` for invocation and router choices. Keep
-the target adapter's actual discovery and invocation contract authoritative.
+**You own the skill's voice.**
 
-Write only instructions another agent needs to decide or act. Put conditional
-detail in linked references, reuse existing workflows by path, and avoid
-duplicating project rules already enforced by types, config, or tests. Prefer
-deletion when prose repeats generic advice. Match tone and depth to scope.
-Do not silently broaden authorization, external publication, or automatic
-triggering.
+1. Use the **create-skill** skill (the source host's built-in for authoring SKILL.md files).
+2. Validate the skill: frontmatter has `name` and `description`, referenced files exist, cross-skill links resolve.
+3. Test cases if structural. Skip if subjective.
+4. Run **Opening a PR**.
 
-Validate frontmatter, local links, referenced resources, target generation,
-and expected discovery. For a structural or risky change, test a realistic
-positive request and a near-miss request; check actual behavior rather than
-wording alone. Subjective style changes need user review. Return the Skill
-path, trigger, key decisions, validation results, and unresolved boundaries.
-Use [opening-a-pr](../opening-a-pr/SKILL.md) only when publication was requested.
+When in doubt, delete. Keep only prose that changes a decision. Tell it to do the thing and skip the reason. Explain only when the rule is confusing without one. Match tone to scope. Point at structural sources (types, READMEs, config) per the **encode-lessons-in-structure** principle skill. Delegate to other skills by path. Don't restate. A workflow you keep hitting but isn't captured → propose a new skill.
+
+**Reply:** summary of the skill, key design decisions, validation notes.

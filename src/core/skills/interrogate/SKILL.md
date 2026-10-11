@@ -1,112 +1,75 @@
 ---
 name: interrogate
-description: Run an adversarial multi-session review with identical inputs, frozen findings, independent synthesis, and root-owned judgment.
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
 ---
+
+Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Interrogate
 
-Use this workflow to challenge a change, design, or bounded code surface from
-independent angles. It produces a review verdict only. Do not modify the code
-under review or automatically apply suggestions.
+Spawn one reviewer per configured model to adversarially review code changes. The adversarial signal comes from model diversity, not assigned personas. The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
-## 1. Freeze scope and intent
+## Step 1, Scope
 
-Identify the exact diff, files, revision, or artifact to review. Read enough
-surrounding code to make the scope understandable, but do not silently expand
-it. Write one intent paragraph derived from the user's request and observable
-repository evidence. If intent is materially ambiguous, return the unresolved
-question instead of inventing a goal.
+Identify what to review from context:
 
-Create one immutable review packet containing:
+- If the user points at specific files or a diff, use that.
+- If on a feature branch, run `git diff main...HEAD` (or the appropriate base branch) for the full changeset.
+- If the user's message references recent work, gather the relevant files.
 
-- the intent paragraph;
-- the exact code or diff and its revision or content hash;
-- required surrounding context;
-- `references/rubric.md`;
-- `references/code-quality-review.md`;
-- the output contract from `references/reviewer-prompt.md`.
+Package the diff or file contents with any surrounding context files the reviewers need to understand the code.
 
-## 2. Start independent reviewers
+## Step 2, Intent
 
-Start at least two independent read-only reviewer sessions before waiting for
-either result. Give every reviewer the same frozen packet. Do not assign
-personas or reveal another reviewer's findings. More than two reviewers are
-optional and must be justified by review risk rather than available capacity.
+Before spawning reviewers, state the intent in one clear paragraph from the user's message, commit messages, the PR description if one exists, and the code. If you're unsure about the intent, ask the user before proceeding.
 
-If the current resolution manifest has an `interrogate.reviewers` panel,
-start one reviewer per ordered entry before waiting. Otherwise start the
-minimum two independent reviewers above. Prefer model diversity when the
-runtime can resolve it, but do not hard-code models or equate distinct session
-names with distinct backends. If per-worker
-model selection is unavailable, use the available reviewers and disclose that
-diversity was not established. Report model identities only from runtime
-metadata inspected by the root, never reviewer self-description. If the root
-cannot inspect trustworthy per-worker metadata, record each model as
-`unverified` and do not name a model or claim diversity in the verdict, even
-when a reviewer says it read its own runtime metadata. An independent audit
-may establish those facts later, but cannot upgrade the earlier root verdict.
+## Step 3, Spawn Reviewers
 
-If parallel start is unavailable, run independent reviewers sequentially
-without sharing prior results. If delegation is unavailable, perform two
-clearly separated root passes and disclose that the review was not session
-independent.
+Launch all reviewers in a single message with the native child-delegation tool, one per entry on the `interrogate reviewers` line in `the effective host model resolution`, labeled Reviewer A, B, and so on to match the entry count. If the rule or that line is missing, use the table defaults.
 
-## 3. Freeze findings
+| Subagent | Default model |
+|----------|---------------|
+| Reviewer A | `observed judgment-model choice` |
+| Reviewer B | `observed code-model choice` |
 
-Wait for every started reviewer and capture each complete, attributable result.
-Once captured, a finding set is frozen: do not ask its reviewer to revise it,
-silently rewrite it, or replace a weak reviewer with a retry. A malformed or
-failed result remains part of the evidence boundary and limits the verdict.
+Each reviewer gets the bounded role from the generated runtime binding, read-only workspace authority, and `model` set to its configured entry, or its table default when there is no configured line. Omit `model` for an `auto` or `inherit-parent` entry, so that reviewer runs on the parent model.
 
-## 4. Synthesize in a new session
+If the native child-delegation tool rejects a configured entry, run that reviewer on its family's table default and say so. Resolve model families from observed host metadata. With no family match, use the observed host reviewer preset only when authorized. If it rejects a table default, spawn with the closest equivalent from the valid slugs in its error message (prefer the same family and reasoning tier), and open a separate PR to update the default table. Do not block the review on the slug issue. Never treat an alias entry as a rejected slug or apply either fallback to it.
 
-After all reviewer results are frozen, start one new read-only synthesizer
-session. Give it the intent, exact frozen findings, and
-`references/lead-judgment.md`. The synthesizer must deduplicate equivalent
-findings, map agreement and disagreement, preserve attribution, and propose one
-of these categories for each finding:
+Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`.
 
-- `Act on`: a concrete correctness, security, or maintainability problem;
-- `Consider`: a legitimate tradeoff without enough evidence to block;
-- `Noted`: valid context with low current action value;
-- `Dismissed`: wrong, ungrounded, duplicative, or merely stylistic.
+## Step 4, Synthesize
 
-If a separate synthesizer is unavailable, the root performs synthesis only
-after freezing all review passes and discloses that fallback.
+As results come back, build a unified picture. Parse every reviewer's findings. Merge findings that describe the same issue differently, and note which models raised each one. Findings two or more models raised independently are the highest signal. Read a lone model's finding, but weight it accordingly. Note disagreements. If one model flags something and another explicitly says the opposite, that is context for the verdict.
 
-## 5. Root judgment
+## Step 5, Lead Judgment
 
-Freeze the synthesis, then have the root independently inspect the cited code
-and evidence for every proposed `Act on` item and any disputed high-severity
-finding. The root is responsible for the final categories; reviewer consensus
-raises the inspection priority but is not proof. Reject findings that cannot be
-traced to the frozen scope or an executable path.
+You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator. Read `references/lead-judgment.md` for the full framework. Put every finding in one of four buckets, with the model(s) that raised it and a one-line rationale.
 
-## Output
+- **Act on**. Real issues affecting correctness, security, or maintainability given the actual goals. They would block a real PR.
+- **Consider**. Legitimate, but you're not sure they outweigh the cost of addressing them now. Worth the user's attention.
+- **Noted**. Technically valid but not actionable. Context-dependent, premature optimization, or low-impact at this stage.
+- **Dismissed**. Wrong, nitpicky, or missing context, with a brief reason.
 
-Return:
+## Output Format
 
 ### Intent
-
-The frozen intent and reviewed revision or hash.
+> [The stated intent paragraph from Step 2]
 
 ### Reviewers
+- Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
 
-One line per attributable reviewer with result state, finding count, and model
-identity only when the root independently verified it from runtime metadata;
-otherwise write `model unverified`.
+### Act On
+[Each: description, which models raised it, why it matters.]
 
-### Act On / Consider / Noted / Dismissed
+### Consider
+[Each: description, which models raised it, the tradeoff.]
 
-For every finding, include location, concrete evidence, reviewer attribution,
-and the root's rationale.
+### Noted
+[Brief list.]
+
+### Dismissed
+[Each with a brief rationale.]
 
 ### Agreement Map
-
-State consensus, disagreements, failed or malformed reviews, and whether model
-diversity was independently verified.
-
-### Verification Boundary
-
-State that no code was changed, identify the frozen reviewer and synthesis
-artifacts, and name any fallback that weakened independence or concurrency.
+[Where models agreed and diverged, and what that pattern tells us.]

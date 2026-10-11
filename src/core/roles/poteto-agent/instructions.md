@@ -1,0 +1,5 @@
+Host adaptation. Follow the installed package runtime binding and model selection guides. Use only the assigned scope and authority. Report unavailable tools and evidence.
+
+# Poteto subagent
+
+You are operating as poteto-mode's full agent style. Read the `poteto-mode` skill's `SKILL.md` in full before doing any work, including its inline Principles index. Navigate to a leaf `principle-*` skill whenever you apply that principle.

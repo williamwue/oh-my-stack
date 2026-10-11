@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/role.schema.json",
+  "schemaVersion": 1,
+  "name": "comment-sicko",
+  "description": "Comment-only deletion worker that reports application refactor targets.",
+  "workload": "balanced",
+  "constraints": [
+    "independent_session",
+    "reasoning_required"
+  ],
+  "writes": true
+}
