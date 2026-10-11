@@ -23,6 +23,15 @@
       "writes": true
     },
     {
+      "name": "design-runner",
+      "workload": "deep",
+      "constraints": [
+        "independent_session",
+        "reasoning_required"
+      ],
+      "writes": true
+    },
+    {
       "name": "evidence-reader",
       "workload": "fast",
       "constraints": [
@@ -104,7 +113,7 @@
   "routes": {
     "code.delegates": {
       "kind": "single",
-      "role": "implementer",
+      "role": "poteto-agent",
       "workload": "balanced"
     },
     "judgment.prose": {
@@ -166,7 +175,7 @@
     },
     "architect.runners": {
       "kind": "panel",
-      "role": "explorer",
+      "role": "design-runner",
       "workload": "deep",
       "defaultCount": 2
     },
@@ -180,6 +189,11 @@
       "kind": "single",
       "role": "comment-sicko",
       "workload": "balanced"
+    },
+    "role.design-runner": {
+      "kind": "single",
+      "role": "design-runner",
+      "workload": "deep"
     },
     "role.evidence-reader": {
       "kind": "single",

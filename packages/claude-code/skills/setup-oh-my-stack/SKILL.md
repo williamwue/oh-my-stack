@@ -27,8 +27,8 @@ or organization caps may lower effective effort.
 Preview `--preset pstack` with the three-family inventory. This dynamic
 preset uses observed IDs rather than pinning model versions: Haiku for
 `fast` (including how.explorer and why.investigator), Sonnet for
-`balanced`, and Opus for `deep`. Its ordered three-worker panels are
-Opus/Sonnet/Haiku, analogous to the Codex Astra/Sol/Luna arrangement.
+`balanced`, and Opus for `deep`. Fresh ordered two-worker panels use
+Opus/Sonnet; Haiku remains the fast workload choice.
 The initial efforts are low/medium/high, reduced to the highest supported
 effort below each target when necessary; the user's budget then applies.
 Haiku 4.5 uses `none` (no native effort override), not a claimed high.
@@ -37,7 +37,8 @@ families require a refreshed inventory or explicit workload choices.
 For an explicit two-model subset, Sonnet can still fill fast/balanced
 and Opus deep. Preserve deliberate existing choices; offer the new
 three-family recommendation before replacing an older mapping.
-Re-running the same preset preserves explicit overrides and budget.
+Re-running the same preset preserves explicit overrides, saved panel
+membership, order and size (including three-member panels), and budget.
 Three configured families do not prove execution or cross-provider
 diversity. Preview every route and panel before `--apply`.
 Setup defaults to `--user` (`~/.claude/`, or the absolute

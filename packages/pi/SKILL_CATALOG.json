@@ -1293,6 +1293,13 @@
       "required": false
     },
     {
+      "kind": "role",
+      "name": "design-runner",
+      "path": "src/core/roles/design-runner",
+      "origin": "oms-host",
+      "distribution": "core"
+    },
+    {
       "kind": "script",
       "path": "tools/collect-model-inventory.mjs",
       "output": "scripts/collect-model-inventory.mjs",
