@@ -31,8 +31,21 @@ Astra. OMP's `pstack-openai-codex` alternative uses the same models with its
 provider-qualified IDs. Presets are reviewed recommendations; observing a newer
 model does not automatically replace a configured model. If a recommended ID is
 unavailable, setup stops for an explicit observed choice instead of silently
-falling back. Re-running model setup previews updated preset defaults while
-preserving explicit model overrides, reasoning budgets, and panel order.
+falling back. Re-running the same preset preserves effective model choices,
+reasoning efforts and ordered panels until you explicitly change them.
+
+For new configurations, the default budget is large (xhigh). Unlimited targets
+max, medium targets high, and small targets medium. Each model uses its highest
+advertised effort at or below the target; budget selection never substitutes a
+model or changes panel length. These are reasoning settings, not spending caps.
+An old unlimited configuration retains its saved efforts until you explicitly
+select a budget, including selecting unlimited again. An explicit uniform
+override persists until reset with `--uniform-reasoning preset`.
+
+OMP's Cursor `pstack` preset uses Opus for deep judgment and Grok for code,
+with ordered Opus/Grok panels. This does not replace existing three-entry panels
+or change the separate OpenAI-Codex preset. Exact selectors must be observed
+in the current runtime inventory before configuration can be applied.
 
 Claude Code's dynamic `pstack` recommendation observes the canonical models
 behind `haiku`, `sonnet`, and `opus`. Haiku fills fast exploration, Sonnet

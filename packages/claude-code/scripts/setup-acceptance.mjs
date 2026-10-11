@@ -170,7 +170,9 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
   assert(!hookRecord || manifest.target === "claude-code", "--hook-record is supported only for Claude Code");
   const selected = routeName ? selectedRoute(manifest, routeName, entry) : null;
   const budget = { name: manifest.budget,
-    meaning: manifest.budgetPolicy?.kind === "reasoning-target" || (!manifest.budgetPolicy && manifest.target === "omp")
+    meaning: manifest.budgetPolicy?.kind === "preserve-effort"
+      ? "saved reasoning efforts, not a cost limit"
+      : manifest.budgetPolicy?.kind === "reasoning-target" || (!manifest.budgetPolicy && manifest.target === "omp")
       ? "reasoning target, not a cost limit" : "reasoning ceiling, not a cost limit",
     level: manifest.budgetPolicy?.level ?? null };
   const base = { target: manifest.target, resolutionPath: path, preset: manifest.preset,

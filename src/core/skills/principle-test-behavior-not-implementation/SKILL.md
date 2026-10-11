@@ -4,13 +4,11 @@ description: "Apply when you write, change, or keep a test. Call the code the wa
 ---
 # Test Behavior, Not Implementation
 
-A test calls the code the way its users do and asserts the result they observe against a literal expected value. A test that asserts which calls the code made, or restates a constant the code contains, does neither.
+A test calls the code the way its users do and asserts the result they observe
+against a literal expected value. Rewrite or delete a test that would still
+pass if every function it imports returned `undefined` or a wrong value.
 
-The check: before you keep a test, ask whether it would still pass if every function it imports returned `undefined`. If yes, it observes no behavior and cannot fail for a defect. Rewrite the assertion or delete the test.
-
-**Why:** A test that cannot fail for a defect costs CI time and review attention and catches nothing. A constant pin also fails when someone edits the constant or the prompt it restates, so it prevents that edit.
-
-**Five shapes that still pass when every imported function returns `undefined`:**
+These shapes need an assertion that observes the subject's behavior:
 
 - **Weak or no assertion.** No `expect`, or only `toBeDefined`, `toBeTruthy`, `not.toThrow`, `toBeInstanceOf`, `toBeGreaterThan(0)`.
 - **Mock or absence only.** Only `toHaveBeenCalled`, `not.toHaveBeenCalled`, `toBeUndefined`, `toEqual([])`, `toHaveLength(0)`, `not.toBe(wrongValue)`.

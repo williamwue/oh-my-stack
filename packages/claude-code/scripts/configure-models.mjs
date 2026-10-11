@@ -11,7 +11,7 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const defaultPackageRoot = resolve(scriptDirectory, "..");
 const workloads = ["fast", "balanced", "deep"];
 const effortOrder = ["none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"];
-const budgetCaps = { unlimited: null, large: "xhigh", medium: "high", small: "medium" };
+const budgetCaps = { unlimited: "max", large: "xhigh", medium: "high", small: "medium" };
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -109,6 +109,7 @@ function validateInventory(inventory) {
 
 function validateSelection(selection, models, label) {
   if (selection.inheritParent) return;
+  assert(effortOrder.includes(selection.reasoning), `${label}: unknown reasoning effort ${selection.reasoning}`);
   const model = models.get(selection.model);
   assert(model, `${label}: model ${selection.model} was not present in the observed inventory`);
   assert(
@@ -139,27 +140,75 @@ function claudePreset(inventory, descriptor) {
   };
 }
 
-function applyBudget(selection, models, budget, label, uniformReasoning) {
+function applyBudget(selection, models, policy, label, uniformReasoning) {
   if (selection.inheritParent) return selection;
   const model = models.get(selection.model);
   assert(model, `${label}: model ${selection.model} was not present in the observed inventory`);
   if (uniformReasoning) {
-    assert(!budgetCaps[budget] || effortOrder.indexOf(uniformReasoning) <= effortOrder.indexOf(budgetCaps[budget]),
-      `${label}: uniform reasoning ${uniformReasoning} exceeds ${budget} budget target`);
     assert(model.reasoningEfforts.includes(uniformReasoning),
       `${label}: ${selection.model} did not advertise uniform reasoning effort ${uniformReasoning}`);
     return { ...selection, reasoning: uniformReasoning };
   }
-  if (!budgetCaps[budget]) return selection;
-  const cap = effortOrder.indexOf(budgetCaps[budget]);
+  if (policy.kind === "preserve-effort") return selection;
+  const cap = effortOrder.indexOf(policy.level);
   const requested = effortOrder.indexOf(selection.reasoning);
   assert(requested >= 0, `${label}: unknown reasoning effort ${selection.reasoning}`);
   const target = cap;
   const supported = model.reasoningEfforts
-    .filter((effort) => effortOrder.indexOf(effort) <= target)
+    .filter((effort) => effortOrder.includes(effort) && effortOrder.indexOf(effort) <= target)
     .sort((left, right) => effortOrder.indexOf(right) - effortOrder.indexOf(left));
-  assert(supported.length > 0, `${label}: no supported effort at or below ${budget} budget for ${selection.model}`);
+  assert(supported.length > 0, `${label}: no supported effort at or below ${policy.level} budget for ${selection.model}`);
   return { ...selection, reasoning: supported[0] };
+}
+
+function normalizeConfiguration({ prior, retainChoices, descriptor, preset, budget, uniformReasoning,
+  selections, roleSelections, routeSelections, panelSelections }) {
+  const savedPolicy = prior?.budgetPolicy;
+  if (savedPolicy?.version !== undefined) {
+    assert(savedPolicy.version === 2, `unknown budget policy version ${savedPolicy.version}`);
+    assert(savedPolicy.costLimit === false && (savedPolicy.kind === "preserve-effort" && savedPolicy.level === null
+      || savedPolicy.kind === "reasoning-target" && Object.values(budgetCaps).includes(savedPolicy.level)),
+    "invalid version 2 budget policy");
+  }
+  const effectiveBudget = budget ?? (retainChoices ? prior.budget : null) ?? "large";
+  assert(Object.hasOwn(budgetCaps, effectiveBudget), `unknown budget ${effectiveBudget}`);
+  const policy = budget !== undefined || !retainChoices
+    ? { version: 2, kind: "reasoning-target", level: budgetCaps[effectiveBudget], costLimit: false }
+    : savedPolicy?.version === 2 ? { ...savedPolicy }
+      : { version: 2, kind: effectiveBudget === "unlimited" ? "preserve-effort" : "reasoning-target",
+        level: effectiveBudget === "unlimited" ? null : budgetCaps[effectiveBudget], costLimit: false };
+  assert(policy.kind !== "preserve-effort" || effectiveBudget === "unlimited", "preserve-effort policy requires unlimited budget");
+  assert(policy.kind !== "reasoning-target" || policy.level === budgetCaps[effectiveBudget], "budget policy does not match budget");
+  const uniform = uniformReasoning === "preset" ? null
+    : uniformReasoning ?? (retainChoices ? prior.uniformReasoning : null) ?? null;
+  assert(uniform === null || effortOrder.includes(uniform), `unknown uniform reasoning ${uniform}`);
+  assert(!uniform || policy.kind === "preserve-effort" || effortOrder.indexOf(uniform) <= effortOrder.indexOf(policy.level),
+    `uniform reasoning ${uniform} exceeds ${effectiveBudget} budget target`);
+  const retained = retainChoices ? legacyOverrides(prior) : {};
+  for (const name of Object.keys(retained.workloads ?? {})) assert(workloads.includes(name), `retired saved workload ${name}`);
+  for (const name of Object.keys(retained.roles ?? {})) assert(descriptor.roles.some((role) => role.name === name), `retired saved role ${name}`);
+  for (const kind of ["routes", "panels"]) for (const name of Object.keys(retained[kind] ?? {})) {
+    assert(descriptor.routes?.[name]?.kind === (kind === "panels" ? "panel" : "single"), `retired saved ${kind} entry ${name}`);
+  }
+  const intent = retainChoices ? prior.overrides ?? {} : {};
+  const patches = { workloads: selections, roles: roleSelections, routes: routeSelections, panels: panelSelections };
+  const overrides = Object.fromEntries(Object.entries(patches).map(([kind, patch]) => [kind, { ...intent[kind], ...patch }]));
+  for (const name of Object.keys(overrides.workloads)) assert(workloads.includes(name), `unknown workload ${name}`);
+  const bindings = retainChoices ? structuredClone(intent.bindings ?? { roles: {}, routes: {} }) : { roles: {}, routes: {} };
+  // Legacy manifests without intent cannot recover which effective choices were derived.
+  if (!retainChoices || prior.overrides && !intent.bindings) {
+    for (const role of descriptor.roles) if (!Object.hasOwn(overrides.roles, role.name)) bindings.roles[role.name] = role.workload;
+    for (const [name, route] of Object.entries(descriptor.routes ?? {})) {
+      const kind = route.kind === "panel" ? "panels" : "routes";
+      if (!Object.hasOwn(overrides[kind], name) && preset?.routes?.[name] === undefined) bindings.routes[name] = route.workload;
+    }
+  }
+  for (const name of Object.keys(roleSelections)) delete bindings.roles[name];
+  for (const name of [...Object.keys(routeSelections), ...Object.keys(panelSelections)]) delete bindings.routes[name];
+  return { budget: effectiveBudget, policy, uniform, retained, overrides, bindings, patches,
+    globalChange: budget !== undefined || uniformReasoning !== undefined,
+    recoverUniformBase: retainChoices && prior.uniformReasoning && prior.overrides && !intent.uniformBase,
+    uniformBase: retainChoices ? intent.uniformBase ?? {} : {} };
 }
 
 function insertYamlFields(text, fields) {
@@ -261,23 +310,58 @@ export async function configure({
   await assertNotSymlink(manifestPath);
   const prior = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
   assert(!prior || prior.owner === "oh-my-stack", `${manifestPath}: refusing to replace an unowned manifest`);
-  const retainChoices = ["omp", "codex", "claude-code"].includes(descriptor.target) && presetName && prior?.target === descriptor.target && prior?.preset === presetName;
-  const effectiveBudget = budget ?? (retainChoices ? prior.budget : null) ?? "unlimited";
-  const effectiveUniformReasoning = uniformReasoning === "preset" ? null
-    : uniformReasoning ?? (retainChoices ? prior.uniformReasoning : null) ?? null;
-  const retained = retainChoices ? (prior.overrides ?? legacyOverrides(prior)) : {};
-  const overrides = {
-    workloads: { ...retained.workloads, ...selections },
-    roles: { ...retained.roles, ...roleSelections },
-    routes: { ...retained.routes, ...routeSelections },
-    panels: { ...retained.panels, ...panelSelections },
-  };
+  const retainChoices = ["omp", "codex", "claude-code"].includes(descriptor.target)
+    && prior?.target === descriptor.target && prior?.preset === (presetName ?? null);
+  const state = normalizeConfiguration({ prior, retainChoices, descriptor, preset, budget, uniformReasoning,
+    selections, roleSelections, routeSelections, panelSelections });
+  const { overrides } = state;
   const modelMap = new Map(inventory.models.map((model) => [model.id, model]));
+  const baseChoices = { workloads: {}, roles: {}, routes: {}, panels: {} };
+  const recoverUniformSelection = (saved, raw, workload, label) => {
+    const retained = parseSelection(saved, label);
+    const original = typeof raw === "string" ? parseSelection(raw.trim(), label)
+      : workload ? parseSelection(baseChoices.workloads[workload], label) : raw;
+    return original && retained.model === original.model && !retained.inheritParent
+      && modelMap.get(retained.model)?.reasoningEfforts.includes(original.reasoning)
+      ? { ...retained, reasoning: original.reasoning } : retained;
+  };
+  const resolveChoice = (kind, name, raw, label, workload, index) => {
+    const pick = (value) => kind === "panels" && value !== undefined
+      ? (Array.isArray(value) ? value : value.split(","))[index] : value;
+    const explicit = Object.hasOwn(state.patches[kind], name);
+    const dependentChange = workload && Object.hasOwn(selections, workload);
+    const saved = pick(state.retained[kind]?.[name]);
+    const savedBase = pick(state.uniformBase[kind]?.[name]);
+    let choice;
+    let base;
+    if (saved !== undefined && !explicit && !dependentChange && !state.globalChange) {
+      choice = parseSelection(saved, label);
+      base = savedBase ? parseSelection(savedBase, label) : choice;
+      if (!savedBase && state.recoverUniformBase) base = applyBudget(recoverUniformSelection(saved, raw, workload, label), modelMap, state.policy, label);
+    } else {
+      let value = explicit || dependentChange ? raw : savedBase ?? saved ?? raw;
+      if (state.recoverUniformBase && saved !== undefined && !explicit && !dependentChange && raw !== undefined) {
+        value = recoverUniformSelection(saved, raw, workload, label);
+      }
+      const requested = typeof value === "string" ? parseSelection(value.trim(), label) : value;
+      assert(requested, `${label}: no observed-model choice was supplied`);
+      if (explicit) validateSelection(requested, modelMap, label);
+      // Workload-derived objects have already passed through the same policy.
+      const derived = typeof raw !== "string" && value === raw && workload;
+      base = derived ? parseSelection(baseChoices.workloads[workload], label) : applyBudget(requested, modelMap, state.policy, label);
+      choice = derived ? requested : applyBudget(base, modelMap, state.policy, label, state.uniform);
+    }
+    validateSelection(choice, modelMap, label);
+    validateSelection(base, modelMap, `${label} reset base`);
+    if (kind === "panels") {
+      (baseChoices[kind][name] ??= [])[index] = selectionText(base);
+    } else baseChoices[kind][name] = selectionText(base);
+    return choice;
+  };
   const resolvedWorkloads = Object.fromEntries(
     workloads.map((workload) => {
       const raw = overrides.workloads[workload] ?? preset?.workloads?.[workload];
-      assert(raw, `${workload}: no observed-model choice was supplied`);
-      const selection = applyBudget(parseSelection(raw, workload), modelMap, effectiveBudget, workload, effectiveUniformReasoning);
+      const selection = resolveChoice("workloads", workload, raw, workload);
       return [workload, selection];
     }),
   );
@@ -290,9 +374,8 @@ export async function configure({
     assert(descriptor.roles.some((role) => role.name === name), `unknown role ${name}`);
   }
   for (const role of descriptor.roles) {
-    const selection = overrides.roles[role.name]
-      ? applyBudget(parseSelection(overrides.roles[role.name], role.name), modelMap, effectiveBudget, role.name, effectiveUniformReasoning)
-      : resolvedWorkloads[role.workload];
+    const selection = resolveChoice("roles", role.name,
+      overrides.roles[role.name] ?? resolvedWorkloads[role.workload], role.name, state.bindings.roles[role.name]);
     validateSelection(selection, modelMap, role.name);
     roles[role.name] = {
       ...selection,
@@ -309,21 +392,27 @@ export async function configure({
   for (const name of Object.keys(overrides.panels)) {
     assert(descriptor.routes?.[name]?.kind === "panel", `unknown panel route ${name}`);
   }
-  const routeMode = Boolean(presetName || Object.keys(overrides.routes).length || Object.keys(overrides.panels).length);
+  const routeMode = Boolean(presetName || Object.keys(overrides.routes).length || Object.keys(overrides.panels).length
+    || Object.keys(state.retained.routes ?? {}).length || Object.keys(state.retained.panels ?? {}).length);
   const routes = {};
   if (routeMode) {
     for (const [name, route] of Object.entries(descriptor.routes ?? {})) {
-      const explicit = route.kind === "panel" ? overrides.panels[name] : overrides.routes[name];
-      const raw = explicit ?? preset?.routes?.[name];
+      const kind = route.kind === "panel" ? "panels" : "routes";
+      const explicit = overrides[kind][name];
+      const raw = state.patches[kind][name] ?? state.retained[kind]?.[name] ?? explicit ?? preset?.routes?.[name];
+      const binding = state.bindings.routes[name];
+      const derivedChange = binding && Object.hasOwn(selections, binding);
       const values = raw === undefined
         ? Array.from({ length: route.kind === "panel" ? route.defaultCount : 1 }, () => resolvedWorkloads[route.workload])
         : route.kind === "panel" ? (Array.isArray(raw) ? raw : raw.split(",")) : [raw];
       assert(values.length > 0 && values.length <= 8, `${name}: route must have 1-8 entries`);
       const entries = values.map((value, index) => {
         const label = `${name}[${index + 1}]`;
-        const selection = typeof value === "string"
-          ? applyBudget(parseSelection(value.trim(), label), modelMap, effectiveBudget, label, effectiveUniformReasoning)
-          : value;
+        const original = explicit ?? preset?.routes?.[name];
+        const originalValue = original === undefined ? binding ? resolvedWorkloads[binding] : undefined
+          : route.kind === "panel" ? (Array.isArray(original) ? original : original.split(","))[index] : original;
+        const selection = resolveChoice(route.kind === "panel" ? "panels" : "routes", name,
+          derivedChange ? resolvedWorkloads[binding] : state.recoverUniformBase ? originalValue : value, label, binding, index);
         validateSelection(selection, modelMap, label);
         const agent = `ohmystack-${name.replaceAll(".", "-")}${route.kind === "panel" ? `-${index + 1}` : ""}`;
         return { ...selection, agent };
@@ -353,19 +442,18 @@ export async function configure({
     }
   }
 
+  overrides.bindings = state.bindings;
+  if (state.uniform) overrides.uniformBase = Object.fromEntries(Object.entries(baseChoices)
+    .map(([kind, values]) => [kind, Object.fromEntries(Object.entries(values).map(([name, value]) => [name, Array.isArray(value) ? value.join(",") : value]))]));
   const manifest = {
     schemaVersion: 1,
     owner: "oh-my-stack",
     target: descriptor.target,
     preset: presetName ?? null,
-    budget: effectiveBudget,
-    budgetPolicy: {
-      kind: "reasoning-target",
-      level: budgetCaps[effectiveBudget],
-      costLimit: false,
-    },
-    uniformReasoning: effectiveUniformReasoning,
-    ...(["omp", "codex", "claude-code"].includes(descriptor.target) && presetName ? { overrides } : {}),
+    budget: state.budget,
+    budgetPolicy: state.policy,
+    uniformReasoning: state.uniform,
+    ...(["omp", "codex", "claude-code"].includes(descriptor.target) ? { overrides } : {}),
     observedInventory: {
       observedAt: inventory.observedAt,
       source: inventory.source,

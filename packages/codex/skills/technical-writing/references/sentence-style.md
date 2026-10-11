@@ -9,7 +9,7 @@ are review aids; preserve clarity when a longer sentence works better.
 - Talk to the reader as "you", in the present tense. "Will" only for things that genuinely happen later.
 - Say who does what: "the compiler checks", not "is checked". Passive is fine only when the actor is unknown or beside the point.
 - Write instructions as commands: "Click Submit." State facts plainly. Never "should be done".
-- Put the condition before the instruction: "To delete the document, click Delete." The reader skips what does not apply.
+- Put the condition before the instruction: "To delete the document, click Delete."
 - Put the common case first. Exceptions after.
 - Sound like a knowledgeable friend. No buzzwords, no figurative language, no "please" in instructions, and never "simply", "easy", or "quickly" in a procedure. If it were simple, the reader would not be here.
 - Don't pre-announce ("we will soon support...") and don't start consecutive sentences with the same phrase.
@@ -29,7 +29,7 @@ Source: developers.google.com/style, fetched 2026-07-18.
 - Give each word one meaning and one job, then keep it. If "check" means inspect, don't also use it for restrain.
 - Pick one word per action and stick to it: "start", not "start" here and "initiate" there.
 - Write procedures as direct commands, never as narration and never in the passive: "Install the component", not "the component must be installed".
-- Avoid "-ing" words where you can. They take too many grammatical jobs and breed misreadings.
+- Avoid "-ing" words where you can.
 
 Source: asd-ste100.org (Issue 9, 2025), fetched 2026-07-18. The numbered rules and dictionary live in the spec PDF. The principles above are the transferable core.
 
@@ -39,14 +39,14 @@ Source: asd-ste100.org (Issue 9, 2025), fetched 2026-07-18. The numbered rules a
 - Break up long noun strings: "the proto import budget check script" becomes "the script that checks the proto-import budget".
 - Make every "it", "they", and "this" point at one obvious thing. Repeat the noun when in doubt. Never use "this" or "which" to point at a whole clause.
 - Don't drop verbs: "Phase 1 moves the converters and Phase 2 the runtime" leaves Phase 2 without one. Give it one.
-- Keep the small words that show structure. "Ensure that the switch is off" keeps "that" because it makes the sentence parse one way. Never trade clarity for word count.
+- Keep the small words that show structure, such as "that" in "Ensure that the switch is off". Never trade clarity for word count.
 - Repeat the article in a series when it prevents a misread: "the client and the host", not "the client and host", when they are two things.
 - Say which parts "and" or "or" joins when a sentence can group two ways. "Both...and", "either...or", and "if...then" are free disambiguators.
 - Use periods, not semicolons. Replace an em dash with a new sentence.
 - Make text in parentheses a full grammatical unit or its own sentence. Never form plurals with "(s)".
 - No slashes: write "a, b, or both" instead of "a/b" or "and/or".
-- Call each thing by one name, everywhere. A doc that says "the gate", "the ratchet", and "the budget check" for one thing teaches three things. Rewording an unchanged sentence between edits costs the same way. Don't churn what didn't change.
-- Skip idioms, colloquialisms, Latin abbreviations, and metaphors. A non-native reader, a translator, and an agent all parse plain constructions best.
+- Call each thing by one name, everywhere. A doc that says "the gate", "the ratchet", and "the budget check" for one thing teaches three things. Don't churn what didn't change.
+- Skip idioms, colloquialisms, Latin abbreviations, and metaphors.
 
 Source: Kohl, The Global English Style Guide (SAS Press). Guideline text fetched from the Internet Archive and the SAS sample chapter, 2026-07-18.
 

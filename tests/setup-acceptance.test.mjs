@@ -64,6 +64,18 @@ test("invalid model and unsupported effort fail before configuration writes on b
   }
 });
 
+test("setup receipt distinguishes preserved legacy effort from a reasoning target", async () => {
+  const { resolutionPath } = await fixture("codex");
+  const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+  manifest.budget = "unlimited";
+  manifest.budgetPolicy = { version: 2, kind: "preserve-effort", level: null, costLimit: false };
+  await writeFile(resolutionPath, JSON.stringify(manifest));
+  const audit = await inspectSetup({ resolutionPath });
+  assert.equal(audit.budget.meaning, "saved reasoning efforts, not a cost limit");
+  assert.equal(audit.budget.level, null);
+  assert.equal(audit.activation, "unverified");
+});
+
 test("setup receipt renders every configured role and route without summarization loss", async () => {
   for (const target of ["omp", "codex"]) {
     const { projectRoot, resolutionPath } = await fixture(target);

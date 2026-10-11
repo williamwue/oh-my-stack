@@ -37,8 +37,8 @@ fixing a run, or personalizing it. A named situation goes straight to its source
 
 - Setup: read [setup-oh-my-stack](../setup-oh-my-stack/SKILL.md). Check the
   selected project or user resolution when it matters. Missing configuration
-  means routing is unconfigured, not that account entitlement is known. Explain
-  token costs and panel size from verified configuration, without probing models.
+  means no saved model mapping was found, not that account entitlement is known.
+  Explain token costs and panel size from verified configuration, without probing models.
 - Start a task: read [poteto-mode](../poteto-mode/SKILL.md). A goal, a done check,
   relevant evidence, and constraints are enough. Read
   [prompting](references/prompting.md) before writing the prompt.
@@ -47,6 +47,11 @@ fixing a run, or personalizing it. A named situation goes straight to its source
   [correct](../correct/SKILL.md) versus [reflect](../reflect/SKILL.md), or a
   [benchmark check](../benchmark-checklist/SKILL.md) versus a
   [performance fix](../perf-issue/SKILL.md).
+  [Ketchup](../ketchup/SKILL.md) reports this chat since the preceding human
+  message and pending human-only decisions. [Recall](../recall/SKILL.md)
+  reconstructs a topic across scoped history.
+  [Session pickup](../session-pickup/SKILL.md) resumes authorized work from a
+  durable trail. A catch-up request does not ask to resume.
 - Fix a run: check the actual installation, selected configuration, task scope,
   writer isolation, and available control harness. A green build alone does not
   prove the user path. Do not promise persistent modes, scheduled wakes, or
@@ -55,6 +60,30 @@ fixing a run, or personalizing it. A named situation goes straight to its source
   [reflect](../reflect/SKILL.md), or
   [authoring-a-skill](../authoring-a-skill/SKILL.md). Their authority boundaries
   still apply.
+
+## Offer model setup when it matters
+
+When no effective model configuration exists and its absence changes the
+answer, offer setup now or later. This matters for a new user's setup or cost
+question, or an answer that depends on which workflow models run. Ask at most
+once per chat, tracking the offer in conversation context. Do not create a
+preference file. If the need is also unclear, combine both questions.
+
+Answer the original question in the same reply regardless of the setup offer
+or its answer. Offer these two choices through the available native question
+tool, or as ordinary text when no such tool is available:
+
+- **Now:** give the host-correct native invocation for
+  [setup-oh-my-stack](../setup-oh-my-stack/SKILL.md), verified from the installed
+  target's instructions. Let the user invoke it. Do not silently execute setup.
+- **Later:** explain which verified defaults or inherited choices apply until
+  setup, then leave the configuration untouched.
+
+Silence or cancellation has the same no-change result as Later. Neither
+choice authorizes a model inventory probe, paid smoke, or configuration write
+during help. Do not repeat the offer later in the same chat. If the native
+invocation cannot be verified, link the owning installed setup file and state
+that gap instead of inventing a command.
 
 ## Give a source the user can check
 

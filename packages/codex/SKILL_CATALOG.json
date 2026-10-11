@@ -273,6 +273,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "ketchup",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "maintain-verification-skill",
       "audience": "public",
       "category": "workflow",

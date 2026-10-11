@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-95 public entries: 71 workflows and 24 principles.
+96 public entries: 72 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -28,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-71 entries.
+72 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -62,6 +62,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`improve-codebase-architecture`](../packages/codex/skills/improve-codebase-architecture/SKILL.md) | Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick. | explicit | aihero original |
 | [`interrogate`](../packages/codex/skills/interrogate/SKILL.md) | Review frozen inputs with independent reviewers and root judgment. | explicit | OMS core |
 | [`investigation`](../packages/codex/skills/investigation/SKILL.md) | Answer an engineering question from evidence without changing code. | explicit | OMS core |
+| [`ketchup`](../packages/codex/skills/ketchup/SKILL.md) | Catch up on this chat, current work status, and decisions waiting on you. | explicit | OMS core |
 | [`maintain-verification-skill`](../packages/codex/skills/maintain-verification-skill/SKILL.md) | Audit and update a verification Skill using source and live behavior. | explicit | OMS core |
 | [`make-bot-ui`](../packages/codex/skills/make-bot-ui/SKILL.md) | Build a local control page for an authenticated webhook. | explicit | OMS core |
 | [`multi-phase-plan`](../packages/codex/skills/multi-phase-plan/SKILL.md) | Write a dependency plan with verifiable units and live checks. | explicit | OMS core |

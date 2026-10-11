@@ -105,6 +105,17 @@ License: MIT; the exact license and changed files are retained under
 This update adds four portable Skills and adapts workflow and guide changes.
 Original source snapshots and dated acceptance records remain historical.
 
+## pstack October 11 semantic update
+
+Source: [cursor/plugins](https://github.com/cursor/plugins), pstack 0.15.17 at
+`978ca6e9c0e012047cd5058b8e829240336e704e`.
+License: MIT, retained with the 45 changed source files under
+`upstream/snapshots/cursor-pstack-october-11/`.
+OMS adapts current-chat catch-up, setup help, model defaults and prose while
+retaining its portable delivery rules. Current output ownership is recorded in
+`upstream/semantic-derivations.json`; dated transition receipts retain earlier
+claims. Historical snapshots and previously published books remain unchanged.
+
 ## AIHero / Matt Pocock Skills
 
 Selected original skills from [mattpocock/skills](https://github.com/mattpocock/skills)

@@ -9,8 +9,9 @@ The generated target package is under `package/`. Run its
 `workspace/inventory.json`. Inspect the inventory source, timestamp, model IDs,
 and advertised reasoning efforts. Choose the first returned model that supports
 all three of `low`, `medium`, and `high`. Map that one observed model to `fast`
-at low, `balanced` at medium, and `deep` at high. This deterministic fixture
-does not claim model diversity.
+at low, `balanced` at medium, and `deep` at high, then explicitly choose
+`--budget medium`. Verify the resulting effective effort is high for all three
+workloads. This deterministic fixture does not claim model diversity.
 
 Use `package/scripts/configure-models.mjs` with `package/` as the package root
 and `workspace/configured/` as the dedicated output directory. First try an

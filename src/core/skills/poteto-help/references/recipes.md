@@ -19,3 +19,10 @@ evidence, and checks. Give one prompt that answers the user's current need.
   them structurally. Prove each new constraint rejects a real past mistake."
 - Resume: "Read this checkpoint, verify its Git anchors, and continue the
   authorized unfinished work without repeating completed units."
+- Catch up: "Summarize this chat since my last message. Give the current status
+  of touched PRs, CI, and agents, and explain every pending decision only I can
+  make, including older ones. Keep this turn read-only."
+
+Catch-up uses `ketchup`. Topic reconstruction across scoped history uses
+`recall`. The resume recipe uses `session-pickup` and needs authorization to
+continue the work. A request for a summary supplies none of that authority.

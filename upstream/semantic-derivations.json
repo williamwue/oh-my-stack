@@ -717,11 +717,6 @@
           "owner": "local-core"
         },
         {
-          "path": "src/core/skills/architect/SKILL.md",
-          "sha256": "33218c4b6777aa443ed802b0f6accd5fce330af741586b10ab4a78367477fb18",
-          "owner": "derived"
-        },
-        {
           "path": "src/core/skills/architect/skill.json",
           "sha256": "e3be6c89436b2565648a95529e8aec5d849d09cb72f825bec5813593d71920f9",
           "owner": "local-core"
@@ -1003,11 +998,6 @@
           "sha256": "f6fb87bd6e06459d23bb4f1d38780a04a38fd2add5d512559882cf48d0c694dc"
         },
         {
-          "path": "src/core/skills/reflect/SKILL.md",
-          "owner": "derived",
-          "sha256": "69570f822ce09154970a16a6415087988cd4cbe54f0baa8905607ba00491713c"
-        },
-        {
           "path": "src/core/skills/reflect/skill.json",
           "owner": "local-core",
           "sha256": "9d7b819ddd7e17528525ee1d1349d90a4db5fc3a9aa499fc42e009854f401dac"
@@ -1264,19 +1254,9 @@
           "sha256": "a5f4bd9d04157214b28e7b0a6bfc51477f9a76db5608b92f4e34c35a7859c83c"
         },
         {
-          "path": "src/core/skills/poteto-help/SKILL.md",
-          "owner": "derived",
-          "sha256": "a3c748136ea5f83de47816ddf5e3ba1e9a558b49b0aee8bd67ef9a523e0a6008"
-        },
-        {
           "path": "src/core/skills/poteto-help/references/prompting.md",
           "owner": "derived",
           "sha256": "e0017eb953e7adc5a58d18e208de5eff575bdb139740afa78c7a8b21afaf75e9"
-        },
-        {
-          "path": "src/core/skills/poteto-help/references/recipes.md",
-          "owner": "derived",
-          "sha256": "318c633e0913c85fe6e9bc39a49613584d9c86989aa695e08de62381d2136ec5"
         },
         {
           "path": "src/core/skills/poteto-help/skill.json",
@@ -1284,19 +1264,9 @@
           "sha256": "018eb26c45d1125708f264d74980c3243cee27bc59400c874021ffc9e7457976"
         },
         {
-          "path": "src/core/skills/poteto-mode/SKILL.md",
-          "owner": "derived",
-          "sha256": "1d1eaac3ccd528893d61f3e49c484bec9571021b037a9cec4c430792c99dfa8f"
-        },
-        {
           "path": "src/core/skills/poteto-mode/references/subagent-handoff.md",
           "owner": "derived",
           "sha256": "2ac1f382082f29ef32b45aa940f0c0aa79600755cd28c2316042aed4d5925a60"
-        },
-        {
-          "path": "src/core/skills/principle-explain-the-number/SKILL.md",
-          "owner": "derived",
-          "sha256": "0a5cb3579a30e4da9d1635f5ceb11f773e551ec8626ac9c38b5db3985d3ac26b"
         },
         {
           "path": "src/core/skills/principle-explain-the-number/skill.json",
@@ -1315,6 +1285,306 @@
         }
       ],
       "transformation": "Adopt four explicit portable Skills and adapt fresh child handoffs, measurement validation, architecture constraints, schema-complete parsing, PR tooling, hourly audit defaults, and current help guidance. Preserve scoped authorization, actual host capabilities, old immutable snapshots, attributed writing guidance, and no-publication boundaries. Updated current output ownership moves to this derivation; prior claims are retained in the dated transition receipt."
+    },
+    {
+      "id": "pstack-october-11-port",
+      "sourceId": "cursor-pstack-october-11",
+      "sourceRevision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "sourceFiles": [
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/.cursor-plugin/plugin.json",
+          "sha256": "4c6e3292f2b0bb4e31462c2a00df191fa3316fa008eb5e80d3d45b14475b52cc"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/README.md",
+          "sha256": "a33eaf6f08fd248f7d064b3909caa947424f027896360077bdbb2d12e8ac213d"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/docs/guide/01-setup.md",
+          "sha256": "86d0330f245d16254a2069955f993c15d96cf29cd1a73690a0164074b7ac1190"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/docs/guide/04-design.md",
+          "sha256": "31f2abe6e9b29feafd1a9eece8f4fe21992f86b8c19ab2e9b5c11a20f36587e7"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/architect/SKILL.md",
+          "sha256": "31f8e97a52bfa5432edd61f68ade2a8632ef0bacbc2d2a6802d7a0e6821944ac"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/architect/references/runner-prompt.md",
+          "sha256": "21dd5314aab778c5007228027a4591d97693fbec6ab86524037772b63f40948e"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/arena/SKILL.md",
+          "sha256": "f15524f216c1c63804b89edb4ff8e53bb21a7b8ed367368dedeb9468eeec6a92"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/benchmark-checklist/SKILL.md",
+          "sha256": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/blast-radius/SKILL.md",
+          "sha256": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/figure-it-out/SKILL.md",
+          "sha256": "d9574cc24929773d5c23f40626ae1e09660afddd7de48e08dd6494d9fff9bbf0"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/how/SKILL.md",
+          "sha256": "47cfe3e6fe55c49c3bdf8ad1b645dcd5fece8f0c36fd22d2e7221f9faa71f648"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/interrogate/SKILL.md",
+          "sha256": "25341c393f515c1e1fa9bce668b7551e9f98c195113a460ff524d3c1f7f50cd9"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/interrogate/references/reviewer-prompt.md",
+          "sha256": "f6005cc2b535006fca97a96c5bfda49df57312eedf1ffd8d1aaaf3eb33817c25"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/interrogate/references/rubric.md",
+          "sha256": "0f9c6bdb0b96e26dbde5f6407f417e0c02f54080e7a1268d8994f3c3ec6c5ac0"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/ketchup/SKILL.md",
+          "sha256": "f460a861cf2179808abc24b5588c94709f8cc3e58d4da2e44baf89556f53b587"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/poteto-help/SKILL.md",
+          "sha256": "3fe669c7c3b8f52c18b7c68ecce01c8691e844b9d2b41a8a6ff6432341451986"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/poteto-mode/SKILL.md",
+          "sha256": "03d61d15c5a0f7abc2c558c7323ff3c360dedc2915ebadf3c76c9e872f41cb64"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+          "sha256": "931070f5674e81a191277253d4e02b1c45d091b223f93bf506d3896a428a5967"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/poteto-mode/playbooks/trace-forensics.md",
+          "sha256": "e8a671fd5511a894f90c933bca75815e7a1d730cb53333075a80b0927e81acfc"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/poteto-mode/scripts/orch/orch.test.ts",
+          "sha256": "773153ac74de6eb15f58d2682f487f5f30672d7efe3ef1d24a131aa9129d279b"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-build-the-lever/SKILL.md",
+          "sha256": "3434b0ad0c640c6f1d7960be7a8986c3bcdc14e26060360dec29903df60074ff"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-encode-lessons-in-structure/SKILL.md",
+          "sha256": "ad12c26209770c52f632d9480c048ac5334ce8e5d6297f83ade59652a56cb3ef"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-explain-the-number/SKILL.md",
+          "sha256": "cd5a25f9e7cf023627ccb470dc5faa97542f29b4319496a32b839a8e1e988047"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-minimize-reader-load/SKILL.md",
+          "sha256": "1ea2b7fef2391cae5844c4efdbd59031f775e8a52d06b7495d707229a200dcca"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-model-the-domain/SKILL.md",
+          "sha256": "52c0d85e0c3827c41c18299b642657d7b47eaf77b7b31609e42e0df42b84c75f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-never-block-on-the-human/SKILL.md",
+          "sha256": "05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-redesign-from-first-principles/SKILL.md",
+          "sha256": "170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-subtract-before-you-add/SKILL.md",
+          "sha256": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-test-behavior-not-implementation/SKILL.md",
+          "sha256": "b2b73ba42920f9c3174ecdf808ec6e4591b3a9266ada9a05814f386004266d3a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/principle-type-system-discipline/SKILL.md",
+          "sha256": "2e492cef34bb25a20b9115df61f9ef3a9837e3fda144ffda8079e5f45a1b72e8"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/reflect/SKILL.md",
+          "sha256": "f5e9200f37e2a4567c0eeb0ba244fde66c1b3f35e3b7a883de2f85b3bda7365a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/reflect/references/divergent-reviewer.md",
+          "sha256": "f6030d88e20e906ef5e2d9ba44cb013ce610c49c2fe2ef74c377d32e0dc9e939"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/reflect/references/judgment-reviewer.md",
+          "sha256": "38f917619fbf346062d643e0ad6b12fc952d58678dfcbbf42ffcf6d8b9c08307"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/reflect/references/synthesizer.md",
+          "sha256": "6af816963de74d1a1aef4070273c1ff533d2072732e488e159ddc0b299fec3cd"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/reflect/references/tooling-reviewer.md",
+          "sha256": "f81b8697e7366fbbc18feba52c6e3253a101f751091364ebc4396a1d9b5753b4"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/setup-pstack/SKILL.md",
+          "sha256": "d61b47256a18155a81c8e5ef95e3cc6569ce8c18317c35c4dd9c8015cf68cb59"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/technical-writing/SKILL.md",
+          "sha256": "61fe9c424a798ebf36ad94941f87be049cb8827bdf86d21474a0dde37b513c43"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/unslop/SKILL.md",
+          "sha256": "3126b9e2cf46022f5e0c332e84be5e17a9730669cb3d6ac0a7e5e7e94b1e24fa"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/SKILL.md",
+          "sha256": "fa1d1e9dec14b15381c1ccccad74044d6b6ea3b4af56821f59ba2d8e59b07545"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/epistemics.md",
+          "sha256": "d54a2361b2d5973bc3fe2edf62f446d87935974d4b40d47f23b9529f956ca758"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/investigator-prompt.md",
+          "sha256": "c44afba186f899094f3694e6c9d6de5d14ff7c4ce28b787a9f50fc789c9a7fc3"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/sources/code-archaeology.md",
+          "sha256": "f6b5c4c3dd4ddc31da446bbbe4d88806e2201f15a76b97b3e44ce25c5862e321"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/sources/datadog.md",
+          "sha256": "b139faac5dc11b8f26c8255dce6033c1a6ac143b038d3dd103f2034c5dbec9cd"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/sources/sentry.md",
+          "sha256": "e0ed11e474c3d248bc5ac16d37ca1439b2db0253a3413252194556643cf8328a"
+        },
+        {
+          "path": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack/skills/why/references/synthesizer-prompt.md",
+          "sha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb"
+        }
+      ],
+      "outputFiles": [
+        {
+          "path": "src/core/skills/architect/SKILL.md",
+          "owner": "derived",
+          "sha256": "04fa4f421c0b2b1508ef57be29a40e6f810093f92595fa8939e0189a2d06f3d8"
+        },
+        {
+          "path": "src/core/skills/ketchup/SKILL.md",
+          "owner": "derived",
+          "sha256": "e65d282b46606e60e5506c8064f52d0921beaae6d8525693e5871be3599b153d"
+        },
+        {
+          "path": "src/core/skills/ketchup/skill.json",
+          "owner": "local-core",
+          "sha256": "542d9a8f3e3d6bf008f063def9947504840aee3b560f95c45f4b248bd04f138e"
+        },
+        {
+          "path": "src/core/skills/poteto-help/SKILL.md",
+          "owner": "derived",
+          "sha256": "0c6e7d6d9b730775d31182367ab064a6286da2afbef1142f6626781d2bae3710"
+        },
+        {
+          "path": "src/core/skills/poteto-help/references/recipes.md",
+          "owner": "derived",
+          "sha256": "48cb2fecc0c07499e995c22ceb3b95ece800d337638dc707f0c8a369d602083c"
+        },
+        {
+          "path": "src/core/skills/poteto-mode/SKILL.md",
+          "owner": "derived",
+          "sha256": "1b1f484c394d4c0d0254feca1f20f8b3229b16bd2b12fe574ea69eb3ff515127"
+        },
+        {
+          "path": "src/core/skills/principle-build-the-lever/SKILL.md",
+          "owner": "derived",
+          "sha256": "9928ef37403958538904f56ade34e7ceb656d913b6cfec05d23725f8366c0abe"
+        },
+        {
+          "path": "src/core/skills/principle-encode-lessons-in-structure/SKILL.md",
+          "owner": "derived",
+          "sha256": "7317b9635b2c84c675cc30c404d10614519361350d882142585af5def0fe5c36"
+        },
+        {
+          "path": "src/core/skills/principle-explain-the-number/SKILL.md",
+          "owner": "derived",
+          "sha256": "0ae388260f84dca4bbe27ce7b24ef21b19d0b44f26844edd063aaeb32710c4c8"
+        },
+        {
+          "path": "src/core/skills/principle-minimize-reader-load/SKILL.md",
+          "owner": "derived",
+          "sha256": "08c3a03b2641272b3030b9925aff99f18be22dca41d6fe43a6bd7799374e9bc3"
+        },
+        {
+          "path": "src/core/skills/principle-model-the-domain/SKILL.md",
+          "owner": "derived",
+          "sha256": "89e2611b826e665961374462a88c411d8a46fe9d1e0ffc7592a645047bf8b0cd"
+        },
+        {
+          "path": "src/core/skills/principle-never-block-on-the-human/SKILL.md",
+          "owner": "derived",
+          "sha256": "a9c3c817a00658136c4c1f434d79f333da3a853be4f87cf88877f238925e95d2"
+        },
+        {
+          "path": "src/core/skills/principle-redesign-from-first-principles/SKILL.md",
+          "owner": "derived",
+          "sha256": "3e237e12288bb7326617c15589939b803c18de4708817bbb3d6839894ce23ae3"
+        },
+        {
+          "path": "src/core/skills/principle-subtract-before-you-add/SKILL.md",
+          "owner": "derived",
+          "sha256": "46ed55730f8bd5b8b4217917dc18e59d74ff6ec112a5b5fd59e2244bc9071190"
+        },
+        {
+          "path": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md",
+          "owner": "derived",
+          "sha256": "520ad3ca6896e2d4ef3bdc4a7a3ae02d5c22061e969e82c567a03d45da857299"
+        },
+        {
+          "path": "src/core/skills/principle-type-system-discipline/SKILL.md",
+          "owner": "derived",
+          "sha256": "c5fb9043875d8225beb3a0f3cc4a9c221617c3345c0fb49e38b9ac0a7fbe1a4f"
+        },
+        {
+          "path": "src/core/skills/reflect/SKILL.md",
+          "owner": "derived",
+          "sha256": "df9e9ada58f7b60235d542caf0553a2059e20f7f7d2d44bb8ac5f04f8d2b2608"
+        },
+        {
+          "path": "src/core/skills/setup-oh-my-stack/SKILL.md",
+          "owner": "derived",
+          "sha256": "10b6255ab1841f348050d777c04e76a5e14b945b310c3651bb4189f93981166c"
+        },
+        {
+          "path": "src/core/skills/technical-writing/SKILL.md",
+          "owner": "derived",
+          "sha256": "0c7263f30ddfe5939ebbaa53f5b4ee6522d4ed6098abc3b7aa4feafd97bfccac"
+        },
+        {
+          "path": "src/core/skills/technical-writing/references/document-structure.md",
+          "owner": "derived",
+          "sha256": "cbd6dbad8cf59a1f6afb8dea0506e7b58500346df92acfd7ac138a40168c6bde"
+        },
+        {
+          "path": "src/core/skills/technical-writing/references/sentence-style.md",
+          "owner": "derived",
+          "sha256": "9b911385a80ff6e9550121a61c0656d5a7e5fe4354992281d351119a5ebd3d50"
+        },
+        {
+          "path": "src/core/skills/unslop/SKILL.md",
+          "owner": "derived",
+          "sha256": "2a0c4a7bcc4e33d2fd01465f1c0e96c217a6707382ab493888c47cd447dd54c1"
+        }
+      ],
+      "transformation": "Reviewed semantic adaptation of pstack0.15.14 through0.15.17: explicit catch-up, contextual setup help, budget migration prose and editorial condensation. Preserve OMS0.14 full delivery gates, portable host bindings, historical snapshots and source attribution."
     }
   ]
 }

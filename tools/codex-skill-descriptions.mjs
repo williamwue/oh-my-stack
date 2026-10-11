@@ -8,6 +8,7 @@ export const codexSkillDescriptions = {
   "eval": "Compare workflow variants with blinded outputs and a frozen rubric.",
   "figure-it-out": "Plan and verify a complex task with an auditable decision trail.",
   "hillclimb": "Improve one metric through bounded measured attempts.",
+  "ketchup": "Catch up on this chat, current work status, and decisions waiting on you.",
   "maintain-verification-skill": "Audit and update a verification Skill using source and live behavior.",
   "make-bot-ui": "Build a local control page for an authenticated webhook.",
   "multi-phase-plan": "Write a dependency plan with verifiable units and live checks.",

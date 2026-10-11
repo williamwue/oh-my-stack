@@ -20,7 +20,11 @@ Write for the reader's task. Follow the requested format and project style.
 6. Check factual claims, links, commands, and examples. Distinguish observed
    results from assumptions and checks that remain unavailable.
 
-Preserve useful voice and varied sentence lengths. Avoid invented jargon,
+Preserve useful voice and varied sentence lengths. A longer sentence can carry
+one fact with its condition or consequence. In explanations, weigh tradeoffs
+and state the conclusion the evidence supports; keep reference material factual.
+Prefer a specific mechanism, such as "a column rename fails the build", over
+"schema changes can cause issues". Avoid invented jargon,
 filler, unsupported certainty, and changes to unrelated prose. Keep code
 examples consistent with the project's actual language and formatting.
 

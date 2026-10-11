@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Ketchup"
+  short_description: "Catch up on this chat, current work status, and decisions waitin"
+  default_prompt: "Use $ketchup for this task."
+policy:
+  allow_implicit_invocation: false

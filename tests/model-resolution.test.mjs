@@ -82,6 +82,7 @@ test("user setup is inherited in two projects and a project manifest overrides o
 
     const rerun = await configure({ packageRoot, inventoryPath, userRoot: root, presetName, apply: false });
     assert.equal(rerun.manifest.budget, "medium");
+    assert.deepEqual(rerun.manifest.budgetPolicy, { version: 2, kind: "reasoning-target", level: "high", costLimit: false });
     assert.equal((await resolveActiveResolution({ runtime, cwd: join(projectA, "src"), userRoot: root })).scope, "project");
     if (runtime === "codex") {
       const task = { bundleRoot: packageRoot, routeName: "code.bug-fix", taskName: "fix_probe", task: "Read one file." };
@@ -113,7 +114,7 @@ test("Claude Code uses native user and project agent scopes without claiming act
   const options = { packageRoot, inventoryPath, selections, routeSelections: { "how.explorer": "claude-haiku-4-5@none" }, apply: true };
   await configure({ ...options, userRoot: root });
   const userPath = join(root, ".claude", "oh-my-stack.resolution.json");
-  assert.match(await readFile(join(root, ".claude", "agents", "ohmystack-role-explorer.md"), "utf8"), /effort: "medium"/);
+  assert.match(await readFile(join(root, ".claude", "agents", "ohmystack-role-explorer.md"), "utf8"), /effort: "high"/);
   assert.doesNotMatch(await readFile(join(root, ".claude", "agents", "ohmystack-how-explorer.md"), "utf8"), /effort:/);
   assert.equal((await resolveActiveResolution({ runtime: "claude-code", cwd: project, userRoot: root })).scope, "user");
   const audit = await inspectSetup({ resolutionPath: userPath, cwd: project, userRoot: root });

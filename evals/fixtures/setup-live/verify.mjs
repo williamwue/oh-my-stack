@@ -34,10 +34,12 @@ assert.equal(
   createHash("sha256").update(inventoryRaw).digest("hex"),
 );
 assert.deepEqual(manifest.workloads, {
-  fast: { model: selected.id, reasoning: "low" },
-  balanced: { model: selected.id, reasoning: "medium" },
+  fast: { model: selected.id, reasoning: "high" },
+  balanced: { model: selected.id, reasoning: "high" },
   deep: { model: selected.id, reasoning: "high" },
 });
+assert.equal(manifest.budget, "medium");
+assert.equal(manifest.budgetPolicy.level, "high");
 
 const extension = descriptor.adapter.format === "toml" ? "toml" : "md";
 const roleNames = descriptor.roles.map((role) => role.name).sort();

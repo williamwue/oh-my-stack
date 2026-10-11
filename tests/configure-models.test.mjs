@@ -17,6 +17,289 @@ const selections = {
 };
 const execFileAsync = promisify(execFile);
 
+async function compatibilityFixture() {
+  const root = await mkdtemp(join(tmpdir(), "oms-budget-compatibility-"));
+  const packageRoot = join(root, "package");
+  await cp(join(repoRoot, "packages", "omp", "agents"), join(packageRoot, "agents"), { recursive: true });
+  const descriptor = JSON.parse(await readFile(join(repoRoot, "packages", "omp", "config", "runtime-resolution.json"), "utf8"));
+  const presets = JSON.parse(await readFile(join(repoRoot, "src", "runtime-resolution", "presets.json"), "utf8"));
+  descriptor.presets = Object.fromEntries(Object.entries(presets).filter(([name]) => name !== "schemaVersion")
+    .map(([name, value]) => [name, value.omp ?? null]));
+  await mkdir(join(packageRoot, "config"), { recursive: true });
+  await writeFile(join(packageRoot, "config", "runtime-resolution.json"), JSON.stringify(descriptor));
+  const inventoryPath = join(root, "inventory.json");
+  const observed = { schemaVersion: 1, runtime: "omp", observedAt: "2026-10-11T00:00:00Z", source: "detached fixture",
+    models: [
+      { id: "cursor/claude-opus-5-5", reasoningEfforts: ["low", "medium", "high", "xhigh", "max", "ultra"] },
+      { id: "cursor/grok-4.7-xhigh-fast", reasoningEfforts: ["low", "medium", "high"] },
+      { id: "cursor/gpt-5.6-sol", reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] },
+    ] };
+  await writeFile(inventoryPath, JSON.stringify(observed));
+  const options = { packageRoot, inventoryPath, outputRoot: join(root, "output"), presetName: "pstack" };
+  return { options, observed, descriptor, manifestPath: join(options.outputRoot, "oh-my-stack.resolution.json") };
+}
+
+function effectiveChoices(manifest) {
+  const choice = ({ model, reasoning, inheritParent }) => ({ model, reasoning, ...(inheritParent ? { inheritParent } : {}) });
+  return { workloads: manifest.workloads,
+    roles: Object.fromEntries(Object.entries(manifest.roles).map(([name, value]) => [name, choice(value)])),
+    routes: Object.fromEntries(Object.entries(manifest.routes).map(([name, value]) => [name, value.entries.map(choice)])) };
+}
+
+async function legacyFixture(overrides) {
+  const fixture = await compatibilityFixture();
+  const { options, descriptor } = fixture;
+  const old = structuredClone(descriptor);
+  old.presets.pstack.workloads.deep = "cursor/claude-opus-5-5@max";
+  old.presets.pstack.routes["reflect.tooling"] = "cursor/gpt-5.6-sol@max";
+  for (const name of ["arena.runners", "arena.cross-judge-pool", "architect.runners", "interrogate.reviewers"]) {
+    old.presets.pstack.routes[name] = ["cursor/claude-opus-5-5@max", "cursor/gpt-5.6-sol@max", "inherit-parent"];
+  }
+  const descriptorPath = join(options.packageRoot, "config", "runtime-resolution.json");
+  await writeFile(descriptorPath, JSON.stringify(old));
+  const first = await configure({ ...options, budget: "large", routeSelections: { "reflect.divergent": "auto" }, apply: true });
+  const legacy = first.manifest;
+  legacy.budget = "unlimited";
+  legacy.budgetPolicy = { kind: "reasoning-target", level: null, costLimit: false };
+  if (overrides === undefined) delete legacy.overrides;
+  else legacy.overrides = overrides;
+  legacy.workloads.deep.reasoning = "high";
+  legacy.roles.reviewer.reasoning = "high";
+  legacy.routes["arena.runners"].entries[0].reasoning = "high";
+  await writeFile(fixture.manifestPath, JSON.stringify(legacy));
+  await writeFile(descriptorPath, JSON.stringify(descriptor));
+  return { ...fixture, legacy };
+}
+
+test("fresh omitted budget is large and explicit unlimited targets max with exact-selector fallback and no ultra", async () => {
+  const { options, manifestPath } = await compatibilityFixture();
+  const defaulted = await configure({ ...options, apply: false });
+  assert.equal(defaulted.manifest.budget, "large");
+  assert.equal(defaulted.manifest.workloads.deep.reasoning, "xhigh");
+  const result = await configure({ ...options, budget: "unlimited", apply: false });
+  assert.deepEqual(result.manifest.budgetPolicy, { version: 2, kind: "reasoning-target", level: "max", costLimit: false });
+  assert.equal(result.manifest.workloads.deep.reasoning, "max");
+  assert.equal(result.manifest.workloads.fast.reasoning, "high");
+  assert.equal(result.manifest.routes["reflect.tooling"].entries[0].model, "cursor/grok-4.7-xhigh-fast");
+  for (const name of ["arena.runners", "arena.cross-judge-pool", "architect.runners", "interrogate.reviewers"]) {
+    assert.deepEqual(result.manifest.routes[name].entries.map(({ model, reasoning }) => [model, reasoning]),
+      [["cursor/claude-opus-5-5", "max"], ["cursor/grok-4.7-xhigh-fast", "high"]]);
+  }
+  assert.ok(Object.values(result.manifest.roles).every(({ reasoning }) => reasoning !== "ultra"));
+  await assert.rejects(readFile(manifestPath));
+});
+
+test("legacy absent, empty, sparse and explicit overrides retain every effective choice and ordered panel on two reruns", async () => {
+  for (const overrides of [undefined, {}, { routes: { "reflect.divergent": "auto" } },
+    { panels: { "arena.runners": "cursor/gpt-5.6-sol@low,auto" } },
+    { workloads: { deep: "cursor/claude-opus-5-5@max" }, panels: { "arena.runners": "cursor/claude-opus-5-5@max,cursor/gpt-5.6-sol@max,auto" } }]) {
+    const { options, manifestPath, legacy, observed } = await legacyFixture(overrides);
+    const before = await readFile(manifestPath, "utf8");
+    const preview = await configure({ ...options, apply: false });
+    assert.deepEqual(effectiveChoices(preview.manifest), effectiveChoices(legacy));
+    assert.deepEqual(preview.manifest.budgetPolicy, { version: 2, kind: "preserve-effort", level: null, costLimit: false });
+    assert.equal(await readFile(manifestPath, "utf8"), before);
+    const applied = await configure({ ...options, apply: true });
+    observed.models[1].reasoningEfforts.push("xhigh", "max", "ultra");
+    await writeFile(options.inventoryPath, JSON.stringify(observed));
+    const second = await configure({ ...options, apply: true });
+    assert.deepEqual(effectiveChoices(second.manifest), effectiveChoices(legacy));
+    assert.deepEqual(second.manifest.overrides, applied.manifest.overrides);
+    const changedBudget = await configure({ ...options, budget: "unlimited", apply: false });
+    assert.equal(changedBudget.manifest.budgetPolicy.level, "max");
+    assert.equal(changedBudget.manifest.workloads.deep.reasoning, "max");
+    assert.equal(changedBudget.manifest.routes["arena.runners"].entries.length, 3);
+    assert.equal(changedBudget.manifest.routes["arena.runners"].entries[2].inheritParent, true);
+  }
+});
+
+test("configuration CLI exposes max policy in a detached preview and retains choices on apply rerun", async () => {
+  const { options, manifestPath } = await compatibilityFixture();
+  const args = [join(repoRoot, "tools", "configure-models.mjs"), "--package", options.packageRoot,
+    "--inventory", options.inventoryPath, "--output", options.outputRoot, "--preset", "pstack"];
+  const preview = JSON.parse((await execFileAsync(process.execPath, [...args, "--budget", "unlimited"])).stdout);
+  assert.equal(preview.applied, false);
+  assert.equal(preview.manifest.budgetPolicy.level, "max");
+  await assert.rejects(readFile(manifestPath));
+  const applied = JSON.parse((await execFileAsync(process.execPath, [...args, "--budget", "unlimited", "--apply"])).stdout);
+  const rerun = JSON.parse((await execFileAsync(process.execPath, args)).stdout);
+  assert.deepEqual(effectiveChoices(rerun.manifest), effectiveChoices(applied.manifest));
+  assert.deepEqual(rerun.manifest.budgetPolicy, applied.manifest.budgetPolicy);
+});
+
+test("explicit route and panel changes leave untouched migrated entries exact", async () => {
+  const { options, legacy } = await legacyFixture({});
+  await configure({ ...options, apply: true });
+  const changed = await configure({ ...options, apply: false,
+    routeSelections: { "code.bug-fix": "cursor/gpt-5.6-sol@medium" },
+    panelSelections: { "interrogate.reviewers": "auto,cursor/gpt-5.6-sol@low" } });
+  assert.equal(changed.manifest.routes["code.bug-fix"].entries[0].reasoning, "medium");
+  assert.equal(changed.manifest.routes["interrogate.reviewers"].entries.length, 2);
+  assert.equal(changed.manifest.routes["interrogate.reviewers"].entries[1].reasoning, "low");
+  assert.deepEqual(changed.manifest.routes["arena.runners"], legacy.routes["arena.runners"]);
+  assert.deepEqual(changed.manifest.roles, legacy.roles);
+});
+
+test("saved bounded choices do not rise when inventory expands, while explicit patches use the saved target", async () => {
+  const { options, observed } = await compatibilityFixture();
+  observed.models[0].reasoningEfforts = ["low", "medium", "high"];
+  await writeFile(options.inventoryPath, JSON.stringify(observed));
+  const first = await configure({ ...options, budget: "large", apply: true });
+  assert.equal(first.manifest.workloads.deep.reasoning, "high");
+  observed.models[0].reasoningEfforts.push("xhigh", "max", "ultra");
+  await writeFile(options.inventoryPath, JSON.stringify(observed));
+  const rerun = await configure({ ...options, apply: true });
+  assert.deepEqual(effectiveChoices(rerun.manifest), effectiveChoices(first.manifest));
+  const patch = await configure({ ...options, routeSelections: { "code.bug-fix": "cursor/claude-opus-5-5@low" }, apply: false });
+  assert.equal(patch.manifest.routes["code.bug-fix"].entries[0].reasoning, "xhigh");
+  assert.equal(patch.manifest.workloads.deep.reasoning, "high");
+  const budget = await configure({ ...options, budget: "large", apply: false });
+  assert.equal(budget.manifest.workloads.deep.reasoning, "xhigh");
+});
+
+test("legacy capped budget and explicit high choices remain exact with sparse intent", async () => {
+  for (const budget of ["medium", "large"]) {
+    const { options, manifestPath } = await compatibilityFixture();
+    const first = await configure({ ...options, budget, apply: true });
+    const legacy = first.manifest;
+    legacy.budgetPolicy = { kind: "reasoning-target", level: budget === "medium" ? "high" : "xhigh", costLimit: false };
+    legacy.overrides = { routes: { "reflect.divergent": "cursor/claude-opus-5-5@high" } };
+    legacy.routes["reflect.divergent"].entries[0].reasoning = "high";
+    await writeFile(manifestPath, JSON.stringify(legacy));
+    const retained = await configure({ ...options, apply: true });
+    assert.equal(retained.manifest.budget, budget);
+    assert.deepEqual(effectiveChoices(retained.manifest), effectiveChoices(legacy));
+    assert.equal(retained.manifest.budgetPolicy.version, 2);
+    assert.equal(retained.manifest.budgetPolicy.level, budget === "medium" ? "high" : "xhigh");
+  }
+});
+
+test("unlimited fallback ignores unrecognized effort names and refuses models with only effort above max", async () => {
+  const { options, observed, manifestPath } = await compatibilityFixture();
+  observed.models[0].reasoningEfforts = ["experimental", "ultra"];
+  await writeFile(options.inventoryPath, JSON.stringify(observed));
+  await assert.rejects(configure({ ...options, budget: "unlimited", apply: true }), /no supported effort at or below max/);
+  await assert.rejects(readFile(manifestPath));
+});
+
+test("workload edits reach only derived slots and uniform survives reruns until explicit reset", async () => {
+  const { options } = await compatibilityFixture();
+  const first = await configure({ ...options, budget: "large", uniformReasoning: "high",
+    routeSelections: { "how.explorer": "cursor/claude-opus-5-5@low" }, apply: true });
+  const rerun = await configure({ ...options, apply: true });
+  assert.equal(rerun.manifest.uniformReasoning, "high");
+  assert.deepEqual(effectiveChoices(rerun.manifest), effectiveChoices(first.manifest));
+  const changed = await configure({ ...options, selections: { fast: "cursor/gpt-5.6-sol@low" }, apply: false });
+  assert.equal(changed.manifest.workloads.fast.model, "cursor/gpt-5.6-sol");
+  assert.equal(changed.manifest.routes["why.investigator"].entries[0].model, "cursor/gpt-5.6-sol");
+  assert.equal(changed.manifest.routes["how.explorer"].entries[0].model, "cursor/claude-opus-5-5");
+  assert.deepEqual(changed.manifest.routes["arena.runners"], first.manifest.routes["arena.runners"]);
+  const reset = await configure({ ...options, uniformReasoning: "preset", apply: false });
+  assert.equal(reset.manifest.uniformReasoning, null);
+  assert.equal(reset.manifest.workloads.deep.reasoning, "xhigh");
+  assert.equal(reset.manifest.routes["how.explorer"].entries[0].reasoning, "xhigh");
+  await assert.rejects(configure({ ...options, budget: "small", apply: true }), /uniform reasoning high exceeds small/);
+});
+
+test("legacy uniform reset recovers known raw effort without replacing retained selectors or panels", async () => {
+  for (const migrateFirst of [false, true]) {
+    const { options, manifestPath } = await compatibilityFixture();
+    const legacy = (await configure({ ...options, budget: "large", uniformReasoning: "high",
+      selections: { deep: "cursor/claude-opus-5-5@max" },
+      routeSelections: { "how.explorer": "cursor/gpt-5.6-sol@low" },
+      panelSelections: { "arena.runners": "cursor/gpt-5.6-sol@max,cursor/claude-opus-5-5@max,auto" }, apply: true })).manifest;
+    legacy.budget = "unlimited";
+    delete legacy.budgetPolicy.version;
+    legacy.budgetPolicy.level = null;
+    delete legacy.overrides.uniformBase;
+    delete legacy.overrides.bindings;
+    await writeFile(manifestPath, JSON.stringify(legacy));
+    if (migrateFirst) {
+      const rerun = await configure({ ...options, apply: true });
+      assert.deepEqual(effectiveChoices(rerun.manifest), effectiveChoices(legacy));
+    }
+    const reset = await configure({ ...options, uniformReasoning: "preset", apply: false });
+    assert.equal(reset.manifest.uniformReasoning, null);
+    assert.equal(reset.manifest.workloads.deep.reasoning, "max");
+    assert.equal(reset.manifest.routes["how.explorer"].entries[0].reasoning, "low");
+    assert.deepEqual(reset.manifest.routes["arena.runners"].entries.map(({ model, reasoning, inheritParent }) => [model, reasoning, Boolean(inheritParent)]),
+      [["cursor/gpt-5.6-sol", "max", false], ["cursor/claude-opus-5-5", "max", false], [null, null, true]]);
+    assert.equal(reset.manifest.roles.reviewer.reasoning, "max");
+    assert.equal(reset.manifest.budgetPolicy.kind, "preserve-effort");
+  }
+});
+
+test("legacy uniform migration never saves an unsupported preset reset effort", async () => {
+  for (const migrateFirst of [false, true]) {
+    const { options, observed, manifestPath } = await compatibilityFixture();
+    for (const model of observed.models) model.reasoningEfforts = model.id.includes("grok") ? ["high"] : ["high", "max"];
+    await writeFile(options.inventoryPath, JSON.stringify(observed));
+    const legacy = (await configure({ ...options, budget: "medium", uniformReasoning: "high", apply: true })).manifest;
+    legacy.budget = "unlimited";
+    legacy.budgetPolicy = { kind: "reasoning-target", level: null, costLimit: false };
+    delete legacy.overrides.uniformBase;
+    delete legacy.overrides.bindings;
+    await writeFile(manifestPath, JSON.stringify(legacy));
+    if (migrateFirst) {
+      const migrated = await configure({ ...options, apply: true });
+      assert.deepEqual(effectiveChoices(migrated.manifest), effectiveChoices(legacy));
+      assert.equal(migrated.manifest.overrides.uniformBase.workloads.deep, "cursor/claude-opus-5-5@high");
+    }
+    const reset = await configure({ ...options, uniformReasoning: "preset", apply: true });
+    assert.equal(reset.manifest.uniformReasoning, null);
+    assert.equal(reset.manifest.workloads.deep.reasoning, "high");
+    assert.deepEqual(effectiveChoices((await configure({ ...options, apply: false })).manifest), effectiveChoices(reset.manifest));
+  }
+});
+
+test("legacy non-preset configuration preserves effective choices and routes through reruns", async () => {
+  const fixture = await compatibilityFixture();
+  const options = { ...fixture.options, presetName: undefined };
+  const legacy = (await configure({ ...options, budget: "medium", apply: true,
+    selections: { fast: "cursor/grok-4.7-xhigh-fast@high", balanced: "cursor/gpt-5.6-sol@medium", deep: "cursor/claude-opus-5-5@high" },
+    routeSelections: { "how.explorer": "cursor/gpt-5.6-sol@low" } })).manifest;
+  legacy.budget = "unlimited";
+  legacy.budgetPolicy = { kind: "reasoning-target", level: null, costLimit: false };
+  delete legacy.overrides;
+  legacy.workloads.balanced.reasoning = "medium";
+  legacy.routes["how.explorer"].entries[0].reasoning = "low";
+  await writeFile(fixture.manifestPath, JSON.stringify(legacy));
+  for (let rerun = 0; rerun < 2; rerun++) {
+    const retained = (await configure({ ...options, apply: true })).manifest;
+    assert.equal(retained.preset, null);
+    assert.equal(retained.budgetPolicy.kind, "preserve-effort");
+    assert.deepEqual(effectiveChoices(retained), effectiveChoices(legacy));
+  }
+  const upgraded = (await configure({ ...options, budget: "unlimited", apply: false })).manifest;
+  assert.equal(upgraded.workloads.deep.reasoning, "max");
+});
+
+test("unsupported policy, selected effort and absent selectors fail before any apply writes", async () => {
+  const { options, manifestPath } = await compatibilityFixture();
+  await configure({ ...options, apply: true });
+  const original = JSON.parse(await readFile(manifestPath, "utf8"));
+  const rolePath = join(options.outputRoot, "agents", "reviewer.md");
+  const roleBefore = await readFile(rolePath, "utf8");
+  const invalid = structuredClone(original);
+  invalid.budgetPolicy.version = 99;
+  await writeFile(manifestPath, JSON.stringify(invalid));
+  const invalidBefore = await readFile(manifestPath, "utf8");
+  await assert.rejects(configure({ ...options, apply: true }), /budget policy version/);
+  assert.equal(await readFile(manifestPath, "utf8"), invalidBefore);
+  const retired = structuredClone(original);
+  retired.roles["retired-role"] = { model: "cursor/claude-opus-5-5", reasoning: "high" };
+  await writeFile(manifestPath, JSON.stringify(retired));
+  await assert.rejects(configure({ ...options, apply: true }), /retired saved role retired-role/);
+  await writeFile(manifestPath, JSON.stringify(original));
+  const before = await readFile(manifestPath, "utf8");
+  for (const selection of ["cursor/claude-opus-5-5@unknown", "cursor/not-observed@high", "cursor/grok-4.7-xhigh-fast@xhigh"]) {
+    await assert.rejects(configure({ ...options, routeSelections: { "code.bug-fix": selection }, apply: true }),
+      /unknown reasoning effort|was not present|did not advertise reasoning/);
+  }
+  assert.equal(await readFile(manifestPath, "utf8"), before);
+  assert.equal(await readFile(rolePath, "utf8"), roleBefore);
+});
+
 async function claudeInventoryFile(root, haiku = "claude-haiku-5-5", extraModels = []) {
   const path = join(root, "claude-three-family.json");
   await writeFile(path, JSON.stringify({
@@ -259,11 +542,13 @@ test("pstack preset creates named workflow routes and ordered native panels on b
     const inventoryPath = await presetInventoryFile(root, runtime);
     const outputRoot = join(root, `${runtime}-preset-output`);
     const packageRoot = join(repoRoot, "packages", runtime);
+    const descriptor = JSON.parse(await readFile(join(packageRoot, "config", "runtime-resolution.json"), "utf8"));
+    const panelCount = descriptor.presets.pstack.routes["interrogate.reviewers"].length;
     const preview = await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: false });
     assert.equal(preview.manifest.preset, "pstack");
-    assert.equal(preview.manifest.routes["interrogate.reviewers"].entries.length, 3);
+    assert.equal(preview.manifest.routes["interrogate.reviewers"].entries.length, panelCount);
     assert.equal(preview.manifest.routes["how.explorer"].entries.length, 1);
-    assert.equal(new Set(preview.manifest.routes["interrogate.reviewers"].entries.map((entry) => entry.model)).size, 3);
+    assert.equal(new Set(preview.manifest.routes["interrogate.reviewers"].entries.map((entry) => entry.model)).size, panelCount);
     await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 
     await configure({ packageRoot, inventoryPath, outputRoot, presetName: "pstack", apply: true });
@@ -272,8 +557,8 @@ test("pstack preset creates named workflow routes and ordered native panels on b
     assert.match(firstReviewer, new RegExp(preview.manifest.routes["interrogate.reviewers"].entries[0].model));
     assert.match(firstReviewer, /ohmystack-interrogate-reviewers-1/);
     const manifest = JSON.parse(await readFile(join(outputRoot, "oh-my-stack.resolution.json"), "utf8"));
-    assert.equal(manifest.routes["interrogate.reviewers"].entries[2].agent, "ohmystack-interrogate-reviewers-3");
-    assert.ok(Object.hasOwn(manifest.ownedFiles, `agents/ohmystack-interrogate-reviewers-3.${extension}`));
+    assert.equal(manifest.routes["interrogate.reviewers"].entries[panelCount - 1].agent, `ohmystack-interrogate-reviewers-${panelCount}`);
+    assert.ok(Object.hasOwn(manifest.ownedFiles, `agents/ohmystack-interrogate-reviewers-${panelCount}.${extension}`));
   }
 });
 
@@ -324,7 +609,7 @@ test("OMP OpenAI-Codex alternative previews current tiers without selecting lega
   await assert.rejects(readFile(join(outputRoot, "oh-my-stack.resolution.json")));
 });
 
-test("Codex previews the Sol default upgrade, preserves explicit pins, and never falls back silently", async () => {
+test("Codex retains effective Sol choices across preset upgrades and never falls back silently", async () => {
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-sol-upgrade-"));
   const packageRoot = join(repoRoot, "packages", "codex");
   const oldPackage = join(root, "old-package");
@@ -343,12 +628,12 @@ test("Codex previews the Sol default upgrade, preserves explicit pins, and never
   const preview = await configure({ ...options, apply: false });
   assert.equal(await readFile(manifestPath, "utf8"), original);
   assert.equal(preview.manifest.budget, "medium");
-  assert.deepEqual(preview.manifest.workloads.balanced, { model: "gpt-6.1-sol", reasoning: "high" });
-  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "gpt-6.1-sol");
+  assert.deepEqual(preview.manifest.workloads.balanced, { model: "gpt-6-sol", reasoning: "high" });
+  assert.equal(preview.manifest.routes["code.bug-fix"].entries[0].model, "gpt-6-sol");
   for (const name of ["arena.runners", "arena.cross-judge-pool", "architect.runners", "interrogate.reviewers"]) {
     assert.deepEqual(preview.manifest.routes[name].entries.map(({ model, reasoning }) => ({ model, reasoning })), [
       { model: "gpt-6-astra", reasoning: "high" },
-      { model: "gpt-6.1-sol", reasoning: "high" },
+      { model: "gpt-6-sol", reasoning: "high" },
       { model: "gpt-6-luna", reasoning: "high" },
     ]);
   }
@@ -356,9 +641,9 @@ test("Codex previews the Sol default upgrade, preserves explicit pins, and never
   await configure({ ...options, routeSelections: { "code.bug-fix": "gpt-6-sol@medium" }, apply: true });
   assert.equal((await configure({ ...options, apply: false })).manifest.routes["code.bug-fix"].entries[0].model, "gpt-6-sol");
   const beforeMissing = await readFile(manifestPath, "utf8");
-  inventory.models = inventory.models.filter(({ id }) => id !== "gpt-6.1-sol");
+  inventory.models = inventory.models.filter(({ id }) => id !== "gpt-6-sol");
   await writeFile(inventoryPath, JSON.stringify(inventory));
-  await assert.rejects(configure({ ...options, apply: true }), /gpt-6\.1-sol was not present in the observed inventory/);
+  await assert.rejects(configure({ ...options, apply: true }), /gpt-6-sol was not present in the observed inventory/);
   assert.equal(await readFile(manifestPath, "utf8"), beforeMissing);
 });
 
@@ -494,6 +779,7 @@ test("OMP mirrors source slots, targets budget effort, and retains explicit choi
   const root = await mkdtemp(join(tmpdir(), "oh-my-stack-omp-source-policy-"));
   const inventoryPath = await presetInventoryFile(root, "omp");
   const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+  inventory.models.push({ id: "cursor/gpt-5.6-sol", reasoningEfforts: ["low", "medium", "high", "xhigh", "max"] });
   inventory.models.find((model) => model.id === "cursor/grok-4.7-xhigh-fast").reasoningEfforts = ["low", "medium", "high"];
   await writeFile(inventoryPath, `${JSON.stringify(inventory, null, 2)}\n`);
   const options = {

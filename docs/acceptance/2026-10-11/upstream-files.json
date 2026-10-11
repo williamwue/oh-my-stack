@@ -1,0 +1,283 @@
+{
+  "sourceId": "cursor-pstack-october-11",
+  "base": "2cbf58508f40de470d7490b55c51d71241928fa2",
+  "head": "978ca6e9c0e012047cd5058b8e829240336e704e",
+  "files": [
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/.cursor-plugin/plugin.json",
+      "sha256": "4c6e3292f2b0bb4e31462c2a00df191fa3316fa008eb5e80d3d45b14475b52cc",
+      "gitBlob": "7d786382d4da27f0b9c7a59cd7c94457dffea3f6"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/README.md",
+      "sha256": "a33eaf6f08fd248f7d064b3909caa947424f027896360077bdbb2d12e8ac213d",
+      "gitBlob": "f335b43490c5e56d3b5dbfeb0324fabc61e88049"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/docs/guide/01-setup.md",
+      "sha256": "86d0330f245d16254a2069955f993c15d96cf29cd1a73690a0164074b7ac1190",
+      "gitBlob": "62420df8255f5f3de03f3977e64bc0f34dbdc073"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/docs/guide/04-design.md",
+      "sha256": "31f2abe6e9b29feafd1a9eece8f4fe21992f86b8c19ab2e9b5c11a20f36587e7",
+      "gitBlob": "61d5bbb591c93e432fafe77259cd62a7aaf1cce8"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/architect/SKILL.md",
+      "sha256": "31f8e97a52bfa5432edd61f68ade2a8632ef0bacbc2d2a6802d7a0e6821944ac",
+      "gitBlob": "88e23ca105b89e67f4085d0e676c40d4b170a623"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/architect/references/runner-prompt.md",
+      "sha256": "21dd5314aab778c5007228027a4591d97693fbec6ab86524037772b63f40948e",
+      "gitBlob": "b1ad21aef22e80d718c361787190b599eb359d6c"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/arena/SKILL.md",
+      "sha256": "f15524f216c1c63804b89edb4ff8e53bb21a7b8ed367368dedeb9468eeec6a92",
+      "gitBlob": "58ae9d9a3f8812429091515f2a7ce2f91cf14ef9"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/benchmark-checklist/SKILL.md",
+      "sha256": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0",
+      "gitBlob": "e901d1fdbc9ffce53e94d6514be7d9a22e771a1a"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/blast-radius/SKILL.md",
+      "sha256": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
+      "gitBlob": "b296cce0d746260a53c16e3671cb05bacfe82daf"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/figure-it-out/SKILL.md",
+      "sha256": "d9574cc24929773d5c23f40626ae1e09660afddd7de48e08dd6494d9fff9bbf0",
+      "gitBlob": "195f50b83d0f643758a2b92e432374fbb5ef7635"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/how/SKILL.md",
+      "sha256": "47cfe3e6fe55c49c3bdf8ad1b645dcd5fece8f0c36fd22d2e7221f9faa71f648",
+      "gitBlob": "775d292f8d5d369200502eabe3136d8f56666239"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/interrogate/SKILL.md",
+      "sha256": "25341c393f515c1e1fa9bce668b7551e9f98c195113a460ff524d3c1f7f50cd9",
+      "gitBlob": "9e3b99a19bf22623220b42412bbabd1d67d02f05"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/interrogate/references/reviewer-prompt.md",
+      "sha256": "f6005cc2b535006fca97a96c5bfda49df57312eedf1ffd8d1aaaf3eb33817c25",
+      "gitBlob": "ef7bff3d77c35a0af2a9947187ccee15465657f4"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/interrogate/references/rubric.md",
+      "sha256": "0f9c6bdb0b96e26dbde5f6407f417e0c02f54080e7a1268d8994f3c3ec6c5ac0",
+      "gitBlob": "8dab195ab840554bfe5e74e9b5ca0d9edbe9b496"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/ketchup/SKILL.md",
+      "sha256": "f460a861cf2179808abc24b5588c94709f8cc3e58d4da2e44baf89556f53b587",
+      "gitBlob": "f00fccbc8274da12c34186f863019014f0cd4d6d"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/poteto-help/SKILL.md",
+      "sha256": "3fe669c7c3b8f52c18b7c68ecce01c8691e844b9d2b41a8a6ff6432341451986",
+      "gitBlob": "575d80fbff15d3421e6ef020d3a9cfeb2b0b01f0"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/poteto-mode/SKILL.md",
+      "sha256": "03d61d15c5a0f7abc2c558c7323ff3c360dedc2915ebadf3c76c9e872f41cb64",
+      "gitBlob": "3cad9b711562d309e8eda7e7ec9b42a99233306e"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "sha256": "931070f5674e81a191277253d4e02b1c45d091b223f93bf506d3896a428a5967",
+      "gitBlob": "fcd00527c6b9fb592aecfc3b1512e3b838146de3"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/poteto-mode/playbooks/trace-forensics.md",
+      "sha256": "e8a671fd5511a894f90c933bca75815e7a1d730cb53333075a80b0927e81acfc",
+      "gitBlob": "ee54a2391b69d1d2a9ad7d3ee06266120c5e054e"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/poteto-mode/scripts/orch/orch.test.ts",
+      "sha256": "773153ac74de6eb15f58d2682f487f5f30672d7efe3ef1d24a131aa9129d279b",
+      "gitBlob": "538775e37f3ac6fd2dd128883b7f7fe51c1316d5"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-build-the-lever/SKILL.md",
+      "sha256": "3434b0ad0c640c6f1d7960be7a8986c3bcdc14e26060360dec29903df60074ff",
+      "gitBlob": "cbf003850489d95fea78e64198fd972c35b1aad3"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "sha256": "ad12c26209770c52f632d9480c048ac5334ce8e5d6297f83ade59652a56cb3ef",
+      "gitBlob": "8bf625b587f1915860ecf493fd90b944c826cf25"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-explain-the-number/SKILL.md",
+      "sha256": "cd5a25f9e7cf023627ccb470dc5faa97542f29b4319496a32b839a8e1e988047",
+      "gitBlob": "1e180c14aefe49a3b2a515320398e08c3ebeb57d"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-minimize-reader-load/SKILL.md",
+      "sha256": "1ea2b7fef2391cae5844c4efdbd59031f775e8a52d06b7495d707229a200dcca",
+      "gitBlob": "628999088c5d05c1c546b3a3ca89da553cd3f3b2"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-model-the-domain/SKILL.md",
+      "sha256": "52c0d85e0c3827c41c18299b642657d7b47eaf77b7b31609e42e0df42b84c75f",
+      "gitBlob": "09b7c739955facf03f08f66e1e329745d2f8880e"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-never-block-on-the-human/SKILL.md",
+      "sha256": "05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f",
+      "gitBlob": "4f59bdc69f79d536b30b0014a563ed3be05b8b62"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-redesign-from-first-principles/SKILL.md",
+      "sha256": "170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034",
+      "gitBlob": "5ca5246cbb0fa08884ce17b0d22c117ae1ad67b8"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-subtract-before-you-add/SKILL.md",
+      "sha256": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f",
+      "gitBlob": "b8740ba6f06922d8e7ef3b23f9fb16e0fc4a876f"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "sha256": "b2b73ba42920f9c3174ecdf808ec6e4591b3a9266ada9a05814f386004266d3a",
+      "gitBlob": "f5a603e3a0925cdc6363bcc26dfbf587d9a36ec7"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/principle-type-system-discipline/SKILL.md",
+      "sha256": "2e492cef34bb25a20b9115df61f9ef3a9837e3fda144ffda8079e5f45a1b72e8",
+      "gitBlob": "4321b83e245d99eded0756c7a74f3fb64e32c36b"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/reflect/SKILL.md",
+      "sha256": "f5e9200f37e2a4567c0eeb0ba244fde66c1b3f35e3b7a883de2f85b3bda7365a",
+      "gitBlob": "b6bd41afdc831741819b72efa60ef2f10947cc8c"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/reflect/references/divergent-reviewer.md",
+      "sha256": "f6030d88e20e906ef5e2d9ba44cb013ce610c49c2fe2ef74c377d32e0dc9e939",
+      "gitBlob": "1e070a2a3754f4dc0ddbaec4450a56179b81c92f"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/reflect/references/judgment-reviewer.md",
+      "sha256": "38f917619fbf346062d643e0ad6b12fc952d58678dfcbbf42ffcf6d8b9c08307",
+      "gitBlob": "61d15d76fff852eb573b551bc1317d79ed5a2e5f"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/reflect/references/synthesizer.md",
+      "sha256": "6af816963de74d1a1aef4070273c1ff533d2072732e488e159ddc0b299fec3cd",
+      "gitBlob": "1a090d86134987719ddb418023020c2ef58a6dae"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/reflect/references/tooling-reviewer.md",
+      "sha256": "f81b8697e7366fbbc18feba52c6e3253a101f751091364ebc4396a1d9b5753b4",
+      "gitBlob": "a839db4318798c51539c319cb90387ce02557225"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/setup-pstack/SKILL.md",
+      "sha256": "d61b47256a18155a81c8e5ef95e3cc6569ce8c18317c35c4dd9c8015cf68cb59",
+      "gitBlob": "90a9e575397fb59f4d9a47e6157c2106f4b4a5e2"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/technical-writing/SKILL.md",
+      "sha256": "61fe9c424a798ebf36ad94941f87be049cb8827bdf86d21474a0dde37b513c43",
+      "gitBlob": "3e6d26109376cd66439c87ed48b4033df8d78a3a"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/unslop/SKILL.md",
+      "sha256": "3126b9e2cf46022f5e0c332e84be5e17a9730669cb3d6ac0a7e5e7e94b1e24fa",
+      "gitBlob": "c37b03679e8fb1f8576f859504acf28c8faf8417"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/SKILL.md",
+      "sha256": "fa1d1e9dec14b15381c1ccccad74044d6b6ea3b4af56821f59ba2d8e59b07545",
+      "gitBlob": "bc2a3eb4f5bacf29949974376bc492df3d59db95"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/epistemics.md",
+      "sha256": "d54a2361b2d5973bc3fe2edf62f446d87935974d4b40d47f23b9529f956ca758",
+      "gitBlob": "b18abf41dfa245ee55e94f1b3a80c0b750eb10cf"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/investigator-prompt.md",
+      "sha256": "c44afba186f899094f3694e6c9d6de5d14ff7c4ce28b787a9f50fc789c9a7fc3",
+      "gitBlob": "e1c2bbf52197ff600ba6e4552439e630687b7ae2"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/sources/code-archaeology.md",
+      "sha256": "f6b5c4c3dd4ddc31da446bbbe4d88806e2201f15a76b97b3e44ce25c5862e321",
+      "gitBlob": "4fbe3c4d36af0998b34e5cab7dd682fcb87ec02d"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/sources/datadog.md",
+      "sha256": "b139faac5dc11b8f26c8255dce6033c1a6ac143b038d3dd103f2034c5dbec9cd",
+      "gitBlob": "536466ddd8ae6543836abb84bdf1efd8e43089ba"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/sources/sentry.md",
+      "sha256": "e0ed11e474c3d248bc5ac16d37ca1439b2db0253a3413252194556643cf8328a",
+      "gitBlob": "0bc49e658fba0b430661b3682ba30011f79ff9ab"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/skills/why/references/synthesizer-prompt.md",
+      "sha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb",
+      "gitBlob": "287a350c925c28b44f0e0dc687bb09a843e11100"
+    },
+    {
+      "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+      "path": "pstack/LICENSE",
+      "sha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e",
+      "gitBlob": "6b5400237fdf6545be0b8fae370d6f2fcff8fb25"
+    }
+  ]
+}

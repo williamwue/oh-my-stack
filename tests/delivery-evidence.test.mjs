@@ -412,8 +412,9 @@ test('canonical source-directory aliases reject existing and new report paths wi
 });
 
 test('executable replacement after validation cannot establish a new pre-execution baseline', async t => {
-  const f=await fixture(t), executable=path.join(f.root,'task/check.sh');
-  await fs.writeFile(executable,'#!/bin/sh\nexit 1\n',{mode:0o755}); f.plan.checks[0].argv=[executable];
+  const f=await fixture(t), executable=path.join(f.root,process.platform === 'win32' ? 'task/check.exe' : 'task/check');
+  await fs.copyFile(process.execPath,executable); await fs.chmod(executable,0o755);
+  f.plan.checks[0].argv=[executable,'-e','process.exit(1)'];
   await write(f.root,'task/plan.json',f.plan);
   const frozen=await freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/exe-lock.json'});
   f.options.lock='task/exe-lock.json'; f.options.expectedLockSha256=frozen.lockSha256;
@@ -423,7 +424,7 @@ test('executable replacement after validation cannot establish a new pre-executi
   const read=fs.readFile; let sourceReads=0,mutated=false;
   fs.readFile=async function(file,...args) {
     if (String(file)===path.join(f.root,'src/normalize.mjs') && ++sourceReads===2) {
-      await fs.writeFile(executable,'#!/bin/sh\nexit 0\n'); mutated=true;
+      await fs.appendFile(executable,'replacement after validation'); mutated=true;
     }
     return read.call(this,file,...args);
   };

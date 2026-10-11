@@ -6,6 +6,16 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.15.0 - 2026-10-11
+
+- Port the reviewed pstack 0.15.14–0.15.17 delta with immutable source receipts
+  and a decision for each of the 45 changed upstream files.
+- Add explicit current-chat catch-up with `ketchup` and contextual setup help.
+- Refresh the OMP Cursor preset and version reasoning-budget semantics while
+  preserving existing effective choices, ordered panels, and user overrides.
+- Keep OMS 0.14's complete delivery contract through semantic prose updates;
+  regenerate the Codex, OMP, and Claude Code packages.
+
 ## 0.14.0 - 2026-10-09
 
 - Restore pstack delivery contracts for `poteto-mode`, `feature`,

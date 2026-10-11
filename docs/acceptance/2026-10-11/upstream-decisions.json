@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 1,
+  "from": "2cbf58508f40de470d7490b55c51d71241928fa2",
+  "to": "978ca6e9c0e012047cd5058b8e829240336e704e",
+  "upstreamVersion": "0.15.17",
+  "fileCount": 45,
+  "decisions": [
+    {
+      "upstreamPath": "pstack/.cursor-plugin/plugin.json",
+      "change": "modified",
+      "decision": "reference",
+      "targets": [
+        "src/core/project.json"
+      ],
+      "rationale": "OMS remains separately versioned; the upstream plugin version is provenance and is not the portable release version."
+    },
+    {
+      "upstreamPath": "pstack/README.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "docs/upstream-pstack-0.15.17.md"
+      ],
+      "rationale": "Adapt the guide to actual OMS entry points, runtime configuration and local candidate boundaries; historical book editions remain immutable."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/01-setup.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "docs/model-configuration.md",
+        "src/core/skills/setup-oh-my-stack/SKILL.md"
+      ],
+      "rationale": "Adapt the guide to actual OMS entry points, runtime configuration and local candidate boundaries; historical book editions remain immutable."
+    },
+    {
+      "upstreamPath": "pstack/docs/guide/04-design.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/architect/SKILL.md"
+      ],
+      "rationale": "Adapt the guide to actual OMS entry points, runtime configuration and local candidate boundaries; historical book editions remain immutable."
+    },
+    {
+      "upstreamPath": "pstack/skills/architect/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/architect/SKILL.md"
+      ],
+      "rationale": "Require the actual how architectural explanation while retaining configured candidate slots, independent comparison and OMS design contract."
+    },
+    {
+      "upstreamPath": "pstack/skills/architect/references/runner-prompt.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/architect/references/design-contract.md"
+      ],
+      "rationale": "Require the actual how architectural explanation while retaining configured candidate slots, independent comparison and OMS design contract."
+    },
+    {
+      "upstreamPath": "pstack/skills/arena/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/arena/SKILL.md"
+      ],
+      "rationale": "Preserve frozen complete artifacts, configured panel size, independent judgment and final synthesized verification; source prose reduction does not weaken these gates."
+    },
+    {
+      "upstreamPath": "pstack/skills/benchmark-checklist/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/benchmark-checklist/SKILL.md"
+      ],
+      "rationale": "Review the editorial delta against its canonical owner, condense redundant prose where useful and preserve the stronger portable verification and authorization requirements."
+    },
+    {
+      "upstreamPath": "pstack/skills/blast-radius/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/blast-radius/SKILL.md"
+      ],
+      "rationale": "Review the editorial delta against its canonical owner, condense redundant prose where useful and preserve the stronger portable verification and authorization requirements."
+    },
+    {
+      "upstreamPath": "pstack/skills/figure-it-out/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/figure-it-out/SKILL.md"
+      ],
+      "rationale": "Review the editorial delta against its canonical owner, condense redundant prose where useful and preserve the stronger portable verification and authorization requirements."
+    },
+    {
+      "upstreamPath": "pstack/skills/how/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/how/SKILL.md"
+      ],
+      "rationale": "Retain the portable staged exploration and distinct explanation contracts; provider routing belongs to generated bindings, not source-host model literals."
+    },
+    {
+      "upstreamPath": "pstack/skills/interrogate/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/interrogate/SKILL.md"
+      ],
+      "rationale": "Retain explicit frozen review scope, independent findings, rubric and lead judgment; portable reviewer contracts already centralize the upstream instructions."
+    },
+    {
+      "upstreamPath": "pstack/skills/interrogate/references/reviewer-prompt.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/interrogate/references/reviewer-prompt.md"
+      ],
+      "rationale": "Retain explicit frozen review scope, independent findings, rubric and lead judgment; portable reviewer contracts already centralize the upstream instructions."
+    },
+    {
+      "upstreamPath": "pstack/skills/interrogate/references/rubric.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/interrogate/references/rubric.md"
+      ],
+      "rationale": "Retain explicit frozen review scope, independent findings, rubric and lead judgment; portable reviewer contracts already centralize the upstream instructions."
+    },
+    {
+      "upstreamPath": "pstack/skills/ketchup/SKILL.md",
+      "change": "added",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/ketchup/SKILL.md",
+        "src/core/skills/ketchup/skill.json"
+      ],
+      "rationale": "Add explicit read-only catch-up anchored to the preceding human message, live touched-resource status and older unresolved human decisions; agent-owned work remains agent work."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-help/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/poteto-help/SKILL.md",
+        "src/core/skills/poteto-help/references/recipes.md"
+      ],
+      "rationale": "Offer relevant missing setup once per chat, answer without executing setup, preserve silence as no selection, and expose current-chat catch-up through the owning skill."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/poteto-mode/SKILL.md"
+      ],
+      "rationale": "Keep OMS routing and full delivery invariants, add current-chat catch-up distinctly from recall and session pickup, and preserve explicit execution authority."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/opening-a-pr/SKILL.md"
+      ],
+      "rationale": "Keep OMS routing and full delivery invariants, add current-chat catch-up distinctly from recall and session pickup, and preserve explicit execution authority."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/playbooks/trace-forensics.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/trace-forensics/SKILL.md"
+      ],
+      "rationale": "Keep OMS routing and full delivery invariants, add current-chat catch-up distinctly from recall and session pickup, and preserve explicit execution authority."
+    },
+    {
+      "upstreamPath": "pstack/skills/poteto-mode/scripts/orch/orch.test.ts",
+      "change": "modified",
+      "decision": "reference",
+      "targets": [
+        "docs/upstream-pstack-0.15.17.md"
+      ],
+      "rationale": "Cursor orchestration test-only change is retained as source evidence; OMS owns a separate tested native delivery implementation and does not copy the source-host orchestrator."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-build-the-lever/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-build-the-lever/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-encode-lessons-in-structure/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-explain-the-number/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-explain-the-number/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-minimize-reader-load/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-minimize-reader-load/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-model-the-domain/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-model-the-domain/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-never-block-on-the-human/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-never-block-on-the-human/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-redesign-from-first-principles/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-redesign-from-first-principles/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-subtract-before-you-add/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-subtract-before-you-add/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-test-behavior-not-implementation/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/principle-type-system-discipline/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/principle-type-system-discipline/SKILL.md"
+      ],
+      "rationale": "Adopt useful editorial condensation without changing the principle, its constraints or portable explicit invocation; preserve source and local transformation attribution."
+    },
+    {
+      "upstreamPath": "pstack/skills/reflect/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "rationale": "Retain the portable reflection contracts and fresh independent reviewers; source-specific reviewer files map to the canonical workflow rather than duplicated host prompts."
+    },
+    {
+      "upstreamPath": "pstack/skills/reflect/references/divergent-reviewer.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "rationale": "Retain the portable reflection contracts and fresh independent reviewers; source-specific reviewer files map to the canonical workflow rather than duplicated host prompts."
+    },
+    {
+      "upstreamPath": "pstack/skills/reflect/references/judgment-reviewer.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "rationale": "Retain the portable reflection contracts and fresh independent reviewers; source-specific reviewer files map to the canonical workflow rather than duplicated host prompts."
+    },
+    {
+      "upstreamPath": "pstack/skills/reflect/references/synthesizer.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "rationale": "Retain the portable reflection contracts and fresh independent reviewers; source-specific reviewer files map to the canonical workflow rather than duplicated host prompts."
+    },
+    {
+      "upstreamPath": "pstack/skills/reflect/references/tooling-reviewer.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/reflect/SKILL.md"
+      ],
+      "rationale": "Retain the portable reflection contracts and fresh independent reviewers; source-specific reviewer files map to the canonical workflow rather than duplicated host prompts."
+    },
+    {
+      "upstreamPath": "pstack/skills/setup-pstack/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/setup-oh-my-stack/SKILL.md",
+        "src/runtime-resolution/presets.json",
+        "tools/configure-models.mjs"
+      ],
+      "rationale": "Adapt fresh large and explicit unlimited/max budget targets, retained legacy effective choices and ordered panels, explicit policy adoption and supported same-model fallback. Update only the OMP Cursor preset; preserve portable setup authority and other preset definitions."
+    },
+    {
+      "upstreamPath": "pstack/skills/technical-writing/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/technical-writing/SKILL.md",
+        "src/core/skills/technical-writing/references/document-structure.md",
+        "src/core/skills/technical-writing/references/sentence-style.md"
+      ],
+      "rationale": "Review the editorial delta against its canonical owner, condense redundant prose where useful and preserve the stronger portable verification and authorization requirements."
+    },
+    {
+      "upstreamPath": "pstack/skills/unslop/SKILL.md",
+      "change": "modified",
+      "decision": "adapt",
+      "targets": [
+        "src/core/skills/unslop/SKILL.md"
+      ],
+      "rationale": "Review the editorial delta against its canonical owner, condense redundant prose where useful and preserve the stronger portable verification and authorization requirements."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/SKILL.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/SKILL.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/epistemics.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/references/evidence.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/investigator-prompt.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/SKILL.md",
+        "src/core/skills/why/references/sources.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/sources/code-archaeology.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/references/sources.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/sources/datadog.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/references/sources.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/sources/sentry.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/references/sources.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    },
+    {
+      "upstreamPath": "pstack/skills/why/references/synthesizer-prompt.md",
+      "change": "modified",
+      "decision": "retain",
+      "targets": [
+        "src/core/skills/why/SKILL.md",
+        "src/core/skills/why/references/evidence.md"
+      ],
+      "rationale": "Retain cited rationale, confidence, conflicting evidence and source availability rules in the canonical evidence/source references; do not invent unavailable Datadog or Sentry tooling."
+    }
+  ]
+}

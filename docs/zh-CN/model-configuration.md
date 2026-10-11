@@ -26,7 +26,16 @@ Codex 的 `pstack` 推荐使用 GPT-6 Luna、GPT-6.1 Sol 和 GPT-6 Astra。
 OMP 的 `pstack-openai-codex` 备选使用相同模型及其供应商前缀 ID。
 预设是经过核对的推荐；发现新版模型不会自动替换已配置模型。
 推荐 ID 不可用时，setup 会要求明确选择已观察到的模型，不会静默回退。
-重新运行模型设置会预览更新后的预设默认值，并保留显式模型覆盖、推理预算和面板顺序。
+重新运行同一预设会保留实际生效的模型、推理档位和面板顺序，直到你明确修改。
+
+新配置默认使用 large（xhigh）；unlimited、medium、small 分别以 max、high、medium 为目标。
+模型不支持目标档位时，使用该模型已公布的最高较低档位，不替换模型或改变面板人数。
+这些是推理设置，不是费用上限。旧 unlimited 配置保留原档位，直到明确重选预算，
+包括再次选择 unlimited。显式统一档位会持续保留；用 `--uniform-reasoning preset` 重置。
+
+OMP 的 Cursor `pstack` 预设由 Opus 负责深度判断、Grok 负责代码，面板按 Opus／Grok 排列。
+这不会替换已有三成员面板，也不改变独立的 OpenAI-Codex 预设。
+应用配置前，必须从当前运行时清单中观察到准确的模型选择器。
 
 Claude Code 的动态 `pstack` 推荐会观察 `haiku`、`sonnet`、`opus` 别名实际对应的模型。
 Haiku 用于快速探索，Sonnet 用于常规实现，Opus 用于深度分析；三人面板按 Opus／Sonnet／Haiku 排列。

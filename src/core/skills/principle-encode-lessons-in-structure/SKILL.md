@@ -6,7 +6,7 @@ description: "Apply when you catch yourself writing the same instruction a secon
 
 Encode recurring fixes in mechanisms (tools, code, metadata, automation) instead of textual instructions. Every error, human correction, and unexpected outcome is a learning signal. Capture it, route it, and close the loop.
 
-**Why:** Textual instructions are easy to miss. They require the reader to notice, remember, and comply. Structural mechanisms (lint rules, metadata flags, runtime checks, automation scripts) enforce the rule without cooperation.
+Textual instructions are easy to miss. Structural mechanisms enforce the rule without cooperation.
 
 **Pattern:**
 When you catch yourself writing the same instruction a second time:
@@ -18,10 +18,11 @@ When you catch yourself writing the same instruction a second time:
 
 **Corollary:** If the fix is structural, only use the structural fix. The instruction is the symptom.
 
-**Feedback loop:**
-- **Capture every correction.** When the human intervenes or tests fail, decide if it's a one-off or a pattern.
-- **Route to the right layer.** One-off -> brain note. Recurring fix -> skill or lint rule. Systemic issue -> principle.
-- **Close the loop.** Don't just record. Apply now or create a concrete todo.
+When the human intervenes or tests fail, decide if it is a one-off or a pattern.
+Route a one-off to a session note, a recurring fix to a skill or lint rule, and
+a systemic issue to a principle. Apply the correction within the authorized
+scope or create a concrete todo. Durable personal-memory writes still require
+the user's authorization.
 
 **Anti-patterns:**
 - Acknowledging without recording ("I'll keep that in mind" does not persist)

@@ -45,6 +45,7 @@ test("setup-live verifier accepts a fully bound dedicated configuration", async 
     "--fast", "observed/live@low",
     "--balanced", "observed/live@medium",
     "--deep", "observed/live@high",
+    "--budget", "medium",
     "--apply",
   ], root);
 

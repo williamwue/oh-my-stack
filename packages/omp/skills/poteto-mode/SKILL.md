@@ -47,6 +47,7 @@ Use the first matching row:
 | Capture recurring personal working conventions in a mode Skill | `automate-me` |
 | Create or revise a task-specific Skill | `authoring-a-skill` |
 | Reflect on conversation lessons and route them to scoped Skill changes | `reflect` |
+| Catch up on this chat since the preceding human message and summarize pending human-only decisions | `ketchup` |
 | Reconstruct recent work from scoped history and current state | `recall` |
 | Restate the last answer in plain language | `bro` |
 | Compare workflow variants in a blinded experiment | `eval` |

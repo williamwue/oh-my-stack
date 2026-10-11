@@ -152,17 +152,37 @@ workload classes:
 Show the proposed choice for every named route, including the *ordered* entries
 for `arena.runners`, `arena.cross-judge-pool`, `architect.runners`, and
 `interrogate.reviewers`. One panel entry means one intended worker; do not
-silently add or remove entries. Ask for the user's reasoning budget:
-`unlimited` (keep preset effort), `large` (target xhigh), `medium` (target high),
-or `small` (target medium). The generated runtimes set every non-inherited
-selection to that target, raising or lowering its preset or explicit effort.
-When the model does not advertise the target, use its highest advertised effort
-below the target; stop if none exists. The budget does not replace a model
-family or change panel length. `--uniform-reasoning EFFORT` is an optional
+silently add or remove entries. Offer the reasoning budgets:
+`unlimited` (target max), `large` (target xhigh), `medium` (target high),
+or `small` (target medium). A fresh setup with no budget selection defaults to
+`large`; explicit fresh `unlimited` targets `max`, not `ultra`. These are target
+efforts, not promises that every available model supports them.
+
+On a rerun, preserve the saved budget and effective model, effort, inheritance,
+and ordered panel choices unless the user explicitly changes them. This includes
+old defaults absent from sparse overrides and saved three-entry panels. Legacy
+`unlimited` keeps a persisted preserve-effort policy until an explicit budget
+selection, including explicitly reselecting `unlimited`, adopts the new target.
+Legacy records without explicit overrides may establish effective choices but
+not recover their original intent. Keep that limitation visible.
+
+An explicit budget selection raises or lowers every retained non-inherited
+choice toward its target. When that exact observed model selector does not
+advertise the target, use its highest advertised recognized effort at or below
+the target. Exclude `ultra` from budget fallback and stop if no eligible effort
+exists. Do not fabricate an effort suffix, substitute a same-family selector,
+or promise support from a model's name. Missing retained selectors fail before
+writes and need an explicit observed replacement. Budget changes preserve
+model identities and panel membership, order, and length. Change a panel only
+when the user explicitly selects that panel change.
+
+`--uniform-reasoning EFFORT` is an optional
 explicit target override and requires every selected model to advertise that
 exact effort; it cannot exceed the chosen budget target. A target that
 preserves same-preset choices also keeps this explicit override on a re-run;
-use `--uniform-reasoning preset` to return to the budget target.
+use `--uniform-reasoning preset` to remove it and recalculate from the saved
+budget policy. Resolve explicit budget and uniform-effort conflicts before
+writes rather than silently discarding a saved override.
 Name this a reasoning setting, not a token or money spending limit. Show the
 *effective* model and effort for every route after budget processing, explicitly
 calling out any route that fell below the budget target because the model does
@@ -190,6 +210,11 @@ resolution manifest and target-native agent definitions. It refuses model IDs
 or reasoning settings absent from the inventory, refuses to overwrite modified
 or unowned files, and only prunes previously owned unchanged route agents when
 a panel shrinks.
+
+Validate the complete plan, retained choices, and budget policy before any
+write. Unknown policy versions stop before mutation. Applying files is not a
+transaction: if interrupted, report the applied subset as partial and reconcile
+actual file hashes before retrying. An interrupted apply is not saved setup.
 
 When the target supports user scope, prefer it for reusable defaults. This
 writes only Oh My Stack's owned manifest and agent files; it does not edit the

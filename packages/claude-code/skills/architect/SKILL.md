@@ -25,9 +25,10 @@ workflow does not expand a request for advice into permission to edit code.
 
 ## Ground
 
-Run [how](../how/SKILL.md) on affected subsystems, retaining traced entry points,
-data flow, ownership, boundaries, and invariants. For changing ownership or
-layering, also run [why](../why/SKILL.md) and carry forward Preserve / Change /
+Run [how](../how/SKILL.md) on affected subsystems and produce its architectural
+explanation, retaining traced entry points, data flow, ownership, boundaries,
+and invariants. Naming files alone does not satisfy grounding. For changing
+ownership or layering, also run [why](../why/SKILL.md) and carry forward Preserve / Change /
 Avoid / Risk constraints with their confidence. Genuinely greenfield work may
 skip existing-system grounding, but must still identify integration constraints.
 
