@@ -39,6 +39,8 @@ installation; paths and versions differ between machines.
 The `oms_delegate` tool starts one configured route member and returns a task
 handle. `collect` returns its state or waits for completion; `cancel` stops it.
 Writing roles need `independentCheckout: true` and a separate Git checkout.
+The parent and child Git worktree roots must differ. Two active writers cannot
+reserve the same worktree, even when their working directories differ.
 Parent shutdown cancels owned children. The bridge does not automatically
 expand panels or synthesize reviews. Native parent tool allowlists must include
 `oms_delegate` if an allowlist is used.

@@ -50,6 +50,7 @@ For manual installation, use the guide for your tool. Each tool needs its own in
 | Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
 | Claude Code | [Marketplace installation](docs/install/claude-code.md). |
 | OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
+| Pi | [Independent native package](docs/pi-install.md), available in the local 0.15.0 source candidate. |
 
 Start a new session after installation. See [support](docs/support-policy.md)
 for tested tools and limitations.
