@@ -3,6 +3,11 @@ import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import test from "node:test";
 import { repoRoot } from "../tools/generate.mjs";
+import { validateDerivedResourceClosure } from "../tools/validate.mjs";
+
+test("selected upstream skills retain every derived resource on all four hosts", async () => {
+  await validateDerivedResourceClosure(repoRoot);
+});
 
 test("all host collectors retain the native Pi inventory import closure", () => {
   for (const host of ["codex", "claude-code", "omp", "pi"]) {

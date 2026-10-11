@@ -19,7 +19,7 @@ async function fixture(target) {
   await mkdir(projectRoot);
   const packageRoot = join(repoRoot, "packages", target);
   const inventoryPath = join(root, "inventory.json");
-  const models = target === "omp"
+  const models = ["omp", "pi"].includes(target)
     ? ["openai-codex/gpt-6-luna", "openai-codex/gpt-6.1-sol", "openai-codex/gpt-6-astra"]
     : ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"];
   await writeFile(inventoryPath, `${JSON.stringify({ schemaVersion: 1, runtime: target,
@@ -27,10 +27,27 @@ async function fixture(target) {
     models: models.map((id) => ({ id, reasoningEfforts: ["low", "medium", "high", "max"] })),
   })}\n`);
   await configure({ packageRoot, inventoryPath, projectRoot,
-    presetName: target === "omp" ? "pstack-openai-codex" : "pstack", budget: "medium", apply: true });
-  const resolutionPath = join(projectRoot, target === "omp" ? ".omp" : ".codex", "oh-my-stack.resolution.json");
+    ...(target === "pi" ? { selections: { fast: `${models[0]}@low`, balanced: `${models[1]}@medium`, deep: `${models[2]}@high` } }
+      : { presetName: target === "omp" ? "pstack-openai-codex" : "pstack" }), budget: "medium", apply: true });
+  const resolutionPath = join(projectRoot, { omp: ".omp", codex: ".codex", pi: ".pi" }[target], "oh-my-stack.resolution.json");
   return { root, projectRoot, packageRoot, resolutionPath, inventoryPath };
 }
+
+test("Pi audits native JSON role files without treating other host records as execution evidence", async () => {
+  const { resolutionPath } = await fixture("pi");
+  const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+  const audit = await inspectSetup({ resolutionPath });
+  assert.equal(audit.configuration, "verified");
+  assert.equal(audit.activation, "unverified");
+  assert.equal(audit.ownedFilesVerified, Object.keys(manifest.ownedFiles).length);
+  assert.ok(Object.keys(manifest.ownedFiles).every((path) => path.endsWith(".json")));
+  await assert.rejects(inspectSetup({ resolutionPath, parentRecord: "not-a-pi-record" }), /Pi native execution uses/);
+  const [path, hash] = Object.entries(manifest.ownedFiles)[0];
+  delete manifest.ownedFiles[path];
+  manifest.ownedFiles[path.replace(/\.json$/, ".toml")] = hash;
+  await writeFile(resolutionPath, JSON.stringify(manifest));
+  await assert.rejects(inspectSetup({ resolutionPath }), /unsafe owned path/);
+});
 
 test("configuration audit is read-only and never promotes files to activation", async () => {
   const { resolutionPath } = await fixture("omp");

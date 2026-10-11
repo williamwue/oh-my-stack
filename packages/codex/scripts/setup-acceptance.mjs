@@ -24,10 +24,12 @@ async function readJsonLines(path) {
 
 async function checkOwnedFiles(resolutionPath, manifest) {
   const root = dirname(resolutionPath);
+  const extension = { codex: "toml", omp: "md", "claude-code": "md", pi: "json" }[manifest.target];
+  assert(extension, "unsupported owned role target");
   const entries = Object.entries(manifest.ownedFiles ?? {});
   assert(entries.length > 0, "resolution has no owned role files");
   for (const [relativePath, expected] of entries) {
-    assert(/^agents\/[a-z0-9.-]+\.(?:md|toml)$/.test(relativePath), `unsafe owned path ${relativePath}`);
+    assert(new RegExp(`^agents/[a-z0-9.-]+\\.${extension}$`).test(relativePath), `unsafe owned path ${relativePath}`);
     const path = join(root, relativePath);
     const stat = await lstat(path);
     assert(stat.isFile() && !stat.isSymbolicLink(), `${path}: expected a regular role file`);

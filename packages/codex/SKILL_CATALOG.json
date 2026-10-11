@@ -1438,6 +1438,27 @@
     },
     {
       "kind": "reference",
+      "path": "src/core/skills/interrogate/references/rubric.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/interrogate/references/lead-judgment.md",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "interrogate"
+    },
+    {
+      "kind": "reference",
       "path": "generated/docs/runtime-binding.md",
       "output": "docs/runtime-binding.md",
       "origin": "oms-host",

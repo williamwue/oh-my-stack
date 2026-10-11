@@ -1806,20 +1806,6 @@
       "owner": "code-review"
     },
     {
-      "kind": "reference",
-      "path": "src/core/skills/poteto-mode/references/delivery-evidence.md",
-      "origin": "oms",
-      "distribution": "enhanced-delivery",
-      "owner": "poteto-mode"
-    },
-    {
-      "kind": "reference",
-      "path": "src/core/skills/poteto-mode/references/subagent-handoff.md",
-      "origin": "oms",
-      "distribution": "enhanced-delivery",
-      "owner": "poteto-mode"
-    },
-    {
       "kind": "script",
       "path": "tools/collect-model-inventory.mjs",
       "output": "scripts/collect-model-inventory.mjs",
@@ -2111,22 +2097,22 @@
     {
       "kind": "reference",
       "path": "src/core/skills/interrogate/references/rubric.md",
-      "origin": "oms",
-      "distribution": "enhanced-delivery",
+      "origin": "pstack",
+      "distribution": "core",
       "owner": "interrogate"
     },
     {
       "kind": "reference",
       "path": "src/core/skills/interrogate/references/reviewer-prompt.md",
-      "origin": "oms",
-      "distribution": "enhanced-delivery",
+      "origin": "pstack",
+      "distribution": "core",
       "owner": "interrogate"
     },
     {
       "kind": "reference",
       "path": "src/core/skills/interrogate/references/lead-judgment.md",
-      "origin": "oms",
-      "distribution": "enhanced-delivery",
+      "origin": "pstack",
+      "distribution": "core",
       "owner": "interrogate"
     },
     {

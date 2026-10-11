@@ -414,10 +414,28 @@ export async function validate(root = repoRoot) {
   await validateRuntimeEvidence(root, model);
   await validateUpstreamState(root);
   await validateSemanticDerivations(root);
+  await validateDerivedResourceClosure(root);
   await validateLocalMarkdownLinks(root);
   await validateExecutableInventory(root);
   await validatePublicHygiene(root);
   return model;
+}
+
+export async function validateDerivedResourceClosure(root) {
+  const manifest = await readJson(join(root, "upstream/parity-derivations.json"));
+  for (const host of ["codex", "claude-code", "omp", "pi"]) {
+    const target = join(root, "packages", host);
+    const catalog = await readJson(join(target, "SKILL_CATALOG.json"));
+    const selected = new Set(catalog.skills.map((skill) => skill.name));
+    for (const { output } of manifest.entries) {
+      const prefix = "src/core/skills/";
+      if (!output.startsWith(prefix)) continue;
+      const resource = output.slice(prefix.length);
+      if (!selected.has(resource.split("/")[0])) continue;
+      assert(await exists(manifestFile(target, `skills/${resource}`, "derived resource")),
+        `${host}: missing derived resource ${resource}`);
+    }
+  }
 }
 
 if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
