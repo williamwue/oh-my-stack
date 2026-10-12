@@ -260,3 +260,6 @@ This selection does not include original `wayfinder` or `triage`. See the
 Source hashes, dependency closure, and the reviewed update procedure are in the
 [first-batch record](maintainers/aihero-complements-2026-10-08.md) and
 [second-batch record](maintainers/aihero-complements-second-batch-2026-10-08.md).
+The [2026-10-12 refresh](maintainers/aihero-refresh-2026-10-12.md) advances the
+first source to `49dd158`, updating grilling confirmations and tracker setup
+templates while retaining the sixteen selected originals.

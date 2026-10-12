@@ -1,9 +1,12 @@
-# Optional automatic routing in Codex and Claude Code
+# Built-in automatic routing in Codex and Claude Code
 
-The 0.15.0 source candidate requires the explicit `auto-routing` extension.
+The current source candidate includes automatic routing in its default package.
 Use `oms-auto` with a request to configure routing. Ordinary `setup-oh-my-stack`
-configures models and does not offer this menu. The older setup invocations
-below describe previous installed versions. See [distribution selection](pstack-parity.md).
+configures models and does not offer this menu. New installations default to
+manual mode; upgrades preserve existing user settings and project overrides.
+The published 0.15.0 default package omitted routing. See
+[distribution selection](https://github.com/williamwue/oh-my-stack/blob/main/docs/pstack-parity.md)
+for this source change and compatibility.
 
 This feature is available in version 0.11.0. Installing or upgrading OMS
 does not enable it. Existing `poteto-mode` and other explicit entries remain
@@ -11,11 +14,12 @@ available. The current source adds Claude Code routing; this does not establish
 publication or an upgrade of an installed plugin. OMP does not yet have this
 routing configuration.
 
-Version 0.11.1 added choice-based setup for Codex. Claude Code uses the same
-choices through `/oh-my-stack:setup-oh-my-stack` in the current source.
+Version 0.11.1 added choice-based setup for Codex. Current packages provide the
+same choices through `oms-auto` instead of general model setup.
 
-In Codex, type `$` and select `oh-my-stack:setup-oh-my-stack`. Submit its default
-setup prompt; no enable instruction is needed. Setup shows the effective mode
+In Codex, type `$` and select `oh-my-stack:oms-auto`, then ask to configure
+automatic routing. In Claude Code, use `/oh-my-stack:oms-auto` with the same
+request. Setup shows the effective mode
 and offers **Enable automatic routing**, **Disable automatic routing**, or
 **Keep current settings**. If you choose a change, select **Default across
 projects** or **Only this project**. Completing those choices saves the selected

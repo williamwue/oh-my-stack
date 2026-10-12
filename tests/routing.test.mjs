@@ -109,8 +109,32 @@ test("CLI honors CODEX_HOME and rejects malformed actions without writes", () =>
   await assert.rejects(resolveRouting({ ...options, configHome: "relative" }), /absolute/);
 }));
 
+test("default packaged routing reads preserved settings and project overrides without rewrites", () => fixture(async (options) => {
+  const model = await loadModel();
+  for (const runtime of ["codex", "claude-code"]) {
+    const configHome = join(options.root, `${runtime}-saved-home`);
+    const routingOptions = { ...options, runtime, configHome };
+    const saved = await configureRouting({ ...routingOptions, scope: "user", mode: "auto", apply: true });
+    const before = await readFile(saved.path, "utf8");
+    const models = join(configHome, "oh-my-stack.resolution.json");
+    const modelText = '{"preset":"pstack","budget":"medium"}\n';
+    await writeFile(models, modelText);
+    const pluginRoot = await renderTarget(options.root, model, model.adapters.find((adapter) => adapter.id === runtime));
+    const env = { ...process.env, CODEX_HOME: configHome, CLAUDE_CONFIG_DIR: configHome };
+    const status = () => JSON.parse(execFileSync(process.execPath,
+      [join(pluginRoot, "scripts/routing.mjs"), "status", "--runtime", runtime],
+      { cwd: options.cwd, env, encoding: "utf8" }));
+    assert.equal(status().enabled, true, runtime);
+    await configureRouting({ ...routingOptions, scope: "project", mode: "manual", apply: true });
+    assert.equal(status().enabled, false, runtime);
+    assert.equal(status().scope, "project", runtime);
+    assert.equal(await readFile(saved.path, "utf8"), before, runtime);
+    assert.equal(await readFile(models, "utf8"), modelText, runtime);
+  }
+}));
+
 test("generated hook injects a bounded hint only for enabled startup/resume/clear/compact", () => fixture(async (options) => {
-  const model = await loadModel(repoRoot, { extensions: ["auto-routing"] });
+  const model = await loadModel();
   const pluginRoot = await renderTarget(options.root, model, model.adapters.find((entry) => entry.id === "codex"));
   const hookOptions = { ...options, pluginRoot };
   const input = { hook_event_name: "SessionStart", source: "startup", cwd: options.cwd };
@@ -205,7 +229,7 @@ test("Claude CLI uses CLAUDE_CONFIG_DIR and leaves Codex and model settings unto
 }));
 
 test("generated Claude plugin hook and setup use the Claude switch and fail closed", () => fixture(async (options) => {
-  const model = await loadModel(repoRoot, { extensions: ["auto-routing"] });
+  const model = await loadModel();
   const pluginRoot = await renderTarget(options.root, model, model.adapters.find((entry) => entry.id === "claude-code"));
   const definition = JSON.parse(await readFile(join(pluginRoot, "hooks/hooks.json")));
   const hook = definition.hooks.SessionStart[0];

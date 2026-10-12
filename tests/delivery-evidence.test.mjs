@@ -415,6 +415,9 @@ test('executable replacement after validation cannot establish a new pre-executi
   const f=await fixture(t), executable=path.join(f.root,process.platform === 'win32' ? 'task/check.exe' : 'task/check');
   await fs.copyFile(process.execPath,executable); await fs.chmod(executable,0o755);
   f.plan.checks[0].argv=[executable,'-e','process.exit(1)'];
+  // A fresh executable copy can take longer to start during OS security checks.
+  // This test verifies executable pinning, not the fixture's short timeout.
+  f.plan.checks[0].timeoutMs=5000;
   await write(f.root,'task/plan.json',f.plan);
   const frozen=await freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/exe-lock.json'});
   f.options.lock='task/exe-lock.json'; f.options.expectedLockSha256=frozen.lockSha256;

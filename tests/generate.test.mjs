@@ -64,7 +64,7 @@ test("all host descriptors preserve Poteto code contracts and bounded Architect 
   } finally { await rm(stage, { recursive: true, force: true }); }
 });
 
-test("extension selection controls skills reference closure scripts hooks and manifest declarations", async () => {
+test("default routing resources remain present with every extension selection", async () => {
   const stage = await mkdtemp(join(tmpdir(), "oms-extension-closure-"));
   try {
     for (const extensions of [[], ["enhanced-delivery"], ["auto-routing"], ["extras"], ["aihero"]]) {
@@ -77,10 +77,14 @@ test("extension selection controls skills reference closure scripts hooks and ma
         assert.equal(await has("scripts/delivery-evidence.mjs"), extensions.includes("enhanced-delivery"), adapter.id);
         assert.equal(await has("docs/delivery-evidence.md"), extensions.includes("enhanced-delivery"), adapter.id);
         assert.equal(await has("skills/oms-enhanced-delivery/SKILL.md"), extensions.includes("enhanced-delivery"), adapter.id);
-        assert.equal(await has("skills/oms-auto/SKILL.md"), extensions.includes("auto-routing"), adapter.id);
+        assert.equal(await has("skills/oms-auto/SKILL.md"), true, adapter.id);
         assert.equal(await has("skills/setup-benny/SKILL.md"), extensions.includes("extras"), adapter.id);
         assert.equal(await has("skills/codebase-design/SKILL.md"), extensions.includes("aihero"), adapter.id);
-        const routing = extensions.includes("auto-routing") && ["codex", "claude-code"].includes(adapter.id);
+        const routing = ["codex", "claude-code"].includes(adapter.id);
+        assert.equal(await has("scripts/routing.mjs"), routing, adapter.id);
+        assert.equal(await has("docs/automatic-routing.md"), routing, adapter.id);
+        const entry = await readFile(join(target, "skills/oms-auto/SKILL.md"), "utf8");
+        assert.match(entry, routing ? /automatic routing binding/ : /Automatic routing availability/, adapter.id);
         assert.equal(await has("hooks/hooks.json"), routing, adapter.id);
         const manifest = JSON.parse(await readFile(join(target, adapter.manifestPath), "utf8"));
         assert.equal(Boolean(manifest.hooks), routing, adapter.id);
@@ -225,10 +229,15 @@ test("Codex keeps all direct entries with concise metadata and unchanged bodies"
   await rm(stage, { recursive: true, force: true });
 });
 
-test("strict selection excludes additions and has four independent adapters", async () => {
+test("default selection includes routing and excludes optional additions across four adapters", async () => {
   const model = await loadModel();
   assert.deepEqual(model.selection, { base: "pstack", extensions: [] });
-  for (const name of ["oms-auto", "prove-it-works", "reproduce-and-fix-issues", "setup-benny", "triage-issue-reports", "oms-enhanced-delivery"]) {
+  assert.ok(model.skills.some((skill) => skill.metadata.name === "oms-auto"));
+  assert.equal(model.entries.find((entry) => entry.name === "oms-auto").distribution, "core");
+  assert.deepEqual((await loadModel(repoRoot, { extensions: ["auto-routing"] })).selection, model.selection);
+  assert.deepEqual((await loadModel(repoRoot, { extensions: ["auto-routing", "extras"] })).selection,
+    { base: "pstack", extensions: ["extras"] });
+  for (const name of ["prove-it-works", "reproduce-and-fix-issues", "setup-benny", "triage-issue-reports", "oms-enhanced-delivery"]) {
     assert.equal(model.skills.some((skill) => skill.metadata.name === name), false, name);
   }
   assert.equal(model.sourceSkills.length, 0);

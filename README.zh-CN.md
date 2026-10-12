@@ -6,8 +6,9 @@
 
 pstack 工程工作流，移植到 Codex 和 Claude Code。
 
-0.15.0 源码候选还提供独立 Pi 与 OMP 适配。默认分发以固定的 pstack 0.15.17 为准；
-AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。现有安装版本可能不同。
+0.16.0 发行版本还提供独立 Pi 与 OMP 适配。默认分发以固定的 pstack 0.15.17 为准；
+自动路由随默认包提供。交付证据、附加工具和 AIHero 通过[显式扩展](docs/pstack-parity.md)加入。
+现有安装版本可能不同。
 
 描述任务、澄清需求、审阅改动或检查模块设计。Oh My Stack 为 agent 提供执行步骤，并要求它用实际证据说明结果。
 
@@ -44,7 +45,7 @@ AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。�
 | Codex | [stable Git marketplace 或正式发布包](docs/zh-CN/install/codex.md)，无需构建源码。 |
 | Claude Code | [Marketplace 安装](docs/zh-CN/install/claude-code.md)。 |
 | OMP | [通过独立 profile 检查安装](docs/zh-CN/install/omp.md)。不同工作流的实测范围不同。 |
-| Pi | [独立原生包说明](docs/pi-install.md)，当前提供于本地 0.15.0 源码候选。 |
+| Pi | [独立原生包说明](docs/pi-install.md)，当前提供于本地 0.16.0 发行版本。 |
 
 安装后新开会话。[支持范围](docs/support-policy.md)说明已测试的工具和当前限制。
 
@@ -96,8 +97,8 @@ AIHero 和 OMS 增强功能通过[显式扩展](docs/pstack-parity.md)加入。�
 未配置 Oh My Stack 模型映射时，基础使用继承 agent 的模型。
 需要为角色和审阅面板选择模型、推理预算时，使用[可选模型配置指南](docs/zh-CN/model-configuration.md)。
 
-[自动路由](docs/zh-CN/automatic-routing.md)在本候选中需要 `auto-routing` 扩展。
-加入扩展后仍需配置才能启用；已有模型选择继续保留。
+[自动路由](docs/zh-CN/automatic-routing.md)随默认包提供。新安装默认使用手动模式，配置后才启用。
+升级保留已有个人设置、项目覆盖和模型选择。
 
 ## 更多文档
 

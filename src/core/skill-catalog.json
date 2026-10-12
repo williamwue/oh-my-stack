@@ -99,7 +99,6 @@
   ],
   "extensions": [
     "enhanced-delivery",
-    "auto-routing",
     "extras",
     "aihero"
   ],
@@ -499,14 +498,14 @@
       "name": "oms-auto",
       "path": "src/core/skills/oms-auto",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "audience": "public"
     },
     {
       "kind": "reference",
       "path": "src/core/skills/oms-auto/**",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "owner": "oms-auto"
     },
     {
@@ -2000,7 +1999,7 @@
       "path": "tools/routing.mjs",
       "output": "scripts/routing.mjs",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex",
         "claude-code"
@@ -2011,7 +2010,7 @@
       "path": "tools/routing-hook.mjs",
       "output": "scripts/routing-hook.mjs",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex",
         "claude-code"
@@ -2022,7 +2021,7 @@
       "path": "tools/codex-routing-hook.mjs",
       "output": "scripts/codex-routing-hook.mjs",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex"
       ]
@@ -2032,7 +2031,7 @@
       "path": "tools/claude-routing-hook.mjs",
       "output": "scripts/claude-routing-hook.mjs",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "claude-code"
       ]
@@ -2055,7 +2054,7 @@
       "path": "docs/automatic-routing.md",
       "output": "docs/automatic-routing.md",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex",
         "claude-code"
@@ -2085,7 +2084,7 @@
       "kind": "hook",
       "path": "generated/hooks/hooks.json",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex",
         "claude-code"
@@ -2095,7 +2094,7 @@
       "kind": "manifest",
       "path": "manifest/hooks",
       "origin": "oms",
-      "distribution": "auto-routing",
+      "distribution": "core",
       "targets": [
         "codex",
         "claude-code"

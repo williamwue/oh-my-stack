@@ -312,12 +312,12 @@ async function validateSchemaReferences(root) {
   }
 }
 
-export const supportedExtensions = ["enhanced-delivery", "auto-routing", "extras", "aihero"];
+export const supportedExtensions = ["enhanced-delivery", "extras", "aihero"];
 
 function normalizeExtensions(extensions = []) {
   assert(Array.isArray(extensions), "extensions must be an array");
   assert(new Set(extensions).size === extensions.length, "duplicate extension selection");
-  for (const name of extensions) assert(supportedExtensions.includes(name), `unknown extension ${name}`);
+  for (const name of extensions) assert(name === "auto-routing" || supportedExtensions.includes(name), `unknown extension ${name}`);
   return supportedExtensions.filter((name) => extensions.includes(name));
 }
 
@@ -732,7 +732,7 @@ function renderSkillDocument(skill, adapter, model) {
       "",
     ].join("\n")
     : "";
-  const routingBinding = model.extensions.includes("auto-routing") && skill.metadata.name === "oms-auto"
+  const routingBinding = skill.metadata.name === "oms-auto"
     ? (adapter.id === "codex" ? [
       "## Codex automatic routing binding",
       "",

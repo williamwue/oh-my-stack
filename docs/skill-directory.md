@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-75 public entries: 51 workflows and 24 principles.
+76 public entries: 52 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -21,14 +21,14 @@ to invoke the Skill when appropriate. It does not guarantee automatic selection.
 The links below open packaged Skill instructions. Those files are instructions for
 agents; the user guides explain how to start tasks and what results to expect.
 
-The default catalog contains pinned pstack workflows and necessary host bindings. `aihero original`
+The default catalog contains pinned pstack workflows, built-in OMS routing and necessary host bindings. `aihero original`
 identifies the selected original source directories. See the
 [AIHero guide](aihero-original-skills.md), [source notices](../THIRD_PARTY_NOTICES.md),
 and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-51 entries.
+52 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -58,6 +58,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`make-bot-ui`](../packages/codex/skills/make-bot-ui/SKILL.md) | Build a local control page for an authenticated webhook. | explicit | pstack core / host binding |
 | [`multi-phase-plan`](../packages/codex/skills/multi-phase-plan/SKILL.md) | Write a dependency plan with verifiable units and live checks. | explicit | pstack core / host binding |
 | [`no-comments`](../packages/codex/skills/no-comments/SKILL.md) | Review comments, remove redundancy, and encode real constraints. | explicit | pstack core / host binding |
+| [`oms-auto`](../packages/codex/skills/oms-auto/SKILL.md) | Route opted-in repository engineering tasks; skip chat, translation, and tool help. | automatic | OMS built-in |
 | [`opening-a-pr`](../packages/codex/skills/opening-a-pr/SKILL.md) | Prepare a reviewed pull request; publish only when explicitly requested. | explicit | pstack core / host binding |
 | [`orchestrate`](../packages/codex/skills/orchestrate/SKILL.md) | Coordinate ongoing engineering work with bounded tasks and independent checks. | explicit | pstack core / host binding |
 | [`pause-safely`](../packages/codex/skills/pause-safely/SKILL.md) | Checkpoint in-flight work when the user requests a pause. | explicit | pstack core / host binding |
