@@ -15,6 +15,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Current source candidate
 
+- [AIHero grilling and tracker setup refresh: 2026-10-12](aihero-refresh-2026-10-12.md)
 - [AIHero second batch: diagnosis and review imports](aihero-complements-second-batch-2026-10-08.md)
 - [AIHero pstack complements: 2026-10-08 import and verification](aihero-complements-2026-10-08.md)
 - [AIHero 0.10.0 imports, dependencies, and verification gates](aihero-imports-0.10.0.md)

@@ -39,7 +39,6 @@
       "items": {
         "enum": [
           "enhanced-delivery",
-          "auto-routing",
           "extras",
           "aihero"
         ]
@@ -71,7 +70,6 @@
               "core",
               "none",
               "enhanced-delivery",
-              "auto-routing",
               "extras",
               "aihero"
             ]

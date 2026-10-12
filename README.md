@@ -6,9 +6,10 @@
 
 pstack engineering workflows, ported to Codex and Claude Code.
 
-The 0.15.0 source candidate also adds independent Pi and OMP adapters. Its
-default distribution follows pinned pstack 0.15.17; AIHero and OMS additions
-are [explicit extensions](docs/pstack-parity.md). Installed releases may differ.
+The 0.16.0 release also adds independent Pi and OMP adapters. Its
+default distribution follows pinned pstack 0.15.17 and includes automatic routing.
+Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
+Installed releases may differ.
 
 Describe a task, clarify a requirement, review a change, or inspect a module's
 design. Oh My Stack gives your agent a workflow and asks it to show evidence
@@ -50,7 +51,7 @@ For manual installation, use the guide for your tool. Each tool needs its own in
 | Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
 | Claude Code | [Marketplace installation](docs/install/claude-code.md). |
 | OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
-| Pi | [Independent native package](docs/pi-install.md), available in the local 0.15.0 source candidate. |
+| Pi | [Independent native package](docs/pi-install.md), available in the local 0.16.0 release. |
 
 Start a new session after installation. See [support](docs/support-policy.md)
 for tested tools and limitations.
@@ -112,8 +113,9 @@ Basic use inherits the agent's model when no Oh My Stack mapping is configured.
 Use [optional model configuration](docs/model-configuration.md) to choose models
 and reasoning budgets for roles and review panels.
 
-[Automatic routing](docs/automatic-routing.md) requires the `auto-routing`
-extension in this candidate. Packaging it leaves routing off until configured.
+[Automatic routing](docs/automatic-routing.md) is included in the default package.
+New installations use manual mode until configured. Upgrades preserve existing
+user settings and project overrides.
 
 ## More documentation
 

@@ -5,8 +5,8 @@
       "id": "aihero",
       "name": "AIHero / Matt Pocock Skills",
       "repository": "https://github.com/mattpocock/skills",
-      "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
-      "snapshot": "upstream/snapshots/aihero/6fd947921b935b7e1e69293a200400f0fdd5c15f",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "snapshot": "upstream/snapshots/aihero/49dd158d1076134a641b33efb035946536778336",
       "license": "MIT",
       "licensePath": "LICENSE",
       "files": [
@@ -76,7 +76,7 @@
         },
         {
           "path": "skills/productivity/grilling/SKILL.md",
-          "sha256": "10ff989e7498b23b5acb49d5048f11dcd906757d2f79c5cdf8a00001381296f2"
+          "sha256": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15"
         },
         {
           "path": "skills/productivity/grilling/agents/openai.yaml",
@@ -92,7 +92,7 @@
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
-          "sha256": "9a0c21694be19fa3eefc39343355d3af7414716ba364882c7432c2f821eac3e9"
+          "sha256": "f148858ffb7f63c03c06fca06e6fdb1d91a35c6b293244b8fdfacd5f4cc028c4"
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml",
@@ -104,11 +104,11 @@
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md",
-          "sha256": "da619c7423506c905ceea62d4d71c955371c2f2c743aada92a01e3deffa93474"
+          "sha256": "f0653fe106dd8ee7b33be27bd7fe3104b40555896cb45f61997aed20467020c3"
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md",
-          "sha256": "ea175f73d193b3f55819c0ed9bbccf6ee0e70ad8f928e3d7607596c53380acd6"
+          "sha256": "591a9e7057382aaccdfbed3f7ea3f2ad07e0cd29f012d18b82ee4e485fd81e24"
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md",
@@ -116,7 +116,7 @@
         },
         {
           "path": "skills/engineering/setup-matt-pocock-skills/triage-labels.md",
-          "sha256": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
+          "sha256": "ae512af838c78b8750471c42cd2b20fa32319553e61d84c9a23d171b40ce14aa"
         },
         {
           "path": "skills/engineering/to-spec/SKILL.md",

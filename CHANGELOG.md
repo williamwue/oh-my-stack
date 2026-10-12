@@ -6,6 +6,17 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.16.0 - 2026-10-12
+
+- Refresh the selected AIHero originals at upstream `49dd158`: make grilling
+  confirmations follow the recommendation and repair tracker setup templates.
+  Preserve complete original resources, invocation modes and prior snapshots.
+
+- Include automatic routing in the default packages, with native hooks on
+  Codex and Claude Code. Preserve manual defaults, saved routing settings and
+  project overrides; accept the former `auto-routing` extension flag as a
+  compatibility alias.
+
 ## 0.15.0 - 2026-10-11
 
 - Port the reviewed pstack 0.15.14–0.15.17 delta with immutable source receipts

@@ -2,7 +2,9 @@
 
 The 0.15.0 source candidate targets pstack 0.15.17 at
 `978ca6e9c0e012047cd5058b8e829240336e704e`. Its default packages contain
-upstream workflows and the bindings needed by Codex, Claude Code, Pi and OMP.
+upstream workflows, built-in OMS automatic routing, and the bindings needed by
+Codex, Claude Code, Pi and OMP. Routing hooks and configuration are supported
+on Codex and Claude Code; Pi and OMP retain the explicit workflow fallback.
 This is a local candidate. Generating or testing it does not update an installed
 plugin or publish a release.
 
@@ -19,7 +21,10 @@ adapter code and optional additions keep their usual checks.
 
 ## Select a distribution
 
-Ordinary generation selects no extensions.
+Ordinary generation includes automatic routing and selects no extensions.
+The entry, configuration helper and supported native hooks are part of the
+default distribution. Missing configuration means manual mode; generation and
+installation never enable routing or rewrite existing settings.
 
 ```sh
 npm run generate
@@ -28,15 +33,19 @@ npm run generate
 Select additions explicitly and generate them into a separate directory.
 
 ```sh
-node tools/generate.mjs --extensions enhanced-delivery,auto-routing,extras,aihero --output-root .tmp/extended
+node tools/generate.mjs --extensions enhanced-delivery,extras,aihero --output-root .tmp/extended
 ```
 
 | Extension | Added capability |
 | --- | --- |
 | `enhanced-delivery` | Explicit OMS delivery evidence entry and its local verification tools. |
-| `auto-routing` | OMS routing entry, configuration and supported native hooks. Packaging it does not enable routing. |
 | `extras` | Optional diagnostic and automation entries. Benny retains its upstream pstack attribution and separate discovery boundary. |
 | `aihero` | Selected pinned AIHero originals, resources and licenses. |
+
+The previous `--extensions auto-routing` option remains accepted for compatibility.
+It adds nothing and is omitted from the selected extension list, because routing
+is now always included. Existing routing configuration paths and precedence are
+unchanged.
 
 An artifact records the selected extensions. Its catalog describes the skills
 actually present. An extension does not replace the strict workflow body or

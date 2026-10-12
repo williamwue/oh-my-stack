@@ -398,6 +398,21 @@
     },
     {
       "kind": "skill",
+      "name": "oms-auto",
+      "path": "src/core/skills/oms-auto",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/oms-auto/**",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "oms-auto"
+    },
+    {
+      "kind": "skill",
       "name": "opening-a-pr",
       "path": "src/core/skills/opening-a-pr",
       "origin": "pstack",
@@ -1619,6 +1634,12 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "oms-auto",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic"
     },
     {
       "name": "opening-a-pr",

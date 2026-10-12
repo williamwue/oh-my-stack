@@ -95,14 +95,12 @@ async function buildPluginBundle({ root, out, project, bundle }) {
   const compatibilityManifest = JSON.parse(
     await readFile(join(packageRoot, ".codex-plugin", "plugin.json"), "utf8"),
   );
-  const generation = JSON.parse(await readFile(join(packageRoot, "GENERATION.json"), "utf8"));
-  const routingEnabled = generation.selection?.extensions?.includes("auto-routing") === true;
   if (
     compatibilityManifest.name !== project.name
     || compatibilityManifest.version !== project.version
-    || compatibilityManifest.hooks !== (routingEnabled ? "./hooks/hooks.json" : undefined)
+    || compatibilityManifest.hooks !== "./hooks/hooks.json"
   ) {
-    throw new Error("Codex plugin manifest identity or selected routing hooks drift");
+    throw new Error("Codex plugin manifest identity or default routing hooks drift");
   }
 
   const staging = await mkdtemp(join(tmpdir(), "oh-my-stack-marketplace-"));

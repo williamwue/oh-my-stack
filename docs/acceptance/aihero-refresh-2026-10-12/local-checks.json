@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-source-and-generated-packages",
+  "revision": "49dd158d1076134a641b33efb035946536778336",
+  "aiheroSourceTests": {
+    "tests": 4,
+    "pass": 4,
+    "fail": 0
+  },
+  "generatedTargets": 4,
+  "packageChecks": [
+    {
+      "target": "omp",
+      "skill": "grilling",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "automatic",
+      "resources": 2,
+      "status": "passed"
+    },
+    {
+      "target": "omp",
+      "skill": "setup-matt-pocock-skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "explicit",
+      "resources": 7,
+      "status": "passed"
+    },
+    {
+      "target": "codex",
+      "skill": "grilling",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "automatic",
+      "resources": 2,
+      "status": "passed"
+    },
+    {
+      "target": "codex",
+      "skill": "setup-matt-pocock-skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "explicit",
+      "resources": 7,
+      "status": "passed"
+    },
+    {
+      "target": "claude-code",
+      "skill": "grilling",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "automatic",
+      "resources": 2,
+      "status": "passed"
+    },
+    {
+      "target": "claude-code",
+      "skill": "setup-matt-pocock-skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "explicit",
+      "resources": 7,
+      "status": "passed"
+    },
+    {
+      "target": "pi",
+      "skill": "grilling",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "automatic",
+      "resources": 2,
+      "status": "passed"
+    },
+    {
+      "target": "pi",
+      "skill": "setup-matt-pocock-skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "invocation": "explicit",
+      "resources": 7,
+      "status": "passed"
+    }
+  ],
+  "npmRunCheck": {
+    "exitCode": 1,
+    "tests": {
+      "tests": 406,
+      "pass": 403,
+      "fail": 1,
+      "skipped": 2
+    },
+    "failedTest": "executable replacement after validation cannot establish a new pre-execution baseline",
+    "limitation": "Previously reproduced on unchanged base: relocated Homebrew Node cannot resolve its dynamic library."
+  },
+  "directFullSuite": {
+    "exitCode": 0,
+    "tests": {
+      "tests": 406,
+      "pass": 404,
+      "fail": 0,
+      "skipped": 2
+    },
+    "runtimeAdjustment": "Temporary process-scoped DYLD_LIBRARY_PATH points to the current Homebrew Node library directory."
+  },
+  "genericSkillValidator": "Unavailable: default Python lacks PyYAML; original-source validators passed.",
+  "published": false,
+  "globallyInstalled": false,
+  "liveModelBehavior": "unverified"
+}

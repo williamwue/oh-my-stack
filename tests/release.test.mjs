@@ -146,7 +146,9 @@ test("Codex plugin bundle exposes the generated package through one local market
     const selectedCatalog = JSON.parse(await readFile(join(repoRoot, "packages/codex/SKILL_CATALOG.json"), "utf8"));
     assert.deepEqual(packagedSkills.sort(), selectedCatalog.skills.filter((skill) => skill.audience === "public")
       .map((skill) => `skills/${skill.name}/SKILL.md`).sort());
-    assert.equal(packagedSkills.includes("skills/oms-auto/SKILL.md"), false);
+    assert.equal(packagedSkills.includes("skills/oms-auto/SKILL.md"), true);
+    assert.ok(codexArtifact.files.some((file) => file.path === "scripts/routing.mjs"));
+    assert.ok(codexArtifact.files.some((file) => file.path === "hooks/hooks.json"));
     assert.equal(packagedSkills.some((path) => /\/check-[^/]+\//.test(path)), false);
     assert.deepEqual(
       await packageInventory(join(extracted, "plugins", "oh-my-stack")),
@@ -159,7 +161,7 @@ test("Codex plugin bundle exposes the generated package through one local market
     assert.equal(await exists(join(extracted, "plugins", "oh-my-stack", "plugin.json")), false);
     assert.equal(
       JSON.parse(await readFile(join(extracted, "plugins", "oh-my-stack", ".codex-plugin", "plugin.json"), "utf8")).hooks,
-      undefined,
+      "./hooks/hooks.json",
     );
   } finally {
     await rm(root, { recursive: true, force: true });
