@@ -398,6 +398,21 @@
     },
     {
       "kind": "skill",
+      "name": "oms-auto",
+      "path": "src/core/skills/oms-auto",
+      "origin": "oms",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/oms-auto/**",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "oms-auto"
+    },
+    {
+      "kind": "skill",
       "name": "opening-a-pr",
       "path": "src/core/skills/opening-a-pr",
       "origin": "pstack",
@@ -1434,6 +1449,49 @@
       ]
     },
     {
+      "kind": "script",
+      "path": "tools/routing.mjs",
+      "output": "scripts/routing.mjs",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/routing-hook.mjs",
+      "output": "scripts/routing-hook.mjs",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/codex-routing-hook.mjs",
+      "output": "scripts/codex-routing-hook.mjs",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/automatic-routing.md",
+      "output": "docs/automatic-routing.md",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "claude-code"
+      ]
+    },
+    {
       "kind": "reference",
       "path": "docs/github-workflow.md",
       "output": "docs/github-workflow.md",
@@ -1441,6 +1499,26 @@
       "distribution": "core",
       "targets": [
         "codex"
+      ]
+    },
+    {
+      "kind": "hook",
+      "path": "generated/hooks/hooks.json",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "manifest",
+      "path": "manifest/hooks",
+      "origin": "oms",
+      "distribution": "core",
+      "targets": [
+        "codex",
+        "claude-code"
       ]
     },
     {
@@ -1675,6 +1753,12 @@
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
+    },
+    {
+      "name": "oms-auto",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "automatic"
     },
     {
       "name": "opening-a-pr",
