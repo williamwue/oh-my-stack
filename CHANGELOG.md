@@ -8,6 +8,9 @@ promise permanent configuration or runtime API compatibility.
 
 ## 0.16.0 - 2026-10-12
 
+- Allow OS startup checks for the copied-executable tamper fixture without
+  relaxing executable integrity verification.
+
 - Refresh the selected AIHero originals at upstream `49dd158`: make grilling
   confirmations follow the recommendation and repair tracker setup templates.
   Preserve complete original resources, invocation modes and prior snapshots.
