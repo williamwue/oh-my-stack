@@ -1,0 +1,11 @@
+
+> probe
+> node probe.mjs
+
+{
+  "processExecutable": "/opt/homebrew/Cellar/node@22/22.23.3/bin/node",
+  "libraryPathPresent": false,
+  "status": null,
+  "signal": "SIGABRT",
+  "stderr": "dyld[17329]: Library not loaded: @rpath/libnode.127.dylib\n  Referenced from: <D31564B0-ACFA-3EFF-91E1-D7A3415E127F> /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/epub-copy-proof-QO7c19/node\n  Reason: tried: '/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/epub-copy-proof-QO7c19/libnode.127.dylib' (no such file), '/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/epub-copy-proof-QO7c19/../lib/libnode.127.dylib' (no such file), '/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/epub-copy-proof-QO7c19/libnode.127.dylib' (no such file), '/private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/epub-copy-proof-QO7c19/../lib/libnode.127.dylib' (no such file)\n"
+}

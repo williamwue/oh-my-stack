@@ -1,0 +1,1163 @@
+{
+  "engine": "epub.js 0.3.93 in Chromium",
+  "artifact": "output/epub/pstack-zh-CN.epub",
+  "sha256": "8bdc644fd737d0b470b1d957eaeddf8ba5f55e0be1e0ff62ef907e6f61aa4340",
+  "measure": "Visible non-whitespace token rectangles in paginated EPUB; excludes hanging code whitespace. Geometry is supplemented by inspected screenshots, not native WeChat proof.",
+  "scans": [
+    {
+      "href": "ch01.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 444,
+      "violations": []
+    },
+    {
+      "href": "ch02.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 143,
+      "violations": []
+    },
+    {
+      "href": "ch03.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 154,
+      "violations": []
+    },
+    {
+      "href": "ch04.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 696,
+      "violations": []
+    },
+    {
+      "href": "ch05.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 571,
+      "violations": []
+    },
+    {
+      "href": "ch06.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 683,
+      "violations": []
+    },
+    {
+      "href": "ch07.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 407,
+      "violations": []
+    },
+    {
+      "href": "ch08.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 148,
+      "violations": []
+    },
+    {
+      "href": "ch09.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 999,
+      "violations": []
+    },
+    {
+      "href": "ch10.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1080,
+      "violations": []
+    },
+    {
+      "href": "ch11.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1033,
+      "violations": []
+    },
+    {
+      "href": "ch12.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 354,
+      "violations": []
+    },
+    {
+      "href": "ch13.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 780,
+      "violations": []
+    },
+    {
+      "href": "ch14.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 569,
+      "violations": []
+    },
+    {
+      "href": "ch15.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 837,
+      "violations": []
+    },
+    {
+      "href": "ch16.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 843,
+      "violations": []
+    },
+    {
+      "href": "ch17.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 602,
+      "violations": []
+    },
+    {
+      "href": "ch18.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1053,
+      "violations": []
+    },
+    {
+      "href": "ch19.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 675,
+      "violations": []
+    },
+    {
+      "href": "ch20.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1737,
+      "violations": []
+    },
+    {
+      "href": "ch21.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 757,
+      "violations": []
+    },
+    {
+      "href": "ch22.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1974,
+      "violations": []
+    },
+    {
+      "href": "ch23.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2633,
+      "violations": []
+    },
+    {
+      "href": "ch24.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1795,
+      "violations": []
+    },
+    {
+      "href": "ch25.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 671,
+      "violations": []
+    },
+    {
+      "href": "ch26.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 913,
+      "violations": []
+    },
+    {
+      "href": "ch27.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1165,
+      "violations": []
+    },
+    {
+      "href": "ch28.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1523,
+      "violations": []
+    },
+    {
+      "href": "ch29.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 343,
+      "violations": []
+    },
+    {
+      "href": "ch30.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2169,
+      "violations": []
+    },
+    {
+      "href": "ch31.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 561,
+      "violations": []
+    },
+    {
+      "href": "ch32.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1252,
+      "violations": []
+    },
+    {
+      "href": "ch33.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 529,
+      "violations": []
+    },
+    {
+      "href": "ch34.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1000,
+      "violations": []
+    },
+    {
+      "href": "ch35.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1727,
+      "violations": []
+    },
+    {
+      "href": "ch36.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 618,
+      "violations": []
+    },
+    {
+      "href": "ch37.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 990,
+      "violations": []
+    },
+    {
+      "href": "ch38.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1642,
+      "violations": []
+    },
+    {
+      "href": "ch39.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 671,
+      "violations": []
+    },
+    {
+      "href": "ch40.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1435,
+      "violations": []
+    },
+    {
+      "href": "ch41.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1792,
+      "violations": []
+    },
+    {
+      "href": "ch42.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 207,
+      "violations": []
+    },
+    {
+      "href": "ch43.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2068,
+      "violations": []
+    },
+    {
+      "href": "ch44.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1149,
+      "violations": []
+    },
+    {
+      "href": "ch45.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1356,
+      "violations": []
+    },
+    {
+      "href": "ch46.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2363,
+      "violations": []
+    },
+    {
+      "href": "ch47.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1784,
+      "violations": []
+    },
+    {
+      "href": "ch48.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 983,
+      "violations": []
+    },
+    {
+      "href": "glossary.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 215,
+      "violations": []
+    },
+    {
+      "href": "image-notes.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "100",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 58,
+      "violations": []
+    },
+    {
+      "href": "ch01.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 533,
+      "violations": []
+    },
+    {
+      "href": "ch02.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 178,
+      "violations": []
+    },
+    {
+      "href": "ch03.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 198,
+      "violations": []
+    },
+    {
+      "href": "ch04.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 914,
+      "violations": []
+    },
+    {
+      "href": "ch05.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 752,
+      "violations": []
+    },
+    {
+      "href": "ch06.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 848,
+      "violations": []
+    },
+    {
+      "href": "ch07.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 539,
+      "violations": []
+    },
+    {
+      "href": "ch08.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 181,
+      "violations": []
+    },
+    {
+      "href": "ch09.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1231,
+      "violations": []
+    },
+    {
+      "href": "ch10.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1297,
+      "violations": []
+    },
+    {
+      "href": "ch11.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1222,
+      "violations": []
+    },
+    {
+      "href": "ch12.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 437,
+      "violations": []
+    },
+    {
+      "href": "ch13.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 877,
+      "violations": []
+    },
+    {
+      "href": "ch14.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 763,
+      "violations": []
+    },
+    {
+      "href": "ch15.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1112,
+      "violations": []
+    },
+    {
+      "href": "ch16.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1121,
+      "violations": []
+    },
+    {
+      "href": "ch17.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 730,
+      "violations": []
+    },
+    {
+      "href": "ch18.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1273,
+      "violations": []
+    },
+    {
+      "href": "ch19.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 863,
+      "violations": []
+    },
+    {
+      "href": "ch20.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2203,
+      "violations": []
+    },
+    {
+      "href": "ch21.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 899,
+      "violations": []
+    },
+    {
+      "href": "ch22.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2489,
+      "violations": []
+    },
+    {
+      "href": "ch23.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 3163,
+      "violations": []
+    },
+    {
+      "href": "ch24.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2215,
+      "violations": []
+    },
+    {
+      "href": "ch25.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 859,
+      "violations": []
+    },
+    {
+      "href": "ch26.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1132,
+      "violations": []
+    },
+    {
+      "href": "ch27.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1344,
+      "violations": []
+    },
+    {
+      "href": "ch28.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1927,
+      "violations": []
+    },
+    {
+      "href": "ch29.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 427,
+      "violations": []
+    },
+    {
+      "href": "ch30.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2657,
+      "violations": []
+    },
+    {
+      "href": "ch31.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 698,
+      "violations": []
+    },
+    {
+      "href": "ch32.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1568,
+      "violations": []
+    },
+    {
+      "href": "ch33.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 715,
+      "violations": []
+    },
+    {
+      "href": "ch34.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1208,
+      "violations": []
+    },
+    {
+      "href": "ch35.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1978,
+      "violations": []
+    },
+    {
+      "href": "ch36.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 791,
+      "violations": []
+    },
+    {
+      "href": "ch37.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1227,
+      "violations": []
+    },
+    {
+      "href": "ch38.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2131,
+      "violations": []
+    },
+    {
+      "href": "ch39.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 864,
+      "violations": []
+    },
+    {
+      "href": "ch40.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1681,
+      "violations": []
+    },
+    {
+      "href": "ch41.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2193,
+      "violations": []
+    },
+    {
+      "href": "ch42.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 248,
+      "violations": []
+    },
+    {
+      "href": "ch43.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2439,
+      "violations": []
+    },
+    {
+      "href": "ch44.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1391,
+      "violations": []
+    },
+    {
+      "href": "ch45.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1669,
+      "violations": []
+    },
+    {
+      "href": "ch46.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2836,
+      "violations": []
+    },
+    {
+      "href": "ch47.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 2175,
+      "violations": []
+    },
+    {
+      "href": "ch48.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 1353,
+      "violations": []
+    },
+    {
+      "href": "glossary.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 248,
+      "violations": []
+    },
+    {
+      "href": "image-notes.xhtml",
+      "settings": {
+        "size": "390,660",
+        "font": "200",
+        "theme": "light"
+      },
+      "page": 390,
+      "lines": 66,
+      "violations": []
+    }
+  ],
+  "screenshots": [
+    {
+      "n": "zh-compact-390-100",
+      "href": "ch04.xhtml",
+      "selector": "table",
+      "font": "100",
+      "size": "390,660",
+      "theme": "light",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-compact-390-100.png"
+    },
+    {
+      "n": "zh-split-390-100",
+      "href": "ch20.xhtml",
+      "selector": "[data-table-id=\"ch20-t04\"][data-table-mode]",
+      "font": "100",
+      "size": "390,660",
+      "theme": "light",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-split-390-100.png"
+    },
+    {
+      "n": "zh-records-spread-dark",
+      "href": "ch27.xhtml",
+      "selector": ".table-row-start",
+      "font": "100",
+      "size": "1100,700",
+      "theme": "dark",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-records-spread-dark.png"
+    },
+    {
+      "n": "zh-tall-diagram-390",
+      "href": "ch40.xhtml",
+      "selector": "#diagram-40-02",
+      "font": "100",
+      "size": "390,660",
+      "theme": "light",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-tall-diagram-390.png"
+    },
+    {
+      "n": "zh-diagram-reading-aid",
+      "href": "ch40.xhtml",
+      "selector": ".diagram-reading-aid[data-diagram-source=\"diagrams/zh-CN/40-02.svg\"]",
+      "font": "100",
+      "size": "390,660",
+      "theme": "light",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-diagram-reading-aid.png"
+    },
+    {
+      "n": "zh-catalog-spread-dark",
+      "href": "ch27.xhtml",
+      "font": "100",
+      "size": "1100,700",
+      "theme": "dark",
+      "path": "docs/books/pstack/reading-edition/screenshots/zh-catalog-spread-dark.png"
+    }
+  ]
+}

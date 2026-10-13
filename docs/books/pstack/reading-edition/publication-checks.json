@@ -1,0 +1,25 @@
+{
+  "scope": "Pre-publication checks for the reviewed reading edition",
+  "command": "npm run check",
+  "node": {
+    "node": "v22.23.3",
+    "zlib": "1.3.1-e00f703"
+  },
+  "environment": "Official Node distribution pinned by docs/local-release.md, selected via process PATH",
+  "result": "passed",
+  "node_tests": {
+    "passed": 406,
+    "failed": 0,
+    "skipped": 0
+  },
+  "log": "publication-npm-check.log",
+  "evidence_path_normalization": "Repository paths use ./; user configuration paths use ~/; raw local copies retained until task cleanup",
+  "preservation_recheck": {
+    "baseline_count": 345,
+    "unchanged": 344,
+    "changed": [
+      "docs/books/pstack/README.md"
+    ],
+    "change_scope": "Release download index only; reviewed book bodies, code, images and PDFs unchanged"
+  }
+}

@@ -16,32 +16,33 @@ English editions; see the [authorization record](AUTHORIZATION.md).
 
 ## PDF and EPUB
 
-The 2026-10-03 ebooks contain all 48 entries, expanded code examples, and bundled
+The ebooks preserve the October 3, 2026 snapshot with all 48 entries, expanded code examples, and bundled
 diagrams. PDFs include a linked contents page and bookmarks; EPUBs support
 reflowable text and include fonts for offline reading.
 
-The [2026-10-03 ebook release](https://github.com/williamwue/oh-my-stack/releases/tag/pstack-book-2026-10-03)
-provides all four files and SHA-256 checksums as downloadable attachments.
+The [2026-10-13 reading edition](https://github.com/williamwue/oh-my-stack/releases/tag/pstack-book-2026-10-13)
+provides both full EPUBs, a Chinese sample, both PDFs, SHA-256 checksums and validation records.
 
 | Edition | PDF | EPUB |
 | --- | --- | --- |
 | Simplified Chinese | [542 pages](../../../output/pdf/pstack-zh-CN.pdf) | [Download EPUB](../../../output/epub/pstack-zh-CN.epub) |
 | Author's English | [622 pages](../../../output/pdf/pstack-en.pdf) | [Download EPUB](../../../output/epub/pstack-en.epub) |
 
-The local files above are unpublished October 7 candidates rebuilt from the
-ported correction on the current 0.10.0 source baseline: EPUB
-tables use labelled paragraph rows, and Chinese code comments and explanatory
-templates have been translated. Runtime-sensitive Japanese values retain their
-original spelling with Chinese notes. The October 3 release remains historical;
-its Chinese PDF has 538 pages. The English PDF is unchanged.
+The October 13 EPUBs restore the original cover and reading hierarchy. Short
+tables retain column comparisons, wide tables split in row order, and long tables
+use labelled entries. Large diagrams include scalable text descriptions. The
+Chinese sample contains representative layout chapters. Both PDFs retain their
+October 7 bytes. The October 3 release remains historical; its Chinese PDF has
+538 pages. The current Chinese PDF has 542 pages.
 
-Both new EPUBs passed EPUBCheck 5.4.0 with no errors or warnings. The new Chinese
+All three EPUBs passed EPUBCheck 5.4.0 with no errors or warnings. The Chinese
 PDF passed text-boundary checks and representative visual inspection; the
 English PDF retains its historical bytes and validation. Native ebook reader
 testing, including reimporting the corrected file into WeChat Read, was deferred
 by the maintainer for this run. Human editorial review of the Chinese
 translation also remains pending.
-See the [ebook notes and checksums](../../../output/README.md).
+See the [ebook notes and checksums](../../../output/README.md) and
+[reading edition acceptance record](reading-edition/README.md).
 
 ## Source and attribution
 
