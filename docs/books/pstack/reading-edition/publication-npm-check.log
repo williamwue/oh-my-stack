@@ -1,0 +1,2700 @@
+
+> oh-my-stack@0.16.0 check
+> npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.16.0 generate:check
+> node tools/generate.mjs --check
+
+Verified 4 public targets with 76 of 88 source Skill.
+
+> oh-my-stack@0.16.0 docs:check
+> node tools/generate-skill-directory.mjs --check
+
+Skill directory matches the packaged catalog.
+
+> oh-my-stack@0.16.0 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.16.0 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 8 output files.
+
+> oh-my-stack@0.16.0 validate
+> node tools/validate.mjs
+
+Validated 4 targets, 8 profiles, and 88 Skill.
+
+> oh-my-stack@0.16.0 check:books
+> node tools/books/validate-pstack-book.mjs
+
+{
+  "chapters": 48,
+  "ready": 48,
+  "warnings": [
+    "chapter 1 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。)",
+    "chapter 4 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。)",
+    "chapter 10 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。)",
+    "chapter 10 zh-CN: approved code deviation 2 (将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 1 行；例如「# 遇到新任务时，如果符合 Playbook 或需要严谨处理，就使用 /poteto-mode。闲聊回合以及用户要求停止时不要使用。」。)",
+    "chapter 10 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 就按这个继续。」。)",
+    "chapter 10 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续。」。)",
+    "chapter 10 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 继续，直到完成。」。)",
+    "chapter 10 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。)",
+    "chapter 10 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。继续处理，直到迁移检查报告旧调用方为零，并记录决策。」。)",
+    "chapter 10 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。)",
+    "chapter 11 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。)",
+    "chapter 11 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。)",
+    "chapter 14 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 新任务。查明为什么退出登录后缓存条目仍然存在。暂时不要修改代码。」。)",
+    "chapter 14 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 有时因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。)",
+    "chapter 15 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果能方便地编写测试，就使用 /tdd。然后修复并重新运行。」。)",
+    "chapter 15 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用这个固定的测试输入，启动需要 1.8 秒。采集追踪，修复测得的原因，并展示修改前后的结果。」。)",
+    "chapter 15 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。)",
+    "chapter 16 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 添加 --json 标志。文本输出保持逐字节一致。验证两种输出形式。」。)",
+    "chapter 16 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把解析逻辑移到一个模块，行为变化必须为零。先记录当前输出，再证明修改后没有变化。」。)",
+    "chapter 16 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。)",
+    "chapter 16 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启用这个标志时，行距太大。第二张图才是正确效果。先复现，再修到一致。」。)",
+    "chapter 17 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写一个 Skill，验证这个代码库中的数据库迁移。」。)",
+    "chapter 17 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对这个 Skill 的修改运行 Eval Playbook。给两个版本安排相同任务，并保持候选版本盲测。」。)",
+    "chapter 18 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。)",
+    "chapter 18 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。)",
+    "chapter 18 zh-CN: approved code deviation 3 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「└─ PR #1 (base: main) ← 只有最底层的 PR 以 trunk 为目标」。)",
+    "chapter 18 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建 PR。提交要小而有序，并在 PR 描述中写出证据。」。)",
+    "chapter 18 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 照看这个 PR，直到所有检查通过。」。)",
+    "chapter 18 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查 PR 123 的状态。还有什么事没完成？」。)",
+    "chapter 18 zh-CN: approved code deviation 7 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「PR #4 PASS ← 已验证，但下面还有未验证的 PR」。)",
+    "chapter 18 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这组堆叠的 PR 合入 trunk。」。)",
+    "chapter 19 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 接手这个分支。阅读决策日志，了解已经完成的工作，然后从那里继续。不要重做已完成的工作。」。)",
+    "chapter 19 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 什么占用了磁盘空间？删除可以安全删除的 worktree。」。)",
+    "chapter 20 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 将这些 Skill 作为插件发布。不要泄露任何公司内部资料；在临时目录中工作，并先展示依赖关系图。」。)",
+    "chapter 20 zh-CN: approved code deviation 2 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 9 行；例如「更新之前」。)",
+    "chapter 20 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 统筹存储系统迁移，直到所有软件包都完成转换并合并。每天检查两次。」。)",
+    "chapter 20 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 full autopilot 处理这个队列。各项任务相互独立，早上之前完成合并。」。)",
+    "chapter 20 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 autopilot 处理这五项改动，但要组成 PR 堆栈，不要投入生产。早上我会亲自合入整个堆栈。」。)",
+    "chapter 21 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。实际运行导入，并展示写入的记录。」。)",
+    "chapter 22 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 subtract before you add。先删除过时的适配器，再设计剩余部分。」。)",
+    "chapter 22 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：saveUser 只调用 db.save，而且只有这里用到它」。)",
+    "chapter 22 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：多了一层可替换接口，但只有 A 公司的一种实现」。)",
+    "chapter 22 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 先确定结构：商品有名称、价格和库存数量」。)",
+    "chapter 22 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 修改前：所有 Worker 共享一个「已处理数量」，先读取再写入」。)",
+    "chapter 22 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 事后补丁：金额仍只是以日元表示的数字，每个使用处都加上「如果是美元」的分支」。)",
+    "chapter 22 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重新设计：金额表示为「数值与币种」的组合，所有使用处都接收这种类型」。)",
+    "chapter 22 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制作两个 Markdown 渲染器原型以供比较，各安排一个 Agent。」。)",
+    "chapter 22 zh-CN: approved code deviation 9 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「手动完成第一项，了解步骤」。)",
+    "chapter 22 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 我暂时离开。把所有调用方从同步存储迁移到新的异步存储，保持行为不变。我回来时需要有证据相信迁移正确。」。)",
+    "chapter 22 zh-CN: approved code deviation 11 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「// 表示已经验证不小于 0 的金额类型」。)",
+    "chapter 23 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// order.ts：用三个布尔值保存订单状态（分散的布尔值）」。)",
+    "chapter 23 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// order.ts：集中定义订单结构与可能的状态」。)",
+    "chapter 23 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：可以表示相互矛盾的状态组合」。)",
+    "chapter 23 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改前：两个函数各自列出相同的三个参数」。)",
+    "chapter 23 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：只定义一次 User 类型，两个函数都接收它」。)",
+    "chapter 23 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：页面、计费和邮件三个文件中都有相同的 if/else」。)",
+    "chapter 23 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：任何支付方式都可以包含全部字段」。)",
+    "chapter 23 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：三个页面分别直接修改购物车」。)",
+    "chapter 23 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 6 行；例如「let stock = 10; // 库存数量」。)",
+    "chapter 23 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「let stock = 10; // 库存数量」。)",
+    "chapter 23 zh-CN: approved code deviation 11 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 边界：读取配置文件时只验证一次，并转成 Config 类型的值」。)",
+    "chapter 23 zh-CN: approved code deviation 12 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 纯函数：相同的 items 总返回相同的总价，不访问页面」。)",
+    "chapter 23 zh-CN: approved code deviation 13 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 两者内部都是字符串，但传入 OrderId 会导致编译错误」。)",
+    "chapter 23 zh-CN: approved code deviation 14 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 已给任务类型添加 canceled」。)",
+    "chapter 23 zh-CN: approved code deviation 15 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「拆分前（各主体共享同一个写入位置）」。)",
+    "chapter 23 zh-CN: approved code deviation 16 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 separate before serializing shared state。给每次尝试分配专用 worktree，不要加锁。」。)",
+    "chapter 23 zh-CN: approved code deviation 17 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 表达领域的结构：状态只能取 status 的四种值之一」。)",
+    "chapter 24 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。)",
+    "chapter 24 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// check-export.ts：比较导出文件的各行与预期内容」。)",
+    "chapter 24 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 prove it works。展示真实输出，而非构建日志。」。)",
+    "chapter 24 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「declare function writeRow(row: Row): void; // 向文件写入一行」。)",
+    "chapter 24 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 当前代码预期的中间状态结构」。)",
+    "chapter 24 zh-CN: approved code deviation 6 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 3 行；例如「提交顺序（越靠下越早）」。)",
+    "chapter 24 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 将字符串转换成适合 URL 的形式」。)",
+    "chapter 24 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。)",
+    "chapter 24 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 计算总金额（存在忘记乘以数量的缺陷）」。)",
+    "chapter 24 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 代码：将工具数量上限设为 8」。)",
+    "chapter 24 zh-CN: approved code deviation 11 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「const user = { name: \"taro\" }; // 测试自己创建的数据」。)",
+    "chapter 24 zh-CN: approved code deviation 12 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「declare function findUsers(name: string): User[]; // 按名称查找用户」。)",
+    "chapter 24 zh-CN: approved code deviation 13 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 每页显示条数的配置值（当前为 20）」。)",
+    "chapter 24 zh-CN: approved code deviation 14 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 注册用户，并通过 mailer 发送注册感谢邮件」。)",
+    "chapter 24 zh-CN: approved code deviation 15 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。)",
+    "chapter 24 zh-CN: approved code deviation 16 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 导出原始行 input；中途失败时重试」。)",
+    "chapter 24 zh-CN: approved code deviation 17 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 验证行为的测试」。)",
+    "chapter 24 zh-CN: approved code deviation 18 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 如果重试发生在执行中途，导出会写入重复的行。先复现，再修复，然后验证。」。)",
+    "chapter 24 zh-CN: approved code deviation 19 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 将字符串转换为适合 URL 的形式」。)",
+    "chapter 25 zh-CN: approved code deviation 1 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「修改前：把每次使用的报告模板放在单独文件中」。)",
+    "chapter 26 zh-CN: approved code deviation 1 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「修改前：在规则文件中用文字说明」。)",
+    "chapter 26 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改后：添加以下配置，并删除规则文件中的文字（假设已引入 typescript-eslint）」。)",
+    "chapter 26 zh-CN: approved code deviation 3 (将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 3 行；例如「## 必须遵守」。)",
+    "chapter 26 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 订单列表页面：自行格式化日期，并在显示前检查格式」。)",
+    "chapter 26 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// date.ts：只在标准辅助函数 formatDate() 中格式化日期」。)",
+    "chapter 26 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 在 eslint.config.js 中添加以下配置，禁止在 date.ts 外格式化日期（假设已引入 typescript-eslint）」。)",
+    "chapter 26 zh-CN: approved code deviation 7 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 在页面上显示的日期字符串」。)",
+    "chapter 28 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 取消执行是怎么实现的？逐个查询待取消的执行时，会不会出现 N+1 查询？」。)",
+    "chapter 28 zh-CN: approved code deviation 2 (将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 2 行；例如「# 显示最后修改目标行的提交」。)",
+    "chapter 28 zh-CN: approved code deviation 3 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「Preserve: 不超过上游 API 允许的重试次数（该上限的理由已有记录）」。)",
+    "chapter 28 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为什么把重试上限设为 5？当初的理由现在仍成立吗？」。)",
+    "chapter 28 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明这个 PR 如何改变重试，并让我相信修复的是原因而非症状。」。)",
+    "chapter 28 zh-CN: approved code deviation 6 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 10 行；例如「- 把 CSV 导出从页面处理流程移到异步任务中」。)",
+    "chapter 28 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 说明上周导出工作的进展」。)",
+    "chapter 29 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 我暂时离开。把同步存储的所有调用方迁移到新的异步存储。」。)",
+    "chapter 30 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。)",
+    "chapter 30 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 要查找的用户 ID」。)",
+    "chapter 30 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 深模块：只公开一个函数，将读取、验证和保存隐藏在内部」。)",
+    "chapter 30 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 用类型表达：shipped 状态的订单必须有 trackingNo」。)",
+    "chapter 30 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// load.ts：读取 CSV，并将每行转为字符串数组（浅模块）」。)",
+    "chapter 30 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 12 行；例如「// 预先建立导入所用数据库连接的函数」。)",
+    "chapter 30 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 写代码前先设计导入流程。我最关心调用方会怎样使用它。」。)",
+    "chapter 30 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 请设置确认环节：在实现前停下来，给我看设计。」。)",
+    "chapter 30 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给出五个候选方案。缓存键格式事后修改代价很高。」。)",
+    "chapter 30 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /arena 对这个讨论及我们的工作方式提出第二意见。」。)",
+    "chapter 30 zh-CN: approved code deviation 11 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用各自的 check.sh 检查 packages/ 下的全部软件包。每个软件包安排一个 Agent，最后提交一份报告。」。)",
+    "chapter 30 zh-CN: approved code deviation 12 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 调用方的用法：先写用法，再据此确定类型」。)",
+    "chapter 31 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 利用上次编辑以来的所有信息，更新我的 mode Skill。」。)",
+    "chapter 32 zh-CN: approved code deviation 1 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 6 行；例如「<!-- 仍有占位内容：下一个 Agent 不知道该运行什么、点击什么 -->」。)",
+    "chapter 32 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 修改前：按屏幕坐标点击；按钮位置变化后可能点到其他地方」。)",
+    "chapter 32 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 检查验证 Skill。」。)",
+    "chapter 33 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 以怀疑的态度审阅整个分支。只有真正的缺陷或回归才需要指出，不必纠缠细枝末节。」。)",
+    "chapter 34 zh-CN: approved code deviation 4 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。)",
+    "chapter 34 zh-CN: approved code deviation 6 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「2026-05-24T13:00:00Z widget 修复了按钮颜色 为修复外观问题 commit 9d4e2b1 tests green」。)",
+    "chapter 34 zh-CN: approved code deviation 7 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「- decisions.tsv 中 11:15 的记录：pixel-diff 0 的证据只有首页的一张截图；其他使用该组件的页面尚未验证。」。)",
+    "chapter 34 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 留下决策记录，方便我回来后复查。」。)",
+    "chapter 34 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 告诉我昨晚完成了什么。」。)",
+    "chapter 35 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 差异（修改过的文件清单）」。)",
+    "chapter 35 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 检查字符串是否符合 UUID 格式」。)",
+    "chapter 35 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 非空数组：第一个元素一定存在」。)",
+    "chapter 35 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 可以继续使用 T[] 的例子：空数组也能返回 0」。)",
+    "chapter 35 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：接收 any 后，无须验证就能使用」。)",
+    "chapter 35 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 从 schema 推导类型」。)",
+    "chapter 35 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 错误示例：未经验证就断言它是 User」。)",
+    "chapter 35 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 7 行；例如「// 1. 对表示类别的字段使用 switch：检查 kind 后，编译器会自动缩小类型」。)",
+    "chapter 35 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 实际检查了表示类别的字段」。)",
+    "chapter 35 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 若在 Shape 中增加 variant 却忘记添加 case，这里会出现编译错误」。)",
+    "chapter 35 zh-CN: approved code deviation 11 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 错误示例：使用 as 会把 theme 的类型扩大为 \"dark\" | \"light\"，丢失它确为 \"dark\" 的信息」。)",
+    "chapter 35 zh-CN: approved code deviation 12 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 领域类型：明确订单有哪些字段，以及每个字段的类型」。)",
+    "chapter 35 zh-CN: approved code deviation 13 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 生成的类型（实际应从生成的模块中 import）」。)",
+    "chapter 35 zh-CN: approved code deviation 14 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：即使调换两个参数，只要类型相符就能通过编译」。)",
+    "chapter 35 zh-CN: approved code deviation 15 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：连可在本机运行的文件保存都替换成 mock，只检查 mock 被调用的次数」。)",
+    "chapter 35 zh-CN: approved code deviation 16 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 错误示例：只有字符串，事后无法查出哪个订单因何失败」。)",
+    "chapter 36 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。)",
+    "chapter 36 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 8 行；例如「// 待验证函数：发送通知，失败时重试，返回已发送通知列表」。)",
+    "chapter 36 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：检查预期行为（只送达一条通知）」。)",
+    "chapter 36 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 使用 /tdd 实现。」。)",
+    "chapter 36 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 先复现重复写入。如果容易编写测试，就使用 /tdd；然后修复并重新运行。」。)",
+    "chapter 37 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：用注释说明自家函数的意外行为」。)",
+    "chapter 37 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 修改后：将两项工作拆成两个名称清楚的函数」。)",
+    "chapter 37 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 修改前：只用注释声明约束」。)",
+    "chapter 37 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 添加一个测试」。)",
+    "chapter 37 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 针对差异」。)",
+    "chapter 38 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对 README 的修改运行 unslop。不要使用 em dash。」。)",
+    "chapter 38 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 对它运行 unslop，让文字更精练。」。)",
+    "chapter 38 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 审阅 README 的修改。」。)",
+    "chapter 39 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 花费太久了。记录经验，避免下次执行时重蹈覆辙。」。)",
+    "chapter 41 zh-CN: approved code deviation 1 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 2 行；例如「按照 Fix Root Causes，修复了每次重试都重复写入已导出行的根本问题，没有在导出后增加去重步骤。」。)",
+    "chapter 41 zh-CN: approved code deviation 2 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 1 行；例如「遵循了 Fix Root Causes 和 Make Operations Idempotent」。)",
+    "chapter 41 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写有状态逻辑、多分支代码，或在多个文件中重复相同前提时，用结构（状态机、带类型的模型、表或注册表、reducer、边界、合适的集合）表达领域，而非散落的条件分支。」。)",
+    "chapter 41 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 这个 PR 有个不易察觉的缺陷：即使处于空闲状态，滚动位置每 750ms 仍会偏移。先复现，再修复，然后验证。」。)",
+    "chapter 41 zh-CN: approved code deviation 5 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 4 行；例如「修改前：修好了：原因是定时器，所以我把它停了；我想现在大概没问题了。」。)",
+    "chapter 41 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 4 行；例如「// 修改前：用描述阶段的注释表示操作步骤」。)",
+    "chapter 43 zh-CN: approved code deviation 1 (将代码块内日文图示标注、文档模板或流程文字译为中文；保留结构、路径、命令及行为性字符串。 本块翻译 5 行；例如「├─ SKILL.md（从启动到清理的步骤）」。)",
+    "chapter 43 zh-CN: approved code deviation 7 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。)",
+    "chapter 43 zh-CN: approved code deviation 8 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它用 /poteto-mode 创建<功能说明和有用的上下文>；用 /control-app 验证改动，并展示视频和截图作为证据。」。)",
+    "chapter 43 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 启动云端 Agent，让它通过 /poteto-mode 改善应用首次加载时间。先用 /control-app 采集现状追踪并寻找改进空间，再有针对性地修复，…」。)",
+    "chapter 44 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 重试后，用户收到了两次通知。先复现，再修复，然后验证。」。)",
+    "chapter 44 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 阅读这个 Slack 讨论串，用自己的话简明复述你认为根本问题是什么。」。)",
+    "chapter 44 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 虚拟化是怎样实现的？」。)",
+    "chapter 44 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 回忆昨天完成的虚拟化工作，然后阅读 Slack 上的这份缺陷报告。」。)",
+    "chapter 45 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。)",
+    "chapter 45 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 3 行；例如「// 回忆过去七天修复虚拟化缺陷与性能问题的工作。用 /how 和 /why 理解当前虚拟化实现的运行方式。」。)",
+    "chapter 45 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 为<功能需求>制作几个候选原型。用 /control-app* 录制视频并截图，让我比较后选择。」。)",
+    "chapter 46 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 设计这个新的<功能需求>。」。)",
+    "chapter 46 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// price.ts（修改前）：只返回金额」。)",
+    "chapter 46 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// UserPage.ts（修改前）：页面代码持有缓存」。)",
+    "chapter 46 zh-CN: approved code deviation 4 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 2 行；例如「// userApi.ts（修改后）：获取数据的模块持有缓存」。)",
+    "chapter 46 zh-CN: approved code deviation 5 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 5 行；例如「// 骨架中定义的类型：没有币种字段」。)",
+    "chapter 46 zh-CN: approved code deviation 6 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 把这个设计写成计划。」。)",
+    "chapter 46 zh-CN: approved code deviation 7 (将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 5 行；例如「# webhook 限流计划文档」。)",
+    "chapter 46 zh-CN: approved code deviation 8 (将代码块内 Markdown 或脚本说明译为中文；保留命令、路径、配置键和示例结构。 本块翻译 17 行；例如「## 添加按发送方限流的功能（PR 2）」。)",
+    "chapter 46 zh-CN: approved code deviation 9 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 调查后台 Worker 周期性因超时错误而失败的原因。分别列出已知事实、使用的数据和最有力的假设。」。)",
+    "chapter 46 zh-CN: approved code deviation 10 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 外部 webhook 需要限流。先用 /architect 做设计，用原型解答未决问题，再让我审阅后继续。」。)",
+    "chapter 46 zh-CN: approved code deviation 11 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 制定将整个 UI 库迁移到 StyleX 的计划，拆成可小步验证的 PR。每个 PR 都要有视觉回归测试和在运行中应用验证的步骤。最终效果要与原来 100% …」。)",
+    "chapter 46 zh-CN: approved code deviation 12 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// （讨论串中已有足够上下文）请照此执行。」。)",
+    "chapter 46 zh-CN: approved code deviation 13 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 用 /control-app 复现这个问题。在 main 上复现后修复，并用视频展示证据。」。)",
+    "chapter 46 zh-CN: approved code deviation 14 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 1. 先写调用方的用法」。)",
+    "chapter 46 zh-CN: approved code deviation 15 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 3 行；例如「// 仅对旧格式订单另行计算」。)",
+    "chapter 46 zh-CN: approved code deviation 16 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架的前提：每个发送方的计数只由一个处理过程读写」。)",
+    "chapter 46 zh-CN: approved code deviation 17 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 实现过程中：试图加入骨架中没有的锁」。)",
+    "chapter 46 zh-CN: approved code deviation 18 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「limiter.init(); // 内部约定要求先调用此方法」。)",
+    "chapter 46 zh-CN: approved code deviation 19 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 1 行；例如「// 骨架：只接收订单」。)",
+    "chapter 46 zh-CN: approved code deviation 20 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「// 实现 invoice.ts 时：发现需要骨架中没有的 locale 参数」。)",
+    "chapter 46 zh-CN: approved code deviation 21 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 36 行；例如「# webhook 限流计划文档」。)",
+    "chapter 47 zh-CN: approved code deviation 1 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 10 行；例如「# 便捷点餐」。)",
+    "chapter 47 zh-CN: approved code deviation 2 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 4 行；例如「❓ **Q1** - **可取消的阶段**: README 写着「取餐前可以取消订单」。制作中的订单也可以取消吗？」。)",
+    "chapter 47 zh-CN: approved code deviation 3 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 9 行；例如「# 订单」。)",
+    "chapter 47 zh-CN: approved code deviation 4 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。)",
+    "chapter 47 zh-CN: approved code deviation 5 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 11 行；例如「# 创建笔记」。)",
+    "chapter 47 zh-CN: approved code deviation 6 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 按店铺分别在独立数据库中保存订单数据」。)",
+    "chapter 47 zh-CN: approved code deviation 7 (将高亮 HTML pre 中的日文注释或文档说明译为中文；保留标签结构、命令、标识符及影响行为的原始字符串。 本块翻译 2 行；例如「# 将订单数据集中到一个数据库」。)",
+    "chapter 48 zh-CN: approved code deviation 1 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 给这个命令增加 JSON 输出。文本输出必须逐字节保持不变。JSON 必须能够解析。两种输出都要在示例项目中运行。请展示证据。」。)",
+    "chapter 48 zh-CN: approved code deviation 2 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 创建<功能说明和有用的上下文>，用 /control-app 验证改动，并展示视频和截图作为证据。」。)",
+    "chapter 48 zh-CN: approved code deviation 3 (将示例提示词或说明性代码注释译为中文；保留可执行语句、命令、标识符和行为性字符串。 本块翻译 1 行；例如「// 编写 any 时 lint 应报错（假设已引入 typescript-eslint）。」。)"
+  ]
+}
+
+> oh-my-stack@0.16.0 lint:markdown
+> markdownlint-cli2 "**/*.md"
+
+markdownlint-cli2 v0.23.3 (markdownlint v0.41.1)
+Finding: **/*.md !.git/** !.tmp/** !node_modules/** !upstream/snapshots/** !upstream/books/**
+Linting: 1148 files
+Summary: 0 issues in 0 files
+
+> oh-my-stack@0.16.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: recorded AIHero research and planning fixtures preserve approval gates and actual artifacts
+ok 1 - recorded AIHero research and planning fixtures preserve approval gates and actual artifacts
+  ---
+  duration_ms: 37.682625
+  type: 'test'
+  ...
+# Subtest: poteto-mode preserves the upstream playbook index, triggers, and authority gates
+ok 2 - poteto-mode preserves the upstream playbook index, triggers, and authority gates
+  ---
+  duration_ms: 9.81825
+  type: 'test'
+  ...
+# Subtest: alpha three playbooks preserve their safety boundaries
+ok 3 - alpha three playbooks preserve their safety boundaries
+  ---
+  duration_ms: 3.439667
+  type: 'test'
+  ...
+# Subtest: architecture candidates have one requirements-consistent winner
+ok 4 - architecture candidates have one requirements-consistent winner
+  ---
+  duration_ms: 36.63325
+  type: 'test'
+  ...
+# Subtest: autonomous run advances one verified unit per iteration and stops at its predicate
+ok 5 - autonomous run advances one verified unit per iteration and stops at its predicate
+  ---
+  duration_ms: 1285.19025
+  type: 'test'
+  ...
+# Subtest: autonomous controller rejects an iteration that edits a future unit
+ok 6 - autonomous controller rejects an iteration that edits a future unit
+  ---
+  duration_ms: 368.415333
+  type: 'test'
+  ...
+# Subtest: autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+ok 7 - autonomous wake persists one bounded heartbeat handoff and consumes one ready event
+  ---
+  duration_ms: 368.838917
+  type: 'test'
+  ...
+# Subtest: autonomous wake preserves a standalone cron provider through resume and cleanup
+ok 8 - autonomous wake preserves a standalone cron provider through resume and cleanup
+  ---
+  duration_ms: 381.4985
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an early or mismatched resume without consuming the wake
+ok 9 - autonomous wake rejects an early or mismatched resume without consuming the wake
+  ---
+  duration_ms: 173.513834
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an expired deadline without consuming the ready event
+ok 10 - autonomous wake rejects an expired deadline without consuming the ready event
+  ---
+  duration_ms: 215.6075
+  type: 'test'
+  ...
+# Subtest: autonomous wake rejects an exhausted wake budget before consuming the ready event
+ok 11 - autonomous wake rejects an exhausted wake budget before consuming the ready event
+  ---
+  duration_ms: 213.124625
+  type: 'test'
+  ...
+# Subtest: autonomous wake falls back to a durable pause without inventing a schedule
+ok 12 - autonomous wake falls back to a durable pause without inventing a schedule
+  ---
+  duration_ms: 148.38675
+  type: 'test'
+  ...
+# Subtest: autopilot full keeps verdicts in root while each owner lands its own current change
+ok 13 - autopilot full keeps verdicts in root while each owner lands its own current change
+  ---
+  duration_ms: 3249.626333
+  type: 'test'
+  ...
+# Subtest: autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+ok 14 - autopilot full rejects uncountersigned, root-executed, stale, and operator-held merges
+  ---
+  duration_ms: 1491.966917
+  type: 'test'
+  ...
+# Subtest: local provider drives a PR through CI failure, retry, approval, and merge
+ok 15 - local provider drives a PR through CI failure, retry, approval, and merge
+  ---
+  duration_ms: 46.884416
+  type: 'test'
+  ...
+# Subtest: stale revisions fail closed and a blocked merge records a deterministic failure
+ok 16 - stale revisions fail closed and a blocked merge records a deterministic failure
+  ---
+  duration_ms: 17.769375
+  type: 'test'
+  ...
+# Subtest: state recovers across a subprocess boundary without provider credentials
+ok 17 - state recovers across a subprocess boundary without provider credentials
+  ---
+  duration_ms: 51.077959
+  type: 'test'
+  ...
+# Subtest: autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+ok 18 - autopilot stack builds, independently verifies, and delivers an unmerged linear chain
+  ---
+  duration_ms: 2369.337833
+  type: 'test'
+  ...
+# Subtest: autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+ok 19 - autopilot stack rejects missing verdicts, owner topology writes, and changed reviewed heads
+  ---
+  duration_ms: 1182.242292
+  type: 'test'
+  ...
+# Subtest: babysit check reports one frozen frontier without mutating it
+ok 20 - babysit check reports one frozen frontier without mutating it
+  ---
+  duration_ms: 359.1695
+  type: 'test'
+  ...
+# Subtest: babysit drive repairs and pushes one wave without merging
+ok 21 - babysit drive repairs and pushes one wave without merging
+  ---
+  duration_ms: 951.280292
+  type: 'test'
+  ...
+# Subtest: Benny stays dormant until thread-safe triage and repro pass end to end
+ok 22 - Benny stays dormant until thread-safe triage and repro pass end to end
+  ---
+  duration_ms: 488.060708
+  type: 'test'
+  ...
+# Subtest: Benny compensates a tracker write when its thread-only verdict cannot land
+ok 23 - Benny compensates a tracker write when its thread-only verdict cannot land
+  ---
+  duration_ms: 239.243292
+  type: 'test'
+  ...
+# Subtest: Benny refuses missing parents, untrusted markers, and insufficient UI proof
+ok 24 - Benny refuses missing parents, untrusted markers, and insufficient UI proof
+  ---
+  duration_ms: 839.422375
+  type: 'test'
+  ...
+# Subtest: bug-fix-root starts with the intended failure and passes after the bounded fix
+ok 25 - bug-fix-root starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 188.212416
+  type: 'test'
+  ...
+# Subtest: bug-fix-delegated starts with the intended failure and passes after the bounded fix
+ok 26 - bug-fix-delegated starts with the intended failure and passes after the bounded fix
+  ---
+  duration_ms: 172.5285
+  type: 'test'
+  ...
+# Subtest: Claude effort hook records only bounded child identity and effective effort
+ok 27 - Claude effort hook records only bounded child identity and effective effort
+  ---
+  duration_ms: 109.32025
+  type: 'test'
+  ...
+# Subtest: current packaged route contracts override stale roles without changing saved model effort or order
+ok 28 - current packaged route contracts override stale roles without changing saved model effort or order
+  ---
+  duration_ms: 1046.41
+  type: 'test'
+  ...
+# Subtest: Codex delegation derives explicit parameters and complete role instructions for ordered routes
+ok 29 - Codex delegation derives explicit parameters and complete role instructions for ordered routes
+  ---
+  duration_ms: 32.628208
+  type: 'test'
+  ...
+# Subtest: inheritance becomes explicit and does not silently omit effort
+ok 30 - inheritance becomes explicit and does not silently omit effort
+  ---
+  duration_ms: 1.629041
+  type: 'test'
+  ...
+# Subtest: verification requires matching parent call, child link, and runtime turn context
+ok 31 - verification requires matching parent call, child link, and runtime turn context
+  ---
+  duration_ms: 38.772834
+  type: 'test'
+  ...
+# Subtest: every generated Codex spawning workflow carries the same binding while OMP does not
+ok 32 - every generated Codex spawning workflow carries the same binding while OMP does not
+  ---
+  duration_ms: 37.8805
+  type: 'test'
+  ...
+# Subtest: OMP model output normalizes provider-qualified selectors and reported efforts
+ok 33 - OMP model output normalizes provider-qualified selectors and reported efforts
+  ---
+  duration_ms: 0.619208
+  type: 'test'
+  ...
+# Subtest: Codex model/list normalizes model ids and supported reasoning efforts
+ok 34 - Codex model/list normalizes model ids and supported reasoning efforts
+  ---
+  duration_ms: 0.1145
+  type: 'test'
+  ...
+# Subtest: inventory normalization rejects duplicates and Claude probes require consent
+ok 35 - inventory normalization rejects duplicates and Claude probes require consent
+  ---
+  duration_ms: 0.28925
+  type: 'test'
+  ...
+# Subtest: Claude probe accepts only observed family and reviewed effort policy
+ok 36 - Claude probe accepts only observed family and reviewed effort policy
+  ---
+  duration_ms: 0.302375
+  type: 'test'
+  ...
+# Subtest: Claude default probes all three families with consent and honors explicit subsets
+ok 37 - Claude default probes all three families with consent and honors explicit subsets
+  ---
+  duration_ms: 268.155042
+  type: 'test'
+  ...
+# Subtest: upgrading saved code and Architect roles refreshes native contracts while retaining model effort and panel size
+ok 38 - upgrading saved code and Architect roles refreshes native contracts while retaining model effort and panel size
+  ---
+  duration_ms: 2735.593333
+  type: 'test'
+  ...
+# Subtest: current Claude setup uses all three workload families and fresh Opus Sonnet panels
+ok 39 - current Claude setup uses all three workload families and fresh Opus Sonnet panels
+  ---
+  duration_ms: 1051.50575
+  type: 'test'
+  ...
+# Subtest: fresh generic and every available preset panel has two members on all hosts
+ok 40 - fresh generic and every available preset panel has two members on all hosts
+  ---
+  duration_ms: 149.676375
+  type: 'test'
+  ...
+# Subtest: same-target same-preset reruns preserve saved three-member order models and efforts on all hosts
+ok 41 - same-target same-preset reruns preserve saved three-member order models and efforts on all hosts
+  ---
+  duration_ms: 1314.957084
+  type: 'test'
+  ...
+# Subtest: fresh omitted budget is large and explicit unlimited targets max with exact-selector fallback and no ultra
+ok 42 - fresh omitted budget is large and explicit unlimited targets max with exact-selector fallback and no ultra
+  ---
+  duration_ms: 22.813375
+  type: 'test'
+  ...
+# Subtest: legacy absent, empty, sparse and explicit overrides retain every effective choice and ordered panel on two reruns
+ok 43 - legacy absent, empty, sparse and explicit overrides retain every effective choice and ordered panel on two reruns
+  ---
+  duration_ms: 480.483667
+  type: 'test'
+  ...
+# Subtest: configuration CLI exposes max policy in a detached preview and retains choices on apply rerun
+ok 44 - configuration CLI exposes max policy in a detached preview and retains choices on apply rerun
+  ---
+  duration_ms: 165.9055
+  type: 'test'
+  ...
+# Subtest: explicit route and panel changes leave untouched migrated entries exact
+ok 45 - explicit route and panel changes leave untouched migrated entries exact
+  ---
+  duration_ms: 67.579334
+  type: 'test'
+  ...
+# Subtest: saved bounded choices do not rise when inventory expands, while explicit patches use the saved target
+ok 46 - saved bounded choices do not rise when inventory expands, while explicit patches use the saved target
+  ---
+  duration_ms: 67.711542
+  type: 'test'
+  ...
+# Subtest: legacy capped budget and explicit high choices remain exact with sparse intent
+ok 47 - legacy capped budget and explicit high choices remain exact with sparse intent
+  ---
+  duration_ms: 102.462
+  type: 'test'
+  ...
+# Subtest: unlimited fallback ignores unrecognized effort names and refuses models with only effort above max
+ok 48 - unlimited fallback ignores unrecognized effort names and refuses models with only effort above max
+  ---
+  duration_ms: 8.143
+  type: 'test'
+  ...
+# Subtest: workload edits reach only derived slots and uniform survives reruns until explicit reset
+ok 49 - workload edits reach only derived slots and uniform survives reruns until explicit reset
+  ---
+  duration_ms: 58.4795
+  type: 'test'
+  ...
+# Subtest: legacy uniform reset recovers known raw effort without replacing retained selectors or panels
+ok 50 - legacy uniform reset recovers known raw effort without replacing retained selectors or panels
+  ---
+  duration_ms: 91.475875
+  type: 'test'
+  ...
+# Subtest: legacy uniform migration never saves an unsupported preset reset effort
+ok 51 - legacy uniform migration never saves an unsupported preset reset effort
+  ---
+  duration_ms: 133.269166
+  type: 'test'
+  ...
+# Subtest: legacy non-preset configuration preserves effective choices and routes through reruns
+ok 52 - legacy non-preset configuration preserves effective choices and routes through reruns
+  ---
+  duration_ms: 67.227625
+  type: 'test'
+  ...
+# Subtest: unsupported policy, selected effort and absent selectors fail before any apply writes
+ok 53 - unsupported policy, selected effort and absent selectors fail before any apply writes
+  ---
+  duration_ms: 32.165833
+  type: 'test'
+  ...
+# Subtest: Claude pstack builds fast Haiku and ordered two-member panels from observed IDs
+ok 54 - Claude pstack builds fast Haiku and ordered two-member panels from observed IDs
+  ---
+  duration_ms: 56.657542
+  type: 'test'
+  ...
+# Subtest: Claude pstack handles Haiku without effort and refuses absent or ambiguous families
+ok 55 - Claude pstack handles Haiku without effort and refuses absent or ambiguous families
+  ---
+  duration_ms: 40.582833
+  type: 'test'
+  ...
+# Subtest: setup resolves only observed models into every target-native role format
+ok 56 - setup resolves only observed models into every target-native role format
+  ---
+  duration_ms: 76.94225
+  type: 'test'
+  ...
+# Subtest: setup rejects unobserved choices and modified owned files without touching unrelated files
+ok 57 - setup rejects unobserved choices and modified owned files without touching unrelated files
+  ---
+  duration_ms: 61.086
+  type: 'test'
+  ...
+# Subtest: project activation previews and writes only native Codex and OMP role directories
+ok 58 - project activation previews and writes only native Codex and OMP role directories
+  ---
+  duration_ms: 56.041875
+  type: 'test'
+  ...
+# Subtest: project activation CLI and safety gate reject symlinks and unowned roles
+ok 59 - project activation CLI and safety gate reject symlinks and unowned roles
+  ---
+  duration_ms: 53.367125
+  type: 'test'
+  ...
+# Subtest: pstack preset creates named workflow routes and ordered native panels on both runtimes
+ok 60 - pstack preset creates named workflow routes and ordered native panels on both runtimes
+  ---
+  duration_ms: 69.206209
+  type: 'test'
+  ...
+# Subtest: OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5 or GPT-6 Sol
+ok 61 - OMP OpenAI-Codex alternative previews current tiers without selecting legacy GPT-5.5 or GPT-6 Sol
+  ---
+  duration_ms: 9.048459
+  type: 'test'
+  ...
+# Subtest: Codex retains effective Sol choices across preset upgrades and never falls back silently
+ok 62 - Codex retains effective Sol choices across preset upgrades and never falls back silently
+  ---
+  duration_ms: 319.668916
+  type: 'test'
+  ...
+# Subtest: Claude 5.5 observations configure current models with real effort support
+ok 63 - Claude 5.5 observations configure current models with real effort support
+  ---
+  duration_ms: 14.770458
+  type: 'test'
+  ...
+# Subtest: OMP and Codex raise matching OpenAI route efforts to the budget target
+ok 64 - OMP and Codex raise matching OpenAI route efforts to the budget target
+  ---
+  duration_ms: 15.711541
+  type: 'test'
+  ...
+# Subtest: uniform high override is explicit, checked against inventory and budget, and reversible
+ok 65 - uniform high override is explicit, checked against inventory and budget, and reversible
+  ---
+  duration_ms: 32.519125
+  type: 'test'
+  ...
+# Subtest: budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+ok 66 - budget, inheritance, route overrides, and panel shrink stay owned and deterministic
+  ---
+  duration_ms: 52.763083
+  type: 'test'
+  ...
+# Subtest: unobserved preset and modified obsolete panel agent fail without partial writes
+ok 67 - unobserved preset and modified obsolete panel agent fail without partial writes
+  ---
+  duration_ms: 35.762834
+  type: 'test'
+  ...
+# Subtest: OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+ok 68 - OMP mirrors source slots, targets budget effort, and retains explicit choices on re-run
+  ---
+  duration_ms: 86.775334
+  type: 'test'
+  ...
+# Subtest: OMP and Codex generated workflows bind separate source-style slots
+ok 69 - OMP and Codex generated workflows bind separate source-style slots
+  ---
+  duration_ms: 2.350083
+  type: 'test'
+  ...
+# Subtest: conflicting writers fixture requires both owned changes in one file
+ok 70 - conflicting writers fixture requires both owned changes in one file
+  ---
+  duration_ms: 103.425417
+  type: 'test'
+  ...
+# Subtest: same-scenario conformance records are deterministic and semantically aligned
+ok 71 - same-scenario conformance records are deterministic and semantically aligned
+  ---
+  duration_ms: 569.278167
+  type: 'test'
+  ...
+# Subtest: real CLI freeze, inspect and root-owned narrow verification
+ok 72 - real CLI freeze, inspect and root-owned narrow verification
+  ---
+  duration_ms: 919.749333
+  type: 'test'
+  ...
+# Subtest: normalization and rendering alone fail until the public path cooperates; baseline may change
+ok 73 - normalization and rendering alone fail until the public path cooperates; baseline may change
+  ---
+  duration_ms: 1035.291708
+  type: 'test'
+  ...
+# Subtest: inspect never executes and omitted named check is inconclusive
+ok 74 - inspect never executes and omitted named check is inconclusive
+  ---
+  duration_ms: 438.124833
+  type: 'test'
+  ...
+# Subtest: full missing design and delegated missing review reject
+ok 75 - full missing design and delegated missing review reject
+  ---
+  duration_ms: 941.901042
+  type: 'test'
+  ...
+# Subtest: complete full graph retains local pass while independence remains unverified
+ok 76 - complete full graph retains local pass while independence remains unverified
+  ---
+  duration_ms: 615.244459
+  type: 'test'
+  ...
+# Subtest: unknown provenance cannot upgrade independence, supplied verified fields reject
+ok 77 - unknown provenance cannot upgrade independence, supplied verified fields reject
+  ---
+  duration_ms: 520.478834
+  type: 'test'
+  ...
+# Subtest: self-review, stale unit review and stale comparative review reject
+ok 78 - self-review, stale unit review and stale comparative review reject
+  ---
+  duration_ms: 628.939625
+  type: 'test'
+  ...
+# Subtest: dirty source at unchanged HEAD, additions and deletions invalidate final inventory
+ok 79 - dirty source at unchanged HEAD, additions and deletions invalidate final inventory
+  ---
+  duration_ms: 366.474
+  type: 'test'
+  ...
+# Subtest: external lock pin, immutable config and harness reject replacement
+ok 80 - external lock pin, immutable config and harness reject replacement
+  ---
+  duration_ms: 183.288958
+  type: 'test'
+  ...
+# Subtest: forged imported pass never replaces named execution
+ok 81 - forged imported pass never replaces named execution
+  ---
+  duration_ms: 369.370166
+  type: 'test'
+  ...
+# Subtest: timeout and bounded output cannot pass
+ok 82 - timeout and bounded output cannot pass
+  ---
+  duration_ms: 1596.505583
+  type: 'test'
+  ...
+# Subtest: successful local observation remains recorded after source or evidence mutation rejects run
+ok 83 - successful local observation remains recorded after source or evidence mutation rejects run
+  ---
+  duration_ms: 520.635708
+  type: 'test'
+  ...
+# Subtest: configured candidate panel count and ordered repeats are frozen
+ok 84 - configured candidate panel count and ordered repeats are frozen
+  ---
+  duration_ms: 123.368042
+  type: 'test'
+  ...
+# Subtest: paths, symlinks, extra fields and unpinned harness arguments fail closed
+ok 85 - paths, symlinks, extra fields and unpinned harness arguments fail closed
+  ---
+  duration_ms: 394.852334
+  type: 'test'
+  ...
+# Subtest: nested outputs are real files and report cannot overwrite lock or evidence
+ok 86 - nested outputs are real files and report cannot overwrite lock or evidence
+  ---
+  duration_ms: 378.59175
+  type: 'test'
+  ...
+# Subtest: empty artifacts, empty owned trees, extra API fields and unknown CLI flags reject
+ok 87 - empty artifacts, empty owned trees, extra API fields and unknown CLI flags reject
+  ---
+  duration_ms: 275.951375
+  type: 'test'
+  ...
+# Subtest: actual PNG measurements enforce frozen bounds and retain capture-authenticity limitation
+ok 88 - actual PNG measurements enforce frozen bounds and retain capture-authenticity limitation
+  ---
+  duration_ms: 559.212041
+  type: 'test'
+  ...
+# Subtest: checker integrates supported native declaration records; encrypted assignments stay inconclusive
+ok 89 - checker integrates supported native declaration records; encrypted assignments stay inconclusive
+  ---
+  duration_ms: 824.389667
+  type: 'test'
+  ...
+# Subtest: native graph uses canonical child identity rather than record filename aliases
+ok 90 - native graph uses canonical child identity rather than record filename aliases
+  ---
+  duration_ms: 339.184209
+  type: 'test'
+  ...
+# Subtest: actual Git HEAD stays unchanged while dirty source invalidates final inventory
+ok 91 - actual Git HEAD stays unchanged while dirty source invalidates final inventory
+  ---
+  duration_ms: 178.020875
+  type: 'test'
+  ...
+# Subtest: canonical report owner preserves all relative authority and absolute native aliases byte for byte
+ok 92 - canonical report owner preserves all relative authority and absolute native aliases byte for byte
+  ---
+  duration_ms: 716.050667
+  type: 'test'
+  ...
+# Subtest: diff destinations use the same authority protection before any report write
+ok 93 - diff destinations use the same authority protection before any report write
+  ---
+  duration_ms: 155.222541
+  type: 'test'
+  ...
+# Subtest: invalid inputs cannot establish an error destination and never write fallback reports
+ok 94 - invalid inputs cannot establish an error destination and never write fallback reports
+  ---
+  duration_ms: 54.101416
+  type: 'test'
+  ...
+# Subtest: every shared-parent prefix survives traversal reorder; append passes but later spawn mutation rejects
+ok 95 - every shared-parent prefix survives traversal reorder; append passes but later spawn mutation rejects
+  ---
+  duration_ms: 575.328375
+  type: 'test'
+  ...
+# Subtest: configured ordered panel binds both native model and effort and supports reviewed alias without conflict
+ok 96 - configured ordered panel binds both native model and effort and supports reviewed alias without conflict
+  ---
+  duration_ms: 1365.820333
+  type: 'test'
+  ...
+# Subtest: missing, inherited and unknown configured panel selections cannot accept full delivery
+ok 97 - missing, inherited and unknown configured panel selections cannot accept full delivery
+  ---
+  duration_ms: 1344.934875
+  type: 'test'
+  ...
+# Subtest: configured slots retain the full floor and must match their derived frozen mapping
+ok 98 - configured slots retain the full floor and must match their derived frozen mapping
+  ---
+  duration_ms: 146.208375
+  type: 'test'
+  ...
+# Subtest: per-unit and comparative judgments cannot reuse one frozen native assignment
+ok 99 - per-unit and comparative judgments cannot reuse one frozen native assignment
+  ---
+  duration_ms: 324.498708
+  type: 'test'
+  ...
+# Subtest: pre-execution pins reject artifact, request and child mutation after initial validation
+ok 100 - pre-execution pins reject artifact, request and child mutation after initial validation
+  ---
+  duration_ms: 632.17975
+  type: 'test'
+  ...
+# Subtest: canonical source-directory aliases reject existing and new report paths without changing source
+ok 101 - canonical source-directory aliases reject existing and new report paths without changing source
+  ---
+  duration_ms: 214.063084
+  type: 'test'
+  ...
+# Subtest: executable replacement after validation cannot establish a new pre-execution baseline
+ok 102 - executable replacement after validation cannot establish a new pre-execution baseline
+  ---
+  duration_ms: 4394.175291
+  type: 'test'
+  ...
+# Subtest: frozen source exclusions permit reports while included source and immutable exclusions stay protected
+ok 103 - frozen source exclusions permit reports while included source and immutable exclusions stay protected
+  ---
+  duration_ms: 798.732167
+  type: 'test'
+  ...
+# Subtest: equal PNG returns exact normalized dimensions and deterministic valid transparent diff
+ok 104 - equal PNG returns exact normalized dimensions and deterministic valid transparent diff
+  ---
+  duration_ms: 1.811792
+  type: 'test'
+  ...
+# Subtest: changed samples count pixels once, include alpha, and bound all changed coordinates
+ok 105 - changed samples count pixels once, include alpha, and bound all changed coordinates
+  ---
+  duration_ms: 0.71425
+  type: 'test'
+  ...
+# Subtest: RGB normalizes alpha to 255; hidden RGB under zero alpha is compared exactly
+ok 106 - RGB normalizes alpha to 255; hidden RGB under zero alpha is compared exactly
+  ---
+  duration_ms: 0.35125
+  type: 'test'
+  ...
+# Subtest: all standard row filters restore RGB and RGBA samples across edges, wraparound and split IDAT
+ok 107 - all standard row filters restore RGB and RGBA samples across edges, wraparound and split IDAT
+  ---
+  duration_ms: 2.315917
+  type: 'test'
+  ...
+# Subtest: dimension mismatch, zero/oversized dimensions and pixel/decoded budgets fail
+ok 108 - dimension mismatch, zero/oversized dimensions and pixel/decoded budgets fail
+  ---
+  duration_ms: 1.187833
+  type: 'test'
+  ...
+# Subtest: input type, signature, CRC, truncation, invalid chunk names and lengths fail closed
+ok 109 - input type, signature, CRC, truncation, invalid chunk names and lengths fail closed
+  ---
+  duration_ms: 3.364708
+  type: 'test'
+  ...
+# Subtest: critical chunk order, duplicates, missing data, invalid palette and trailing bytes fail
+ok 110 - critical chunk order, duplicates, missing data, invalid palette and trailing bytes fail
+  ---
+  duration_ms: 1.640167
+  type: 'test'
+  ...
+# Subtest: unsupported depth, color, interlace, methods, profiles and ancillary transforms are rejected
+ok 111 - unsupported depth, color, interlace, methods, profiles and ancillary transforms are rejected
+  ---
+  duration_ms: 0.891958
+  type: 'test'
+  ...
+# Subtest: zlib validates exact decoded size, expansion bound, stream checksum and consumed input
+ok 112 - zlib validates exact decoded size, expansion bound, stream checksum and consumed input
+  ---
+  duration_ms: 3.91525
+  type: 'test'
+  ...
+# Subtest: real-shaped final_answer records verify bounded writer and accepted judge attribution
+ok 113 - real-shaped final_answer records verify bounded writer and accepted judge attribution
+  ---
+  duration_ms: 73.860666
+  type: 'test'
+  ...
+# Subtest: swapped parent, child, task name and unrelated valid receipt fail closed
+ok 114 - swapped parent, child, task name and unrelated valid receipt fail closed
+  ---
+  duration_ms: 73.041959
+  type: 'test'
+  ...
+# Subtest: encrypted parent is INDEPENDENCE_UNVERIFIED even when existing linkage accepts it
+ok 115 - encrypted parent is INDEPENDENCE_UNVERIFIED even when existing linkage accepts it
+  ---
+  duration_ms: 13.326375
+  type: 'test'
+  ...
+# Subtest: output bytes, output paths, lock and review targets cannot be swapped
+ok 116 - output bytes, output paths, lock and review targets cannot be swapped
+  ---
+  duration_ms: 49.603458
+  type: 'test'
+  ...
+# Subtest: user, commentary, tool and function-call declaration text cannot become final authority
+ok 117 - user, commentary, tool and function-call declaration text cannot become final authority
+  ---
+  duration_ms: 37.519375
+  type: 'test'
+  ...
+# Subtest: copied record aliases retain canonical child identity for checker self-review comparison
+ok 118 - copied record aliases retain canonical child identity for checker self-review comparison
+  ---
+  duration_ms: 13.237166
+  type: 'test'
+  ...
+# Subtest: later activity, multiple finals, duplicate blocks and changes-required never pass
+ok 119 - later activity, multiple finals, duplicate blocks and changes-required never pass
+  ---
+  duration_ms: 37.895042
+  type: 'test'
+  ...
+# Subtest: detached verification flags, host backing conversations and role or inherited spawns have no authority
+ok 120 - detached verification flags, host backing conversations and role or inherited spawns have no authority
+  ---
+  duration_ms: 23.230834
+  type: 'test'
+  ...
+# Subtest: model drift, missing contexts, repeated spawn and metadata identities are rejected
+ok 121 - model drift, missing contexts, repeated spawn and metadata identities are rejected
+  ---
+  duration_ms: 55.273708
+  type: 'test'
+  ...
+# Subtest: strict protocol refuses unknown keys, duplicate targets and unexpected assignment scope
+ok 122 - strict protocol refuses unknown keys, duplicate targets and unexpected assignment scope
+  ---
+  duration_ms: 68.827666
+  type: 'test'
+  ...
+# Subtest: benign parent append preserves a bounded prefix and its digest
+ok 123 - benign parent append preserves a bounded prefix and its digest
+  ---
+  duration_ms: 11.196667
+  type: 'test'
+  ...
+# Subtest: during-read parent prefix and child mutation reject, benign concurrent append passes
+ok 124 - during-read parent prefix and child mutation reject, benign concurrent append passes
+  ---
+  duration_ms: 21.2475
+  type: 'test'
+  ...
+# Subtest: explicit enhanced-delivery packages reject broken public behavior and accept repaired narrow output
+ok 125 - explicit enhanced-delivery packages reject broken public behavior and accept repaired narrow output
+  ---
+  duration_ms: 6510.47875
+  type: 'test'
+  ...
+# Subtest: durable state survives a process boundary and recovers a completed run
+ok 126 - durable state survives a process boundary and recovers a completed run
+  ---
+  duration_ms: 97.664584
+  type: 'test'
+  ...
+# Subtest: a waiting checkpoint can be continued by a fresh process
+ok 127 - a waiting checkpoint can be continued by a fresh process
+  ---
+  duration_ms: 84.275583
+  type: 'test'
+  ...
+# Subtest: identical event appends are idempotent while conflicting IDs are rejected
+ok 128 - identical event appends are idempotent while conflicting IDs are rejected
+  ---
+  duration_ms: 88.221125
+  type: 'test'
+  ...
+# Subtest: load accepts an append-compatible history through waiting, continuation, and failure
+ok 129 - load accepts an append-compatible history through waiting, continuation, and failure
+  ---
+  duration_ms: 30.653583
+  type: 'test'
+  ...
+# Subtest: load rejects on-disk histories that append could not produce
+    # Subtest: duplicate eventId
+    ok 1 - duplicate eventId
+      ---
+      duration_ms: 10.185125
+      type: 'test'
+      ...
+    # Subtest: second start
+    ok 2 - second start
+      ---
+      duration_ms: 13.677916
+      type: 'test'
+      ...
+    # Subtest: missing initial start
+    ok 3 - missing initial start
+      ---
+      duration_ms: 12.693958
+      type: 'test'
+      ...
+    # Subtest: event after completed
+    ok 4 - event after completed
+      ---
+      duration_ms: 12.090416
+      type: 'test'
+      ...
+    # Subtest: event after failed
+    ok 5 - event after failed
+      ---
+      duration_ms: 11.985458
+      type: 'test'
+      ...
+    1..5
+ok 130 - load rejects on-disk histories that append could not produce
+  ---
+  duration_ms: 61.958
+  type: 'test'
+  ...
+# Subtest: stale generations, malformed stores, and paths outside the store fail closed
+ok 131 - stale generations, malformed stores, and paths outside the store fail closed
+  ---
+  duration_ms: 155.35675
+  type: 'test'
+  ...
+# Subtest: store paths are bounded by the explicit store root
+ok 132 - store paths are bounded by the explicit store root
+  ---
+  duration_ms: 0.570625
+  type: 'test'
+  ...
+# Subtest: store paths reject symlinked or junction parents that escape the store root
+ok 133 - store paths reject symlinked or junction parents that escape the store root
+  ---
+  duration_ms: 2.316125
+  type: 'test'
+  ...
+# Subtest: independently loaded writers preserve the first append and reject a stale revision
+ok 134 - independently loaded writers preserve the first append and reject a stale revision
+  ---
+  duration_ms: 22.247041
+  type: 'test'
+  ...
+# Subtest: true concurrent subprocess writers cannot erase one another
+ok 135 - true concurrent subprocess writers cannot erase one another
+  ---
+  duration_ms: 72.784167
+  type: 'test'
+  ...
+# Subtest: an existing lock fails closed without changing local or disk state
+ok 136 - an existing lock fails closed without changing local or disk state
+  ---
+  duration_ms: 2028.281916
+  type: 'test'
+  ...
+# Subtest: stale generation and revision plus secret fields never partially write
+ok 137 - stale generation and revision plus secret fields never partially write
+  ---
+  duration_ms: 10.672583
+  type: 'test'
+  ...
+# Subtest: a valid on-disk generation replacement is rejected by a loaded writer
+ok 138 - a valid on-disk generation replacement is rejected by a loaded writer
+  ---
+  duration_ms: 9.196709
+  type: 'test'
+  ...
+# Subtest: append rejects a parent replaced by an escaping junction after load
+ok 139 - append rejects a parent replaced by an escaping junction after load
+  ---
+  duration_ms: 6.873084
+  type: 'test'
+  ...
+# Subtest: feature-routing starts with absent behavior and passes through the named boundary
+ok 140 - feature-routing starts with absent behavior and passes through the named boundary
+  ---
+  duration_ms: 174.413375
+  type: 'test'
+  ...
+# Subtest: all host descriptors preserve Poteto code contracts and bounded Architect writers
+ok 141 - all host descriptors preserve Poteto code contracts and bounded Architect writers
+  ---
+  duration_ms: 2149.312417
+  type: 'test'
+  ...
+# Subtest: default routing resources remain present with every extension selection
+ok 142 - default routing resources remain present with every extension selection
+  ---
+  duration_ms: 7565.420667
+  type: 'test'
+  ...
+# Subtest: generator CLI writes isolated strict or opt-in outputs and rejects unknown selections
+ok 143 - generator CLI writes isolated strict or opt-in outputs and rejects unknown selections
+  ---
+  duration_ms: 741.821458
+  type: 'test'
+  ...
+# Subtest: Codex bundles the bounded GitHub workflow and its dependencies
+ok 144 - Codex bundles the bounded GitHub workflow and its dependencies
+  ---
+  duration_ms: 270.878292
+  type: 'test'
+  ...
+# Subtest: Codex wraps long core entries and preserves source originals byte for byte
+ok 145 - Codex wraps long core entries and preserves source originals byte for byte
+  ---
+  duration_ms: 281.548375
+  type: 'test'
+  ...
+# Subtest: OMP delegated workflows describe the current background-job lifecycle
+ok 146 - OMP delegated workflows describe the current background-job lifecycle
+  ---
+  duration_ms: 242.14375
+  type: 'test'
+  ...
+# Subtest: Codex keeps all direct entries with concise metadata and unchanged bodies
+ok 147 - Codex keeps all direct entries with concise metadata and unchanged bodies
+  ---
+  duration_ms: 282.181459
+  type: 'test'
+  ...
+# Subtest: default selection includes routing and excludes optional additions across four adapters
+ok 148 - default selection includes routing and excludes optional additions across four adapters
+  ---
+  duration_ms: 317.062292
+  type: 'test'
+  ...
+# Subtest: Pi renders independent JSON roles contracts and explicit canonical-role routes
+ok 149 - Pi renders independent JSON roles contracts and explicit canonical-role routes
+  ---
+  duration_ms: 208.978209
+  type: 'test'
+  ...
+# Subtest: live profiles cite surface-specific evidence
+ok 150 - live profiles cite surface-specific evidence
+  ---
+  duration_ms: 90.563834
+  type: 'test'
+  ...
+# Subtest: portable core rejects runtime bindings
+ok 151 - portable core rejects runtime bindings
+  ---
+  duration_ms: 0.312792
+  type: 'test'
+  ...
+# Subtest: unsupported requirements need an explicit fallback
+ok 152 - unsupported requirements need an explicit fallback
+  ---
+  duration_ms: 87.665292
+  type: 'test'
+  ...
+# Subtest: rendering is deterministic for every adapter
+ok 153 - rendering is deterministic for every adapter
+  ---
+  duration_ms: 1391.843125
+  type: 'test'
+  ...
+# Subtest: explicit invocation renders as target-native policy
+ok 154 - explicit invocation renders as target-native policy
+  ---
+  duration_ms: 624.158375
+  type: 'test'
+  ...
+# Subtest: writable roles render native write permissions while read-only roles stay constrained
+ok 155 - writable roles render native write permissions while read-only roles stay constrained
+  ---
+  duration_ms: 638.9185
+  type: 'test'
+  ...
+# Subtest: isolated generation and check leave committed packages unchanged
+ok 156 - isolated generation and check leave committed packages unchanged
+  ---
+  duration_ms: 1446.758583
+  type: 'test'
+  ...
+# Subtest: release packages expose public Skills while probe Skills remain test-only
+ok 157 - release packages expose public Skills while probe Skills remain test-only
+  ---
+  duration_ms: 1147.340667
+  type: 'test'
+  ...
+# Subtest: generated manifests identify the public source repository
+ok 158 - generated manifests identify the public source repository
+  ---
+  duration_ms: 574.044542
+  type: 'test'
+  ...
+# Subtest: an exact branch lease permits the owned rewrite and rejects a concurrent writer
+ok 159 - an exact branch lease permits the owned rewrite and rejects a concurrent writer
+  ---
+  duration_ms: 978.815208
+  type: 'test'
+  ...
+# Subtest: GitHub provider exposes an authenticated exact-target read
+ok 160 - GitHub provider exposes an authenticated exact-target read
+  ---
+  duration_ms: 1.070042
+  type: 'test'
+  ...
+# Subtest: target and account are explicit and verified
+ok 161 - target and account are explicit and verified
+  ---
+  duration_ms: 0.675209
+  type: 'test'
+  ...
+# Subtest: inspect PR reports actual SHAs and conservative gates
+ok 162 - inspect PR reports actual SHAs and conservative gates
+  ---
+  duration_ms: 1.30825
+  type: 'test'
+  ...
+# Subtest: diagnostic reports bounded current-head required check failure without relaxing inspection or merge
+ok 163 - diagnostic reports bounded current-head required check failure without relaxing inspection or merge
+  ---
+  duration_ms: 10.4945
+  type: 'test'
+  ...
+# Subtest: diagnostic distinguishes missing, pending, wrong-app, stale, and incomplete check data
+ok 164 - diagnostic distinguishes missing, pending, wrong-app, stale, and incomplete check data
+  ---
+  duration_ms: 1.518042
+  type: 'test'
+  ...
+# Subtest: null and malformed check observations stay unknown under both review policies
+ok 165 - null and malformed check observations stay unknown under both review policies
+  ---
+  duration_ms: 0.697583
+  type: 'test'
+  ...
+# Subtest: independent OMS audits policy before rejecting malformed observations or merging
+ok 166 - independent OMS audits policy before rejecting malformed observations or merging
+  ---
+  duration_ms: 4.412084
+  type: 'test'
+  ...
+# Subtest: diagnostic fails closed on unsafe policy and snapshots caller target before reads
+ok 167 - diagnostic fails closed on unsafe policy and snapshots caller target before reads
+  ---
+  duration_ms: 1.203541
+  type: 'test'
+  ...
+# Subtest: documented empty review restrictions remain auditable; populated bypass restrictions fail closed
+ok 168 - documented empty review restrictions remain auditable; populated bypass restrictions fail closed
+  ---
+  duration_ms: 0.634292
+  type: 'test'
+  ...
+# Subtest: unsafe review policy wins over red CI in diagnostic and strict inspection
+ok 169 - unsafe review policy wins over red CI in diagnostic and strict inspection
+  ---
+  duration_ms: 0.561875
+  type: 'test'
+  ...
+# Subtest: create journals intent, readback, deduplicates, and keeps body out of journal
+ok 170 - create journals intent, readback, deduplicates, and keeps body out of journal
+  ---
+  duration_ms: 15.014416
+  type: 'test'
+  ...
+# Subtest: ambiguous create recovers exact marker without repeating POST; pending blocks another write
+ok 171 - ambiguous create recovers exact marker without repeating POST; pending blocks another write
+  ---
+  duration_ms: 10.950958
+  type: 'test'
+  ...
+# Subtest: create recovery keeps branch-retargeted PR outcome unknown
+ok 172 - create recovery keeps branch-retargeted PR outcome unknown
+  ---
+  duration_ms: 6.51475
+  type: 'test'
+  ...
+# Subtest: create requires scope and pinned remote refs
+ok 173 - create requires scope and pinned remote refs
+  ---
+  duration_ms: 5.395875
+  type: 'test'
+  ...
+# Subtest: merge requires accepted server-policy boundary, scoped authorization, and independent receipt
+ok 174 - merge requires accepted server-policy boundary, scoped authorization, and independent receipt
+  ---
+  duration_ms: 3.588458
+  type: 'test'
+  ...
+# Subtest: merge blocks drift, draft, unknown checks and unresolved threads before PUT
+ok 175 - merge blocks drift, draft, unknown checks and unresolved threads before PUT
+  ---
+  duration_ms: 25.976209
+  type: 'test'
+  ...
+# Subtest: stale identical merge intent cannot repeat PUT after ambiguous first response
+ok 176 - stale identical merge intent cannot repeat PUT after ambiguous first response
+  ---
+  duration_ms: 10.922458
+  type: 'test'
+  ...
+# Subtest: dismissed or stale remote review cannot satisfy independent receipt
+ok 177 - dismissed or stale remote review cannot satisfy independent receipt
+  ---
+  duration_ms: 2.011916
+  type: 'test'
+  ...
+# Subtest: unprotected base branch blocks normal shipping merge
+ok 178 - unprotected base branch blocks normal shipping merge
+  ---
+  duration_ms: 2.401667
+  type: 'test'
+  ...
+# Subtest: independent OMS policy permits an unreviewed PR only with bound review and audited server policy
+ok 179 - independent OMS policy permits an unreviewed PR only with bound review and audited server policy
+  ---
+  duration_ms: 9.444125
+  type: 'test'
+  ...
+# Subtest: provider independently rejects bad OMS authority and evidence before PUT
+ok 180 - provider independently rejects bad OMS authority and evidence before PUT
+  ---
+  duration_ms: 14.346458
+  type: 'test'
+  ...
+# Subtest: independent OMS policy respects required GitHub reviews and fails closed on policy uncertainty
+ok 181 - independent OMS policy respects required GitHub reviews and fails closed on policy uncertainty
+  ---
+  duration_ms: 27.23075
+  type: 'test'
+  ...
+# Subtest: independent OMS rejects required checks without a pinned GitHub app
+ok 182 - independent OMS rejects required checks without a pinned GitHub app
+  ---
+  duration_ms: 23.903083
+  type: 'test'
+  ...
+# Subtest: valid remote review policy blocks insufficient approvals and accepts current-head approval
+ok 183 - valid remote review policy blocks insufficient approvals and accepts current-head approval
+  ---
+  duration_ms: 14.976375
+  type: 'test'
+  ...
+# Subtest: later comments cannot erase a requested change or a current-head approval
+ok 184 - later comments cannot erase a requested change or a current-head approval
+  ---
+  duration_ms: 0.382958
+  type: 'test'
+  ...
+# Subtest: unknown no-review rule flags do not authorize a null decision
+ok 185 - unknown no-review rule flags do not authorize a null decision
+  ---
+  duration_ms: 0.168584
+  type: 'test'
+  ...
+# Subtest: direct provider snapshots independent review, authority, and frontier before asynchronous reads
+ok 186 - direct provider snapshots independent review, authority, and frontier before asynchronous reads
+  ---
+  duration_ms: 9.835375
+  type: 'test'
+  ...
+# Subtest: merge uses GitHub head SHA guard and remote readback; ambiguous response recovers without another PUT
+ok 187 - merge uses GitHub head SHA guard and remote readback; ambiguous response recovers without another PUT
+  ---
+  duration_ms: 24.198542
+  type: 'test'
+  ...
+# Subtest: merge recovery refuses PR retarget with same SHAs
+ok 188 - merge recovery refuses PR retarget with same SHAs
+  ---
+  duration_ms: 9.279208
+  type: 'test'
+  ...
+# Subtest: completed replay rechecks account and recovery refuses another account
+ok 189 - completed replay rechecks account and recovery refuses another account
+  ---
+  duration_ms: 14.569208
+  type: 'test'
+  ...
+# Subtest: concurrent writer lock blocks before mutation
+ok 190 - concurrent writer lock blocks before mutation
+  ---
+  duration_ms: 4.58225
+  type: 'test'
+  ...
+# Subtest: stale local journal instance fails CAS before remote mutation
+ok 191 - stale local journal instance fails CAS before remote mutation
+  ---
+  duration_ms: 10.11625
+  type: 'test'
+  ...
+# Subtest: CLI offers reads only and refuses mutation commands
+ok 192 - CLI offers reads only and refuses mutation commands
+  ---
+  duration_ms: 114.204917
+  type: 'test'
+  ...
+# Subtest: stdin module import is a library import when argv[1] is not a path
+ok 193 - stdin module import is a library import when argv[1] is not a path
+  ---
+  duration_ms: 37.291625
+  type: 'test'
+  ...
+# Subtest: gh transport passes shell-like content as inert JSON stdin and bounds stderr
+ok 194 - gh transport passes shell-like content as inert JSON stdin and bounds stderr
+  ---
+  duration_ms: 1289.237167
+  type: 'test'
+  ...
+# Subtest: create, inspect, and ambiguous recovery never repeat POST
+ok 195 - create, inspect, and ambiguous recovery never repeat POST
+  ---
+  duration_ms: 20.144875
+  type: 'test'
+  ...
+# Subtest: babysit check cannot create or merge even with forged authority
+ok 196 - babysit check cannot create or merge even with forged authority
+  ---
+  duration_ms: 0.636083
+  type: 'test'
+  ...
+# Subtest: independent root shipping requires server policy and recovers ambiguous merge without repeat PUT
+ok 197 - independent root shipping requires server policy and recovers ambiguous merge without repeat PUT
+  ---
+  duration_ms: 12.165167
+  type: 'test'
+  ...
+# Subtest: explicit OMS policy merges without GitHub reviewer and binds recovery to that policy
+ok 198 - explicit OMS policy merges without GitHub reviewer and binds recovery to that policy
+  ---
+  duration_ms: 11.500167
+  type: 'test'
+  ...
+# Subtest: invalid authority, independent review, frontier, and modes fail before network or store
+ok 199 - invalid authority, independent review, frontier, and modes fail before network or store
+  ---
+  duration_ms: 1.807041
+  type: 'test'
+  ...
+# Subtest: in-flight caller edits cannot change the independently reviewed PR or authority
+ok 200 - in-flight caller edits cannot change the independently reviewed PR or authority
+  ---
+  duration_ms: 9.656458
+  type: 'test'
+  ...
+# Subtest: CLI only accepts help and read-only inspect or recover grammar
+ok 201 - CLI only accepts help and read-only inspect or recover grammar
+  ---
+  duration_ms: 148.374666
+  type: 'test'
+  ...
+# Subtest: how-routing fixture proves the documented end-to-end flow
+ok 202 - how-routing fixture proves the documented end-to-end flow
+  ---
+  duration_ms: 0.756459
+  type: 'test'
+  ...
+# Subtest: how preserves the upstream four-phase read-only explanation workflow
+ok 203 - how preserves the upstream four-phase read-only explanation workflow
+  ---
+  duration_ms: 4.43625
+  type: 'test'
+  ...
+# Subtest: the additional root verification stage belongs to explicitly selected enhanced delivery
+ok 204 - the additional root verification stage belongs to explicitly selected enhanced delivery
+  ---
+  duration_ms: 0.851292
+  type: 'test'
+  ...
+# Subtest: interrogate fixture contains both intended reachable defects
+ok 205 - interrogate fixture contains both intended reachable defects
+  ---
+  duration_ms: 3.316583
+  type: 'test'
+  ...
+# Subtest: interrogate preserves independent reviewers, source evidence, and lead synthesis
+ok 206 - interrogate preserves independent reviewers, source evidence, and lead synthesis
+  ---
+  duration_ms: 1.568416
+  type: 'test'
+  ...
+# Subtest: arena judges completed candidate artifacts against the common task rubric
+ok 207 - arena judges completed candidate artifacts against the common task rubric
+  ---
+  duration_ms: 0.541917
+  type: 'test'
+  ...
+# Subtest: OMP package survives clean npm install, update, and uninstall
+ok 208 - OMP package survives clean npm install, update, and uninstall
+  ---
+  duration_ms: 1047.619542
+  type: 'test'
+  ...
+# Subtest: Codex repo marketplace copy installs, replaces, and removes only the plugin
+ok 209 - Codex repo marketplace copy installs, replaces, and removes only the plugin
+  ---
+  duration_ms: 815.242917
+  type: 'test'
+  ...
+# Subtest: repository Actions checks have only explicit manual triggers and no stable publisher
+ok 210 - repository Actions checks have only explicit manual triggers and no stable publisher
+  ---
+  duration_ms: 4.835667
+  type: 'test'
+  ...
+# Subtest: pinned environment and CLI arguments fail before any output
+ok 211 - pinned environment and CLI arguments fail before any output
+  ---
+  duration_ms: 43.487083
+  type: 'test'
+  ...
+# Subtest: valid tagged evidence and clean HEAD validation evidence verify offline
+ok 212 - valid tagged evidence and clean HEAD validation evidence verify offline
+  ---
+  duration_ms: 44.233917
+  type: 'test'
+  ...
+# Subtest: source, review, required checks, duplicates and asset inventory are bound
+ok 213 - source, review, required checks, duplicates and asset inventory are bound
+  ---
+  duration_ms: 73.228417
+  type: 'test'
+  ...
+# Subtest: traversal, symlink files and ancestor directories never count as evidence
+ok 214 - traversal, symlink files and ancestor directories never count as evidence
+  ---
+  duration_ms: 45.7235
+  type: 'test'
+  ...
+# Subtest: tampered logs, reviews, assets and extra assets are rejected
+ok 215 - tampered logs, reviews, assets and extra assets are rejected
+  ---
+  duration_ms: 62.157292
+  type: 'test'
+  ...
+# Subtest: release resume preserves published assets and accepts only matching draft subsets
+ok 216 - release resume preserves published assets and accepts only matching draft subsets
+  ---
+  duration_ms: 0.439209
+  type: 'test'
+  ...
+# Subtest: actual Git source and review checks reject mismatches before output
+ok 217 - actual Git source and review checks reject mismatches before output
+  ---
+  duration_ms: 418.273417
+  type: 'test'
+  ...
+# Subtest: a failed real npm check retains logs and does not emit a success receipt
+ok 218 - a failed real npm check retains logs and does not emit a success receipt
+  ---
+  duration_ms: 520.312916
+  type: 'test'
+  ...
+# Subtest: immutable snapshots may contain upstream template links; published instructions may not
+ok 219 - immutable snapshots may contain upstream template links; published instructions may not
+  ---
+  duration_ms: 14.866583
+  type: 'test'
+  ...
+# Subtest: snapshot path examples remain verbatim while private keys remain forbidden
+ok 220 - snapshot path examples remain verbatim while private keys remain forbidden
+  ---
+  duration_ms: 15.572041
+  type: 'test'
+  ...
+# Subtest: Markdown links allow internal parent paths and reject encoded escapes
+ok 221 - Markdown links allow internal parent paths and reject encoded escapes
+  ---
+  duration_ms: 10.750209
+  type: 'test'
+  ...
+# Subtest: only exact snapshots, node_modules, .git, and root .tmp are excluded
+ok 222 - only exact snapshots, node_modules, .git, and root .tmp are excluded
+  ---
+  duration_ms: 13.625333
+  type: 'test'
+  ...
+# Subtest: source-model dependencies reject rather than silently reducing hygiene coverage
+ok 223 - source-model dependencies reject rather than silently reducing hygiene coverage
+  ---
+  duration_ms: 6.181125
+  type: 'test'
+  ...
+# Subtest: frozen historical reports keep original paths without exempting changed or copied content
+ok 224 - frozen historical reports keep original paths without exempting changed or copied content
+  ---
+  duration_ms: 15.731833
+  type: 'test'
+  ...
+# Subtest: mixed review retains the reachable defect and dismisses the unreachable seed
+ok 225 - mixed review retains the reachable defect and dismisses the unreachable seed
+  ---
+  duration_ms: 44.584417
+  type: 'test'
+  ...
+# Subtest: Pi uses independent native user and nearest project resolution without OMP fallthrough
+ok 226 - Pi uses independent native user and nearest project resolution without OMP fallthrough
+  ---
+  duration_ms: 13.033875
+  type: 'test'
+  ...
+# Subtest: user setup is inherited in two projects and a project manifest overrides only its project
+ok 227 - user setup is inherited in two projects and a project manifest overrides only its project
+  ---
+  duration_ms: 281.33
+  type: 'test'
+  ...
+# Subtest: Claude Code uses native user and project agent scopes without claiming activation
+ok 228 - Claude Code uses native user and project agent scopes without claiming activation
+  ---
+  duration_ms: 184.24625
+  type: 'test'
+  ...
+# Subtest: Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+ok 229 - Claude user setup and audit honor CLAUDE_CONFIG_DIR without touching the normal home scope
+  ---
+  duration_ms: 85.005458
+  type: 'test'
+  ...
+# Subtest: user setup preserves unrelated personal agents and refuses an owned-name collision
+ok 230 - user setup preserves unrelated personal agents and refuses an owned-name collision
+  ---
+  duration_ms: 66.0345
+  type: 'test'
+  ...
+# Subtest: invalid project resolution fails closed and does not silently use the user default
+ok 231 - invalid project resolution fails closed and does not silently use the user default
+  ---
+  duration_ms: 0.991667
+  type: 'test'
+  ...
+# Subtest: the CLI defaults to user scope without touching the real home directory
+ok 232 - the CLI defaults to user scope without touching the real home directory
+  ---
+  duration_ms: 169.769417
+  type: 'test'
+  ...
+# Subtest: OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+ok 233 - OMP gate preflights bytes, installs in one isolated profile, and cleans up even on partial failure
+  ---
+  duration_ms: 3423.20075
+  type: 'test'
+  ...
+# Subtest: opening-pr fallback fixture has a clean verifiable two-file commit range
+ok 234 - opening-pr fallback fixture has a clean verifiable two-file commit range
+  ---
+  duration_ms: 329.643208
+  type: 'test'
+  ...
+# Subtest: healthy local run, receipts, matrix and absent locks pass in human and JSON output
+ok 235 - healthy local run, receipts, matrix and absent locks pass in human and JSON output
+  ---
+  duration_ms: 349.497041
+  type: 'test'
+  ...
+# Subtest: missing and malformed stores report fixed codes without echoing private content
+ok 236 - missing and malformed stores report fixed codes without echoing private content
+  ---
+  duration_ms: 466.751041
+  type: 'test'
+  ...
+# Subtest: stale receipts and matrix revisions fail with actionable codes
+ok 237 - stale receipts and matrix revisions fail with actionable codes
+  ---
+  duration_ms: 260.689417
+  type: 'test'
+  ...
+# Subtest: unknown and unsupported runtimes are explicit failures
+ok 238 - unknown and unsupported runtimes are explicit failures
+  ---
+  duration_ms: 378.429
+  type: 'test'
+  ...
+# Subtest: tracked source changes fail closed while untracked artifacts do not
+ok 239 - tracked source changes fail closed while untracked artifacts do not
+  ---
+  duration_ms: 325.77075
+  type: 'test'
+  ...
+# Subtest: failed runtime probe takes priority over unknown and unsupported probes
+ok 240 - failed runtime probe takes priority over unknown and unsupported probes
+  ---
+  duration_ms: 255.124667
+  type: 'test'
+  ...
+# Subtest: malformed matrix and a present lock return stable codes without changing files
+ok 241 - malformed matrix and a present lock return stable codes without changing files
+  ---
+  duration_ms: 254.417583
+  type: 'test'
+  ...
+# Subtest: help is read only and bad invocation exits with usage
+ok 242 - help is read only and bad invocation exits with usage
+  ---
+  duration_ms: 77.712
+  type: 'test'
+  ...
+# Subtest: orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+ok 243 - orchestrate pilots, drains a rolling window, relays receipts, and closes at 4/4
+  ---
+  duration_ms: 1769.418291
+  type: 'test'
+  ...
+# Subtest: orchestrate rejects fan-out before the pilot and integration without a current verdict
+ok 244 - orchestrate rejects fan-out before the pilot and integration without a current verdict
+  ---
+  duration_ms: 531.801917
+  type: 'test'
+  ...
+# Subtest: selected upstream skills retain every derived resource on all four hosts
+ok 245 - selected upstream skills retain every derived resource on all four hosts
+  ---
+  duration_ms: 51.436708
+  type: 'test'
+  ...
+# Subtest: all host collectors retain the native Pi inventory import closure
+ok 246 - all host collectors retain the native Pi inventory import closure
+  ---
+  duration_ms: 140.681333
+  type: 'test'
+  ...
+# Subtest: complete pinned runtime bodies, references, helpers, and promoted playbooks derive exactly
+ok 247 - complete pinned runtime bodies, references, helpers, and promoted playbooks derive exactly
+  ---
+  duration_ms: 216.700875
+  type: 'test'
+  ...
+# Subtest: mode retains combined triggers, complete principle index, and large-task precedence
+ok 248 - mode retains combined triggers, complete principle index, and large-task precedence
+  ---
+  duration_ms: 0.811333
+  type: 'test'
+  ...
+# Subtest: How and Interrogate preserve upstream stage ownership without extra acceptance phases
+ok 249 - How and Interrogate preserve upstream stage ownership without extra acceptance phases
+  ---
+  duration_ms: 0.820708
+  type: 'test'
+  ...
+# Subtest: review and comment rules preserve presumptive blockers and delete unenforced constraints
+ok 250 - review and comment rules preserve presumptive blockers and delete unenforced constraints
+  ---
+  duration_ms: 1.7515
+  type: 'test'
+  ...
+# Subtest: default source workflows do not acquire the optional OMS machine-evidence contract
+ok 251 - default source workflows do not acquire the optional OMS machine-evidence contract
+  ---
+  duration_ms: 60.304291
+  type: 'test'
+  ...
+# Subtest: an output mutation that weakens no-comments fails exact check and is not silently repaired
+ok 252 - an output mutation that weakens no-comments fails exact check and is not silently repaired
+  ---
+  duration_ms: 18.587417
+  type: 'test'
+  ...
+# Subtest: even a one-byte source mutation fails the pinned source check
+ok 253 - even a one-byte source mutation fails the pinned source check
+  ---
+  duration_ms: 18.126666
+  type: 'test'
+  ...
+# Subtest: changed occurrence counts and weakened replacement output fail before writes
+ok 254 - changed occurrence counts and weakened replacement output fail before writes
+  ---
+  duration_ms: 26.424459
+  type: 'test'
+  ...
+# Subtest: manifest cannot substitute regex, undeclared policy, external paths, or out-of-scope writes
+ok 255 - manifest cannot substitute regex, undeclared policy, external paths, or out-of-scope writes
+  ---
+  duration_ms: 17.749333
+  type: 'test'
+  ...
+# Subtest: derivation checks byte identity rather than whitespace or token equivalence
+ok 256 - derivation checks byte identity rather than whitespace or token equivalence
+  ---
+  duration_ms: 15.948584
+  type: 'test'
+  ...
+# Subtest: source and output directory symlinks or junctions cannot escape their boundaries
+ok 257 - source and output directory symlinks or junctions cannot escape their boundaries
+  ---
+  duration_ms: 16.555166
+  type: 'test'
+  ...
+# Subtest: Pi native RPC inventory uses model-specific advertised levels without persistent settings commands
+ok 258 - Pi native RPC inventory uses model-specific advertised levels without persistent settings commands
+  ---
+  duration_ms: 46.496625
+  type: 'test'
+  ...
+# Subtest: start/collect respects one-based membership, immutable results and native observed identity
+ok 259 - start/collect respects one-based membership, immutable results and native observed identity
+  ---
+  duration_ms: 62.019583
+  type: 'test'
+  ...
+# Subtest: native error cannot masquerade as success
+ok 260 - native error cannot masquerade as success
+  ---
+  duration_ms: 62.376875
+  type: 'test'
+  ...
+# Subtest: native nonzero cannot masquerade as success
+ok 261 - native nonzero cannot masquerade as success
+  ---
+  duration_ms: 56.358167
+  type: 'test'
+  ...
+# Subtest: native retry cannot masquerade as success
+ok 262 - native retry cannot masquerade as success
+  ---
+  duration_ms: 59.226208
+  type: 'test'
+  ...
+# Subtest: native mismatch cannot masquerade as success
+ok 263 - native mismatch cannot masquerade as success
+  ---
+  duration_ms: 35.622084
+  type: 'test'
+  ...
+# Subtest: native virtual cannot masquerade as success
+ok 264 - native virtual cannot masquerade as success
+  ---
+  duration_ms: 40.703291
+  type: 'test'
+  ...
+# Subtest: native wrong-model cannot masquerade as success
+ok 265 - native wrong-model cannot masquerade as success
+  ---
+  duration_ms: 58.472875
+  type: 'test'
+  ...
+# Subtest: extension-only provider rejects before native prompt
+ok 266 - extension-only provider rejects before native prompt
+  ---
+  duration_ms: 37.927166
+  type: 'test'
+  ...
+# Subtest: cancel and shutdown terminate child processes, including parent cancellation
+ok 267 - cancel and shutdown terminate child processes, including parent cancellation
+  ---
+  duration_ms: 7.199541
+  type: 'test'
+  ...
+# Subtest: shutdown during asynchronous resolution never creates a child
+ok 268 - shutdown during asynchronous resolution never creates a child
+  ---
+  duration_ms: 4.375
+  type: 'test'
+  ...
+# Subtest: creation has a bounded timeout even when resolution never completes
+ok 269 - creation has a bounded timeout even when resolution never completes
+  ---
+  duration_ms: 54.105791
+  type: 'test'
+  ...
+# Subtest: output and retained result count are bounded
+ok 270 - output and retained result count are bounded
+  ---
+  duration_ms: 56.448916
+  type: 'test'
+  ...
+# Subtest: writers require an explicitly independent Git checkout; invalid member fails
+ok 271 - writers require an explicitly independent Git checkout; invalid member fails
+  ---
+  duration_ms: 58.63825
+  type: 'test'
+  ...
+# Subtest: writer rejects root/subdirectory aliases of the parent Git worktree before spawning
+ok 272 - writer rejects root/subdirectory aliases of the parent Git worktree before spawning
+  ---
+  duration_ms: 148.508
+  type: 'test'
+  ...
+# Subtest: writer grants writing tools to an actual distinct linked Git worktree
+ok 273 - writer grants writing tools to an actual distinct linked Git worktree
+  ---
+  duration_ms: 282.421334
+  type: 'test'
+  ...
+# Subtest: writer admission atomically rejects the same worktree and permits reuse after termination
+ok 274 - writer admission atomically rejects the same worktree and permits reuse after termination
+  ---
+  duration_ms: 268.02425
+  type: 'test'
+  ...
+# Subtest: real RPC process preserves Chinese UTF-8 characters split across stdout writes
+ok 275 - real RPC process preserves Chinese UTF-8 characters split across stdout writes
+  ---
+  duration_ms: 118.870708
+  type: 'test'
+  ...
+# Subtest: packaged route roles replace a stale saved role while preserving model and effort
+ok 276 - packaged route roles replace a stale saved role while preserving model and effort
+  ---
+  duration_ms: 326.232708
+  type: 'test'
+  ...
+# Subtest: writer fails closed outside verified Git worktrees before spawning
+ok 277 - writer fails closed outside verified Git worktrees before spawning
+  ---
+  duration_ms: 83.509917
+  type: 'test'
+  ...
+# Subtest: current packaged role map rejects unknown routes while legacy contracts retain saved roles
+ok 278 - current packaged role map rejects unknown routes while legacy contracts retain saved roles
+  ---
+  duration_ms: 58.585334
+  type: 'test'
+  ...
+# Subtest: missing native CLI and hung RPC commands fail within the bounded lifecycle
+ok 279 - missing native CLI and hung RPC commands fail within the bounded lifecycle
+  ---
+  duration_ms: 57.566917
+  type: 'test'
+  ...
+# Subtest: prototype-routing compares equivalent variants with a deterministic decision variable
+ok 280 - prototype-routing compares equivalent variants with a deterministic decision variable
+  ---
+  duration_ms: 69.55175
+  type: 'test'
+  ...
+# Subtest: pstack delta decisions cover exact source blobs and existing target paths
+ok 281 - pstack delta decisions cover exact source blobs and existing target paths
+  ---
+  duration_ms: 29.232083
+  type: 'test'
+  ...
+# Subtest: all host catalogs expose explicit upstream entries without selecting enhanced handoff resources
+ok 282 - all host catalogs expose explicit upstream entries without selecting enhanced handoff resources
+  ---
+  duration_ms: 910.908583
+  type: 'test'
+  ...
+# Subtest: fresh delegation is upstream policy while enhanced fencing remains optional
+ok 283 - fresh delegation is upstream policy while enhanced fencing remains optional
+  ---
+  duration_ms: 7.188208
+  type: 'test'
+  ...
+# Subtest: generated Codex PR procedures prefer host tools while retaining bounded adapter authority gates
+ok 284 - generated Codex PR procedures prefer host tools while retaining bounded adapter authority gates
+  ---
+  duration_ms: 2.653958
+  type: 'test'
+  ...
+# Subtest: correction verifier rejects the authentic historical alias bug and accepts the actual fixed installer
+ok 285 - correction verifier rejects the authentic historical alias bug and accepts the actual fixed installer
+  ---
+  duration_ms: 321.941375
+  type: 'test'
+  ...
+# Subtest: measurement verifier refuses false winners, incomplete coverage, and stale receipt claims
+ok 286 - measurement verifier refuses false winners, incomplete coverage, and stale receipt claims
+  ---
+  duration_ms: 141.113958
+  type: 'test'
+  ...
+# Subtest: a valid partial book passes while --complete waits for all 48 ready chapters
+ok 287 - a valid partial book passes while --complete waits for all 48 ready chapters
+  ---
+  duration_ms: 26.613625
+  type: 'test'
+  ...
+# Subtest: missing claimed chapter and missing table-of-contents entry fail
+ok 288 - missing claimed chapter and missing table-of-contents entry fail
+  ---
+  duration_ms: 13.237542
+  type: 'test'
+  ...
+# Subtest: missing local link, missing fragment, and path escape fail offline
+ok 289 - missing local link, missing fragment, and path escape fail offline
+  ---
+  duration_ms: 32.43525
+  type: 'test'
+  ...
+# Subtest: changed executable code needs a per-block approval with rationale
+ok 290 - changed executable code needs a per-block approval with rationale
+  ---
+  duration_ms: 20.622958
+  type: 'test'
+  ...
+# Subtest: ready status requires review evidence, and placeholders inside original code are allowed
+ok 291 - ready status requires review evidence, and placeholders inside original code are allowed
+  ---
+  duration_ms: 20.514125
+  type: 'test'
+  ...
+# Subtest: snapshot hashes and cross-edition chapter pairing are checked
+ok 292 - snapshot hashes and cross-edition chapter pairing are checked
+  ---
+  duration_ms: 18.986708
+  type: 'test'
+  ...
+# Subtest: unlabeled code is protected and apostrophes in quoted HTML anchors work
+ok 293 - unlabeled code is protected and apostrophes in quoted HTML anchors work
+  ---
+  duration_ms: 18.069792
+  type: 'test'
+  ...
+# Subtest: independent review evidence cannot survive a prose edit
+ok 294 - independent review evidence cannot survive a prose edit
+  ---
+  duration_ms: 19.242791
+  type: 'test'
+  ...
+# Subtest: English prose remains bound to the frozen author's edition
+ok 295 - English prose remains bound to the frozen author's edition
+  ---
+  duration_ms: 19.102666
+  type: 'test'
+  ...
+# Subtest: code retained in raw HTML is protected from changes
+ok 296 - code retained in raw HTML is protected from changes
+  ---
+  duration_ms: 16.554583
+  type: 'test'
+  ...
+# Subtest: title review binds all manifest titles and emitted headings
+ok 297 - title review binds all manifest titles and emitted headings
+  ---
+  duration_ms: 25.997583
+  type: 'test'
+  ...
+# Subtest: public Skill matrix verifier requires the exact catalog and headings
+ok 298 - public Skill matrix verifier requires the exact catalog and headings
+  ---
+  duration_ms: 632.713958
+  type: 'test'
+  ...
+# Subtest: refactoring-routing preserves the pinned behavior while removing duplication
+ok 299 - refactoring-routing preserves the pinned behavior while removing duplication
+  ---
+  duration_ms: 177.130125
+  type: 'test'
+  ...
+# Subtest: Git authentication selects native gh even with inherited token and global credential overrides
+ok 300 - Git authentication selects native gh even with inherited token and global credential overrides
+  ---
+  duration_ms: 280.549875
+  type: 'test'
+  ...
+# Subtest: cross-process publishers cannot race latest and a later lower version is rejected
+ok 301 - cross-process publishers cannot race latest and a later lower version is rejected
+  ---
+  duration_ms: 911.140792
+  type: 'test'
+  ...
+# Subtest: lease cleanup refuses to delete a replacement owner's ref
+ok 302 - lease cleanup refuses to delete a replacement owner's ref
+  ---
+  duration_ms: 505.959208
+  type: 'test'
+  ...
+# Subtest: release archives and manifest are byte-reproducible
+ok 303 - release archives and manifest are byte-reproducible
+  ---
+  duration_ms: 4684.512542
+  type: 'test'
+  ...
+# Subtest: release inventory preserves shell entrypoints and checks only observable installed modes
+ok 304 - release inventory preserves shell entrypoints and checks only observable installed modes
+  ---
+  duration_ms: 2.943292
+  type: 'test'
+  ...
+# Subtest: Claude plugin bundle exposes the generated package through a native marketplace
+ok 305 - Claude plugin bundle exposes the generated package through a native marketplace
+  ---
+  duration_ms: 1561.332042
+  type: 'test'
+  ...
+# Subtest: repository Claude marketplace points at the generated native plugin
+ok 306 - repository Claude marketplace points at the generated native plugin
+  ---
+  duration_ms: 0.837083
+  type: 'test'
+  ...
+# Subtest: Codex plugin bundle exposes the generated package through one local marketplace
+ok 307 - Codex plugin bundle exposes the generated package through one local marketplace
+  ---
+  duration_ms: 1001.499125
+  type: 'test'
+  ...
+# Subtest: all target archives install, update, roll back, and uninstall within their owned directory
+ok 308 - all target archives install, update, roll back, and uninstall within their owned directory
+  ---
+  duration_ms: 2500.151458
+  type: 'test'
+  ...
+# Subtest: release installer rejects checksum drift and non-owned uninstall targets
+ok 309 - release installer rejects checksum drift and non-owned uninstall targets
+  ---
+  duration_ms: 810.456667
+  type: 'test'
+  ...
+# Subtest: release installer CLI consumes the generated manifest
+ok 310 - release installer CLI consumes the generated manifest
+  ---
+  duration_ms: 1422.48475
+  type: 'test'
+  ...
+# Subtest: release installer CLI refuses an existing empty unowned directory
+ok 311 - release installer CLI refuses an existing empty unowned directory
+  ---
+  duration_ms: 1109.785375
+  type: 'test'
+  ...
+# Subtest: release installer CLI verifies installed files without mutation or archives
+ok 312 - release installer CLI verifies installed files without mutation or archives
+  ---
+  duration_ms: 4140.445625
+  type: 'test'
+  ...
+# Subtest: tagged release source requires the version tag at clean HEAD
+ok 313 - tagged release source requires the version tag at clean HEAD
+  ---
+  duration_ms: 150.265416
+  type: 'test'
+  ...
+# Subtest: release installer CLI executes through file and directory aliases
+ok 314 - release installer CLI executes through file and directory aliases
+  ---
+  duration_ms: 102.335791
+  type: 'test'
+  ...
+# Subtest: routing defaults to manual and previews never create configuration
+ok 315 - routing defaults to manual and previews never create configuration
+  ---
+  duration_ms: 119.453583
+  type: 'test'
+  ...
+# Subtest: project manual overrides user auto without modifying the personal default
+ok 316 - project manual overrides user auto without modifying the personal default
+  ---
+  duration_ms: 180.6045
+  type: 'test'
+  ...
+# Subtest: lookup stops at the worktree boundary and uses the nearest project override
+ok 317 - lookup stops at the worktree boundary and uses the nearest project override
+  ---
+  duration_ms: 210.094875
+  type: 'test'
+  ...
+# Subtest: applying the same mode is idempotent and leaves other settings untouched
+ok 318 - applying the same mode is idempotent and leaves other settings untouched
+  ---
+  duration_ms: 104.7315
+  type: 'test'
+  ...
+# Subtest: invalid or unowned project configuration never falls back to enabled user routing
+ok 319 - invalid or unowned project configuration never falls back to enabled user routing
+  ---
+  duration_ms: 231.552042
+  type: 'test'
+  ...
+# Subtest: symlinked configuration files and directories cannot be read or replaced
+ok 320 - symlinked configuration files and directories cannot be read or replaced
+  ---
+  duration_ms: 88.537458
+  type: 'test'
+  ...
+# Subtest: CLI honors CODEX_HOME and rejects malformed actions without writes
+ok 321 - CLI honors CODEX_HOME and rejects malformed actions without writes
+  ---
+  duration_ms: 301.192083
+  type: 'test'
+  ...
+# Subtest: default packaged routing reads preserved settings and project overrides without rewrites
+ok 322 - default packaged routing reads preserved settings and project overrides without rewrites
+  ---
+  duration_ms: 1703.778958
+  type: 'test'
+  ...
+# Subtest: generated hook injects a bounded hint only for enabled startup/resume/clear/compact
+ok 323 - generated hook injects a bounded hint only for enabled startup/resume/clear/compact
+  ---
+  duration_ms: 771.694875
+  type: 'test'
+  ...
+# Subtest: Claude routing is opt-in and its project switch is independent of Codex
+ok 324 - Claude routing is opt-in and its project switch is independent of Codex
+  ---
+  duration_ms: 251.607
+  type: 'test'
+  ...
+# Subtest: Claude nearest override and invalid configuration preserve the user setting
+ok 325 - Claude nearest override and invalid configuration preserve the user setting
+  ---
+  duration_ms: 205.946583
+  type: 'test'
+  ...
+# Subtest: Claude CLI uses CLAUDE_CONFIG_DIR and leaves Codex and model settings untouched
+ok 326 - Claude CLI uses CLAUDE_CONFIG_DIR and leaves Codex and model settings untouched
+  ---
+  duration_ms: 302.291791
+  type: 'test'
+  ...
+# Subtest: generated Claude plugin hook and setup use the Claude switch and fail closed
+ok 327 - generated Claude plugin hook and setup use the Claude switch and fail closed
+  ---
+  duration_ms: 1089.609542
+  type: 'test'
+  ...
+# Subtest: a recovered terminal run accepts revision-bound receipts and keeps unknown explicit
+ok 328 - a recovered terminal run accepts revision-bound receipts and keeps unknown explicit
+  ---
+  duration_ms: 24.784291
+  type: 'test'
+  ...
+# Subtest: receipt replay is idempotent and a conflicting receipt ID is refused
+ok 329 - receipt replay is idempotent and a conflicting receipt ID is refused
+  ---
+  duration_ms: 37.509792
+  type: 'test'
+  ...
+# Subtest: run identity, generation, revision, source, and secret-bearing fields fail closed
+ok 330 - run identity, generation, revision, source, and secret-bearing fields fail closed
+  ---
+  duration_ms: 22.572625
+  type: 'test'
+  ...
+# Subtest: a failed command cannot be reported as an all-pass verification
+ok 331 - a failed command cannot be reported as an all-pass verification
+  ---
+  duration_ms: 12.028291
+  type: 'test'
+  ...
+# Subtest: reserved receipt ID is rejected before an evidence store is created
+ok 332 - reserved receipt ID is rejected before an evidence store is created
+  ---
+  duration_ms: 112.132333
+  type: 'test'
+  ...
+# Subtest: source changes make old evidence stale and a fresh receipt restores current status
+ok 333 - source changes make old evidence stale and a fresh receipt restores current status
+  ---
+  duration_ms: 95.042166
+  type: 'test'
+  ...
+# Subtest: advancing the recovered run revision makes previous receipts stale
+ok 334 - advancing the recovered run revision makes previous receipts stale
+  ---
+  duration_ms: 26.023333
+  type: 'test'
+  ...
+# Subtest: CLI status reports JSON and human status without writing to the evidence store
+ok 335 - CLI status reports JSON and human status without writing to the evidence store
+  ---
+  duration_ms: 224.183167
+  type: 'test'
+  ...
+# Subtest: positive Node probe records command, runtime, platform, and pass
+ok 336 - positive Node probe records command, runtime, platform, and pass
+  ---
+  duration_ms: 49.338708
+  type: 'test'
+  ...
+# Subtest: Bun host selects Node for a Node probe while honoring an explicit override
+ok 337 - Bun host selects Node for a Node probe while honoring an explicit override
+  ---
+  duration_ms: 171.921375
+  type: 'test'
+  ...
+# Subtest: an unavailable runtime stays unknown or unsupported according to declaration
+ok 338 - an unavailable runtime stays unknown or unsupported according to declaration
+  ---
+  duration_ms: 2.616416
+  type: 'test'
+  ...
+# Subtest: malformed probe output is a failed result
+ok 339 - malformed probe output is a failed result
+  ---
+  duration_ms: 46.258125
+  type: 'test'
+  ...
+# Subtest: a hanging command is terminated and recorded as a timeout
+ok 340 - a hanging command is terminated and recorded as a timeout
+  ---
+  duration_ms: 268.325083
+  type: 'test'
+  ...
+# Subtest: excess output is truncated, terminated, and failed
+ok 341 - excess output is truncated, terminated, and failed
+  ---
+  duration_ms: 44.937792
+  type: 'test'
+  ...
+# Subtest: a probe cannot overwrite observed execution metadata
+ok 342 - a probe cannot overwrite observed execution metadata
+  ---
+  duration_ms: 43.744
+  type: 'test'
+  ...
+# Subtest: successful probes without a JSON payload are failed as malformed
+ok 343 - successful probes without a JSON payload are failed as malformed
+  ---
+  duration_ms: 180.645709
+  type: 'test'
+  ...
+# Subtest: persisted results remain bound to their source revision
+ok 344 - persisted results remain bound to their source revision
+  ---
+  duration_ms: 51.27375
+  type: 'test'
+  ...
+# Subtest: persistence rejects results without an executable and argument list
+ok 345 - persistence rejects results without an executable and argument list
+  ---
+  duration_ms: 50.279792
+  type: 'test'
+  ...
+# Subtest: pause checkpoint survives a cold session pickup without redoing completed work
+ok 346 - pause checkpoint survives a cold session pickup without redoing completed work
+  ---
+  duration_ms: 1366.063417
+  type: 'test'
+  ...
+# Subtest: Pi audits native JSON role files without treating other host records as execution evidence
+ok 347 - Pi audits native JSON role files without treating other host records as execution evidence
+  ---
+  duration_ms: 128.306083
+  type: 'test'
+  ...
+# Subtest: configuration audit is read-only and never promotes files to activation
+ok 348 - configuration audit is read-only and never promotes files to activation
+  ---
+  duration_ms: 34.970125
+  type: 'test'
+  ...
+# Subtest: invalid model and unsupported effort fail before configuration writes on both hosts
+ok 349 - invalid model and unsupported effort fail before configuration writes on both hosts
+  ---
+  duration_ms: 60.543667
+  type: 'test'
+  ...
+# Subtest: setup receipt distinguishes preserved legacy effort from a reasoning target
+ok 350 - setup receipt distinguishes preserved legacy effort from a reasoning target
+  ---
+  duration_ms: 86.127667
+  type: 'test'
+  ...
+# Subtest: setup receipt renders every configured role and route without summarization loss
+ok 351 - setup receipt renders every configured role and route without summarization loss
+  ---
+  duration_ms: 133.1445
+  type: 'test'
+  ...
+# Subtest: installed setup CLIs run through a symlinked package directory
+ok 352 - installed setup CLIs run through a symlinked package directory
+  ---
+  duration_ms: 363.821917
+  type: 'test'
+  ...
+# Subtest: OMP acceptance requires selected native agent and observed child model/effort
+ok 353 - OMP acceptance requires selected native agent and observed child model/effort
+  ---
+  duration_ms: 114.863
+  type: 'test'
+  ...
+# Subtest: Claude acceptance links native Agent call and child model but leaves effort unverified
+ok 354 - Claude acceptance links native Agent call and child model but leaves effort unverified
+  ---
+  duration_ms: 125.051459
+  type: 'test'
+  ...
+# Subtest: Codex acceptance verifies explicit spawn without claiming native role activation
+ok 355 - Codex acceptance verifies explicit spawn without claiming native role activation
+  ---
+  duration_ms: 134.846667
+  type: 'test'
+  ...
+# Subtest: setup-live verifier accepts a fully bound dedicated configuration
+ok 356 - setup-live verifier accepts a fully bound dedicated configuration
+  ---
+  duration_ms: 1155.490583
+  type: 'test'
+  ...
+# Subtest: shipping lands only the revision-bound contiguous passing run
+ok 357 - shipping lands only the revision-bound contiguous passing run
+  ---
+  duration_ms: 1875.510084
+  type: 'test'
+  ...
+# Subtest: shipping refuses an upper PR and a verdict whose reviewed head changed
+ok 358 - shipping refuses an upper PR and a verdict whose reviewed head changed
+  ---
+  duration_ms: 681.497459
+  type: 'test'
+  ...
+# Subtest: shipping accepts a clean PASS without fabricating reviewer notes
+ok 359 - shipping accepts a clean PASS without fabricating reviewer notes
+  ---
+  duration_ms: 461.141
+  type: 'test'
+  ...
+# Subtest: shipping preserves a Codex canonical task name as native attribution
+ok 360 - shipping preserves a Codex canonical task name as native attribution
+  ---
+  duration_ms: 493.353084
+  type: 'test'
+  ...
+# Subtest: the decision-log helper is an exact pinned source reference
+ok 361 - the decision-log helper is an exact pinned source reference
+  ---
+  duration_ms: 6.081917
+  type: 'test'
+  ...
+# Subtest: source and generated catalogs classify the helper as reference-only
+ok 362 - source and generated catalogs classify the helper as reference-only
+  ---
+  duration_ms: 4.810958
+  type: 'test'
+  ...
+# Subtest: the portable log contract preserves append-only evidence and scoped transcript audits
+ok 363 - the portable log contract preserves append-only evidence and scoped transcript audits
+  ---
+  duration_ms: 1.430917
+  type: 'test'
+  ...
+# Subtest: directory check rejects stale or missing documentation without rewriting it
+ok 364 - directory check rejects stale or missing documentation without rewriting it
+  ---
+  duration_ms: 12.451667
+  type: 'test'
+  ...
+# Subtest: all selected AIHero originals ship every resource and their invocation modes on every host
+ok 365 - all selected AIHero originals ship every resource and their invocation modes on every host
+  ---
+  duration_ms: 2193.167334
+  type: 'test'
+  ...
+# Subtest: a workflow cannot ship when an original invoked dependency is omitted
+ok 366 - a workflow cannot ship when an original invoked dependency is omitted
+  ---
+  duration_ms: 349.753583
+  type: 'test'
+  ...
+# Subtest: a packaged original cannot silently change after generation
+ok 367 - a packaged original cannot silently change after generation
+  ---
+  duration_ms: 659.634334
+  type: 'test'
+  ...
+# Subtest: source validation rejects changed originals, omitted dependencies, unrecorded resources, and snapshot symlinks
+ok 368 - source validation rejects changed originals, omitted dependencies, unrecorded resources, and snapshot symlinks
+  ---
+  duration_ms: 305.276875
+  type: 'test'
+  ...
+# Subtest: maintainer identity requires explicit native write permission for the exact repository
+ok 369 - maintainer identity requires explicit native write permission for the exact repository
+  ---
+  duration_ms: 0.903
+  type: 'test'
+  ...
+# Subtest: Actions identity cannot publish through the local-only gate
+ok 370 - Actions identity cannot publish through the local-only gate
+  ---
+  duration_ms: 0.242125
+  type: 'test'
+  ...
+# Subtest: stable snapshot keeps released host payloads separate and byte-identical
+ok 371 - stable snapshot keeps released host payloads separate and byte-identical
+  ---
+  duration_ms: 169.131458
+  type: 'test'
+  ...
+# Subtest: stable snapshot accepts the independent Pi artifact without treating it as a marketplace plugin
+ok 372 - stable snapshot accepts the independent Pi artifact without treating it as a marketplace plugin
+  ---
+  duration_ms: 120.610917
+  type: 'test'
+  ...
+# Subtest: tagged rebuild allows only gzip OS metadata and refuses all other byte or manifest drift
+ok 373 - tagged rebuild allows only gzip OS metadata and refuses all other byte or manifest drift
+  ---
+  duration_ms: 174.83525
+  type: 'test'
+  ...
+# Subtest: draft, prerelease, wrong repository, and incomplete assets never create a snapshot
+ok 374 - draft, prerelease, wrong repository, and incomplete assets never create a snapshot
+  ---
+  duration_ms: 82.64575
+  type: 'test'
+  ...
+# Subtest: tampered downloads fail before any output exists
+ok 375 - tampered downloads fail before any output exists
+  ---
+  duration_ms: 86.360583
+  type: 'test'
+  ...
+# Subtest: a self-consistent checksum set cannot hide a dirty source or false archive inventory
+ok 376 - a self-consistent checksum set cannot hide a dirty source or false archive inventory
+  ---
+  duration_ms: 100.774917
+  type: 'test'
+  ...
+# Subtest: promotion binds clean manifest, exact tag and tree, local checks, review, and monotonic versions
+ok 377 - promotion binds clean manifest, exact tag and tree, local checks, review, and monotonic versions
+  ---
+  duration_ms: 0.959583
+  type: 'test'
+  ...
+# Subtest: Git promotion appends history, is idempotent, and rejects concurrent branch changes
+ok 378 - Git promotion appends history, is idempotent, and rejects concurrent branch changes
+  ---
+  duration_ms: 2288.438875
+  type: 'test'
+  ...
+# Subtest: successful Actions CI cannot substitute for a commit-bound local release receipt
+ok 379 - successful Actions CI cannot substitute for a commit-bound local release receipt
+  ---
+  duration_ms: 0.166833
+  type: 'test'
+  ...
+# Subtest: promotion verifies historical non-executable shebang files against Git modes
+ok 380 - promotion verifies historical non-executable shebang files against Git modes
+  ---
+  duration_ms: 1596.935625
+  type: 'test'
+  ...
+# Subtest: source records update one pin without rewriting unrelated fields
+ok 381 - source records update one pin without rewriting unrelated fields
+  ---
+  duration_ms: 0.871959
+  type: 'test'
+  ...
+# Subtest: portable Skill transform preserves prose and moves invocation policy out of core
+ok 382 - portable Skill transform preserves prose and moves invocation policy out of core
+  ---
+  duration_ms: 1.099042
+  type: 'test'
+  ...
+# Subtest: portable Skill transform rejects runtime bindings and binary content
+ok 383 - portable Skill transform rejects runtime bindings and binary content
+  ---
+  duration_ms: 0.375583
+  type: 'test'
+  ...
+# Subtest: three-way merge covers clean updates, local forks, and non-overlapping edits
+ok 384 - three-way merge covers clean updates, local forks, and non-overlapping edits
+  ---
+  duration_ms: 23.065708
+  type: 'test'
+  ...
+# Subtest: three-way merge classifies overlapping edits as a typed conflict
+ok 385 - three-way merge classifies overlapping edits as a typed conflict
+  ---
+  duration_ms: 19.329625
+  type: 'test'
+  ...
+# Subtest: deletion distinguishes unchanged, missing, modified, and binary local state
+ok 386 - deletion distinguishes unchanged, missing, modified, and binary local state
+  ---
+  duration_ms: 0.198292
+  type: 'test'
+  ...
+# Subtest: atomic apply restores earlier writes when a later target escapes the root
+ok 387 - atomic apply restores earlier writes when a later target escapes the root
+  ---
+  duration_ms: 20.565583
+  type: 'test'
+  ...
+# Subtest: candidate pin advances only after verification succeeds
+ok 388 - candidate pin advances only after verification succeeds
+  ---
+  duration_ms: 6.260667
+  type: 'test'
+  ...
+# Subtest: a sync against the accepted commit is a no-op
+ok 389 - a sync against the accepted commit is a no-op
+  ---
+  duration_ms: 187.654667
+  type: 'test'
+  ...
+# Subtest: an accepted commit can extend its pinned import set
+ok 390 - an accepted commit can extend its pinned import set
+  ---
+  duration_ms: 178.187792
+  type: 'test'
+  ...
+# Subtest: sync planning rejects paths that escape configured roots
+ok 391 - sync planning rejects paths that escape configured roots
+  ---
+  duration_ms: 3.361083
+  type: 'test'
+  ...
+# Subtest: 0.15.17 decisions account for all 45 exact source blobs
+ok 392 - 0.15.17 decisions account for all 45 exact source blobs
+  ---
+  duration_ms: 51.0775
+  type: 'test'
+  ...
+# Subtest: ketchup is an explicit public skill on all four generated hosts
+ok 393 - ketchup is an explicit public skill on all four generated hosts
+  ---
+  duration_ms: 422.024208
+  type: 'test'
+  ...
+# Subtest: the complete pinned parity source remains independently verifiable
+ok 394 - the complete pinned parity source remains independently verifiable
+  ---
+  duration_ms: 43.862667
+  type: 'test'
+  ...
+# Subtest: literal fenced glossary examples do not require files, but real links still do
+ok 395 - literal fenced glossary examples do not require files, but real links still do
+  ---
+  duration_ms: 10.469375
+  type: 'test'
+  ...
+# Subtest: slash-form related and profile evidence resolve to native files
+ok 396 - slash-form related and profile evidence resolve to native files
+  ---
+  duration_ms: 11.257333
+  type: 'test'
+  ...
+# Subtest: evidence references reject malformed, sibling, and absolute paths
+ok 397 - evidence references reject malformed, sibling, and absolute paths
+  ---
+  duration_ms: 12.105333
+  type: 'test'
+  ...
+# Subtest: semantic derivations use native scope checks and raw-byte hashes
+ok 398 - semantic derivations use native scope checks and raw-byte hashes
+  ---
+  duration_ms: 11.999875
+  type: 'test'
+  ...
+# Subtest: unlisted tool and skill scripts reject while dependency directories are pruned
+ok 399 - unlisted tool and skill scripts reject while dependency directories are pruned
+  ---
+  duration_ms: 9.842791
+  type: 'test'
+  ...
+# Subtest: upstream import source and target fields reject escapes before file reads
+ok 400 - upstream import source and target fields reject escapes before file reads
+  ---
+  duration_ms: 7.260125
+  type: 'test'
+  ...
+# Subtest: writing cleanup rejects slop and accepts a meaning-preserving how-to
+ok 401 - writing cleanup rejects slop and accepts a meaning-preserving how-to
+  ---
+  duration_ms: 172.133875
+  type: 'test'
+  ...
+1..401
+# tests 406
+# suites 0
+# pass 406
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22064.557

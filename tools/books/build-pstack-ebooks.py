@@ -2,7 +2,9 @@
 """Build the complete pstack reading editions from reviewed local sources."""
 from pathlib import Path
 import re,json,hashlib,html,zipfile,uuid,datetime,logging,sys,copy,subprocess,argparse
-from epub_layout import EPUB_CSS, reflow_tables
+from epub_layout import EPUB_CSS
+from epub_tables import parse_table_policy
+from epub_publication import ReadingDocument, prepare_document, navigation, title_page, reading_about
 from urllib.parse import urlsplit,unquote
 import mistune
 from bs4 import BeautifulSoup,Comment
@@ -112,39 +114,67 @@ def cover(lang):
  headline='AI Agent<br/>开发环境实践' if lang=='zh-CN' else 'Build an environment<br/>you can trust'
  return f'<section class="cover"><p class="eyebrow">OH MY STACK / READING EDITION</p><p class="brand">pstack</p><h1>{headline}</h1><p class="subtitle">{SUB[lang]}</p><p class="author">kaito</p><p class="edition">{EDITION[lang]}</p><p class="bottom">SOURCE EDITION / 2026-10-03<br/>48 ENTRIES · COMPLETE TEXT</p></section>'
 
-def package_epub(lang,folder,chapters,front,cover_png):
- navitems=[('about.xhtml','关于本版' if lang=='zh-CN' else 'About this edition')]+[(n,t) for n,t,b in chapters]
- nav='<nav epub:type="toc" id="toc"><h1>'+('目录' if lang=='zh-CN' else 'Contents')+'</h1><ol>'+''.join(f'<li><a href="{n}">{html.escape(t)}</a></li>' for n,t in navitems)+'</ol></nav>'
- files={'cover.xhtml':xhtml(TITLE[lang],'<section><img class="cover-image" src="images/cover.png" alt="'+html.escape(TITLE[lang],quote=True)+'"/></section>',lang),'about.xhtml':xhtml(TITLE[lang],front,lang),'nav.xhtml':xhtml('Contents',nav,lang),'book.css':EPUB_CSS}
- for n,t,b in chapters:files[n]=xhtml(t,reflow_tables(b),lang)
- # Confirm every generated XHTML parses as XML before packaging.
- for n,t in files.items():
-  if n.endswith('.xhtml'):etree.fromstring(t.encode())
- mimetypes={'.otf':'font/otf','.png':'image/png','.txt':'text/plain'}
- binaries={p.relative_to(folder).as_posix():p.read_bytes() for path in ['images','fonts'] for p in (folder/path).glob('*') if p.is_file() and not re.search(r'-part[0-9]+\.png$',p.name)}
+def package_epub(lang,folder,chapters,front,cover_image,*,sample=False,target=None):
+ policy=parse_table_policy((BOOK/'epub-table-policy.json').read_text())
+ selected={name for name,title,body in chapters}
+ documents=[];receipts=[]
+ for name,title,body in chapters:
+  match=re.fullmatch(r'ch(\d+)\.xhtml',name)
+  if match:raw=str(parse_body(CHAPTERS[int(match[1])-1],lang)[1])
+  else:
+   path=BOOK/('zh-CN/GLOSSARY.md' if name=='glossary.xhtml' else 'assets/README.md')
+   raw=RENDER(path.read_text());supp=BeautifulSoup(raw,'html.parser')
+   for a in supp.select('a[href]'):
+    if not urlsplit(a['href']).scheme:a['href']='https://github.com/williamwue/oh-my-stack/blob/'+SOURCE_REV+'/'+(path.parent/a['href']).resolve().relative_to(ROOT).as_posix()
+   for h in supp.select('h1'):h.name='h2'
+   body=f'<section class="chapter" id="{Path(name).stem}"><h1>{html.escape(title)}</h1>{supp}</section>'
+  doc,table_receipts=prepare_document(ReadingDocument(name,title,raw,body),language=lang,book_dir=BOOK,policy=policy,selected_documents=selected,catalog=CHAPTERS)
+  documents.append(doc);receipts.extend([dict(table_id=r.table_id,source_sha256=r.source_sha256,layout=r.layout,rows=r.rows,columns=r.columns) for r in table_receipts])
+ cover_name='images/'+cover_image.name
+ nav=navigation(documents,language=lang,catalog=CHAPTERS)
+ front=reading_about(front,lang)
+ if sample:
+  note='<p>这是节选排版样书，完整阅读版收录 48 个目录项。</p>' if lang=='zh-CN' else '<p>This typography sample contains selected entries. The full edition has 48 contents entries.</p>'
+  front=note+front
+ files={
+  'cover.xhtml':xhtml(TITLE[lang],'<section class="cover-page"><img class="cover-image" src="'+cover_name+'" alt="'+('日文原书封面，作者 kaito' if lang=='zh-CN' else 'Original Japanese cover, author kaito')+'"/></section>',lang),
+  'titlepage.xhtml':xhtml(TITLE[lang],title_page(lang,title=TITLE[lang],subtitle=SUB[lang],sample=sample),lang),
+  'about.xhtml':xhtml(TITLE[lang],front,lang),'nav.xhtml':xhtml('Contents',nav,lang),'book.css':EPUB_CSS}
+ for doc in documents:files[doc.filename]=xhtml(doc.title,doc.content,lang)
+ for name,text in files.items():
+  if name.endswith('.xhtml'):etree.fromstring(text.encode())
+ image_names={cover_name}
+ for name,text in files.items():
+  if name.endswith('.xhtml'):image_names.update(img['src'] for img in BeautifulSoup(text,'html.parser').select('img[src]'))
+ binaries={name:(folder/name).read_bytes() for name in sorted(image_names)}
+ binaries.update({p.relative_to(folder).as_posix():p.read_bytes() for p in sorted((folder/'fonts').glob('*')) if p.is_file()})
+ mimetypes={'.otf':'font/otf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain'}
  manifest=[];spine=[]
  for i,(name,data) in enumerate(files.items()):
   props=' properties="nav"' if name=='nav.xhtml' else '';media='application/xhtml+xml' if name.endswith('.xhtml') else 'text/css';manifest.append(f'<item id="f{i}" href="{name}" media-type="{media}"{props}/>')
-  if name in ['cover.xhtml','about.xhtml','nav.xhtml'] or name.endswith('.xhtml') and name not in ['cover.xhtml','about.xhtml','nav.xhtml']:spine.append(f'<itemref idref="f{i}"/>')
+  if name.endswith('.xhtml'):spine.append(f'<itemref idref="f{i}"/>')
  for i,(name,data) in enumerate(binaries.items()):
-  props=' properties="cover-image"' if name=='images/cover.png' else '';manifest.append(f'<item id="b{i}" href="{name}" media-type="{mimetypes[Path(name).suffix]}"{props}/>')
- # Layout-only changes must receive a new identifier as well as text changes.
- identity=json.dumps(files,sort_keys=True,ensure_ascii=False).encode()
+  props=' properties="cover-image"' if name==cover_name else '';manifest.append(f'<item id="b{i}" href="{name}" media-type="{mimetypes[Path(name).suffix]}"{props}/>')
+ identity=json.dumps({'files':files,'binaries':{k:sha(v) for k,v in binaries.items()}},sort_keys=True,ensure_ascii=False).encode()
  uid='urn:uuid:'+str(uuid.uuid5(uuid.NAMESPACE_URL,'https://github.com/williamwue/oh-my-stack/pstack/'+lang+'/'+sha(identity)))
  modified=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
- opf=f'''<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" xml:lang="{lang}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="book-id">{uid}</dc:identifier><dc:title>{html.escape(TITLE[lang])}</dc:title><dc:creator>kaito</dc:creator><dc:language>{lang}</dc:language><dc:publisher>Oh My Stack</dc:publisher><dc:source>https://github.com/williamwue/oh-my-stack/tree/{SOURCE_REV}/docs/books/pstack</dc:source><dc:rights>Author permission reported by the maintainer. Book content is not licensed under the project MIT license.</dc:rights><meta property="dcterms:modified">{modified}</meta></metadata><manifest>{''.join(manifest)}</manifest><spine>{''.join(spine)}</spine></package>'''
- target=ROOT/f'output/epub/pstack-{lang}.epub'
+ book_title=TITLE[lang]+((' · 排版样书' if lang=='zh-CN' else ' · Typography sample') if sample else '')
+ opf=f'''<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" xml:lang="{lang}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="book-id">{uid}</dc:identifier><dc:title>{html.escape(book_title)}</dc:title><dc:creator>kaito</dc:creator><dc:language>{lang}</dc:language><dc:publisher>Oh My Stack</dc:publisher><dc:source>https://github.com/williamwue/oh-my-stack/tree/{SOURCE_REV}/docs/books/pstack</dc:source><dc:rights>Author permission reported by the maintainer. Book content is not licensed under the project MIT license.</dc:rights><meta property="dcterms:modified">{modified}</meta><meta property="rendition:layout">reflowable</meta></metadata><manifest>{''.join(manifest)}</manifest><spine>{''.join(spine)}</spine></package>'''
+ target=target or ROOT/f'output/epub/pstack-{lang}{"-sample" if sample else ""}.epub'
+ target.parent.mkdir(parents=True,exist_ok=True)
  with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
   z.writestr('mimetype','application/epub+zip',compress_type=zipfile.ZIP_STORED)
   z.writestr('META-INF/container.xml','<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>')
   z.writestr('OEBPS/content.opf',opf)
   for n,d in {**files,**binaries}.items():z.writestr('OEBPS/'+n,d)
+ (folder/'epub-layout-receipts.json').write_text(json.dumps({'documents':[d.filename for d in documents],'tables':receipts},ensure_ascii=False,indent=2)+'\n')
  return target
 
-def main(lang,formats):
- folder=BUILD/lang;folder.mkdir(parents=True,exist_ok=True);(folder/'images').mkdir(exist_ok=True)
+def main(lang,formats,sample=False):
+ folder=BUILD/(lang+ ("-sample" if sample else ""));folder.mkdir(parents=True,exist_ok=True);(folder/'images').mkdir(exist_ok=True)
  text=''.join((BOOK/c['translation_file' if lang=='zh-CN' else 'english_file']).read_text() for c in CHAPTERS)+about(lang)+cover(lang)+''.join(p.read_text() for p in (BOOK/'diagrams'/lang).glob('*.md'))
  text+=''.join(p.read_text() for p in [BOOK/'zh-CN/GLOSSARY.md',BOOK/'assets/README.md'])+'关于本版目录中文图片说明第部分图续'
+ text+=(ROOT/'tools/books/epub_publication.py').read_text()+(ROOT/'tools/books/epub_media.py').read_text()
  make_fonts(folder,text);print(lang,'fonts ready',flush=True)
  chapters,stats=make_content(lang,folder);print(lang,'48 chapters and images ready',flush=True)
  if lang=='zh-CN':
@@ -156,10 +186,14 @@ def main(lang,formats):
    chapters.append((fn,title,f'<section class="chapter" id="{Path(fn).stem}"><h1>{title}</h1>{soup}</section>'))
  front=about(lang);cover_html=cover(lang)
  toc='<section class="toc" id="contents"><h1>'+('目录' if lang=='zh-CN' else 'Contents')+'</h1><ol>'+''.join(f'<li><a href="#{Path(n).stem}">{html.escape(t)}</a></li>' for n,t,b in chapters)+'</ol></section>'
- cover_pdf=HTML(string=xhtml(TITLE[lang],cover_html,lang),base_url=str(folder)+'/').write_pdf(stylesheets=[CSS(string=PDF_CSS,base_url=str(folder)+'/',font_config=FONT)],font_config=FONT);doc=pymupdf.open(stream=cover_pdf,filetype='pdf');doc[0].get_pixmap(matrix=pymupdf.Matrix(1.5,1.5)).save(str(folder/'images/cover.png'));doc.close()
- epub=package_epub(lang,folder,chapters,front,folder/'images/cover.png');print(lang,'EPUB packaged',flush=True)
+ if sample:
+  chosen={4,13,20,22,27,28,29,31,38,40,45}
+  chapters=[item for item in chapters if not item[0].startswith('ch') or int(item[0][2:4]) in chosen]
+  stats=[s for s in stats if s['order'] in chosen]
+ cover_image=folder/'images/original-cover.jpg';cover_image.write_bytes((BOOK/'assets/original-cover.jpg').read_bytes())
+ epub=package_epub(lang,folder,chapters,front,cover_image,sample=sample);print(lang,'EPUB packaged:',epub,flush=True)
  if formats=='epub':
-  report={'language':lang,'source_revision':SOURCE_REV,'chapters':stats,'epub_sha256':sha(epub.read_bytes()),'epub_table_layout':'labelled paragraphs','working_tree_sources':True}
+  report={'language':lang,'source_revision':SOURCE_REV,'chapters':stats,'epub_sha256':sha(epub.read_bytes()),'epub_table_layout':'explicit per-table policy','working_tree_sources':True}
   (folder/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
   return
  pdf_sections=[]
@@ -197,17 +231,19 @@ def main(lang,formats):
  anchors={}
  for i,p in enumerate(rendered.pages):
   for k in p.anchors:anchors.setdefault(k,i+1)
- report={'language':lang,'source_revision':SOURCE_REV,'chapters':stats,'pages':len(rendered.pages),'anchors':anchors,'pdf_sha256':sha(pdf.read_bytes()),'epub_sha256':sha(epub.read_bytes()),'working_tree_sources':True,'epub_table_layout':'labelled paragraphs'}
+ report={'language':lang,'source_revision':SOURCE_REV,'chapters':stats,'pages':len(rendered.pages),'anchors':anchors,'pdf_sha256':sha(pdf.read_bytes()),'epub_sha256':sha(epub.read_bytes()),'working_tree_sources':True,'epub_table_layout':'explicit per-table policy'}
  (folder/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print(lang,'PDF pages',len(rendered.pages),flush=True)
 
 if __name__=='__main__':
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--language',nargs='+',choices=['zh-CN','en'],default=['zh-CN','en'])
+ parser.add_argument('--sample',action='store_true',help='Build representative EPUB sample without overwriting full artifacts')
  parser.add_argument('--format',choices=['both','epub'],default='both')
  parser.add_argument('--assets',type=Path,default=ASSETS,help='Directory containing full Noto CJK fonts and OFL.txt')
  args=parser.parse_args();ASSETS=args.assets.resolve()
+ if args.sample and args.format!='epub':parser.error('--sample requires --format epub')
  for name in ['NotoSansCJKsc-Regular.otf','NotoSansCJKsc-Bold.otf','NotoSansMonoCJKsc-Regular.otf','OFL.txt']:
   if not (ASSETS/name).is_file():parser.error(f'Missing font asset: {ASSETS/name}')
  for path in ['output/pdf','output/epub']: (ROOT/path).mkdir(parents=True,exist_ok=True)
  subprocess.run(['node',str(ROOT/'tools/books/validate-pstack-book.mjs'),'--complete'],cwd=ROOT,check=True)
- for lang in args.language:main(lang,args.format)
+ for lang in args.language:main(lang,args.format,args.sample)

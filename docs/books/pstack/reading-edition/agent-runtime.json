@@ -1,0 +1,77 @@
+{
+  "evidence": "Native session_meta first record and first turn_context; no message body inspected",
+  "agents": [
+    {
+      "id": "01a1334c-8c5e-76e1-b69f-a995a3871353",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_arch_2",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-26-57-01a1334c-8c5e-76e1-b69f-a995a3871353.jsonl",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    {
+      "id": "01a13357-d449-7570-bf1c-8bcae69e3987",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_impl_media",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-39-16-01a13357-d449-7570-bf1c-8bcae69e3987.jsonl",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    {
+      "id": "01a13357-801b-78d1-a914-04deb04c0329",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_impl_validator",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-38-54-01a13357-801b-78d1-a914-04deb04c0329.jsonl",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    {
+      "id": "01a13357-2fee-79b2-bc3e-ca8a87e4431e",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_impl_tables",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-38-34-01a13357-2fee-79b2-bc3e-ca8a87e4431e.jsonl",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    {
+      "id": "01a13350-8b51-7c21-b29a-bed4a9227144",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_arch_judge",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-31-18-01a13350-8b51-7c21-b29a-bed4a9227144.jsonl",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    {
+      "id": "01a1334c-4db9-7403-8632-64b7ea5cdb8d",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_arch_1",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-26-41-01a1334c-4db9-7403-8632-64b7ea5cdb8d.jsonl",
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    {
+      "id": "01a1334c-cbf4-7462-86e8-dfe3d6409253",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_arch_3",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-27-13-01a1334c-cbf4-7462-86e8-dfe3d6409253.jsonl",
+      "model": "gpt-6-luna",
+      "effort": "high"
+    },
+    {
+      "id": "01a13361-f0cb-7e83-9a2c-c52c188b6b6e",
+      "parent_thread_id": "01a13340-79d3-7610-93ad-a9c698118dbb",
+      "agent_path": "/root/epub_code_review",
+      "model_provider": "openai",
+      "metadata_file": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-50-19-01a13361-f0cb-7e83-9a2c-c52c188b6b6e.jsonl",
+      "model": "gpt-6-astra",
+      "effort": "high"
+    }
+  ]
+}

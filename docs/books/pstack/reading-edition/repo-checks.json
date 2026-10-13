@@ -1,0 +1,41 @@
+{
+  "standard_npm_run_check": {
+    "status": "failed",
+    "reason": "Homebrew Node executable copied by unchanged delivery-evidence test cannot locate libnode.127.dylib; SIGABRT",
+    "baseline_reproduced": true,
+    "log": "repo-check-default.log",
+    "baseline_log": "repo-check-baseline-failure.log"
+  },
+  "preceding_npm_check_stages": {
+    "generate:check": "passed",
+    "docs:check": "passed",
+    "conformance:check": "passed",
+    "release:check": "passed",
+    "validate": "passed",
+    "check:books": "passed",
+    "lint:markdown": "passed"
+  },
+  "full_node_suite_direct": {
+    "command": "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/node@22/lib:/opt/homebrew/lib node --test tests/*.test.mjs",
+    "passed": 404,
+    "failed": 0,
+    "skipped": 2,
+    "log": "repo-node-tests-final.log"
+  },
+  "unrelated_test_or_runtime_source_modified": false,
+  "environment_diagnostic": {
+    "direct": "node-copy-direct-diagnostic.log",
+    "via_npm": "node-copy-npm-diagnostic.log",
+    "conclusion": "Identical copied Node exits 1 directly with DYLD search path, but npm-script child lacks that variable and aborts loading @rpath/libnode.127.dylib."
+  },
+  "publication_check": {
+    "status": "passed",
+    "environment": "Official pinned Node 22.23.3",
+    "node_tests": {
+      "passed": 406,
+      "failed": 0,
+      "skipped": 0
+    },
+    "evidence": "publication-checks.json"
+  }
+}

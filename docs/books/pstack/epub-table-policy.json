@@ -1,0 +1,1347 @@
+{
+  "version": 1,
+  "source_snapshot": "2026-10-03",
+  "tables": {
+    "ch01-t01": {
+      "zh-CN": {
+        "source_sha256": "b96c8be4b09df964409c6ff4715c108ee718111ee603b46beda15d3720e30835",
+        "mode": "records",
+        "reason": "Six part titles and their explanatory questions form a reading guide; unboxed records keep each part with its topic and chapter range."
+      },
+      "en": {
+        "source_sha256": "ff0c1e3b9a3ec16e672777cd60bbba834f68b331ef8711f46e49d769c53df158",
+        "mode": "records",
+        "reason": "Six part titles and their explanatory questions form a reading guide; unboxed records keep each part with its topic and chapter range."
+      }
+    },
+    "ch01-t02": {
+      "zh-CN": {
+        "source_sha256": "d0e63510318cead27aa3d2132498dca7bb78e60587b9c5a4dffa60b9af70d410",
+        "mode": "table",
+        "reason": "Five short snapshot facts are concise item/value pairs, suitable for a semantic two-column table."
+      },
+      "en": {
+        "source_sha256": "e4b0600499ee97534c88b2d95ab79715d110ce966147e51e8d0c0a2486679697",
+        "mode": "table",
+        "reason": "Five short snapshot facts are concise item/value pairs, suitable for a semantic two-column table."
+      }
+    },
+    "ch02-t01": {
+      "zh-CN": {
+        "source_sha256": "c19cddb41d98ed38ebc275477f7a49a5300fb91e817552a88221dc5d68d8f314",
+        "mode": "records",
+        "reason": "Chapter titles and narrative roles are an explanatory chapter guide rather than a compact comparison."
+      },
+      "en": {
+        "source_sha256": "7c53dfe8ec77120530c5f033499c37fc8db463a19d0a822c76593f27114c08c9",
+        "mode": "records",
+        "reason": "Chapter titles and narrative roles are an explanatory chapter guide rather than a compact comparison."
+      }
+    },
+    "ch04-t01": {
+      "zh-CN": {
+        "source_sha256": "fee7506c1cd09b9568506e4eed7af6338ee1c67d9228b4feb3c305214b513f22",
+        "mode": "table",
+        "reason": "Five short change examples compare a report against concrete evidence; retain the three-column comparison."
+      },
+      "en": {
+        "source_sha256": "a9f489e78185fd4a192212c9e186d571a54fad0b3b1ba0347e98134693d44793",
+        "mode": "table",
+        "reason": "Five short change examples compare a report against concrete evidence; retain the three-column comparison."
+      }
+    },
+    "ch04-t02": {
+      "zh-CN": {
+        "source_sha256": "74cff273536a9d54a22e297b0d46cd1bb6c4c310fae878e520c92762d246be8d",
+        "mode": "records",
+        "reason": "Verification questions and corrective instructions should read as individual checklist records without a row box."
+      },
+      "en": {
+        "source_sha256": "bb8d339b983988f4b859a1dc81443fb3aef434ee4955c56513133c72cb950e5c",
+        "mode": "records",
+        "reason": "Verification questions and corrective instructions should read as individual checklist records without a row box."
+      }
+    },
+    "ch06-t01": {
+      "zh-CN": {
+        "source_sha256": "1532e00ebc1eede96fcd9ff8e77856f77ed414a04d92a59ddffb50ef2d05b4ee",
+        "mode": "records",
+        "reason": "Maintenance tasks have detailed linked explanations of the supporting mechanism; keep each task as a record."
+      },
+      "en": {
+        "source_sha256": "946ccce44ceb91c78940dc4338259fcf7b4e948dcadf3e9fcc712a0b74bb6f24",
+        "mode": "records",
+        "reason": "Maintenance tasks have detailed linked explanations of the supporting mechanism; keep each task as a record."
+      }
+    },
+    "ch07-t01": {
+      "zh-CN": {
+        "source_sha256": "c19cfe9ed7a3b4745616309f4e0da635cf0478b361413007b993f10fd56b4bf5",
+        "mode": "table",
+        "reason": "Three concise missing-foundation/consequence pairs benefit from direct two-column comparison."
+      },
+      "en": {
+        "source_sha256": "238dcc1a463174623ef7b51ccb3e4206a75164b5536b0d60fd6cd71ab01fa435",
+        "mode": "table",
+        "reason": "Three concise missing-foundation/consequence pairs benefit from direct two-column comparison."
+      }
+    },
+    "ch07-t02": {
+      "zh-CN": {
+        "source_sha256": "fa4cb531d6a63069a320c01320c6defb825ee7e5dc736e26ff8d5a6297dbb149",
+        "mode": "table",
+        "reason": "Five concise automation prerequisites map to short chapter references; retain their two-column association."
+      },
+      "en": {
+        "source_sha256": "224cf198af9ab9bc84cc64f46111797b16b710c7b12637fd630fac2ee4589852",
+        "mode": "table",
+        "reason": "Five concise automation prerequisites map to short chapter references; retain their two-column association."
+      }
+    },
+    "ch08-t01": {
+      "zh-CN": {
+        "source_sha256": "cdb8cd64de0b5db5867692435ba76e4d762ae27e488957dbe0bc1a09ce08509d",
+        "mode": "records",
+        "reason": "The four chapter titles and narrative roles are an explanatory chapter guide."
+      },
+      "en": {
+        "source_sha256": "114ffbb88302390dd99603635685533bc00ebaf9b03f52f54d362866e63c818c",
+        "mode": "records",
+        "reason": "The four chapter titles and narrative roles are an explanatory chapter guide."
+      }
+    },
+    "ch09-t01": {
+      "zh-CN": {
+        "source_sha256": "129b35c7fce475b796e745d85475c712b110f39bab5f72f449a1e4b6ac882a60",
+        "mode": "split",
+        "reason": "Five component entries have four columns; repeat the component key alongside count/location, then its role, in source row order.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "en": {
+        "source_sha256": "adcd605a5e3a6cf7c36f67a49ba39930be6ce9d4cf0b0b47a5e2ca69d38f2364",
+        "mode": "split",
+        "reason": "Five component entries have four columns; repeat the component key alongside count/location, then its role, in source row order.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      }
+    },
+    "ch09-t02": {
+      "zh-CN": {
+        "source_sha256": "bc8167268fd3b7083bd47fdb8e7a1553cd7bc638e66106e655bd343a7ce25371",
+        "mode": "records",
+        "reason": "The component directory includes explanatory usage text and linked plugin details, better read as labelled records."
+      },
+      "en": {
+        "source_sha256": "380d78de8ef3d030700168a7cc99786d16b84742d4ad00a6d9fc3a0b9ac1a7e9",
+        "mode": "records",
+        "reason": "The component directory includes explanatory usage text and linked plugin details, better read as labelled records."
+      }
+    },
+    "ch09-t03": {
+      "zh-CN": {
+        "source_sha256": "9a47863458e9d798759014dea2817412af37043acd4b4a699cbf120af6a38d5f",
+        "mode": "records",
+        "reason": "Talk themes map to multi-item linked component explanations and examples; preserve each theme as an unboxed record."
+      },
+      "en": {
+        "source_sha256": "b1413ef0367ff004a6bdb19e0f30c095770ee8e7b446da7b003a04ba76e01526",
+        "mode": "records",
+        "reason": "Talk themes map to multi-item linked component explanations and examples; preserve each theme as an unboxed record."
+      }
+    },
+    "ch10-t01": {
+      "zh-CN": {
+        "source_sha256": "a4b319073acc981bc05cf9adf850264d2c1387a498e245b7276db1881b8e014a",
+        "mode": "table",
+        "reason": "Four short request categories map directly to a route; retain the two-column routing comparison."
+      },
+      "en": {
+        "source_sha256": "a840248a9fbf11182a19625a4245a504b181a8b5b87acfaa8526d416488580cc",
+        "mode": "table",
+        "reason": "Four short request categories map directly to a route; retain the two-column routing comparison."
+      }
+    },
+    "ch11-t01": {
+      "zh-CN": {
+        "source_sha256": "4647dd43be803c5899ccbfb5a754380bbf7e9534cff11046e64256807792ac82",
+        "mode": "records",
+        "reason": "Eight aspects mix short counts with long calling explanations across four columns; unboxed records avoid long comparison rows."
+      },
+      "en": {
+        "source_sha256": "d88779514c8912a6bbc884afaff018f2786bfe6b2644ce5dc75fc807bfd68c97",
+        "mode": "records",
+        "reason": "Eight aspects mix short counts with long calling explanations across four columns; unboxed records avoid long comparison rows."
+      }
+    },
+    "ch11-t02": {
+      "zh-CN": {
+        "source_sha256": "8656d5e44d13734eddf7d3daf511f1421aeefbf92cca573bd1e5f2fa43f99ec1",
+        "mode": "records",
+        "reason": "Calling categories contain long Skill lists; a record keeps each list associated with its calling condition."
+      },
+      "en": {
+        "source_sha256": "a341befed9844c264769eb75a383aa3074c1daff7a4156df1fafd07f0b37ddac",
+        "mode": "records",
+        "reason": "Calling categories contain long Skill lists; a record keeps each list associated with its calling condition."
+      }
+    },
+    "ch11-t03": {
+      "zh-CN": {
+        "source_sha256": "da96abe0bc625d6de16293db3860755cc1c0a841b21daf1a79d79217ab6e1308",
+        "mode": "table",
+        "reason": "Eight concise trigger/capability pairs form a compact two-column reference."
+      },
+      "en": {
+        "source_sha256": "79efaba1f19bfba107477d2a3da9209103a36236a96a2bfa09e526ec3bc9a290",
+        "mode": "table",
+        "reason": "Eight concise trigger/capability pairs form a compact two-column reference."
+      }
+    },
+    "ch11-t04": {
+      "zh-CN": {
+        "source_sha256": "25bb99357a424e616e9cb793f0d469119f30cc5728e0c4f9617c57f1741e5951",
+        "mode": "records",
+        "reason": "Bug-fix stages have multi-item Skill and Principle explanations; keep each stage as an unboxed record."
+      },
+      "en": {
+        "source_sha256": "5cc1ecbce8957a76c5a4a18602912ad0cf0849dabef9b92b2abf7377f01f2a8b",
+        "mode": "records",
+        "reason": "Bug-fix stages have multi-item Skill and Principle explanations; keep each stage as an unboxed record."
+      }
+    },
+    "ch12-t01": {
+      "zh-CN": {
+        "source_sha256": "adf74e2573bd20c64c10c36b88847e9864c1f7b8e18eda2c828ccf4e5fe423dd",
+        "mode": "records",
+        "reason": "Loading layers describe both the document read and its timing in full sentences; use labelled layer records."
+      },
+      "en": {
+        "source_sha256": "35f84c1e5955e5574ab3df35dc37a0ba09bb0843b9b3a16cdbb1acdd01e40225",
+        "mode": "records",
+        "reason": "Loading layers describe both the document read and its timing in full sentences; use labelled layer records."
+      }
+    },
+    "ch12-t02": {
+      "zh-CN": {
+        "source_sha256": "24ffb5053246cb9ccb9e0aea143795b96398a78f1d4988d2a23532efde70c00c",
+        "mode": "records",
+        "reason": "Auditable mechanisms and their observable effects are explanatory prose pairs."
+      },
+      "en": {
+        "source_sha256": "5994d6ffe3a69f303bb7e65159a34c37a4ba647c6962c958e6e1b41c8af68c35",
+        "mode": "records",
+        "reason": "Auditable mechanisms and their observable effects are explanatory prose pairs."
+      }
+    },
+    "ch13-t01": {
+      "zh-CN": {
+        "source_sha256": "b752752a2874ea22f50dda35d3ce2d654f355368051cd93f6cdf77a394adc3f5",
+        "mode": "records",
+        "reason": "The chapter guide combines narrative roles with multi-Playbook lists; each chapter should be an unboxed record."
+      },
+      "en": {
+        "source_sha256": "fc90090bf270b95cdac44fffe8d088d46f5663eb89c6d58ee4eb5e38a2eb58ed",
+        "mode": "records",
+        "reason": "The chapter guide combines narrative roles with multi-Playbook lists; each chapter should be an unboxed record."
+      }
+    },
+    "ch13-t02": {
+      "zh-CN": {
+        "source_sha256": "cc518c63feee914653eba978073c50050e9d3fb48a29d96411d3f48c9c17c134",
+        "mode": "records",
+        "reason": "The 23-Playbook catalog contains long overviews and use cases; retain all four fields as unboxed records."
+      },
+      "en": {
+        "source_sha256": "621975f408f82b97c31841f9110eaa072c9bc64b298bb7d6cbb5ff3ddaa717c0",
+        "mode": "records",
+        "reason": "The 23-Playbook catalog contains long overviews and use cases; retain all four fields as unboxed records."
+      }
+    },
+    "ch14-t01": {
+      "zh-CN": {
+        "source_sha256": "b7164a9a071a8d191f3d18602d93d57b7f47290d2da3e17028ca7f6c79788fe8",
+        "mode": "split",
+        "reason": "The three-row, four-column investigation comparison is short; repeat its aspect key in two contiguous column groups.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "en": {
+        "source_sha256": "09b198ce0bf2a5673e5eba4faedcc949dac84d4c104700be7a2572461fa11c67",
+        "mode": "split",
+        "reason": "The three-row, four-column investigation comparison is short; repeat its aspect key in two contiguous column groups.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      }
+    },
+    "ch15-t01": {
+      "zh-CN": {
+        "source_sha256": "ecda15e19e4c7ccad6794a0972f2b132ea154f21d4082dac0b808c0a2e1abf26",
+        "mode": "split",
+        "reason": "Three aspects compare bug fix, performance work and hillclimb; split the four-column comparison into key-based panels.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "en": {
+        "source_sha256": "ae387ad5aa7cee5191ddd3431452e54e98b5250c3ed21184f539629ccb44aaa9",
+        "mode": "split",
+        "reason": "Three aspects compare bug fix, performance work and hillclimb; split the four-column comparison into key-based panels.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      }
+    },
+    "ch15-t02": {
+      "zh-CN": {
+        "source_sha256": "f7014a85120c3063a65bea26b1c34482b164745de104b129e765c34f77ccfbeb",
+        "mode": "records",
+        "reason": "Eight strategy families include explanatory runtime symptoms, including a long indirection description; use unboxed records."
+      },
+      "en": {
+        "source_sha256": "209d5443ba73e853bee50339282123f828b1fe633b9d5b7bc9b594baaf5a30be",
+        "mode": "records",
+        "reason": "Eight strategy families include explanatory runtime symptoms, including a long indirection description; use unboxed records."
+      }
+    },
+    "ch16-t01": {
+      "zh-CN": {
+        "source_sha256": "e090a65a9d8227401c12806fb3390c366adcbb94629c736a0618835d0304ec14",
+        "mode": "split",
+        "reason": "Three aspects compare four workflows; divide the five-column comparison into two paired workflow panels per source row.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "en": {
+        "source_sha256": "6e5cb6a7d1010e43fcd92990da6838f423f527cc7501feb9d8a319292e47759e",
+        "mode": "split",
+        "reason": "Three aspects compare four workflows; divide the five-column comparison into two paired workflow panels per source row.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    "ch16-t02": {
+      "zh-CN": {
+        "source_sha256": "2baab3fd1223afbe895081de8dd4db554adc3a9e8f639309f00a9142a10415e3",
+        "mode": "records",
+        "reason": "Throughput-plan fields include long shared-state guidance; each planning field needs unboxed explanatory flow."
+      },
+      "en": {
+        "source_sha256": "1feb9b270439252511ff561a1020d0a65fc75b9527435e1be295e1d1a5d446b2",
+        "mode": "records",
+        "reason": "Throughput-plan fields include long shared-state guidance; each planning field needs unboxed explanatory flow."
+      }
+    },
+    "ch16-t03": {
+      "zh-CN": {
+        "source_sha256": "4549486a9681e70a071fa26adea9ec1b182d4bd962f66520bdd7ca737fa48960",
+        "mode": "table",
+        "reason": "Four concise intent/example/route entries form a useful three-column comparison."
+      },
+      "en": {
+        "source_sha256": "a3023ef6ae033af58229211c0e034e3b9faa9450b4b96ec67fa539469b9f37a4",
+        "mode": "table",
+        "reason": "Four concise intent/example/route entries form a useful three-column comparison."
+      }
+    },
+    "ch17-t01": {
+      "zh-CN": {
+        "source_sha256": "767edd0a0f5e836fcdc3d0108913da4b24d54618965eb7e8616100069b68bcea",
+        "mode": "records",
+        "reason": "Skill entry points contain explanatory invocation conditions and chapter references; use labelled entries."
+      },
+      "en": {
+        "source_sha256": "86f8ddeeb9cd30728d53f52fffd0e7983af93f54480a394049fa5138ab16f24d",
+        "mode": "records",
+        "reason": "Skill entry points contain explanatory invocation conditions and chapter references; use labelled entries."
+      }
+    },
+    "ch18-t01": {
+      "zh-CN": {
+        "source_sha256": "3f926071ae15dfdeab591ac31f823fff58e89f554d65347850efd337089c8c29",
+        "mode": "table",
+        "reason": "Three brief PR stages map to a Playbook and endpoint; retain native three-column comparison."
+      },
+      "en": {
+        "source_sha256": "66d97290866261379fad3a074dcea8a464588d5d1a00f53b1571ebb338ff1680",
+        "mode": "table",
+        "reason": "Three brief PR stages map to a Playbook and endpoint; retain native three-column comparison."
+      }
+    },
+    "ch18-t02": {
+      "zh-CN": {
+        "source_sha256": "f0d2b33bdad5f451c46573fb8f6772d091ea729a8317c86e8285f527f657a010",
+        "mode": "table",
+        "reason": "Four brief Babysit modes compare action and matching request; preserve the compact three-column reference."
+      },
+      "en": {
+        "source_sha256": "70c37a86086d5e62a4b9d354c145e5406e59c8b258b0318a1c0bf795864175f3",
+        "mode": "table",
+        "reason": "Four brief Babysit modes compare action and matching request; preserve the compact three-column reference."
+      }
+    },
+    "ch19-t01": {
+      "zh-CN": {
+        "source_sha256": "48ce51b9e76b90a661d7c177f912d0c408c6ced50cad72b58a04b21b43ba5a9e",
+        "mode": "table",
+        "reason": "Four concise ownership entries compare role, Playbook and responsibility."
+      },
+      "en": {
+        "source_sha256": "9fff725830bbccee9bc607a0c54c66e0926427a716506ceb1803100d880731a6",
+        "mode": "table",
+        "reason": "Four concise ownership entries compare role, Playbook and responsibility."
+      }
+    },
+    "ch20-t01": {
+      "zh-CN": {
+        "source_sha256": "83e1ddd30134c427d14e46412a69bc43e46fea544131ba05114f296262a1210e",
+        "mode": "table",
+        "reason": "Four short Playbook ownership distinctions form compact two-column pairs."
+      },
+      "en": {
+        "source_sha256": "a1fe21bf42fca70d45fb04b7d3233ef7c9bf8bdc875ecdca5eaca8d664e92ded",
+        "mode": "table",
+        "reason": "Four short Playbook ownership distinctions form compact two-column pairs."
+      }
+    },
+    "ch20-t02": {
+      "zh-CN": {
+        "source_sha256": "04934c131cfe9559267f164d2352efbc577106da063b0ef15c618417ef1ce95f",
+        "mode": "records",
+        "reason": "Coordinator files carry detailed contents and field lists, so each file needs an unboxed record."
+      },
+      "en": {
+        "source_sha256": "c0db23f38e3c60ec9b549dba823cc14e1653d512360f7c106b45db0ed7149bcc",
+        "mode": "records",
+        "reason": "Coordinator files carry detailed contents and field lists, so each file needs an unboxed record."
+      }
+    },
+    "ch20-t03": {
+      "zh-CN": {
+        "source_sha256": "1dc4f485221d3b832e50069e0e4c918a71383a726374e61c31e6fb958cb74034",
+        "mode": "table",
+        "reason": "Five short verdict definitions are concise two-column reference pairs."
+      },
+      "en": {
+        "source_sha256": "714a6284389f2420e31ee3e8df7d0b30b43494b649b557b7d2308a8d3d4727bf",
+        "mode": "table",
+        "reason": "Five short verdict definitions are concise two-column reference pairs."
+      }
+    },
+    "ch20-t04": {
+      "zh-CN": {
+        "source_sha256": "1ba194820b46b7a198183661b1b6c4f79fe7e4645f3de558063ab628b5b5003c",
+        "mode": "split",
+        "reason": "Three aspects compare five automation choices; preserve source row order with key plus two, two, and one contiguous non-key columns.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ]
+      },
+      "en": {
+        "source_sha256": "098a77866cce9430b6ecde72d454ef5bccd174462f94e512f296fa69655e9a62",
+        "mode": "split",
+        "reason": "Three aspects compare five automation choices; preserve source row order with key plus two, two, and one contiguous non-key columns.",
+        "key_column": 0,
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ]
+        ]
+      }
+    },
+    "ch21-t01": {
+      "zh-CN": {
+        "source_sha256": "a5e3c5c6f58859ffcd79124a04613ddfe4af6d0bed4243b014140e37d836aa7c",
+        "mode": "table",
+        "reason": "Five principle groups compare short counts and decision scopes; retain the three-column reference."
+      },
+      "en": {
+        "source_sha256": "7bd9fc4c9aa4bbae858bcb450318ea09ad4c2fda94d1eff3ddd3bcb965964fce",
+        "mode": "table",
+        "reason": "Five principle groups compare short counts and decision scopes; retain the three-column reference."
+      }
+    },
+    "ch21-t02": {
+      "zh-CN": {
+        "source_sha256": "8ba702c59d6632a4517600ccb2c3267ba9640ca1751f936ce6c8b6d2c4200316",
+        "mode": "records",
+        "reason": "Chapter titles and explanatory topic lists are prose entries rather than compact cells."
+      },
+      "en": {
+        "source_sha256": "ea2c4fce80f8f3225d5933b4994d018e127acfb3a04d5ea65c7a537d0b088dd1",
+        "mode": "records",
+        "reason": "Chapter titles and explanatory topic lists are prose entries rather than compact cells."
+      }
+    },
+    "ch21-t03": {
+      "zh-CN": {
+        "source_sha256": "83c0134095af31e65cb49922a018016623b74c923a8466916263f1008eae0041",
+        "mode": "records",
+        "reason": "The 23-Principle catalog has long summaries and trigger conditions; retain all fields as unboxed records."
+      },
+      "en": {
+        "source_sha256": "cf4300ea121911aad61a05d547c064ed0e451f3fc8df4f7ba799014c240c2ed4",
+        "mode": "records",
+        "reason": "The 23-Principle catalog has long summaries and trigger conditions; retain all fields as unboxed records."
+      }
+    },
+    "ch22-t01": {
+      "zh-CN": {
+        "source_sha256": "3194e9ab8c1b6cd26931b976db626f203a389d9eeb5d459114c71b90b8bda70c",
+        "mode": "records",
+        "reason": "Ten principle entries have sentence-length conclusions; records keep the grouping, principle and conclusion together."
+      },
+      "en": {
+        "source_sha256": "6be6787224b3e0104be96ab8d49c2daaa16d50a20b9578081b0e2bb0a56b99f3",
+        "mode": "records",
+        "reason": "Ten principle entries have sentence-length conclusions; records keep the grouping, principle and conclusion together."
+      }
+    },
+    "ch22-t02": {
+      "zh-CN": {
+        "source_sha256": "4ec2fe2d61d232143cb4af7cf61cc85bb59525d741983d5840a250f7609643d0",
+        "mode": "records",
+        "reason": "Linked principle names and explanatory targets should flow as unboxed prose pairs."
+      },
+      "en": {
+        "source_sha256": "4acc3ddec9ae55cd7eec4665dedb01db240e2c85e504e618cef328c46dd6196a",
+        "mode": "records",
+        "reason": "Linked principle names and explanatory targets should flow as unboxed prose pairs."
+      }
+    },
+    "ch23-t01": {
+      "zh-CN": {
+        "source_sha256": "0134c1cc4f4aabc6ba031339eb698868aa5b723adb0edd1266d717eacda99c63",
+        "mode": "records",
+        "reason": "Six principle summaries contain sentence-length rules; use unboxed entries to accommodate their text."
+      },
+      "en": {
+        "source_sha256": "02cb91037f59ae7f50c0bf5f43695dcf6e62f846fc6f713f701d63c4d3a3c502",
+        "mode": "records",
+        "reason": "Six principle summaries contain sentence-length rules; use unboxed entries to accommodate their text."
+      }
+    },
+    "ch23-t02": {
+      "zh-CN": {
+        "source_sha256": "a0ede20fcdc2d7f12ea1a77c74e2efef0f77b51c50ce561a67e1f49b8784cdbc",
+        "mode": "records",
+        "reason": "Both the scattered patterns and their replacement structures are explanatory sentences."
+      },
+      "en": {
+        "source_sha256": "85f5d62b24add26a6d7b4d85cc3a82bf86b84a24f4a35766f1460516ad2061d0",
+        "mode": "records",
+        "reason": "Both the scattered patterns and their replacement structures are explanatory sentences."
+      }
+    },
+    "ch23-t03": {
+      "zh-CN": {
+        "source_sha256": "b24f8cb90d55c43847d76d538ad289205a4ba0618029f510904c90f0d7fc6b49",
+        "mode": "records",
+        "reason": "Six review questions map to detailed structural remedies; use labelled principle records."
+      },
+      "en": {
+        "source_sha256": "6ca65b603a2ab239816b1b4220f0ee62b9476a8382a0f27317edb165e7249a14",
+        "mode": "records",
+        "reason": "Six review questions map to detailed structural remedies; use labelled principle records."
+      }
+    },
+    "ch24-t01": {
+      "zh-CN": {
+        "source_sha256": "4ec3e7f37a26c0a87dc22b6ccedbe94d6aa221a4fc038817eb4e7a8eb3e8bd3c",
+        "mode": "records",
+        "reason": "Four principle conclusions are explanatory sentences and should flow as unboxed records."
+      },
+      "en": {
+        "source_sha256": "88db6c23b344fbcd9f0a83a3e607a923eb3179018629178a6437b00730629ff5",
+        "mode": "records",
+        "reason": "Four principle conclusions are explanatory sentences and should flow as unboxed records."
+      }
+    },
+    "ch24-t02": {
+      "zh-CN": {
+        "source_sha256": "c18fa56575b75ed32e2aa3ffcd3410d45ee30d3032c3b0468079af09dbad9645",
+        "mode": "records",
+        "reason": "Each bug-fix step contains detailed decision reasoning; retain the step and explanation in independent paragraphs."
+      },
+      "en": {
+        "source_sha256": "6351d04d17307dd75d80a1597dc8bdd5f800e14a46311b0027ef992a97652425",
+        "mode": "records",
+        "reason": "Each bug-fix step contains detailed decision reasoning; retain the step and explanation in independent paragraphs."
+      }
+    },
+    "ch25-t01": {
+      "zh-CN": {
+        "source_sha256": "974cbe6ebcc4baddce07a64e72f47aa875eac3c1c5790372043e9e85cffd60f4",
+        "mode": "records",
+        "reason": "The two delegation principles contain long conclusions despite the short row count; use unboxed records."
+      },
+      "en": {
+        "source_sha256": "0a350e77ab715bf7e2b3dfcec603b8de0bbe5fe457764bca0ee5065364e6ca58",
+        "mode": "records",
+        "reason": "The two delegation principles contain long conclusions despite the short row count; use unboxed records."
+      }
+    },
+    "ch25-t02": {
+      "zh-CN": {
+        "source_sha256": "08ead61af35ce4765df49d15bb900debf1b0320de568b449a020af0906a8cb01",
+        "mode": "records",
+        "reason": "The product-direction handling cell is a full explanation; individual labelled handling records keep it readable."
+      },
+      "en": {
+        "source_sha256": "df9c9f676e9e19d4c117e949db4385c5491e4d4f005b14cde266f3a488acce56",
+        "mode": "records",
+        "reason": "The product-direction handling cell is a full explanation; individual labelled handling records keep it readable."
+      }
+    },
+    "ch27-t01": {
+      "zh-CN": {
+        "source_sha256": "13d00fcb5f5d019eefe06340109e4b638af2007b96018e30c38aa085802c39d6",
+        "mode": "records",
+        "reason": "The 14-chapter Skill guide combines narrative roles and capability lists; use chapter records."
+      },
+      "en": {
+        "source_sha256": "175788c8916ecd137a8c819461feec52a94d48bdfabc0518866b2d70d70cf3f4",
+        "mode": "records",
+        "reason": "The 14-chapter Skill guide combines narrative roles and capability lists; use chapter records."
+      }
+    },
+    "ch27-t02": {
+      "zh-CN": {
+        "source_sha256": "6ec7bb5ea6981a2630c56bb36bd4aa1b63be1f5d196a8697c11f3d732fb4d37a",
+        "mode": "records",
+        "reason": "The 24-Skill, five-column catalog includes long summaries, use conditions and caller lists; use unboxed records."
+      },
+      "en": {
+        "source_sha256": "0ae0acde116fe8e4f9dcd4671077b5013c2903602c7e2d852ac47781b7505104",
+        "mode": "records",
+        "reason": "The 24-Skill, five-column catalog includes long summaries, use conditions and caller lists; use unboxed records."
+      }
+    },
+    "ch28-t01": {
+      "zh-CN": {
+        "source_sha256": "f0915e590947a767c1425f2772bc7145052568599ad1343c2e0a0bb5c714e61a",
+        "mode": "records",
+        "reason": "Four investigation Skills have narrative descriptions and question lists; retain all fields in unboxed entries."
+      },
+      "en": {
+        "source_sha256": "c5b279a33f557567cf13d19886a2f920d87bb4d33267d2e8859a98456ce6df44",
+        "mode": "records",
+        "reason": "Four investigation Skills have narrative descriptions and question lists; retain all fields in unboxed entries."
+      }
+    },
+    "ch28-t02": {
+      "zh-CN": {
+        "source_sha256": "42f369aaace56a34d1aad1c4024ccbacaf30ddecdb04aee63bd5d14f9fa9126e",
+        "mode": "records",
+        "reason": "Seven evidence-source categories contain detailed guidance about the reasons each reveals; use records."
+      },
+      "en": {
+        "source_sha256": "9ae6a2b5412876ee50425b5c8d18f0bfc2a39c35d2ad0bb89b2f8a3cb888641c",
+        "mode": "records",
+        "reason": "Seven evidence-source categories contain detailed guidance about the reasons each reveals; use records."
+      }
+    },
+    "ch28-t03": {
+      "zh-CN": {
+        "source_sha256": "0050c423820ce6a575e540f654a0e8504e5373ede164f801c571fff1957747f3",
+        "mode": "records",
+        "reason": "Confidence levels include sentence-length explanations and examples; use labelled records."
+      },
+      "en": {
+        "source_sha256": "059200f13bfc73c7ffa8b6ea0054bb220e8d299afbce98101e95632d50fa5ac6",
+        "mode": "records",
+        "reason": "Confidence levels include sentence-length explanations and examples; use labelled records."
+      }
+    },
+    "ch28-t04": {
+      "zh-CN": {
+        "source_sha256": "625a9687bde8fe21f904b71e6209a562855f83489b04a8f5e7a448d1c8ade6e6",
+        "mode": "table",
+        "reason": "Six concise provenance tags map directly to short meanings; retain two-column semantics."
+      },
+      "en": {
+        "source_sha256": "7796796b00b6cfeff2322a35e1292fb411e54a312004e436bcaa4b3337be27af",
+        "mode": "table",
+        "reason": "Six concise provenance tags map directly to short meanings; retain two-column semantics."
+      }
+    },
+    "ch29-t01": {
+      "zh-CN": {
+        "source_sha256": "c94b8f9b623865b446d6642b9c1b94d6e03ffd74f4b52c5818e669e9abc83734",
+        "mode": "records",
+        "reason": "Workflow stages contain long multi-sentence explanations, especially framing and design; use unboxed stage records."
+      },
+      "en": {
+        "source_sha256": "873fee8dea515659f9f78c6c3faa3c13f1f692d67832acd497f30f4e24916a74",
+        "mode": "records",
+        "reason": "Workflow stages contain long multi-sentence explanations, especially framing and design; use unboxed stage records."
+      }
+    },
+    "ch30-t01": {
+      "zh-CN": {
+        "source_sha256": "b377468a5e38b39272182f4772f1238881b91850433eaebd2471a6db93dbc837",
+        "mode": "records",
+        "reason": "Parallel-work Skills have explanatory summaries and distinct execution descriptions; use unboxed entries."
+      },
+      "en": {
+        "source_sha256": "72dee7a62c341a26f027cfb6882737f4799363849936cad6e6208c32ee6d2b3f",
+        "mode": "records",
+        "reason": "Parallel-work Skills have explanatory summaries and distinct execution descriptions; use unboxed entries."
+      }
+    },
+    "ch30-t02": {
+      "zh-CN": {
+        "source_sha256": "46eec9dc9c2b602aef1abe05d83d7ab128cfee669792c0d0ccd2271f44e7d18b",
+        "mode": "records",
+        "reason": "Architecture phases include long grounding guidance and follow-up actions; use phase records."
+      },
+      "en": {
+        "source_sha256": "dc2578c0b6d9d6caad23d9d547823081fa34a3ea51993174227d4814146d0eb0",
+        "mode": "records",
+        "reason": "Architecture phases include long grounding guidance and follow-up actions; use phase records."
+      }
+    },
+    "ch30-t03": {
+      "zh-CN": {
+        "source_sha256": "48c553ced120978de30fc11106ed0fccb1a5cccbdc303ad6a8bbd23b89f6db37",
+        "mode": "records",
+        "reason": "Arena phases contain detailed grading, selection and grafting instructions; use unboxed phase records."
+      },
+      "en": {
+        "source_sha256": "a798f03ca59f5e2b1e47587aba82a8ff0b6bce185a88bce8191a6726bcc0be20",
+        "mode": "records",
+        "reason": "Arena phases contain detailed grading, selection and grafting instructions; use unboxed phase records."
+      }
+    },
+    "ch30-t04": {
+      "zh-CN": {
+        "source_sha256": "39ec1edfe242b8082f65c3e2a7d43086245e068e3496268b80f3dbdac5da5205",
+        "mode": "table",
+        "reason": "Three concise partition/race/mixed descriptions form a compact two-column comparison."
+      },
+      "en": {
+        "source_sha256": "46192965359bb504d46155238acb0d8fa90701f1729736a1ce593dc01dc3215b",
+        "mode": "table",
+        "reason": "Three concise partition/race/mixed descriptions form a compact two-column comparison."
+      }
+    },
+    "ch30-t05": {
+      "zh-CN": {
+        "source_sha256": "13881e0ec7023954dc8955d3b06af7e5ac7a24798bac9190cc04a3c873ad2645",
+        "mode": "table",
+        "reason": "Five brief situations map to short tool choices; retain native two-column comparison."
+      },
+      "en": {
+        "source_sha256": "11fd6a9dd88dbf7c3f9264680a0dd6ab424d6b4ea50cebca47fc0638a81395da",
+        "mode": "table",
+        "reason": "Five brief situations map to short tool choices; retain native two-column comparison."
+      }
+    },
+    "ch30-t06": {
+      "zh-CN": {
+        "source_sha256": "0e9ad8f24adbac5d1c74a05a77d3a2e19b1a1c00c320843a3027fdf6fb841b7d",
+        "mode": "records",
+        "reason": "The arena/swarm comparison includes a long grafting explanation; use aspect records to preserve readable prose."
+      },
+      "en": {
+        "source_sha256": "27698199de5669e60432731611d48a57e94972198fe7e4006fe47f3ee07961de",
+        "mode": "records",
+        "reason": "The arena/swarm comparison includes a long grafting explanation; use aspect records to preserve readable prose."
+      }
+    },
+    "ch31-t01": {
+      "zh-CN": {
+        "source_sha256": "8f8be90a875c19932fb84b9a2f36f6d0374be04bb3207bf23bd9fa0e9bd54bb0",
+        "mode": "table",
+        "reason": "Two concise personal-tool descriptions form a small two-column reference."
+      },
+      "en": {
+        "source_sha256": "605eddf7a68b87a95ed9dde226c72de5bb3b24f6e8642f903ff74ca58e8f7bf6",
+        "mode": "table",
+        "reason": "Two concise personal-tool descriptions form a small two-column reference."
+      }
+    },
+    "ch32-t01": {
+      "zh-CN": {
+        "source_sha256": "8d9791b5cb5b9d08c3a651d951ad1a8940bab87a845ddec2b4894ea5ef282cee",
+        "mode": "records",
+        "reason": "Verification capabilities include narrative responsibilities and artifact descriptions; use unboxed entries."
+      },
+      "en": {
+        "source_sha256": "2c320f7effd7f486d7fdda32145c12adf4f0cf93cadc4b3de668974b84e749f3",
+        "mode": "records",
+        "reason": "Verification capabilities include narrative responsibilities and artifact descriptions; use unboxed entries."
+      }
+    },
+    "ch32-t02": {
+      "zh-CN": {
+        "source_sha256": "3a10aa1b35e1c61dc53708110850db0501778fba1e057c2b071657ff196f3228",
+        "mode": "records",
+        "reason": "The operating-surface questions include detailed startup and harness guidance; use question records."
+      },
+      "en": {
+        "source_sha256": "3d6acdb41babdcb0159e5ac4b4dd1a04498a914011750cc0bbb70fee9a51a910",
+        "mode": "records",
+        "reason": "The operating-surface questions include detailed startup and harness guidance; use question records."
+      }
+    },
+    "ch32-t03": {
+      "zh-CN": {
+        "source_sha256": "55a5e798f023ea261b45c5eba377b88181e36468bf8b112019c980f715413f62",
+        "mode": "records",
+        "reason": "Verification headings carry detailed operational instructions; keep each heading as an unboxed entry."
+      },
+      "en": {
+        "source_sha256": "c03b870818f71de21bd1d37d9031cffb4037e6410adc0885db2a53dde76641f3",
+        "mode": "records",
+        "reason": "Verification headings carry detailed operational instructions; keep each heading as an unboxed entry."
+      }
+    },
+    "ch32-t04": {
+      "zh-CN": {
+        "source_sha256": "acd9e5dc671ba6769c73f39d9e91dbcabb63b1cf52616cd1506223b550868e78",
+        "mode": "table",
+        "reason": "Three concise drift categories map to their corrective actions; retain a two-column reference."
+      },
+      "en": {
+        "source_sha256": "23c3fc4231eb0ef303acbcee0dc340643949f6504390556469455d9e60749dcc",
+        "mode": "table",
+        "reason": "Three concise drift categories map to their corrective actions; retain a two-column reference."
+      }
+    },
+    "ch33-t01": {
+      "zh-CN": {
+        "source_sha256": "efb5d10ec0b130bd98f8c1d17a0c7f107be55260c6db08006afe19512d3a7acd",
+        "mode": "records",
+        "reason": "Review Skills contain narrative scope and main questions; use unboxed capability entries."
+      },
+      "en": {
+        "source_sha256": "d8cdfbd8faf085b465576aca6fbca0cdbf11c408fb9049cb52b9096a1b65150b",
+        "mode": "records",
+        "reason": "Review Skills contain narrative scope and main questions; use unboxed capability entries."
+      }
+    },
+    "ch33-t02": {
+      "zh-CN": {
+        "source_sha256": "9532d45242ace39b033120ec09d42aa467843bd52d6e7ea56d0392831cec174a",
+        "mode": "records",
+        "reason": "Review verdicts have detailed meanings and examples, including dismissal reasoning; use records."
+      },
+      "en": {
+        "source_sha256": "fc2367c6607efcd88b2fcb6bbad63b385ba940ab39fbfa7b189ebfdce28be6be",
+        "mode": "records",
+        "reason": "Review verdicts have detailed meanings and examples, including dismissal reasoning; use records."
+      }
+    },
+    "ch34-t01": {
+      "zh-CN": {
+        "source_sha256": "6e794081ab3f7d23d811633f4f395c6d0dbb990e104c9410be10dbf6c8ee6ca1",
+        "mode": "records",
+        "reason": "Decision-log columns include detailed descriptions and concrete sample text; use unboxed field records."
+      },
+      "en": {
+        "source_sha256": "482ff00aa612a00f5f8cb8e1039d96af245e4ebbb36fc17a0737e8574d964849",
+        "mode": "records",
+        "reason": "Decision-log columns include detailed descriptions and concrete sample text; use unboxed field records."
+      }
+    },
+    "ch35-t01": {
+      "zh-CN": {
+        "source_sha256": "09014c36040d2d88264dfc836accbb229a8079f0b5e1f353268623a09071a957",
+        "mode": "records",
+        "reason": "The 16-rule TypeScript catalog contains prose explanations; use independent rule records."
+      },
+      "en": {
+        "source_sha256": "8d5922cd0f138d8c902d6c98b765a441097464c83281aa4714d2696496f1b3bb",
+        "mode": "records",
+        "reason": "The 16-rule TypeScript catalog contains prose explanations; use independent rule records."
+      }
+    },
+    "ch38-t01": {
+      "zh-CN": {
+        "source_sha256": "08531ca362cd5572ce5a9a4de4af2ec088e5bac0549f797294cb92cece8e3a12",
+        "mode": "table",
+        "reason": "Three short writing-tool entries compare target and text owner; retain the three-column semantic comparison."
+      },
+      "en": {
+        "source_sha256": "79b09f9f9fe640aab8696e3ee4d872e713b1ee62d23f6fb7d7e5b66f0a1721e3",
+        "mode": "table",
+        "reason": "Three short writing-tool entries compare target and text owner; retain the three-column semantic comparison."
+      }
+    },
+    "ch38-t02": {
+      "zh-CN": {
+        "source_sha256": "d3a860e1faff76138b80f359fa375bdecf2eb2106ddbf744d32e27f80ea2d71d",
+        "mode": "records",
+        "reason": "Caller entries contain long tool/Playbook lists and document lists; use labelled records."
+      },
+      "en": {
+        "source_sha256": "4d03f45bac850ad7ac30a248d4025b129bd1b0b04727216ed441b9a59cb5cc1b",
+        "mode": "records",
+        "reason": "Caller entries contain long tool/Playbook lists and document lists; use labelled records."
+      }
+    },
+    "ch38-t03": {
+      "zh-CN": {
+        "source_sha256": "f56f5a2a9e1ba4ea970ceb5c508a7a6d592d438de9f143085289147e01d55fad",
+        "mode": "table",
+        "reason": "Seven brief writing categories compare scope and rule numbers; retain their three-column reference."
+      },
+      "en": {
+        "source_sha256": "38535eaf686ff51c0361bf3b18513b4ff055575d484974b9133f2afdc60e9bb7",
+        "mode": "table",
+        "reason": "Seven brief writing categories compare scope and rule numbers; retain their three-column reference."
+      }
+    },
+    "ch38-t04": {
+      "zh-CN": {
+        "source_sha256": "a022723056633d6c01805a03b3916ded0b047c2caf827ea0757ef8767449bcde",
+        "mode": "records",
+        "reason": "Rule remedies quote several phrases and explanatory edits; use unboxed rule records."
+      },
+      "en": {
+        "source_sha256": "d8f5e056505dfcf3d50c64349d750383e470a611df80a4c5ede6b5754042ce0d",
+        "mode": "records",
+        "reason": "Rule remedies quote several phrases and explanatory edits; use unboxed rule records."
+      }
+    },
+    "ch38-t05": {
+      "zh-CN": {
+        "source_sha256": "dcb26b147dcd5466d2a0acf5a98da721a00b5f7ee27fedeeea6c70914b80d9ae",
+        "mode": "records",
+        "reason": "Six writing rules contain quoted examples and remedies; use unboxed rule records."
+      },
+      "en": {
+        "source_sha256": "3eda8edc26ec0220d4c5d1de7b0fff4a599f881073d9f8e9c88184b9eec67a68",
+        "mode": "records",
+        "reason": "Six writing rules contain quoted examples and remedies; use unboxed rule records."
+      }
+    },
+    "ch38-t06": {
+      "zh-CN": {
+        "source_sha256": "b5de9a5ae5a782a2dbfc2d40a3159a40f6b6c1fdd12a10ade8dc2546b8e9c352",
+        "mode": "records",
+        "reason": "Seven style rules contain detailed punctuation and heading remedies; use rule records."
+      },
+      "en": {
+        "source_sha256": "c34f8331eaab62add3b207802ad62f94ac07cb9a94c5d4bfba071cac64085299",
+        "mode": "records",
+        "reason": "Seven style rules contain detailed punctuation and heading remedies; use rule records."
+      }
+    },
+    "ch38-t07": {
+      "zh-CN": {
+        "source_sha256": "a3a3486bed46d71cadae425b081b3436667e369f02e25d559e5cb238e4071803",
+        "mode": "table",
+        "reason": "Two short communication rules and their concise fixes fit a small three-column reference."
+      },
+      "en": {
+        "source_sha256": "fe425c213a36aad8f393051574403610b109d08a4385faf8d201c4da81cd180b",
+        "mode": "table",
+        "reason": "Two short communication rules and their concise fixes fit a small three-column reference."
+      }
+    },
+    "ch38-t08": {
+      "zh-CN": {
+        "source_sha256": "8a692b4ed4e544047ebae9793a1b03dfb689923f5e9d0207480aee5afaf2bf80",
+        "mode": "table",
+        "reason": "Three short filler rules compare quoted phrases and direct fixes; retain native table semantics."
+      },
+      "en": {
+        "source_sha256": "c6fcec84beae9cbb3d0eb997485455ef412a380c4ca1bef92cbf84d1e1c2e28d",
+        "mode": "table",
+        "reason": "Three short filler rules compare quoted phrases and direct fixes; retain native table semantics."
+      }
+    },
+    "ch38-t09": {
+      "zh-CN": {
+        "source_sha256": "db836aeecd11981fde00142f2dcba66d04453450e2e910064c8bdb8c472c4b67",
+        "mode": "records",
+        "reason": "Even its single metaphor rule has a substantial quoted explanation; retain it as an unboxed record."
+      },
+      "en": {
+        "source_sha256": "131538d5033082fcb5303ef58ba35367b620e1c3723edad9a644b3c0564269d6",
+        "mode": "records",
+        "reason": "Even its single metaphor rule has a substantial quoted explanation; retain it as an unboxed record."
+      }
+    },
+    "ch38-t10": {
+      "zh-CN": {
+        "source_sha256": "fa841754e756133253fad6310945d48140ea7aaed5b6ca853dd7cfb0419ce26b",
+        "mode": "records",
+        "reason": "Seven plain-speech rules contain long explanations and quoted examples; use unboxed records."
+      },
+      "en": {
+        "source_sha256": "d1e53a1019083367247180dbed7f304310f4b5978a0831b0dc16ba637e8e3c56",
+        "mode": "records",
+        "reason": "Seven plain-speech rules contain long explanations and quoted examples; use unboxed records."
+      }
+    },
+    "ch38-t11": {
+      "zh-CN": {
+        "source_sha256": "96668b94fc3bd85b11b2c82d6cd3a2e413d12ccd1caaa5e0b3404f6e6f487573",
+        "mode": "records",
+        "reason": "Four writing layers contain full-sentence standards and questions; use labelled records."
+      },
+      "en": {
+        "source_sha256": "419def2b30b59d43bbca527d02131dfedd33c031b3e52187d18a5a0131eadc1b",
+        "mode": "records",
+        "reason": "Four writing layers contain full-sentence standards and questions; use labelled records."
+      }
+    },
+    "ch38-t12": {
+      "zh-CN": {
+        "source_sha256": "7035e236a91964876ae9a79c4bdb17e2abacf4198ab84f0b0ef348d93dce755e",
+        "mode": "table",
+        "reason": "The two-by-two Diataxis matrix relies on both axes; preserve its blank corner and native three-column semantics."
+      },
+      "en": {
+        "source_sha256": "03f1934a8d1171ec4b77759fe0c7c43f55f7f3012a19ef1782c814a6c9f89bfb",
+        "mode": "table",
+        "reason": "The two-by-two Diataxis matrix relies on both axes; preserve its blank corner and native three-column semantics."
+      }
+    },
+    "ch39-t01": {
+      "zh-CN": {
+        "source_sha256": "902182bb5cbb3f808c8ac6dddf7fa5ac96072c7998449f43f524731da2ac6d9d",
+        "mode": "records",
+        "reason": "Eight reflection criteria carry full-sentence questions; use unboxed criteria records."
+      },
+      "en": {
+        "source_sha256": "2db59d6fddbdb5ad3882587e2ca2cbec3aade2fb8fd6b5f864dba8f93bd3855c",
+        "mode": "records",
+        "reason": "Eight reflection criteria carry full-sentence questions; use unboxed criteria records."
+      }
+    },
+    "ch40-t01": {
+      "zh-CN": {
+        "source_sha256": "b0c4d1fce393a2f4b6001b51f6f75daf1e1e2ff82faba280f1d4c0b9ddd94185",
+        "mode": "records",
+        "reason": "The 17-role model catalog contains narrative responsibilities and model lists; use role records."
+      },
+      "en": {
+        "source_sha256": "c2ecf8a4bb0f2484f184f810acbcd07413d169675b1561027443ab6b2ee28834",
+        "mode": "records",
+        "reason": "The 17-role model catalog contains narrative responsibilities and model lists; use role records."
+      }
+    },
+    "ch40-t02": {
+      "zh-CN": {
+        "source_sha256": "52bdd645e538b4b205f4c7959d1be43a73a68b12d1480e753366fe18db664229",
+        "mode": "table",
+        "reason": "Four concise budget mappings compare effort and resulting model slug; retain the three-column reference."
+      },
+      "en": {
+        "source_sha256": "8c47a8a2977ce0b194eb0fae13e9c8ac0fe3ab9476107029562d74d51aafca10",
+        "mode": "table",
+        "reason": "Four concise budget mappings compare effort and resulting model slug; retain the three-column reference."
+      }
+    },
+    "ch41-t01": {
+      "zh-CN": {
+        "source_sha256": "2e53c6bdd1855daba3e3254e780b746e5bfc6a4b9895e7996a8963ebf771ff76",
+        "mode": "records",
+        "reason": "Nine routing situations contain long mandatory instructions; use independent situation records."
+      },
+      "en": {
+        "source_sha256": "bb6c375216230f0667ffc2ce22fe55f47d08431a45d452c862bc23a7f7a73845",
+        "mode": "records",
+        "reason": "Nine routing situations contain long mandatory instructions; use independent situation records."
+      }
+    },
+    "ch41-t02": {
+      "zh-CN": {
+        "source_sha256": "e7c339622a7e6fe24eaf2d28a578b70479fa7563510d44a55dbb41439687dc94",
+        "mode": "records",
+        "reason": "Principle groups contain very long name lists, especially Core and Architecture; use unboxed grouped records."
+      },
+      "en": {
+        "source_sha256": "13dae6c4137b77a7add98fd3713a609ceef0a5b972296767e8c2781436df30de",
+        "mode": "records",
+        "reason": "Principle groups contain very long name lists, especially Core and Architecture; use unboxed grouped records."
+      }
+    },
+    "ch41-t03": {
+      "zh-CN": {
+        "source_sha256": "04cef4e2a98c399818a2b45a2b0cb1dd366c1fd878e434f114120310af974700",
+        "mode": "records",
+        "reason": "Authorization paragraphs contain multi-sentence behavior rules; use unboxed paragraph records."
+      },
+      "en": {
+        "source_sha256": "b8bc9d03225f8b13163f6d27dc48fff7225cce2e062ec47b1a90431280452168",
+        "mode": "records",
+        "reason": "Authorization paragraphs contain multi-sentence behavior rules; use unboxed paragraph records."
+      }
+    },
+    "ch41-t04": {
+      "zh-CN": {
+        "source_sha256": "1012ac00455541cb54e3b834d52d02ba0546e5ae36fc9c07a75a5bcf074d9208",
+        "mode": "records",
+        "reason": "Seven writing standards contain detailed instructions and examples; use rule records."
+      },
+      "en": {
+        "source_sha256": "916c8bcbd0435f28c5ac553ae3e00e97321e93bf23a2e3981b8a2285c60977a0",
+        "mode": "records",
+        "reason": "Seven writing standards contain detailed instructions and examples; use rule records."
+      }
+    },
+    "ch41-t05": {
+      "zh-CN": {
+        "source_sha256": "b6eddcc340c6566062543988e348bff0c2d3c239f4d6cca3c26bbd1c2e6cafa1",
+        "mode": "records",
+        "reason": "Several routing request descriptions are long; labelled records keep each destination with its complete condition."
+      },
+      "en": {
+        "source_sha256": "0134236b4ce2f4be9ce10de73670c4f020b367f91c95d520ca85bbb5ea2a9287",
+        "mode": "records",
+        "reason": "Several routing request descriptions are long; labelled records keep each destination with its complete condition."
+      }
+    },
+    "ch41-t06": {
+      "zh-CN": {
+        "source_sha256": "13e8187e69c549216b1c5e3deea849af76c3bdd389c7d12f3d71c950b078f89f",
+        "mode": "records",
+        "reason": "The seven workflow groups contain lengthy multi-Playbook lists and chapter references; use group records."
+      },
+      "en": {
+        "source_sha256": "829a8f8a2e642fd66f7300e294c83c951cff027be31812364db51c5e4b5471ce",
+        "mode": "records",
+        "reason": "The seven workflow groups contain lengthy multi-Playbook lists and chapter references; use group records."
+      }
+    },
+    "ch42-t01": {
+      "zh-CN": {
+        "source_sha256": "5f9796ab41b667958216c69dfcc2462108674dff0adea670c94d8da8196f39ff",
+        "mode": "records",
+        "reason": "Long guide chapter titles map to explanatory coverage and reference sections; use chapter records."
+      },
+      "en": {
+        "source_sha256": "cae6a77cc3d3da5b1c5761e0b24d7770104a5f8a5f88eca8a10c15eec94ec0ba",
+        "mode": "records",
+        "reason": "Long guide chapter titles map to explanatory coverage and reference sections; use chapter records."
+      }
+    },
+    "ch43-t01": {
+      "zh-CN": {
+        "source_sha256": "f26e0926b5649870df067c378748213a42167102a396d2f519a43cc07d1598a1",
+        "mode": "records",
+        "reason": "Verification Playbooks include detailed app-operation requirements, especially visual parity and shipping; use unboxed entries."
+      },
+      "en": {
+        "source_sha256": "6dd5240263809a6197ec23b2ab96e3bdb6a16a7bdfa8dfda730e8f5fc1001ab1",
+        "mode": "records",
+        "reason": "Verification Playbooks include detailed app-operation requirements, especially visual parity and shipping; use unboxed entries."
+      }
+    },
+    "ch43-t02": {
+      "zh-CN": {
+        "source_sha256": "75535c7955a03b1386d20f51c0cf4b6437565d90b0b9f6a77ab71c9ddec3075b",
+        "mode": "records",
+        "reason": "Feature Map headings answer full-sentence operating questions; use heading records."
+      },
+      "en": {
+        "source_sha256": "f1eb483c23e740e2f40d08f3d8c174092e16c5aa4a9c007b9534df5beb3efe75",
+        "mode": "records",
+        "reason": "Feature Map headings answer full-sentence operating questions; use heading records."
+      }
+    },
+    "ch43-t03": {
+      "zh-CN": {
+        "source_sha256": "b33a9a20b7378b53fac0fb99e082e0dd7da3531e9d3da304f7416c4e1af7f18b",
+        "mode": "records",
+        "reason": "The sample includes a long literal harness command and observable-result sentences; use unboxed element records."
+      },
+      "en": {
+        "source_sha256": "220fe6207a9eb7a73aa8b9b0ce156512febaf7d1f0650fb4f89f5adda426fefc",
+        "mode": "records",
+        "reason": "The sample includes a long literal harness command and observable-result sentences; use unboxed element records."
+      }
+    },
+    "ch44-t01": {
+      "zh-CN": {
+        "source_sha256": "9d037c188a04b06c219e196512e1672821d92cf767feeab232a84dfc07fdc174",
+        "mode": "records",
+        "reason": "The 13-point supervision guide contains long section references and multi-sentence summaries; use unboxed numbered records."
+      },
+      "en": {
+        "source_sha256": "702868667fb1fbb59aca648db26ae37381a0ad624630d523eb9331f25d906731",
+        "mode": "records",
+        "reason": "The 13-point supervision guide contains long section references and multi-sentence summaries; use unboxed numbered records."
+      }
+    },
+    "ch44-t02": {
+      "zh-CN": {
+        "source_sha256": "d0df7aa6d384bffcaf418260b9732e09947449ec01123c1eecb86bbfe63eb37c",
+        "mode": "table",
+        "reason": "Three investigation capabilities map to concise role descriptions in two columns."
+      },
+      "en": {
+        "source_sha256": "3862d3bbab5ea09cd1143dd1db25f3b162ef959e24804725af4a10795cde1a52",
+        "mode": "table",
+        "reason": "Three investigation capabilities map to concise role descriptions in two columns."
+      }
+    },
+    "ch45-t01": {
+      "zh-CN": {
+        "source_sha256": "5fc5073132f59185e3a729c30280ca59a9dd07633b78aea84c0c43186d9d2af7",
+        "mode": "records",
+        "reason": "Four design guide points contain detailed process summaries; use unboxed numbered records."
+      },
+      "en": {
+        "source_sha256": "594d4deef1b6002332a0272da1294297b255f9b4bbe0af2d51278a081b2077fc",
+        "mode": "records",
+        "reason": "Four design guide points contain detailed process summaries; use unboxed numbered records."
+      }
+    },
+    "ch46-t01": {
+      "zh-CN": {
+        "source_sha256": "f261fe9b480f59224e2e26a96fa3a2f53d05779756ffd294f07a928aa1d0019f",
+        "mode": "records",
+        "reason": "Five planning guide points contain detailed process summaries; use unboxed numbered records."
+      },
+      "en": {
+        "source_sha256": "b50e0d9d83abe8faf2142280778bfc699cb47d8f77a231b6e99091f32a06b2cb",
+        "mode": "records",
+        "reason": "Five planning guide points contain detailed process summaries; use unboxed numbered records."
+      }
+    },
+    "ch47-t01": {
+      "zh-CN": {
+        "source_sha256": "2167c2904178b1b9e13e15856cd6c8fc6ecc9b87fea371f2a5e6c6e565ee570e",
+        "mode": "records",
+        "reason": "Context documents have descriptive names, responsibilities and owners; use unboxed document records."
+      },
+      "en": {
+        "source_sha256": "c22dc8ef9a84e5dd487add7f2909327e1e697ad61fe16c0c2c993de98d7267db",
+        "mode": "records",
+        "reason": "Context documents have descriptive names, responsibilities and owners; use unboxed document records."
+      }
+    },
+    "ch47-t02": {
+      "zh-CN": {
+        "source_sha256": "65c136c9ef7badc0a756c3303d7ebae0f8248eb0fed9be5e8c09bf4467fa7829",
+        "mode": "records",
+        "reason": "ADR criteria contain full-sentence meanings and restaurant examples; use unboxed criteria records."
+      },
+      "en": {
+        "source_sha256": "bb242956cd043bd3b4510b78874d83d7b0502471f88bb6d85d6c7e4e7b18b454",
+        "mode": "records",
+        "reason": "ADR criteria contain full-sentence meanings and restaurant examples; use unboxed criteria records."
+      }
+    },
+    "ch47-t03": {
+      "zh-CN": {
+        "source_sha256": "265978a8b395ed785486051f18fe8920e62634f0bf1beed85e8e822cd5fa2a2a",
+        "mode": "records",
+        "reason": "Context-building stages include long source-document lists and verification descriptions; use stage records."
+      },
+      "en": {
+        "source_sha256": "0bc924604ff7c4676804dd205e65b082430c3dc366660cf13fffbfa5aea28f40",
+        "mode": "records",
+        "reason": "Context-building stages include long source-document lists and verification descriptions; use stage records."
+      }
+    },
+    "ch48-t01": {
+      "zh-CN": {
+        "source_sha256": "2b31077bdd3fe5b3265cb990b90cb3e2738b9487400d0212a04719f07dc78abc",
+        "mode": "records",
+        "reason": "Delegation stages contain increasingly long human and agent responsibilities; use unboxed stage records."
+      },
+      "en": {
+        "source_sha256": "efb76d3b3742b46b0539480f7cea7754806e9aa6a269dbf559cdaeff1eaf0040",
+        "mode": "records",
+        "reason": "Delegation stages contain increasingly long human and agent responsibilities; use unboxed stage records."
+      }
+    },
+    "glossary-t01": {
+      "zh-CN": {
+        "source_sha256": "6a5867b4278fe19231e19a7f295b2ec121cdd9a6a3df336ff7a8c34e4845c8ee",
+        "mode": "records",
+        "reason": "The 18-term Chinese glossary includes explanations and translation conventions; use unboxed term records."
+      }
+    }
+  }
+}

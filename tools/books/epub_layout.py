@@ -1,103 +1,58 @@
-"""Prepare reflowable book content without depending on reader table layout."""
-
-from copy import deepcopy
-
-from bs4 import BeautifulSoup
-
+"""Conservative EPUB typography inspired by the Japanese Zenn edition."""
 
 EPUB_CSS = '''
 @font-face { font-family: Book; src: url("fonts/regular.otf"); }
 @font-face { font-family: Book; src: url("fonts/bold.otf"); font-weight: bold; }
 @font-face { font-family: BookMono; src: url("fonts/mono.otf"); }
-body { font-family: Book, sans-serif; margin: 5%; line-height: 1.7; }
-p { margin: 0 0 1em; }
-h1, h2, h3, h4 { line-height: 1.4; margin: 1.5em 0 .8em; }
-h1 { font-size: 1.7em; }
-h2 { font-size: 1.4em; }
-h3 { font-size: 1.15em; }
-a, code { overflow-wrap: anywhere; word-wrap: break-word; }
-ul, ol { padding-left: 1.5em; }
-li { margin-bottom: .5em; }
-blockquote, aside { margin: 1em 0; padding-left: 1em; border-left: .15em solid; }
-code { font-family: BookMono, Book, monospace; font-size: .9em; }
-pre { font-family: BookMono, Book, monospace; font-size: .85em;
-      line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere;
-      word-wrap: break-word; margin: 1em 0; padding: .7em; border: thin solid; }
-pre code { font-size: inherit; line-height: inherit; white-space: inherit; }
-.table-field { margin: 0 0 .7em; }
+body { font-family: Book, sans-serif; margin: 4%; line-height: 1.8; overflow-wrap: anywhere; word-wrap: break-word; }
+p { margin: 0 0 1em; orphans: 2; widows: 2; }
+h1, h2, h3, h4 { line-height: 1.45; font-weight: bold; break-after: avoid; page-break-after: avoid; }
+h1 { font-size: 1.65em; margin: 0 0 1.3em; }
+h2 { font-size: 1.4em; margin: 1.8em 0 .9em; padding-bottom: .3em; border-bottom: 1px solid #cbd5df; }
+h3 { font-size: 1.18em; margin: 1.5em 0 .7em; }
+h4 { font-size: 1em; margin: 1.3em 0 .6em; }
+a { color: #256b9d; text-decoration: underline; overflow-wrap: anywhere; word-wrap: break-word; }
+ul, ol { padding-left: 1.5em; margin: .7em 0 1.2em; }
+li { margin-bottom: .4em; }
+blockquote, aside { margin: 1.2em 0; padding-left: .8em; border-left: .15em solid #94a3b8; }
+blockquote p:last-child, aside p:last-child { margin-bottom: 0; }
+code { font-family: BookMono, Book, monospace; font-size: .9em; overflow-wrap: anywhere; word-wrap: break-word; }
+pre { font-family: BookMono, Book, monospace; font-size: .86em; line-height: 1.65;
+      white-space: pre-wrap; tab-size: 2; overflow-wrap: anywhere; word-wrap: break-word;
+      margin: .4em 0 1.3em; padding: .65em; background: #edf2f7; color: #223342;
+      border: 0; break-inside: auto; page-break-inside: auto; }
+pre code { font-size: inherit; line-height: inherit; white-space: inherit; color: inherit; }
+.code-language { font-family: sans-serif; font-size: .75em; margin: 1.3em 0 .2em; break-after: avoid; }
+table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: .92em; line-height: 1.55; margin: 1.2em 0; }
+th, td { border: 1px solid #b8c5d1; padding: .42em .48em; text-align: left; vertical-align: top; overflow-wrap: anywhere; word-wrap: break-word; }
+th { background: #edf2f7; color: #223342; font-weight: bold; }
+thead { display: table-header-group; break-after: avoid; page-break-after: avoid; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+table p { margin: 0 0 .3em; }
+.table-field { margin: 0 0 .65em; }
 .table-row-start { margin-top: 1.4em; }
-figure { margin: 1em 0; }
+.table-record-title { font-weight: bold; }
+.table-caption { margin: 1em 0 .5em; font-weight: bold; }
+figure { margin: 1.3em 0; text-align: center; }
+figure img { display: inline-block; max-width: 100%; max-height: 75vh; width: auto; height: auto; object-fit: contain; }
 img { max-width: 100%; height: auto; }
-figcaption, .source-line, .small { font-size: .85em; }
-.source-line { margin-bottom: 1.5em; }
+figcaption, .source-line, .small, .edition-navigation { font-size: .84em; line-height: 1.65; }
+.source-line { margin-bottom: 1.6em; }
+.diagram-reading-aid { margin: 1em 0 1.5em; }
+.diagram-reading-aid h3, .diagram-reading-aid h4 { font-size: 1em; }
+.diagram-reading-aid li { overflow-wrap: anywhere; word-wrap: break-word; }
+.disclosure-title { font-weight: bold; margin: 1.3em 0 .4em; }
 .running, .msg-symbol { display: none; }
-.cover-image { width: 100%; height: auto; }
+.cover-page { margin: 0; padding: 0; text-align: center; }
+.cover-image { max-width: 100%; max-height: 92vh; width: auto; height: auto; }
+.title-page { padding: 2em 0; }
+.edition-kicker { letter-spacing: .15em; font-size: .9em; margin-bottom: 2em; }
+nav ol { list-style: none; padding-left: 1em; }
+nav > ol { padding-left: 0; }
+nav li { margin: .65em 0; }
+@media (prefers-color-scheme: dark) {
+  a { color: #83c3ee; }
+  pre, th { background: #202b38; color: #e0e8ef; }
+  th, td, h2 { border-color: #657789; }
+}
 '''
-
-
-def reflow_tables(content):
-    """Express each data row as labelled paragraphs, preserving cell markup.
-
-    Labels are real text so a reading system that discards author CSS still
-    keeps column associations. Unsupported merged/nested tables fail the build
-    rather than silently dropping data or attaching the wrong column label.
-    """
-    soup = BeautifulSoup(content, "html.parser")
-    for table_index, table in enumerate(list(soup.select("table"))):
-        if table.select("table, [rowspan], [colspan]"):
-            raise ValueError("EPUB table has nested or merged cells; review its reading order")
-        rows = table.find_all("tr")
-        if not rows:
-            raise ValueError("EPUB table has no rows")
-        header = rows[0].find_all(["th", "td"], recursive=False)
-        if not header or not all(cell.name == "th" for cell in header):
-            raise ValueError("EPUB table requires an explicit column header row")
-        labels = [cell.get_text(" ", strip=True) for cell in header]
-        if any(not label for label in labels[1:]):
-            raise ValueError("EPUB table has an empty data column label")
-        # This temporary fragment is unwrapped below. Reader columns must not
-        # fragment an enclosing table/row box across subsequent paragraphs.
-        replacement = soup.new_tag("div")
-        if table.get("id"):
-            replacement.append(soup.new_tag("a", attrs={"id": table["id"]}))
-        caption = table.find("caption", recursive=False)
-        if caption:
-            caption.name = "p"
-            replacement.append(caption.extract())
-        for row_index, row in enumerate(rows[1:]):
-            cells = row.find_all(["th", "td"], recursive=False)
-            if len(cells) != len(labels):
-                raise ValueError("EPUB table row does not match its column headers")
-            if row.get("id"):
-                replacement.append(soup.new_tag("a", attrs={"id": row["id"]}))
-            for column_index, (label, header_cell, cell) in enumerate(zip(labels, header, cells)):
-                blocks = cell.find(["p", "pre", "ul", "ol", "blockquote", "div"])
-                classes = "table-field table-row-start" if column_index == 0 else "table-field"
-                field = soup.new_tag("div" if blocks else "p", attrs={
-                    "class": classes, "data-table": str(table_index),
-                    "data-table-row": f"{table_index}:{row_index}",
-                })
-                if cell.get("id"):
-                    field["id"] = cell["id"]
-                strong = soup.new_tag("strong")
-                if label:
-                    for child in header_cell.contents:
-                        strong.append(deepcopy(child))
-                    strong.append(": ")
-                if blocks:
-                    label_line = soup.new_tag("p")
-                    label_line.append(strong)
-                    field.append(label_line)
-                elif label:
-                    field.append(strong)
-                for child in list(cell.contents):
-                    field.append(child.extract())
-                replacement.append(field)
-        table.replace_with(*list(replacement.contents))
-    for element in soup.select(".code-line"):
-        classes = [name for name in element.get("class", []) if name != "code-line"]
-        if classes:
-            element["class"] = classes
-        else:
-            del element["class"]
-    return str(soup)
