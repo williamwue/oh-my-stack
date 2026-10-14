@@ -10,7 +10,17 @@ For every delegated worker in this workflow, derive the exact `model`,
 `../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
 the nearest project manifest first, then the user manifest. Supply the named
 route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. Pass
+and the observed parent model and effort. For task adjustment, supply
+`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
+and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
+effort alternatives. The saved model stays fixed. Without inventory only
+the saved effort is available. Read `audit.taskSelection` before dispatch.
+Keep the complete prepared request. If the host rejects its adjustment,
+supply `--rejected-adjustment ERROR.json` and
+`--rejected-prepared-request REQUEST.json` to retry the original role line
+even after the inventory changes. A request checksum binds the receipt;
+the host remains responsible for authenticating the rejection evidence.
+Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -26,7 +36,7 @@ Host adaptation. Read the installed package's [runtime binding](../../docs/runti
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is a native child with the bounded role from the generated runtime binding and read-only workspace authority. Explorers use the `how explorer` line in the `effective host model resolution` rule (default `observed code-model choice`), and every explainer uses the `how explainer` line (default `observed judgment-model choice`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names.
+Every spawn is a native child with the bounded role from the generated runtime binding and read-only workspace authority. Explorers use the `how explorer` line in the `effective host model resolution` rule (default `observed code-model choice`), and every explainer uses the `how explainer` line (default `observed judgment-model choice`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## 1. Assess complexity
 

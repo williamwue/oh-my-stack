@@ -10,7 +10,17 @@ For every delegated worker in this workflow, derive the exact `model`,
 `../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
 the nearest project manifest first, then the user manifest. Supply the named
 route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. Pass
+and the observed parent model and effort. For task adjustment, supply
+`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
+and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
+effort alternatives. The saved model stays fixed. Without inventory only
+the saved effort is available. Read `audit.taskSelection` before dispatch.
+Keep the complete prepared request. If the host rejects its adjustment,
+supply `--rejected-adjustment ERROR.json` and
+`--rejected-prepared-request REQUEST.json` to retry the original role line
+even after the inventory changes. A request checksum binds the receipt;
+the host remains responsible for authenticating the rejection evidence.
+Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -40,7 +50,7 @@ Open a todolist with one entry per phase before launching anything.
 1. State the done predicate and the artifact or report the swarm must return.
 2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
-4. Pick the worker model from the `swarm workers` line in `the effective host model resolution`. If the rule or that line is missing, use `observed code-model choice`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. For a model race, name each arm's model up front.
+4. Pick the worker model from the `swarm workers` line in `the effective host model resolution`. If the rule or that line is missing, use `observed code-model choice`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. For a model race, name each arm's model up front. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
 5. Give each worker its own writable output when it writes. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
 ## Phase B: Fan out

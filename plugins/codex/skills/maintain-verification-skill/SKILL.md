@@ -10,7 +10,17 @@ For every delegated worker in this workflow, derive the exact `model`,
 `../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
 the nearest project manifest first, then the user manifest. Supply the named
 route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. Pass
+and the observed parent model and effort. For task adjustment, supply
+`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
+and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
+effort alternatives. The saved model stays fixed. Without inventory only
+the saved effort is available. Read `audit.taskSelection` before dispatch.
+Keep the complete prepared request. If the host rejects its adjustment,
+supply `--rejected-adjustment ERROR.json` and
+`--rejected-prepared-request REQUEST.json` to retry the original role line
+even after the inventory changes. A request checksum binds the receipt;
+the host remains responsible for authenticating the rejection evidence.
+Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's

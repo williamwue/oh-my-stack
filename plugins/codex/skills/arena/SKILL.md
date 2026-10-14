@@ -10,7 +10,17 @@ For every delegated worker in this workflow, derive the exact `model`,
 `../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
 the nearest project manifest first, then the user manifest. Supply the named
 route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. Pass
+and the observed parent model and effort. For task adjustment, supply
+`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
+and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
+effort alternatives. The saved model stays fixed. Without inventory only
+the saved effort is available. Read `audit.taskSelection` before dispatch.
+Keep the complete prepared request. If the host rejects its adjustment,
+supply `--rejected-adjustment ERROR.json` and
+`--rejected-prepared-request REQUEST.json` to retry the original role line
+even after the inventory changes. A request checksum binds the receipt;
+the host remains responsible for authenticating the rejection evidence.
+Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -32,7 +42,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use the `arena runners` line in `the effective host model resolution`. If the rule or that line is missing, default to one each on `observed judgment-model choice` and `observed code-model choice`. An `auto` or `inherit-parent` entry in this line or the cross-judge line means the parent model, so omit `model` for it. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. Spawn more runners when the arena covers multiple design directions. Use the same model N times when the work is generation-bound rather than judgment-sensitive.
+3. Pick the runners. Use the `arena runners` line in `the effective host model resolution`. If the rule or that line is missing, default to one each on `observed judgment-model choice` and `observed code-model choice`. An `auto` or `inherit-parent` entry in this line or the cross-judge line means the parent model, so omit `model` for it. If the host rejects a configured entry, run that seat on its family's observed default and disclose it. Resolve families from host metadata. In the source-host examples, `cursor-grok-*` and `composer-*` belong to the `grok-*` family, so a refused composer entry uses that family's default. With no family match, use the observed judgment-model default. If the default is rejected, use the closest observed equivalent in the same family from the host's valid model IDs. Aliases inherit the parent model and never use model fallback. Spawn more runners when the arena covers multiple design directions. Use the same model N times when the work is generation-bound rather than judgment-sensitive. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
 4. Give each candidate its own output location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
