@@ -14,6 +14,7 @@ const modelFallbackStrategies = { 'interrogate.reviewers': 'interrogate', 'arena
 const inheritedAliases = new Set(['auto', 'inherit-parent']);
 const effortKeys = new Set(['effort', 'reasoningEffort', 'reasoning_effort']);
 const effortLadder = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max', 'ultra'];
+const slugPattern = /^(.*)-(none|minimal|low|medium|high|xhigh|max|ultra)(-fast)?$/;
 const jobEffortSteps = { routine: -2, judgment: -1, hardest: 1, verification: 0 };
 const speedSettings = {
   fast: { type: 'boolean', standard: false, fast: true },
@@ -130,8 +131,7 @@ function targetFrom(input, catalog) {
     string(id, 'target option id');
     if (typeof value !== 'string' && typeof value !== 'boolean') throw new Error(`Invalid option value for ${id}`);
   }
-  const efforts = Object.entries(options).filter(([id]) => effortKeys.has(id)).map(([, value]) => value);
-  if (new Set(efforts).size > 1) throw new Error('Ambiguous reasoning effort options');
+  coherentOptions({ id: input.model, options: [] }, options);
   if (catalog) {
     const provider = catalog.providers.find(value => value.providerInstanceId === input.providerInstanceId);
     if (!provider) throw new Error(`Unknown provider instance ${input.providerInstanceId}`);
@@ -142,6 +142,7 @@ function targetFrom(input, catalog) {
       if (!option) throw new Error(`Unsupported option ${id} for ${input.model}`);
       if (option.type === 'boolean' ? typeof value !== 'boolean' : typeof value !== 'string' || !option.options.some(choice => choice.id === value)) throw new Error(`Unsupported value for option ${id}`);
     }
+    coherentOptions(model, options);
   }
   return clone(input);
 }
@@ -321,6 +322,32 @@ function compatibleOption(option, value) {
   return option.type === 'boolean' ? typeof value === 'boolean' : typeof value === 'string' && option.options.some(choice => choice.id === value);
 }
 
+function coherentOptions(model, pinned, derive = false) {
+  const options = clone(pinned);
+  const slug = slugPattern.exec(model.id);
+  if (slug) for (const option of model.options) {
+    const value = effortKeys.has(option.id) ? slug[2] : speedSettings[option.id]?.[slug[3] ? 'fast' : 'standard'];
+    if (value === undefined) continue;
+    if (!compatibleOption(option, value)) throw new Error(`Inconsistent selector ${option.id} cannot express ${value} encoded by model slug ${model.id}`);
+    if (derive) options[option.id] = value;
+  }
+  const effective = { ...Object.fromEntries(model.options.filter(option => (effortKeys.has(option.id) || Object.hasOwn(speedSettings, option.id))
+    && option.defaultValue !== undefined).map(option => [option.id, option.defaultValue])), ...options };
+  const efforts = Object.entries(effective).filter(([id]) => effortKeys.has(id)).map(([, value]) => value);
+  if (new Set(efforts).size > 1) throw new Error('Ambiguous reasoning effort options');
+  if (slug && efforts.some(value => value !== slug[2])) throw new Error(`Inconsistent reasoning effort options for model slug ${model.id}`);
+  if (efforts.length && model.options.some(option => effortKeys.has(option.id) && !compatibleOption(option, efforts[0]))) throw new Error('Ambiguous reasoning effort baseline across advertised selectors');
+  const speeds = [];
+  for (const [id, value] of Object.entries(effective)) {
+    const setting = speedSettings[id];
+    if (!setting) continue;
+    if (slug && value !== setting[slug[3] ? 'fast' : 'standard']) throw new Error(`Inconsistent speed option ${id} for model slug ${model.id}`);
+    if (value === setting.fast || value === setting.standard) speeds.push(value === setting.fast);
+  }
+  if (new Set(speeds).size > 1) throw new Error('Ambiguous speed options');
+  return options;
+}
+
 function replacementOptions(source, model) {
   const options = {};
   for (const [id, value] of Object.entries(source.options)) {
@@ -330,7 +357,15 @@ function replacementOptions(source, model) {
     const option = exact && compatibleOption(exact, value) ? exact : translated;
     if (option && !Object.hasOwn(options, option.id)) options[option.id] = value;
   }
-  return options;
+  return coherentOptions(model, options, true);
+}
+
+function replacementCandidate(source, model, skipped) {
+  try { return { model, options: replacementOptions(source, model) }; }
+  catch (error) {
+    skipped.push({ target: { providerInstanceId: source.providerInstanceId, model: model.id, options: {} }, reason: error.message });
+    return null;
+  }
 }
 
 function optionChanges(source, target, model) {
@@ -359,7 +394,7 @@ function modelDistance(left, right) {
   return row[right.length];
 }
 
-function observedFallbackPolicy(routes, catalog) {
+function observedFallbackPolicy(routes, catalog, skipped) {
   const modelFallbacks = {};
   for (const [routeName, strategy] of Object.entries(modelFallbackStrategies)) {
     const providerDefaults = {};
@@ -367,13 +402,14 @@ function observedFallbackPolicy(routes, catalog) {
       if (target.inheritParent || inheritedAliases.has(target.model) || providerDefaults[target.providerInstanceId]) continue;
       let provider;
       try { provider = executableProvider(target, catalog); } catch { continue; }
-      const models = provider.models.filter(model => !inheritedAliases.has(model.id));
+      const models = provider.models.filter(model => !inheritedAliases.has(model.id))
+        .map(model => replacementCandidate(target, model, skipped)).filter(Boolean).map(candidate => ({ ...candidate.model, replacement: candidate.options }));
       if (!models.length) continue;
       const choose = choices => [...choices].sort((a, b) =>
         Number(a.id === target.model) - Number(b.id === target.model)
         || Number(t3ModelFamily(a.id) === 'claude' && !a.id.includes('opus')) - Number(t3ModelFamily(b.id) === 'claude' && !b.id.includes('opus'))
         || modelDistance(target.model, a.id) - modelDistance(target.model, b.id) || a.id.localeCompare(b.id))[0];
-      const explicit = model => ({ providerInstanceId: target.providerInstanceId, model: model.id, options: replacementOptions(target, model) });
+      const explicit = model => ({ providerInstanceId: target.providerInstanceId, model: model.id, options: model.replacement });
       const families = [...new Set(models.map(model => t3ModelFamily(model.id)).filter(Boolean))];
       const familyDefaults = Object.fromEntries(families.map(family => [family, explicit(choose(models.filter(model => t3ModelFamily(model.id) === family)))]));
       const hostFallback = explicit(choose(models.filter(model => model.id === catalog.inheritedModel).length
@@ -403,7 +439,7 @@ function jobSelection(target, profile, catalog) {
   const model = provider.models.find(model => model.id === target.model);
   const selected = clone(target);
   const limitations = [];
-  const slugPattern = /^(.*)-(none|minimal|low|medium|high|xhigh|max|ultra)(-fast)?$/;
+  const skipped = [];
   const slug = slugPattern.exec(target.model);
   const efforts = model.options.filter(option => effortKeys.has(option.id) && option.type === 'select');
   const effort = efforts[0];
@@ -419,19 +455,19 @@ function jobSelection(target, profile, catalog) {
   if (effort) {
     const pinned = efforts.map(option => selected.options[option.id]).filter(value => value !== undefined);
     const baselines = pinned.length ? pinned : efforts.map(option => option.defaultValue).filter(value => value !== undefined);
-    if (new Set(baselines).size > 1) throw new Error('Ambiguous reasoning effort defaults');
     const configured = baselines[0] ?? slug?.[2];
     const supported = effort.options.map(option => option.id).filter(value => efforts.every(option => compatibleOption(option, value)));
-    if (efforts.length > 1 && configured !== undefined && !supported.includes(configured)) throw new Error('Ambiguous reasoning effort baseline across advertised selectors');
     const wanted = desiredEffort(configured, supported);
     if (wanted) for (const option of efforts) selected.options[option.id] = wanted;
     else limitations.push('Reasoning adjustment needs a configured or advertised default effort on the known ladder.');
   }
+  const speedChanges = {};
   for (const speed of speeds) {
     const wanted = speedSettings[speed.id][profile.urgent === true ? 'fast' : 'standard'];
-    if (compatibleOption(speed, wanted)) selected.options[speed.id] = wanted;
+    if (compatibleOption(speed, wanted)) speedChanges[speed.id] = wanted;
     else limitations.push(`Requested speed for ${speed.id} is not advertised by this model.`);
   }
+  if (Object.keys(speedChanges).length === speeds.length) Object.assign(selected.options, speedChanges);
   if (!slug) {
     if (!effort) limitations.push('This model advertises no supported reasoning adjustment.');
     if (!speeds.length) limitations.push('This model advertises no supported speed adjustment.');
@@ -448,27 +484,17 @@ function jobSelection(target, profile, catalog) {
       && (typedSelectors || profile.kind !== 'hardest' || effortLadder.indexOf(candidate.slug[2]) <= Math.max(effortLadder.indexOf(slug[2]), effortLadder.indexOf('max')))
       && (typedSelectors || profile.kind !== 'hardest' || effortLadder.indexOf(slug[2]) <= effortLadder.indexOf('max') || candidate.slug[2] === slug[2]))
       .map(candidate => {
-        const options = replacementOptions(selected, candidate.model);
-        const selectors = candidate.model.options.filter(option => effortKeys.has(option.id) && option.type === 'select');
-        for (const option of selectors) {
-          if (!compatibleOption(option, candidate.slug[2])) return null;
-          options[option.id] = candidate.slug[2];
-        }
-        for (const option of speedsFor(candidate.model)) {
-          const wanted = speedSettings[option.id][wantedFast ? 'fast' : 'standard'];
-          if (!compatibleOption(option, wanted)) return null;
-          options[option.id] = wanted;
-        }
-        return { ...candidate, options };
+        const replacement = replacementCandidate(selected, candidate.model, skipped);
+        return replacement && { ...candidate, options: replacement.options };
       }).filter(Boolean)
       .sort((a, b) => distance(a) - distance(b) || effortLadder.indexOf(a.slug[2]) - effortLadder.indexOf(b.slug[2]));
     if (candidates.length) {
       selected.model = candidates[0].model.id;
       selected.options = candidates[0].options;
-      return { target: selected, limitations: [] };
+      return { target: selected, limitations: [], skipped };
     }
     limitations.push('No advertised variant of the configured model identity supports the requested job settings.');
-    return { target, limitations };
+    return { target, limitations, skipped };
   }
   return { target: selected, limitations };
 }
@@ -535,16 +561,17 @@ function resolveModelFallback(input, provenance = new Map()) {
   if (!configuredRejection) throw new Error('Model fallback requires rejection of the configured target first');
   const defaultRejection = evidence.find(rejection => hash(rejection.target) === hash(tableDefault));
   let selected = tableDefault;
+  const skipped = [];
   let reason = family !== null && !defaults.familyDefaults[family] ? 'model-original-host-default' : 'model-family-default';
   if (defaultRejection) {
     const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
     if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
     const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
     const effort = Object.entries(tableDefault.options).find(([id, value]) => effortKeys.has(id) && typeof value === 'string');
-    const slugEffort = /-(low|medium|high|xhigh|max|ultra)(?:-|$)/.exec(tableDefault.model)?.[1];
+    const slugEffort = slugPattern.exec(tableDefault.model)?.[2];
     const candidates = provider.models.filter(model => defaultRejection.validModelIds.includes(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
       .filter(model => routePolicy.strategy !== 'arena' || t3ModelFamily(model.id, policy.modelFamilies) === defaultFamily)
-      .map(model => ({ model, options: replacementOptions(tableDefault, model) }))
+      .map(model => replacementCandidate(tableDefault, model, skipped)).filter(Boolean)
       .map(candidate => ({ ...candidate, rank: [
         t3ModelFamily(candidate.model.id, policy.modelFamilies) === defaultFamily ? 0 : 1,
         effort ? Object.entries(candidate.options).some(([id, value]) => effortKeys.has(id) && value === effort[1]) ? 0 : 1
@@ -552,13 +579,13 @@ function resolveModelFallback(input, provenance = new Map()) {
         modelDistance(tableDefault.model, candidate.model.id)
       ] }))
       .sort((left, right) => left.rank[0] - right.rank[0] || left.rank[1] - right.rank[1] || left.rank[2] - right.rank[2] || (left.model.id < right.model.id ? -1 : left.model.id > right.model.id ? 1 : 0));
-    if (!candidates.length) throw new Error('BLOCKED: no observed valid equivalent on the configured provider');
+    if (!candidates.length) throw new Error(`BLOCKED: no observed valid equivalent on the configured provider; ${skipped.map(value => value.reason).join('; ')}`);
     selected = { providerInstanceId: target.providerInstanceId, model: candidates[0].model.id, options: candidates[0].options };
     reason = 'model-valid-equivalent';
   }
   executableTarget(selected, catalog, runtimeMode);
   const model = provider.models.find(model => model.id === selected.model);
-  return { target: clone(selected), audit: { reason, modelRejections: clone(evidence), rejectionProvenance, configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
+  return { target: clone(selected), audit: { reason, skipped, modelRejections: clone(evidence), rejectionProvenance, configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
 }
 
 function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runtimeMode }) {
@@ -683,7 +710,8 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   if (Boolean(routeName) === Boolean(roleName)) throw new Error('Select exactly one routeName or roleName');
   const scope = capturedScope ?? (input.resolution ? { scope: 'explicit', path: null, resolution: input.resolution } : await resolveT3Resolution({ cwd, userRoot: input.userRoot ?? homedir(), contracts }));
   const resolution = scope.resolution ? resolutionFrom(scope.resolution, contracts) : configureT3Resolution({ catalog, contracts });
-  const policy = resolution.selectionPolicy ?? observedFallbackPolicy(resolution.routes, catalog);
+  const incoherentCandidates = [];
+  const policy = resolution.selectionPolicy ?? observedFallbackPolicy(resolution.routes, catalog, incoherentCandidates);
   const entry = input.entry ?? 1;
   if (!Number.isInteger(entry) || entry < 1) throw new Error('entry must be a positive one-based integer');
   const selectedRole = routeName ? contracts.routes[routeName]?.role : roleName;
@@ -752,8 +780,9 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
       skipped: [...new Map([...baseSelection.audit.skipped, ...selected.audit.skipped].map(value => [hash(value), value])).values()] };
   }
   if (modelResolution.audit.reason !== 'configured-target') {
-    selected.audit = { ...selected.audit, ...modelResolution.audit, configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
+    selected.audit = { ...selected.audit, ...modelResolution.audit, skipped: [...selected.audit.skipped, ...modelResolution.audit.skipped], configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
   }
+  selected.audit.skipped = [...new Map([...selected.audit.skipped, ...incoherentCandidates, ...(job.skipped ?? [])].map(value => [hash(value), value])).values()];
   if (input.jobProfile !== undefined || adjustedRejections.length) {
     const selectedModel = selected.target.inheritParent ? null : catalog.providers.find(provider => provider.providerInstanceId === selected.target.providerInstanceId)?.models.find(model => model.id === selected.target.model);
     selected.audit = { ...selected.audit, configuredTarget: clone(configured), selectedTarget: clone(selected.target),

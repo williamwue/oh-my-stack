@@ -78,6 +78,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "jobs. Its chainOrigin binds later rejections to that actual channel.",
     "Bound chains validate their next target directly; unavailable actual",
     "channels fail instead of invoking fresh-request channel fallback.",
+    "All candidates share slug/typed-selector coherence checks, including",
+    "observed defaults, equivalents, job changes and final explicit targets.",
     "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
     "Later rejected targets retain their own modelRejections[].preparedRequest;",
     "keep earlier evidence unchanged and use each request's captured catalog.",

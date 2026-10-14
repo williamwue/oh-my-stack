@@ -183,7 +183,7 @@ test('all advertised speed keys receive standard or urgent settings regardless o
   const optionDefs = [select('serviceTier', ['default', 'priority']), { id: 'fastMode', type: 'boolean' },
     { id: 'fast', type: 'boolean' }, select('speed', ['standard', 'fast'])];
   for (const reversed of [false, true]) {
-    const configured = target('codex', 'gpt-6.1-sol', { serviceTier: 'default', fastMode: true, fast: true, speed: 'fast' });
+    const configured = target('codex', 'gpt-6.1-sol', { serviceTier: 'priority', fastMode: true, fast: true, speed: 'fast' });
     const args = await input(t, catalog([{ id: configured.model, options: reversed ? [...optionDefs].reverse() : optionDefs }]), configured);
     for (const [urgent, expected] of [[false, { serviceTier: 'default', fastMode: false, fast: false, speed: 'standard' }],
       [true, { serviceTier: 'priority', fastMode: true, fast: true, speed: 'fast' }]]) {
@@ -194,12 +194,12 @@ test('all advertised speed keys receive standard or urgent settings regardless o
   }
 });
 
-test('an unsupported speed value limits only its own key while other advertised keys still adjust', async t => {
+test('an unsupported speed value retains the coherent speed group and discloses the limiting key', async t => {
   const configured = target('codex', 'gpt-6.1-sol', { serviceTier: 'priority', fastMode: true, speed: 'fast' });
   const args = await input(t, catalog([{ id: configured.model, options: [select('serviceTier', ['priority']),
     { id: 'fastMode', type: 'boolean' }, select('speed', ['standard', 'fast'])] }]), configured);
   const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'routine' } });
-  assert.deepEqual(prepared.arguments.target, target('codex', configured.model, { serviceTier: 'priority', fastMode: false, speed: 'standard' }));
+  assert.deepEqual(prepared.arguments.target, configured);
   assert.match(prepared.audit.selection.jobLimitations.join(' '), /serviceTier/);
   assert.equal(prepared.audit.selection.jobLimitations.some(value => value.includes('fastMode')), false);
 });

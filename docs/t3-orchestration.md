@@ -277,8 +277,11 @@ defaults fail rather than producing conflicting request options.
 Urgent work requests advertised fast speed. Other work requests standard speed.
 Boolean `fast` and `fastMode` use `true` for fast and `false` for standard.
 The `speed` select uses `fast` and `standard`. The `serviceTier` select uses
-`priority` and `default`. Preparation adjusts every advertised speed key
-independently and uses only advertised values.
+`priority` and `default`. Preparation computes each advertised speed key using
+only advertised values. Multiple speed selectors must describe one mode. If any
+selector cannot express the requested mode, preparation retains the speed group
+and records the unsupported selectors rather than applying a contradictory
+partial change.
 Verification keeps configured effort and speed. Inherited aliases remain
 untouched. Preparation changes typed effort or speed options when available.
 For effort and speed encoded in a slug, it selects only an advertised variant
@@ -290,6 +293,11 @@ with both. Without one it retains the original target and records a limitation.
 Routine and judgment
 work never raise the configured effort. It never guesses a variant.
 Missing supported settings appear in `audit.selection.jobLimitations`.
+Shared candidate validation applies the same slug, effort-alias, and speed-mode
+coherence rules to task adjustment, observed defaults, model equivalents, and
+final explicit targets. Explicit contradictions fail. Generated replacements
+use coherent advertised selectors or are skipped with reasons in the audit.
+Model-rejection fallback option changes remain recorded as fallback changes.
 
 Preparation selects a permitted runnable channel before applying job settings.
 The audit retains the configured origin, skipped candidates and their reasons,
