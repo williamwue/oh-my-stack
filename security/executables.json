@@ -689,6 +689,14 @@
       "uninstallBehavior": "Selected package helper is removed with that package; user-owned T3 resolution remains independent."
     },
     {
+      "path": "tools/t3-receipts.mjs",
+      "owner": "local-adapter",
+      "purpose": "Validate and deduplicate self-contained T3 receipt graphs in memory, rejecting cycles and inconsistent records.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Selected package receipt module is removed with that package; user-owned T3 resolution remains independent."
+    },
+    {
       "path": "tools/validate.mjs",
       "owner": "local-core",
       "purpose": "Validate source contracts and generated packages.",

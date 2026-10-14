@@ -360,8 +360,9 @@ function receiptDigest(value) {
 }
 
 function reseal(saved) {
-  const { receiptHash, ...audit } = saved.audit;
-  saved.audit.receiptHash = receiptDigest({ tool: saved.tool, arguments: saved.arguments, audit });
+  const { receiptHash, preparation, ...audit } = saved.audit;
+  const { ledger, ...captured } = preparation;
+  saved.audit.receiptHash = receiptDigest({ tool: saved.tool, arguments: saved.arguments, audit: { ...audit, preparation: captured } });
 }
 
 for (const resealed of [false, true]) {
@@ -804,7 +805,7 @@ test('a rejected job adjustment stays on the captured channel through primary re
   assert.deepEqual(original.audit.selection.jobBaseTarget, actual);
   assert.deepEqual(original.audit.selection.rejectedJobTarget, adjusted.arguments.target);
   assert.deepEqual(original.audit.selection.skipped, adjusted.audit.selection.skipped);
-  assert.deepEqual(original.audit.selection.modelRejections, [adjustedRejection]);
+  assert.deepEqual(original.audit.selection.modelRejections, [{ ...adjustedRejection, preparedRequest: { receiptRef: adjusted.audit.receiptHash } }]);
   assert.equal(original.audit.selection.rejectionProvenance[0].receiptHash, adjusted.audit.receiptHash);
   assert.deepEqual(original.audit.preparation.chainOrigin, adjusted.audit.preparation.chainOrigin);
   assert.deepEqual(original.audit.requested, actual);

@@ -1,0 +1,7 @@
+{
+  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-073eb581b842bd1f862660c8c6661c6b9dc56f2de5452b1e32c2f4401a4d2735",
+  "status": "completed",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "summary": "Fixed the recursive receipt duplication with a flat hash-keyed ledger, cycle detection, and memoized transition reconstruction. Callers still save the full returned request.\n\n- **Red.** Request 10 failed after nine successes. Receipt 9 reached **38,380,726 bytes**.\n- **Green.** Required focused suite passed **224/224**. Both fourteen-request chains succeeded. Largest receipts were **176,789 bytes**, or **178,193 bytes** after JSON roundtrip with the origin receipt retained.\n- Corruption, missing-reference, cycle, scope, resealed-transition, catalog-refresh, and CLI JSON checks pass. `git diff --check` passes.\n\nChanged `tools/t3-orchestration.mjs`, added `tools/t3-receipts.mjs`, and changed the candidate-coherence, job-selection, and new receipts tests. The job-selection edits only adapt receipt representation.\n\nThe parent must deliver the new sibling `t3-receipts.mjs` artifact with the helper. Both modules remain under 1,000 lines. No external dependency was added.\n\nModel the Domain shaped the ledger. Fix Root Causes ruled out increasing the depth guard. Test Behavior and Prove It Works shaped the public-request and CLI checks.\n\nNo commits, installs, configuration changes, provider calls, publication, or nested agents. Parent integration and final Codex review remain.\n\n"
+}

@@ -1,5 +1,6 @@
 export const t3BindingArtifacts = [
   { kind: "script", path: "tools/t3-orchestration.mjs", output: "scripts/t3-orchestration.mjs" },
+  { kind: "script", path: "tools/t3-receipts.mjs", output: "scripts/t3-receipts.mjs" },
   { kind: "reference", path: "src/schemas/t3-resolution.schema.json", output: "config/t3-resolution.schema.json" },
   { kind: "reference", path: "docs/t3-orchestration.md", output: "docs/t3-orchestration.md" },
   { kind: "reference", path: "docs/zh-CN/t3-orchestration.md", output: "docs/zh-CN/t3-orchestration.md" },

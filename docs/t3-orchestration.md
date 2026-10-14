@@ -346,6 +346,16 @@ or validated equivalent refusal supplies the current `validModelIds`; older
 menus are not combined. An empty current list provides no permitted equivalent.
 The complete history still excludes every refused candidate.
 
+Returned requests carry a self-contained flat receipt ledger in
+`audit.preparation.ledger`, keyed by receipt hash. Captured history uses
+`receiptRef` references rather than embedding earlier ledgers. Save and pass the
+whole returned request; do not pass an extracted reference or ledger node alone.
+The helper checks missing references, conflicting duplicates and cycles, then
+reconstructs each unique captured transition once per preparation. The sibling
+`scripts/t3-receipts.mjs` is an installed dependency of the orchestration helper.
+JSON serialization preserves this complete receipt; no caller reassembly is
+required. Receipt checks establish consistency, not host rejection authenticity.
+
 ```js
 {
   target: preparedDefault.arguments.target,

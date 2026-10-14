@@ -20,6 +20,9 @@ const speeds = [
   [select('speed', ['standard', 'fast']), 'standard', 'fast'],
   [select('serviceTier', ['default', 'priority']), 'default', 'priority']
 ];
+const recordedRejections = values => values.map(({ preparedRequest, ...evidence }) => ({ ...evidence,
+  ...(preparedRequest === undefined ? {} : { preparedRequest: { receiptRef: preparedRequest.audit.receiptHash } }) }));
+
 const reject = (prepared, validModelIds = []) => ({
   target: prepared.arguments.target, code: 'model-rejected', rawError: 'Host rejected this model.', validModelIds, preparedRequest: prepared
 });
@@ -57,7 +60,7 @@ for (const [id, expected] of [
     const prepared = await prepareT3Delegation({ ...args, stepId: 'replacement', modelRejections: evidence });
     assert.deepEqual(prepared.arguments.target, target(id, expected));
     assert.equal(prepared.audit.selection.reason, 'model-family-default');
-    assert.deepEqual(prepared.audit.selection.modelRejections, evidence);
+    assert.deepEqual(prepared.audit.selection.modelRejections, recordedRejections(evidence));
     assert.equal(prepared.audit.selection.rejectionProvenance[0].receiptHash, original.audit.receiptHash);
     assert.deepEqual(prepared.audit.selection.optionChanges, id.endsWith('-fast')
       ? [{ option: 'fastMode', change: 'changed', from: false, to: true }]
@@ -289,7 +292,7 @@ for (const explicit of [false, true]) {
     assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
     assert.deepEqual(prepared.audit.selection.familyDefault, adjusted.arguments.target);
     assert.deepEqual(prepared.audit.selection.configuredTarget, configured);
-    assert.deepEqual(prepared.audit.selection.modelRejections, next.modelRejections);
+    assert.deepEqual(prepared.audit.selection.modelRejections, recordedRejections(next.modelRejections));
     assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
       [adjusted.audit.receiptHash, original.audit.receiptHash]);
     assert.deepEqual(prepared.audit.selection.optionChanges, [{ option: 'reasoningEffort', change: 'changed', from: 'high', to: 'ultra' }]);
@@ -335,7 +338,7 @@ test('an equivalent candidate already refused as the adjustment stays excluded a
   const prepared = await prepareT3Delegation({ ...args, stepId: 'distinct-equivalent', modelRejections });
   assert.deepEqual(prepared.arguments.target, target('composer-2-ultra-fast', { reasoningEffort: 'ultra', fastMode: true }));
   assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
-  assert.deepEqual(prepared.audit.selection.modelRejections, modelRejections);
+  assert.deepEqual(prepared.audit.selection.modelRejections, recordedRejections(modelRejections));
   assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
     [adjusted.audit.receiptHash, original.audit.receiptHash, preparedDefault.audit.receiptHash]);
 });
@@ -412,7 +415,7 @@ for (const selectedRoute of [routeName, 'arena.runners', 'architect.runners']) {
       const preparedB = await prepareT3Delegation(next);
       assert.deepEqual(preparedB.arguments.target, equivalentB);
       assert.equal(preparedB.audit.selection.reason, 'model-valid-equivalent');
-      assert.deepEqual(preparedB.audit.selection.modelRejections, frozenHistory);
+      assert.deepEqual(preparedB.audit.selection.modelRejections, recordedRejections(frozenHistory));
       assert.deepEqual(preparedB.audit.selection.rejectionProvenance.map(value => value.receiptHash),
         [original.audit.receiptHash, preparedDefault.audit.receiptHash, preparedA.audit.receiptHash]);
       assert.deepEqual(preparedB.audit.preparation.chainOrigin, original.audit.preparation.chainOrigin);
@@ -446,7 +449,7 @@ for (const empty of [false, true]) {
       const prepared = await prepareT3Delegation(current);
       assert.deepEqual(prepared.arguments.target, farC);
       assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
-      assert.deepEqual(prepared.audit.selection.modelRejections, savedEvidence);
+      assert.deepEqual(prepared.audit.selection.modelRejections, recordedRejections(savedEvidence));
     }
     assert.equal(catalog.providers[0].models.some(model => model.id === equivalentB.model), true);
     assert.deepEqual(evidence, savedEvidence);
@@ -468,8 +471,9 @@ function reseal(saved) {
     : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
   const digest = value => createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
   saved.audit.payloadHash = digest(saved.arguments);
-  const { receiptHash, ...audit } = saved.audit;
-  saved.audit.receiptHash = digest({ tool: saved.tool, arguments: saved.arguments, audit });
+  const { receiptHash, preparation, ...audit } = saved.audit;
+  const { ledger, ...captured } = preparation;
+  saved.audit.receiptHash = digest({ tool: saved.tool, arguments: saved.arguments, audit: { ...audit, preparation: captured } });
 }
 
 for (const [name, change] of [

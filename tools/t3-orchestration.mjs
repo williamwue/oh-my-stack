@@ -5,6 +5,7 @@ import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveTaskSelection } from './model-resolution.mjs';
+import { createReceiptLedger, receiptHash } from './t3-receipts.mjs';
 
 const terminalStatuses = new Set(['completed', 'failed', 'cancelled', 'interrupted']);
 const statuses = new Set(['queued', 'running', 'waiting', ...terminalStatuses]);
@@ -517,7 +518,7 @@ function rejectionOrigin(rejection, catalog, provenance) {
   const target = rejectionFrom(rejection);
   const captured = provenance.get(hash(target));
   if (rejection.preparedRequest !== undefined && (!captured || captured.source !== 'captured-prepared-request'
-    || captured.receiptHash !== rejection.preparedRequest.audit?.receiptHash)) throw new Error('Invalid rejected prepared request provenance');
+    || captured.receiptHash !== (rejection.preparedRequest.receiptRef ?? rejection.preparedRequest.audit?.receiptHash))) throw new Error('Invalid rejected prepared request provenance');
   const origin = captured?.catalog ?? catalog;
   const known = origin.providers.find(provider => provider.providerInstanceId === target.providerInstanceId)?.models.some(model => model.id === target.model);
   if (captured || known) targetFrom(target, origin);
@@ -660,14 +661,9 @@ function preparationInput(input, catalog, resolution) {
     ownedPaths: list(input.ownedPaths, 'ownedPaths').map(value => path.resolve(input.cwd, string(value, 'owned path'))) };
 }
 
-function receiptHash(prepared) {
-  const { receiptHash: ignored, ...audit } = prepared.audit;
-  return hash({ tool: prepared.tool, arguments: prepared.arguments, audit });
-}
-
-async function rejectedPreparation(saved, input, context, target) {
-  object(saved, 'rejected prepared request');
-  const { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, depth } = context;
+async function rejectedPreparation(reference, input, context, target) {
+  const { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, receipts } = context;
+  const saved = receipts.node(reference);
   const selection = saved.audit?.selection;
   const identity = saved.audit?.identity;
   const preparation = saved.audit?.preparation;
@@ -689,24 +685,25 @@ async function rejectedPreparation(saved, input, context, target) {
     || (preparation.input.modelRejections ?? []).some(rejection => !evidence.some(current => hash(current) === hash(rejection)))
     || (preparation.input.rejectedPreparedRequest !== undefined && hash(preparation.input.rejectedPreparedRequest) !== hash(input.rejectedPreparedRequest ?? null))) throw new Error('Invalid rejected prepared request provenance');
   if (preparation.input.catalog.inheritedProviderInstanceId !== catalog.inheritedProviderInstanceId) throw new Error('Invalid rejected prepared request parent provider');
-  let rebuilt;
-  try {
-    if (preparation.input.priorPreparedRequest !== undefined) throw new Error('Nested retry');
-    rebuilt = await prepareDelegation(preparation.input, { ...preparation.scope, resolution: preparation.input.resolution }, depth + 1);
-  } catch {
-    throw new Error('Invalid rejected prepared request preparation');
-  }
-  if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
+  await receipts.reconstruct(saved, async () => {
+    let rebuilt;
+    try {
+      if (preparation.input.priorPreparedRequest !== undefined) throw new Error('Nested retry');
+      rebuilt = await prepareDelegation(preparation.input, { ...preparation.scope, resolution: preparation.input.resolution }, receipts);
+    } catch { throw new Error('Invalid rejected prepared request preparation'); }
+    if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
+    return rebuilt;
+  });
   return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy, chainOrigin: clone(preparation.chainOrigin),
     source: 'captured-prepared-request', selectionReason: selection.reason, receiptHash: saved.audit.receiptHash };
 }
 
 export async function prepareT3Delegation(input) {
-  return prepareDelegation(input);
+  const receipts = createReceiptLedger();
+  return receipts.complete(await prepareDelegation(receipts.input(input), undefined, receipts));
 }
 
-async function prepareDelegation(input, capturedScope, depth = 0) {
-  if (depth > 8) throw new Error('Invalid rejected prepared request chain depth');
+async function prepareDelegation(input, capturedScope, receipts) {
   keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'rejectedPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel', 'modelRejections', 'jobProfile'], 'delegation input');
   const { bundleRoot, cwd, routeName, roleName, task, ownedPaths, runId, stepId, priorRound, priorPreparedRequest } = input;
   if (!path.isAbsolute(string(bundleRoot, 'bundleRoot')) || !path.isAbsolute(string(cwd, 'cwd'))) throw new Error('bundleRoot and cwd must be absolute');
@@ -731,16 +728,16 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(configured));
   const rejectedOriginal = configuredRejection && (originalMissing || configuredRejection.preparedRequest !== undefined);
   const provenance = new Map();
-  const context = { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, depth };
+  const context = { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, receipts };
   const captures = [];
   if (input.rejectedPreparedRequest !== undefined) {
-    const saved = object(input.rejectedPreparedRequest, 'rejectedPreparedRequest');
+    const saved = receipts.node(input.rejectedPreparedRequest);
     if (!evidence.some(rejection => hash(rejection.target) === hash(saved.arguments?.target ?? null))) throw new Error('Invalid rejected prepared request or new step identity');
-    captures.push({ saved, captured: await rejectedPreparation(saved, input, context, saved.arguments.target) });
+    captures.push({ saved, captured: await rejectedPreparation(input.rejectedPreparedRequest, input, context, saved.arguments.target) });
   }
   for (const rejection of evidence) {
     rejectionFrom(rejection);
-    if (rejection.preparedRequest !== undefined) captures.push({ saved: rejection.preparedRequest,
+    if (rejection.preparedRequest !== undefined) captures.push({ saved: receipts.node(rejection.preparedRequest),
       captured: await rejectedPreparation(rejection.preparedRequest, input, context, rejection.target) });
   }
   let chainOrigin = captures[0]?.captured.chainOrigin;
