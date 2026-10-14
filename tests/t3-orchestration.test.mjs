@@ -108,7 +108,7 @@ test('explicit override can replace a stale catalog selection', () => {
   const previous = configuration({ roles: { implementer: first } });
   previous.roles.implementer.model = 'removed:model';
   assert.deepEqual(configureT3Resolution({ catalog, contracts, preset: 'explicit-review', previous, overrides: { roles: { implementer: first } } }).roles.implementer, first);
-  assert.throws(() => configureT3Resolution({ catalog, contracts, preset: 'explicit-review', previous }), /unavailable/);
+  assert.deepEqual(configureT3Resolution({ catalog, contracts, preset: 'explicit-review', previous }), previous);
 });
 
 test('project manifests shadow the entire user manifest and native configurations stay unchanged', async t => {
@@ -495,4 +495,325 @@ test('panel preparation checks inherited seats before dispatching explicit famil
   assert.deepEqual((await prepareT3Delegation(panel)).arguments.target, fixture.opus);
   panel.catalog.providers[0].canRunChildTask = false;
   for (const entry of [1, 2, 3]) await assert.rejects(prepareT3Delegation({ ...panel, entry }), /Provider codex cannot run child tasks/);
+});
+
+function modelFallbackFixture(strategy = 'interrogate') {
+  const fixture = familyFixture();
+  for (const name of ['interrogate.reviewers', 'arena.runners', 'architect.runners']) {
+    fixture.roleContracts.routes[name] = { kind: 'panel', role: 'reviewer', defaultCount: 2 };
+  }
+  const target = (model, options = {}) => ({ providerInstanceId: 'cursor', model, options });
+  const effort = id => ({ id, type: 'select', options: ['low', 'high', 'xhigh'].map(id => ({ id })) });
+  const bool = { id: 'fast', type: 'boolean' };
+  fixture.configured = target('claude-opus-old', { effort: 'xhigh', fast: false });
+  fixture.tableDefault = target('claude-opus-default', { effort: 'xhigh', fast: false });
+  fixture.nearest = target('claude-opus-default-2', { reasoningEffort: 'xhigh', fast: false });
+  fixture.crossFamily = target('grok-4.7', { reasoningEffort: 'xhigh', fast: false });
+  fixture.live.providers[1].runtimeModes = ['auto'];
+  fixture.live.providers[1].models = [
+    { id: fixture.configured.model, options: [effort('effort'), bool] },
+    { id: fixture.tableDefault.model, options: [effort('effort'), bool] },
+    { id: fixture.nearest.model, options: [effort('reasoningEffort'), bool] },
+    { id: 'claude-sonnet-far-away', options: [effort('reasoningEffort'), bool] },
+    { id: fixture.crossFamily.model, options: [effort('reasoningEffort'), bool] }
+  ];
+  fixture.routeName = strategy === 'interrogate' ? 'interrogate.reviewers' : 'arena.runners';
+  fixture.policy = { modelFallbacks: { [fixture.routeName]: {
+    strategy, familyDefaults: { claude: fixture.tableDefault }, unknownFamilyDefault: fixture.tableDefault
+  } } };
+  fixture.rejection = (target, validModelIds = []) => ({ target, code: 'model-rejected', rawError: `Rejected model ${target.model}`, validModelIds });
+  return fixture;
+}
+
+async function modelFallbackInput(t, fixture = modelFallbackFixture()) {
+  const input = await familyInput(t, fixture, {
+    routes: { [fixture.routeName]: [fixture.configured, fixture.configured] }, selectionPolicy: fixture.policy
+  });
+  return { ...input, roleName: undefined, routeName: fixture.routeName };
+}
+
+test('model rejection tries the configured seat before its table default and audits actual evidence', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const configured = await prepareT3Delegation({ ...input, modelRejections: [] });
+  assert.deepEqual(configured.arguments.target, fixture.configured);
+  const evidence = [fixture.rejection(fixture.configured, [fixture.nearest.model])];
+  const prepared = await prepareT3Delegation({ ...input, stepId: 'default-attempt', modelRejections: evidence });
+  assert.deepEqual(prepared.arguments.target, fixture.tableDefault);
+  assert.equal(prepared.audit.selection.reason, 'model-family-default');
+  assert.deepEqual(prepared.audit.selection.modelRejections, evidence);
+  assert.deepEqual(prepared.audit.selection.configuredTarget, fixture.configured);
+  assert.deepEqual(prepared.audit.selection.selectedTarget, fixture.tableDefault);
+  assert.equal(prepared.audit.selection.selectedFamily, 'claude');
+  assert.deepEqual(prepared.audit.selection.optionChanges, []);
+});
+
+test('same-preset refresh preserves stale saved provider, model, options, policy and ordered seats', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const stale = structuredClone(fixture.live);
+  stale.providers[1].canRunChildTask = false;
+  stale.providers[1].models = [];
+  const refreshed = configureT3Resolution({ catalog: stale, contracts: fixture.roleContracts, preset: input.resolution.preset, previous: input.resolution });
+  assert.deepEqual(refreshed, input.resolution);
+  await assert.rejects(prepareT3Delegation({ ...input, catalog: stale, resolution: refreshed }), /cannot run child/);
+  assert.throws(() => configureT3Resolution({ catalog: stale, contracts: fixture.roleContracts, preset: input.resolution.preset, previous: input.resolution, overrides: { routes: { [fixture.routeName]: [fixture.configured] } } }), /unavailable/);
+});
+
+test('only a rejected table default can select an observed equivalent with advertised effort options', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const valid = ['claude-sonnet-far-away', fixture.crossFamily.model, 'claude-opus-default-1', fixture.nearest.model];
+  const evidence = [fixture.rejection(fixture.configured, [fixture.crossFamily.model]), fixture.rejection(fixture.tableDefault, valid)];
+  const prepared = await prepareT3Delegation({ ...input, modelRejections: evidence });
+  assert.deepEqual(prepared.arguments.target, fixture.nearest);
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+  assert.deepEqual(prepared.audit.selection.familyDefault, fixture.tableDefault);
+  assert.deepEqual(prepared.audit.selection.optionChanges, [{ option: 'effort', change: 'translated', toOption: 'reasoningEffort', value: 'xhigh' }]);
+  assert.equal(prepared.audit.options.fast.requested, false);
+  const observed = observeT3Task({ prepared, observation: taskObservation({ providerInstanceId: 'cursor', model: fixture.nearest.model }) });
+  assert.equal(observed.targetMatchesRequest, true);
+  assert.deepEqual(observed.selection.modelRejections, evidence);
+  assert.deepEqual(observed.requestedTarget, fixture.nearest);
+  assert.equal(observed.requestedOptionsVerified, false);
+  const removed = structuredClone(input.catalog);
+  removed.providers[1].models = removed.providers[1].models.filter(model => ![fixture.configured.model, fixture.tableDefault.model].includes(model.id));
+  assert.deepEqual((await prepareT3Delegation({ ...input, catalog: removed, modelRejections: evidence })).arguments.target, fixture.nearest);
+  await assert.rejects(prepareT3Delegation({ ...input, catalog: removed, modelRejections: [evidence[0]] }), /unavailable/);
+  await assert.rejects(prepareT3Delegation({ ...input, catalog: removed }), /unavailable/);
+});
+
+test('interrogate allows an observed cross-family equivalent while arena and architect stay in the default family', async t => {
+  for (const routeName of ['interrogate.reviewers', 'arena.runners', 'architect.runners']) {
+    const fixture = modelFallbackFixture(routeName === 'interrogate.reviewers' ? 'interrogate' : 'arena');
+    fixture.policy.modelFallbacks[routeName] = fixture.policy.modelFallbacks[fixture.routeName];
+    if (routeName !== fixture.routeName) delete fixture.policy.modelFallbacks[fixture.routeName];
+    fixture.routeName = routeName;
+    const input = await modelFallbackInput(t, fixture);
+    const evidence = [fixture.rejection(fixture.configured), fixture.rejection(fixture.tableDefault, [fixture.crossFamily.model, 'unadvertised/model'])];
+    if (routeName === 'interrogate.reviewers') {
+      const prepared = await prepareT3Delegation({ ...input, modelRejections: evidence });
+      assert.deepEqual(prepared.arguments.target, fixture.crossFamily);
+      assert.equal(prepared.audit.selection.selectedFamily, 'grok');
+      assert.equal(prepared.audit.selection.configuredFamily, 'claude');
+    } else {
+      await assert.rejects(prepareT3Delegation({ ...input, modelRejections: evidence }), /no observed valid equivalent/);
+      evidence[1].validModelIds.push(fixture.nearest.model);
+      assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: evidence })).arguments.target, fixture.nearest);
+    }
+  }
+});
+
+test('compatible effort outranks identifier distance and equivalent ties have deterministic model order', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const provider = input.catalog.providers[1];
+  provider.models.push(
+    { id: 'claude-opus-default-0', options: [{ id: 'effort', type: 'select', options: [{ id: 'low' }] }] },
+    { ...structuredClone(provider.models[2]), id: 'claude-opus-default-3' }
+  );
+  const evidence = [fixture.rejection(fixture.configured), fixture.rejection(fixture.tableDefault, ['claude-opus-default-3', 'claude-opus-default-0', fixture.nearest.model])];
+  const selected = await prepareT3Delegation({ ...input, modelRejections: evidence });
+  assert.deepEqual(selected.arguments.target, fixture.nearest);
+  provider.models.reverse();
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: evidence })).arguments.target, fixture.nearest);
+});
+
+test('provider, options and runtime failures do not trigger model fallback or provider migration', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const modelRejections = [fixture.rejection(fixture.configured)];
+  for (const changes of [{ canRunChildTask: false }, { canRunCrossProviderChildTask: false }]) {
+    const disabled = structuredClone(input.catalog);
+    Object.assign(disabled.providers[1], changes);
+    for (const evidence of [undefined, modelRejections]) await assert.rejects(prepareT3Delegation({ ...input, catalog: disabled, modelRejections: evidence }), /cannot run/);
+    assert.equal(disabled.providers[1].canRunChildTask, changes.canRunChildTask ?? true);
+  }
+  for (const evidence of [undefined, modelRejections]) {
+    await assert.rejects(prepareT3Delegation({ ...input, runtimeMode: 'full-access', modelRejections: evidence }), /does not advertise/);
+    const invalidOptions = structuredClone(input);
+    invalidOptions.resolution.routes[fixture.routeName].entries[0].options.fast = 'false';
+    const invalidEvidence = evidence && [fixture.rejection(invalidOptions.resolution.routes[fixture.routeName].entries[0])];
+    await assert.rejects(prepareT3Delegation({ ...invalidOptions, modelRejections: invalidEvidence }), /Unsupported value/);
+  }
+  const moved = structuredClone(input);
+  moved.resolution.selectionPolicy.modelFallbacks[fixture.routeName].familyDefaults.claude.providerInstanceId = 'codex';
+  await assert.rejects(prepareT3Delegation({ ...moved, modelRejections }), /preserve.*provider/);
+});
+
+test('rejection evidence is scoped to the selected target, original provider and eligible route', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const rejection = fixture.rejection(fixture.configured);
+  for (const modelRejections of [
+    [{ ...rejection, code: 'provider-unavailable' }],
+    [{ ...rejection, rawError: ' ' }],
+    [{ ...rejection, validModelIds: [false] }],
+    [{ ...rejection, target: { ...fixture.configured, providerInstanceId: 'codex' } }],
+    [fixture.rejection(fixture.nearest)],
+    [fixture.rejection(fixture.tableDefault)],
+    [rejection, rejection],
+    [{ ...rejection, invented: true }]
+  ]) await assert.rejects(prepareT3Delegation({ ...input, modelRejections }));
+  const otherRoute = { ...input, routeName: 'review.panel' };
+  otherRoute.resolution.routes['review.panel'].entries = [fixture.configured];
+  await assert.rejects(prepareT3Delegation({ ...otherRoute, modelRejections: [rejection] }), /not configured/);
+  assert.deepEqual((await prepareT3Delegation({ ...otherRoute, modelRejections: [] })).arguments.target, fixture.configured);
+  for (const [routeName, strategy] of [['review.panel', 'interrogate'], ['interrogate.reviewers', 'arena'], ['arena.runners', 'interrogate']]) {
+    assert.throws(() => configureT3Resolution({ catalog: fixture.live, contracts: fixture.roleContracts, overrides: { selectionPolicy: { modelFallbacks: { [routeName]: { ...fixture.policy.modelFallbacks[fixture.routeName], strategy } } } } }), /fallback route|fallback strategy/);
+  }
+});
+
+test('inherited aliases are exempt from rejected-slug fallback and same-family seats need no default diversity gate', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  for (const entry of [1, 2]) assert.deepEqual((await prepareT3Delegation({ ...input, entry })).arguments.target, fixture.configured);
+  input.resolution.routes[fixture.routeName].entries = [{ inheritParent: true }, { inheritParent: true }];
+  const inherited = await prepareT3Delegation({ ...input, modelRejections: [] });
+  assert.deepEqual(inherited.audit.requested, { inheritParent: true });
+  assert.equal(Object.hasOwn(inherited.arguments, 'target'), false);
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [fixture.rejection({ inheritParent: true })] }), /Inherited aliases/);
+  for (const model of ['auto', 'inherit-parent']) {
+    const alias = { ...fixture.configured, model };
+    input.resolution.routes[fixture.routeName].entries = [alias];
+    await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(alias)] }), /Inherited aliases/);
+  }
+});
+
+test('replacement options disclose dropped values and unpinned advertised options without inventing keys', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  input.catalog.providers[1].models.push({ id: 'claude-minimal', options: [{ id: 'fast', type: 'boolean' }, { id: 'new-switch', type: 'boolean' }] });
+  const modelRejections = [fixture.rejection(fixture.configured), fixture.rejection(fixture.tableDefault, ['claude-minimal'])];
+  const prepared = await prepareT3Delegation({ ...input, modelRejections });
+  assert.deepEqual(prepared.arguments.target, { providerInstanceId: 'cursor', model: 'claude-minimal', options: { fast: false } });
+  assert.deepEqual(prepared.audit.selection.optionChanges, [{ option: 'effort', change: 'dropped', value: 'xhigh' }, { option: 'new-switch', change: 'inherited-or-unpinned' }]);
+  assert.deepEqual(prepared.audit.options['new-switch'], { source: 'inherited-or-unpinned', verified: false });
+});
+
+test('model substitution requires a fresh step identity while exact retries retain their saved audit', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const original = await prepareT3Delegation(input);
+  const modelRejections = [fixture.rejection(fixture.configured)];
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections, priorPreparedRequest: original }), /Retry identity or payload/);
+  const replacementInput = { ...input, modelRejections, stepId: 'new-default-step' };
+  const replacement = await prepareT3Delegation(replacementInput);
+  assert.notEqual(replacement.arguments.clientRequestId, original.arguments.clientRequestId);
+  assert.deepEqual(await prepareT3Delegation({ ...replacementInput, priorPreparedRequest: replacement }), replacement);
+  await assert.rejects(prepareT3Delegation({ ...replacementInput, task: 'Changed task.', priorPreparedRequest: replacement }), /Retry identity or payload/);
+  await assert.rejects(prepareT3Delegation({ ...replacementInput, modelRejections: [], priorPreparedRequest: replacement }), /Retry identity or payload/);
+});
+
+test('unknown-family seats use the declared default and a rejected configured default goes straight to valid equivalents', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const opaque = { ...fixture.configured, model: 'custom/opaque-old' };
+  input.catalog.providers[1].models.push({ ...structuredClone(input.catalog.providers[1].models[0]), id: opaque.model });
+  input.resolution.routes[fixture.routeName].entries[0] = opaque;
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(opaque)] })).arguments.target, fixture.tableDefault);
+  input.resolution.routes[fixture.routeName].entries[0] = fixture.tableDefault;
+  const prepared = await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.tableDefault, [fixture.nearest.model])] });
+  assert.deepEqual(prepared.arguments.target, fixture.nearest);
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+});
+
+test('known families require their own default while opaque families use the unknown default', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const gpt = { ...fixture.configured, model: 'gpt-old' };
+  const opaque = { ...fixture.configured, model: 'custom/opaque-old' };
+  for (const target of [gpt, opaque]) input.catalog.providers[1].models.push({ ...structuredClone(input.catalog.providers[1].models[0]), id: target.model });
+  input.resolution.routes[fixture.routeName].entries[0] = gpt;
+  assert.deepEqual((await prepareT3Delegation(input)).arguments.target, gpt);
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(gpt)] }), {
+    message: 'Model fallback configuration is missing family default for gpt on interrogate.reviewers'
+  });
+  input.resolution.routes[fixture.routeName].entries[0] = opaque;
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(opaque)] })).arguments.target, fixture.tableDefault);
+});
+
+test('an explicit family minimum blocks family-changing single seats and remains mandatory', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  input.resolution.selectionPolicy.minimumPanelFamilies = { [fixture.routeName]: 2 };
+  const modelRejections = [fixture.rejection(fixture.configured), fixture.rejection(fixture.tableDefault, [fixture.crossFamily.model])];
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections }), {
+    message: 'BLOCKED: panel interrogate.reviewers has minimumPanelFamilies=2; family-changing single-seat preparation requires a complete effective-panel configuration'
+  });
+  assert.deepEqual(input.resolution.routes[fixture.routeName].entries, [fixture.configured, fixture.configured]);
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [modelRejections[0]] }), /needs 2 model families/);
+});
+
+test('separate rejected claude and gpt seats cannot both collapse a two-family panel to grok', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const claude = { ...fixture.configured, model: 'claude-old' };
+  const gpt = { ...fixture.configured, model: 'gpt-old' };
+  const grok = { ...fixture.crossFamily, model: 'grok-valid' };
+  const provider = input.catalog.providers[1];
+  provider.models.push(
+    ...[claude, gpt].map(target => ({ ...structuredClone(provider.models[0]), id: target.model })),
+    { ...structuredClone(provider.models[4]), id: grok.model }
+  );
+  input.resolution.routes[fixture.routeName].entries = [claude, gpt];
+  input.resolution.selectionPolicy.modelFallbacks[fixture.routeName].familyDefaults = { claude, gpt };
+  input.resolution.selectionPolicy.minimumPanelFamilies = { [fixture.routeName]: 2 };
+  const replacements = [claude, gpt].map((target, index) => ({ ...input, entry: index + 1, modelRejections: [fixture.rejection(target, [grok.model])] }));
+  const outcomes = await Promise.allSettled(replacements.map(prepareT3Delegation));
+  assert.deepEqual(outcomes.map(outcome => ({ status: outcome.status, message: outcome.reason?.message })), [
+    { status: 'rejected', message: 'BLOCKED: panel interrogate.reviewers has minimumPanelFamilies=2; family-changing single-seat preparation requires a complete effective-panel configuration' },
+    { status: 'rejected', message: 'BLOCKED: panel interrogate.reviewers has minimumPanelFamilies=2; family-changing single-seat preparation requires a complete effective-panel configuration' }
+  ]);
+  for (const [index, target] of [claude, gpt].entries()) {
+    assert.deepEqual((await prepareT3Delegation({ ...input, entry: index + 1 })).arguments.target, target);
+    const unconstrained = structuredClone(replacements[index]);
+    delete unconstrained.resolution.selectionPolicy.minimumPanelFamilies;
+    assert.deepEqual((await prepareT3Delegation(unconstrained)).arguments.target, grok);
+  }
+  assert.deepEqual(input.resolution.routes[fixture.routeName].entries, [claude, gpt]);
+});
+
+test('same-family model and explicit channel fallbacks preserve a custom family minimum', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  input.resolution.routes[fixture.routeName].entries[1] = fixture.gpt;
+  input.resolution.selectionPolicy.minimumPanelFamilies = { [fixture.routeName]: 2 };
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] })).arguments.target, fixture.tableDefault);
+  const modelRejections = [fixture.rejection(fixture.configured), fixture.rejection(fixture.tableDefault, [fixture.nearest.model])];
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections })).arguments.target, fixture.nearest);
+  input.resolution.selectionPolicy.fallbackTargets = [fixture.otherOpus, fixture.crossFamily];
+  input.catalog.providers[1].canRunChildTask = false;
+  assert.deepEqual((await prepareT3Delegation(input)).arguments.target, fixture.otherOpus);
+  input.resolution.selectionPolicy.fallbackTargets = [fixture.crossFamily];
+  await assert.rejects(prepareT3Delegation(input), /BLOCKED: configured target/);
+});
+
+test('unknown-to-known family fallback cannot prove an explicit panel family minimum', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const opaque = { ...fixture.configured, model: 'custom/opaque-old' };
+  input.catalog.providers[1].models.push({ ...structuredClone(input.catalog.providers[1].models[0]), id: opaque.model });
+  input.resolution.routes[fixture.routeName].entries = [opaque, fixture.configured, fixture.gpt];
+  input.resolution.selectionPolicy.minimumPanelFamilies = { [fixture.routeName]: 2 };
+  assert.deepEqual((await prepareT3Delegation(input)).arguments.target, opaque);
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(opaque)] }), {
+    message: 'BLOCKED: panel interrogate.reviewers has minimumPanelFamilies=2; family-changing single-seat preparation requires a complete effective-panel configuration'
+  });
+  delete input.resolution.selectionPolicy.minimumPanelFamilies;
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(opaque)] })).arguments.target, fixture.tableDefault);
+});
+
+test('saved unavailable options and provider identities survive refresh but new overrides remain strict', async t => {
+  const previous = configuration({ routes: { 'review.panel': [second, first, second] } });
+  const changedCatalog = structuredClone(catalog);
+  changedCatalog.providers[0].models[0].options = [];
+  const refreshed = configureT3Resolution({ catalog: changedCatalog, contracts, preset: previous.preset, previous });
+  assert.deepEqual(refreshed, previous);
+  const input = await delegationInput(t, { catalog: changedCatalog, resolution: refreshed, entry: 2 });
+  await assert.rejects(prepareT3Delegation(input), /Unsupported option/);
+  assert.throws(() => configureT3Resolution({ catalog: changedCatalog, contracts, preset: previous.preset, previous, overrides: { roles: { implementer: first } } }), /Unsupported option/);
+  changedCatalog.providers = changedCatalog.providers.filter(provider => provider.providerInstanceId !== second.providerInstanceId);
+  assert.deepEqual(configureT3Resolution({ catalog: changedCatalog, contracts, preset: previous.preset, previous }), previous);
+  await assert.rejects(prepareT3Delegation({ ...input, catalog: changedCatalog, entry: 1 }), /cannot run child/);
 });

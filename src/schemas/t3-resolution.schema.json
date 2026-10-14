@@ -19,11 +19,30 @@
         "modelFamilies": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } },
         "roleCandidates": { "type": "object", "additionalProperties": { "$ref": "#/$defs/candidates" } },
         "fallbackTargets": { "$ref": "#/$defs/candidates" },
+        "modelFallbacks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "interrogate.reviewers": { "allOf": [{ "$ref": "#/$defs/modelFallback" }, { "properties": { "strategy": { "const": "interrogate" } } }] },
+            "arena.runners": { "allOf": [{ "$ref": "#/$defs/modelFallback" }, { "properties": { "strategy": { "const": "arena" } } }] },
+            "architect.runners": { "allOf": [{ "$ref": "#/$defs/modelFallback" }, { "properties": { "strategy": { "const": "arena" } } }] }
+          }
+        },
         "minimumPanelFamilies": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 2 } }
       }
     }
   },
   "$defs": {
+    "modelFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "familyDefaults", "unknownFamilyDefault"],
+      "properties": {
+        "strategy": { "enum": ["interrogate", "arena"] },
+        "familyDefaults": { "type": "object", "additionalProperties": { "$ref": "#/$defs/explicitTarget" } },
+        "unknownFamilyDefault": { "$ref": "#/$defs/explicitTarget" }
+      }
+    },
     "candidates": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/explicitTarget" } },
     "explicitTarget": {
       "type": "object",

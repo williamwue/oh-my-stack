@@ -9,6 +9,9 @@ const terminalStatuses = new Set(['completed', 'failed', 'cancelled', 'interrupt
 const statuses = new Set(['queued', 'running', 'waiting', ...terminalStatuses]);
 const runtimeModes = new Set(['approval-required', 'auto-accept-edits', 'auto', 'full-access']);
 const manifestName = '.oh-my-stack/t3/resolution.json';
+const modelFallbackStrategies = { 'interrogate.reviewers': 'interrogate', 'arena.runners': 'arena', 'architect.runners': 'arena' };
+const inheritedAliases = new Set(['auto', 'inherit-parent']);
+const effortKeys = new Set(['effort', 'reasoningEffort', 'reasoning_effort']);
 
 function object(value, label) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
@@ -141,7 +144,7 @@ export function t3ModelFamily(model, assignments = {}) {
 }
 
 function policyFrom(input, contracts, catalog) {
-  keys(input, ['modelFamilies', 'roleCandidates', 'fallbackTargets', 'minimumPanelFamilies'], 'selectionPolicy');
+  keys(input, ['modelFamilies', 'roleCandidates', 'fallbackTargets', 'minimumPanelFamilies', 'modelFallbacks'], 'selectionPolicy');
   for (const [model, family] of Object.entries(object(input.modelFamilies ?? {}, 'modelFamilies'))) {
     string(model, 'family model');
     string(family, 'model family');
@@ -162,6 +165,18 @@ function policyFrom(input, contracts, catalog) {
   const fallbacks = list(input.fallbackTargets ?? [], 'fallbackTargets');
   fallbacks.forEach(concrete);
   unique(fallbacks.map(hash), 'fallback target');
+  for (const [route, policy] of Object.entries(object(input.modelFallbacks ?? {}, 'modelFallbacks'))) {
+    if (!Object.hasOwn(modelFallbackStrategies, route) || (contracts && contracts.routes[route]?.kind !== 'panel')) throw new Error(`Unsupported model fallback route ${route}`);
+    keys(policy, ['strategy', 'familyDefaults', 'unknownFamilyDefault'], 'model fallback policy');
+    if (policy.strategy !== modelFallbackStrategies[route]) throw new Error(`Invalid model fallback strategy for ${route}`);
+    for (const [family, target] of Object.entries(object(policy.familyDefaults, 'familyDefaults'))) {
+      string(family, 'default family');
+      concrete(target);
+      if (inheritedAliases.has(target.model) || t3ModelFamily(target.model, input.modelFamilies) !== family) throw new Error(`Invalid family default for ${family}`);
+    }
+    concrete(policy.unknownFamilyDefault);
+    if (inheritedAliases.has(policy.unknownFamilyDefault.model)) throw new Error('Model fallback defaults cannot be inherited aliases');
+  }
   for (const [route, count] of Object.entries(object(input.minimumPanelFamilies ?? {}, 'minimumPanelFamilies'))) {
     if (contracts && contracts.routes[route]?.kind !== 'panel') throw new Error(`Unknown panel route ${route}`);
     if (!Number.isInteger(count) || count < 2) throw new Error('Panel family minimum must be an integer of at least two');
@@ -204,18 +219,23 @@ export function configureT3Resolution(input) {
   for (const [name, target] of Object.entries(object(overrides.roles ?? {}, 'role overrides'))) {
     if (!Object.hasOwn(contracts.roles, name)) throw new Error(`Unknown role ${name}`);
     resolution.roles[name] = targetFrom(target, catalog);
+    executableTarget(resolution.roles[name], catalog);
   }
   for (const [name, entries] of Object.entries(object(overrides.routes ?? {}, 'route overrides'))) {
     if (!Object.hasOwn(contracts.routes, name)) throw new Error(`Unknown route ${name}`);
     resolution.routes[name].entries = list(entries, 'route override entries').map(target => targetFrom(target, catalog));
+    resolution.routes[name].entries.forEach(target => executableTarget(target, catalog));
   }
-  if (overrides.selectionPolicy !== undefined) resolution.selectionPolicy = policyFrom(overrides.selectionPolicy, contracts, catalog);
-  const checked = resolutionFrom(resolution, contracts, catalog);
-  for (const target of Object.values(checked.roles)) executableTarget(target, catalog);
-  for (const route of Object.values(checked.routes)) route.entries.forEach(target => executableTarget(target, catalog));
-  for (const targets of Object.values(checked.selectionPolicy?.roleCandidates ?? {})) targets.forEach(target => executableTarget(target, catalog));
-  (checked.selectionPolicy?.fallbackTargets ?? []).forEach(target => executableTarget(target, catalog));
-  validatePanelFamilies(checked, catalog);
+  if (overrides.selectionPolicy !== undefined) {
+    resolution.selectionPolicy = policyFrom(overrides.selectionPolicy, contracts, catalog);
+    for (const targets of Object.values(resolution.selectionPolicy.roleCandidates ?? {})) targets.forEach(target => executableTarget(target, catalog));
+    (resolution.selectionPolicy.fallbackTargets ?? []).forEach(target => executableTarget(target, catalog));
+    for (const policy of Object.values(resolution.selectionPolicy.modelFallbacks ?? {})) {
+      [...Object.values(policy.familyDefaults), policy.unknownFamilyDefault].forEach(target => executableTarget(target, catalog));
+    }
+  }
+  const checked = resolutionFrom(resolution, contracts);
+  if (saved?.preset !== preset || Object.keys(overrides).length) validatePanelFamilies(checked, catalog);
   return checked;
 }
 
@@ -247,13 +267,20 @@ export async function resolveT3Resolution(input) {
   }
 }
 
-function executableTarget(target, catalog, runtimeMode) {
-  targetFrom(target, catalog);
+function executableProvider(target, catalog, runtimeMode) {
   const providerId = target.inheritParent ? catalog.inheritedProviderInstanceId : target.providerInstanceId;
   const provider = catalog.providers.find(value => value.providerInstanceId === providerId);
   if (!provider || !provider.canRunChildTask) throw new Error(`Provider ${providerId} cannot run child tasks`);
   if (providerId !== catalog.inheritedProviderInstanceId && !provider.canRunCrossProviderChildTask) throw new Error(`Provider ${providerId} cannot run cross-provider child tasks`);
   if (runtimeMode !== undefined && runtimeMode !== 'inherit' && !provider.runtimeModes?.includes(runtimeMode)) throw new Error(`Provider ${providerId} does not advertise runtimeMode ${runtimeMode}`);
+  return provider;
+}
+
+function executableTarget(target, catalog, runtimeMode) {
+  targetFrom(target);
+  const provider = executableProvider(target, catalog, runtimeMode);
+  targetFrom(target, catalog);
+  const providerId = provider.providerInstanceId;
   const modelId = target.inheritParent ? catalog.inheritedModel : target.model;
   if (target.inheritParent && modelId === null) return { requested: clone(target), options: {}, inheritedModelKnown: false };
   const model = provider.models.find(value => value.id === modelId);
@@ -263,6 +290,109 @@ function executableTarget(target, catalog, runtimeMode) {
     requested: clone(target),
     options: Object.fromEntries(model.options.map(option => [option.id, Object.hasOwn(pinned, option.id) ? { source: 'explicit', requested: pinned[option.id], verified: false } : { source: 'inherited-or-unpinned', verified: false }]))
   };
+}
+
+function compatibleOption(option, value) {
+  return option.type === 'boolean' ? typeof value === 'boolean' : typeof value === 'string' && option.options.some(choice => choice.id === value);
+}
+
+function replacementOptions(source, model) {
+  const options = {};
+  for (const [id, value] of Object.entries(source.options)) {
+    const exact = model.options.find(option => option.id === id);
+    const translated = effortKeys.has(id) && typeof value === 'string'
+      ? model.options.find(option => effortKeys.has(option.id) && option.type === 'select' && compatibleOption(option, value)) : null;
+    const option = exact && compatibleOption(exact, value) ? exact : translated;
+    if (option && !Object.hasOwn(options, option.id)) options[option.id] = value;
+  }
+  return options;
+}
+
+function optionChanges(source, target, model) {
+  const changes = [];
+  for (const [id, value] of Object.entries(source.options)) {
+    if (Object.hasOwn(target.options, id) && target.options[id] === value) continue;
+    const translated = effortKeys.has(id) && Object.keys(target.options).find(key => effortKeys.has(key) && target.options[key] === value);
+    changes.push(translated ? { option: id, change: 'translated', toOption: translated, value }
+      : Object.hasOwn(target.options, id) ? { option: id, change: 'changed', from: value, to: target.options[id] }
+        : { option: id, change: 'dropped', value });
+  }
+  for (const option of model.options) {
+    if (!Object.hasOwn(target.options, option.id)) changes.push({ option: option.id, change: 'inherited-or-unpinned' });
+    else if (!Object.hasOwn(source.options, option.id) && !changes.some(change => change.toOption === option.id)) changes.push({ option: option.id, change: 'added', value: target.options[option.id] });
+  }
+  return changes;
+}
+
+function modelDistance(left, right) {
+  let row = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let i = 0; i < left.length; i++) {
+    const next = [i + 1];
+    for (let j = 0; j < right.length; j++) next.push(Math.min(next[j] + 1, row[j + 1] + 1, row[j] + (left[i] === right[j] ? 0 : 1)));
+    row = next;
+  }
+  return row[right.length];
+}
+
+export function resolveT3ModelFallback(input) {
+  keys(input, ['target', 'catalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
+  const { routeName, runtimeMode } = input;
+  const catalog = parseT3Catalog(input.catalog);
+  const target = targetFrom(input.target);
+  const policy = policyFrom(input.policy ?? {});
+  const routePolicy = policy.modelFallbacks?.[routeName];
+  const evidence = list(input.modelRejections ?? [], 'modelRejections');
+  const unchanged = { target, audit: { reason: 'configured-target', modelRejections: [], optionChanges: [] } };
+  if (!evidence.length) return unchanged;
+  if (!routePolicy) throw new Error(`Model rejection fallback is not configured for ${routeName ?? 'role'}`);
+  if (target.inheritParent || inheritedAliases.has(target.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
+  const family = t3ModelFamily(target.model, policy.modelFamilies);
+  if (family !== null && !Object.hasOwn(routePolicy.familyDefaults, family)) throw new Error(`Model fallback configuration is missing family default for ${family} on ${routeName}`);
+  const tableDefault = family === null ? routePolicy.unknownFamilyDefault : routePolicy.familyDefaults[family];
+  if (tableDefault.providerInstanceId !== target.providerInstanceId) throw new Error('Model fallback must preserve the configured provider instance');
+  const permitted = new Set([hash(target), hash(tableDefault)]);
+  for (const rejection of evidence) {
+    keys(rejection, ['target', 'code', 'rawError', 'validModelIds'], 'model rejection');
+    const rejected = targetFrom(rejection.target);
+    if (rejected.inheritParent || inheritedAliases.has(rejected.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
+    if (rejection.code !== 'model-rejected') throw new Error('Model fallback requires model-rejected evidence');
+    string(rejection.rawError, 'rawError');
+    list(rejection.validModelIds, 'validModelIds').forEach(model => string(model, 'valid model id'));
+    if (rejected.providerInstanceId !== target.providerInstanceId || !permitted.has(hash(rejected))) throw new Error('Foreign model rejection target or provider');
+  }
+  unique(evidence.map(rejection => hash(rejection.target)), 'model rejection target');
+  const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(target));
+  if (!configuredRejection) throw new Error('Model fallback requires rejection of the configured target first');
+  const provider = executableProvider(target, catalog, runtimeMode);
+  if (provider.models.some(model => model.id === target.model)) targetFrom(target, catalog);
+  const defaultRejection = evidence.find(rejection => hash(rejection.target) === hash(tableDefault));
+  let selected = tableDefault;
+  let reason = 'model-family-default';
+  if (defaultRejection) {
+    const defaultModel = provider.models.find(model => model.id === tableDefault.model);
+    if (defaultModel) targetFrom(tableDefault, catalog);
+    const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
+    if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
+    const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
+    const effort = Object.entries(tableDefault.options).find(([id, value]) => effortKeys.has(id) && typeof value === 'string');
+    const slugEffort = /-(low|medium|high|xhigh|max|ultra)(?:-|$)/.exec(tableDefault.model)?.[1];
+    const candidates = provider.models.filter(model => defaultRejection.validModelIds.includes(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
+      .filter(model => routePolicy.strategy !== 'arena' || t3ModelFamily(model.id, policy.modelFamilies) === defaultFamily)
+      .map(model => ({ model, options: replacementOptions(tableDefault, model) }))
+      .map(candidate => ({ ...candidate, rank: [
+        t3ModelFamily(candidate.model.id, policy.modelFamilies) === defaultFamily ? 0 : 1,
+        effort ? Object.entries(candidate.options).some(([id, value]) => effortKeys.has(id) && value === effort[1]) ? 0 : 1
+          : slugEffort && !candidate.model.id.includes(`-${slugEffort}`) ? 1 : 0,
+        modelDistance(tableDefault.model, candidate.model.id)
+      ] }))
+      .sort((left, right) => left.rank[0] - right.rank[0] || left.rank[1] - right.rank[1] || left.rank[2] - right.rank[2] || (left.model.id < right.model.id ? -1 : left.model.id > right.model.id ? 1 : 0));
+    if (!candidates.length) throw new Error('BLOCKED: no observed valid equivalent on the configured provider');
+    selected = { providerInstanceId: target.providerInstanceId, model: candidates[0].model.id, options: candidates[0].options };
+    reason = 'model-valid-equivalent';
+  }
+  executableTarget(selected, catalog, runtimeMode);
+  const model = provider.models.find(model => model.id === selected.model);
+  return { target: clone(selected), audit: { reason, modelRejections: clone(evidence), configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
 }
 
 function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runtimeMode }) {
@@ -299,13 +429,14 @@ function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runti
   throw new Error(`${role === 'trail-reviewer' ? 'BLOCKED: independent review' : 'BLOCKED: configured target'}; ${detail}`);
 }
 
-function validatePanelFamilies(resolution, catalog, runtimeMode) {
+function validatePanelFamilies(resolution, catalog, runtimeMode, preparedSelection) {
   const policy = resolution.selectionPolicy ?? {};
   for (const [name, count] of Object.entries(policy.minimumPanelFamilies ?? {})) {
     const entries = resolution.routes[name]?.entries;
     if (!entries) throw new Error(`Unknown panel route ${name}`);
-    const families = new Set(entries.map(target => {
-      const selected = selectTarget(target, { catalog, policy, runtimeMode });
+    const families = new Set(entries.map((target, index) => {
+      const selected = preparedSelection?.routeName === name && index + 1 === preparedSelection.entry
+        ? preparedSelection.selected : selectTarget(target, { catalog, policy, runtimeMode });
       return target.inheritParent ? null : t3ModelFamily(selected.target.model, policy.modelFamilies);
     }).filter(Boolean));
     if (families.size < count) throw new Error(`BLOCKED: panel ${name} needs ${count} model families; got ${families.size}. inherit-parent does not count`);
@@ -313,7 +444,7 @@ function validatePanelFamilies(resolution, catalog, runtimeMode) {
 }
 
 export async function prepareT3Delegation(input) {
-  keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel'], 'delegation input');
+  keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel', 'modelRejections'], 'delegation input');
   const { bundleRoot, cwd, routeName, roleName, task, ownedPaths, runId, stepId, priorRound, priorPreparedRequest } = input;
   if (!path.isAbsolute(string(bundleRoot, 'bundleRoot')) || !path.isAbsolute(string(cwd, 'cwd'))) throw new Error('bundleRoot and cwd must be absolute');
   const catalog = parseT3Catalog(input.catalog);
@@ -329,9 +460,20 @@ export async function prepareT3Delegation(input) {
   const configured = routeName ? resolution.routes[routeName]?.entries[entry - 1] : resolution.roles[roleName];
   if (!configured) throw new Error('Route entry is unavailable');
   const reviewedModel = input.reviewedModel === undefined ? catalog.inheritedModel : string(input.reviewedModel, 'reviewedModel');
-  const selected = selectTarget(configured, { catalog, policy: resolution.selectionPolicy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  const modelResolution = resolveT3ModelFallback({ target: configured, catalog, policy: resolution.selectionPolicy, routeName, modelRejections: input.modelRejections, runtimeMode: input.runtimeMode });
+  const selected = selectTarget(modelResolution.target, { catalog, policy: resolution.selectionPolicy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  if (modelResolution.audit.reason !== 'configured-target') {
+    selected.audit = { ...selected.audit, ...modelResolution.audit, configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
+  }
   const { target, selection } = selected;
-  if (routeName && resolution.selectionPolicy?.minimumPanelFamilies?.[routeName]) validatePanelFamilies({ ...resolution, selectionPolicy: { ...resolution.selectionPolicy, minimumPanelFamilies: { [routeName]: resolution.selectionPolicy.minimumPanelFamilies[routeName] } } }, catalog, input.runtimeMode);
+  const minimumFamilies = routeName && resolution.selectionPolicy?.minimumPanelFamilies?.[routeName];
+  if (minimumFamilies) {
+    const families = resolution.selectionPolicy.modelFamilies;
+    const configuredFamily = t3ModelFamily(configured.inheritParent ? catalog.inheritedModel : configured.model, families);
+    const selectedFamily = t3ModelFamily(target.inheritParent ? catalog.inheritedModel : target.model, families);
+    if (configuredFamily !== selectedFamily) throw new Error(`BLOCKED: panel ${routeName} has minimumPanelFamilies=${minimumFamilies}; family-changing single-seat preparation requires a complete effective-panel configuration`);
+    validatePanelFamilies({ ...resolution, selectionPolicy: { ...resolution.selectionPolicy, minimumPanelFamilies: { [routeName]: minimumFamilies } } }, catalog, input.runtimeMode, { routeName, entry, selected });
+  }
   const round = input.round ?? 1;
   if (!Number.isInteger(round) || round < 1) throw new Error('round must be a positive integer');
   string(task, 'task');

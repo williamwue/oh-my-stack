@@ -35,7 +35,8 @@ node scripts/t3-orchestration.mjs COMMAND --input input.json --output output.jso
 
 T3 配置独立保存在项目或用户目录的 `.oh-my-stack/t3/resolution.json`。
 最近的项目配置整体覆盖 T3 用户配置，不与原生 Codex、Claude 配置混用。
-同一 preset 的刷新保留面板成员、顺序、长度和选项。显式覆盖才改变这些选择。
+同一 preset 的刷新保留目标、面板成员、顺序、长度和选项，包括暂不可运行的保存目标。
+新覆盖必须通过当前目录校验；准备具体任务时再检查其可运行性。保留配置不等于执行成功。
 未配置的面板需要明确的有序成员，不能用重复父模型填充。
 
 选项值保持真实 JSON 类型。布尔值 `false` 不能变成字符串 `"false"`。
@@ -44,7 +45,10 @@ T3 配置独立保存在项目或用户目录的 `.oh-my-stack/t3/resolution.jso
 ## 固定跨家族选择与降级顺序
 
 配置可增加 `selectionPolicy`。`roleCandidates` 按角色保存有序候选，
-`fallbackTargets` 保存明确允许的同家族替代，`minimumPanelFamilies` 为指定面板设置家族数量下限。
+`fallbackTargets` 保存明确允许的同家族渠道替代。
+`minimumPanelFamilies` 是用户自定义约束，不是 pstack 的默认要求；未设置时，同家族的多个独立席位有效。
+自定义家族下限存在时，单席位的跨家族替代无法证明整个面板仍达标，因此会阻塞。
+应先审查并配置完整的有效面板；工具不会从其他席位的旧配置推断它们之前的替代。
 同一 preset 刷新会保留策略；显式覆盖替换整个策略。
 
 轨迹审计角色 `trail-reviewer` 必须与 `reviewedModel` 属于不同的已知模型家族。
@@ -56,14 +60,37 @@ T3 配置独立保存在项目或用户目录的 `.oh-my-stack/t3/resolution.jso
 自定义不透明 ID 可通过 `modelFamilies` 显式声明家族，但不能覆盖已知前缀。
 provider 名称不决定家族；这些声明和报告的模型名均不构成后端引擎证明。
 
-普通角色不会在失败后切换家族，只检查 `fallbackTargets` 中同家族的目标。
-工具不会遍历目录任意选模型、启用 provider 或改写其设置。
-禁用某个 provider 会关闭那个执行渠道，其他明确配置的同家族渠道仍可作为候选。
+禁用 provider 会关闭该渠道，不是模型标识被拒绝。工具不会启用 provider 或改写其设置。
+其他明确配置的同家族渠道仍可作为候选。面板中的 `inheritParent` 不计入自定义的家族下限。
 
-`configure` 会校验 provider 的执行能力、模型及选项，并检查配置的面板家族下限。
-面板中的 `inheritParent` 不计入家族多样性。准备委派时再次检查当前目录，保留全部配置席位，
-缺少必需席位或家族不足则阻塞该面板。运行时仅解析保存配置的结构，再检查当前任务目标，
-避免无关旧目标阻止当前任务使用明确允许的替代。
+### 保留原版的模型拒绝回退
+
+`selectionPolicy.modelFallbacks` 为路由保存 `strategy`、`familyDefaults` 和 `unknownFamilyDefault`。
+`interrogate` 策略只用于 `interrogate.reviewers`；`arena` 策略只用于 `arena.runners` 或 `architect.runners`。
+默认目标必须使用当前观察到的完整 provider/model/options；使用时必须与被拒绝席位属于同一 provider。
+
+宿主实际拒绝模型后，向 `prepare` 传入 `modelRejections`：每条包含被拒绝的 `target`、
+`code: "model-rejected"`、非空的 `rawError` 及错误列出的 `validModelIds`。
+工具不能独立认证传入的错误文本。provider 不可用、选项错误、超时都不能伪装成模型拒绝证据。
+
+先尝试映射的家族默认模型；已知家族缺少映射时报告配置错误，只有真正未知的家族才使用 Reviewer A 默认模型。
+默认模型也被拒绝后，Interrogate 从错误列出的有效 ID 与当前原 provider 目录的交集中选择近似模型，
+优先同家族和兼容的推理等级；Arena 与 Architect 的替代必须留在默认模型的家族内。
+不能用其他 provider 的错误或目录授权替代，也不能猜模型 ID。
+替代选项使用新模型实际支持的键和值，审计中列出改变或未固定的选项。
+
+别名 `auto`／`inheritParent` 不进入模型拒绝回退。保留席位、原配置目标和错误证据，
+替代必须使用新的 `stepId`，之后重试复用已保存请求。没有有效替代时仍报告不可用。
+
+### 保留候选与裁判规则
+
+Arena 的候选没有产出时，可按 N-1 继续，记录退出及实际原因。
+provider 不可用要如实报告，不能声称模型被拒绝。
+Architect 仍需至少两个结构不同的设计产物才能综合，候选退出不能免除该要求。
+Arena 从配置池中选择一个可运行裁判，优先不同家族；这是偏好，不是硬门槛。
+决策记录的跨家族审查仍是必需条件。
+
+运行时先解析保存配置的结构，再检查当前任务目标，避免无关旧目标阻止当前任务。
 
 `audit.selection` 保存配置目标、实际目标、家族、配置作用域、跳过原因及替代类型。
 必须原样调用准备好的目标；更换选择需要新的步骤标识，不能在同一次重试中静默改模型。
