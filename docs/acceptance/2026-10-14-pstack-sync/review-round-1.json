@@ -1,0 +1,26 @@
+{
+  "candidate": "bc0eb2d01100bd6b89383cc82ea3384681be06a3",
+  "reviewers": [
+    {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [critical] 任务强度调整提前阻断显式渠道回退\n\n**Location**: [tools/t3-orchestration.mjs:575](tools/t3-orchestration.mjs:575)，`jobSelection` 第 395–396 行。\n\n**Finding**: `jobSelection` 在 `selectTarget` 之前要求原配置的 provider/model 可运行，因此传入 `jobProfile` 会破坏已有的显式 `fallbackTargets` 策略。\n\n**Evidence**: 对冻结代码复现：配置 provider A，并显式允许同 family 的 provider B 回退，然后将 A 的 `canRunChildTask` 置为 `false`。不传 profile 时成功选择 B；仅增加 `{kind:\"judgment\"}` 就抛出 `Provider a cannot run child tasks`，根本没有执行 `selectTarget`。`verification` 也会经过这个提前校验。\n\n**Suggestion**: 将可运行候选选择与任务参数调整按明确顺序组合，让显式渠道回退完成后再调整实际选择的目标，同时保留原配置的审计来源。\n\n### 2. [warning] 自动生成的回退策略在修改席位后仍绑定旧 provider\n\n**Location**: [tools/t3-orchestration.mjs:253](tools/t3-orchestration.mjs:253)。\n\n**Finding**: 自动推导的策略被保存为普通 `selectionPolicy`，随后被当作用户显式策略永久保留。修改 route 的 provider 后，自动默认值没有相应更新。\n\n**Evidence**: 先通过 `configureT3Resolution` 为 provider A 的 `interrogate.reviewers` 创建配置，不提供策略；再用相同 preset、`previous` 和 route override 把席位改到 B。配置成功，但自动策略仍指向 A。B 的配置模型遭到有证据的拒绝后，准备请求报错 `Model fallback must preserve the configured provider instance`，即使 B 的目录中存在可用同 family 模型。\n\n**Suggestion**: 区分用户显式策略与自动推导策略。修改席位时重新推导受影响的自动默认值，并继续完整保留用户显式策略。\n\n### 3. [warning] T3 没有按模型实际支持的档位提升强度\n\n**Location**: [tools/t3-orchestration.mjs:403](tools/t3-orchestration.mjs:403)。\n\n**Finding**: T3 先沿固定全局 ladder 移动，再向下寻找兼容值，违反“提高一个受支持档位”的规则，也与原生 Codex 的实现不一致。\n\n**Evidence**: 模型广告的 effort 为 `[\"low\",\"high\",\"max\"]`，保存值为 `high`，任务为 `hardest`。冻结代码实际返回 `high`：先计算不存在的 `xhigh`，然后退回 `high`。相同输入在 `resolveTaskSelection` 中返回 `max`。因此最难任务在 T3 上没有提升，尽管下一受支持档位明确存在。\n\n**Suggestion**: 从广告目录构造有序的受支持档位，再计算步数和 `max` 上限；共享这部分策略计算，避免两套实现继续分歧。\n\n### 4. [critical] 原生 Codex 在目录变化后无法重试原始配置\n\n**Location**: [tools/model-resolution.mjs:98](tools/model-resolution.mjs:98)。\n\n**Finding**: `rejectedAdjustment` 必须匹配当前目录重新计算出的调整结果，而不是之前真正被拒绝的请求。目录刷新后，即使原始配置仍有效，也无法进入恢复原始 reasoning 的分支。\n\n**Evidence**: 保存 `high`，初始目录为 `[\"low\",\"high\",\"max\"]`，`hardest` 准备出 `max`。宿主拒绝 `max` 后，刷新目录为 `[\"low\",\"high\"]`，再提交真实的 `{model, reasoning:\"max\", reason}` 拒绝证据。函数重新计算得到 `high`，随后抛出 `rejectedAdjustment must identify this adjusted model and reasoning…`，而不是重试仍受支持的原始 `high`。省略 inventory 同样失败。\n\n**Suggestion**: 接收并校验之前保存的 prepared request/audit，用它证明被拒绝的调整；恢复原始配置不应依赖重新计算出同一个调整值。\n\nROLE_POLICY=independent-frozen-review"
+    },
+    {
+      "provider": "cursor",
+      "model": "claude-opus-5-5",
+      "status": "failed",
+      "summary": "Provider turn failed.",
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-5c98024667099dbf1d9948a80ac447aec45dfef363c7ec6ebdc075c74822a62b"
+    },
+    {
+      "provider": "cursor",
+      "model": "claude-opus-5-5",
+      "status": "failed",
+      "summary": "Provider turn failed.",
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-4d6ad407fb607841a4629f5df21630b2419404b1a258d3d8460bc5909c9dd822"
+    }
+  ],
+  "judgment": "Act on all four Astra findings. Root independently reproduced stale generated policy, unsupported speed selectors, and missing nearest effort. No completed Cursor verdict."
+}
