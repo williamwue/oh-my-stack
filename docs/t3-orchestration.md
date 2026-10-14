@@ -65,7 +65,7 @@ Each command reads one JSON object. Embed the captured `catalog` and generated
 | `catalog` | The captured capability result itself. | None. |
 | `configure` | `catalog`, `contracts`. | `preset`, `previous`, `overrides`. |
 | `resolve` | Absolute `cwd`, `userRoot`. | `contracts`. |
-| `prepare` | `bundleRoot`, `catalog`, `cwd`, `ownedPaths`, `task`, `runId`, `stepId`, and one of `routeName` or `roleName`. | `resolution`, `userRoot`, one-based `entry`, `round`, `originalBrief`, `priorRound`, `priorPreparedRequest`, `mode`, `timeoutMs`, `runtimeMode`, `interactionMode`, `title`, `reviewedModel`. |
+| `prepare` | `bundleRoot`, `catalog`, `cwd`, `ownedPaths`, `task`, `runId`, `stepId`, and one of `routeName` or `roleName`. | `resolution`, `userRoot`, one-based `entry`, `round`, `originalBrief`, `priorRound`, `priorPreparedRequest`, `mode`, `timeoutMs`, `runtimeMode`, `interactionMode`, `title`, `reviewedModel`, `modelRejections`. |
 | `observe` | `observation`, the structured task result. | `previous`, the preceding normalized observation; `prepared`, the saved delegate request. |
 | `cancel` | `taskId`. | `reason`, `clientRequestId`. |
 | `schedule` | `prompt`, structured `schedule`. | `title`, `enabled`, `projectId`, `currentProjectId`, `bindToCurrentThread`, `freshThreadIntent`, `clientRequestId`. |
@@ -94,9 +94,11 @@ a task reads the active T3 configuration automatically unless you supply an
 explicit resolution. The optional `userRoot` input supports isolated checks.
 
 Preview configuration into a detached file. Reusing a preset preserves saved
-models, option values, panel membership, and order. Replace a panel explicitly
-to change its order or size. Refreshing a catalog does not silently replace an
-unavailable model.
+models, option values, panel membership, and order, including saved targets that
+are now unavailable. Replace a panel explicitly to change its order or size.
+New overrides are validated against the current catalog. Inspect availability
+by preparing the selected task; preserving a saved target is not proof that it
+can execute. Refreshing a catalog never silently replaces an unavailable model.
 
 There is no configuration apply command. After an authorized setup request and
 review of the complete preview, place that resolution in the selected T3 scope.
@@ -122,8 +124,7 @@ fallbacks explicit. For example, on a catalog listing these exact targets:
       { "providerInstanceId": "cursor", "model": "grok-4.7", "options": { "reasoning_effort": "high" } }
     ]
   },
-  "fallbackTargets": [],
-  "minimumPanelFamilies": { "interrogate.reviewers": 2 }
+  "fallbackTargets": []
 }
 ```
 
@@ -141,19 +142,77 @@ Unknown custom IDs require an explicit `modelFamilies` mapping when family
 independence is required. Mappings cannot contradict a known prefix. They are
 configuration assertions, not backend verification.
 
-Ordinary roles do not switch families after a failure. Only explicit
-`fallbackTargets` of the original candidate's family are tried, in order.
-No catalog-wide search, provider activation or settings mutation occurs.
-Disabling a provider prevents that channel from running; another configured
-channel serving the same family remains eligible.
+Explicit `fallbackTargets` permit another approved channel serving the same
+family. Disabling a provider prevents that channel from running; it is not a
+model-slug rejection. No provider is enabled and no saved target is rewritten.
 
-`configure` checks provider execution capabilities, model/option availability,
-and configured panel family minimums before returning a preview. In a panel,
-`inheritParent` does not establish diversity. Preparation checks the selected
-route again against the current catalog and keeps all configured seats. Missing
-required seats or insufficient families block that panel. Saved configuration
-is structurally parsed before runtime selection so a stale unrelated target
-does not prevent an explicitly allowed fallback for the requested task.
+Panel family minimums are optional user constraints. They are not pstack
+defaults: two independently run models of the same family are valid without a
+custom minimum. An explicit minimum remains enforced; inherited aliases do not
+establish family diversity. A single-seat model replacement that changes family
+cannot prove a complete panel's custom minimum and is blocked. Review and
+configure the complete effective panel before using that custom constraint;
+the helper does not infer earlier seats' substitutions from their old targets.
+
+### Preserve upstream model-rejection fallback
+
+Route-scoped `selectionPolicy.modelFallbacks` maps the original workflow's
+defaults to exact observed T3 targets:
+
+```json
+{
+  "modelFallbacks": {
+    "interrogate.reviewers": {
+      "strategy": "interrogate",
+      "familyDefaults": {
+        "claude": { "providerInstanceId": "cursor", "model": "claude-opus-5-5", "options": { "effort": "high" } }
+      },
+      "unknownFamilyDefault": { "providerInstanceId": "cursor", "model": "claude-opus-5-5", "options": { "effort": "high" } }
+    }
+  }
+}
+```
+
+Use `interrogate` only for `interrogate.reviewers`. Use `arena` for
+`arena.runners` or `architect.runners`. These strategies do not apply to
+arbitrary roles or inherited aliases. A mapped default must belong to the
+original provider when used for a rejected seat.
+
+After an actual model rejection, pass `modelRejections` to `prepare`, retaining
+the rejected explicit `target`, `code: "model-rejected"`, the nonempty
+`rawError`, and the error's `validModelIds`. Evidence is supplied by the host;
+the helper cannot independently authenticate an error string. Do not invent
+rejection evidence from provider unavailability, option errors or a timeout.
+
+The seat first tries its mapped family default. A recognized family without
+a mapping is a configuration error; only an actually unknown family uses the
+mapped Reviewer A default. If that default is also rejected, Interrogate
+chooses the closest observed model among its reported valid IDs, preferring
+the same family and compatible reasoning effort. Arena and Architect keep
+that equivalent within the default's family. A model must also exist on the
+original provider's current catalog; IDs reported by another provider do not
+authorize a substitution. Replacement options use the model's advertised keys
+and values. Every changed or unpinned option is disclosed in the audit.
+
+The original seat, configured target and rejection evidence remain visible.
+A replacement uses a new `stepId`; unchanged retries reuse its saved request.
+This fallback does not discard an Interrogate reviewer or manufacture a
+cross-family trail review. Missing valid equivalents remain unavailable.
+
+### Preserve candidate and judge rules
+
+Arena may proceed with N-1 when a candidate produces no output, recording the
+dropout and its actual cause. Provider unavailability must be reported as such;
+it is not evidence of a rejected model. Architect inherits Arena's runner
+rules but still requires at least two structurally distinct design artifacts
+before synthesis. A dropout cannot waive that requirement.
+
+Arena chooses one runnable judge from its configured pool, preferring a
+different family from the parent when possible. That preference is not a hard
+family minimum. Trail review retains its mandatory different-family rule.
+
+Saved configuration is structurally parsed before runtime selection so a stale
+unrelated target does not prevent preparing an otherwise available task.
 
 Prepared `audit.selection` records the configured and selected targets,
 families, configuration scope, candidate rejections, and selection reason.

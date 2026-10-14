@@ -66,10 +66,19 @@ export function t3SkillBinding(packageRoot = "../../") {
     "Preview the full ordered selection. Preserve same-preset membership and",
     "order unless an explicit override replaces them. Omitted options remain",
     "inherited or unpinned. Requested settings need independent runtime evidence.",
-    "Use the configured selectionPolicy for ordered cross-family candidates,",
-    "explicit same-family fallback targets, and panel family minimums. A trail",
-    "reviewer must differ from the reviewed model family. Unknown families or",
-    "unavailable required reviewers stay BLOCKED. Do not override prepared",
+    "Use selectionPolicy for explicit channel fallbacks and ordered trail",
+    "candidates. Route modelFallbacks handle evidenced model rejection only:",
+    "Interrogate may use the closest observed equivalent; Arena and Architect",
+    "keep runner replacements in the default's family. Inherited aliases do",
+    "not use model fallback. Provider unavailability is a separate failure.",
+    "Panel family minimums are optional user constraints, not pstack defaults.",
+    "With a custom minimum, a single-seat family change cannot establish",
+    "whole-panel compliance; configure the complete effective panel first.",
+    "Report Arena candidates with no output as dropouts; Architect still",
+    "needs two structurally distinct designs. Prefer a different-family Arena",
+    "judge. A trail reviewer must differ from the reviewed model family.",
+    "Unknown families or unavailable required trail reviewers stay BLOCKED.",
+    "Do not override prepared",
     "targets manually. Retry the saved request; a new selection needs a new step.",
     "Record configured and selected targets, skipped candidates and reasons.",
     "Pass the saved prepared request to observe alongside the task result.",
@@ -104,5 +113,29 @@ export function t3RuntimeBindingGuide(runtime) {
 }
 
 export function t3ModelSelectionGuide() {
-  return "# Model selection\n\nRead [the T3 orchestration guide](t3-orchestration.md). Collect exact provider\ninstances, model IDs, typed options and modes from orchestrator_capabilities.\nPrepare requests with ../scripts/t3-orchestration.mjs. The host invokes tools.\nThe nearest project .oh-my-stack/t3/resolution.json shadows the whole user\nconfiguration. Same-preset refresh preserves ordered entries unless explicitly\nchanged. selectionPolicy supplies ordered cross-family candidates, explicit\nsame-family fallback targets and panel family minimums. Trail review requires\na known family different from the reviewed model. An unavailable required\nreview stays BLOCKED. Preserve prepared targets, record selection reasons,\nand compare them with reported task metadata through observe. Preview the\ncomplete selection before an authorized write. Omitted options remain\ninherited or unpinned. Native host manifests remain independent. Requested\nsettings and reported model IDs do not prove backend option enforcement.\n";
+  return `# Model selection
+
+Read [the T3 orchestration guide](t3-orchestration.md). Collect exact provider
+instances, model IDs, typed options and modes from orchestrator_capabilities.
+Prepare requests with ../scripts/t3-orchestration.mjs. The host invokes tools.
+The nearest project .oh-my-stack/t3/resolution.json shadows the whole user
+configuration. Same-preset refresh preserves saved targets and ordered entries;
+availability is checked when preparing the selected task.
+selectionPolicy supplies explicit channel fallbacks, ordered trail candidates
+and route-scoped modelFallbacks. Confirmed model rejection can select a mapped
+family default, then an observed equivalent from the rejection's valid IDs.
+Interrogate prefers the same family; Arena and Architect runner equivalents
+must stay in the default's family. Aliases do not use model fallback.
+Disabled providers, invalid options and unsupported modes are separate failures.
+Panel family minimums are optional custom constraints, not pstack defaults.
+Arena reports no-output candidates and can proceed with the remaining outputs.
+Architect still needs two structurally distinct designs. Arena's judge prefers
+a different family; trail review requires one and stays BLOCKED without it.
+Preserve prepared targets and record selection reasons and option changes.
+Compare selections with reported task metadata through observe. A replacement
+requires a new step identity; retry the saved request unchanged.
+Preview the complete selection before an authorized write. Omitted options
+remain inherited or unpinned. Native host manifests remain independent.
+Requested settings and reported model IDs do not prove option enforcement.
+`;
 }
