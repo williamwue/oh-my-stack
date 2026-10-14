@@ -75,6 +75,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "keeps older callers compatible. If an adjusted selection is rejected,",
     "retry the original configured role line in a new step before fallback.",
     "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
+    "Later rejected targets retain their own modelRejections[].preparedRequest;",
+    "keep earlier evidence unchanged and use each request's captured catalog.",
     "Use selectionPolicy for explicit channel fallbacks and ordered trail",
     "candidates. Route modelFallbacks handle evidenced model rejection only:",
     "Without a policy, defaults derive only from runnable observed catalog",

@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { configureT3Resolution, prepareT3Delegation } from '../tools/t3-orchestration.mjs';
+import { configureT3Resolution, prepareT3Delegation, resolveT3ModelFallback } from '../tools/t3-orchestration.mjs';
 
 const contracts = {
   schemaVersion: 1, orchestration: 't3', host: 'codex',
@@ -477,6 +477,151 @@ test('implicit fallback policy is reconstructed from the original catalog and ma
   const prepared = await prepareT3Delegation({ ...args, stepId: 'refreshed-default', rejectedPreparedRequest: adjusted,
     modelRejections: [rejection(adjusted.arguments.target), rejection(configured)] });
   assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-6.1-sol-default', { reasoningEffort: 'high', fastMode: false }));
+});
+
+async function refreshedRejectionChain(t) {
+  const options = [select('reasoningEffort', ['low', 'high', 'max'])];
+  const configured = target('codex', 'gpt-original', { reasoningEffort: 'high' });
+  const args = await input(t, catalog([{ id: configured.model, options }]), configured);
+  args.jobProfile = { kind: 'hardest' };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, target('codex', 'gpt-original', { reasoningEffort: 'max' }));
+  const retry = { ...args, stepId: 'original', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target)] };
+  assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, configured);
+  args.catalog.providers[0].models.push(
+    { id: 'gpt-original-a', options: structuredClone(options) },
+    { id: 'gpt-original-zzzzzz', options: structuredClone(options) }
+  );
+  const defaultInput = { ...retry, stepId: 'default', modelRejections: [...retry.modelRejections, rejection(configured)] };
+  const preparedDefault = await prepareT3Delegation(defaultInput);
+  assert.deepEqual(preparedDefault.arguments.target, target('codex', 'gpt-original-a', { reasoningEffort: 'high' }));
+  return { args, configured, adjusted, preparedDefault, next: { ...defaultInput, stepId: 'equivalent', modelRejections: [
+    ...defaultInput.modelRejections,
+    { ...rejection(preparedDefault.arguments.target), validModelIds: ['gpt-original-zzzzzz'] }
+  ] } };
+}
+
+test('a refreshed catalog default can be rejected after the original job adjustment and original target', async t => {
+  const { next } = await refreshedRejectionChain(t);
+  const prepared = await prepareT3Delegation(next);
+  assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-original-zzzzzz', { reasoningEffort: 'high' }));
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+  assert.equal(prepared.audit.selection.rejectionProvenance[2].source, 'current-catalog');
+});
+
+for (const change of ['options', 'model']) {
+  test(`a captured refreshed default survives removed ${change} when selecting a current equivalent`, async t => {
+    const { next, preparedDefault } = await refreshedRejectionChain(t);
+    next.modelRejections[2].preparedRequest = preparedDefault;
+    if (change === 'options') next.catalog.providers[0].models[1].options = [];
+    else next.catalog.providers[0].models.splice(1, 1);
+    const prepared = await prepareT3Delegation(next);
+    assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-original-zzzzzz', { reasoningEffort: 'high' }));
+    assert.deepEqual(prepared.audit.selection.familyDefault, target('codex', 'gpt-original-a', { reasoningEffort: 'high' }));
+    assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+    assert.deepEqual(prepared.audit.selection.rejectionProvenance.at(-1), {
+      target: target('codex', 'gpt-original-a', { reasoningEffort: 'high' }), source: 'captured-prepared-request',
+      catalogHash: preparedDefault.audit.catalogHash, receiptHash: preparedDefault.audit.receiptHash
+    });
+  });
+}
+
+for (const [name, mutate] of [
+  ['task', input => { input.task = 'Review another task.'; }],
+  ['scope', input => { input.cwd = path.join(input.cwd, 'elsewhere'); }],
+  ['owned paths', input => { input.ownedPaths = [path.join(input.cwd, 'other.mjs')]; }],
+  ['run', input => { input.runId = 'different-run'; }],
+  ['step', input => { input.stepId = 'default'; }],
+  ['rejection chain', input => { input.modelRejections[1].rawError = 'Different rejection.'; }]
+]) {
+  test(`a refreshed default receipt rejects different ${name}`, async t => {
+    const { next, preparedDefault } = await refreshedRejectionChain(t);
+    next.modelRejections[2].preparedRequest = preparedDefault;
+    mutate(next);
+    await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared/);
+  });
+}
+
+for (const resealed of [false, true]) {
+  test(`a refreshed default receipt rejects an altered target with recomputed checksum=${resealed}`, async t => {
+    const { next, preparedDefault } = await refreshedRejectionChain(t);
+    const saved = structuredClone(preparedDefault);
+    saved.arguments.target.options.reasoningEffort = 'low';
+    saved.audit.selection.selectedTarget = structuredClone(saved.arguments.target);
+    saved.audit.payloadHash = receiptDigest(saved.arguments);
+    if (resealed) reseal(saved);
+    next.modelRejections[2].target = structuredClone(saved.arguments.target);
+    next.modelRejections[2].preparedRequest = saved;
+    await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared/);
+  });
+}
+
+test('the initial capture cannot establish provenance for a later generated default', async t => {
+  const { next, adjusted } = await refreshedRejectionChain(t);
+  next.modelRejections[2].preparedRequest = adjusted;
+  await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared/);
+});
+
+test('a captured configured request proves rejected original options without an adjustment root', async t => {
+  const options = [select('reasoningEffort', ['low', 'high', 'max'])];
+  const configured = target('codex', 'gpt-original', { reasoningEffort: 'high' });
+  const args = await input(t, catalog([{ id: configured.model, options }]), configured);
+  args.jobProfile = { kind: 'verification' };
+  const original = await prepareT3Delegation(args);
+  args.catalog.providers[0].models[0].options = [select('reasoningEffort', ['low'])];
+  args.catalog.providers[0].models.push({ id: 'gpt-new-default', options });
+  const next = { ...args, stepId: 'default', modelRejections: [{ ...rejection(configured), preparedRequest: original }] };
+  const prepared = await prepareT3Delegation(next);
+  assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-new-default', { reasoningEffort: 'high' }));
+  assert.equal(prepared.audit.selection.rejectionProvenance[0].source, 'captured-prepared-request');
+  await assert.rejects(prepareT3Delegation({ ...next, modelRejections: [rejection(configured)] }), /Unsupported value/);
+});
+
+test('an unused stale policy default does not block a captured adjustment retry', async t => {
+  const { args, configured } = await retryFixture(t);
+  const staleDefault = target('codex', 'gpt-stale-default', { reasoningEffort: 'high' });
+  args.resolution.selectionPolicy.modelFallbacks = { [args.routeName]: {
+    strategy: 'interrogate', familyDefaults: { gpt: staleDefault }, unknownFamilyDefault: staleDefault
+  } };
+  const adjusted = await prepareT3Delegation(args);
+  const prepared = await prepareT3Delegation({ ...args, stepId: 'original-with-stale-policy', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target)] });
+  assert.deepEqual(prepared.arguments.target, configured);
+  assert.equal(prepared.audit.selection.reason, 'job-profile-rejected-original-line');
+});
+
+test('a genuine receipt for a default selected by another task cannot supply its catalog', async t => {
+  const { args, next } = await refreshedRejectionChain(t);
+  const foreign = { ...args, task: 'Review a different task.', stepId: 'foreign-adjustment' };
+  const adjusted = await prepareT3Delegation(foreign);
+  const preparedDefault = await prepareT3Delegation({ ...foreign, stepId: 'foreign-default', rejectedPreparedRequest: adjusted,
+    modelRejections: next.modelRejections.slice(0, 2) });
+  assert.deepEqual(preparedDefault.arguments.target, target('codex', 'gpt-original-a', { reasoningEffort: 'high' }));
+  next.modelRejections[2].preparedRequest = preparedDefault;
+  await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared request provenance/);
+});
+
+test('resealing a later default receipt with the old catalog cannot preserve its generated transition', async t => {
+  const { next, adjusted, preparedDefault } = await refreshedRejectionChain(t);
+  const saved = structuredClone(preparedDefault);
+  saved.audit.preparation.input.catalog = structuredClone(adjusted.audit.preparation.input.catalog);
+  saved.audit.catalogHash = adjusted.audit.catalogHash;
+  reseal(saved);
+  next.modelRejections[2].preparedRequest = saved;
+  await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared request (preparation|transition)/);
+});
+
+test('synchronous model fallback cannot consume an unvalidated prepared request', async t => {
+  const { next, configured } = await refreshedRejectionChain(t);
+  const replacement = target('codex', 'gpt-original-a', { reasoningEffort: 'high' });
+  const policy = { modelFallbacks: { [next.routeName]: {
+    strategy: 'interrogate', familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement
+  } } };
+  const input = { target: configured, catalog: next.catalog, policy, routeName: next.routeName, modelRejections: [rejection(configured)] };
+  assert.deepEqual(resolveT3ModelFallback(input).target, replacement);
+  input.modelRejections[0].preparedRequest = { audit: {} };
+  assert.throws(() => resolveT3ModelFallback(input), /Invalid rejected prepared request provenance/);
 });
 
 test('original option rejection can still select its configured model fallback after adjustment retry', async t => {

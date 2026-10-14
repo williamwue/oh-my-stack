@@ -474,7 +474,7 @@ function jobSelection(target, profile, catalog) {
 }
 
 function rejectionFrom(rejection) {
-  keys(rejection, ['target', 'code', 'rawError', 'validModelIds'], 'model rejection');
+  keys(rejection, ['target', 'code', 'rawError', 'validModelIds', 'preparedRequest'], 'model rejection');
   const rejected = targetFrom(rejection.target);
   if (rejected.inheritParent || inheritedAliases.has(rejected.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
   if (rejection.code !== 'model-rejected') throw new Error('Model fallback requires model-rejected evidence');
@@ -484,11 +484,27 @@ function rejectionFrom(rejection) {
 }
 
 export function resolveT3ModelFallback(input) {
+  return resolveModelFallback(input);
+}
+
+function rejectionOrigin(rejection, catalog, provenance) {
+  const target = rejectionFrom(rejection);
+  const captured = provenance.get(hash(target));
+  if (rejection.preparedRequest !== undefined && (!captured || captured.source !== 'captured-prepared-request'
+    || captured.receiptHash !== rejection.preparedRequest.audit?.receiptHash)) throw new Error('Invalid rejected prepared request provenance');
+  const origin = captured?.catalog ?? catalog;
+  const known = origin.providers.find(provider => provider.providerInstanceId === target.providerInstanceId)?.models.some(model => model.id === target.model);
+  if (captured || known) targetFrom(target, origin);
+  return { target: clone(target), source: captured?.source ?? (known ? 'current-catalog' : 'reported-model-rejection'),
+    ...(captured || known ? { catalogHash: hash(origin) } : {}), ...(captured?.receiptHash ? { receiptHash: captured.receiptHash } : {}) };
+}
+
+function resolveModelFallback(input, provenance = new Map()) {
   keys(input, ['target', 'catalog', 'rejectionCatalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
   const { routeName, runtimeMode } = input;
   const catalog = parseT3Catalog(input.catalog);
   const target = targetFrom(input.target);
-  const rejectionCatalog = input.rejectionCatalog === undefined ? catalog : parseT3Catalog(input.rejectionCatalog);
+  const rejectionCatalog = input.rejectionCatalog === undefined ? null : parseT3Catalog(input.rejectionCatalog);
   const policy = policyFrom(input.policy ?? {});
   const routePolicy = policy.modelFallbacks?.[routeName];
   const evidence = list(input.modelRejections ?? [], 'modelRejections');
@@ -502,21 +518,25 @@ export function resolveT3ModelFallback(input) {
   if (family !== null && !Object.hasOwn(defaults.familyDefaults, family) && !defaults.hostFallback) throw new Error(`Model fallback configuration is missing family default for ${family} on ${routeName}`);
   const tableDefault = family === null ? defaults.unknownFamilyDefault : defaults.familyDefaults[family] ?? defaults.hostFallback;
   if (tableDefault.providerInstanceId !== target.providerInstanceId) throw new Error('Model fallback must preserve the configured provider instance');
+  if (rejectionCatalog) for (const candidate of [target, tableDefault]) {
+    if (hash(candidate) === hash(target) || rejectionCatalog.providers.find(value => value.providerInstanceId === candidate.providerInstanceId)?.models.some(model => model.id === candidate.model)) {
+      provenance.set(hash(candidate), { catalog: rejectionCatalog, source: 'supplied-rejection-catalog' });
+    }
+  }
   const permitted = new Set([hash(target), hash(tableDefault)]);
+  const rejectionProvenance = [];
   for (const rejection of evidence) {
     const rejected = rejectionFrom(rejection);
     if (rejected.providerInstanceId !== target.providerInstanceId || !permitted.has(hash(rejected))) throw new Error('Foreign model rejection target or provider');
+    rejectionProvenance.push(rejectionOrigin(rejection, catalog, provenance));
   }
   unique(evidence.map(rejection => hash(rejection.target)), 'model rejection target');
   const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(target));
   if (!configuredRejection) throw new Error('Model fallback requires rejection of the configured target first');
-  if (input.rejectionCatalog !== undefined || provider.models.some(model => model.id === target.model)) targetFrom(target, rejectionCatalog);
   const defaultRejection = evidence.find(rejection => hash(rejection.target) === hash(tableDefault));
   let selected = tableDefault;
   let reason = family !== null && !defaults.familyDefaults[family] ? 'model-original-host-default' : 'model-family-default';
   if (defaultRejection) {
-    const defaultModel = provider.models.find(model => model.id === tableDefault.model);
-    if (input.rejectionCatalog !== undefined || defaultModel) targetFrom(tableDefault, rejectionCatalog);
     const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
     if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
     const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
@@ -538,7 +558,7 @@ export function resolveT3ModelFallback(input) {
   }
   executableTarget(selected, catalog, runtimeMode);
   const model = provider.models.find(model => model.id === selected.model);
-  return { target: clone(selected), audit: { reason, modelRejections: clone(evidence), configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
+  return { target: clone(selected), audit: { reason, modelRejections: clone(evidence), rejectionProvenance, configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
 }
 
 function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runtimeMode }) {
@@ -591,7 +611,7 @@ function validatePanelFamilies(resolution, catalog, runtimeMode, preparedSelecti
 
 function preparationInput(input, catalog, resolution) {
   const captured = Object.fromEntries(['bundleRoot', 'cwd', 'task', 'runId', 'stepId', 'routeName', 'roleName',
-    'priorRound', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'jobProfile'].filter(field => input[field] !== undefined).map(field => [field, clone(input[field])]));
+    'priorRound', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'jobProfile', 'rejectedPreparedRequest', 'modelRejections'].filter(field => input[field] !== undefined).map(field => [field, clone(input[field])]));
   return { ...captured, catalog: clone(catalog), resolution: clone(resolution), entry: input.entry ?? 1, round: input.round ?? 1,
     originalBrief: input.originalBrief ?? input.task, mode: input.mode ?? 'async',
     ...(typeof (input.reviewedModel ?? catalog.inheritedModel) === 'string' ? { reviewedModel: input.reviewedModel ?? catalog.inheritedModel } : {}),
@@ -603,11 +623,48 @@ function receiptHash(prepared) {
   return hash({ tool: prepared.tool, arguments: prepared.arguments, audit });
 }
 
+async function rejectedPreparation(saved, input, context, target) {
+  object(saved, 'rejected prepared request');
+  const { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, depth } = context;
+  const selection = saved.audit?.selection;
+  const identity = saved.audit?.identity;
+  const preparation = saved.audit?.preparation;
+  if (saved.tool !== 'delegate_task' || !saved.arguments || !preparation?.input || !preparation.scope
+    || saved.audit?.receiptHash !== receiptHash(saved) || saved.audit?.payloadHash !== hash(saved.arguments)
+    || saved.audit?.contractsHash !== hash(contracts) || saved.audit?.roleHash !== hash(contracts.roles[selectedRole])
+    || hash(selection?.configuredTarget ?? null) !== hash(configured) || hash(selection?.selectedTarget ?? null) !== hash(saved.arguments.target)
+    || hash(target) !== hash(saved.arguments.target)
+    || identity?.parentThreadId !== catalog.parentThreadId || identity.runId !== input.runId
+    || identity.roleName !== selectedRole || identity.routeName !== (input.routeName ?? null) || identity.entry !== (input.entry ?? 1)
+    || identity.round !== (input.round ?? 1) || identity.stepId === input.stepId) throw new Error('Invalid rejected prepared request or new step identity');
+  const stable = value => {
+    const { modelRejections, rejectedPreparedRequest, ...scopeInput } = value;
+    return scopeInput;
+  };
+  const expectedInput = preparationInput({ ...input, reviewedModel, stepId: identity.stepId }, preparation.input.catalog, resolution);
+  if (hash(stable(expectedInput)) !== hash(stable(preparation.input))
+    || hash(preparation.scope) !== hash({ scope: scope.scope, path: scope.path })
+    || (preparation.input.modelRejections ?? []).some(rejection => !evidence.some(current => hash(current) === hash(rejection)))
+    || (preparation.input.rejectedPreparedRequest !== undefined && hash(preparation.input.rejectedPreparedRequest) !== hash(input.rejectedPreparedRequest ?? null))) throw new Error('Invalid rejected prepared request provenance');
+  if (preparation.input.catalog.inheritedProviderInstanceId !== catalog.inheritedProviderInstanceId) throw new Error('Invalid rejected prepared request parent provider');
+  let rebuilt;
+  try {
+    if (preparation.input.priorPreparedRequest !== undefined) throw new Error('Nested retry');
+    rebuilt = await prepareDelegation(preparation.input, { ...preparation.scope, resolution: preparation.input.resolution }, depth + 1);
+  } catch {
+    throw new Error('Invalid rejected prepared request preparation');
+  }
+  if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
+  return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy,
+    source: 'captured-prepared-request', receiptHash: saved.audit.receiptHash };
+}
+
 export async function prepareT3Delegation(input) {
   return prepareDelegation(input);
 }
 
-async function prepareDelegation(input, capturedScope) {
+async function prepareDelegation(input, capturedScope, depth = 0) {
+  if (depth > 8) throw new Error('Invalid rejected prepared request chain depth');
   keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'rejectedPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel', 'modelRejections', 'jobProfile'], 'delegation input');
   const { bundleRoot, cwd, routeName, roleName, task, ownedPaths, runId, stepId, priorRound, priorPreparedRequest } = input;
   if (!path.isAbsolute(string(bundleRoot, 'bundleRoot')) || !path.isAbsolute(string(cwd, 'cwd'))) throw new Error('bundleRoot and cwd must be absolute');
@@ -628,48 +685,50 @@ async function prepareDelegation(input, capturedScope) {
   const evidence = list(input.modelRejections ?? [], 'modelRejections');
   jobProfileFrom(input.jobProfile);
   const originalMissing = !configured.inheritParent && !catalog.providers.find(provider => provider.providerInstanceId === configured.providerInstanceId)?.models.some(model => model.id === configured.model);
-  const rejectedOriginalMissing = originalMissing && evidence.some(rejection => hash(rejection.target) === hash(configured));
-  let baseSelection = input.jobProfile !== undefined && input.rejectedPreparedRequest === undefined && !rejectedOriginalMissing
+  const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(configured));
+  const rejectedOriginal = configuredRejection && (originalMissing || configuredRejection.preparedRequest !== undefined);
+  let baseSelection = input.jobProfile !== undefined && input.rejectedPreparedRequest === undefined && !rejectedOriginal
     ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
   let jobBase = baseSelection?.target ?? configured;
-  let rejectionCatalog;
-  let job = input.rejectedPreparedRequest !== undefined || rejectedOriginalMissing
+  const provenance = new Map();
+  const context = { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, depth };
+  let job = input.rejectedPreparedRequest !== undefined || rejectedOriginal
     ? { target: jobBase, limitations: [] } : jobSelection(jobBase, input.jobProfile, catalog);
   if (input.rejectedPreparedRequest !== undefined) {
     const saved = object(input.rejectedPreparedRequest, 'rejectedPreparedRequest');
     const selection = saved.audit?.selection;
-    const identity = saved.audit?.identity;
-    const preparation = saved.audit?.preparation;
-    if (saved.tool !== 'delegate_task' || !saved.arguments || !preparation?.input || !preparation.scope
-      || saved.audit?.receiptHash !== receiptHash(saved) || saved.audit?.payloadHash !== hash(saved.arguments)
-      || saved.audit?.contractsHash !== hash(contracts) || saved.audit?.roleHash !== hash(contracts.roles[selectedRole])
-      || selection?.reason !== 'job-profile-adjustment' || hash(selection.configuredTarget) !== hash(configured)
-      || hash(selection.jobProfile) !== hash(input.jobProfile) || hash(selection.selectedTarget) !== hash(saved.arguments.target)
-      || identity?.parentThreadId !== catalog.parentThreadId || identity.runId !== runId
-      || identity.roleName !== selectedRole || identity.routeName !== (routeName ?? null) || identity.entry !== entry
-      || identity.round !== (input.round ?? 1) || identity.stepId === stepId
-      || !evidence.some(rejection => hash(rejection.target) === hash(saved.arguments.target))) throw new Error('Invalid rejected prepared request or new step identity');
-    const expectedInput = preparationInput({ ...input, reviewedModel, stepId: identity.stepId }, preparation.input.catalog, resolution);
-    if (hash(expectedInput) !== hash(preparation.input) || hash(preparation.scope) !== hash({ scope: scope.scope, path: scope.path })) throw new Error('Invalid rejected prepared request provenance');
-    if (preparation.input.catalog.inheritedProviderInstanceId !== catalog.inheritedProviderInstanceId) throw new Error('Invalid rejected prepared request parent provider');
-    let rebuilt;
-    try {
-      if (preparation.input.rejectedPreparedRequest !== undefined || preparation.input.priorPreparedRequest !== undefined) throw new Error('Nested preparation');
-      rebuilt = await prepareDelegation(preparation.input, { ...preparation.scope, resolution: preparation.input.resolution });
-    } catch {
-      throw new Error('Invalid rejected prepared request preparation');
+    if (selection?.reason !== 'job-profile-adjustment'
+      || !evidence.some(rejection => hash(rejection.target) === hash(saved.arguments?.target ?? null))) throw new Error('Invalid rejected prepared request or new step identity');
+    const captured = await rejectedPreparation(saved, input, context, saved.arguments.target);
+    jobBase = targetFrom(selection.jobBaseTarget, captured.catalog);
+    provenance.set(hash(jobBase), { ...captured, source: 'captured-job-base' });
+    provenance.set(hash(saved.arguments.target), captured);
+    const defaults = captured.policy.modelFallbacks?.[routeName];
+    const candidates = defaults?.providerDefaults?.[jobBase.providerInstanceId] ?? defaults;
+    for (const candidate of [...Object.values(candidates?.familyDefaults ?? {}), candidates?.unknownFamilyDefault, candidates?.hostFallback].filter(Boolean)) {
+      if (candidate.providerInstanceId === jobBase.providerInstanceId && !provenance.has(hash(candidate))
+        && evidence.some(rejection => hash(rejection.target) === hash(candidate))) {
+        try { targetFrom(candidate, captured.catalog); } catch { continue; }
+        provenance.set(hash(candidate), { ...captured, source: 'captured-policy-default' });
+      }
     }
-    if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
-    rejectionCatalog = parseT3Catalog(preparation.input.catalog);
-    jobBase = targetFrom(rebuilt.audit.selection.jobBaseTarget, rejectionCatalog);
     baseSelection = { target: jobBase, audit: { skipped: clone(selection.skipped ?? []) } };
     job = { target: targetFrom(saved.arguments.target), limitations: clone(selection.jobLimitations ?? []) };
+  }
+  let fallbackPolicy = policy;
+  for (const rejection of evidence) {
+    rejectionFrom(rejection);
+    if (rejection.preparedRequest === undefined) continue;
+    const captured = await rejectedPreparation(rejection.preparedRequest, input, context, rejection.target);
+    provenance.set(hash(rejection.target), captured);
+    const selection = rejection.preparedRequest.audit.selection;
+    if (hash(selection.familyDefault ?? null) === hash(rejection.target) && hash(selection.jobBaseTarget ?? selection.configuredTarget) === hash(jobBase)) fallbackPolicy = captured.policy;
   }
   const adjustedRejections = evidence.filter(rejection => hash(job.target) !== hash(jobBase) && hash(rejection.target) === hash(job.target));
   adjustedRejections.forEach(rejectionFrom);
   if (adjustedRejections.length > 1) throw new Error('Duplicate model rejection target');
   const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
-  const modelResolution = resolveT3ModelFallback({ target: jobBase, catalog, rejectionCatalog, policy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode });
+  const modelResolution = resolveModelFallback({ target: jobBase, catalog, policy: fallbackPolicy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode }, provenance);
   const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
   const selected = selectTarget(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
   if (baseSelection) {
@@ -686,7 +745,8 @@ async function prepareDelegation(input, capturedScope) {
       configuredFamily: t3ModelFamily(configured.inheritParent ? catalog.inheritedModel : configured.model, policy.modelFamilies),
       jobProfile: clone(input.jobProfile), jobLimitations: job.limitations, jobBaseTarget: clone(jobBase),
       ...(hash(job.target) !== hash(jobBase) && !evidence.length ? { reason: 'job-profile-adjustment' } : {}),
-      ...(adjustedRejections.length ? { ...(!remainingRejections.length ? { reason: 'job-profile-rejected-original-line' } : {}), modelRejections: clone(evidence), rejectedJobTarget: clone(job.target) } : {}),
+      ...(adjustedRejections.length ? { ...(!remainingRejections.length ? { reason: 'job-profile-rejected-original-line' } : {}), modelRejections: clone(evidence), rejectedJobTarget: clone(job.target),
+        rejectionProvenance: evidence.map(rejection => rejectionOrigin(rejection, catalog, provenance)) } : {}),
       optionChanges: selectedModel && !configured.inheritParent ? optionChanges(configured, selected.target, selectedModel) : [] };
   }
   const { target, selection } = selected;
@@ -744,7 +804,7 @@ async function prepareDelegation(input, capturedScope) {
     args.timeoutMs = input.timeoutMs;
   }
   const prepared = { tool: 'delegate_task', arguments: args, audit: { identity, ...selection, selection: { ...selected.audit, reviewedModel: selectedRole === 'trail-reviewer' ? reviewedModel : null, scope: scope.scope, path: scope.path }, payloadHash: hash(args), roleHash: hash(role), contractsHash: hash(contracts), catalogHash: hash(catalog), observed: false } };
-  if (selected.audit.reason === 'job-profile-adjustment') prepared.audit.preparation = {
+  prepared.audit.preparation = {
     input: preparationInput(input, catalog, resolution), scope: { scope: scope.scope, path: scope.path }, policy: clone(policy)
   };
   prepared.audit.receiptHash = receiptHash(prepared);

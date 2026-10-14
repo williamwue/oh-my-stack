@@ -65,7 +65,7 @@ Each command reads one JSON object. Embed the captured `catalog` and generated
 | `catalog` | The captured capability result itself. | None. |
 | `configure` | `catalog`, `contracts`. | `preset`, `previous`, `overrides`. |
 | `resolve` | Absolute `cwd`, `userRoot`. | `contracts`. |
-| `prepare` | `bundleRoot`, `catalog`, `cwd`, `ownedPaths`, `task`, `runId`, `stepId`, and one of `routeName` or `roleName`. | `resolution`, `userRoot`, one-based `entry`, `round`, `originalBrief`, `priorRound`, `priorPreparedRequest`, `mode`, `timeoutMs`, `runtimeMode`, `interactionMode`, `title`, `reviewedModel`, `modelRejections`. |
+| `prepare` | `bundleRoot`, `catalog`, `cwd`, `ownedPaths`, `task`, `runId`, `stepId`, and one of `routeName` or `roleName`. | `resolution`, `userRoot`, one-based `entry`, `round`, `originalBrief`, `priorRound`, `priorPreparedRequest`, `mode`, `timeoutMs`, `runtimeMode`, `interactionMode`, `title`, `reviewedModel`, `modelRejections`, `jobProfile`, `rejectedPreparedRequest`. |
 | `observe` | `observation`, the structured task result. | `previous`, the preceding normalized observation; `prepared`, the saved delegate request. |
 | `cancel` | `taskId`. | `reason`, `clientRequestId`. |
 | `schedule` | `prompt`, structured `schedule`. | `title`, `enabled`, `projectId`, `currentProjectId`, `bindToCurrentThread`, `freshThreadIntent`, `clientRequestId`. |
@@ -309,6 +309,26 @@ If the actual channel's original line is also rejected, add that evidence before
 model fallback on that channel. The captured catalog validates rejected request
 provenance; the current catalog validates the new execution target. The configured
 primary channel remains the audit origin.
+
+For each later rejected target, retain its own prepared request. Put that receipt
+in the corresponding `modelRejections[].preparedRequest`, keep earlier rejection
+entries unchanged, retain the initial adjusted request in `rejectedPreparedRequest`,
+and use a fresh `stepId`. This also covers a default model that first appeared in
+a refreshed catalog. Preparation reconstructs each captured request independently;
+`audit.selection.rejectionProvenance` identifies the source for each rejected
+target. A current-catalog or host-reported rejection is labeled separately from
+a captured prepared request. The host still authenticates actual rejection.
+
+```js
+{
+  target: preparedDefault.arguments.target,
+  code: "model-rejected",
+  rawError: actualError,
+  validModelIds: [observedReplacementId],
+  preparedRequest: preparedDefault
+}
+```
+
 Audit metadata preserves the configured and selected targets, profile, changed
 options, and rejected job target. Independent records are still required to
 prove that runtime effort or speed was enforced.
