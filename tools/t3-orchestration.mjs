@@ -1,0 +1,487 @@
+#!/usr/bin/env node
+import { createHash } from 'node:crypto';
+import { readFile, writeFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const terminalStatuses = new Set(['completed', 'failed', 'cancelled', 'interrupted']);
+const statuses = new Set(['queued', 'running', 'waiting', ...terminalStatuses]);
+const runtimeModes = new Set(['approval-required', 'auto-accept-edits', 'auto', 'full-access']);
+const manifestName = '.oh-my-stack/t3/resolution.json';
+
+function object(value, label) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
+  return value;
+}
+
+function string(value, label) {
+  if (typeof value !== 'string' || !value.trim()) throw new Error(`${label} must be a nonempty string`);
+  return value;
+}
+
+function keys(value, allowed, label) {
+  object(value, label);
+  for (const key of Object.keys(value)) if (!allowed.includes(key)) throw new Error(`Unsupported ${label} field ${key}`);
+}
+
+function boolean(value, label) {
+  if (typeof value !== 'boolean') throw new Error(`${label} must be a boolean`);
+  return value;
+}
+
+function list(value, label) {
+  if (!Array.isArray(value)) throw new Error(`${label} must be an array`);
+  return value;
+}
+
+function unique(values, label) {
+  if (new Set(values).size !== values.length) throw new Error(`Duplicate ${label}`);
+}
+
+function canonical(value) {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])]));
+  return value;
+}
+
+function hash(value) {
+  return createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
+}
+
+function clone(value) {
+  return structuredClone(value);
+}
+
+export function parseT3Catalog(input) {
+  const catalog = clone(object(typeof input === 'string' ? JSON.parse(input) : input, 'catalog'));
+  string(catalog.parentThreadId, 'parentThreadId');
+  string(catalog.inheritedProviderInstanceId, 'inheritedProviderInstanceId');
+  const providers = list(catalog.providers, 'providers');
+  unique(providers.map(provider => string(provider.providerInstanceId, 'providerInstanceId')), 'provider instance');
+  for (const provider of providers) {
+    boolean(provider.canRunChildTask, 'canRunChildTask');
+    boolean(provider.canRunCrossProviderChildTask, 'canRunCrossProviderChildTask');
+    if (provider.runtimeModes !== undefined && provider.runtimeModes !== null) {
+      for (const mode of list(provider.runtimeModes, 'runtimeModes')) if (!runtimeModes.has(mode)) throw new Error(`Unsupported advertised runtimeMode ${mode}`);
+      unique(provider.runtimeModes, 'runtimeMode');
+    }
+    const models = list(provider.models, 'models');
+    unique(models.map(model => string(model.id, 'model id')), 'model id');
+    for (const model of models) {
+      const options = list(model.options ?? [], 'model options');
+      model.options = options;
+      unique(options.map(option => string(option.id, 'option id')), 'option id');
+      for (const option of options) {
+        if (option.type === 'select') {
+          const values = list(option.options, 'select options').map(value => string(value.id, 'select value'));
+          if (!values.length) throw new Error(`Empty select option ${option.id}`);
+          unique(values, 'select value');
+        } else if (option.type !== 'boolean') throw new Error(`Unsupported option type ${option.type}`);
+      }
+    }
+  }
+  return catalog;
+}
+
+function contractsFrom(input) {
+  const contracts = object(input, 'contracts');
+  if (contracts.schemaVersion !== 1 || contracts.orchestration !== 't3' || !['codex', 'claude-code'].includes(contracts.host)) throw new Error('Unsupported T3 role contracts');
+  object(contracts.roles, 'contract roles');
+  object(contracts.routes, 'contract routes');
+  for (const [name, role] of Object.entries(contracts.roles)) {
+    string(name, 'role name');
+    string(role.description, 'role description');
+    string(role.instructions, 'role instructions');
+    boolean(role.writes, 'role writes');
+    list(role.constraints, 'role constraints').forEach(value => string(value, 'role constraint'));
+  }
+  for (const [name, route] of Object.entries(contracts.routes)) {
+    string(name, 'route name');
+    if (!['single', 'panel'].includes(route.kind) || !Object.hasOwn(contracts.roles, route.role)) throw new Error(`Invalid route contract ${name}`);
+    if (!Number.isInteger(route.defaultCount) || route.defaultCount < 1 || (route.kind === 'single' && route.defaultCount !== 1)) throw new Error(`Invalid defaultCount for ${name}`);
+  }
+  return contracts;
+}
+
+function targetFrom(input, catalog) {
+  object(input, 'target');
+  if (input.inheritParent === true) {
+    keys(input, ['inheritParent'], 'inherited target');
+    return { inheritParent: true };
+  }
+  keys(input, ['providerInstanceId', 'model', 'options'], 'explicit target');
+  string(input.providerInstanceId, 'target providerInstanceId');
+  string(input.model, 'target model');
+  const options = object(input.options, 'target options');
+  for (const [id, value] of Object.entries(options)) {
+    string(id, 'target option id');
+    if (typeof value !== 'string' && typeof value !== 'boolean') throw new Error(`Invalid option value for ${id}`);
+  }
+  if (catalog) {
+    const provider = catalog.providers.find(value => value.providerInstanceId === input.providerInstanceId);
+    if (!provider) throw new Error(`Unknown provider instance ${input.providerInstanceId}`);
+    const model = provider.models.find(value => value.id === input.model);
+    if (!model) throw new Error(`Model ${input.model} is unavailable on ${input.providerInstanceId}`);
+    for (const [id, value] of Object.entries(options)) {
+      const option = model.options.find(value => value.id === id);
+      if (!option) throw new Error(`Unsupported option ${id} for ${input.model}`);
+      if (option.type === 'boolean' ? typeof value !== 'boolean' : typeof value !== 'string' || !option.options.some(choice => choice.id === value)) throw new Error(`Unsupported value for option ${id}`);
+    }
+  }
+  return clone(input);
+}
+
+export function t3ModelFamily(model, assignments = {}) {
+  if (typeof model !== 'string' || !model.trim()) return null;
+  const known = /^(gpt|claude|grok|gemini)(?:-|$)/.exec(model.split('/').at(-1))?.[1] ?? null;
+  const assigned = Object.hasOwn(assignments, model) ? string(assignments[model], 'model family') : null;
+  if (known && assigned && known !== assigned) throw new Error(`Family assignment contradicts model ${model}`);
+  return assigned ?? known;
+}
+
+function policyFrom(input, contracts, catalog) {
+  keys(input, ['modelFamilies', 'roleCandidates', 'fallbackTargets', 'minimumPanelFamilies'], 'selectionPolicy');
+  for (const [model, family] of Object.entries(object(input.modelFamilies ?? {}, 'modelFamilies'))) {
+    string(model, 'family model');
+    string(family, 'model family');
+    t3ModelFamily(model, input.modelFamilies);
+  }
+  const concrete = target => {
+    const checked = targetFrom(target, catalog);
+    if (checked.inheritParent) throw new Error('Selection candidates must name explicit targets');
+    return checked;
+  };
+  for (const [role, candidates] of Object.entries(object(input.roleCandidates ?? {}, 'roleCandidates'))) {
+    if (contracts && !Object.hasOwn(contracts.roles, role)) throw new Error(`Unknown candidate role ${role}`);
+    if (role !== 'trail-reviewer') throw new Error(`Role ${role} has no required cross-family selection contract`);
+    const values = list(candidates, 'role candidates');
+    values.forEach(concrete);
+    unique(values.map(hash), 'role candidate');
+  }
+  const fallbacks = list(input.fallbackTargets ?? [], 'fallbackTargets');
+  fallbacks.forEach(concrete);
+  unique(fallbacks.map(hash), 'fallback target');
+  for (const [route, count] of Object.entries(object(input.minimumPanelFamilies ?? {}, 'minimumPanelFamilies'))) {
+    if (contracts && contracts.routes[route]?.kind !== 'panel') throw new Error(`Unknown panel route ${route}`);
+    if (!Number.isInteger(count) || count < 2) throw new Error('Panel family minimum must be an integer of at least two');
+  }
+  return clone(input);
+}
+
+function resolutionFrom(input, contracts, catalog) {
+  keys(input, ['schemaVersion', 'owner', 'orchestration', 'preset', 'roles', 'routes', 'selectionPolicy'], 'resolution');
+  if (input.schemaVersion !== 1 || input.owner !== 'oh-my-stack' || input.orchestration !== 't3') throw new Error('Resolution is not owned by Oh My Stack T3');
+  string(input.preset, 'preset');
+  object(input.roles, 'resolution roles');
+  object(input.routes, 'resolution routes');
+  if (contracts && (Object.keys(input.roles).sort().join('\0') !== Object.keys(contracts.roles).sort().join('\0') || Object.keys(input.routes).sort().join('\0') !== Object.keys(contracts.routes).sort().join('\0'))) throw new Error('Resolution roles and routes must match contracts');
+  for (const target of Object.values(input.roles)) targetFrom(target, catalog);
+  for (const [name, route] of Object.entries(input.routes)) {
+    keys(route, ['kind', 'entries'], 'resolution route');
+    if (!['single', 'panel'].includes(route.kind) || (contracts && route.kind !== contracts.routes[name].kind)) throw new Error(`Route kind mismatch for ${name}`);
+    const entries = list(route.entries, 'route entries');
+    if (route.kind === 'single' && entries.length !== 1) throw new Error(`Invalid entry count for ${name}`);
+    entries.forEach(target => targetFrom(target, catalog));
+  }
+  if (input.selectionPolicy !== undefined) policyFrom(input.selectionPolicy, contracts, catalog);
+  return clone(input);
+}
+
+export function configureT3Resolution(input) {
+  keys(input, ['catalog', 'contracts', 'preset', 'previous', 'overrides'], 'configuration');
+  const { catalog: rawCatalog, contracts: rawContracts, preset = 'inherit-parent', previous, overrides = {} } = input;
+  const catalog = parseT3Catalog(rawCatalog);
+  const contracts = contractsFrom(rawContracts);
+  string(preset, 'preset');
+  keys(overrides, ['roles', 'routes', 'selectionPolicy'], 'overrides');
+  const saved = previous ? resolutionFrom(previous, contracts) : null;
+  const resolution = saved?.preset === preset ? saved : {
+    schemaVersion: 1, owner: 'oh-my-stack', orchestration: 't3', preset,
+    roles: Object.fromEntries(Object.keys(contracts.roles).map(name => [name, { inheritParent: true }])),
+    routes: Object.fromEntries(Object.entries(contracts.routes).map(([name, route]) => [name, { kind: route.kind, entries: route.kind === 'single' ? [{ inheritParent: true }] : [] }]))
+  };
+  for (const [name, target] of Object.entries(object(overrides.roles ?? {}, 'role overrides'))) {
+    if (!Object.hasOwn(contracts.roles, name)) throw new Error(`Unknown role ${name}`);
+    resolution.roles[name] = targetFrom(target, catalog);
+  }
+  for (const [name, entries] of Object.entries(object(overrides.routes ?? {}, 'route overrides'))) {
+    if (!Object.hasOwn(contracts.routes, name)) throw new Error(`Unknown route ${name}`);
+    resolution.routes[name].entries = list(entries, 'route override entries').map(target => targetFrom(target, catalog));
+  }
+  if (overrides.selectionPolicy !== undefined) resolution.selectionPolicy = policyFrom(overrides.selectionPolicy, contracts, catalog);
+  const checked = resolutionFrom(resolution, contracts, catalog);
+  for (const target of Object.values(checked.roles)) executableTarget(target, catalog);
+  for (const route of Object.values(checked.routes)) route.entries.forEach(target => executableTarget(target, catalog));
+  for (const targets of Object.values(checked.selectionPolicy?.roleCandidates ?? {})) targets.forEach(target => executableTarget(target, catalog));
+  (checked.selectionPolicy?.fallbackTargets ?? []).forEach(target => executableTarget(target, catalog));
+  validatePanelFamilies(checked, catalog);
+  return checked;
+}
+
+async function readJSON(filename) {
+  return JSON.parse(await readFile(filename, 'utf8'));
+}
+
+export async function resolveT3Resolution(input) {
+  keys(input, ['cwd', 'userRoot', 'contracts'], 'resolution scope');
+  const { cwd, userRoot, contracts } = input;
+  if (!path.isAbsolute(string(cwd, 'cwd')) || !path.isAbsolute(string(userRoot, 'userRoot'))) throw new Error('Scope roots must be absolute');
+  const checkedContracts = contracts === undefined ? undefined : contractsFrom(contracts);
+  for (let directory = path.resolve(cwd); ; directory = path.dirname(directory)) {
+    const filename = path.join(directory, manifestName);
+    if (directory === path.resolve(userRoot)) break;
+    try {
+      return { scope: 'project', path: filename, resolution: resolutionFrom(await readJSON(filename), checkedContracts) };
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    if (directory === path.dirname(directory)) break;
+  }
+  const filename = path.join(userRoot, manifestName);
+  try {
+    return { scope: 'user', path: filename, resolution: resolutionFrom(await readJSON(filename), checkedContracts) };
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    return { scope: 'inherit-parent', path: null, resolution: null };
+  }
+}
+
+function executableTarget(target, catalog, runtimeMode) {
+  targetFrom(target, catalog);
+  const providerId = target.inheritParent ? catalog.inheritedProviderInstanceId : target.providerInstanceId;
+  const provider = catalog.providers.find(value => value.providerInstanceId === providerId);
+  if (!provider || !provider.canRunChildTask) throw new Error(`Provider ${providerId} cannot run child tasks`);
+  if (providerId !== catalog.inheritedProviderInstanceId && !provider.canRunCrossProviderChildTask) throw new Error(`Provider ${providerId} cannot run cross-provider child tasks`);
+  if (runtimeMode !== undefined && runtimeMode !== 'inherit' && !provider.runtimeModes?.includes(runtimeMode)) throw new Error(`Provider ${providerId} does not advertise runtimeMode ${runtimeMode}`);
+  const modelId = target.inheritParent ? catalog.inheritedModel : target.model;
+  if (target.inheritParent && modelId === null) return { requested: clone(target), options: {}, inheritedModelKnown: false };
+  const model = provider.models.find(value => value.id === modelId);
+  if (!model) throw new Error(`Inherited or selected model ${modelId} is unavailable on ${providerId}`);
+  const pinned = target.inheritParent ? {} : target.options;
+  return {
+    requested: clone(target),
+    options: Object.fromEntries(model.options.map(option => [option.id, Object.hasOwn(pinned, option.id) ? { source: 'explicit', requested: pinned[option.id], verified: false } : { source: 'inherited-or-unpinned', verified: false }]))
+  };
+}
+
+function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runtimeMode }) {
+  const families = policy.modelFamilies ?? {};
+  const originalModel = target.inheritParent ? catalog.inheritedModel : target.model;
+  const originalFamily = t3ModelFamily(originalModel, families);
+  const reviewedFamily = role === 'trail-reviewer' ? t3ModelFamily(reviewedModel, families) : null;
+  if (role === 'trail-reviewer' && !reviewedFamily) throw new Error('BLOCKED: independent review; reviewed model family is unknown');
+  const skipped = [];
+  const candidates = role === 'trail-reviewer' ? [target, ...(policy.roleCandidates?.[role] ?? [])] : [target];
+  for (const candidate of candidates) {
+    const model = candidate.inheritParent ? catalog.inheritedModel : candidate.model;
+    const family = t3ModelFamily(model, families);
+    if (role === 'trail-reviewer' && (!family || family === reviewedFamily)) {
+      skipped.push({ target: clone(candidate), reason: family ? 'Same family as reviewed model' : 'Unknown model family' });
+      continue;
+    }
+    const alternatives = [candidate, ...(policy.fallbackTargets ?? []).filter(value => family && t3ModelFamily(value.model, families) === family)];
+    for (const alternative of alternatives) {
+      try {
+        const selection = executableTarget(alternative, catalog, runtimeMode);
+        return { target: alternative, selection, audit: {
+          configuredTarget: clone(target), selectedTarget: clone(alternative), configuredFamily: originalFamily,
+          selectedFamily: family, reviewedFamily,
+          reason: alternative !== candidate ? 'same-family-fallback' : candidate !== target ? 'ordered-cross-family-candidate' : 'configured-target',
+          skipped
+        } };
+      } catch (error) {
+        skipped.push({ target: clone(alternative), reason: error.message });
+      }
+    }
+  }
+  const detail = skipped.map(value => value.reason).join('; ');
+  throw new Error(`${role === 'trail-reviewer' ? 'BLOCKED: independent review' : 'BLOCKED: configured target'}; ${detail}`);
+}
+
+function validatePanelFamilies(resolution, catalog, runtimeMode) {
+  const policy = resolution.selectionPolicy ?? {};
+  for (const [name, count] of Object.entries(policy.minimumPanelFamilies ?? {})) {
+    const entries = resolution.routes[name]?.entries;
+    if (!entries) throw new Error(`Unknown panel route ${name}`);
+    const families = new Set(entries.map(target => {
+      const selected = selectTarget(target, { catalog, policy, runtimeMode });
+      return target.inheritParent ? null : t3ModelFamily(selected.target.model, policy.modelFamilies);
+    }).filter(Boolean));
+    if (families.size < count) throw new Error(`BLOCKED: panel ${name} needs ${count} model families; got ${families.size}. inherit-parent does not count`);
+  }
+}
+
+export async function prepareT3Delegation(input) {
+  keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel'], 'delegation input');
+  const { bundleRoot, cwd, routeName, roleName, task, ownedPaths, runId, stepId, priorRound, priorPreparedRequest } = input;
+  if (!path.isAbsolute(string(bundleRoot, 'bundleRoot')) || !path.isAbsolute(string(cwd, 'cwd'))) throw new Error('bundleRoot and cwd must be absolute');
+  const catalog = parseT3Catalog(input.catalog);
+  const contracts = contractsFrom(await readJSON(path.join(bundleRoot, 'config/t3-role-contracts.json')));
+  if (Boolean(routeName) === Boolean(roleName)) throw new Error('Select exactly one routeName or roleName');
+  const scope = input.resolution ? { scope: 'explicit', path: null, resolution: input.resolution } : await resolveT3Resolution({ cwd, userRoot: input.userRoot ?? homedir(), contracts });
+  const resolution = scope.resolution ? resolutionFrom(scope.resolution, contracts) : configureT3Resolution({ catalog, contracts });
+  const entry = input.entry ?? 1;
+  if (!Number.isInteger(entry) || entry < 1) throw new Error('entry must be a positive one-based integer');
+  const selectedRole = routeName ? contracts.routes[routeName]?.role : roleName;
+  if (!selectedRole || !Object.hasOwn(contracts.roles, selectedRole)) throw new Error('Unknown route or role');
+  if (roleName && entry !== 1) throw new Error('Role selection has only entry one');
+  const configured = routeName ? resolution.routes[routeName]?.entries[entry - 1] : resolution.roles[roleName];
+  if (!configured) throw new Error('Route entry is unavailable');
+  const reviewedModel = input.reviewedModel === undefined ? catalog.inheritedModel : string(input.reviewedModel, 'reviewedModel');
+  const selected = selectTarget(configured, { catalog, policy: resolution.selectionPolicy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  const { target, selection } = selected;
+  if (routeName && resolution.selectionPolicy?.minimumPanelFamilies?.[routeName]) validatePanelFamilies({ ...resolution, selectionPolicy: { ...resolution.selectionPolicy, minimumPanelFamilies: { [routeName]: resolution.selectionPolicy.minimumPanelFamilies[routeName] } } }, catalog, input.runtimeMode);
+  const round = input.round ?? 1;
+  if (!Number.isInteger(round) || round < 1) throw new Error('round must be a positive integer');
+  string(task, 'task');
+  const originalBrief = round === 1 ? input.originalBrief ?? task : string(input.originalBrief, 'originalBrief');
+  string(originalBrief, 'originalBrief');
+  if (round > 1) {
+    keys(priorRound, ['round', 'findings', 'responses', 'unresolvedObjections'], 'priorRound');
+    if (priorRound.round !== round - 1) throw new Error('priorRound must identify the preceding round');
+    for (const field of ['findings', 'responses', 'unresolvedObjections']) {
+      if (!Object.hasOwn(priorRound, field) || !(typeof priorRound[field] === 'string' || Array.isArray(priorRound[field]))) throw new Error(`priorRound requires ${field}`);
+    }
+  } else if (priorRound !== undefined) throw new Error('Round one cannot have priorRound');
+  const absolutePaths = list(ownedPaths, 'ownedPaths').map(value => path.resolve(cwd, string(value, 'owned path')));
+  const role = contracts.roles[selectedRole];
+  if (role.writes && !absolutePaths.length) throw new Error('Writing roles require explicit ownedPaths');
+  const identity = { parentThreadId: catalog.parentThreadId, runId: string(runId, 'runId'), stepId: string(stepId, 'stepId'), round, roleName: selectedRole, routeName: routeName ?? null, entry };
+  const brief = [
+    `Oh My Stack role ${selectedRole}.`, role.description,
+    `Package root ${bundleRoot}`, `Skill root ${path.join(bundleRoot, 'skills')}`,
+    `Runtime binding ${path.join(bundleRoot, 'docs/runtime-binding.md')}`,
+    `Model selection ${path.join(bundleRoot, 'docs/model-selection.md')}`,
+    `Complete role instructions\n${role.instructions}`,
+    `Role writes ${role.writes}. Constraints ${JSON.stringify(role.constraints)}.`,
+    `Working directory ${cwd}`, `Owned paths ${JSON.stringify(absolutePaths)}`,
+    'You are not alone in the codebase. Preserve others\' edits and work only within the assigned scope.',
+    `Original brief\n${originalBrief}`, `Assigned task\n${task}`,
+    ...(selectedRole === 'trail-reviewer' ? [`Reviewed model ${reviewedModel}. Reviewed family ${selected.audit.reviewedFamily}.`] : []),
+    ...(round > 1 ? [`Prior review round ${priorRound.round}\nFindings\n${JSON.stringify(priorRound.findings)}\nResponses\n${JSON.stringify(priorRound.responses)}\nUnresolved objections\n${JSON.stringify(priorRound.unresolvedObjections)}`] : [])
+  ].join('\n\n');
+  const args = { clientRequestId: `oms-t3-${hash(identity)}`, mode: input.mode ?? 'async', task: brief };
+  if (!['async', 'wait'].includes(args.mode)) throw new Error('mode must be async or wait');
+  if (!target.inheritParent) args.target = clone(target);
+  for (const field of ['runtimeMode', 'interactionMode', 'title']) if (input[field] !== undefined) args[field] = string(input[field], field);
+  if (args.runtimeMode !== undefined && args.runtimeMode !== 'inherit' && !runtimeModes.has(args.runtimeMode)) throw new Error('Unsupported runtimeMode');
+  if (args.interactionMode !== undefined && !['inherit', 'default', 'plan'].includes(args.interactionMode)) throw new Error('Unsupported interactionMode');
+  if (input.timeoutMs !== undefined) {
+    if (args.mode !== 'wait' || !Number.isFinite(input.timeoutMs) || input.timeoutMs <= 0) throw new Error('timeoutMs requires wait mode and a positive finite number');
+    args.timeoutMs = input.timeoutMs;
+  }
+  const prepared = { tool: 'delegate_task', arguments: args, audit: { identity, ...selection, selection: { ...selected.audit, reviewedModel: selectedRole === 'trail-reviewer' ? reviewedModel : null, scope: scope.scope, path: scope.path }, payloadHash: hash(args), roleHash: hash(role), contractsHash: hash(contracts), catalogHash: hash(catalog), observed: false } };
+  if (priorPreparedRequest) {
+    if (priorPreparedRequest.arguments?.clientRequestId !== args.clientRequestId || priorPreparedRequest.audit?.payloadHash !== hash(args) || hash(priorPreparedRequest.arguments) !== hash(args)) throw new Error('Retry identity or payload differs from saved request');
+    return clone(priorPreparedRequest);
+  }
+  return prepared;
+}
+
+export function observeT3Task(input) {
+  keys(input, ['observation', 'previous', 'prepared'], 'observation input');
+  const { observation: raw, previous, prepared } = input;
+  const observation = object(raw, 'task observation');
+  for (const field of ['taskId', 'childNodeId', 'childThreadId', 'providerInstanceId']) string(observation[field], field);
+  if (!statuses.has(observation.status) || !['working', 'waiting_for_children', 'result_available'].includes(observation.workState)) throw new Error('Invalid task state');
+  boolean(observation.waitTimedOut, 'waitTimedOut');
+  boolean(observation.hasPendingChildRuns, 'hasPendingChildRuns');
+  for (const field of ['childRunId', 'resultContextTransferId', 'latestTerminalRunId', 'latestTerminalResultContextTransferId', 'model']) if (observation[field] !== null) string(observation[field], field);
+  for (const field of ['summary', 'latestTerminalSummary']) if (observation[field] !== null && typeof observation[field] !== 'string') throw new Error(`${field} must be a string or null`);
+  if (observation.latestTerminalStatus !== null && !terminalStatuses.has(observation.latestTerminalStatus)) throw new Error('Invalid latestTerminalStatus');
+  if (terminalStatuses.has(observation.status) && observation.workState !== 'result_available') throw new Error('Terminal task must have result_available workState');
+  if (previous) {
+    for (const field of ['taskId', 'childNodeId', 'childThreadId', 'providerInstanceId']) if (previous[field] !== observation[field]) throw new Error(`Task observation identity changed at ${field}`);
+    if (previous.original.childRunId !== observation.childRunId
+      && (previous.original.childRunId !== null || terminalStatuses.has(previous.original.status))) throw new Error('Original childRunId changed');
+  }
+  const original = previous && terminalStatuses.has(previous.original.status) ? clone(previous.original) : {
+    childRunId: observation.childRunId, status: observation.status, summary: observation.summary,
+    resultContextTransferId: observation.resultContextTransferId
+  };
+  const selection = prepared?.audit?.selection ?? previous?.selection;
+  const requested = selection?.selectedTarget;
+  if (prepared && (prepared.tool !== 'delegate_task' || prepared.audit?.payloadHash !== hash(prepared.arguments))) throw new Error('Invalid prepared request observation');
+  if (prepared && requested && !requested.inheritParent && hash(requested) !== hash(prepared.arguments.target)) throw new Error('Prepared selection does not match requested target');
+  if (previous?.selection && prepared && hash(previous.selection) !== hash(selection)) throw new Error('Prepared selection changed for observed task');
+  return {
+    taskId: observation.taskId, childNodeId: observation.childNodeId, childThreadId: observation.childThreadId,
+    providerInstanceId: observation.providerInstanceId, model: observation.model,
+    original, originalComplete: terminalStatuses.has(original.status),
+    workState: observation.workState, waitTimedOut: observation.waitTimedOut,
+    hasPendingChildRuns: observation.hasPendingChildRuns,
+    latestTerminal: { runId: observation.latestTerminalRunId, status: observation.latestTerminalStatus, summary: observation.latestTerminalSummary, resultContextTransferId: observation.latestTerminalResultContextTransferId },
+    requestedOptionsVerified: false,
+    ...(selection ? { selection: clone(selection), requestedTarget: clone(requested), reportedTarget: { providerInstanceId: observation.providerInstanceId, model: observation.model }, targetMatchesRequest: requested.inheritParent ? null : requested.providerInstanceId === observation.providerInstanceId && requested.model === observation.model } : {})
+  };
+}
+
+export function prepareT3Cancellation(input) {
+  keys(input, ['taskId', 'reason', 'clientRequestId'], 'cancellation');
+  const args = { taskId: string(input.taskId, 'taskId') };
+  for (const field of ['reason', 'clientRequestId']) if (input[field] !== undefined) args[field] = string(input[field], field);
+  return { tool: 'task_cancel', arguments: args, audit: { cancellationObserved: false } };
+}
+
+export function prepareT3Schedule(input) {
+  keys(input, ['prompt', 'schedule', 'title', 'enabled', 'projectId', 'currentProjectId', 'bindToCurrentThread', 'freshThreadIntent', 'clientRequestId'], 'schedule input');
+  const schedule = object(input.schedule, 'schedule');
+  const fields = { interval: ['type', 'everyMs'], fixed_time: ['type', 'timeOfDay', 'weekdays'], webhook: ['type', 'signature', 'maxDeliveryAgeMinutes'] };
+  if (!Object.hasOwn(fields, schedule.type)) throw new Error('Unsupported schedule type');
+  keys(schedule, fields[schedule.type], 'schedule');
+  if (schedule.type === 'interval' && (!Number.isSafeInteger(schedule.everyMs) || schedule.everyMs <= 0)) throw new Error('everyMs must be a positive safe integer');
+  if (schedule.type === 'fixed_time') {
+    if (typeof schedule.timeOfDay !== 'string' || !/^([01]\d|2[0-3]):[0-5]\d$/.test(schedule.timeOfDay)) throw new Error('timeOfDay must be HH:MM');
+    if (schedule.weekdays !== undefined && schedule.weekdays !== null) {
+      const days = list(schedule.weekdays, 'weekdays');
+      if (!days.length || days.some(day => !Number.isInteger(day) || day < 0 || day > 6)) throw new Error('weekdays must contain integers zero through six');
+      unique(days, 'weekday');
+    }
+  }
+  if (schedule.type === 'webhook') {
+    if (schedule.maxDeliveryAgeMinutes !== undefined && schedule.maxDeliveryAgeMinutes !== null && (!Number.isFinite(schedule.maxDeliveryAgeMinutes) || schedule.maxDeliveryAgeMinutes <= 0)) throw new Error('maxDeliveryAgeMinutes must be positive');
+    if (schedule.signature !== undefined && schedule.signature !== null) {
+      keys(schedule.signature, ['encoding', 'header', 'prefix', 'secretRef'], 'webhook signature');
+      if (!['hex', 'base64'].includes(schedule.signature.encoding)) throw new Error('Unsupported signature encoding');
+      string(schedule.signature.header, 'signature header');
+      if (typeof schedule.signature.prefix !== 'string') throw new Error('signature prefix must be a string');
+      string(schedule.signature.secretRef, 'signature secretRef');
+    }
+  }
+  if (input.projectId !== undefined) string(input.projectId, 'projectId');
+  if (input.currentProjectId !== undefined) string(input.currentProjectId, 'currentProjectId');
+  if (input.projectId !== undefined && input.currentProjectId === undefined) throw new Error('currentProjectId is required to compare an explicit projectId');
+  const sameProject = input.projectId === undefined || input.projectId === input.currentProjectId;
+  const bind = input.bindToCurrentThread === undefined ? sameProject : boolean(input.bindToCurrentThread, 'bindToCurrentThread');
+  if (!sameProject && bind) throw new Error('Another project cannot bind to the current thread');
+  if (input.freshThreadIntent !== undefined) boolean(input.freshThreadIntent, 'freshThreadIntent');
+  if (!bind && input.freshThreadIntent !== true) throw new Error('Fresh-thread schedules require explicit user intent');
+  const args = { prompt: string(input.prompt, 'prompt'), schedule: clone(schedule), bindToCurrentThread: bind };
+  for (const field of ['title', 'projectId', 'clientRequestId']) if (input[field] !== undefined) args[field] = string(input[field], field);
+  if (input.enabled !== undefined) args.enabled = boolean(input.enabled, 'enabled');
+  return { tool: 'schedule_task', arguments: args, audit: { draft: true, created: false, destination: bind ? 'current-thread' : 'fresh-thread' } };
+}
+
+async function main(argv) {
+  const [command, ...flags] = argv;
+  const operations = { catalog: parseT3Catalog, configure: configureT3Resolution, resolve: resolveT3Resolution, prepare: prepareT3Delegation, observe: observeT3Task, cancel: prepareT3Cancellation, schedule: prepareT3Schedule };
+  if (!Object.hasOwn(operations, command)) throw new Error('Use catalog, configure, resolve, prepare, observe, cancel, or schedule --input JSON_FILE [--output JSON_FILE]');
+  const options = {};
+  for (let index = 0; index < flags.length; index += 2) {
+    if (!['--input', '--output'].includes(flags[index]) || !flags[index + 1] || flags[index + 1].startsWith('--') || options[flags[index]]) throw new Error('Invalid or repeated CLI option');
+    options[flags[index]] = flags[index + 1];
+  }
+  if (!options['--input']) throw new Error('--input is required');
+  const result = await operations[command](await readJSON(options['--input']));
+  const output = `${JSON.stringify(result, null, 2)}\n`;
+  if (options['--output']) await writeFile(options['--output'], output, { flag: 'wx' });
+  else process.stdout.write(output);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main(process.argv.slice(2)).catch(error => {
+    process.stderr.write(`${error.message}\n`);
+    process.exitCode = 1;
+  });
+}

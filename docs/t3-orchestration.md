@@ -1,0 +1,279 @@
+# Use OMS workflows inside T3 Code
+
+[English](t3-orchestration.md) | [简体中文](zh-CN/t3-orchestration.md)
+
+Build a T3-selected package when T3 should own delegated workflow tasks.
+Codex and Claude Code retain their native plugin formats. T3 supplies model
+discovery, child tasks, result delivery, cancellation, and event tools.
+
+## Generate a detached package
+
+From the source checkout, run:
+
+```bash
+node tools/generate.mjs --orchestration t3 --output-root .tmp/t3
+```
+
+The selected Codex and Claude Code packages live under `.tmp/t3/packages/`.
+OMP and Pi keep their native bindings. Ordinary `npm run generate` keeps the
+default package contents. T3 generation requires a detached destination.
+It does not update an installed plugin or change release inputs.
+
+Select one generated package for its native host using that host's existing
+local-package mechanism. Keep the selected package separate from the default
+installation. Use it in a T3 thread that exposes `orchestrator_capabilities`
+and `delegate_task`. Report an unavailable tool rather than interpreting a
+standalone terminal session as T3.
+
+The selected binding translates host operations. It does not add review
+stages, change the pinned pstack procedure, require another model family, or
+authorize external writes.
+
+## Capture the actual catalog
+
+Call `orchestrator_capabilities` in the current thread. Save its structured
+result as JSON. The catalog lists provider instances, exact model identifiers,
+typed options, and execution constraints. A listed model on a disabled provider
+cannot run a child task.
+
+Use the package's `scripts/t3-orchestration.mjs` helper to prepare local JSON
+artifacts. Its commands share this interface:
+
+```bash
+node scripts/t3-orchestration.mjs COMMAND --input input.json --output output.json
+```
+
+The helper does not contact a provider or invoke T3 tools. The running agent
+uses the prepared request with the actual host tool. Model identifiers remain
+opaque for dispatch. Known model prefixes or explicit family assignments are
+selection metadata, not independent proof of backend model identity.
+
+Use `catalog` for a captured capability result, `configure` for a detached
+resolution preview, and `resolve` for scope lookup. Use `prepare` for a child
+request, `observe` for a task result, `cancel` for a cancellation request, and
+`schedule` for a scheduler draft.
+
+## Helper input reference
+
+Each command reads one JSON object. Embed the captured `catalog` and generated
+`contracts` as objects, not file-name strings. `configure`, `prepare`, and
+`observe` correspond to `configureT3Resolution`, `prepareT3Delegation`, and
+`observeT3Task` in the helper module.
+
+| Command | Required input | Optional input |
+| --- | --- | --- |
+| `catalog` | The captured capability result itself. | None. |
+| `configure` | `catalog`, `contracts`. | `preset`, `previous`, `overrides`. |
+| `resolve` | Absolute `cwd`, `userRoot`. | `contracts`. |
+| `prepare` | `bundleRoot`, `catalog`, `cwd`, `ownedPaths`, `task`, `runId`, `stepId`, and one of `routeName` or `roleName`. | `resolution`, `userRoot`, one-based `entry`, `round`, `originalBrief`, `priorRound`, `priorPreparedRequest`, `mode`, `timeoutMs`, `runtimeMode`, `interactionMode`, `title`, `reviewedModel`. |
+| `observe` | `observation`, the structured task result. | `previous`, the preceding normalized observation; `prepared`, the saved delegate request. |
+| `cancel` | `taskId`. | `reason`, `clientRequestId`. |
+| `schedule` | `prompt`, structured `schedule`. | `title`, `enabled`, `projectId`, `currentProjectId`, `bindToCurrentThread`, `freshThreadIntent`, `clientRequestId`. |
+
+Configuration overrides use `roles` keyed by canonical role name and `routes`
+keyed by logical route name. Each route override is its complete ordered target
+array. An optional `selectionPolicy` override replaces the complete selection
+policy. `previous` contains the reviewed resolution whose choices you want to
+retain. `prepare` reads contracts from `bundleRoot/config/t3-role-contracts.json`.
+
+For round two and later, supply `originalBrief` and `priorRound` with `round`,
+`findings`, `responses`, and `unresolvedObjections`. Retry by supplying the
+saved `priorPreparedRequest` or invoking its unchanged arguments directly.
+Prepared outputs contain `tool`, exact native `arguments`, and local `audit`
+metadata. `--output` creates a new file and refuses to overwrite an existing one.
+
+## Keep T3 configuration separate
+
+T3 resolution lives at `.oh-my-stack/t3/resolution.json` in the project or
+user root. The nearest project file shadows the whole user configuration.
+It does not merge panel entries across scopes. Native Codex and Claude model
+manifests remain independent.
+
+Both selected installation hosts expose the same logical T3 routes. Preparing
+a task reads the active T3 configuration automatically unless you supply an
+explicit resolution. The optional `userRoot` input supports isolated checks.
+
+Preview configuration into a detached file. Reusing a preset preserves saved
+models, option values, panel membership, and order. Replace a panel explicitly
+to change its order or size. Refreshing a catalog does not silently replace an
+unavailable model.
+
+There is no configuration apply command. After an authorized setup request and
+review of the complete preview, place that resolution in the selected T3 scope.
+Preserve any existing user-owned file when that replacement was not requested.
+
+Explicit choices contain `providerInstanceId`, `model`, and an `options`
+object. Option values are strings or JSON booleans. Preserve `false` as a
+boolean. Claude's `effort` and Codex's `reasoningEffort` are different keys.
+Missing option values are unpinned and remain visible in audit metadata.
+They do not establish a reproducible effort setting.
+
+## Select cross-family reviewers predictably
+
+The optional resolution `selectionPolicy` keeps candidate order and allowed
+fallbacks explicit. For example, on a catalog listing these exact targets:
+
+```json
+{
+  "roleCandidates": {
+    "trail-reviewer": [
+      { "providerInstanceId": "cursor", "model": "claude-opus-5-5", "options": { "effort": "high" } },
+      { "providerInstanceId": "cursor", "model": "gemini-4-argon", "options": { "reasoning_effort": "high" } },
+      { "providerInstanceId": "cursor", "model": "grok-4.7", "options": { "reasoning_effort": "high" } }
+    ]
+  },
+  "fallbackTargets": [],
+  "minimumPanelFamilies": { "interrogate.reviewers": 2 }
+}
+```
+
+The configured role target is tried first, followed by its ordered candidates.
+`trail-reviewer` always requires a known family different from `reviewedModel`,
+which defaults to the current thread's inherited model. Supply the actual
+writer's model when it differs. Same-family and unknown-family candidates are
+skipped; unavailable candidates retain their rejection reasons. With no
+compliant candidate, preparation fails with `BLOCKED: independent review`.
+This enforces the existing trail-review requirement, not an additional stage.
+
+Known prefixes are `gpt`, `claude`, `gemini`, and `grok`, taken from the last
+slash-separated model-ID segment. Provider names never determine the family.
+Unknown custom IDs require an explicit `modelFamilies` mapping when family
+independence is required. Mappings cannot contradict a known prefix. They are
+configuration assertions, not backend verification.
+
+Ordinary roles do not switch families after a failure. Only explicit
+`fallbackTargets` of the original candidate's family are tried, in order.
+No catalog-wide search, provider activation or settings mutation occurs.
+Disabling a provider prevents that channel from running; another configured
+channel serving the same family remains eligible.
+
+`configure` checks provider execution capabilities, model/option availability,
+and configured panel family minimums before returning a preview. In a panel,
+`inheritParent` does not establish diversity. Preparation checks the selected
+route again against the current catalog and keeps all configured seats. Missing
+required seats or insufficient families block that panel. Saved configuration
+is structurally parsed before runtime selection so a stale unrelated target
+does not prevent an explicitly allowed fallback for the requested task.
+
+Prepared `audit.selection` records the configured and selected targets,
+families, configuration scope, candidate rejections, and selection reason.
+Invoke the prepared target unchanged. A changed choice requires a new step
+identity, never a silent retry substitution. Pass `prepared` to `observe` to
+retain the selection and compare it with the reported provider/model.
+Report substitutions and mismatches, with the task ID; do not label an
+agent-selected target as a model chosen automatically by T3. Reported names do
+not establish effective reasoning effort or backend engine identity.
+
+## Delegate one bounded unit
+
+Read `config/t3-role-contracts.json` from the selected package. Choose the
+named route and its one-based panel entry, or a canonical role. Prepare a
+request with the complete assignment, working directory, owned output paths,
+and stable run and step identifiers.
+
+The prepared task includes the full role contract and installed Skill paths.
+T3 children receive only their supplied task prompt. They do not inherit the
+parent conversation. A role label alone is insufficient context.
+
+Selected T3 workflow units are explicitly T3-owned. Invoke `delegate_task`
+with the prepared arguments, including for same-provider work. Save the
+prepared artifact and returned `taskId`. Use asynchronous execution for long
+tasks. When only child work remains, end the turn and let T3 deliver the
+completion notification. Read `task_status` when a result is needed mid-turn.
+
+Retry with the same saved request and `clientRequestId`. Do not recompute a
+different model choice or change the prompt under that identity. A new task
+or review round has a new identity. Each later review round includes the
+original brief, prior findings, responses, and unresolved objections, and
+uses a new `delegate_task` call. Do not continue a review with
+`t3_thread_send` on its `childThreadId`.
+
+Writing children use separately created worktrees and exact owned paths.
+Read-only instructions and a working directory are coordination constraints.
+They are not an operating-system sandbox. Inspect actual write scope when
+accepting artifacts.
+
+## Read results and cancellation accurately
+
+An exhausted wait budget does not cancel a task. Retain its `taskId` and read
+its later status. A finished child turn with nested work is not completion.
+
+The original published result remains distinct from `latestTerminal*` and
+later pending child runs. Keep failures, interruption, and cancellation
+visible. Inspect artifacts and run their acceptance checks independently of
+the child's completion summary.
+
+Cancel using `task_cancel` with the saved task ID. A `cancel_requested`
+response acknowledges the request. Check actual task status before claiming
+cancellation. A terminal original task can have later work stopped while its
+published result remains readable.
+
+Record requested model options separately from reported provider and model.
+Task responses do not by themselves establish effective option enforcement.
+Use native records when available and disclose missing evidence.
+
+## Associate PRs and use event watches
+
+After authorized PR creation, immediately call `link_pull_request` with its
+full URL. Link every stack layer. Before finishing PR work, inspect
+`list_thread_pull_requests` and associate any missing PR from the task.
+
+The parent thread owns PR watches. Process existing review activity first.
+If the thread is settled, discover and use the actual host interface to
+unsettle it before watching. Call `watch_pull_request` and end the turn.
+T3 wakes the thread when checks, review activity, or conflicts change.
+Do not run a parallel shell watcher. Call `unwatch_pull_request` before
+handing the work back. An event wake does not authorize a merge.
+
+Use `t3_thread_launch` or `create_threads` only when the user explicitly asks
+for separate top-level conversations. A request for subagents alone does not
+authorize that conversion.
+
+## Prepare schedules only within their requested scope
+
+Persistent scheduling requires a user request. Preparing a local draft does
+not create persistent work. Use structured trigger objects, such as
+`{"type":"interval","everyMs":3600000}` or
+`{"type":"fixed_time","timeOfDay":"09:00","weekdays":[1,2,3,4,5]}`.
+Keep booleans as booleans and omit unsupported provider or model overrides.
+
+Same-project schedules default to the current thread. Select a fresh thread
+only when the user wants one. Another project's schedule always starts a
+fresh thread and cannot bind to this one. Report the returned cadence and
+`nextRunAt` after an authorized creation.
+
+Webhook requests reach the prompt through the host's documented placeholders.
+For signed senders, use `request_secret` and its returned `secretRef`.
+Keep credentials out of chat and local artifacts. Share only the returned
+public `webhookUrl`. Its absence means no managed public tunnel is available.
+
+## Verify on the actual browser or device
+
+For web verification, call `preview_status` first. If no automation-capable
+preview is attached, call `preview_open`. Read human-owned tabs without
+operating them. Parallel children open their own tabs and retain each `tabId`.
+Refresh snapshots after state changes and use observed locators. Capture
+actual screenshots or recordings as evidence.
+
+For mobile verification, call `device_list`, then `device_open` on an observed
+device. Use the exact returned launcher, host configuration, and session flags
+for every command. Report an unavailable platform. A responsive browser
+viewport does not establish simulator or emulator acceptance.
+
+## Check the source candidate
+
+```bash
+node --test tests/t3-orchestration.test.mjs tests/t3-generation.test.mjs
+npm run check
+```
+
+Generated packages and fixtures establish local consistency. Live child
+execution, return, cancellation, installation, PR watches, schedules, and UI
+behavior need separate observations. The source checkout records the
+implementation in `docs/acceptance/2026-10-13-t3/plan.md` and the distribution
+boundary in `docs/pstack-parity.md`.
+
+The design comparison used
+[t3-pstack](https://github.com/chhoumann/t3-pstack) as a reference.
+The OMS implementation follows current T3 tool contracts and retains OMS
+source ownership.

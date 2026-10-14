@@ -1,0 +1,7 @@
+{
+  "check": "npm run check",
+  "result": "pass",
+  "tests": {"pass": 404, "fail": 0, "skipped": 2},
+  "environment": "Node library-path preload in a temporary file for copied Homebrew Node executables",
+  "productionOrInstallationClaim": false
+}

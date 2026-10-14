@@ -1,0 +1,290 @@
+{
+  "recordedAt": "2026-10-13T15:55:33.823673Z",
+  "scope": "Checklist item 1: isolated candidate installation, native explicit entry, and installed how simple workflow through T3; these are separate acceptance components",
+  "packageVersion": "0.16.0",
+  "published": false,
+  "originalPluginRegistrationsReplaced": false,
+  "hosts": {
+    "codex": {
+      "cliVersion": "0.162.1",
+      "pluginId": "oh-my-stack@oms-t3-codex-acceptance",
+      "nativeManagerInstalled": true,
+      "enabled": true,
+      "packageCacheByteEquality": {
+        "comparedFiles": 297,
+        "drift": []
+      },
+      "skills": 76,
+      "providerInstanceId": "oms_t3_codex_acceptance",
+      "providerLabel": "OMS T3 验收 Codex",
+      "originalProviderReplaced": false,
+      "workflow": {
+        "entry": "manual read of installed how SKILL.md under explicit bounded test brief",
+        "branch": "simple",
+        "complete": true,
+        "parentClientRequestId": "oms-t3-52dd69facabc900c6f81c0a4304e3f94cd47fb820cd8212cf817cd2873e870a6",
+        "nestedTaskId": "node:delegated-task:command%3Amcp%3A0874ae87-f01d-4bd3-8598-46e7a1e9a3cd%3Adelegate-task%3Aoms-t3-f63b5c1e83bf06d0949f6bee3fa129b60a32232006eb8e91641b90917fa0f828",
+        "status": "completed",
+        "hasPendingChildRuns": false,
+        "reportedModel": "gpt-6.1-sol",
+        "requestedOptionsVerified": false,
+        "rootVerifiedNestedThread": {
+          "status": "completed",
+          "relationshipToParent": "subagent",
+          "pendingRequestCount": 0,
+          "recentRuns": [
+            {
+              "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A0874ae87-f01d-4bd3-8598-46e7a1e9a3cd%253Adelegate-task%253Aoms-t3-f63b5c1e83bf06d0949f6bee3fa129b60a32232006eb8e91641b90917fa0f828:ordinal:1",
+              "ordinal": 1,
+              "status": "completed",
+              "providerInstanceId": "oms_t3_codex_acceptance",
+              "model": "gpt-6.1-sol",
+              "requestedAt": "2026-10-13T15:42:53.023Z",
+              "startedAt": "2026-10-13T15:42:53.099Z",
+              "completedAt": "2026-10-13T15:43:23.736Z"
+            }
+          ]
+        },
+        "observedNestedActions": [
+          {
+            "type": "command_execution",
+            "status": "completed",
+            "text": "$ /bin/zsh -lc 'nl -ba .tmp/t3-install-acceptance/codex-home/plugins/cache/oms-t3-codex-acceptance/oh-my-stack/0.16.0/docs/runtime-binding.md'\n     1\t# codex runtime binding\n     2\t\n     3\t## T3 orchestration binding\n     4\t\n     5\tThis selected package makes delegated workflow units explicitly T3-owned.\n     6\tThis binding replaces OMS native delegation, model selection, setup, PR\n     7\tmonitoring, browser, device, and scheduler tool instructions below.\n     8\tPreserve the complete source workflow, its stages, and its review standard.\n     9\tRead [the T3 orchestration guide](../docs/t3-orchestration.md) before\n    10\tpreparing requests with `../scripts/t3-orchestration.mjs`.\n    11\tThe helper prepares requests. The host invokes the actual available tools.\n    12\tUse `delegate_task` for every selected unit, including same-provider work.\n    13\tPrepare the canonical role or route and exact ordered panel entry directly\n    14\tfrom `../config/t3-role-contracts.json`. Supply the full bounded brief.\n    15\tKeep each round's client request identity stable across retries. Start a\n    16\tfresh delegated review round with the original requirement, prior findings,\n    17\tresponses, and unre",
+            "textTruncated": true
+          },
+          {
+            "type": "command_execution",
+            "status": "completed",
+            "text": "$ /bin/zsh -lc 'nl -ba .tmp/t3-install-acceptance/fixture/price.mjs'\n     1\texport function subtotal(units, unitPrice) {\n     2\t  if (!Number.isInteger(units) || units < 0) throw new Error(\"invalid units\");\n     3\t  return Math.round(units * unitPrice * 100) / 100;\n     4\t}\n",
+            "textTruncated": false
+          },
+          {
+            "type": "checkpoint",
+            "status": "completed",
+            "text": "[]",
+            "textTruncated": false
+          }
+        ],
+        "nativeAutomaticHowListing": "absent in T3 child; explicit native input tested separately",
+        "coordinatorTaskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-52dd69facabc900c6f81c0a4304e3f94cd47fb820cd8212cf817cd2873e870a6",
+        "requestedCoordinatorTarget": {
+          "providerInstanceId": "oms_t3_codex_acceptance",
+          "model": "gpt-6.1-sol",
+          "options": {
+            "reasoningEffort": "high",
+            "serviceTier": "default"
+          }
+        },
+        "reportedCoordinatorModel": "gpt-6.1-sol",
+        "nestedOptions": "omitted; inherited or unpinned; effective values unverified",
+        "nativeAutomaticHowListingEvidence": "Codex coordinator report; root did not inspect original native injected Skill inventory"
+      },
+      "nativeDiscovery": {
+        "method": "skills/list",
+        "count": 76,
+        "how": {
+          "name": "oh-my-stack:how",
+          "enabled": true,
+          "scope": "user",
+          "path": "<workspace>/.tmp/t3-install-acceptance/codex-home/plugins/cache/oms-t3-codex-acceptance/oh-my-stack/0.16.0/skills/how/SKILL.md",
+          "pluginId": "oh-my-stack@oms-t3-codex-acceptance"
+        },
+        "errors": []
+      },
+      "explicitEntry": {
+        "method": "Codex app-server turn/start structured UserInput skill",
+        "inputName": "oh-my-stack:how",
+        "inputPath": "<workspace>/.tmp/t3-install-acceptance/codex-home/plugins/cache/oms-t3-codex-acceptance/oh-my-stack/0.16.0/skills/how/SKILL.md",
+        "userText": "Installation-entry audit only. Do not execute the workflow, use any tools, read files, or delegate. From the selected Skill content already supplied by the host, quote its first section heading and first paragraph, then state its delegation API and role-contract path. If the host did not supply the selected Skill content, say UNVERIFIED.",
+        "nativeThreadId": "01a135f7-bd94-7de0-998f-456c339d5851",
+        "status": "completed",
+        "completedAtEpoch": 1791906817,
+        "observedItemTypes": [
+          "userMessage",
+          "reasoning",
+          "agentMessage"
+        ],
+        "toolsExecuted": false,
+        "answer": "First section heading:\n\n> ## T3 orchestration binding\n\nFirst paragraph:\n\n> This selected package makes delegated workflow units explicitly T3-owned.\n> This binding replaces OMS native delegation, model selection, setup, PR\n> monitoring, browser, device, and scheduler tool instructions below.\n> Preserve the complete source workflow, its stages, and its review standard.\n> Read [the T3 orchestration guide](../../docs/t3-orchestration.md) before\n> preparing requests with `../../scripts/t3-orchestration.mjs`.\n> The helper prepares requests. The host invokes the actual available tools.\n> Use `delegate_task` for every selected unit, including same-provider work.\n> Prepare the canonical role or route and exact ordered panel entry directly\n> from `../../config/t3-role-contracts.json`. Supply the full bounded brief.\n> Keep each round's client request identity stable across retries. Start a\n> fresh delegated review round with the original requirement, prior findings,\n> responses, and unresolved objections. Do not send a new review round to\n> the backing child thread. Async completion wakes the parent. End the turn.\n> Read `task_status` when its result is needed during a turn. A wait timeout\n> does not cancel work. Keep the published result separate from later child\n> runs. A cancellation request does not prove observed cancellation.\n\nDelegation API: `delegate_task`  \nRole-contract path: `../../config/t3-role-contracts.json`",
+        "requestedModel": "gpt-6.1-sol",
+        "requestedEffort": "high",
+        "reportedModel": "gpt-6.1-sol"
+      }
+    },
+    "claude": {
+      "cliVersion": "2.1.295",
+      "pluginId": "oh-my-stack@oms-t3-claude-acceptance",
+      "nativeManagerInstalled": true,
+      "enabled": true,
+      "packageCacheByteEquality": {
+        "comparedFiles": 188,
+        "drift": []
+      },
+      "skills": 76,
+      "providerInstanceId": "oms_t3_claude_acceptance",
+      "providerLabel": "OMS T3 验收 Claude",
+      "originalProviderReplaced": false,
+      "workflow": {
+        "entry": "manual read of installed how SKILL.md under explicit bounded test brief",
+        "branch": "simple",
+        "complete": true,
+        "parentClientRequestId": "oms-t3-6051023a6e02596a54122090cd4d9ae45b168fd54a1596ea9c5e0de13e9fe658",
+        "nestedTaskId": "node:delegated-task:command%3Amcp%3A9fe56bf1-61ea-4259-aeab-d38724a59370%3Adelegate-task%3Aoms-t3-5d03855fc07774811825d86b08881c45cd53aeb88836bb4e95cca87743422ef8",
+        "status": "completed",
+        "hasPendingChildRuns": false,
+        "reportedModel": "claude-sonnet-5-5",
+        "requestedOptionsVerified": false,
+        "rootVerifiedNestedThread": {
+          "status": "completed",
+          "relationshipToParent": "subagent",
+          "pendingRequestCount": 0,
+          "recentRuns": [
+            {
+              "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A9fe56bf1-61ea-4259-aeab-d38724a59370%253Adelegate-task%253Aoms-t3-5d03855fc07774811825d86b08881c45cd53aeb88836bb4e95cca87743422ef8:ordinal:1",
+              "ordinal": 1,
+              "status": "completed",
+              "providerInstanceId": "oms_t3_claude_acceptance",
+              "model": "claude-sonnet-5-5",
+              "requestedAt": "2026-10-13T15:50:07.417Z",
+              "startedAt": "2026-10-13T15:50:07.431Z",
+              "completedAt": "2026-10-13T15:50:25.433Z"
+            }
+          ]
+        },
+        "observedNestedActions": [
+          {
+            "type": "dynamic_tool",
+            "status": "completed",
+            "text": "{\n  \"toolName\": \"Read\",\n  \"input\": {\n    \"file_path\": \"<workspace>/.tmp/t3-install-acceptance/fixture/price.mjs\"\n  },\n  \"output\": {\n    \"type\": \"text\",\n    \"file\": {\n      \"filePath\": \"<workspace>/.tmp/t3-install-acceptance/fixture/price.mjs\",\n      \"content\": \"export function subtotal(units, unitPrice) {\\n  if (!Number.isInteger(units) || units < 0) throw new Error(\\\"invalid units\\\");\\n  return Math.round(units * unitPrice * 100) / 100;\\n}\\n\",\n      \"numLines\": 5,\n      \"startLine\": 1,\n      \"totalLines\": 5\n    }\n  }\n}",
+            "textTruncated": false
+          },
+          {
+            "type": "checkpoint",
+            "status": "completed",
+            "text": "[]",
+            "textTruncated": false
+          }
+        ],
+        "nativeModelInvocationBlock": "Skill oh-my-stack:how cannot be used with Skill tool due to disable-model-invocation. Ask the user to run /oh-my-stack:how themselves — it cannot be invoked via the Skill tool. Do not replicate this skill's workflow by other means — it is reserved for explicit user invocation.",
+        "coordinatorTaskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-6051023a6e02596a54122090cd4d9ae45b168fd54a1596ea9c5e0de13e9fe658",
+        "requestedCoordinatorTarget": {
+          "providerInstanceId": "oms_t3_claude_acceptance",
+          "model": "claude-sonnet-5-5",
+          "options": {
+            "effort": "high"
+          }
+        },
+        "reportedCoordinatorModel": "claude-sonnet-5-5",
+        "nestedOptions": "omitted; inherited or unpinned; effective values unverified",
+        "loadPath": "Session-only --plugin-dir to installed cache; normal Claude home/account, not isolated marketplace registration",
+        "nativeModelInvocationBlockEvidence": "Initially coordinator-reported; root subsequently verified actual Skill tool failure in claude-entry-block.json",
+        "manualFallbackOverride": "Parent acceptance brief authorized direct file loading for a pipeline probe; coordinator proceeded despite the Skill tool instruction not to replicate the workflow; not a supported native invocation success"
+      },
+      "nativeDiscovery": {
+        "method": "claude plugin details",
+        "count": 76,
+        "howListed": true,
+        "agents": 10,
+        "sessionStartHooks": 1,
+        "sourceReceiptSha256": "5ef38400c3b4d34e75c168e37fd87b32a91ad52f6b14f32215ca451bdabca876"
+      },
+      "explicitEntry": {
+        "method": "Claude CLI user slash command /oh-my-stack:how with session-only --plugin-dir and tools disabled",
+        "sessionId": "60e276f9-4626-4428-8df9-75dcc998b92e",
+        "status": "success",
+        "isError": false,
+        "numTurns": 1,
+        "toolsExecuted": false,
+        "reportedModels": [
+          "claude-sonnet-5-5"
+        ],
+        "answer": "**Status: verified.** The host supplied the selected Skill content, and I used only that text. I read no files, used no tools and delegated nothing.\n\n**First section heading:**\n\n> ## T3 orchestration binding\n\nThe Skill's own title, `# How`, comes later in the content.\n\n**First paragraph (quoted in full):**\n\n> This selected package makes delegated workflow units explicitly T3-owned.\n> This binding replaces OMS native delegation, model selection, setup, PR\n> monitoring, browser, device, and scheduler tool instructions below.\n> Preserve the complete source workflow, its stages, and its review standard.\n> Read [the T3 orchestration guide](../../docs/t3-orchestration.md) before\n> preparing requests with `../../scripts/t3-orchestration.mjs`.\n> The helper prepares requests. The host invokes the actual available tools.\n> Use `delegate_task` for every selected unit, including same-provider work.\n> Prepare the canonical role or route and exact ordered panel entry directly\n> from `../../config/t3-role-contracts.json`. Supply the full bounded brief.\n> Keep each round's client request identity stable across retries. Start a\n> fresh delegated review round with the original requirement, prior findings,\n> responses, and unresolved objections. Do not send a new review round to\n> the backing child thread. Async completion wakes the parent. End the turn.\n> Read `task_status` when its result is needed during a turn. A wait timeout\n> does not cancel work. Keep the published result separate from later child\n> runs. A cancellation request does not prove observed cancellation.\n\n**Delegation API:** `delegate_task`, used for every selected unit, including same-provider work. `task_status` reads results.\n\n**Role-contract path:** `../../config/t3-role-contracts.json`. It is relative to the Skill base directory, `.../oh-my-stack/0.16.0/skills/how`. I have not opened it, so I haven't confirmed that it exists on disk.",
+        "requestedModel": "claude-sonnet-5-5",
+        "requestedEffort": "high",
+        "loadPath": "Session-only --plugin-dir to the installed cache; normal Claude home/account, not isolated marketplace registration",
+        "normalRegistrationExclusion": "session settings requested; duplicate exclusion not independently verified"
+      }
+    }
+  },
+  "configuration": {
+    "~/.codex/config.toml": {
+      "beforeSha256": "44c8b9e8191ba2618642e64dc23f1ab0838f1c2e4542d65720e6cc5d2af918ed",
+      "afterSha256": "44c8b9e8191ba2618642e64dc23f1ab0838f1c2e4542d65720e6cc5d2af918ed",
+      "byteEqual": true
+    },
+    "~/.claude/settings.json": {
+      "beforeSha256": "dfe1fcc2dd43a837e09e46d6c077cacb3b08e3280e138670eb304b0172b3d52e",
+      "afterSha256": "dfe1fcc2dd43a837e09e46d6c077cacb3b08e3280e138670eb304b0172b3d52e",
+      "byteEqual": true
+    },
+    "~/.claude.json": {
+      "beforeSha256": "46b4f95f0489ffdf745c93962cac8f3df9cede815b926297a100d00e7c3d3213",
+      "afterSha256": "79969084b94a6a0e3dd32547b9992ee1ee0a27a37bc446020ffcaf22106d92e4",
+      "byteEqual": false
+    }
+  },
+  "limits": [
+    "T3 UI Skill picker-to-workflow flow was not tested; T3 workers manually loaded installed how files under the bounded acceptance brief",
+    "Complex how branch, oms-auto routing, Claude lifecycle sweep, and effective backend options remain unverified",
+    "Role read-only instructions are coordination constraints; no OS sandbox claim",
+    "Test provider instances and ignored local marketplace/cache homes are retained; default provider instances were not replaced",
+    "Claude isolated manager registration was validated and inventoried but not used to load a session; native explicit loading and T3 execution used --plugin-dir to its cache"
+  ],
+  "claudeNativeBookkeeping": {
+    "baselineMatched": true,
+    "changedKeys": [
+      "additionalModelOptionsAnsweredAt",
+      "cachedExperimentData",
+      "cachedExperimentFeatures",
+      "cachedGrowthBookFeatures",
+      "cachedGrowthBookFeaturesAt",
+      "cachedUsageUtilization",
+      "clientDataCacheSlots",
+      "groveConfigCache",
+      "oauthAccount",
+      "passesEligibilityCache",
+      "pluginUsage",
+      "skillUsage"
+    ],
+    "modelValuesPrinted": false,
+    "accountIdentityPreserved": {
+      "accountUuid": true,
+      "emailAddress": true,
+      "organizationUuid": true
+    },
+    "changedAccountMetadataKeys": [
+      "profileFetchedAt"
+    ],
+    "scope": "Compared 15:30:57Z baseline with state after candidate manager setup, T3 coordinator/explainer sessions and explicit-entry probes; no exclusive attribution to one command"
+  },
+  "workspaceNativeConfigFiles": {
+    ".codex/config.toml": false,
+    ".agents/plugins/marketplace.json": false,
+    ".claude/settings.json": false
+  },
+  "localSourceHashes": {
+    ".tmp/t3-install-acceptance/codex-explicit-entry.json": "30a4e945009c27ea6dcbae06e5b96c2fdc2885d5663935d3dd27cfd0e78350bc",
+    ".tmp/t3-install-acceptance/claude-explicit-entry.jsonl": "776c89391fb219e24fc6ee9856e4b5c4a589f502bb510fa4ddfc7b274191f1eb",
+    ".tmp/t3-install-acceptance/codex-native-skills.json": "63760004f89ca4671c7989281e7a21d8dfd14d585d56c9eb38caef582a5b134f",
+    ".tmp/t3-install-acceptance/reports/codex/final.md": "248df3c350dd53b221dd357928ef202f93ff19da5da0efff4f9704984426952c",
+    ".tmp/t3-install-acceptance/reports/claude/final.md": "a52328d638a5ff840c9400a094567744503c7ed6c6e7d680fb9da252c09e59b2"
+  },
+  "configurationBaseline": {
+    "observedAt": "2026-10-13T15:30:57Z",
+    "scope": "Snapshot taken after CLI help/auth preflight, before candidate setup; not a preflight-free baseline"
+  },
+  "isolatedCodexConfigurationWrites": {
+    "model": "gpt-6.1-sol",
+    "model_reasoning_effort": "high",
+    "workspaceTrust": "trusted",
+    "scope": "test home only; existing workspace trust reused",
+    "normalUserConfigChanged": false
+  },
+  "reviewCorrection": {
+    "recordedAt": "2026-10-13T16:06:43.745985Z",
+    "source": "installation-trail-review.md",
+    "originalObservationRecordedAt": "2026-10-13T15:55:33.823673Z",
+    "scope": "Added load-path attribution, requested parameters, baseline timing and actual Claude tool-block timeline evidence; original installation observations remain timestamped",
+    "correctedRevisionIndependentlyReviewed": false
+  }
+}

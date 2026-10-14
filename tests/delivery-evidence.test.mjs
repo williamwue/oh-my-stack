@@ -413,10 +413,14 @@ test('canonical source-directory aliases reject existing and new report paths wi
 
 test('executable replacement after validation cannot establish a new pre-execution baseline', async t => {
   const f=await fixture(t), executable=path.join(f.root,process.platform === 'win32' ? 'task/check.exe' : 'task/check');
-  await fs.copyFile(process.execPath,executable); await fs.chmod(executable,0o755);
-  f.plan.checks[0].argv=[executable,'-e','process.exit(1)'];
-  // A fresh executable copy can take longer to start during OS security checks.
-  // This test verifies executable pinning, not the fixture's short timeout.
+  if (process.platform === 'win32') {
+    await fs.copyFile(process.execPath,executable);
+    f.plan.checks[0].argv=[executable,'-e','process.exit(1)'];
+  } else {
+    await fs.writeFile(executable,'#!/bin/sh\nexit 1\n');
+    f.plan.checks[0].argv=[executable];
+  }
+  await fs.chmod(executable,0o755);
   f.plan.checks[0].timeoutMs=5000;
   await write(f.root,'task/plan.json',f.plan);
   const frozen=await freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/exe-lock.json'});

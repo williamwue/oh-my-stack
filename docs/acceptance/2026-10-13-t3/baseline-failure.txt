@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: executable replacement after validation cannot establish a new pre-execution baseline
+not ok 1 - executable replacement after validation cannot establish a new pre-execution baseline
+  ---
+  duration_ms: 715.426417
+  type: 'test'
+  location: 'tests/delivery-evidence.test.mjs:414:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://tests/delivery-evidence.test.mjs:426:56)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 784.822042
