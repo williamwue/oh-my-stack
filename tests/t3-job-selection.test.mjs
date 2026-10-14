@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -96,6 +97,133 @@ test('typed effort steps use the observed support order and retain the max ceili
     assert.equal(prepared.audit.selection.selectedFamily, 'gpt');
     assert.deepEqual(args.resolution.routes[args.routeName].entries[0], configured);
   }
+});
+
+for (const [kind, expected] of [['hardest', 'ultra'], ['judgment', 'max'], ['routine', 'high'], ['verification', 'ultra']]) {
+  test(`saved ultra uses its actual supported tier for ${kind}`, async t => {
+    const configured = target('codex', 'gpt-6.1-sol', { reasoningEffort: 'ultra' });
+    const args = await input(t, catalog([{ id: configured.model, options: [select('reasoningEffort', ['low', 'high', 'max', 'ultra'])] }]), configured);
+    const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind } });
+    assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-6.1-sol', { reasoningEffort: expected }));
+  });
+}
+
+test('none and minimal are real advertised tiers and hardest does not raise max to ultra', async t => {
+  for (const [original, kind, expected] of [['max', 'routine', 'minimal'], ['minimal', 'judgment', 'none'], ['none', 'hardest', 'minimal'], ['max', 'hardest', 'max']]) {
+    const configured = target('codex', 'gpt-6.1-sol', { reasoningEffort: original });
+    const args = await input(t, catalog([{ id: configured.model, options: [select('reasoningEffort', ['ultra', 'max', 'high', 'minimal', 'none'])] }]), configured);
+    assert.equal((await prepareT3Delegation({ ...args, jobProfile: { kind } })).arguments.target.options.reasoningEffort, expected);
+  }
+});
+
+test('slug variants include none minimal and ultra and preserve an above-max original', async t => {
+  const live = catalog([{ id: 'gpt-parent' }], ['none', 'minimal', 'high', 'max', 'ultra'].map(level => ({ id: `composer-2-${level}` })));
+  for (const [original, kind, expected] of [['ultra', 'hardest', 'ultra'], ['ultra', 'judgment', 'max'], ['ultra', 'routine', 'high'], ['high', 'routine', 'none']]) {
+    const args = await input(t, live, target('cursor', `composer-2-${original}`));
+    assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind } })).arguments.target, target('cursor', `composer-2-${expected}`));
+  }
+});
+
+test('hardest preserves ultra when standard-speed variants would lower its effort', async t => {
+  const args = await input(t, catalog([{ id: 'gpt-parent' }], [{ id: 'composer-2-ultra-fast' }, { id: 'composer-2-max' }]), target('cursor', 'composer-2-ultra-fast'));
+  const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } });
+  assert.deepEqual(prepared.arguments.target, target('cursor', 'composer-2-ultra-fast'));
+  assert.match(prepared.audit.selection.jobLimitations.join(' '), /No advertised variant/);
+});
+
+for (const [name, optionDefs, configuredOptions, expectedOptions] of [
+  ['typed effort', [select('reasoningEffort', ['high', 'max'])], { reasoningEffort: 'high' }, { reasoningEffort: 'max' }],
+  ['typed speed', [{ id: 'fastMode', type: 'boolean' }], { fastMode: false }, { fastMode: true }],
+  ['both selectors', [select('reasoningEffort', ['high', 'max']), { id: 'fastMode', type: 'boolean' }],
+    { reasoningEffort: 'high', fastMode: false }, { reasoningEffort: 'max', fastMode: true }]
+]) {
+  test(`slug and ${name} choose one coherent urgent hardest variant`, async t => {
+    const ids = ['composer-2-high', 'composer-2-high-fast', 'composer-2-max', 'composer-2-max-fast'];
+    const args = await input(t, catalog([{ id: 'gpt-parent' }], ids.map(id => ({ id, options: optionDefs }))), target('cursor', ids[0], configuredOptions));
+    const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest', urgent: true } });
+    assert.deepEqual(prepared.arguments.target, target('cursor', 'composer-2-max-fast', expectedOptions));
+    assert.deepEqual(prepared.audit.selection.jobLimitations, []);
+    assert.deepEqual(args.resolution.routes[args.routeName].entries[0], target('cursor', 'composer-2-high', configuredOptions));
+  });
+}
+
+test('slug and both selectors choose one standard judgment variant and preserve verification exactly', async t => {
+  const optionDefs = [select('reasoningEffort', ['high', 'max']), { id: 'fastMode', type: 'boolean' }, select('serviceTier', ['default', 'priority'])];
+  const configured = target('cursor', 'composer-2-max-fast', { reasoningEffort: 'max', fastMode: true, serviceTier: 'priority' });
+  const args = await input(t, catalog([{ id: 'gpt-parent' }], ['composer-2-high', 'composer-2-max-fast'].map(id => ({ id, options: optionDefs }))), configured);
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'judgment' } })).arguments.target,
+    target('cursor', 'composer-2-high', { reasoningEffort: 'high', fastMode: false, serviceTier: 'default' }));
+  const verified = await prepareT3Delegation({ ...args, jobProfile: { kind: 'verification', urgent: false } });
+  assert.deepEqual(verified.arguments.target, configured);
+  assert.deepEqual(verified.audit.selection.jobLimitations, []);
+});
+
+test('missing coherent advertised slug and selector combinations retain the original target with a limitation', async t => {
+  for (const optionDefs of [[select('reasoningEffort', ['high', 'max'])], [{ id: 'fastMode', type: 'boolean' }]]) {
+    const configured = target('cursor', 'composer-2-high', optionDefs[0].id === 'reasoningEffort' ? { reasoningEffort: 'high' } : { fastMode: false });
+    const args = await input(t, catalog([{ id: 'gpt-parent' }], ['composer-2-high', 'composer-2-high-fast', 'composer-2-max'].map(id => ({ id, options: optionDefs }))), configured);
+    const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest', urgent: true } });
+    assert.deepEqual(prepared.arguments.target, configured);
+    assert.match(prepared.audit.selection.jobLimitations.join(' '), /No advertised variant/);
+  }
+});
+
+test('a matching slug whose typed selector cannot express that effort is not a coherent variant', async t => {
+  const configured = target('cursor', 'composer-2-high', { reasoningEffort: 'high' });
+  const args = await input(t, catalog([{ id: 'gpt-parent' }], [
+    { id: configured.model, options: [select('reasoningEffort', ['high', 'max'])] },
+    { id: 'composer-2-max-fast', options: [select('reasoningEffort', ['high'])] }
+  ]), configured);
+  const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest', urgent: true } });
+  assert.deepEqual(prepared.arguments.target, configured);
+  assert.match(prepared.audit.selection.jobLimitations.join(' '), /No advertised variant/);
+});
+
+test('all advertised speed keys receive standard or urgent settings regardless of order', async t => {
+  const optionDefs = [select('serviceTier', ['default', 'priority']), { id: 'fastMode', type: 'boolean' },
+    { id: 'fast', type: 'boolean' }, select('speed', ['standard', 'fast'])];
+  for (const reversed of [false, true]) {
+    const configured = target('codex', 'gpt-6.1-sol', { serviceTier: 'default', fastMode: true, fast: true, speed: 'fast' });
+    const args = await input(t, catalog([{ id: configured.model, options: reversed ? [...optionDefs].reverse() : optionDefs }]), configured);
+    for (const [urgent, expected] of [[false, { serviceTier: 'default', fastMode: false, fast: false, speed: 'standard' }],
+      [true, { serviceTier: 'priority', fastMode: true, fast: true, speed: 'fast' }]]) {
+      assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'routine', urgent } })).arguments.target,
+        target('codex', configured.model, expected));
+    }
+    assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'verification' } })).arguments.target, configured);
+  }
+});
+
+test('an unsupported speed value limits only its own key while other advertised keys still adjust', async t => {
+  const configured = target('codex', 'gpt-6.1-sol', { serviceTier: 'priority', fastMode: true, speed: 'fast' });
+  const args = await input(t, catalog([{ id: configured.model, options: [select('serviceTier', ['priority']),
+    { id: 'fastMode', type: 'boolean' }, select('speed', ['standard', 'fast'])] }]), configured);
+  const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind: 'routine' } });
+  assert.deepEqual(prepared.arguments.target, target('codex', configured.model, { serviceTier: 'priority', fastMode: false, speed: 'standard' }));
+  assert.match(prepared.audit.selection.jobLimitations.join(' '), /serviceTier/);
+  assert.equal(prepared.audit.selection.jobLimitations.some(value => value.includes('fastMode')), false);
+});
+
+test('selected variants use their advertised effort key and adjust every advertised speed key', async t => {
+  const configured = target('cursor', 'composer-2-high', { reasoningEffort: 'high', fastMode: false });
+  const args = await input(t, catalog([{ id: 'gpt-parent' }], [
+    { id: configured.model, options: [select('reasoningEffort', ['high', 'max']), { id: 'fastMode', type: 'boolean' }] },
+    { id: 'composer-2-max-fast', options: [select('effort', ['high', 'max']), { id: 'fastMode', type: 'boolean' }, select('serviceTier', ['default', 'priority'])] }
+  ]), configured);
+  const jobProfile = { kind: 'hardest', urgent: true };
+  const prepared = await prepareT3Delegation({ ...args, jobProfile });
+  assert.deepEqual(prepared.arguments.target, target('cursor', 'composer-2-max-fast', { effort: 'max', fastMode: true, serviceTier: 'priority' }));
+  assert.deepEqual(prepared.audit.selection.optionChanges, [
+    { option: 'reasoningEffort', change: 'dropped', value: 'high' },
+    { option: 'fastMode', change: 'changed', from: false, to: true },
+    { option: 'effort', change: 'added', value: 'max' },
+    { option: 'serviceTier', change: 'added', value: 'priority' }
+  ]);
+  args.catalog.providers[1].models.pop();
+  const retried = await prepareT3Delegation({ ...args, jobProfile, stepId: 'mixed-original', rejectedPreparedRequest: prepared,
+    modelRejections: [rejection(prepared.arguments.target)] });
+  assert.deepEqual(retried.arguments.target, configured);
+  assert.deepEqual(retried.audit.selection.rejectedJobTarget, prepared.arguments.target);
 });
 
 test('slug effort steps use supported identity variants and nearest required-speed effort with lower ties', async t => {
@@ -209,4 +337,158 @@ test('rejected channel adjustment retries original actual channel options with a
   const foreignBase = structuredClone(adjusted);
   foreignBase.audit.selection.jobBaseTarget.providerInstanceId = 'foreign-channel';
   await assert.rejects(prepareT3Delegation({ ...args, jobProfile, modelRejections, stepId: 'foreign-base', rejectedPreparedRequest: foreignBase }), /Invalid rejected prepared/);
+});
+
+async function retryFixture(t) {
+  const options = [select('reasoningEffort', ['low', 'high', 'max']), { id: 'fastMode', type: 'boolean' }];
+  const configured = target('codex', 'gpt-6.1-sol', { reasoningEffort: 'high', fastMode: false });
+  const fallback = target('cursor', configured.model, { reasoningEffort: 'high', fastMode: false });
+  const args = await input(t, catalog([{ id: configured.model, options }], [{ id: fallback.model, options }]), configured, { fallbackTargets: [fallback] });
+  args.ownedPaths = [path.join(args.cwd, 'owned.mjs')];
+  args.jobProfile = { kind: 'hardest', urgent: true };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, target('codex', configured.model, { reasoningEffort: 'max', fastMode: true }));
+  return { args, configured, fallback, adjusted, retry: {
+    ...args, stepId: 'retry-original', rejectedPreparedRequest: adjusted, modelRejections: [rejection(adjusted.arguments.target)]
+  } };
+}
+
+function receiptDigest(value) {
+  const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
+    ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
+  return createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
+}
+
+function reseal(saved) {
+  const { receiptHash, ...audit } = saved.audit;
+  saved.audit.receiptHash = receiptDigest({ tool: saved.tool, arguments: saved.arguments, audit });
+}
+
+for (const resealed of [false, true]) {
+  test(`retry rejects a permitted but false original channel even with checksum recomputed=${resealed}`, async t => {
+    const { retry, fallback, adjusted, configured } = await retryFixture(t);
+    assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, configured);
+    const saved = structuredClone(adjusted);
+    saved.audit.selection.jobBaseTarget = fallback;
+    if (resealed) reseal(saved);
+    await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: saved }), /Invalid rejected prepared/);
+  });
+}
+
+for (const [name, change] of [
+  ['task', args => { args.task = 'Review another task.'; }],
+  ['cwd', args => { args.cwd = path.join(args.cwd, 'elsewhere'); }],
+  ['owned paths', args => { args.ownedPaths = [path.join(args.cwd, 'other.mjs')]; }],
+  ['original brief', args => { args.originalBrief = 'A different original brief.'; }],
+  ['profile', args => { args.jobProfile = { kind: 'judgment' }; }],
+  ['selection', args => { args.entry = 2; args.resolution.routes[args.routeName].entries.push(args.resolution.routes[args.routeName].entries[0]); }],
+  ['configuration', args => { args.resolution.preset = 'other-preset'; }],
+  ['policy', args => { args.resolution.selectionPolicy.fallbackTargets = []; }],
+  ['runtime', args => { args.runtimeMode = 'full-access'; }],
+  ['title', args => { args.title = 'Another title'; }],
+  ['reviewed model', args => { args.reviewedModel = 'claude-opus-current'; }],
+  ['identity', args => { args.runId = 'another-run'; }]
+]) {
+  test(`retry rejects different ${name} provenance`, async t => {
+    const { retry } = await retryFixture(t);
+    const changed = structuredClone(retry);
+    change(changed);
+    await assert.rejects(prepareT3Delegation(changed), /Invalid rejected prepared/);
+  });
+}
+
+for (const field of ['identity', 'catalogHash', 'contractsHash', 'roleHash', 'selection']) {
+  test(`receipt binds audit ${field}`, async t => {
+    const { retry, adjusted } = await retryFixture(t);
+    const saved = structuredClone(adjusted);
+    if (field === 'identity') saved.audit.identity.stepId = 'invented-step';
+    else if (field === 'selection') saved.audit.selection.jobLimitations.push('Invented limitation.');
+    else saved.audit[field] = 'invented-hash';
+    await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: saved }), /Invalid rejected prepared/);
+  });
+}
+
+test('retry uses captured preparation catalog while refreshing provider and option availability', async t => {
+  const { retry, configured } = await retryFixture(t);
+  retry.catalog.providers[0].models[0].options[0] = select('reasoningEffort', ['low', 'high']);
+  retry.catalog.providers[1].canRunChildTask = false;
+  assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, configured);
+});
+
+test('recomputed checksums cannot replace the captured job transition with another supported target', async t => {
+  const { retry, adjusted } = await retryFixture(t);
+  const saved = structuredClone(adjusted);
+  saved.arguments.target.options.reasoningEffort = 'low';
+  saved.audit.selection.selectedTarget = structuredClone(saved.arguments.target);
+  saved.audit.payloadHash = receiptDigest(saved.arguments);
+  reseal(saved);
+  retry.modelRejections = [rejection(saved.arguments.target)];
+  await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: saved }), /Invalid rejected prepared request transition/);
+});
+
+test('receipt reconstruction checks the original catalog rather than current candidate membership', async t => {
+  const { retry, adjusted } = await retryFixture(t);
+  const saved = structuredClone(adjusted);
+  saved.audit.preparation.input.catalog.providers[0].canRunChildTask = false;
+  saved.audit.catalogHash = receiptDigest(saved.audit.preparation.input.catalog);
+  reseal(saved);
+  await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: saved }), /Invalid rejected prepared request transition/);
+});
+
+test('receipt binds the captured effective preparation policy', async t => {
+  const { retry, adjusted } = await retryFixture(t);
+  const saved = structuredClone(adjusted);
+  saved.audit.preparation.policy.fallbackTargets = [];
+  reseal(saved);
+  await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: saved }), /Invalid rejected prepared request transition/);
+});
+
+test('receipt checks remain usable when the original catalog has no inherited model', async t => {
+  const { args, configured } = await retryFixture(t);
+  args.catalog.inheritedModel = null;
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual((await prepareT3Delegation({ ...args, stepId: 'no-inherited-model', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target)] })).arguments.target, configured);
+});
+
+test('retry binds contracts and retains the original project configuration scope', async t => {
+  const { args, configured } = await retryFixture(t);
+  const resolutionPath = path.join(args.cwd, '.oh-my-stack/t3/resolution.json');
+  await mkdir(path.dirname(resolutionPath), { recursive: true });
+  await writeFile(resolutionPath, JSON.stringify(args.resolution));
+  const scoped = { ...args, resolution: undefined, userRoot: path.join(args.cwd, 'isolated-user') };
+  const adjusted = await prepareT3Delegation(scoped);
+  assert.equal(adjusted.audit.selection.scope, 'project');
+  const retry = { ...scoped, stepId: 'project-retry', rejectedPreparedRequest: adjusted, modelRejections: [rejection(adjusted.arguments.target)] };
+  assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, configured);
+  await assert.rejects(prepareT3Delegation({ ...retry, resolution: args.resolution }), /Invalid rejected prepared request provenance/);
+  const changedContracts = structuredClone(contracts);
+  changedContracts.roles.reviewer.instructions = 'A different contract.';
+  await writeFile(path.join(args.bundleRoot, 'config/t3-role-contracts.json'), JSON.stringify(changedContracts));
+  await assert.rejects(prepareT3Delegation(retry), /Invalid rejected prepared/);
+});
+
+test('implicit fallback policy is reconstructed from the original catalog and may refresh for the retry', async t => {
+  const { args, configured } = await retryFixture(t);
+  delete args.resolution.selectionPolicy;
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.audit.preparation.policy.modelFallbacks[args.routeName].familyDefaults.gpt, configured);
+  args.catalog.providers[0].models.push({ id: 'gpt-6.1-sol-default', options: structuredClone(args.catalog.providers[0].models[0].options) });
+  const prepared = await prepareT3Delegation({ ...args, stepId: 'refreshed-default', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target), rejection(configured)] });
+  assert.deepEqual(prepared.arguments.target, target('codex', 'gpt-6.1-sol-default', { reasoningEffort: 'high', fastMode: false }));
+});
+
+test('original option rejection can still select its configured model fallback after adjustment retry', async t => {
+  const { args, configured } = await retryFixture(t);
+  const replacement = target('codex', 'gpt-6.1-sol-default', { reasoningEffort: 'high', fastMode: false });
+  args.catalog.providers[0].models.push({ id: replacement.model, options: structuredClone(args.catalog.providers[0].models[0].options) });
+  args.resolution.selectionPolicy.modelFallbacks = { [args.routeName]: {
+    strategy: 'interrogate', familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement
+  } };
+  const adjusted = await prepareT3Delegation(args);
+  const prepared = await prepareT3Delegation({ ...args, stepId: 'retry-model', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target), rejection(configured)] });
+  assert.deepEqual(prepared.arguments.target, replacement);
+  assert.equal(prepared.audit.selection.reason, 'model-family-default');
 });

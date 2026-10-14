@@ -120,7 +120,8 @@ Arena 从配置池中选择一个可运行裁判，优先不同家族；这是�
 工作流调用者在准备阶段传入 `jobProfile`，例如 `{"kind":"routine","urgent":false}`。
 `kind` 仅接受 `routine`、`judgment`、`hardest`、`verification`，`urgent` 是可选布尔值。
 旧调用者省略该字段时保持原配置。Routine 降低两档，judgment 降低一档，hardest 提高一档，最高为 `max`。
-推理调整按目录支持的档位依次移动，排序为 `low`、`medium`、`high`、`xhigh`、`max`。
+推理调整按目录支持的档位依次移动，排序为 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`、`ultra`。
+Hardest 的上限为 `max` 或目录中低于它的最高档；已保存且高于 `max` 的档位保持不变。
 例如目录支持 `low`、`high`、`max` 时，hardest 将 `high` 提高为 `max`。
 类型化选项需要已配置的值或目录声明的 `defaultValue`，缺少依据时保持未固定并披露。
 
@@ -128,9 +129,11 @@ Arena 从配置池中选择一个可运行裁判，优先不同家族；这是�
 布尔选项 `fast`、`fastMode` 的 fast 值为 `true`，standard 值为 `false`。
 `speed` 选项使用 `fast`、`standard`；`serviceTier` 使用 `priority`、`default`。
 只使用目录声明的键和值。
+每个已广告的速度键分别调整，缺少对应值时按键记录限制。
 Verification 保留配置的推理与速度，继承别名不变。
 优先修改类型化选项；参数编码在模型 ID 中时，只选择目录中同一模型身份前缀且符合请求速度的变体。
 请求速度缺少目标推理档位时，按完整推理阶梯距离选择最近的已观察档位，距离相同则优先较低档。
+类型化选项和 slug 同时存在时，变体必须与两者一致；缺少匹配变体则保留原目标并记录限制。
 Routine 和 judgment 不提高原配置的推理档位。
 缺少对应能力时记录 `audit.selection.jobLimitations`，不猜标识。
 
@@ -141,6 +144,8 @@ Verification 保留实际渠道的选项；调整被拒绝时恢复该渠道的�
 调整后的选择被实际拒绝时，保留已准备请求和错误证据。
 传入相同 profile、`modelRejections` 和新的 `stepId`，下一次请求恢复原角色行及原选项，不继续调整其他变体。
 传入已保存的 `rejectedPreparedRequest` 可在目录变化后仍识别实际被拒绝的选择。
+完整回执绑定捕获的准备输入，包括任务、工作目录、负责路径、配置及委派身份，并重建原请求核对调整关系。
+这些检查证明输入一致性；真实拒绝证据仍由宿主认证。
 原角色行也被拒绝时，加入该错误证据后再使用路由回退。
 审计保留原配置、实际选择、改变的选项和被拒绝目标，不能声称这些请求参数已由运行时执行。
 

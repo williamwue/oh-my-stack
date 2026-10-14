@@ -311,6 +311,9 @@ test("native retry restores high from the captured max request after inventory r
         assert.deepEqual(retry.audit.taskSelection.rejectedAdjustment, f.rejectedAdjustment);
         assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, rejectedPreparedRequest.audit.requestSha256);
         assert.deepEqual(retry.audit.taskSelection.requested, { model: "configured-model", reasoning: "high" });
+        for (const field of ["inventoryJson", "inventorySha256", "inventorySource"]) {
+          assert.equal(retry.audit.taskSelection[field], rejectedPreparedRequest.audit.taskSelection[field]);
+        }
       }
     }
     assert.equal(await readFile(f.resolutionPath, "utf8"), before);
@@ -321,6 +324,39 @@ function rehashPrepared(request) {
   const { requestSha256, ...audit } = request.audit;
   request.audit.requestSha256 = createHash("sha256").update(JSON.stringify({ ...request, audit })).digest("hex");
   return request;
+}
+
+for (const currentCatalog of ["refreshed", "omitted"]) {
+  test(`native retry preserves captured inventory evidence with ${currentCatalog} current catalog`, async () => {
+    const f = await staleRetryFixture();
+    try {
+      const capturedJson = await readFile(f.inventoryPath, "utf8");
+      const currentJson = currentCatalog === "refreshed" ? `${JSON.stringify({ ...f.inventory,
+        source: "refreshed local compatibility fixture, backend not verified",
+        observedAt: "2026-10-14T01:00:00Z",
+        models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }, null, 2)}\n` : null;
+      if (currentJson) await writeFile(f.inventoryPath, currentJson);
+      const retry = await prepareDelegation({ ...f.common,
+        inventoryPath: currentJson ? f.inventoryPath : undefined,
+        rejectedPreparedRequest: f.rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment });
+      const audit = retry.audit.taskSelection;
+      assert.equal(retry.reasoning_effort, "high");
+      assert.equal(audit.rejectedAdjustment.reasoning, "max");
+      assert.equal(audit.inventoryJson, capturedJson);
+      assert.equal(audit.inventorySha256, createHash("sha256").update(capturedJson).digest("hex"));
+      assert.equal(audit.inventorySha256, f.prepared.audit.taskSelection.inventorySha256);
+      assert.equal(audit.inventorySource, "local rejection fixture, backend not verified");
+      assert.deepEqual(JSON.parse(audit.inventoryJson).models[0].reasoningEfforts, ["low", "high", "max"]);
+      assert.equal(audit.currentInventoryJson, currentJson);
+      assert.equal(audit.currentInventorySha256,
+        currentJson ? createHash("sha256").update(currentJson).digest("hex") : null);
+      assert.equal(audit.currentInventorySource,
+        currentJson ? "refreshed local compatibility fixture, backend not verified" : null);
+      assert.equal(audit.hostRejectionVerified, false);
+      assert.equal(audit.rejectedPreparedRequestSha256, f.prepared.audit.requestSha256);
+      assert.equal(retry.audit.requestSha256, rehashPrepared(structuredClone(retry)).audit.requestSha256);
+    } finally { await rm(f.root, { recursive: true, force: true }); }
+  });
 }
 
 test("native stale retry rejects receipts from another role, profile, task, entry, or scope", async () => {
@@ -462,6 +498,14 @@ test("native CLI consumes the saved prepared request and exact prior inventory b
       assert.equal(retry.message, f.prepared.message);
       assert.equal(retry.audit.taskSelection.hostRejectionVerified, false);
       assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, f.prepared.audit.requestSha256);
+      for (const field of ["inventoryJson", "inventorySha256", "inventorySource"]) {
+        assert.equal(retry.audit.taskSelection[field], f.prepared.audit.taskSelection[field]);
+      }
+      const currentJson = inventory.length ? await readFile(f.inventoryPath, "utf8") : null;
+      assert.equal(retry.audit.taskSelection.currentInventoryJson, currentJson);
+      assert.equal(retry.audit.taskSelection.currentInventorySha256,
+        currentJson ? createHash("sha256").update(currentJson).digest("hex") : null);
+      assert.equal(retry.audit.taskSelection.currentInventorySource, inventory.length ? f.inventory.source : null);
     }
   } finally { await rm(f.root, { recursive: true, force: true }); }
 });

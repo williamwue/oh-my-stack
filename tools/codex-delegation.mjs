@@ -148,11 +148,10 @@ export async function prepareDelegation({
   const restored = buildRequest(priorInventoryRaw, rejectedAdjustment);
   request.model = restored.model;
   request.reasoning_effort = restored.reasoning_effort;
-  request.audit.taskSelection = { ...request.audit.taskSelection,
-    selected: restored.audit.taskSelection.selected,
-    requested: restored.audit.taskSelection.requested,
-    reason: restored.audit.taskSelection.reason,
-    rejectedAdjustment: restored.audit.taskSelection.rejectedAdjustment,
+  request.audit.taskSelection = { ...restored.audit.taskSelection,
+    currentInventoryJson: request.audit.taskSelection.inventoryJson,
+    currentInventorySha256: request.audit.taskSelection.inventorySha256,
+    currentInventorySource: request.audit.taskSelection.inventorySource,
     rejectedPreparedRequestSha256: saved.audit.requestSha256,
     hostRejectionVerified: false,
   };

@@ -264,8 +264,10 @@ Use `{"kind":"routine","urgent":false}` for routine work, or choose
 `judgment`, `hardest`, or `verification` as the kind.
 
 Routine work lowers effort two levels. Judgment lowers it one level. Hardest
-work raises it one level, capped at `max`. Preparation steps through the
-advertised levels in `low`, `medium`, `high`, `xhigh`, `max` order. A catalog
+work raises it one level, capped at `max` or the highest advertised level below
+`max`. An explicitly saved level above `max` remains unchanged for hardest work.
+Preparation steps through advertised levels in `none`, `minimal`, `low`,
+`medium`, `high`, `xhigh`, `max`, `ultra` order. A catalog
 with `low`, `high`, and `max` therefore raises `high` to `max` for hardest work.
 Typed effort options need a configured value or an advertised
 `defaultValue`; unknown settings remain unpinned and disclosed.
@@ -273,13 +275,17 @@ Typed effort options need a configured value or an advertised
 Urgent work requests advertised fast speed. Other work requests standard speed.
 Boolean `fast` and `fastMode` use `true` for fast and `false` for standard.
 The `speed` select uses `fast` and `standard`. The `serviceTier` select uses
-`priority` and `default`. Preparation uses only advertised keys and values.
+`priority` and `default`. Preparation adjusts every advertised speed key
+independently and uses only advertised values.
 Verification keeps configured effort and speed. Inherited aliases remain
 untouched. Preparation changes typed effort or speed options when available.
 For effort and speed encoded in a slug, it selects only an advertised variant
 with the exact same model identity prefix and requested speed. If that speed
 lacks the desired effort, preparation selects the nearest advertised effort on
-the canonical ladder, preferring the lower level on a tie. Routine and judgment
+the canonical ladder, preferring the lower level on a tie. When typed selectors
+and slug settings coexist, preparation requires an advertised variant consistent
+with both. Without one it retains the original target and records a limitation.
+Routine and judgment
 work never raise the configured effort. It never guesses a variant.
 Missing supported settings appear in `audit.selection.jobLimitations`.
 
@@ -293,7 +299,10 @@ that selection, pass the same profile and its `modelRejections` with a new
 `stepId`. Preparation retries the original configured role line, including
 its original options. It does not pick another adjusted variant. Pass the saved
 `rejectedPreparedRequest` to retain the rejected choice across catalog changes.
-The helper checks its payload and assignment identity, not error authenticity.
+The helper binds the complete receipt and captured preparation inputs, including
+task, working directory, owned paths, configuration, and assignment identity.
+It reconstructs the captured request to verify the original adjustment. These
+checks establish consistency; the host authenticates the rejection evidence.
 If the original line is also rejected, add that evidence before route fallback.
 Audit metadata preserves the configured and selected targets, profile, changed
 options, and rejected job target. Independent records are still required to
