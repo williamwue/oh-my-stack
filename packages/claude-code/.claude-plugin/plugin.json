@@ -8,6 +8,6 @@
   "license": "MIT",
   "homepage": "https://github.com/williamwue/oh-my-stack#readme",
   "repository": "https://github.com/williamwue/oh-my-stack",
-  "version": "0.17.1-pstack01523.20261014",
+  "version": "0.18.0",
   "hooks": "./hooks/hooks.json"
 }

@@ -6,12 +6,12 @@
 
 pstack engineering workflows, ported to Codex and Claude Code.
 
-The current local candidate follows pinned pstack 0.15.23 and includes automatic routing.
-Formal release 0.17.1 follows pstack 0.15.17. Pi and OMP retain independent adapters.
+Version 0.18.0 follows pinned pstack 0.15.23 and includes automatic routing.
+Pi and OMP retain independent adapters.
 Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
 Installed releases may differ.
 
-The source candidate offers [opt-in T3 orchestration](docs/t3-orchestration.md)
+The source offers [opt-in T3 orchestration](docs/t3-orchestration.md)
 through detached Codex and Claude Code builds. This does not update an
 installed plugin or the default release packages.
 

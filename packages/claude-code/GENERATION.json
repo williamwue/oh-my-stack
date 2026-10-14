@@ -6,7 +6,7 @@
     "extensions": []
   },
   "target": "claude-code",
-  "sourceVersion": "0.17.1-pstack01523.20261014",
+  "sourceVersion": "0.18.0",
   "profiles": [
     "claude-code-default"
   ],

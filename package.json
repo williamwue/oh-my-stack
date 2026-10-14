@@ -1,6 +1,6 @@
 {
   "name": "oh-my-stack",
-  "version": "0.17.1-pstack01523.20261014",
+  "version": "0.18.0",
   "description": "Portable, verifiable engineering workflows for agent runtimes.",
   "private": true,
   "type": "module",

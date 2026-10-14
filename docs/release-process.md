@@ -11,10 +11,11 @@ SHA-256 checksums, and explicit verification maturity.
 The Codex plugin bundle is a fourth archive rooted at
 `oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. All 95 current source public Skills remain discoverable
-and directly invocable. Codex descriptions are concise; full instructions and
-resources load on demand. Catalog categories distinguish 71 workflows and
-24 principles without moving either group outside the discovery directory.
+`.agents/plugins/marketplace.json`. All 77 default public Skills remain discoverable and directly invocable.
+Codex descriptions are concise; full instructions and resources load on demand.
+Catalog categories distinguish workflows and principles without moving either
+group outside the discovery directory. Optional extensions have their own
+explicitly selected catalogs.
 
 The Claude Code marketplace bundle is a fifth archive rooted at
 `oh-my-stack-claude-marketplace/`. It contains the generated Claude plugin at

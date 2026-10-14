@@ -1,12 +1,15 @@
 # Project status
 
-## 0.17.0 source and release scope (2026-10-14)
+## 0.18.0 source and release scope (2026-10-14)
 
-Current source version is [0.17.0](releases/0.17.0.md). It adds opt-in T3 source
-builds and explicit cross-family selection. Default published packages retain
-native bindings. [Source closeout](acceptance/2026-10-14-cross-model/closeout.md)
-records independent review and local installation; formal publication is
-verified through the pinned maintainer pipeline and GitHub release state.
+Current source version is [0.18.0](releases/0.18.0.md), following pinned
+pstack 0.15.23 with 77 default public Skills and corrected T3/native host
+selection and rejection handling. Default packages retain native bindings;
+T3 orchestration remains an explicit source-build choice. The
+[alignment acceptance](acceptance/2026-10-14-pstack-sync/result.md) records
+independent review and the preceding local candidate installation. Formal
+publication is verified through the pinned maintainer pipeline and
+[GitHub release state](https://github.com/williamwue/oh-my-stack/releases/latest).
 The older sections below are historical snapshots.
 
 Current source version: [0.11.2](releases/0.11.2.md), with 90 public Skills.
