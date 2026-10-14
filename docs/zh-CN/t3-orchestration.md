@@ -72,14 +72,14 @@ provider 名称不决定家族；这些声明和报告的模型名均不构成�
 `interrogate` 策略只用于 `interrogate.reviewers`；`arena` 策略只用于 `arena.runners` 或 `architect.runners`。
 默认目标必须使用当前观察到的完整 provider/model/options；使用时必须与被拒绝席位属于同一 provider。
 
-没有 `selectionPolicy` 时，配置会为显式面板席位从当前可运行目录生成并保存默认策略。
-旧配置没有策略时，准备请求也会生成该策略；继承席位无需回退策略。
+没有 `selectionPolicy` 时，准备请求为显式面板席位从当前可运行目录生成默认策略。
+配置不保存隐式默认策略，provider 覆盖和目录变化后使用当前默认目标；继承席位无需回退策略。
 用户显式策略整体优先，不自动补齐。已有策略在同一 preset 刷新时完整保留。
-同一 preset 刷新也保留旧配置没有策略的状态；没有策略时，显式面板覆盖会生成默认策略。
+同一 preset 刷新也保留配置没有策略的状态。旧版本已保存策略的来源无法推断，因此仍视为显式策略。
 选择限于原 provider。家族内优先其他已观察模型，Claude 优先 Opus，随后比较模型 ID 距离与顺序。
 兼容选项保留或翻译，不猜模型标识，也不启用禁用 provider。
 
-多个 provider 的面板使用按准确实例 ID 保存的 `providerDefaults`。
+多个 provider 的面板生成按准确实例 ID 区分的 `providerDefaults`。
 各值包含 `familyDefaults`、`unknownFamilyDefault` 及可选的 `hostFallback`。
 原 provider 不提供指定家族时，默认策略使用该 provider 目录中的继承模型或已观察近似模型。
 审计标为 `model-original-host-default` 并记录实际家族变化，不把 GPT 标为 Claude 或 Grok。
@@ -120,13 +120,23 @@ Arena 从配置池中选择一个可运行裁判，优先不同家族；这是�
 工作流调用者在准备阶段传入 `jobProfile`，例如 `{"kind":"routine","urgent":false}`。
 `kind` 仅接受 `routine`、`judgment`、`hardest`、`verification`，`urgent` 是可选布尔值。
 旧调用者省略该字段时保持原配置。Routine 降低两档，judgment 降低一档，hardest 提高一档，最高为 `max`。
-推理阶梯为 `low`、`medium`、`high`、`xhigh`、`max`，选择目录支持且不高于目标的最高档。
+推理调整按目录支持的档位依次移动，排序为 `low`、`medium`、`high`、`xhigh`、`max`。
+例如目录支持 `low`、`high`、`max` 时，hardest 将 `high` 提高为 `max`。
 类型化选项需要已配置的值或目录声明的 `defaultValue`，缺少依据时保持未固定并披露。
 
 紧急任务请求实际支持的 fast，其他任务请求 standard。
+布尔选项 `fast`、`fastMode` 的 fast 值为 `true`，standard 值为 `false`。
+`speed` 选项使用 `fast`、`standard`；`serviceTier` 使用 `priority`、`default`。
+只使用目录声明的键和值。
 Verification 保留配置的推理与速度，继承别名不变。
-优先修改类型化选项；参数编码在模型 ID 中时，只选择目录中同一模型身份前缀的变体。
+优先修改类型化选项；参数编码在模型 ID 中时，只选择目录中同一模型身份前缀且符合请求速度的变体。
+请求速度缺少目标推理档位时，按完整推理阶梯距离选择最近的已观察档位，距离相同则优先较低档。
+Routine 和 judgment 不提高原配置的推理档位。
 缺少对应能力时记录 `audit.selection.jobLimitations`，不猜标识。
+
+准备阶段先选择允许使用的可运行渠道，再调整本次工作参数。
+审计保留配置来源、跳过候选及原因，并将实际渠道的原目标记录为 `jobBaseTarget`。
+Verification 保留实际渠道的选项；调整被拒绝时恢复该渠道的原选项。
 
 调整后的选择被实际拒绝时，保留已准备请求和错误证据。
 传入相同 profile、`modelRejections` 和新的 `stepId`，下一次请求恢复原角色行及原选项，不继续调整其他变体。

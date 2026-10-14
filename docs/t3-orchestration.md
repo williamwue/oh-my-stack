@@ -184,13 +184,14 @@ Use `interrogate` only for `interrogate.reviewers`. Use `arena` for
 arbitrary roles or inherited aliases. A mapped default must belong to the
 original provider when used for a rejected seat.
 
-When no `selectionPolicy` exists, configuration derives and saves defaults for
-explicit panel seats from the observed catalog. Preparation also derives them
-for an older configuration without a policy. Inherited defaults need no policy.
+When no `selectionPolicy` exists, preparation derives defaults for explicit
+panel seats from the current observed catalog. Configuration leaves implicit
+defaults unsaved, so provider overrides and catalog changes use current defaults.
+Inherited defaults need no policy.
 An explicit policy replaces the whole policy and disables inferred additions.
 Same-preset refresh preserves a saved policy without refreshing its targets.
-It also preserves an older configuration without a policy. Explicit panel
-overrides materialize defaults only when that configuration has no policy.
+It also preserves a configuration without a policy. Previously saved policies
+remain authoritative because their provenance cannot be inferred.
 
 Derived choices use runnable models on each seat's original provider only.
 Within a family, another observed model is preferred over the configured slug.
@@ -199,7 +200,7 @@ then model-ID order. Compatible configured options are retained or translated.
 The unknown-family default uses observed Claude when available, then the
 original host's observed model. No slug or unavailable provider is invented.
 
-Mixed-provider panels save separate `providerDefaults` keyed by exact provider
+Mixed-provider panels derive separate `providerDefaults` keyed by exact provider
 instance. Each value contains `familyDefaults`, `unknownFamilyDefault`, and an
 optional `hostFallback`. These targets must remain on that provider.
 If the original provider cannot serve the configured family, the derived
@@ -263,17 +264,29 @@ Use `{"kind":"routine","urgent":false}` for routine work, or choose
 `judgment`, `hardest`, or `verification` as the kind.
 
 Routine work lowers effort two levels. Judgment lowers it one level. Hardest
-work raises it one level, capped at `max`. The ladder is `low`, `medium`, `high`,
-`xhigh`, `max`. Preparation selects the highest advertised level at or below
-the target. Typed effort options need a configured value or an advertised
+work raises it one level, capped at `max`. Preparation steps through the
+advertised levels in `low`, `medium`, `high`, `xhigh`, `max` order. A catalog
+with `low`, `high`, and `max` therefore raises `high` to `max` for hardest work.
+Typed effort options need a configured value or an advertised
 `defaultValue`; unknown settings remain unpinned and disclosed.
 
 Urgent work requests advertised fast speed. Other work requests standard speed.
+Boolean `fast` and `fastMode` use `true` for fast and `false` for standard.
+The `speed` select uses `fast` and `standard`. The `serviceTier` select uses
+`priority` and `default`. Preparation uses only advertised keys and values.
 Verification keeps configured effort and speed. Inherited aliases remain
 untouched. Preparation changes typed effort or speed options when available.
 For effort and speed encoded in a slug, it selects only an advertised variant
-with the exact same model identity prefix. It never guesses a variant.
+with the exact same model identity prefix and requested speed. If that speed
+lacks the desired effort, preparation selects the nearest advertised effort on
+the canonical ladder, preferring the lower level on a tie. Routine and judgment
+work never raise the configured effort. It never guesses a variant.
 Missing supported settings appear in `audit.selection.jobLimitations`.
+
+Preparation selects a permitted runnable channel before applying job settings.
+The audit retains the configured origin, skipped candidates and their reasons,
+and the actual channel's original target as `jobBaseTarget`. Verification keeps
+that channel's options. A rejected adjustment restores those original options.
 
 Save the adjusted request and actual rejection evidence. After rejection of
 that selection, pass the same profile and its `modelRejections` with a new

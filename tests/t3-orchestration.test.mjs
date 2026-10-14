@@ -835,9 +835,10 @@ test('observed route defaults work without manual policy and explicit policy rem
   const input = await modelFallbackInput(t, fixture);
   input.resolution = configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
     overrides: { routes: { [fixture.routeName]: [fixture.configured, fixture.configured] } } });
-  assert.deepEqual(input.resolution.selectionPolicy.modelFallbacks[fixture.routeName].familyDefaults.claude, fixture.tableDefault);
+  assert.equal(Object.hasOwn(input.resolution, 'selectionPolicy'), false);
   const prepared = await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] });
   assert.deepEqual(prepared.arguments.target, fixture.tableDefault);
+  assert.deepEqual(prepared.audit.selection.familyDefault, fixture.tableDefault);
   assert.equal(prepared.audit.selection.reason, 'model-family-default');
   delete input.resolution.selectionPolicy;
   assert.deepEqual(configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
@@ -878,7 +879,13 @@ test('multiple original providers receive separate observed defaults without mig
   const prepared = await prepareT3Delegation({ ...input, entry: 2, modelRejections: [fixture.rejection(other)] });
   assert.deepEqual(prepared.arguments.target, { ...fixture.tableDefault, providerInstanceId: 'other-cursor' });
   assert.equal(prepared.audit.selection.familyDefault.providerInstanceId, 'other-cursor');
-  input.resolution.selectionPolicy.modelFallbacks[fixture.routeName].providerDefaults['other-cursor'].hostFallback.providerInstanceId = 'cursor';
+  const otherDefault = { ...fixture.tableDefault, providerInstanceId: 'other-cursor' };
+  input.resolution.selectionPolicy = { modelFallbacks: { [fixture.routeName]: {
+    strategy: 'interrogate', familyDefaults: { claude: fixture.tableDefault }, unknownFamilyDefault: fixture.tableDefault,
+    providerDefaults: { 'other-cursor': {
+      familyDefaults: { claude: otherDefault }, unknownFamilyDefault: otherDefault, hostFallback: fixture.tableDefault
+    } }
+  } } };
   await assert.rejects(prepareT3Delegation(input), /preserve their provider/);
 });
 

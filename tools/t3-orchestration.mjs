@@ -14,6 +14,12 @@ const inheritedAliases = new Set(['auto', 'inherit-parent']);
 const effortKeys = new Set(['effort', 'reasoningEffort', 'reasoning_effort']);
 const effortLadder = ['low', 'medium', 'high', 'xhigh', 'max'];
 const jobEffortSteps = { routine: -2, judgment: -1, hardest: 1, verification: 0 };
+const speedSettings = {
+  fast: { type: 'boolean', standard: false, fast: true },
+  fastMode: { type: 'boolean', standard: false, fast: true },
+  speed: { type: 'select', standard: 'standard', fast: 'fast' },
+  serviceTier: { type: 'select', standard: 'default', fast: 'priority' }
+};
 
 function object(value, label) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
@@ -250,10 +256,6 @@ export function configureT3Resolution(input) {
       }
     }
   }
-  if (resolution.selectionPolicy === undefined && (saved?.preset !== preset || overrides.routes !== undefined)) {
-    const policy = observedFallbackPolicy(resolution.routes, catalog);
-    if (Object.keys(policy.modelFallbacks).length) resolution.selectionPolicy = policy;
-  }
   const checked = resolutionFrom(resolution, contracts);
   if (saved?.preset !== preset || Object.keys(overrides).length) validatePanelFamilies(checked, catalog);
   return checked;
@@ -398,21 +400,20 @@ function jobSelection(target, profile, catalog) {
   const selected = clone(target);
   const limitations = [];
   const effort = model.options.find(option => effortKeys.has(option.id) && option.type === 'select');
-  const speed = model.options.find(option => option.id === 'fast' && option.type === 'boolean'
-    || option.id === 'speed' && option.type === 'select');
-  const desiredEffort = value => {
-    const index = value === 'ultra' ? effortLadder.length - 1 : effortLadder.indexOf(value);
-    return index < 0 ? null : effortLadder[Math.max(0, Math.min(effortLadder.length - 1, index + jobEffortSteps[profile.kind]))];
+  const speed = model.options.find(option => Object.hasOwn(speedSettings, option.id) && option.type === speedSettings[option.id].type);
+  const desiredEffort = (value, values) => {
+    const supported = effortLadder.filter(level => values.includes(level));
+    const index = supported.indexOf(value === 'ultra' ? 'max' : value);
+    return index < 0 ? null : supported[Math.max(0, Math.min(supported.length - 1, index + jobEffortSteps[profile.kind]))];
   };
   if (effort && profile.kind !== 'verification') {
     const configured = selected.options[effort.id] ?? effort.defaultValue;
-    const wanted = desiredEffort(configured);
-    const supported = wanted && effortLadder.slice(0, effortLadder.indexOf(wanted) + 1).reverse().find(value => compatibleOption(effort, value));
-    if (supported) selected.options[effort.id] = supported;
+    const wanted = desiredEffort(configured, effort.options.map(option => option.id));
+    if (wanted) selected.options[effort.id] = wanted;
     else limitations.push('Reasoning adjustment needs a configured or advertised default effort on the known ladder.');
   }
   if (speed && profile.kind !== 'verification') {
-    const wanted = speed.type === 'boolean' ? profile.urgent === true : profile.urgent ? 'fast' : 'standard';
+    const wanted = speedSettings[speed.id][profile.urgent === true ? 'fast' : 'standard'];
     if (compatibleOption(speed, wanted)) selected.options[speed.id] = wanted;
     else limitations.push('Requested speed is not advertised by this model.');
   }
@@ -422,12 +423,14 @@ function jobSelection(target, profile, catalog) {
     if (!speed) limitations.push('This model advertises no supported speed adjustment.');
   }
   if (slug && ((!effort && profile.kind !== 'verification') || (!speed && profile.kind !== 'verification'))) {
-    const wantedEffort = effort ? slug[2] : desiredEffort(slug[2]);
+    const variants = provider.models.map(model => ({ model, slug: /^(.*)-(low|medium|high|xhigh|max)(-fast)?$/.exec(model.id) }))
+      .filter(candidate => candidate.slug?.[1] === slug[1]);
+    const wantedEffort = effort ? slug[2] : desiredEffort(slug[2], variants.map(candidate => candidate.slug[2]));
     const wantedFast = speed ? Boolean(slug[3]) : profile.urgent === true;
-    const candidates = provider.models.map(model => ({ model, slug: /^(.*)-(low|medium|high|xhigh|max)(-fast)?$/.exec(model.id) }))
-      .filter(candidate => candidate.slug?.[1] === slug[1] && Boolean(candidate.slug[3]) === wantedFast
-        && (effort ? candidate.slug[2] === wantedEffort : effortLadder.indexOf(candidate.slug[2]) <= effortLadder.indexOf(wantedEffort)))
-      .sort((a, b) => effortLadder.indexOf(b.slug[2]) - effortLadder.indexOf(a.slug[2]));
+    const distance = candidate => Math.abs(effortLadder.indexOf(candidate.slug[2]) - effortLadder.indexOf(wantedEffort));
+    const candidates = variants.filter(candidate => Boolean(candidate.slug[3]) === wantedFast
+      && (effort ? candidate.slug[2] === wantedEffort : jobEffortSteps[profile.kind] > 0 || effortLadder.indexOf(candidate.slug[2]) <= effortLadder.indexOf(slug[2])))
+      .sort((a, b) => distance(a) - distance(b) || effortLadder.indexOf(a.slug[2]) - effortLadder.indexOf(b.slug[2]));
     if (candidates.length) {
       selected.model = candidates[0].model.id;
       selected.options = replacementOptions(selected, candidates[0].model);
@@ -572,12 +575,21 @@ export async function prepareT3Delegation(input) {
   const evidence = list(input.modelRejections ?? [], 'modelRejections');
   jobProfileFrom(input.jobProfile);
   const originalMissing = !configured.inheritParent && !catalog.providers.find(provider => provider.providerInstanceId === configured.providerInstanceId)?.models.some(model => model.id === configured.model);
-  let job = input.rejectedPreparedRequest !== undefined || originalMissing && evidence.some(rejection => hash(rejection.target) === hash(configured))
-    ? { target: configured, limitations: [] } : jobSelection(configured, input.jobProfile, catalog);
+  const rejectedOriginalMissing = originalMissing && evidence.some(rejection => hash(rejection.target) === hash(configured));
+  let baseSelection = input.jobProfile !== undefined && input.rejectedPreparedRequest === undefined && !rejectedOriginalMissing
+    ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
+  let jobBase = baseSelection?.target ?? configured;
+  let job = input.rejectedPreparedRequest !== undefined || rejectedOriginalMissing
+    ? { target: jobBase, limitations: [] } : jobSelection(jobBase, input.jobProfile, catalog);
   if (input.rejectedPreparedRequest !== undefined) {
     const saved = object(input.rejectedPreparedRequest, 'rejectedPreparedRequest');
     const selection = saved.audit?.selection;
     const identity = saved.audit?.identity;
+    const savedBase = selection?.jobBaseTarget ?? configured;
+    const candidates = [configured, ...(selectedRole === 'trail-reviewer' ? policy.roleCandidates?.[selectedRole] ?? [] : [])];
+    const permittedBases = candidates.flatMap(candidate => [candidate, ...(policy.fallbackTargets ?? []).filter(target =>
+      t3ModelFamily(target.model, policy.modelFamilies) !== null
+      && t3ModelFamily(target.model, policy.modelFamilies) === t3ModelFamily(candidate.inheritParent ? catalog.inheritedModel : candidate.model, policy.modelFamilies))]);
     if (saved.tool !== 'delegate_task' || saved.audit?.payloadHash !== hash(saved.arguments)
       || saved.audit?.contractsHash !== hash(contracts) || saved.audit?.roleHash !== hash(contracts.roles[selectedRole])
       || selection?.reason !== 'job-profile-adjustment' || hash(selection.configuredTarget) !== hash(configured)
@@ -585,16 +597,24 @@ export async function prepareT3Delegation(input) {
       || identity?.parentThreadId !== catalog.parentThreadId || identity.runId !== runId
       || identity.roleName !== selectedRole || identity.routeName !== (routeName ?? null) || identity.entry !== entry
       || identity.round !== (input.round ?? 1) || identity.stepId === stepId
+      || !permittedBases.some(target => hash(target) === hash(savedBase))
       || !evidence.some(rejection => hash(rejection.target) === hash(saved.arguments.target))) throw new Error('Invalid rejected prepared request or new step identity');
+    jobBase = targetFrom(savedBase);
+    baseSelection = { target: jobBase, audit: { skipped: clone(selection.skipped ?? []) } };
     job = { target: targetFrom(saved.arguments.target), limitations: clone(selection.jobLimitations ?? []) };
   }
-  const adjustedRejections = evidence.filter(rejection => hash(job.target) !== hash(configured) && hash(rejection.target) === hash(job.target));
+  const adjustedRejections = evidence.filter(rejection => hash(job.target) !== hash(jobBase) && hash(rejection.target) === hash(job.target));
   adjustedRejections.forEach(rejectionFrom);
   if (adjustedRejections.length > 1) throw new Error('Duplicate model rejection target');
   const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
   const modelResolution = resolveT3ModelFallback({ target: configured, catalog, policy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode });
-  const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? configured : job.target;
+  const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
   const selected = selectTarget(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  if (baseSelection) {
+    selected.audit = { ...selected.audit, configuredTarget: clone(configured),
+      reason: selected.audit.reason === 'configured-target' ? baseSelection.audit.reason ?? selected.audit.reason : selected.audit.reason,
+      skipped: [...new Map([...baseSelection.audit.skipped, ...selected.audit.skipped].map(value => [hash(value), value])).values()] };
+  }
   if (modelResolution.audit.reason !== 'configured-target') {
     selected.audit = { ...selected.audit, ...modelResolution.audit, configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
   }
@@ -602,8 +622,8 @@ export async function prepareT3Delegation(input) {
     const selectedModel = selected.target.inheritParent ? null : catalog.providers.find(provider => provider.providerInstanceId === selected.target.providerInstanceId)?.models.find(model => model.id === selected.target.model);
     selected.audit = { ...selected.audit, configuredTarget: clone(configured), selectedTarget: clone(selected.target),
       configuredFamily: t3ModelFamily(configured.inheritParent ? catalog.inheritedModel : configured.model, policy.modelFamilies),
-      jobProfile: clone(input.jobProfile), jobLimitations: job.limitations,
-      ...(hash(job.target) !== hash(configured) && !evidence.length ? { reason: 'job-profile-adjustment' } : {}),
+      jobProfile: clone(input.jobProfile), jobLimitations: job.limitations, jobBaseTarget: clone(jobBase),
+      ...(hash(job.target) !== hash(jobBase) && !evidence.length ? { reason: 'job-profile-adjustment' } : {}),
       ...(adjustedRejections.length ? { ...(!remainingRejections.length ? { reason: 'job-profile-rejected-original-line' } : {}), modelRejections: clone(evidence), rejectedJobTarget: clone(job.target) } : {}),
       optionChanges: selectedModel && !configured.inheritParent ? optionChanges(configured, selected.target, selectedModel) : [] };
   }

@@ -170,6 +170,7 @@ test('permitted actual channel receives verification and hardest job settings wh
   args.catalog.providers[0].canRunChildTask = false;
   for (const [profile, expected] of [
     [undefined, fallback], [{ kind: 'verification', urgent: true }, fallback],
+    [{ kind: 'judgment' }, { ...fallback, options: { reasoningEffort: 'low', fastMode: false } }],
     [{ kind: 'hardest', urgent: true }, { ...fallback, options: { reasoningEffort: 'max', fastMode: true } }]
   ]) {
     const prepared = await prepareT3Delegation({ ...args, jobProfile: profile });
@@ -191,6 +192,9 @@ test('rejected channel adjustment retries original actual channel options with a
   const adjusted = await prepareT3Delegation({ ...args, jobProfile });
   assert.deepEqual(adjusted.arguments.target.options, { reasoningEffort: 'max', fastMode: true });
   const modelRejections = [rejection(adjusted.arguments.target)];
+  const directRetry = await prepareT3Delegation({ ...args, jobProfile, modelRejections, stepId: 'original-channel-direct' });
+  assert.deepEqual(directRetry.arguments.target, fallback);
+  args.catalog.providers[0].canRunChildTask = true;
   const retry = await prepareT3Delegation({ ...args, jobProfile, modelRejections, stepId: 'original-channel', rejectedPreparedRequest: adjusted });
   assert.deepEqual(retry.arguments.target, fallback);
   assert.deepEqual(retry.audit.selection.configuredTarget, configured);
@@ -202,4 +206,7 @@ test('rejected channel adjustment retries original actual channel options with a
   const tampered = structuredClone(adjusted);
   tampered.arguments.target.options.fastMode = false;
   await assert.rejects(prepareT3Delegation({ ...args, jobProfile, modelRejections, stepId: 'tampered', rejectedPreparedRequest: tampered }), /Invalid rejected prepared/);
+  const foreignBase = structuredClone(adjusted);
+  foreignBase.audit.selection.jobBaseTarget.providerInstanceId = 'foreign-channel';
+  await assert.rejects(prepareT3Delegation({ ...args, jobProfile, modelRejections, stepId: 'foreign-base', rejectedPreparedRequest: foreignBase }), /Invalid rejected prepared/);
 });
