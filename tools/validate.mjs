@@ -384,8 +384,10 @@ async function validateParityPointer(root, document) {
   const { derivePstack } = await import("./derive-pstack.mjs");
   const result = await derivePstack({ root, check: true });
   assert(result.revision === document.revision, "active parity revision mismatch");
-  const receipt = await readJson(join(root, "docs/acceptance/2026-10-11-parity/upstream-files.json"));
-  assert(receipt.revision === result.revision && receipt.files.length === 165, "complete upstream receipt mismatch");
+  const receiptPath = document.sourceReceipt ?? "docs/acceptance/2026-10-11-parity/upstream-files.json";
+  const receipt = await readJson(manifestFile(root, receiptPath, "active upstream receipt"));
+  assert(receipt.revision === result.revision && Array.isArray(receipt.files) && receipt.files.length > 0,
+    "complete upstream receipt mismatch");
   const paths = new Set();
   for (const file of receipt.files) {
     const path = manifestFile(root, file.path, "pinned upstream file");

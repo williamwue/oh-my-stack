@@ -6,13 +6,13 @@
     "extensions": []
   },
   "target": "claude-code",
-  "sourceVersion": "0.17.1",
+  "sourceVersion": "0.17.1-pstack01523.20261014",
   "profiles": [
     "claude-code-default"
   ],
   "skills": {
     "audience": "public",
-    "included": 76,
+    "included": 77,
     "omittedProbes": 12
   },
   "claims": {

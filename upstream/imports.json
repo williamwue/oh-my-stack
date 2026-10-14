@@ -8,5 +8,6 @@
       "sha256": "e799f903392c7639f90d685a8316c7b5654f1ad5b34c4978f20f7ddbf37fa815"
     }
   ],
-  "note": "Archived records describe earlier OMS semantics. Active output ownership and transformations are recorded by the parity manifest; extension inclusion is owned by the source catalog."
+  "note": "Archived records describe earlier OMS semantics. Active output ownership and transformations are recorded by the parity manifest; extension inclusion is owned by the source catalog.",
+  "sourceReceipt": "docs/acceptance/2026-10-14-pstack-sync/upstream-files.json"
 }

@@ -1,0 +1,8 @@
+ts	phase	decision	why	evidence	result
+2026-10-14T06:45:02Z	frame	Split source and host work into three isolated worktrees	Independent writers preserve the main checkout and avoid shared generated output	docs/acceptance/2026-10-14-pstack-sync/plan.md	open
+2026-10-14T06:45:02Z	baseline	Recorded five personal configuration hashes	Local installation must preserve existing model and routing choices	docs/acceptance/2026-10-14-pstack-sync/configuration-before.json	saved
+2026-10-14T06:47:49Z	validation	Allow the active source receipt to follow the pinned revision	Historical receipts remain immutable while complete snapshot checks remain enforced	tools/validate.mjs	baseline validation passed
+2026-10-14T06:59:34Z	validation	Corrected the preceding validation result and relative configuration receipt names	Validation reported a forbidden absolute home path; an exit receipt was insufficient evidence of success	docs/acceptance/2026-10-14-pstack-sync/configuration-before.json	previous success row superseded
+2026-10-14T07:57:03Z	integration	Integrated all three units and regenerated four native packages	Source and runtime changes require one generated candidate and active receipt	upstream/parity-derivations.json	166 exact derivations
+2026-10-14T07:57:03Z	verification	Passed the complete integrated repository check	Validate the generated candidate after all source and host changes	docs/acceptance/2026-10-14-pstack-sync/integrated-check.txt	483 tests passed
+2026-10-14T07:59:44Z	review	Comment review returned no findings	Review local authored comments before freezing the candidate	tools/t3-orchestration.mjs	zero comment deletions

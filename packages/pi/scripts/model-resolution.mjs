@@ -50,6 +50,68 @@ export async function resolveActiveResolution({ runtime, cwd = process.cwd(), us
   return null;
 }
 
+const effortOrder = ["none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"];
+const jobEffortSteps = { hardest: 1, judgment: -1, routine: -2, verification: 0 };
+
+export function resolveTaskSelection({ selection, jobContext, inventory, runtime, rejectedAdjustment }) {
+  if (!selection || typeof selection !== "object" || Array.isArray(selection)) throw new Error("a saved selection is required");
+  if (jobContext !== undefined) {
+    if (!jobContext || typeof jobContext !== "object" || Array.isArray(jobContext)
+      || Object.keys(jobContext).some((key) => !["kind", "urgent"].includes(key))
+      || !Object.hasOwn(jobEffortSteps, jobContext.kind)
+      || jobContext.urgent !== undefined && typeof jobContext.urgent !== "boolean") {
+      throw new Error("jobContext requires kind hardest, judgment, routine, or verification and optional boolean urgent");
+    }
+  }
+  const configured = { model: selection.model ?? null, reasoning: selection.reasoning ?? null,
+    inheritParent: selection.inheritParent === true, speed: selection.speed ?? null };
+  const selected = { ...selection };
+  const audit = { configured, selected: null, jobContext: jobContext ?? null,
+    reason: "saved-role-line", inventorySource: null, rejectedAdjustment: null,
+    speed: { requested: selection.inheritParent || jobContext?.kind === "verification" ? configured.speed
+      : jobContext ? jobContext.urgent ? "fast" : "standard" : configured.speed,
+    applied: false, reason: "native-helper-has-no-speed-selector" } };
+  if (selection.inheritParent) audit.reason = "inherited-alias-unchanged";
+  else if (jobContext && jobContext.kind !== "verification") {
+    let supported = [selection.reasoning];
+    if (inventory) {
+      if (inventory.schemaVersion !== 1 || inventory.runtime !== runtime || !Array.isArray(inventory.models)
+        || typeof inventory.source !== "string" || !inventory.source
+        || Number.isNaN(Date.parse(inventory.observedAt))) throw new Error("a matching observed native inventory is required");
+      const models = inventory.models.filter((model) => model?.id === selection.model);
+      if (models.length !== 1 || !Array.isArray(models[0].reasoningEfforts)
+        || !models[0].reasoningEfforts.includes(selection.reasoning)) {
+        throw new Error("the saved model and reasoning must be present in the observed inventory");
+      }
+      supported = [...new Set(models[0].reasoningEfforts)].filter((value) => effortOrder.includes(value))
+        .sort((left, right) => effortOrder.indexOf(left) - effortOrder.indexOf(right));
+      audit.inventorySource = inventory.source;
+    }
+    const start = supported.indexOf(selection.reasoning);
+    if (start === -1) throw new Error("the saved reasoning effort has no supported adjustment order");
+    const ceiling = jobContext.kind === "hardest"
+      ? Math.max(start, supported.findLastIndex((effort) => effortOrder.indexOf(effort) <= effortOrder.indexOf("max")))
+      : supported.length - 1;
+    selected.reasoning = supported[Math.max(0, Math.min(ceiling, start + jobEffortSteps[jobContext.kind]))];
+    audit.reason = inventory ? "observed-job-effort-adjustment" : "saved-entry-only-no-observed-alternatives";
+  } else if (jobContext) audit.reason = "verification-keeps-role-line";
+  if (rejectedAdjustment !== undefined) {
+    if (!rejectedAdjustment || typeof rejectedAdjustment !== "object"
+      || Object.keys(rejectedAdjustment).some((key) => !["model", "reasoning", "reason"].includes(key))
+      || typeof rejectedAdjustment.reason !== "string" || !rejectedAdjustment.reason.trim()
+      || rejectedAdjustment.model !== selected.model || rejectedAdjustment.reasoning !== selected.reasoning
+      || selected.reasoning === selection.reasoning || selection.inheritParent) {
+      throw new Error("rejectedAdjustment must identify this adjusted model and reasoning with the host rejection reason");
+    }
+    audit.rejectedAdjustment = { ...rejectedAdjustment };
+    selected.reasoning = selection.reasoning;
+    audit.reason = "adjustment-rejected-retry-original-role-line";
+  }
+  audit.selected = { model: selected.model ?? null, reasoning: selected.reasoning ?? null,
+    inheritParent: selected.inheritParent === true, speed: selected.speed ?? null };
+  return { selection: selected, audit };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const options = {};

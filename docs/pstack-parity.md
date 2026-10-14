@@ -1,7 +1,7 @@
 # Pinned pstack core and optional extensions
 
-The 0.16.0 release targets pstack 0.15.17 at
-`978ca6e9c0e012047cd5058b8e829240336e704e`. Its default packages contain
+The current local candidate targets pstack 0.15.23 at
+`ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a`. Its default packages contain
 upstream workflows, built-in OMS automatic routing, and the bindings needed by
 Codex, Claude Code, Pi and OMP. Routing hooks and configuration are supported
 on Codex and Claude Code; Pi and OMP retain the explicit workflow fallback.
@@ -13,8 +13,9 @@ through detached Codex and Claude Code builds. Their installation hosts remain
 unchanged. The selected binding changes delegation and host-tool calls without
 adding workflow stages. Default generation retains native bindings.
 
-The [complete source receipt](acceptance/2026-10-11-parity/upstream-files.json)
-records all 165 pinned upstream files. Runtime instructions derive from these
+The [complete source receipt](acceptance/2026-10-14-pstack-sync/upstream-files.json)
+records all 168 pinned upstream files. The previous snapshot and receipts remain
+historical evidence. Formal release 0.17.1 targets pstack 0.15.17. Runtime instructions derive from these
 inputs through exact, reviewed replacements. The derivation record explains
 each changed span. Hashes establish source integrity; they do not establish
 that an agent followed the instructions.

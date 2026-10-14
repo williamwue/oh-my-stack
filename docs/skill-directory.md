@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-76 public entries: 52 workflows and 24 principles.
+77 public entries: 53 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -28,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-52 entries.
+53 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -51,6 +51,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`figure-it-out`](../packages/codex/skills/figure-it-out/SKILL.md) | Plan and verify a complex task with an auditable decision trail. | explicit | pstack core / host binding |
 | [`hillclimb`](../packages/codex/skills/hillclimb/SKILL.md) | Improve one metric through bounded measured attempts. | explicit | pstack core / host binding |
 | [`how`](../packages/codex/skills/how/SKILL.md) | Explain a code path or subsystem using verified repository evidence. | explicit | pstack core / host binding |
+| [`in-your-own-words`](../packages/codex/skills/in-your-own-words/SKILL.md) | Restate the user's goal and problem before work starts. | explicit | pstack core / host binding |
 | [`interrogate`](../packages/codex/skills/interrogate/SKILL.md) | Review frozen inputs with independent reviewers and root judgment. | explicit | pstack core / host binding |
 | [`investigation`](../packages/codex/skills/investigation/SKILL.md) | Answer an engineering question from evidence without changing code. | explicit | pstack core / host binding |
 | [`ketchup`](../packages/codex/skills/ketchup/SKILL.md) | Catch up on this chat, current work status, and decisions waiting on you. | explicit | pstack core / host binding |

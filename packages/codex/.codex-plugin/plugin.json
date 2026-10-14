@@ -26,6 +26,6 @@
       "Use $setup-oh-my-stack to configure models."
     ]
   },
-  "version": "0.17.1",
+  "version": "0.17.1-pstack01523.20261014",
   "hooks": "./hooks/hooks.json"
 }

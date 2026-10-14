@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+  "revision": "ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a",
   "derivationManifest": "upstream/parity-derivations.json",
   "historicalRecords": [
     {
@@ -8,5 +8,6 @@
       "sha256": "074df56e92db41a0721983b745f2aa6019c9785ffc00ff97469e8a0ca9dd2862"
     }
   ],
-  "note": "Archived records describe earlier OMS semantics. Active output ownership and transformations are recorded by the parity manifest; extension inclusion is owned by the source catalog."
+  "note": "Archived records describe earlier OMS semantics. Active output ownership and transformations are recorded by the parity manifest; extension inclusion is owned by the source catalog.",
+  "sourceReceipt": "docs/acceptance/2026-10-14-pstack-sync/upstream-files.json"
 }
