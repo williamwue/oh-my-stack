@@ -1,5 +1,14 @@
 # Project status
 
+## 0.17.0 source and release scope (2026-10-14)
+
+Current source version is [0.17.0](releases/0.17.0.md). It adds opt-in T3 source
+builds and explicit cross-family selection. Default published packages retain
+native bindings. [Source closeout](acceptance/2026-10-14-cross-model/closeout.md)
+records independent review and local installation; formal publication is
+verified through the pinned maintainer pipeline and GitHub release state.
+The older sections below are historical snapshots.
+
 Current source version: [0.11.2](releases/0.11.2.md), with 90 public Skills.
 The [release checklist](acceptance/model-recommendations-0.11.2/release-checklist.md)
 separates model recommendations, configuration migration, publication and installed acceptance.
