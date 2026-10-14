@@ -26,6 +26,6 @@
       "Use $setup-oh-my-stack to configure models."
     ]
   },
-  "version": "0.17.1",
+  "version": "0.18.0",
   "hooks": "./hooks/hooks.json"
 }

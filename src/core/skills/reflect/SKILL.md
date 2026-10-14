@@ -25,7 +25,7 @@ That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), 
 
 One message, three native child delegation calls, the bounded role from the generated runtime binding, agent mode (evidence-tool access with writes bounded by the assignment). Reviewers need MCP access to look up the tickets, chat threads, and observability traces the transcript references, and the source-host readonly mode strips MCPs; preserve evidence access through the host binding.
 
-Each reviewer and the synthesizer name a role line in the `effective host model resolution` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names.
+Each reviewer and the synthesizer name a role line in the `effective host model resolution` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
 
 | Lens | Role line | Default `model` | Prompt template |
 |---|---|---|---|

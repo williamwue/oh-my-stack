@@ -1,0 +1,14 @@
+{
+  "commit": "0892ef4b7b930b2d26a095955b17e78389ebbcde",
+  "tree": "69bcfb8c4d4350e0c529a9f3d1566975d2d688df",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-f44106b2f1390f67dd1d160779b7149ee67252bc88e0d28690365448e655c1fe",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 回执递归嵌套使合法拒绝链在第十次准备时失败\n\n**Location**: [tools/t3-orchestration.mjs:654](tools/t3-orchestration.mjs:654)，`rejectedPreparation` 第 695 行及深度检查第 709 行。\n\n**Finding**: 每个新回执再次嵌入包含旧回执的完整历史，重建时递归调用 `prepareDelegation`。因此正常追加的拒绝链会触发 `depth > 8`，即使还有合法候选。\n\n**Evidence**: 在冻结提交上以纯内存 fixture 复现，无文件写入或 provider 调用。同一 provider 广告原始模型、默认模型及八个等价模型；每次保留原记录，追加 helper 生成的完整回执和拒绝，使用新 `stepId`。前九次准备成功，第十次报 `Invalid rejected prepared request preparation`，此时 `gpt-default-7` 仍被最新错误列为有效且从未拒绝。第九个回执的 JSON 已达 **31,314,466 字节**。\n\n**Suggestion**: 将历史表示为按回执哈希引用的扁平记录，逐步验证转换并复用验证结果；用循环引用检查保护重建，避免把正常历史长度当成非法递归。补充超过九次准备的连续拒绝测试。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on exponential captured receipt growth and legitimate-chain depth failure. Flatten hash-keyed records, validate unique transitions with memoization and cycle rejection, rather than increasing depth cap. Parent owns new runtime artifact delivery and guides. Installation held."
+}

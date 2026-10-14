@@ -1,0 +1,14 @@
+{
+  "candidate": "450390feecaa2ed4a712528ce39f98a9a810abc0",
+  "tree": "141ba33869e7d77bb2cbf13ad74d7ea47bd77b8b",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-c2d9469cd47ee26fccf732cdcd741b47b8723be42d25cbd73fb958bd508f4027",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 备用渠道原始值被拒后，模型回退仍使用主渠道\n\n**Location**: [tools/t3-orchestration.mjs:661](tools/t3-orchestration.mjs:661)\n\n**Finding**: 捕获请求已恢复实际渠道 `jobBase`，但后续模型回退仍传入 `configured`。备用渠道原始值的拒绝证据因此无法继续处理。\n\n**Evidence**: 冻结提交上配置主渠道 A、允许备用渠道 B，并为 B 配置合法的模型默认值。禁用 A 后，`hardest` 正确生成 B/max；拒绝后正确恢复 B/high。再加入 B/high 的拒绝证据，得到 `Provider A cannot run child tasks`。即使重新启用 A，也得到 `Foreign model rejection target or provider`。\n\n**Suggestion**: 将后续拒绝链绑定到经凭据重建的实际原始目标 `jobBase`，使用该渠道的模型回退策略；配置目标 A 保留为审计来源。\n\n### 2. [warning] 当前目录移除已拒绝的选项后，会阻断合法回退\n\n**Location**: [tools/t3-orchestration.mjs:504](tools/t3-orchestration.mjs:504)\n\n**Finding**: 模型回退前仍要求已被拒绝的原始目标通过当前目录的选项校验。原始模型 ID 尚在、原始 effort 已移除时，代码无法进入合法的默认模型回退。\n\n**Evidence**: 保存 high，准备 hardest/max，拒绝后恢复 high，再提供 high 的拒绝证据。目录仍包含 high 时，正确选择已配置的默认模型 low；仅将原模型的广告档位刷新为 `[low]`，同一请求立即报 `Unsupported value for option reasoningEffort`。默认模型及其 low 选项仍有效。\n\n**Suggestion**: 使用捕获目录验证被拒绝请求的来源和转换关系；当前目录用于校验准备执行的回退目标，不应要求已拒绝目标继续有效。\n\n### 3. [warning] 非 slug 模型的多个 effort 键会生成矛盾请求\n\n**Location**: [tools/t3-orchestration.mjs:406](tools/t3-orchestration.mjs:406)\n\n**Finding**: 非 slug 路径通过 `find` 只调整第一个受支持的 effort 键，其余同类键保留原值。\n\n**Evidence**: 目录同时广告 `reasoningEffort` 和 `effort`，两者均支持 `[low, high, max]`，保存值均为 high。配置和准备均被接受，但 hardest 返回：\n```json\n{\"reasoningEffort\":\"max\",\"effort\":\"high\"}\n```\n请求本身表达了两个不同的推理强度。相比之下，slug 路径会遍历并统一所有已识别的 effort 键。\n\n**Suggestion**: 在边界统一这些别名或拒绝含糊配置；若支持同时发送多个键，则确保它们表达一致的任务强度，并覆盖上述回归用例。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on all three findings. Installation held pending repair and fresh Codex review. User explicitly selected Codex-only final review and local synchronization because Cursor disabled/missing executable; no provider settings or saved resolution changed."
+}

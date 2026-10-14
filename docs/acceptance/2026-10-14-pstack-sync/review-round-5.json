@@ -1,0 +1,14 @@
+{
+  "commit": "5585401d6057b0e42526de93a76341712032d612",
+  "tree": "58ff4a981362b52f290842a0141c239fc4953404",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-a1a3e420f8895c5fe20e5478bbc7fb6b0e88aab79ed6277e2572fa7f1051feae",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 未发生参数调整时，拒绝链仍会丢失实际渠道归属\n\n**Location**: [tools/t3-orchestration.mjs:690](tools/t3-orchestration.mjs:690)，`prepareDelegation` 第 719–731 行。\n\n**Finding**: `modelRejections[].preparedRequest` 虽经过重建验证，但没有恢复其中的实际渠道。只有 `rejectedPreparedRequest` 分支会恢复 `jobBase`，而该分支仅接受 `job-profile-adjustment`。因此，verification 或未改变参数的任务无法稳定延续备用渠道上的拒绝链。\n\n**Evidence**: 在冻结提交上用纯内存 fixture 复现：\n\n1. 配置主渠道 A，显式允许同 family 的备用渠道 B，并配置 B 的模型默认值 D。\n2. 禁用 A，以 `{kind:\"verification\"}` 准备请求，正确得到 B/high。\n3. 恢复 A，将上述完整请求放入 B 的拒绝记录 `preparedRequest`，使用新 `stepId`。\n4. 准备失败：`Foreign model rejection target or provider`，尽管 B、D 仍可执行。\n\n原因是第 690–692 行重新选择 A 作为 `jobBase`；后面的凭据验证只登记 provenance，最终将 B 的合法拒绝视为外来证据。不传 `jobProfile` 时，即使 A 仍不可用，也会报 `Provider a cannot run child tasks`。\n\n**Suggestion**: 从经过重建验证的首次实际请求绑定拒绝链所属渠道，不要以是否发生任务参数调整作为恢复渠道的条件。补充 verification、参数调整无变化及省略 profile 的渠道回退测试。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on no-adjustment actual-channel ownership finding. Canonical captured chain base must be restored for verification, no-op effort and omitted profile as well as adjusted jobs. Installation remains held. User selected Codex-only final review, configurations unchanged."
+}

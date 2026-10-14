@@ -1,0 +1,7 @@
+{
+  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-4a402c7d0911693dcecd2fb7cd4875b567a49de09ace92075ff9c6ed769ecfb3",
+  "status": "completed",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "summary": "已修复 round8 finding。回退现在使用完整有效拒绝历史，排除已拒绝的默认目标和等价候选。原始参数尚未拒绝时，仍先重试原始参数，包括同模型 ID 的 max 到 high 重试。\n\n仅修改两份源码：\n\n- [t3-orchestration.mjs](tools/t3-orchestration.mjs:528)。970 行，保留精确 target、provider 绑定与 provenance 校验。\n- [t3-candidate-coherence.test.mjs](tests/t3-candidate-coherence.test.mjs:255)。364 行，新增 11 项测试。job-selection 文件未修改，仍为 967 行。\n\n先复现 6 项行为失败，其中原始错误为：\n\n```text\nerror: 'Missing expected rejection.'\n```\n\n指定三文件检查最终输出：\n\n```text\n# tests 188\n# pass 188\n# fail 0\n```\n\n`git diff --check` 通过。现有测试全部保留，覆盖默认重合、等价排除、同 ID 原始参数重试、foreign target 和历史 receipt 防护。\n\n应用了 Model the Domain 分离分类与历史、Fix Root Causes 修复证据丢失、Boundary Discipline 保留信任边界、Laziness Protocol 限制运行时代码改动。Test Behavior, Not Implementation、Sequence Verifiable Units 和 Prove It Works 用于先红后绿的实际 helper 验证。\n\n未提交、生成、安装或调用 provider。其他人的修改已保留。完整检查、生成与 Codex 最终审核交回父会话，安装继续保持暂停。\n\n"
+}

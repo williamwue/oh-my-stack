@@ -9,7 +9,7 @@ import { promisify } from "node:util";
 import { configure } from "../tools/configure-models.mjs";
 import { prepareDelegation } from "../tools/codex-delegation.mjs";
 import { repoRoot } from "../tools/generate.mjs";
-import { resolveActiveResolution } from "../tools/model-resolution.mjs";
+import { resolveActiveResolution, resolveTaskSelection } from "../tools/model-resolution.mjs";
 import { inspectSetup } from "../tools/setup-acceptance.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -244,4 +244,90 @@ test("the CLI defaults to user scope without touching the real home directory", 
     { env: environment })).stdout);
   assert.equal(selected.scope, "user");
   assert.equal(selected.path, join(root, ".codex", "oh-my-stack.resolution.json"));
+});
+
+
+test("task effort uses the saved model and observed options without mutating the role line", () => {
+  const selection = { model: "observed-model", reasoning: "high", speed: "standard", agent: "saved-agent" };
+  const inventory = { schemaVersion: 1, runtime: "codex", source: "fixture model/list",
+    observedAt: "2026-10-14T00:00:00Z",
+    models: [{ id: "observed-model", reasoningEfforts: ["xhigh", "low", "medium", "high"] }] };
+  const prepare = (kind, extra = {}) => resolveTaskSelection({ selection,
+    jobContext: { kind }, inventory, runtime: "codex", ...extra });
+  for (const [kind, reasoning] of [["hardest", "xhigh"], ["judgment", "medium"],
+    ["routine", "low"], ["verification", "high"]]) {
+    const result = prepare(kind);
+    assert.deepEqual(result.selection, { model: "observed-model", reasoning, speed: "standard", agent: "saved-agent" });
+    assert.equal(result.audit.configured.reasoning, "high");
+    assert.equal(result.audit.selected.reasoning, reasoning);
+  }
+  assert.deepEqual(selection, { model: "observed-model", reasoning: "high", speed: "standard", agent: "saved-agent" });
+  assert.equal(prepare("hardest", { selection: { ...selection, reasoning: "xhigh" } }).selection.reasoning, "xhigh");
+  assert.equal(prepare("routine", { selection: { ...selection, reasoning: "low" } }).selection.reasoning, "low");
+  const noInventory = prepare("routine", { inventory: undefined });
+  assert.equal(noInventory.selection.reasoning, "high");
+  assert.equal(noInventory.audit.reason, "saved-entry-only-no-observed-alternatives");
+  const urgent = prepare("routine", { jobContext: { kind: "routine", urgent: true } });
+  assert.deepEqual(urgent.audit.speed, { requested: "fast", applied: false, reason: "native-helper-has-no-speed-selector" });
+  assert.equal(prepare("verification", { selection: { ...selection, speed: "fast" } }).audit.speed.requested, "fast");
+  const rejection = { model: "observed-model", reasoning: "xhigh", reason: "host rejected xhigh" };
+  const retry = prepare("hardest", { rejectedAdjustment: rejection });
+  assert.deepEqual(retry.selection, selection);
+  assert.equal(retry.audit.reason, "adjustment-rejected-retry-original-role-line");
+  assert.deepEqual(retry.audit.rejectedAdjustment, rejection);
+  assert.throws(() => prepare("hardest", { rejectedAdjustment: { ...rejection, model: "guessed-model" } }), /must identify/);
+  assert.throws(() => prepare("routine", { inventory: { ...inventory, runtime: "pi" } }), /matching observed/);
+  assert.throws(() => prepare("routine", { inventory: { ...inventory, models: [] } }), /saved model and reasoning/);
+  assert.throws(() => prepare("unknown"), /jobContext requires/);
+  assert.throws(() => prepare("routine", { jobContext: { kind: "routine", urgent: "yes" } }), /boolean urgent/);
+});
+
+test("task contexts preserve inherited aliases without selecting a guessed replacement", () => {
+  for (const alias of ["inherit-parent", "auto"]) {
+    const selection = { model: null, reasoning: null, inheritParent: true, alias };
+    const result = resolveTaskSelection({ selection, runtime: "codex",
+      jobContext: { kind: "hardest", urgent: true } });
+    assert.deepEqual(result.selection, selection);
+    assert.equal(result.audit.reason, "inherited-alias-unchanged");
+    assert.equal(result.audit.speed.requested, null);
+  }
+});
+
+
+test("hardest effort stops at advertised max without selecting ultra or inventing a missing level", () => {
+  const inventory = { schemaVersion: 1, runtime: "codex", source: "fixture native options",
+    observedAt: "2026-10-14T00:00:00Z",
+    models: [{ id: "saved-model", reasoningEfforts: ["low", "high", "max", "ultra"] }] };
+  const prepare = (reasoning, observed = inventory) => resolveTaskSelection({
+    selection: { model: "saved-model", reasoning }, inventory: observed, runtime: "codex", jobContext: { kind: "hardest" } });
+  assert.equal(prepare("high").selection.reasoning, "max");
+  assert.equal(prepare("max").selection.reasoning, "max");
+  assert.equal(prepare("ultra").selection.reasoning, "ultra");
+  assert.equal(prepare("high", { ...inventory,
+    models: [{ id: "saved-model", reasoningEfforts: ["high", "ultra"] }] }).selection.reasoning, "high");
+});
+
+
+test("bare rejection cannot authorize a stale retry and the original model options remain intact", () => {
+  const selection = { model: "saved-model", reasoning: "high", speed: "standard",
+    modelOptions: { verbosity: "low" } };
+  const inventory = { schemaVersion: 1, runtime: "codex", source: "local host rejection fixture",
+    observedAt: "2026-10-14T00:00:00Z",
+    models: [{ id: "saved-model", reasoningEfforts: ["low", "high", "max"] }] };
+  const input = { selection, inventory, runtime: "codex", jobContext: { kind: "hardest" } };
+  const prepared = resolveTaskSelection(input);
+  assert.equal(prepared.selection.reasoning, "max");
+  assert.deepEqual(prepared.audit.configuredSelection, { model: "saved-model", reasoning: "high",
+    speed: "standard", modelOptions: { verbosity: "low" } });
+  const rejectedAdjustment = { model: "saved-model", reasoning: "max", reason: "fixture rejection, backend not verified" };
+  const sameCatalog = resolveTaskSelection({ ...input, rejectedAdjustment });
+  assert.deepEqual(sameCatalog.selection, { model: "saved-model", reasoning: "high",
+    speed: "standard", modelOptions: { verbosity: "low" } });
+  for (const observed of [undefined, { ...inventory,
+    models: [{ id: "saved-model", reasoningEfforts: ["low", "high"] }] }]) {
+    assert.throws(() => resolveTaskSelection({ ...input, inventory: observed, rejectedAdjustment }), /must identify/);
+    const unchanged = resolveTaskSelection({ ...input, inventory: observed });
+    assert.equal(unchanged.selection.reasoning, "high");
+    assert.equal(unchanged.selection.model, "saved-model");
+  }
 });

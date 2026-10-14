@@ -1595,6 +1595,21 @@
         "pi"
       ],
       "generated": true
+    },
+    {
+      "kind": "skill",
+      "name": "in-your-own-words",
+      "path": "src/core/skills/in-your-own-words",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/in-your-own-words/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "in-your-own-words"
     }
   ],
   "skills": [
@@ -1708,6 +1723,12 @@
     },
     {
       "name": "how",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "in-your-own-words",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"

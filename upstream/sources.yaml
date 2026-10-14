@@ -199,3 +199,15 @@ sources:
     candidate_commit: null
     baseline_commit: 978ca6e9c0e012047cd5058b8e829240336e704e
     verified_commit: 978ca6e9c0e012047cd5058b8e829240336e704e
+
+  - id: cursor-pstack-october-14
+    repository: https://github.com/cursor/plugins.git
+    path: pstack
+    role: reviewed-october-14-semantic-authority
+    license: MIT
+    usage: imported-source
+    inspected_at: "2026-10-14"
+    inspected_commit: ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a
+    candidate_commit: null
+    baseline_commit: 978ca6e9c0e012047cd5058b8e829240336e704e
+    verified_commit: ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a

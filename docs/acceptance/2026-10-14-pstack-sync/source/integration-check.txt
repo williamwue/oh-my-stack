@@ -1,0 +1,9 @@
+
+> oh-my-stack@0.17.1 check
+> npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.17.1 generate:check
+> node tools/generate.mjs --check
+
+Codex descriptions must cover exactly the core public catalog

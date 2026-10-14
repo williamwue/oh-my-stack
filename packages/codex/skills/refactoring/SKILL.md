@@ -10,7 +10,17 @@ For every delegated worker in this workflow, derive the exact `model`,
 `../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
 the nearest project manifest first, then the user manifest. Supply the named
 route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. Pass
+and the observed parent model and effort. For task adjustment, supply
+`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
+and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
+effort alternatives. The saved model stays fixed. Without inventory only
+the saved effort is available. Read `audit.taskSelection` before dispatch.
+Keep the complete prepared request. If the host rejects its adjustment,
+supply `--rejected-adjustment ERROR.json` and
+`--rejected-prepared-request REQUEST.json` to retry the original role line
+even after the inventory changes. A request checksum binds the receipt;
+the host remains responsible for authenticating the rejection evidence.
+Pass
 the returned `task_name`, `fork_turns=none`, model, effort, and message
 explicitly to the spawn call. Do not use a generated custom-role name as a selector or
 claim its TOML was activated. After the worker finishes, run the helper's
@@ -33,7 +43,7 @@ If the cleanup reveals a missing feature or a real bug, split it out and ship th
 2. Name the structure the code is missing per **principle-model-the-domain**. Boring code stays when the shape is already clear and local. The reshape must delete branches or invalid states, not add indirection.
 3. Name the target shape. State what the module layout, types, and call graph should be if built today (**principle-foundational-thinking**, **principle-redesign-from-first-principles**). If the target crosses a function boundary, run the **architect** skill for parallel design exploration of the shape before the move.
 4. Subtract before you add. Delete dead code, collapse one-caller wrappers, drop redundant validators, and remove orphan references before introducing the new shape (**principle-subtract-before-you-add**). The smallest change that reaches the target shape ships (**principle-laziness-protocol**). A speculative cleanup that "might help" gets reverted.
-5. Move in small behavior-preserving steps, each keeping the pin green. For API reshapes, migrate every caller and delete the old API in the same wave (**principle-migrate-callers-then-delete-legacy-apis**). No compatibility shims, no parallel old-and-new paths. Spot-check every rename against the actual files. Renames silently miss usages in strings, prose, and back-references. Delegate the mechanical edits to a subagent using your configured refactoring model (default `observed code-model choice`) with a specific scope (file paths, the names being moved, the behavior to hold).
+5. Move in small behavior-preserving steps, each keeping the pin green. For API reshapes, migrate every caller and delete the old API in the same wave (**principle-migrate-callers-then-delete-legacy-apis**). No compatibility shims, no parallel old-and-new paths. Spot-check every rename against the actual files. Renames silently miss usages in strings, prose, and back-references. Delegate the mechanical edits to a subagent using your configured refactoring model (default `observed code-model choice`) with a specific scope (file paths, the names being moved, the behavior to hold). Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section.
 6. Prove behavior is unchanged on the real artifact, not "it compiles" (**principle-prove-it-works**). For larger reshapes, run an equivalence check: a script that diffs old-vs-new outputs, a recorded baseline replayed against the new code, or a smoke run on the matching surface via the relevant control skill.
 7. Confirm the change is worth keeping. The success measure is reduced reader load (**principle-minimize-reader-load**). If the diff does not lower reader load somewhere, revert it.
 8. Rebase into small ordered commits. A subtraction commit, then the reshape, then any follow-on cleanup. Shape them with the **sequence-verifiable-units** principle skill, so each behavior-preserving slice stays green before the next. Run **Opening a PR**.

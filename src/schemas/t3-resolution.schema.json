@@ -40,7 +40,19 @@
       "properties": {
         "strategy": { "enum": ["interrogate", "arena"] },
         "familyDefaults": { "type": "object", "additionalProperties": { "$ref": "#/$defs/explicitTarget" } },
-        "unknownFamilyDefault": { "$ref": "#/$defs/explicitTarget" }
+        "unknownFamilyDefault": { "$ref": "#/$defs/explicitTarget" },
+        "hostFallback": { "$ref": "#/$defs/explicitTarget" },
+        "providerDefaults": { "type": "object", "additionalProperties": { "$ref": "#/$defs/providerDefaults" } }
+      }
+    },
+    "providerDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["familyDefaults", "unknownFamilyDefault"],
+      "properties": {
+        "familyDefaults": { "type": "object", "additionalProperties": { "$ref": "#/$defs/explicitTarget" } },
+        "unknownFamilyDefault": { "$ref": "#/$defs/explicitTarget" },
+        "hostFallback": { "$ref": "#/$defs/explicitTarget" }
       }
     },
     "candidates": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/explicitTarget" } },

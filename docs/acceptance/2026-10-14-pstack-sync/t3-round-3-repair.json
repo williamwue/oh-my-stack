@@ -1,0 +1,7 @@
+{
+  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-145e894e9c358d0a71fd25e659740bc75070de410bf3eebc9460acb222ba4e56",
+  "status": "completed",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "summary": "三个 finding 均已修复，仅修改授权的两个文件。\n\n- [t3-orchestration.mjs](tools/t3-orchestration.mjs:672) 使用捕获的实际渠道 `jobBase` 继续模型回退，同时保留配置主渠道的审计数据。\n- 捕获目录验证拒绝来源，当前目录验证新执行目标。旧 effort 被移除后仍可合法回退。\n- 多个 effort 键按共同支持的档位统一调整，矛盾配置会被拒绝。helper 为 863 行，无新增依赖。\n\n[请求级回归测试](tests/t3-job-selection.test.mjs:496) 先复现 10 项失败，再修复并补充 3 项边界检查。\n\n```text\nnode --test tests/t3-job-selection.test.mjs tests/t3-orchestration.test.mjs\n\nRed:\n# tests 118\n# pass 108\n# fail 10\n\nGreen:\n# tests 121\n# pass 121\n# fail 0\n```\n\n最终分别为 68 项和 53 项通过。`git diff --check` 通过。生成包、fullcheck 和最终独立审查留给父任务。\n\n本次按 Model the Domain 分离渠道来源，按 Boundary Discipline 分离两种目录校验，按 Fix Root Causes、Test Behavior Not Implementation 和 Prove It Works 完成请求级红绿验证。\n\n"
+}

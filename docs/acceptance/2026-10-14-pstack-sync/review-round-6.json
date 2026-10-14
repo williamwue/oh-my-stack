@@ -1,0 +1,14 @@
+{
+  "commit": "2e8e07aef63434a6574b9b64c3aed839870af1f6",
+  "tree": "6e9dd0c05759badc25de968d10072da3e394a264",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-2265d2fd9deaaeadceee8950b595741df61a1cd2cd29a2ea9a732ffe26760533",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 恢复原始参数时仍可越过 chainOrigin 切换渠道\n\n**Location**: [tools/t3-orchestration.mjs:738](tools/t3-orchestration.mjs:738)\n\n**Finding**: 捕获凭据恢复了 `jobBase`，但最终仍调用允许渠道回退的 `selectTarget`。实际渠道不可用时，请求可以切回主渠道；`chainOrigin` 却仍指向原渠道，且审计将其标为 `job-profile-rejected-original-line`。\n\n**Evidence**: 在冻结提交上通过纯内存 fixture 复现：\n\n1. 配置 A/high，显式 `fallbackTargets: [B/high, A/high]`，两者同 family。\n2. 禁用 A，`hardest` 正确准备 B/max。\n3. 保存完整请求及拒绝记录，恢复 A、禁用 B，以新 `stepId` 重试。\n4. 返回 **A/high**，但 `chainOrigin.target` 仍为 **B/high**。\n5. 再恢复 B，把 helper 刚生成的 A/high 请求连同完整凭据加入拒绝链，报错 `Foreign model rejection target or provider`。\n\n原因是调整拒绝被过滤后，`resolveModelFallback` 收到空证据直接返回；第 738 行随后重新选择渠道。首次实际渠道的约束因此没有覆盖原参数重试路径。\n\n**Suggestion**: 已绑定 `chainOrigin` 的拒绝链应直接校验准备执行的目标，不再进入通用渠道选择。原渠道不可用时报告可用性失败，并补充上述恢复主渠道及连续拒绝的回归测试。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on bound-chain execution channel switching finding. Already captured actual-channel requests must validate next target directly; availability failure must not relabel another channel as original-line retry. Installation held; Codex-only final review userauthorized."
+}

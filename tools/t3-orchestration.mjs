@@ -4,6 +4,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTaskSelection } from './model-resolution.mjs';
+import { createReceiptLedger, receiptHash } from './t3-receipts.mjs';
 
 const terminalStatuses = new Set(['completed', 'failed', 'cancelled', 'interrupted']);
 const statuses = new Set(['queued', 'running', 'waiting', ...terminalStatuses]);
@@ -12,6 +14,15 @@ const manifestName = '.oh-my-stack/t3/resolution.json';
 const modelFallbackStrategies = { 'interrogate.reviewers': 'interrogate', 'arena.runners': 'arena', 'architect.runners': 'arena' };
 const inheritedAliases = new Set(['auto', 'inherit-parent']);
 const effortKeys = new Set(['effort', 'reasoningEffort', 'reasoning_effort']);
+const effortLadder = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max', 'ultra'];
+const slugPattern = /^(.*)-(none|minimal|low|medium|high|xhigh|max|ultra)(-fast)?$/;
+const jobEffortSteps = { routine: -2, judgment: -1, hardest: 1, verification: 0 };
+const speedSettings = {
+  fast: { type: 'boolean', standard: false, fast: true },
+  fastMode: { type: 'boolean', standard: false, fast: true },
+  speed: { type: 'select', standard: 'standard', fast: 'fast' },
+  serviceTier: { type: 'select', standard: 'default', fast: 'priority' }
+};
 
 function object(value, label) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
@@ -121,6 +132,7 @@ function targetFrom(input, catalog) {
     string(id, 'target option id');
     if (typeof value !== 'string' && typeof value !== 'boolean') throw new Error(`Invalid option value for ${id}`);
   }
+  coherentOptions({ id: input.model, options: [] }, options);
   if (catalog) {
     const provider = catalog.providers.find(value => value.providerInstanceId === input.providerInstanceId);
     if (!provider) throw new Error(`Unknown provider instance ${input.providerInstanceId}`);
@@ -131,13 +143,15 @@ function targetFrom(input, catalog) {
       if (!option) throw new Error(`Unsupported option ${id} for ${input.model}`);
       if (option.type === 'boolean' ? typeof value !== 'boolean' : typeof value !== 'string' || !option.options.some(choice => choice.id === value)) throw new Error(`Unsupported value for option ${id}`);
     }
+    coherentOptions(model, options);
   }
   return clone(input);
 }
 
 export function t3ModelFamily(model, assignments = {}) {
   if (typeof model !== 'string' || !model.trim()) return null;
-  const known = /^(gpt|claude|grok|gemini)(?:-|$)/.exec(model.split('/').at(-1))?.[1] ?? null;
+  const segment = model.split('/').at(-1);
+  const known = /^(?:cursor-grok-|composer-)/.test(segment) ? 'grok' : /^(gpt|claude|grok|gemini)(?:-|$)/.exec(segment)?.[1] ?? null;
   const assigned = Object.hasOwn(assignments, model) ? string(assignments[model], 'model family') : null;
   if (known && assigned && known !== assigned) throw new Error(`Family assignment contradicts model ${model}`);
   return assigned ?? known;
@@ -167,15 +181,26 @@ function policyFrom(input, contracts, catalog) {
   unique(fallbacks.map(hash), 'fallback target');
   for (const [route, policy] of Object.entries(object(input.modelFallbacks ?? {}, 'modelFallbacks'))) {
     if (!Object.hasOwn(modelFallbackStrategies, route) || (contracts && contracts.routes[route]?.kind !== 'panel')) throw new Error(`Unsupported model fallback route ${route}`);
-    keys(policy, ['strategy', 'familyDefaults', 'unknownFamilyDefault'], 'model fallback policy');
+    keys(policy, ['strategy', 'familyDefaults', 'unknownFamilyDefault', 'hostFallback', 'providerDefaults'], 'model fallback policy');
     if (policy.strategy !== modelFallbackStrategies[route]) throw new Error(`Invalid model fallback strategy for ${route}`);
-    for (const [family, target] of Object.entries(object(policy.familyDefaults, 'familyDefaults'))) {
-      string(family, 'default family');
-      concrete(target);
-      if (inheritedAliases.has(target.model) || t3ModelFamily(target.model, input.modelFamilies) !== family) throw new Error(`Invalid family default for ${family}`);
+    const defaults = value => {
+      for (const [family, target] of Object.entries(object(value.familyDefaults, 'familyDefaults'))) {
+        string(family, 'default family');
+        concrete(target);
+        if (inheritedAliases.has(target.model) || t3ModelFamily(target.model, input.modelFamilies) !== family) throw new Error(`Invalid family default for ${family}`);
+      }
+      for (const target of [value.unknownFamilyDefault, ...(value.hostFallback ? [value.hostFallback] : [])]) {
+        concrete(target);
+        if (inheritedAliases.has(target.model)) throw new Error('Model fallback defaults cannot be inherited aliases');
+      }
+    };
+    defaults(policy);
+    for (const [providerId, value] of Object.entries(object(policy.providerDefaults ?? {}, 'providerDefaults'))) {
+      string(providerId, 'default provider');
+      keys(value, ['familyDefaults', 'unknownFamilyDefault', 'hostFallback'], 'provider defaults');
+      defaults(value);
+      if ([...Object.values(value.familyDefaults), value.unknownFamilyDefault, value.hostFallback].filter(Boolean).some(target => target.providerInstanceId !== providerId)) throw new Error('Provider defaults must preserve their provider instance');
     }
-    concrete(policy.unknownFamilyDefault);
-    if (inheritedAliases.has(policy.unknownFamilyDefault.model)) throw new Error('Model fallback defaults cannot be inherited aliases');
   }
   for (const [route, count] of Object.entries(object(input.minimumPanelFamilies ?? {}, 'minimumPanelFamilies'))) {
     if (contracts && contracts.routes[route]?.kind !== 'panel') throw new Error(`Unknown panel route ${route}`);
@@ -214,7 +239,7 @@ export function configureT3Resolution(input) {
   const resolution = saved?.preset === preset ? saved : {
     schemaVersion: 1, owner: 'oh-my-stack', orchestration: 't3', preset,
     roles: Object.fromEntries(Object.keys(contracts.roles).map(name => [name, { inheritParent: true }])),
-    routes: Object.fromEntries(Object.entries(contracts.routes).map(([name, route]) => [name, { kind: route.kind, entries: route.kind === 'single' ? [{ inheritParent: true }] : [] }]))
+    routes: Object.fromEntries(Object.entries(contracts.routes).map(([name, route]) => [name, { kind: route.kind, entries: Array.from({ length: route.defaultCount }, () => ({ inheritParent: true })) }]))
   };
   for (const [name, target] of Object.entries(object(overrides.roles ?? {}, 'role overrides'))) {
     if (!Object.hasOwn(contracts.roles, name)) throw new Error(`Unknown role ${name}`);
@@ -231,7 +256,9 @@ export function configureT3Resolution(input) {
     for (const targets of Object.values(resolution.selectionPolicy.roleCandidates ?? {})) targets.forEach(target => executableTarget(target, catalog));
     (resolution.selectionPolicy.fallbackTargets ?? []).forEach(target => executableTarget(target, catalog));
     for (const policy of Object.values(resolution.selectionPolicy.modelFallbacks ?? {})) {
-      [...Object.values(policy.familyDefaults), policy.unknownFamilyDefault].forEach(target => executableTarget(target, catalog));
+      for (const value of [policy, ...Object.values(policy.providerDefaults ?? {})]) {
+        [...Object.values(value.familyDefaults), value.unknownFamilyDefault, value.hostFallback].filter(Boolean).forEach(target => executableTarget(target, catalog));
+      }
     }
   }
   const checked = resolutionFrom(resolution, contracts);
@@ -296,6 +323,32 @@ function compatibleOption(option, value) {
   return option.type === 'boolean' ? typeof value === 'boolean' : typeof value === 'string' && option.options.some(choice => choice.id === value);
 }
 
+function coherentOptions(model, pinned, derive = false) {
+  const options = clone(pinned);
+  const slug = slugPattern.exec(model.id);
+  if (slug) for (const option of model.options) {
+    const value = effortKeys.has(option.id) ? slug[2] : speedSettings[option.id]?.[slug[3] ? 'fast' : 'standard'];
+    if (value === undefined) continue;
+    if (!compatibleOption(option, value)) throw new Error(`Inconsistent selector ${option.id} cannot express ${value} encoded by model slug ${model.id}`);
+    if (derive) options[option.id] = value;
+  }
+  const effective = { ...Object.fromEntries(model.options.filter(option => (effortKeys.has(option.id) || Object.hasOwn(speedSettings, option.id))
+    && option.defaultValue !== undefined).map(option => [option.id, option.defaultValue])), ...options };
+  const efforts = Object.entries(effective).filter(([id]) => effortKeys.has(id)).map(([, value]) => value);
+  if (new Set(efforts).size > 1) throw new Error('Ambiguous reasoning effort options');
+  if (slug && efforts.some(value => value !== slug[2])) throw new Error(`Inconsistent reasoning effort options for model slug ${model.id}`);
+  if (efforts.length && model.options.some(option => effortKeys.has(option.id) && !compatibleOption(option, efforts[0]))) throw new Error('Ambiguous reasoning effort baseline across advertised selectors');
+  const speeds = [];
+  for (const [id, value] of Object.entries(effective)) {
+    const setting = speedSettings[id];
+    if (!setting) continue;
+    if (slug && value !== setting[slug[3] ? 'fast' : 'standard']) throw new Error(`Inconsistent speed option ${id} for model slug ${model.id}`);
+    if (value === setting.fast || value === setting.standard) speeds.push(value === setting.fast);
+  }
+  if (new Set(speeds).size > 1) throw new Error('Ambiguous speed options');
+  return options;
+}
+
 function replacementOptions(source, model) {
   const options = {};
   for (const [id, value] of Object.entries(source.options)) {
@@ -305,7 +358,15 @@ function replacementOptions(source, model) {
     const option = exact && compatibleOption(exact, value) ? exact : translated;
     if (option && !Object.hasOwn(options, option.id)) options[option.id] = value;
   }
-  return options;
+  return coherentOptions(model, options, true);
+}
+
+function replacementCandidate(source, model, skipped) {
+  try { return { model, options: replacementOptions(source, model) }; }
+  catch (error) {
+    skipped.push({ target: { providerInstanceId: source.providerInstanceId, model: model.id, options: {} }, reason: error.message });
+    return null;
+  }
 }
 
 function optionChanges(source, target, model) {
@@ -334,51 +395,189 @@ function modelDistance(left, right) {
   return row[right.length];
 }
 
+function observedFallbackPolicy(routes, catalog, skipped) {
+  const modelFallbacks = {};
+  for (const [routeName, strategy] of Object.entries(modelFallbackStrategies)) {
+    const providerDefaults = {};
+    for (const target of routes[routeName]?.entries ?? []) {
+      if (target.inheritParent || inheritedAliases.has(target.model) || providerDefaults[target.providerInstanceId]) continue;
+      let provider;
+      try { provider = executableProvider(target, catalog); } catch { continue; }
+      const models = provider.models.filter(model => !inheritedAliases.has(model.id))
+        .map(model => replacementCandidate(target, model, skipped)).filter(Boolean).map(candidate => ({ ...candidate.model, replacement: candidate.options }));
+      if (!models.length) continue;
+      const choose = choices => [...choices].sort((a, b) =>
+        Number(a.id === target.model) - Number(b.id === target.model)
+        || Number(t3ModelFamily(a.id) === 'claude' && !a.id.includes('opus')) - Number(t3ModelFamily(b.id) === 'claude' && !b.id.includes('opus'))
+        || modelDistance(target.model, a.id) - modelDistance(target.model, b.id) || a.id.localeCompare(b.id))[0];
+      const explicit = model => ({ providerInstanceId: target.providerInstanceId, model: model.id, options: model.replacement });
+      const families = [...new Set(models.map(model => t3ModelFamily(model.id)).filter(Boolean))];
+      const familyDefaults = Object.fromEntries(families.map(family => [family, explicit(choose(models.filter(model => t3ModelFamily(model.id) === family)))]));
+      const hostFallback = explicit(choose(models.filter(model => model.id === catalog.inheritedModel).length
+        ? models.filter(model => model.id === catalog.inheritedModel) : models));
+      providerDefaults[target.providerInstanceId] = { familyDefaults, unknownFamilyDefault: familyDefaults.claude ?? hostFallback, hostFallback };
+    }
+    const values = Object.values(providerDefaults);
+    if (values.length) modelFallbacks[routeName] = { strategy, ...values[0], ...(values.length > 1 ? { providerDefaults } : {}) };
+  }
+  return { modelFallbacks };
+}
+
+function jobProfileFrom(profile) {
+  if (profile === undefined) return;
+  keys(profile, ['kind', 'urgent'], 'jobProfile');
+  if (!Object.hasOwn(jobEffortSteps, profile.kind)) throw new Error('Unsupported jobProfile kind');
+  if (profile.urgent !== undefined) boolean(profile.urgent, 'jobProfile urgent');
+}
+
+function jobSelection(target, profile, catalog) {
+  jobProfileFrom(profile);
+  if (profile === undefined) return { target, limitations: [] };
+  if (target.inheritParent || inheritedAliases.has(target.model)) return { target, limitations: [] };
+  const provider = executableProvider(target, catalog);
+  targetFrom(target, catalog);
+  if (profile.kind === 'verification') return { target, limitations: [] };
+  const model = provider.models.find(model => model.id === target.model);
+  const selected = clone(target);
+  const limitations = [];
+  const skipped = [];
+  const slug = slugPattern.exec(target.model);
+  const efforts = model.options.filter(option => effortKeys.has(option.id) && option.type === 'select');
+  const effort = efforts[0];
+  const speedsFor = model => model.options.filter(option => Object.hasOwn(speedSettings, option.id) && option.type === speedSettings[option.id].type);
+  const speeds = speedsFor(model);
+  const desiredEffort = (value, values) => {
+    const supported = effortLadder.filter(level => values.includes(level));
+    if (!supported.includes(value)) return null;
+    return resolveTaskSelection({ selection: { model: target.model, reasoning: value }, jobContext: profile, runtime: 't3',
+      inventory: { schemaVersion: 1, runtime: 't3', source: 'captured-t3-catalog', observedAt: '1970-01-01T00:00:00Z',
+        models: [{ id: target.model, reasoningEfforts: supported }] } }).selection.reasoning;
+  };
+  if (effort) {
+    const pinned = efforts.map(option => selected.options[option.id]).filter(value => value !== undefined);
+    const baselines = pinned.length ? pinned : efforts.map(option => option.defaultValue).filter(value => value !== undefined);
+    const configured = baselines[0] ?? slug?.[2];
+    const supported = effort.options.map(option => option.id).filter(value => efforts.every(option => compatibleOption(option, value)));
+    const wanted = desiredEffort(configured, supported);
+    if (wanted) for (const option of efforts) selected.options[option.id] = wanted;
+    else limitations.push('Reasoning adjustment needs a configured or advertised default effort on the known ladder.');
+  }
+  const speedChanges = {};
+  for (const speed of speeds) {
+    const wanted = speedSettings[speed.id][profile.urgent === true ? 'fast' : 'standard'];
+    if (compatibleOption(speed, wanted)) speedChanges[speed.id] = wanted;
+    else limitations.push(`Requested speed for ${speed.id} is not advertised by this model.`);
+  }
+  if (Object.keys(speedChanges).length === speeds.length) Object.assign(selected.options, speedChanges);
+  if (!slug) {
+    if (!effort) limitations.push('This model advertises no supported reasoning adjustment.');
+    if (!speeds.length) limitations.push('This model advertises no supported speed adjustment.');
+  }
+  if (slug) {
+    const variants = provider.models.map(model => ({ model, slug: slugPattern.exec(model.id) }))
+      .filter(candidate => candidate.slug?.[1] === slug[1]);
+    const wantedEffort = effort ? selected.options[effort.id] : desiredEffort(slug[2], variants.map(candidate => candidate.slug[2]));
+    const wantedFast = profile.urgent === true;
+    const typedSelectors = Boolean(effort || speeds.length);
+    const distance = candidate => Math.abs(effortLadder.indexOf(candidate.slug[2]) - effortLadder.indexOf(wantedEffort));
+    const candidates = variants.filter(candidate => Boolean(candidate.slug[3]) === wantedFast
+      && (typedSelectors ? candidate.slug[2] === wantedEffort : jobEffortSteps[profile.kind] > 0 || effortLadder.indexOf(candidate.slug[2]) <= effortLadder.indexOf(slug[2]))
+      && (typedSelectors || profile.kind !== 'hardest' || effortLadder.indexOf(candidate.slug[2]) <= Math.max(effortLadder.indexOf(slug[2]), effortLadder.indexOf('max')))
+      && (typedSelectors || profile.kind !== 'hardest' || effortLadder.indexOf(slug[2]) <= effortLadder.indexOf('max') || candidate.slug[2] === slug[2]))
+      .map(candidate => {
+        const replacement = replacementCandidate(selected, candidate.model, skipped);
+        return replacement && { ...candidate, options: replacement.options };
+      }).filter(Boolean)
+      .sort((a, b) => distance(a) - distance(b) || effortLadder.indexOf(a.slug[2]) - effortLadder.indexOf(b.slug[2]));
+    if (candidates.length) {
+      selected.model = candidates[0].model.id;
+      selected.options = candidates[0].options;
+      return { target: selected, limitations: [], skipped };
+    }
+    limitations.push('No advertised variant of the configured model identity supports the requested job settings.');
+    return { target, limitations, skipped };
+  }
+  return { target: selected, limitations };
+}
+
+function rejectionFrom(rejection) {
+  keys(rejection, ['target', 'code', 'rawError', 'validModelIds', 'preparedRequest'], 'model rejection');
+  const rejected = targetFrom(rejection.target);
+  if (rejected.inheritParent || inheritedAliases.has(rejected.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
+  if (rejection.code !== 'model-rejected') throw new Error('Model fallback requires model-rejected evidence');
+  string(rejection.rawError, 'rawError');
+  list(rejection.validModelIds, 'validModelIds').forEach(model => string(model, 'valid model id'));
+  return rejected;
+}
+
 export function resolveT3ModelFallback(input) {
-  keys(input, ['target', 'catalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
+  return resolveModelFallback(input);
+}
+
+function rejectionOrigin(rejection, catalog, provenance) {
+  const target = rejectionFrom(rejection);
+  const captured = provenance.get(hash(target));
+  if (rejection.preparedRequest !== undefined && (!captured || captured.source !== 'captured-prepared-request'
+    || captured.receiptHash !== (rejection.preparedRequest.receiptRef ?? rejection.preparedRequest.audit?.receiptHash))) throw new Error('Invalid rejected prepared request provenance');
+  const origin = captured?.catalog ?? catalog;
+  const known = origin.providers.find(provider => provider.providerInstanceId === target.providerInstanceId)?.models.some(model => model.id === target.model);
+  if (captured || known) targetFrom(target, origin);
+  return { target: clone(target), source: captured?.source ?? (known ? 'current-catalog' : 'reported-model-rejection'),
+    ...(captured || known ? { catalogHash: hash(origin) } : {}), ...(captured?.receiptHash ? { receiptHash: captured.receiptHash } : {}) };
+}
+
+function resolveModelFallback(input, provenance = new Map(), rejectedJobTarget) {
+  keys(input, ['target', 'catalog', 'rejectionCatalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
   const { routeName, runtimeMode } = input;
   const catalog = parseT3Catalog(input.catalog);
   const target = targetFrom(input.target);
+  const rejectionCatalog = input.rejectionCatalog === undefined ? null : parseT3Catalog(input.rejectionCatalog);
   const policy = policyFrom(input.policy ?? {});
   const routePolicy = policy.modelFallbacks?.[routeName];
   const evidence = list(input.modelRejections ?? [], 'modelRejections');
   const unchanged = { target, audit: { reason: 'configured-target', modelRejections: [], optionChanges: [] } };
   if (!evidence.length) return unchanged;
-  if (!routePolicy) throw new Error(`Model rejection fallback is not configured for ${routeName ?? 'role'}`);
   if (target.inheritParent || inheritedAliases.has(target.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
+  const provider = executableProvider(target, catalog, runtimeMode);
+  if (!routePolicy) throw new Error(`Model rejection fallback is not configured for ${routeName ?? 'role'}`);
   const family = t3ModelFamily(target.model, policy.modelFamilies);
-  if (family !== null && !Object.hasOwn(routePolicy.familyDefaults, family)) throw new Error(`Model fallback configuration is missing family default for ${family} on ${routeName}`);
-  const tableDefault = family === null ? routePolicy.unknownFamilyDefault : routePolicy.familyDefaults[family];
+  const defaults = routePolicy.providerDefaults?.[target.providerInstanceId] ?? routePolicy;
+  if (family !== null && !Object.hasOwn(defaults.familyDefaults, family) && !defaults.hostFallback) throw new Error(`Model fallback configuration is missing family default for ${family} on ${routeName}`);
+  const tableDefault = family === null ? defaults.unknownFamilyDefault : defaults.familyDefaults[family] ?? defaults.hostFallback;
   if (tableDefault.providerInstanceId !== target.providerInstanceId) throw new Error('Model fallback must preserve the configured provider instance');
+  if (rejectionCatalog) for (const candidate of [target, tableDefault]) {
+    if (hash(candidate) === hash(target) || rejectionCatalog.providers.find(value => value.providerInstanceId === candidate.providerInstanceId)?.models.some(model => model.id === candidate.model)) {
+      provenance.set(hash(candidate), { catalog: rejectionCatalog, source: 'supplied-rejection-catalog' });
+    }
+  }
   const permitted = new Set([hash(target), hash(tableDefault)]);
+  if (rejectedJobTarget) permitted.add(hash(rejectedJobTarget));
+  for (const [key, captured] of provenance) if (captured.source === 'captured-prepared-request') permitted.add(key);
+  const rejectionProvenance = [];
   for (const rejection of evidence) {
-    keys(rejection, ['target', 'code', 'rawError', 'validModelIds'], 'model rejection');
-    const rejected = targetFrom(rejection.target);
-    if (rejected.inheritParent || inheritedAliases.has(rejected.model)) throw new Error('Inherited aliases cannot be rejected model slugs');
-    if (rejection.code !== 'model-rejected') throw new Error('Model fallback requires model-rejected evidence');
-    string(rejection.rawError, 'rawError');
-    list(rejection.validModelIds, 'validModelIds').forEach(model => string(model, 'valid model id'));
+    const rejected = rejectionFrom(rejection);
     if (rejected.providerInstanceId !== target.providerInstanceId || !permitted.has(hash(rejected))) throw new Error('Foreign model rejection target or provider');
+    rejectionProvenance.push(rejectionOrigin(rejection, catalog, provenance));
   }
   unique(evidence.map(rejection => hash(rejection.target)), 'model rejection target');
   const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(target));
   if (!configuredRejection) throw new Error('Model fallback requires rejection of the configured target first');
-  const provider = executableProvider(target, catalog, runtimeMode);
-  if (provider.models.some(model => model.id === target.model)) targetFrom(target, catalog);
   const defaultRejection = evidence.find(rejection => hash(rejection.target) === hash(tableDefault));
   let selected = tableDefault;
-  let reason = 'model-family-default';
+  const skipped = [];
+  let reason = family !== null && !defaults.familyDefaults[family] ? 'model-original-host-default' : 'model-family-default';
   if (defaultRejection) {
-    const defaultModel = provider.models.find(model => model.id === tableDefault.model);
-    if (defaultModel) targetFrom(tableDefault, catalog);
     const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
     if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
     const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
+    const latestRejection = evidence.findLast(rejection => hash(rejection.target) === hash(tableDefault)
+      || provenance.get(hash(rejection.target))?.selectionReason === 'model-valid-equivalent');
+    const validIds = new Set(latestRejection.validModelIds);
     const effort = Object.entries(tableDefault.options).find(([id, value]) => effortKeys.has(id) && typeof value === 'string');
-    const slugEffort = /-(low|medium|high|xhigh|max|ultra)(?:-|$)/.exec(tableDefault.model)?.[1];
-    const candidates = provider.models.filter(model => defaultRejection.validModelIds.includes(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
+    const slugEffort = slugPattern.exec(tableDefault.model)?.[2];
+    const candidates = provider.models.filter(model => validIds.has(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
       .filter(model => routePolicy.strategy !== 'arena' || t3ModelFamily(model.id, policy.modelFamilies) === defaultFamily)
-      .map(model => ({ model, options: replacementOptions(tableDefault, model) }))
+      .map(model => replacementCandidate(tableDefault, model, skipped)).filter(Boolean)
       .map(candidate => ({ ...candidate, rank: [
         t3ModelFamily(candidate.model.id, policy.modelFamilies) === defaultFamily ? 0 : 1,
         effort ? Object.entries(candidate.options).some(([id, value]) => effortKeys.has(id) && value === effort[1]) ? 0 : 1
@@ -386,13 +585,13 @@ export function resolveT3ModelFallback(input) {
         modelDistance(tableDefault.model, candidate.model.id)
       ] }))
       .sort((left, right) => left.rank[0] - right.rank[0] || left.rank[1] - right.rank[1] || left.rank[2] - right.rank[2] || (left.model.id < right.model.id ? -1 : left.model.id > right.model.id ? 1 : 0));
-    if (!candidates.length) throw new Error('BLOCKED: no observed valid equivalent on the configured provider');
+    if (!candidates.length) throw new Error(`BLOCKED: no observed valid equivalent on the configured provider; ${skipped.map(value => value.reason).join('; ')}`);
     selected = { providerInstanceId: target.providerInstanceId, model: candidates[0].model.id, options: candidates[0].options };
     reason = 'model-valid-equivalent';
   }
   executableTarget(selected, catalog, runtimeMode);
   const model = provider.models.find(model => model.id === selected.model);
-  return { target: clone(selected), audit: { reason, modelRejections: clone(evidence), configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
+  return { target: clone(selected), audit: { reason, skipped, modelRejections: clone(evidence), rejectionProvenance, configuredTarget: clone(target), selectedTarget: clone(selected), familyDefault: clone(tableDefault), optionChanges: optionChanges(target, selected, model) } };
 }
 
 function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runtimeMode }) {
@@ -429,6 +628,16 @@ function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runti
   throw new Error(`${role === 'trail-reviewer' ? 'BLOCKED: independent review' : 'BLOCKED: configured target'}; ${detail}`);
 }
 
+function selectBoundTarget(target, { catalog, policy, role, reviewedModel, runtimeMode }) {
+  const family = t3ModelFamily(target.inheritParent ? catalog.inheritedModel : target.model, policy.modelFamilies);
+  const reviewedFamily = role === 'trail-reviewer' ? t3ModelFamily(reviewedModel, policy.modelFamilies) : null;
+  if (role === 'trail-reviewer' && (!reviewedFamily || !family || family === reviewedFamily)) throw new Error('BLOCKED: independent review; bound target must have a known different model family');
+  return { target, selection: executableTarget(target, catalog, runtimeMode), audit: {
+    configuredTarget: clone(target), selectedTarget: clone(target), configuredFamily: family,
+    selectedFamily: family, reviewedFamily, reason: 'configured-target', skipped: []
+  } };
+}
+
 function validatePanelFamilies(resolution, catalog, runtimeMode, preparedSelection) {
   const policy = resolution.selectionPolicy ?? {};
   for (const [name, count] of Object.entries(policy.minimumPanelFamilies ?? {})) {
@@ -443,15 +652,68 @@ function validatePanelFamilies(resolution, catalog, runtimeMode, preparedSelecti
   }
 }
 
+function preparationInput(input, catalog, resolution) {
+  const captured = Object.fromEntries(['bundleRoot', 'cwd', 'task', 'runId', 'stepId', 'routeName', 'roleName',
+    'priorRound', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'jobProfile', 'rejectedPreparedRequest', 'modelRejections'].filter(field => input[field] !== undefined).map(field => [field, clone(input[field])]));
+  return { ...captured, catalog: clone(catalog), resolution: clone(resolution), entry: input.entry ?? 1, round: input.round ?? 1,
+    originalBrief: input.originalBrief ?? input.task, mode: input.mode ?? 'async',
+    ...(typeof (input.reviewedModel ?? catalog.inheritedModel) === 'string' ? { reviewedModel: input.reviewedModel ?? catalog.inheritedModel } : {}),
+    ownedPaths: list(input.ownedPaths, 'ownedPaths').map(value => path.resolve(input.cwd, string(value, 'owned path'))) };
+}
+
+async function rejectedPreparation(reference, input, context, target) {
+  const { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, receipts } = context;
+  const saved = receipts.node(reference);
+  const selection = saved.audit?.selection;
+  const identity = saved.audit?.identity;
+  const preparation = saved.audit?.preparation;
+  if (saved.tool !== 'delegate_task' || !saved.arguments || !preparation?.input || !preparation.scope
+    || saved.audit?.receiptHash !== receiptHash(saved) || saved.audit?.payloadHash !== hash(saved.arguments)
+    || saved.audit?.contractsHash !== hash(contracts) || saved.audit?.roleHash !== hash(contracts.roles[selectedRole])
+    || hash(selection?.configuredTarget ?? null) !== hash(configured) || hash(selection?.selectedTarget ?? null) !== hash(saved.arguments.target)
+    || hash(target) !== hash(saved.arguments.target)
+    || identity?.parentThreadId !== catalog.parentThreadId || identity.runId !== input.runId
+    || identity.roleName !== selectedRole || identity.routeName !== (input.routeName ?? null) || identity.entry !== (input.entry ?? 1)
+    || identity.round !== (input.round ?? 1) || identity.stepId === input.stepId) throw new Error('Invalid rejected prepared request or new step identity');
+  const stable = value => {
+    const { modelRejections, rejectedPreparedRequest, ...scopeInput } = value;
+    return scopeInput;
+  };
+  const expectedInput = preparationInput({ ...input, reviewedModel, stepId: identity.stepId }, preparation.input.catalog, resolution);
+  if (hash(stable(expectedInput)) !== hash(stable(preparation.input))
+    || hash(preparation.scope) !== hash({ scope: scope.scope, path: scope.path })
+    || (preparation.input.modelRejections ?? []).some(rejection => !evidence.some(current => hash(current) === hash(rejection)))
+    || (preparation.input.rejectedPreparedRequest !== undefined && hash(preparation.input.rejectedPreparedRequest) !== hash(input.rejectedPreparedRequest ?? null))) throw new Error('Invalid rejected prepared request provenance');
+  if (preparation.input.catalog.inheritedProviderInstanceId !== catalog.inheritedProviderInstanceId) throw new Error('Invalid rejected prepared request parent provider');
+  await receipts.reconstruct(saved, async () => {
+    let rebuilt;
+    try {
+      if (preparation.input.priorPreparedRequest !== undefined) throw new Error('Nested retry');
+      rebuilt = await prepareDelegation(preparation.input, { ...preparation.scope, resolution: preparation.input.resolution }, receipts);
+    } catch { throw new Error('Invalid rejected prepared request preparation'); }
+    if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
+    return rebuilt;
+  });
+  return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy, chainOrigin: clone(preparation.chainOrigin),
+    source: 'captured-prepared-request', selectionReason: selection.reason, receiptHash: saved.audit.receiptHash };
+}
+
 export async function prepareT3Delegation(input) {
-  keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel', 'modelRejections'], 'delegation input');
+  const receipts = createReceiptLedger();
+  return receipts.complete(await prepareDelegation(receipts.input(input), undefined, receipts));
+}
+
+async function prepareDelegation(input, capturedScope, receipts) {
+  keys(input, ['bundleRoot', 'catalog', 'resolution', 'userRoot', 'routeName', 'roleName', 'entry', 'task', 'originalBrief', 'cwd', 'ownedPaths', 'runId', 'stepId', 'round', 'priorRound', 'priorPreparedRequest', 'rejectedPreparedRequest', 'mode', 'runtimeMode', 'interactionMode', 'timeoutMs', 'title', 'reviewedModel', 'modelRejections', 'jobProfile'], 'delegation input');
   const { bundleRoot, cwd, routeName, roleName, task, ownedPaths, runId, stepId, priorRound, priorPreparedRequest } = input;
   if (!path.isAbsolute(string(bundleRoot, 'bundleRoot')) || !path.isAbsolute(string(cwd, 'cwd'))) throw new Error('bundleRoot and cwd must be absolute');
   const catalog = parseT3Catalog(input.catalog);
   const contracts = contractsFrom(await readJSON(path.join(bundleRoot, 'config/t3-role-contracts.json')));
   if (Boolean(routeName) === Boolean(roleName)) throw new Error('Select exactly one routeName or roleName');
-  const scope = input.resolution ? { scope: 'explicit', path: null, resolution: input.resolution } : await resolveT3Resolution({ cwd, userRoot: input.userRoot ?? homedir(), contracts });
+  const scope = capturedScope ?? (input.resolution ? { scope: 'explicit', path: null, resolution: input.resolution } : await resolveT3Resolution({ cwd, userRoot: input.userRoot ?? homedir(), contracts }));
   const resolution = scope.resolution ? resolutionFrom(scope.resolution, contracts) : configureT3Resolution({ catalog, contracts });
+  const incoherentCandidates = [];
+  const policy = resolution.selectionPolicy ?? observedFallbackPolicy(resolution.routes, catalog, incoherentCandidates);
   const entry = input.entry ?? 1;
   if (!Number.isInteger(entry) || entry < 1) throw new Error('entry must be a positive one-based integer');
   const selectedRole = routeName ? contracts.routes[routeName]?.role : roleName;
@@ -460,10 +722,80 @@ export async function prepareT3Delegation(input) {
   const configured = routeName ? resolution.routes[routeName]?.entries[entry - 1] : resolution.roles[roleName];
   if (!configured) throw new Error('Route entry is unavailable');
   const reviewedModel = input.reviewedModel === undefined ? catalog.inheritedModel : string(input.reviewedModel, 'reviewedModel');
-  const modelResolution = resolveT3ModelFallback({ target: configured, catalog, policy: resolution.selectionPolicy, routeName, modelRejections: input.modelRejections, runtimeMode: input.runtimeMode });
-  const selected = selectTarget(modelResolution.target, { catalog, policy: resolution.selectionPolicy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  const evidence = list(input.modelRejections ?? [], 'modelRejections');
+  jobProfileFrom(input.jobProfile);
+  const originalMissing = !configured.inheritParent && !catalog.providers.find(provider => provider.providerInstanceId === configured.providerInstanceId)?.models.some(model => model.id === configured.model);
+  const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(configured));
+  const rejectedOriginal = configuredRejection && (originalMissing || configuredRejection.preparedRequest !== undefined);
+  const provenance = new Map();
+  const context = { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, receipts };
+  const captures = [];
+  if (input.rejectedPreparedRequest !== undefined) {
+    const saved = receipts.node(input.rejectedPreparedRequest);
+    if (!evidence.some(rejection => hash(rejection.target) === hash(saved.arguments?.target ?? null))) throw new Error('Invalid rejected prepared request or new step identity');
+    captures.push({ saved, captured: await rejectedPreparation(input.rejectedPreparedRequest, input, context, saved.arguments.target) });
+  }
+  for (const rejection of evidence) {
+    rejectionFrom(rejection);
+    if (rejection.preparedRequest !== undefined) captures.push({ saved: receipts.node(rejection.preparedRequest),
+      captured: await rejectedPreparation(rejection.preparedRequest, input, context, rejection.target) });
+  }
+  let chainOrigin = captures[0]?.captured.chainOrigin;
+  for (const { captured } of captures) {
+    if (hash(captured.chainOrigin) !== hash(chainOrigin)) throw new Error('Invalid rejected prepared request chain origin');
+  }
+  const baseSelection = chainOrigin
+    ? { target: targetFrom(chainOrigin.target, chainOrigin.catalog), audit: { skipped: clone(captures[0].saved.audit.selection.skipped ?? []) } }
+    : !rejectedOriginal ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
+  const jobBase = baseSelection?.target ?? configured;
+  chainOrigin ??= { configuredTarget: clone(configured), target: clone(jobBase), catalog: clone(catalog) };
+  if (captures.length) provenance.set(hash(jobBase), { catalog: parseT3Catalog(chainOrigin.catalog), source: 'captured-job-base' });
+  const adjustedCapture = captures.find(({ saved }) => saved.audit.selection.reason === 'job-profile-adjustment' || saved.audit.selection.rejectedJobTarget);
+  const job = captures.length || rejectedOriginal
+    ? { target: adjustedCapture ? targetFrom(adjustedCapture.saved.audit.selection.rejectedJobTarget ?? adjustedCapture.saved.arguments.target) : jobBase,
+      limitations: clone(captures[0]?.saved.audit.selection.jobLimitations ?? []) }
+    : jobSelection(jobBase, input.jobProfile, catalog);
+  let fallbackPolicy = policy;
+  for (const { saved, captured } of captures) {
+    const defaults = captured.policy.modelFallbacks?.[routeName];
+    const candidates = defaults?.providerDefaults?.[jobBase.providerInstanceId] ?? defaults;
+    for (const candidate of [...Object.values(candidates?.familyDefaults ?? {}), candidates?.unknownFamilyDefault, candidates?.hostFallback].filter(Boolean)) {
+      if (candidate.providerInstanceId === jobBase.providerInstanceId && !provenance.has(hash(candidate))
+        && evidence.some(rejection => hash(rejection.target) === hash(candidate))) {
+        try { targetFrom(candidate, captured.catalog); } catch { continue; }
+        provenance.set(hash(candidate), { ...captured, source: 'captured-policy-default' });
+      }
+    }
+    provenance.set(hash(saved.arguments.target), captured);
+    if (hash(saved.audit.selection.familyDefault ?? null) === hash(saved.arguments.target)) fallbackPolicy = captured.policy;
+  }
+  const adjustedRejections = evidence.filter(rejection => hash(job.target) !== hash(jobBase) && hash(rejection.target) === hash(job.target));
+  adjustedRejections.forEach(rejectionFrom);
+  if (adjustedRejections.length > 1) throw new Error('Duplicate model rejection target');
+  const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
+  const modelResolution = resolveModelFallback({ target: jobBase, catalog, policy: fallbackPolicy, routeName,
+    modelRejections: remainingRejections.length ? evidence : [], runtimeMode: input.runtimeMode }, provenance,
+    adjustedRejections.length ? job.target : undefined);
+  const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
+  const selected = (captures.length ? selectBoundTarget : selectTarget)(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  if (baseSelection) {
+    selected.audit = { ...selected.audit, configuredTarget: clone(configured),
+      reason: selected.audit.reason === 'configured-target' ? baseSelection.audit.reason ?? selected.audit.reason : selected.audit.reason,
+      skipped: [...new Map([...baseSelection.audit.skipped, ...selected.audit.skipped].map(value => [hash(value), value])).values()] };
+  }
   if (modelResolution.audit.reason !== 'configured-target') {
-    selected.audit = { ...selected.audit, ...modelResolution.audit, configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
+    selected.audit = { ...selected.audit, ...modelResolution.audit, skipped: [...selected.audit.skipped, ...modelResolution.audit.skipped], configuredTarget: clone(configured), configuredFamily: t3ModelFamily(configured.model, resolution.selectionPolicy?.modelFamilies) };
+  }
+  selected.audit.skipped = [...new Map([...selected.audit.skipped, ...incoherentCandidates, ...(job.skipped ?? [])].map(value => [hash(value), value])).values()];
+  if (input.jobProfile !== undefined || adjustedRejections.length) {
+    const selectedModel = selected.target.inheritParent ? null : catalog.providers.find(provider => provider.providerInstanceId === selected.target.providerInstanceId)?.models.find(model => model.id === selected.target.model);
+    selected.audit = { ...selected.audit, configuredTarget: clone(configured), selectedTarget: clone(selected.target),
+      configuredFamily: t3ModelFamily(configured.inheritParent ? catalog.inheritedModel : configured.model, policy.modelFamilies),
+      jobProfile: clone(input.jobProfile), jobLimitations: job.limitations, jobBaseTarget: clone(jobBase),
+      ...(hash(job.target) !== hash(jobBase) && !evidence.length ? { reason: 'job-profile-adjustment' } : {}),
+      ...(adjustedRejections.length ? { ...(!remainingRejections.length ? { reason: 'job-profile-rejected-original-line' } : {}), modelRejections: clone(evidence), rejectedJobTarget: clone(job.target),
+        rejectionProvenance: evidence.map(rejection => rejectionOrigin(rejection, catalog, provenance)) } : {}),
+      optionChanges: selectedModel && !configured.inheritParent ? optionChanges(configured, selected.target, selectedModel) : [] };
   }
   const { target, selection } = selected;
   const minimumFamilies = routeName && resolution.selectionPolicy?.minimumPanelFamilies?.[routeName];
@@ -495,6 +827,12 @@ export async function prepareT3Delegation(input) {
     `Package root ${bundleRoot}`, `Skill root ${path.join(bundleRoot, 'skills')}`,
     `Runtime binding ${path.join(bundleRoot, 'docs/runtime-binding.md')}`,
     `Model selection ${path.join(bundleRoot, 'docs/model-selection.md')}`,
+    ...(selectedRole === 'poteto-agent' ? [
+      `Read the full Poteto Mode entry at ${path.join(bundleRoot, 'skills/poteto-mode/SKILL.md')} before work.`,
+      `Read the complete workflow and Principles index there. If the entry is a wrapper, read ${path.join(bundleRoot, 'skills/poteto-mode/WORKFLOW.md')} through the end.`,
+      `Read each applicable principle leaf at ${path.join(bundleRoot, 'skills/principle-<name>/SKILL.md')}.`,
+      'The parent owns playbook coordination and independent review. This assignment owns only the bounded unit and its acceptance checks.'
+    ] : []),
     `Complete role instructions\n${role.instructions}`,
     `Role writes ${role.writes}. Constraints ${JSON.stringify(role.constraints)}.`,
     `Working directory ${cwd}`, `Owned paths ${JSON.stringify(absolutePaths)}`,
@@ -514,6 +852,10 @@ export async function prepareT3Delegation(input) {
     args.timeoutMs = input.timeoutMs;
   }
   const prepared = { tool: 'delegate_task', arguments: args, audit: { identity, ...selection, selection: { ...selected.audit, reviewedModel: selectedRole === 'trail-reviewer' ? reviewedModel : null, scope: scope.scope, path: scope.path }, payloadHash: hash(args), roleHash: hash(role), contractsHash: hash(contracts), catalogHash: hash(catalog), observed: false } };
+  prepared.audit.preparation = {
+    input: preparationInput(input, catalog, resolution), scope: { scope: scope.scope, path: scope.path }, policy: clone(policy), chainOrigin: clone(chainOrigin)
+  };
+  prepared.audit.receiptHash = receiptHash(prepared);
   if (priorPreparedRequest) {
     if (priorPreparedRequest.arguments?.clientRequestId !== args.clientRequestId || priorPreparedRequest.audit?.payloadHash !== hash(args) || hash(priorPreparedRequest.arguments) !== hash(args)) throw new Error('Retry identity or payload differs from saved request');
     return clone(priorPreparedRequest);

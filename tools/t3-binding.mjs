@@ -1,5 +1,6 @@
 export const t3BindingArtifacts = [
   { kind: "script", path: "tools/t3-orchestration.mjs", output: "scripts/t3-orchestration.mjs" },
+  { kind: "script", path: "tools/t3-receipts.mjs", output: "scripts/t3-receipts.mjs" },
   { kind: "reference", path: "src/schemas/t3-resolution.schema.json", output: "config/t3-resolution.schema.json" },
   { kind: "reference", path: "docs/t3-orchestration.md", output: "docs/t3-orchestration.md" },
   { kind: "reference", path: "docs/zh-CN/t3-orchestration.md", output: "docs/zh-CN/t3-orchestration.md" },
@@ -66,8 +67,31 @@ export function t3SkillBinding(packageRoot = "../../") {
     "Preview the full ordered selection. Preserve same-preset membership and",
     "order unless an explicit override replaces them. Omitted options remain",
     "inherited or unpinned. Requested settings need independent runtime evidence.",
+    "Fresh panels contain defaultCount independent seats, including inherited",
+    "aliases. A saved empty panel stays empty; the judge pool selects one seat.",
+    "Supply the intended jobProfile when preparing workflow requests:",
+    "routine, judgment, hardest, or verification, with urgent only when needed.",
+    "Preparation adjusts advertised effort and speed without changing model",
+    "identity. Verification retains speed; aliases remain untouched. Omission",
+    "keeps older callers compatible. If an adjusted selection is rejected,",
+    "retry the original configured role line in a new step before fallback.",
+    "Save every first actual prepared request, including verification and no-op",
+    "jobs. Its chainOrigin binds later rejections to that actual channel.",
+    "Bound chains validate their next target directly; unavailable actual",
+    "channels fail instead of invoking fresh-request channel fallback.",
+    "All candidates share slug/typed-selector coherence checks, including",
+    "observed defaults, equivalents, job changes and final explicit targets.",
+    "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
+    "Later rejected targets retain their own modelRejections[].preparedRequest;",
+    "keep earlier evidence unchanged and use each request's captured catalog.",
+    "Later model fallback retains all valid refusals, including adjustments;",
+    "never reselect a refused target as a default or equivalent.",
+    "Verified same-origin equivalents belong to later refusal history; append",
+    "errors in execution order and use the latest default/equivalent valid IDs.",
     "Use selectionPolicy for explicit channel fallbacks and ordered trail",
     "candidates. Route modelFallbacks handle evidenced model rejection only:",
+    "Without a policy, defaults derive only from runnable observed catalog",
+    "models on the original provider. Explicit user policy remains authoritative.",
     "Interrogate may use the closest observed equivalent; Arena and Architect",
     "keep runner replacements in the default's family. Inherited aliases do",
     "not use model fallback. Provider unavailability is a separate failure.",
@@ -86,6 +110,9 @@ export function t3SkillBinding(packageRoot = "../../") {
     "Never attribute an agent-selected target to T3's automatic choice.",
     "Native host manifests keep their own authority. T3 setup does not rewrite",
     "them, install a daemon, change personal configuration, or authorize probes.",
+    "The parent owns playbook coordination and independent review; a child",
+    "owns its bounded assignment and acceptance checks. Read the prepared",
+    "absolute Poteto Mode entry and its WORKFLOW.md wrapper fallback in full.",
     "",
     "Immediately link every created PR, including each stack layer, with",
     "`link_pull_request`. Inspect existing review and checks before watching.",
@@ -109,7 +136,36 @@ export function t3SkillBinding(packageRoot = "../../") {
 }
 
 export function t3RuntimeBindingGuide(runtime) {
-  return `# ${runtime} runtime binding\n\n${t3SkillBinding("../")}\n`;
+  const helpers = runtime === "codex" ? `
+The native bounded GitHub helpers scripts/github-workflow.mjs,
+scripts/github-autopilot-provider.mjs, and scripts/durable-run-state.mjs
+retain only their documented operations and gates. Read docs/github-workflow.md
+before invoking them. PR monitoring uses T3 watch_pull_request and
+unwatch_pull_request instead of native polling helpers.
+` : "";
+  return `# ${runtime} runtime binding\n\n${t3SkillBinding("../")}
+## Portable helpers and local evidence
+
+Resolve the actual installed package root before invoking a supported helper.
+The portable plan checker supports this exact package-aware command:
+
+\`node "<absolute-package-root>/skills/poteto-mode/scripts/check-plan.mjs" "<absolute-plan.md>"\`
+
+The checker validates plan structure only. It does not execute the plan or
+prove live acceptance. Other source-host helpers under Skill scripts remain
+reference-only unless this binding supports their exact operation.
+${helpers}
+For worktree cleanup, inspect git worktree list and the host's active and pinned
+threads through supported interfaces. Cross-check child tasks and processes.
+Do not execute Cursor worktree-audit.sh or assume Cursor transcript, SQLite,
+snapshot, or storage paths apply to T3. Missing active-thread or pinned-thread
+evidence leaves deletion candidates unresolved. Preserve cleanup approval gates.
+
+Read native transcripts only through supported host tools or authorized local
+records. Task summaries do not prove complete transcript access or sandboxed
+read-only execution. Report unavailable transcript evidence. Cleanup skills
+not exposed by the host remain unavailable; inspect the bounded diff locally.
+`;
 }
 
 export function t3ModelSelectionGuide() {
@@ -122,7 +178,10 @@ The nearest project .oh-my-stack/t3/resolution.json shadows the whole user
 configuration. Same-preset refresh preserves saved targets and ordered entries;
 availability is checked when preparing the selected task.
 selectionPolicy supplies explicit channel fallbacks, ordered trail candidates
-and route-scoped modelFallbacks. Confirmed model rejection can select a mapped
+and route-scoped modelFallbacks. Without a policy, prepare derives observed
+defaults on the original provider; configure saves them for explicit panels.
+An explicit policy replaces the whole policy, including derived defaults.
+Confirmed model rejection can select a mapped
 family default, then an observed equivalent from the rejection's valid IDs.
 Interrogate prefers the same family; Arena and Architect runner equivalents
 must stay in the default's family. Aliases do not use model fallback.
@@ -137,5 +196,13 @@ requires a new step identity; retry the saved request unchanged.
 Preview the complete selection before an authorized write. Omitted options
 remain inherited or unpinned. Native host manifests remain independent.
 Requested settings and reported model IDs do not prove option enforcement.
+Workflow callers supply jobProfile with kind routine, judgment, hardest, or
+verification and optional urgent. Omitted profiles retain configured choices.
+Effort moves two levels down, one down, or one up capped at max respectively.
+Urgent selects advertised fast speed; other jobs use standard speed.
+Verification preserves configured speed and effort. Aliases stay untouched.
+Use typed options or an advertised variant of the same model identity only.
+After adjusted-selection rejection, retry the original role line with a new
+stepId. Keep configured and selected choices and actual errors in the audit.
 `;
 }

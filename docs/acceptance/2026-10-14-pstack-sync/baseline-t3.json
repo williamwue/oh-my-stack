@@ -1,0 +1,21 @@
+{
+  "panels": {
+    "arena.runners": {
+      "actual": 0,
+      "expected": 2
+    },
+    "arena.cross-judge-pool": {
+      "actual": 0,
+      "expected": 2
+    },
+    "architect.runners": {
+      "actual": 0,
+      "expected": 2
+    },
+    "interrogate.reviewers": {
+      "actual": 0,
+      "expected": 2
+    }
+  },
+  "error": "Route entry is unavailable"
+}

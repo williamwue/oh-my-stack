@@ -6,12 +6,12 @@
 
 pstack engineering workflows, ported to Codex and Claude Code.
 
-The 0.16.0 release also adds independent Pi and OMP adapters. Its
-default distribution follows pinned pstack 0.15.17 and includes automatic routing.
+Version 0.18.0 follows pinned pstack 0.15.23 and includes automatic routing.
+Pi and OMP retain independent adapters.
 Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
 Installed releases may differ.
 
-The source candidate offers [opt-in T3 orchestration](docs/t3-orchestration.md)
+The source offers [opt-in T3 orchestration](docs/t3-orchestration.md)
 through detached Codex and Claude Code builds. This does not update an
 installed plugin or the default release packages.
 
@@ -55,7 +55,7 @@ For manual installation, use the guide for your tool. Each tool needs its own in
 | Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
 | Claude Code | [Marketplace installation](docs/install/claude-code.md). |
 | OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
-| Pi | [Independent native package](docs/pi-install.md), available in the local 0.16.0 release. |
+| Pi | [Independent native package](docs/pi-install.md), included in the native distribution. |
 
 Start a new session after installation. See [support](docs/support-policy.md)
 for tested tools and limitations.

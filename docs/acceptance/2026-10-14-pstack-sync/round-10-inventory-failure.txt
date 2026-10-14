@@ -1,0 +1,29 @@
+
+> oh-my-stack@0.17.1-pstack01523.20261014 check
+> npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test
+
+
+> oh-my-stack@0.17.1-pstack01523.20261014 generate:check
+> node tools/generate.mjs --check
+
+Verified 4 public targets with 77 of 89 source Skill.
+
+> oh-my-stack@0.17.1-pstack01523.20261014 docs:check
+> node tools/generate-skill-directory.mjs --check
+
+Skill directory matches the packaged catalog.
+
+> oh-my-stack@0.17.1-pstack01523.20261014 conformance:check
+> node tools/build-conformance.mjs --check
+
+Verified 12 conformance records from 6 scenarios.
+
+> oh-my-stack@0.17.1-pstack01523.20261014 release:check
+> node tools/build-release.mjs --check
+
+Verified reproducible release with 8 output files.
+
+> oh-my-stack@0.17.1-pstack01523.20261014 validate
+> node tools/validate.mjs
+
+tools/t3-receipts.mjs: executable is missing from security inventory

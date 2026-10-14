@@ -3,9 +3,11 @@
 import { createHash } from "node:crypto";
 import { existsSync, realpathSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveActiveResolution } from "./model-resolution.mjs";
+import { isDeepStrictEqual } from "node:util";
+import { resolveActiveResolution, resolveTaskSelection } from "./model-resolution.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -15,6 +17,15 @@ function assert(condition, message) {
 
 function hash(text) {
   return createHash("sha256").update(text).digest("hex");
+}
+
+function scopePath(path) {
+  return existsSync(path) ? realpathSync(path) : resolve(path);
+}
+
+function requestHash(request) {
+  const { requestSha256, ...audit } = request.audit;
+  return hash(JSON.stringify({ ...request, audit }));
 }
 
 function parseArgs(argv) {
@@ -33,7 +44,7 @@ function parseArgs(argv) {
 
 export async function prepareDelegation({
   bundleRoot = packageRoot, resolutionPath, cwd, userRoot, routeName, roleName, entry = 1,
-  task, taskName, parentModel, parentReasoning,
+  task, taskName, parentModel, parentReasoning, jobContext, inventoryPath, rejectedAdjustment, rejectedPreparedRequest,
 }) {
   assert(Boolean(routeName) !== Boolean(roleName), "provide exactly one routeName or roleName");
   assert(typeof task === "string" && task.trim(), "task instructions are required");
@@ -66,45 +77,86 @@ export async function prepareDelegation({
   }
   const contract = contracts.roles?.[role];
   assert(contract?.instructions && contract?.description, `unknown or incomplete role ${role}`);
-  const model = selection?.inheritParent || !selection ? parentModel : selection.model;
-  const reasoning = selection?.inheritParent || !selection ? parentReasoning : selection.reasoning;
-  assert(typeof model === "string" && model, "explicit model is required; supply parentModel for inheritance");
-  assert(typeof reasoning === "string" && reasoning, "explicit reasoning effort is required; supply parentReasoning for inheritance");
-  const message = [
-    `Oh My Stack role: ${role}`,
-    `Role purpose: ${contract.description}`,
-    "",
-    "Installed package context:",
-    `Package root: ${resolve(bundleRoot)}`,
-    `Skill root: ${resolve(bundleRoot, "skills")}`,
-    `Runtime binding guide: ${resolve(bundleRoot, "docs", "runtime-binding.md")}`,
-    `Model selection guide: ${resolve(bundleRoot, "docs", "model-selection.md")}`,
-    ...(role === "poteto-agent" ? [
-      `Read the full Poteto Mode entry at ${resolve(bundleRoot, "skills", "poteto-mode", "SKILL.md")} before work.`,
-      `Read its complete workflow, including the Principles index, at ${resolve(bundleRoot, "skills", "poteto-mode", "WORKFLOW.md")}.`,
-      `Read each applicable principle leaf at ${resolve(bundleRoot, "skills", "principle-<name>", "SKILL.md")}.`,
-    ] : []),
-    "",
-    "Complete role instructions:",
-    contract.instructions.trim(),
-    "",
-    "Assigned task:",
-    task.trim(),
-  ].join("\n");
-  return {
-    task_name: taskName,
-    fork_turns: "none",
-    model,
-    reasoning_effort: reasoning,
-    message,
-    audit: {
-      role, route: routeName ?? null, entry,
-      contractSha256: hash(contract.instructions.trim()),
-      taskSha256: hash(task.trim()),
-      resolutionInventorySha256: resolution?.observedInventory?.sha256 ?? null,
-      resolutionScope: active?.scope ?? (resolutionPath ? "explicit" : null),
-    },
+  const buildRequest = (taskInventoryRaw, rejection) => {
+    const taskSelection = resolveTaskSelection({
+      selection: selection ?? { inheritParent: true }, jobContext,
+      inventory: taskInventoryRaw ? JSON.parse(taskInventoryRaw) : undefined,
+      runtime: "codex", rejectedAdjustment: rejection,
+    });
+    const selected = taskSelection.selection;
+    const model = selected.inheritParent ? parentModel : selected.model;
+    const reasoning = selected.inheritParent ? parentReasoning : selected.reasoning;
+    assert(typeof model === "string" && model, "explicit model is required; supply parentModel for inheritance");
+    assert(typeof reasoning === "string" && reasoning, "explicit reasoning effort is required; supply parentReasoning for inheritance");
+    const message = [
+      `Oh My Stack role: ${role}`,
+      `Role purpose: ${contract.description}`,
+      "",
+      "Installed package context:",
+      `Package root: ${resolve(bundleRoot)}`,
+      `Skill root: ${resolve(bundleRoot, "skills")}`,
+      `Runtime binding guide: ${resolve(bundleRoot, "docs", "runtime-binding.md")}`,
+      `Model selection guide: ${resolve(bundleRoot, "docs", "model-selection.md")}`,
+      ...(role === "poteto-agent" ? [
+        `Read the full Poteto Mode entry at ${resolve(bundleRoot, "skills", "poteto-mode", "SKILL.md")} before work.`,
+        `Read its complete workflow, including the Principles index, at ${resolve(bundleRoot, "skills", "poteto-mode", "WORKFLOW.md")}.`,
+        `Read each applicable principle leaf at ${resolve(bundleRoot, "skills", "principle-<name>", "SKILL.md")}.`,
+      ] : []),
+      "",
+      "Complete role instructions:",
+      contract.instructions.trim(),
+      "",
+      "Assigned task:",
+      task.trim(),
+    ].join("\n");
+    const request = {
+      task_name: taskName,
+      fork_turns: "none",
+      model,
+      reasoning_effort: reasoning,
+      message,
+      audit: {
+        role, route: routeName ?? null, entry,
+        requestScope: { bundleRoot: scopePath(bundleRoot), cwd: scopePath(cwd ?? process.cwd()),
+          userRoot: scopePath(userRoot ?? homedir()), resolutionPath: resolutionPath ? scopePath(resolutionPath) : active?.path ? scopePath(active.path) : null },
+        taskSelection: { ...taskSelection.audit, inventoryJson: taskInventoryRaw, inventorySha256: taskInventoryRaw ? hash(taskInventoryRaw) : null,
+          requested: { model, reasoning } },
+        contractSha256: hash(contract.instructions.trim()),
+        taskSha256: hash(task.trim()),
+        resolutionInventorySha256: resolution?.observedInventory?.sha256 ?? null,
+        resolutionProfile: { preset: resolution?.preset ?? null, budget: resolution?.budget ?? null },
+        resolutionScope: active?.scope ?? (resolutionPath ? "explicit" : null),
+      },
+    };
+    request.audit.requestSha256 = requestHash(request);
+    return request;
   };
+  const taskInventoryRaw = inventoryPath ? await readFile(inventoryPath, "utf8") : null;
+  if (rejectedPreparedRequest === undefined) return buildRequest(taskInventoryRaw, rejectedAdjustment);
+
+  const request = buildRequest(taskInventoryRaw);
+  const saved = rejectedPreparedRequest;
+  assert(saved && typeof saved === "object" && !Array.isArray(saved)
+    && typeof saved.audit?.taskSelection?.inventoryJson === "string"
+    && saved.audit?.requestSha256 === requestHash(saved), "invalid rejected prepared request checksum or inventory receipt");
+  assert(isDeepStrictEqual(saved.audit.taskSelection.configuredSelection, request.audit.taskSelection.configuredSelection),
+    "rejected prepared request differs from the original configured entry");
+  const priorInventoryRaw = saved.audit.taskSelection.inventoryJson;
+  const expected = buildRequest(priorInventoryRaw);
+  assert(isDeepStrictEqual(saved, expected), "rejected prepared request differs from this role, configuration, profile, or request scope");
+  assert(rejectedAdjustment !== undefined, "a rejected prepared request requires rejectedAdjustment with the host rejection reason");
+  const restored = buildRequest(priorInventoryRaw, rejectedAdjustment);
+  request.model = restored.model;
+  request.reasoning_effort = restored.reasoning_effort;
+  request.audit.taskSelection = { ...restored.audit.taskSelection,
+    currentInventoryJson: request.audit.taskSelection.inventoryJson,
+    currentInventorySha256: request.audit.taskSelection.inventorySha256,
+    currentInventorySource: request.audit.taskSelection.inventorySource,
+    rejectedPreparedRequestSha256: saved.audit.requestSha256,
+    hostRejectionVerified: false,
+  };
+  request.audit.requestSha256 = requestHash(request);
+  return request;
 }
 
 async function readJsonLines(path) {
@@ -171,6 +223,12 @@ async function main() {
       taskName: options["task-name"],
       parentModel: options["parent-model"],
       parentReasoning: options["parent-reasoning"],
+      jobContext: options["job-context"] ? JSON.parse(await readFile(options["job-context"], "utf8")) : undefined,
+      inventoryPath: options.inventory,
+      rejectedPreparedRequest: options["rejected-prepared-request"]
+        ? JSON.parse(await readFile(options["rejected-prepared-request"], "utf8")) : undefined,
+      rejectedAdjustment: options["rejected-adjustment"]
+        ? JSON.parse(await readFile(options["rejected-adjustment"], "utf8")) : undefined,
     });
   } else {
     assert(options.request && options["parent-record"] && options["child-record"], "--request, --parent-record, and --child-record are required");

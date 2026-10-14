@@ -1,0 +1,14 @@
+{
+  "commit": "9ff0317a32890b49dc7891abac6e0510c10fb385",
+  "tree": "53fbc431c80e8a1e3eb81699bbf2c8f26e9a1876",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-a170d0aaa98219a8f64b8cceb30a41583a0d702f522180fe2206af02face779b",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 模型回退仍会生成 slug 与类型化选项矛盾的请求\n\n**Location**: [tools/t3-orchestration.mjs:376](tools/t3-orchestration.mjs:376)，`replacementOptions`、`resolveModelFallback`。\n\n**Finding**: 一致性修复仅覆盖 `jobSelection`。自动推导默认模型和选择等价模型仍直接复制兼容选项，没有校验它们与目标 slug 表达的 effort、speed 是否一致。最终 `executableTarget` 也不会拦截。\n\n**Evidence**: 在冻结提交 `9ff0317` 上通过纯内存 fixture 复现：\n\n1. 保存 `composer-2-high`，选项为 `reasoningEffort: high`、`fastMode: false`，不设置显式策略。\n2. 以 `verification` 准备请求，再提交包含该完整 `preparedRequest` 的模型拒绝记录。\n3. 当目录中的另一个模型为 `composer-2-max` 时，回退请求仍携带 `reasoningEffort: high`。\n4. 将另一个模型改为 `composer-2-high-fast`，回退请求仍携带 `fastMode: false`。\n\n两种请求均成功返回，原因均为 `model-family-default`。这重现了此前已接受的 slug／类型化选项冲突，只是入口变成了模型回退；未调用实际 provider。\n\n**Suggestion**: 将 slug 与类型化选项的一致性检查提取为共享候选校验，覆盖任务调整、默认模型推导及等价模型选择。无法形成一致请求的候选应排除并说明原因，补充上述回退链回归用例。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on shared candidate slug/typed-option coherence finding. Move consistency validation from job-only path to all request candidates and fallback generation. Personal explicit options remain authoritative; installation held."
+}

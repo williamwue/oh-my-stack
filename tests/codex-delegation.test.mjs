@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -204,4 +207,305 @@ test("every generated Codex spawning workflow carries the same binding while OMP
   const setupWorkflow = setup.includes("WORKFLOW.md")
     ? await readFile(join(bundleRoot, "skills", "setup-oh-my-stack", "WORKFLOW.md"), "utf8") : setup;
   assert.match(setupWorkflow, /configuration artifacts, not evidence/);
+});
+
+
+test("native prepare reports task choices, preserves saved configuration, and retries its original role line", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-codex-job-context-"));
+  try {
+    const model = await loadModel();
+    const currentRoot = await renderTarget(root, model, model.adapters.find((adapter) => adapter.id === "codex"));
+    const resolutionPath = join(root, "saved.json");
+    const inventoryPath = join(root, "inventory.json");
+    await writeFile(resolutionPath, JSON.stringify({ schemaVersion: 1, owner: "oh-my-stack", target: "codex",
+      routes: { "code.bug-fix": { kind: "single", role: "poteto-agent",
+        entries: [{ model: "configured-model", reasoning: "high" }] } },
+      roles: { explorer: { inheritParent: true, model: null, reasoning: null } } }));
+    await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: "codex",
+      source: "fixture host inventory", observedAt: "2026-10-14T00:00:00Z",
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "medium", "high", "max"] }] }));
+    const before = await readFile(resolutionPath, "utf8");
+    const common = { bundleRoot: currentRoot, resolutionPath, inventoryPath, routeName: "code.bug-fix",
+      taskName: "bounded_worker", task: "Implement only the assigned files." };
+    for (const [kind, effort] of [["hardest", "max"], ["judgment", "medium"],
+      ["routine", "low"], ["verification", "high"]]) {
+      const request = await prepareDelegation({ ...common, jobContext: { kind } });
+      assert.equal(request.model, "configured-model");
+      assert.equal(request.reasoning_effort, effort);
+      assert.deepEqual(request.audit.taskSelection.requested, { model: "configured-model", reasoning: effort });
+      assert.equal(request.audit.taskSelection.configured.reasoning, "high");
+      assert.equal(request.audit.taskSelection.speed.applied, false);
+      assert.equal(Object.hasOwn(request, "speed"), false);
+    }
+    const retry = await prepareDelegation({ ...common, jobContext: { kind: "hardest" },
+      rejectedAdjustment: { model: "configured-model", reasoning: "max", reason: "local host rejection fixture; backend not verified" } });
+    assert.equal(retry.reasoning_effort, "high");
+    assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
+    const inherited = await prepareDelegation({ ...common, routeName: undefined, roleName: "explorer",
+      jobContext: { kind: "routine" }, parentModel: "actual-parent", parentReasoning: "high" });
+    assert.equal(inherited.model, "actual-parent");
+    assert.equal(inherited.reasoning_effort, "high");
+    assert.equal(inherited.audit.taskSelection.reason, "inherited-alias-unchanged");
+    const taskPath = join(root, "task.txt");
+    const jobPath = join(root, "job.json");
+    await writeFile(taskPath, "Implement only the assigned files.");
+    await writeFile(jobPath, JSON.stringify({ kind: "routine", urgent: true }));
+    const cli = await promisify(execFile)(process.execPath, [join(currentRoot, "scripts/codex-delegation.mjs"),
+      "prepare", "--resolution", resolutionPath, "--route", "code.bug-fix", "--task-name", "cli_worker",
+      "--task-file", taskPath, "--job-context", jobPath, "--inventory", inventoryPath], { cwd: root });
+    const prepared = JSON.parse(cli.stdout);
+    assert.equal(prepared.model, "configured-model");
+    assert.equal(prepared.reasoning_effort, "low");
+    assert.equal(prepared.audit.taskSelection.speed.requested, "fast");
+    assert.match(prepared.audit.taskSelection.inventorySha256, /^[a-f0-9]{64}$/);
+    assert.equal(await readFile(resolutionPath, "utf8"), before);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+async function staleRetryFixture() {
+  const root = await mkdtemp(join(tmpdir(), "oms-native-stale-retry-"));
+  const resolutionPath = join(root, "saved.json");
+  const inventoryPath = join(root, "inventory.json");
+  const selection = { model: "configured-model", reasoning: "high", speed: "standard",
+    agent: "saved-agent", modelOptions: { verbosity: "low" } };
+  const resolution = { schemaVersion: 1, owner: "oh-my-stack", target: "codex",
+    routes: { "code.bug-fix": { kind: "single", role: "implementer", entries: [selection] } },
+    roles: { implementer: selection, reviewer: selection,
+      explorer: { inheritParent: true, alias: "auto", model: null, reasoning: null } } };
+  const inventory = { schemaVersion: 1, runtime: "codex", source: "local rejection fixture, backend not verified",
+    observedAt: "2026-10-14T00:00:00Z",
+    models: [{ id: "configured-model", reasoningEfforts: ["low", "high", "max"] }] };
+  await writeFile(resolutionPath, JSON.stringify(resolution));
+  await writeFile(inventoryPath, `${JSON.stringify(inventory, null, 2)}\n`);
+  const common = { bundleRoot, resolutionPath, cwd: root, inventoryPath, routeName: "code.bug-fix",
+    taskName: "bounded_worker", task: "Implement only the assigned files.", jobContext: { kind: "hardest" } };
+  const prepared = await prepareDelegation(common);
+  assert.equal(prepared.reasoning_effort, "max");
+  const rejectedPreparedRequest = JSON.parse(JSON.stringify(prepared));
+  const rejectedAdjustment = { model: prepared.model, reasoning: prepared.reasoning_effort,
+    reason: "local fixture host rejected max; backend not verified" };
+  return { root, resolutionPath, inventoryPath, inventory, resolution, selection, common,
+    prepared, rejectedPreparedRequest, rejectedAdjustment };
+}
+
+test("native retry restores high from the captured max request after inventory refresh or omission", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const before = await readFile(f.resolutionPath, "utf8");
+    const roleInput = { ...f.common, routeName: undefined, roleName: "implementer" };
+    const rolePrepared = await prepareDelegation(roleInput);
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
+    for (const [input, rejectedPreparedRequest] of [[f.common, f.rejectedPreparedRequest], [roleInput, rolePrepared]]) {
+      for (const inventoryPath of [f.inventoryPath, undefined]) {
+        const retry = await prepareDelegation({ ...input, inventoryPath,
+          rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment });
+        assert.equal(retry.model, "configured-model");
+        assert.equal(retry.reasoning_effort, "high");
+        assert.equal(retry.fork_turns, "none");
+        assert.equal(retry.task_name, "bounded_worker");
+        assert.equal(retry.message, rejectedPreparedRequest.message);
+        assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
+        assert.equal(retry.audit.taskSelection.hostRejectionVerified, false);
+        assert.deepEqual(retry.audit.taskSelection.configuredSelection, f.selection);
+        assert.deepEqual(retry.audit.taskSelection.rejectedAdjustment, f.rejectedAdjustment);
+        assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, rejectedPreparedRequest.audit.requestSha256);
+        assert.deepEqual(retry.audit.taskSelection.requested, { model: "configured-model", reasoning: "high" });
+        for (const field of ["inventoryJson", "inventorySha256", "inventorySource"]) {
+          assert.equal(retry.audit.taskSelection[field], rejectedPreparedRequest.audit.taskSelection[field]);
+        }
+      }
+    }
+    assert.equal(await readFile(f.resolutionPath, "utf8"), before);
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+function rehashPrepared(request) {
+  const { requestSha256, ...audit } = request.audit;
+  request.audit.requestSha256 = createHash("sha256").update(JSON.stringify({ ...request, audit })).digest("hex");
+  return request;
+}
+
+for (const currentCatalog of ["refreshed", "omitted"]) {
+  test(`native retry preserves captured inventory evidence with ${currentCatalog} current catalog`, async () => {
+    const f = await staleRetryFixture();
+    try {
+      const capturedJson = await readFile(f.inventoryPath, "utf8");
+      const currentJson = currentCatalog === "refreshed" ? `${JSON.stringify({ ...f.inventory,
+        source: "refreshed local compatibility fixture, backend not verified",
+        observedAt: "2026-10-14T01:00:00Z",
+        models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }, null, 2)}\n` : null;
+      if (currentJson) await writeFile(f.inventoryPath, currentJson);
+      const retry = await prepareDelegation({ ...f.common,
+        inventoryPath: currentJson ? f.inventoryPath : undefined,
+        rejectedPreparedRequest: f.rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment });
+      const audit = retry.audit.taskSelection;
+      assert.equal(retry.reasoning_effort, "high");
+      assert.equal(audit.rejectedAdjustment.reasoning, "max");
+      assert.equal(audit.inventoryJson, capturedJson);
+      assert.equal(audit.inventorySha256, createHash("sha256").update(capturedJson).digest("hex"));
+      assert.equal(audit.inventorySha256, f.prepared.audit.taskSelection.inventorySha256);
+      assert.equal(audit.inventorySource, "local rejection fixture, backend not verified");
+      assert.deepEqual(JSON.parse(audit.inventoryJson).models[0].reasoningEfforts, ["low", "high", "max"]);
+      assert.equal(audit.currentInventoryJson, currentJson);
+      assert.equal(audit.currentInventorySha256,
+        currentJson ? createHash("sha256").update(currentJson).digest("hex") : null);
+      assert.equal(audit.currentInventorySource,
+        currentJson ? "refreshed local compatibility fixture, backend not verified" : null);
+      assert.equal(audit.hostRejectionVerified, false);
+      assert.equal(audit.rejectedPreparedRequestSha256, f.prepared.audit.requestSha256);
+      assert.equal(retry.audit.requestSha256, rehashPrepared(structuredClone(retry)).audit.requestSha256);
+    } finally { await rm(f.root, { recursive: true, force: true }); }
+  });
+}
+
+test("native stale retry rejects receipts from another role, profile, task, entry, or scope", async () => {
+  const f = await staleRetryFixture();
+  try {
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
+    const retry = { ...f.common, rejectedPreparedRequest: f.rejectedPreparedRequest,
+      rejectedAdjustment: f.rejectedAdjustment };
+    for (const change of [
+      { routeName: undefined, roleName: "implementer" },
+      { routeName: undefined, roleName: "reviewer" },
+      { jobContext: { kind: "routine" } },
+      { jobContext: { kind: "hardest", urgent: true } },
+      { task: "Implement different files." },
+      { taskName: "another_worker" },
+      { cwd: join(f.root, "another-project") },
+      { userRoot: join(f.root, "another-user") },
+    ]) {
+      await assert.rejects(prepareDelegation({ ...retry, ...change }), /rejected prepared request/);
+    }
+    f.resolution.routes["code.bug-fix"].kind = "panel";
+    f.resolution.routes["code.bug-fix"].entries.push({ ...f.selection });
+    await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, entry: 2 }), /rejected prepared request/);
+    const otherPath = join(f.root, "same-config-another-path.json");
+    await writeFile(otherPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, resolutionPath: otherPath }), /rejected prepared request/);
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native stale retry rejects modified or unbound receipts even with recomputed checksums", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const retry = { ...f.common, inventoryPath: undefined,
+      rejectedPreparedRequest: f.rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment };
+    for (const mutate of [
+      request => { request.fork_turns = "all"; },
+      request => { request.message = "Forged assignment."; },
+      request => { request.model = "guessed-model"; },
+      request => { request.reasoning_effort = "ultra"; },
+      request => { request.audit.role = "reviewer"; },
+      request => { request.audit.route = "hardest.tasks"; },
+      request => { request.audit.contractSha256 = "0".repeat(64); },
+      request => { request.audit.taskSha256 = "0".repeat(64); },
+      request => { request.audit.requestScope.cwd = "/other/project"; },
+      request => { request.audit.resolutionScope = "project"; },
+      request => { request.audit.taskSelection.inventorySha256 = "0".repeat(64); },
+      request => { request.audit.taskSelection.configuredSelection.modelOptions.verbosity = "high"; },
+      request => { request.audit.taskSelection.requested.reasoning = "high"; },
+      request => { request.audit.taskSelection.selected.reasoning = "high"; },
+      request => { request.audit.taskSelection.jobContext = { kind: "routine" }; },
+      request => { request.audit.taskSelection.reason = "saved-role-line"; },
+      request => { request.audit.taskSelection.rejectedAdjustment = { model: "configured-model", reasoning: "max", reason: "forged" }; },
+      request => { request.audit.resolutionProfile = { preset: "other", budget: "other" }; },
+    ]) {
+      const forged = structuredClone(f.rejectedPreparedRequest);
+      mutate(forged);
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: forged }), /rejected prepared request/);
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: rehashPrepared(forged) }), /rejected prepared request/);
+    }
+    for (const invalid of [null, {}, { model: "configured-model", reasoning_effort: "max" }]) {
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: invalid }), /rejected prepared request/);
+    }
+    await assert.rejects(prepareDelegation({ ...retry, rejectedAdjustment: undefined }), /requires rejectedAdjustment/);
+    for (const change of [{ model: "guessed-model" }, { reasoning: "ultra" }, { reason: "" }]) {
+      await assert.rejects(prepareDelegation({ ...retry,
+        rejectedAdjustment: { ...f.rejectedAdjustment, ...change } }), /must identify/);
+    }
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native stale retry validates the original saved entry and preserves aliased selections", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const retry = { ...f.common, rejectedPreparedRequest: f.rejectedPreparedRequest,
+      rejectedAdjustment: f.rejectedAdjustment };
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low"] }] }));
+    await assert.rejects(prepareDelegation(retry), /saved model and reasoning/);
+    for (const selection of [
+      { ...f.selection, model: "another-family-model" },
+      { ...f.selection, reasoning: "low" },
+      { ...f.selection, modelOptions: { verbosity: "high" } },
+    ]) {
+      f.resolution.routes["code.bug-fix"].entries[0] = selection;
+      await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+      await assert.rejects(prepareDelegation({ ...retry, inventoryPath: undefined }), /rejected prepared request/);
+    }
+    f.resolution.routes["code.bug-fix"].entries[0] = { ...f.selection, reasoning: "invalid-effort" };
+    await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, inventoryPath: undefined }), /rejected prepared request/);
+    await assert.rejects(prepareDelegation(retry), /saved model and reasoning/);
+    for (const alias of ["auto", "inherit-parent"]) {
+      f.resolution.roles.explorer.alias = alias;
+      await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+      const input = { ...f.common, inventoryPath: undefined, routeName: undefined, roleName: "explorer",
+        parentModel: "actual-parent", parentReasoning: "high" };
+      const inherited = await prepareDelegation(input);
+      assert.equal(inherited.model, "actual-parent");
+      assert.equal(inherited.reasoning_effort, "high");
+      assert.equal(inherited.audit.taskSelection.reason, "inherited-alias-unchanged");
+      await assert.rejects(prepareDelegation({ ...input, rejectedPreparedRequest: inherited,
+        rejectedAdjustment: { model: "actual-parent", reasoning: "high", reason: "fixture rejection" } }), /rejected prepared request/);
+      await assert.rejects(prepareDelegation({ ...input, rejectedAdjustment:
+        { model: "actual-parent", reasoning: "high", reason: "fixture rejection" } }), /must identify/);
+    }
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native CLI consumes the saved prepared request and exact prior inventory bytes", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const requestPath = join(f.root, "prepared.json");
+    const rejectionPath = join(f.root, "rejection.json");
+    const taskPath = join(f.root, "task.txt");
+    const jobPath = join(f.root, "job.json");
+    await writeFile(requestPath, JSON.stringify(f.prepared));
+    await writeFile(rejectionPath, JSON.stringify(f.rejectedAdjustment));
+    await writeFile(taskPath, f.common.task);
+    await writeFile(jobPath, JSON.stringify(f.common.jobContext));
+    assert.equal(f.prepared.audit.taskSelection.inventoryJson, await readFile(f.inventoryPath, "utf8"));
+    assert.equal(f.prepared.audit.taskSelection.inventorySha256,
+      createHash("sha256").update(await readFile(f.inventoryPath, "utf8")).digest("hex"));
+    assert.equal(f.prepared.audit.requestSha256, rehashPrepared(structuredClone(f.prepared)).audit.requestSha256);
+    assert.deepEqual(f.prepared.audit.taskSelection.configuredSelection, f.selection);
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
+    for (const inventory of [["--inventory", f.inventoryPath], []]) {
+      const cli = await promisify(execFile)(process.execPath, [join(repoRoot, "tools/codex-delegation.mjs"),
+        "prepare", "--package", bundleRoot, "--resolution", f.resolutionPath, "--route", "code.bug-fix",
+        "--task-name", f.common.taskName, "--task-file", taskPath, "--job-context", jobPath,
+        "--rejected-adjustment", rejectionPath, "--rejected-prepared-request", requestPath,
+        ...inventory], { cwd: f.root });
+      const retry = JSON.parse(cli.stdout);
+      assert.equal(retry.model, "configured-model");
+      assert.equal(retry.reasoning_effort, "high");
+      assert.equal(retry.fork_turns, "none");
+      assert.equal(retry.message, f.prepared.message);
+      assert.equal(retry.audit.taskSelection.hostRejectionVerified, false);
+      assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, f.prepared.audit.requestSha256);
+      for (const field of ["inventoryJson", "inventorySha256", "inventorySource"]) {
+        assert.equal(retry.audit.taskSelection[field], f.prepared.audit.taskSelection[field]);
+      }
+      const currentJson = inventory.length ? await readFile(f.inventoryPath, "utf8") : null;
+      assert.equal(retry.audit.taskSelection.currentInventoryJson, currentJson);
+      assert.equal(retry.audit.taskSelection.currentInventorySha256,
+        currentJson ? createHash("sha256").update(currentJson).digest("hex") : null);
+      assert.equal(retry.audit.taskSelection.currentInventorySource, inventory.length ? f.inventory.source : null);
+    }
+  } finally { await rm(f.root, { recursive: true, force: true }); }
 });

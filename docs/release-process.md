@@ -11,10 +11,11 @@ SHA-256 checksums, and explicit verification maturity.
 The Codex plugin bundle is a fourth archive rooted at
 `oh-my-stack-marketplace/`. It contains the complete generated Codex
 package at `plugins/oh-my-stack/` and a repository marketplace at
-`.agents/plugins/marketplace.json`. All 95 current source public Skills remain discoverable
-and directly invocable. Codex descriptions are concise; full instructions and
-resources load on demand. Catalog categories distinguish 71 workflows and
-24 principles without moving either group outside the discovery directory.
+`.agents/plugins/marketplace.json`. All 77 default public Skills remain discoverable and directly invocable.
+Codex descriptions are concise; full instructions and resources load on demand.
+Catalog categories distinguish workflows and principles without moving either
+group outside the discovery directory. Optional extensions have their own
+explicitly selected catalogs.
 
 The Claude Code marketplace bundle is a fifth archive rooted at
 `oh-my-stack-claude-marketplace/`. It contains the generated Claude plugin at
@@ -306,15 +307,15 @@ node /absolute/path/to/oh-my-stack/tools/stable-marketplace.mjs \
 
 This downloads release assets and writes local evidence, but does not push.
 It verifies the native account's write access and exact repository, a published
-non-prerelease, all seven GitHub asset digests, same-release `SHA256SUMS`, clean
+non-prerelease, all eight GitHub asset digests, same-release `SHA256SUMS`, clean
 manifest provenance, safe archive inventories, exact tag commit and tree, a
-verified local check/review receipt, and an independent clean tagged rebuild of all seven assets.
+verified local check/review receipt, and an independent clean tagged rebuild of all eight assets.
 Cross-platform rebuilding may normalize only gzip's operating-system header
 byte to the published value; every other compressed byte, complete manifest
 and checksum file must match. Any normalization is recorded in the receipt.
 Published downloads and GitHub asset digests are always checked unchanged.
 Maintainer execution requires native repository write permission. Local receipt
-logs, review and seven asset hashes are verified against the same source. Actions
+logs, review and eight asset hashes are verified against the same source. Actions
 is not a publication authority. The receipt is local maintainer evidence, not a
 signed third-party attestation or a historical CI result.
 Inspect `promotion.json`, `snapshot/STABLE_RELEASE.json`, and the downloads.

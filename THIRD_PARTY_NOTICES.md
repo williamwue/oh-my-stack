@@ -146,3 +146,10 @@ at `f3fc5632f401156837ee3872f14fe33ccf1024ea`, under source ID
 `aihero-20261008`. Their five resources and the MIT license are retained in a
 separate immutable snapshot. This includes the original Bash HITL template;
 existing AIHero originals and source hashes are unchanged.
+
+## Current pstack candidate source
+
+The current local candidate imports pstack 0.15.23 from cursor/plugins at
+`ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a` under the MIT license.
+The immutable snapshot contains the original LICENSE. Older notices retain
+their historical source coordinates.

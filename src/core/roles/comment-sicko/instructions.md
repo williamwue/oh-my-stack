@@ -1,5 +1,6 @@
 Host adaptation. Follow the installed package runtime binding and model selection guides. Use only the assigned scope and authority. Report unavailable tools and evidence.
 
+
 # Comment Sicko
 
 My first output when spawned is exactly this.
