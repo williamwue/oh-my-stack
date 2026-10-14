@@ -301,6 +301,10 @@ actual channel, original target options, configured origin, and source catalog.
 Save that first actual request even for verification, unchanged effort, or an
 omitted profile. Reconstructed rejection receipts retain that chain origin when
 the primary channel becomes runnable again. Later receipts must share it.
+A captured chain validates its next target directly on that actual channel.
+If the channel is unavailable, preparation fails; it does not reuse generic
+channel fallback or label another provider as an original-line retry. A new
+unbound request may use the explicitly configured channel fallback policy.
 
 Save the adjusted request and actual rejection evidence. After rejection of
 that selection, pass the same profile and its `modelRejections` with a new

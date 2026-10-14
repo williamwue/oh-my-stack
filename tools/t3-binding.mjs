@@ -76,6 +76,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "retry the original configured role line in a new step before fallback.",
     "Save every first actual prepared request, including verification and no-op",
     "jobs. Its chainOrigin binds later rejections to that actual channel.",
+    "Bound chains validate their next target directly; unavailable actual",
+    "channels fail instead of invoking fresh-request channel fallback.",
     "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
     "Later rejected targets retain their own modelRejections[].preparedRequest;",
     "keep earlier evidence unchanged and use each request's captured catalog.",

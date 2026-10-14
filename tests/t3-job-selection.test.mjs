@@ -638,19 +638,21 @@ test('original option rejection can still select its configured model fallback a
   assert.equal(prepared.audit.selection.reason, 'model-family-default');
 });
 
-async function channelFallbackFixture(t) {
+async function channelFallbackFixture(t, requestOptions = {}) {
   const options = [select('reasoningEffort', ['low', 'high', 'max']), { id: 'fastMode', type: 'boolean' }];
   const configured = target('codex', 'gpt-primary', { reasoningEffort: 'high', fastMode: false });
   const actual = target('cursor', 'gpt-secondary', { reasoningEffort: 'high', fastMode: false });
   const replacement = target('cursor', 'gpt-secondary-default', { reasoningEffort: 'low', fastMode: false });
   const args = await input(t, catalog([{ id: configured.model, options }], [
     { id: actual.model, options }, { id: replacement.model, options }
-  ]), configured, { fallbackTargets: [actual], modelFallbacks: { 'interrogate.reviewers': {
+  ]), configured, { fallbackTargets: [actual, configured], modelFallbacks: { 'interrogate.reviewers': {
     strategy: 'interrogate', familyDefaults: { gpt: configured }, unknownFamilyDefault: configured,
     providerDefaults: { cursor: { familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement } }
   } } });
+  for (const provider of args.catalog.providers) provider.runtimeModes = ['auto'];
   args.catalog.providers[0].canRunChildTask = false;
   args.jobProfile = { kind: 'hardest', urgent: true };
+  Object.assign(args, requestOptions);
   const adjusted = await prepareT3Delegation(args);
   assert.deepEqual(adjusted.arguments.target, target('cursor', 'gpt-secondary', { reasoningEffort: 'max', fastMode: true }));
   const retry = { ...args, stepId: 'channel-original', rejectedPreparedRequest: adjusted,
@@ -780,6 +782,81 @@ test('a captured actual channel becoming unavailable cannot return the rejection
     modelRejections: [...retry.modelRejections, rejection(actual)] }), /Provider cursor cannot run child tasks/);
 });
 
+test('a rejected job adjustment stays on the captured channel through primary recovery and further refusals', async t => {
+  const requestOptions = { mode: 'wait', runtimeMode: 'auto', interactionMode: 'plan', timeoutMs: 2000, title: 'Bound channel retry' };
+  const { args, configured, actual, replacement, adjusted } = await channelFallbackFixture(t, requestOptions);
+  args.catalog.providers[0].canRunChildTask = true;
+  args.catalog.providers[1].canRunChildTask = false;
+  const adjustedRejection = { ...rejection(adjusted.arguments.target), preparedRequest: adjusted };
+  const retry = { ...args, stepId: 'bound-original', modelRejections: [adjustedRejection] };
+  await assert.rejects(prepareT3Delegation(retry), /Provider cursor cannot run child tasks/);
+
+  const fresh = await prepareT3Delegation({ ...args, stepId: 'fresh-primary' });
+  assert.deepEqual(fresh.arguments.target, target('codex', configured.model, { reasoningEffort: 'max', fastMode: true }));
+  assert.deepEqual(fresh.audit.preparation.chainOrigin.target, configured);
+
+  args.catalog.providers[1].canRunChildTask = true;
+  const original = await prepareT3Delegation(retry);
+  assert.deepEqual(original.arguments.target, actual);
+  assert.equal(original.audit.selection.reason, 'job-profile-rejected-original-line');
+  assert.deepEqual(original.audit.selection.configuredTarget, configured);
+  assert.deepEqual(original.audit.selection.selectedTarget, actual);
+  assert.deepEqual(original.audit.selection.jobBaseTarget, actual);
+  assert.deepEqual(original.audit.selection.rejectedJobTarget, adjusted.arguments.target);
+  assert.deepEqual(original.audit.selection.skipped, adjusted.audit.selection.skipped);
+  assert.deepEqual(original.audit.selection.modelRejections, [adjustedRejection]);
+  assert.equal(original.audit.selection.rejectionProvenance[0].receiptHash, adjusted.audit.receiptHash);
+  assert.deepEqual(original.audit.preparation.chainOrigin, adjusted.audit.preparation.chainOrigin);
+  assert.deepEqual(original.audit.requested, actual);
+  assert.deepEqual(original.audit.options, {
+    reasoningEffort: { source: 'explicit', requested: 'high', verified: false },
+    fastMode: { source: 'explicit', requested: false, verified: false }
+  });
+  assert.equal(original.audit.observed, false);
+  assert.deepEqual(Object.fromEntries(Object.keys(requestOptions).map(key => [key, original.arguments[key]])), requestOptions);
+  assert.deepEqual(original.audit.selection.jobLimitations, adjusted.audit.selection.jobLimitations);
+  assert.deepEqual(original.audit.selection.optionChanges, []);
+  assert.equal(original.audit.selection.configuredFamily, 'gpt');
+  assert.equal(original.audit.selection.selectedFamily, 'gpt');
+  assert.equal(original.audit.selection.reviewedFamily, null);
+
+  const originalRejection = { ...rejection(actual), preparedRequest: original };
+  const preparedDefault = await prepareT3Delegation({ ...args, stepId: 'bound-default',
+    modelRejections: [adjustedRejection, originalRejection] });
+  assert.deepEqual(preparedDefault.arguments.target, replacement);
+  assert.equal(preparedDefault.audit.selection.reason, 'model-family-default');
+  assert.deepEqual(preparedDefault.audit.preparation.chainOrigin, adjusted.audit.preparation.chainOrigin);
+
+  const equivalent = target('cursor', 'gpt-secondary-equivalent', { reasoningEffort: 'low', fastMode: false });
+  args.catalog.providers[1].models = [{ id: equivalent.model, options: [select('reasoningEffort', ['low']), { id: 'fastMode', type: 'boolean' }] }];
+  const prepared = await prepareT3Delegation({ ...args, stepId: 'bound-equivalent', modelRejections: [
+    adjustedRejection, originalRejection,
+    { ...rejection(replacement), preparedRequest: preparedDefault, validModelIds: [equivalent.model] }
+  ] });
+  assert.deepEqual(prepared.arguments.target, equivalent);
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+  assert.deepEqual(prepared.audit.selection.familyDefault, replacement);
+  assert.deepEqual(prepared.audit.selection.skipped, adjusted.audit.selection.skipped);
+  assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
+    [adjusted.audit.receiptHash, original.audit.receiptHash, preparedDefault.audit.receiptHash]);
+  assert.deepEqual(prepared.audit.preparation.chainOrigin, adjusted.audit.preparation.chainOrigin);
+});
+
+for (const [name, change, error] of [
+  ['cross-provider execution', provider => { provider.canRunCrossProviderChildTask = false; }, /Provider cursor cannot run cross-provider child tasks/],
+  ['original model', provider => { provider.models.shift(); }, /Model gpt-secondary is unavailable on cursor/],
+  ['original options', provider => { provider.models[0].options[0] = select('reasoningEffort', ['max']); }, /Unsupported value for option reasoningEffort/],
+  ['runtime mode', provider => { provider.runtimeModes = []; }, /Provider cursor does not advertise runtimeMode auto/]
+]) {
+  test(`a bound original request validates current ${name} without switching to a permitted primary`, async t => {
+    const { args, adjusted } = await channelFallbackFixture(t, { runtimeMode: 'auto' });
+    args.catalog.providers[0].canRunChildTask = true;
+    change(args.catalog.providers[1]);
+    await assert.rejects(prepareT3Delegation({ ...args, stepId: 'bound-current-availability',
+      rejectedPreparedRequest: adjusted, modelRejections: [rejection(adjusted.arguments.target)] }), error);
+  });
+}
+
 test('one pinned effort selector supplies a shared baseline only when every selector supports it', async t => {
   const configured = target('codex', 'gpt-multiple-efforts', { reasoningEffort: 'high' });
   const args = await input(t, catalog([{ id: configured.model, options: [
@@ -811,7 +888,7 @@ async function unadjustedChannelFixture(t, profile, level = 'high') {
   const replacement = target('cursor', 'gpt-secondary-default', values);
   const args = await input(t, catalog([{ id: configured.model, options }], [
     { id: actual.model, options: structuredClone(options) }, { id: replacement.model, options: structuredClone(options) }
-  ]), configured, { fallbackTargets: [actual], modelFallbacks: { 'interrogate.reviewers': {
+  ]), configured, { fallbackTargets: [actual, configured], modelFallbacks: { 'interrogate.reviewers': {
     strategy: 'interrogate', familyDefaults: { gpt: configured }, unknownFamilyDefault: configured,
     providerDefaults: { cursor: { familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement } }
   } } });

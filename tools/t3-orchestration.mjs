@@ -595,6 +595,16 @@ function selectTarget(target, { catalog, policy = {}, role, reviewedModel, runti
   throw new Error(`${role === 'trail-reviewer' ? 'BLOCKED: independent review' : 'BLOCKED: configured target'}; ${detail}`);
 }
 
+function selectBoundTarget(target, { catalog, policy, role, reviewedModel, runtimeMode }) {
+  const family = t3ModelFamily(target.inheritParent ? catalog.inheritedModel : target.model, policy.modelFamilies);
+  const reviewedFamily = role === 'trail-reviewer' ? t3ModelFamily(reviewedModel, policy.modelFamilies) : null;
+  if (role === 'trail-reviewer' && (!reviewedFamily || !family || family === reviewedFamily)) throw new Error('BLOCKED: independent review; bound target must have a known different model family');
+  return { target, selection: executableTarget(target, catalog, runtimeMode), audit: {
+    configuredTarget: clone(target), selectedTarget: clone(target), configuredFamily: family,
+    selectedFamily: family, reviewedFamily, reason: 'configured-target', skipped: []
+  } };
+}
+
 function validatePanelFamilies(resolution, catalog, runtimeMode, preparedSelection) {
   const policy = resolution.selectionPolicy ?? {};
   for (const [name, count] of Object.entries(policy.minimumPanelFamilies ?? {})) {
@@ -735,7 +745,7 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
   const modelResolution = resolveModelFallback({ target: jobBase, catalog, policy: fallbackPolicy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode }, provenance);
   const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
-  const selected = selectTarget(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
+  const selected = (captures.length ? selectBoundTarget : selectTarget)(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
   if (baseSelection) {
     selected.audit = { ...selected.audit, configuredTarget: clone(configured),
       reason: selected.audit.reason === 'configured-target' ? baseSelection.audit.reason ?? selected.audit.reason : selected.audit.reason,
