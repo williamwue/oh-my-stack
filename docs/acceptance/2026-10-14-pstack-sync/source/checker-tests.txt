@@ -1,0 +1,13 @@
+bun test v1.4.2 (744846f84)
+
+src/core/skills/poteto-mode/scripts/check-plan.test.ts:
+(pass) accepts ordinary, indented, and longer closing fences [229.06ms]
+(pass) accepts nested backticks and tilde info strings [89.79ms]
+(pass) keeps mismatched, shorter, and suffixed closers inside the fence [134.49ms]
+(pass) rejects headings and prose outside a proper close [139.29ms]
+(pass) rejects backtick info strings containing a backtick [44.23ms]
+
+ 5 pass
+ 0 fail
+ 18 expect() calls
+Ran 5 tests across 1 file. [661.00ms]

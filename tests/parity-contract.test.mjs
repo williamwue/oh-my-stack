@@ -42,8 +42,8 @@ async function fixture(t, sourceName = "skills/no-comments/SKILL.md") {
 }
 
 test("complete pinned runtime bodies, references, helpers, and promoted playbooks derive exactly", async () => {
-  assert.equal(manifest.revision, "978ca6e9c0e012047cd5058b8e829240336e704e");
-  assert.equal(manifest.sourceRoot, `upstream/snapshots/cursor-pstack-october-11/${manifest.revision}/pstack`);
+  assert.equal(manifest.revision, "ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a");
+  assert.equal(manifest.sourceRoot, `upstream/snapshots/cursor-pstack-october-14/${manifest.revision}/pstack`);
   const sourceRoot = join(root, manifest.sourceRoot);
   const sources = await paths(sourceRoot);
   const runtimeSources = sources.filter((path) => path.startsWith("skills/") || path.startsWith("agents/") || path.startsWith("automations/benny/skills/") || path.startsWith("automations/benny/templates/"));

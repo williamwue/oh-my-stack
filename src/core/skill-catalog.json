@@ -21,6 +21,7 @@
     "figure-it-out",
     "hillclimb",
     "how",
+    "in-your-own-words",
     "interrogate",
     "investigation",
     "ketchup",
@@ -2288,6 +2289,14 @@
         "pi"
       ],
       "generated": true
+    },
+    {
+      "kind": "skill",
+      "name": "in-your-own-words",
+      "path": "src/core/skills/in-your-own-words",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
     }
   ]
 }

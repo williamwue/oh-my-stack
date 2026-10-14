@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "sourceRoot": "upstream/snapshots/cursor-pstack-october-11/978ca6e9c0e012047cd5058b8e829240336e704e/pstack",
-  "revision": "978ca6e9c0e012047cd5058b8e829240336e704e",
+  "sourceRoot": "upstream/snapshots/cursor-pstack-october-14/ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a/pstack",
+  "revision": "ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a",
   "entries": [
     {
       "source": "skills/architect/references/design-red-flags.md",
@@ -70,8 +70,8 @@
     {
       "source": "skills/arena/SKILL.md",
       "output": "src/core/skills/arena/SKILL.md",
-      "sourceSha256": "f15524f216c1c63804b89edb4ff8e53bb21a7b8ed367368dedeb9468eeec6a92",
-      "outputSha256": "df9891dcddaab60b7ceb5e32e4c8ec1ed9fb67f53efaa91d1811bf65691bcbdb",
+      "sourceSha256": "ed72f6c132b1ce3974d949581d0adc5dade424fe20793ac3b4c4fae22ecb9354",
+      "outputSha256": "f1e3e0eb351b590c9aa67fe8271c80ddd0da67ebae8f52331f44dc63923098ec",
       "replacements": [
         {
           "before": "---\nname: arena\ndescription: \"Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape.\"\ndisable-model-invocation: true\n---\n\n",
@@ -90,7 +90,7 @@
         {
           "before": "`grok-4.7-xhigh-fast`",
           "after": "`observed code-model choice`",
-          "expectedOccurrences": 2,
+          "expectedOccurrences": 3,
           "category": "model-selection",
           "reason": "Concrete provider slugs are resolved by the current host inventory and preset."
         },
@@ -102,8 +102,8 @@
           "reason": "Concrete provider slugs are resolved by the current host inventory and preset."
         },
         {
-          "before": "If the Task tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*` and `grok-*`. With no family match, use `observed judgment-model choice`. If it rejects a default, use the closest valid slug of the same family from its error message.",
-          "after": "If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names.",
+          "before": "If the Task tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*`, and `grok-*` with `cursor-grok-*` and `composer-*`. A refused `composer-*` entry runs on `observed code-model choice`. With no family match, use `observed judgment-model choice`. If it rejects a default, use the closest valid slug of the same family from its error message.",
+          "after": "If the host rejects a configured entry, run that seat on its family's observed default and disclose it. Resolve families from host metadata. In the source-host examples, `cursor-grok-*` and `composer-*` belong to the `grok-*` family, so a refused composer entry uses that family's default. With no family match, use the observed judgment-model default. If the default is rejected, use the closest observed equivalent in the same family from the host's valid model IDs. Aliases inherit the parent model and never use model fallback.",
           "expectedOccurrences": 1,
           "category": "model-selection",
           "reason": "Replace source-only slug error fallback with the host inventory contract."
@@ -120,8 +120,8 @@
     {
       "source": "skills/automate-me/SKILL.md",
       "output": "src/core/skills/automate-me/SKILL.md",
-      "sourceSha256": "1510979b0b71b54284427a19c09918f8b1fdfc168f9b7f9e30098793a5ec88ef",
-      "outputSha256": "8951b7bff30225bb1fc4dec9c3a85f05d16993542361ae816848c901bc210576",
+      "sourceSha256": "30b35f3628c4fd8c11af0ada06d14cdc3b28901810caca2480f627d4d21acfbe",
+      "outputSha256": "3a80e210ef4306887c1e982cb110141bbff03778253f4a8f489e7a5ea7c68217",
       "replacements": [
         {
           "before": "---\nname: automate-me\ndescription: \"Use for \\\"automate me\\\", \\\"create/update/refresh my -mode skill\\\", \\\"turn/capture my preferences or working style into a skill\\\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts.\"\ndisable-model-invocation: true\n---\n\n",
@@ -258,8 +258,8 @@
     {
       "source": "skills/create-verification-skill/SKILL.md",
       "output": "src/core/skills/create-verification-skill/SKILL.md",
-      "sourceSha256": "644f2551403c1bca01a2855b34611b6e7be0ce0dc5b204514c376c0f6a6e6ac4",
-      "outputSha256": "dce666897b38f2171cfe5c76d5b8afd1d2c412c75ad15432eb4d6c2028d532eb",
+      "sourceSha256": "d353973547bf8ad8977eca645f4cd4feaed0d32f4b43d1448f906b0a76c4d694",
+      "outputSha256": "1fc95a4b410363e1a97dce99386a86b3fc16fd966c5a1a186c2ee9cf8fd8ab51",
       "replacements": [
         {
           "before": "---\nname: create-verification-skill\ndescription: \"Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \\\"make a control skill for this repo\\\", or when a project has no scripted way to prove UI/CLI/service behavior.\"\ndisable-model-invocation: true\n---\n\n",
@@ -280,8 +280,8 @@
     {
       "source": "skills/figure-it-out/SKILL.md",
       "output": "src/core/skills/figure-it-out/SKILL.md",
-      "sourceSha256": "d9574cc24929773d5c23f40626ae1e09660afddd7de48e08dd6494d9fff9bbf0",
-      "outputSha256": "59167275cf5256430510e4bd4229e237fc328070d24889999d2c59dae85a0ffa",
+      "sourceSha256": "bdb23cdbd82a1e6af094b495691c832a6f7f3ab9706ba9edbeb664ef51a726e1",
+      "outputSha256": "ffd6ae1cdbfb0bcc6bea8b7ed7f476902c157aa7cf6de986be3a7dcb9fd6b99e",
       "replacements": [
         {
           "before": "---\nname: figure-it-out\ndescription: \"Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'.\"\ndisable-model-invocation: true\n---\n\n",
@@ -302,15 +302,15 @@
     {
       "source": "skills/how/references/explorer-prompt.md",
       "output": "src/core/skills/how/references/explorer-prompt.md",
-      "sourceSha256": "a3b44a6e5bb16a6d4d1cac19db8ed5322ffd5f5f5d45baca4e73990ca096f8be",
-      "outputSha256": "a3b44a6e5bb16a6d4d1cac19db8ed5322ffd5f5f5d45baca4e73990ca096f8be",
+      "sourceSha256": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1",
+      "outputSha256": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1",
       "replacements": []
     },
     {
       "source": "skills/how/SKILL.md",
       "output": "src/core/skills/how/SKILL.md",
-      "sourceSha256": "47cfe3e6fe55c49c3bdf8ad1b645dcd5fece8f0c36fd22d2e7221f9faa71f648",
-      "outputSha256": "ec4e82d12965202ff009f89c942be583fe5432eb694345891de9bed54fede5c0",
+      "sourceSha256": "08a00079bb15b4258874ac3ff62d4ca7e94350ffedb521d0fd296dc9dd21904e",
+      "outputSha256": "15d811e20863ee4b88e717436982ba26353daaa4777574eb805e9f9e6f79270b",
       "replacements": [
         {
           "before": "---\nname: how\ndescription: \"Use for \\\"how does X work\\\", code walkthroughs before changing something, and placement / ownership / layering questions (\\\"where should this live\\\", \\\"which package owns this\\\", \\\"is this the right layer\\\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation.\"\ndisable-model-invocation: true\n---\n\n",
@@ -401,8 +401,8 @@
     {
       "source": "skills/interrogate/SKILL.md",
       "output": "src/core/skills/interrogate/SKILL.md",
-      "sourceSha256": "25341c393f515c1e1fa9bce668b7551e9f98c195113a460ff524d3c1f7f50cd9",
-      "outputSha256": "aed1df86127d3b4f7822432033ca9d5a3918b44acf9f249698a95b1591f759da",
+      "sourceSha256": "a16dfe179005abc22a4651b82f25b0c8ab953284276efe4e6dc341958fb63647",
+      "outputSha256": "c075d88d85b545bdb60ff748597365a0b93cbe1337714f78c524a2d039bed325",
       "replacements": [
         {
           "before": "---\nname: interrogate\ndescription: \"Use for \\\"interrogate\\\", \\\"adversarial review\\\", \\\"multi-model review\\\", \\\"challenge this\\\", \\\"stress test this code\\\", \\\"find blind spots\\\", or \\\"tear this apart\\\". Multiple LLM reviewers challenge changes from independent angles.\"\ndisable-model-invocation: true\n---\n\n",
@@ -433,8 +433,8 @@
           "reason": "Concrete provider slugs are resolved by the current host inventory and preset."
         },
         {
-          "before": "Families go by prefix: `claude-*` and `grok-*`.",
-          "after": "Resolve model families from observed host metadata.",
+          "before": "Families go by prefix: `claude-*`, and `grok-*` with `cursor-grok-*` and `composer-*`.",
+          "after": "Resolve model families from observed host metadata. In the source-host examples, `cursor-grok-*` and `composer-*` belong to the `grok-*` family.",
           "expectedOccurrences": 1,
           "category": "model-selection",
           "reason": "Provider-family matching follows the host inventory."
@@ -472,12 +472,12 @@
     {
       "source": "skills/ketchup/SKILL.md",
       "output": "src/core/skills/ketchup/SKILL.md",
-      "sourceSha256": "f460a861cf2179808abc24b5588c94709f8cc3e58d4da2e44baf89556f53b587",
-      "outputSha256": "4eb02749f919047cb84b4eb4d7200b33985dcca431dee7377a347c58c4c7a86d",
+      "sourceSha256": "d9704b154081af306b6583b2752498d454f9d761e9989ff1f037efd414f86bb4",
+      "outputSha256": "76d33a6d6a291627c410aebd4d919cd9947638f28e3a163c158e609c8444ca2a",
       "replacements": [
         {
-          "before": "---\nname: ketchup\ndescription: \"Catch the user up on everything in this chat since their last message, in plain words. Give each action item an executive summary with enough context to make the call. Use for /ketchup.\"\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: ketchup\ndescription: \"Catch the user up on everything in this chat since their last message, in plain words. Give each action item an executive summary with enough context to make the call. Use for /ketchup.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: ketchup\ndescription: \"Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup.\"\ndisable-model-invocation: true\n---\n",
+          "after": "---\nname: ketchup\ndescription: \"Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -524,8 +524,8 @@
     {
       "source": "skills/no-comments/SKILL.md",
       "output": "src/core/skills/no-comments/SKILL.md",
-      "sourceSha256": "5c5b0882297d704c3a9720c52b7a793c68b013eaf717989f0945624efdfe2b05",
-      "outputSha256": "5a0f7fb94f78b90c70feac6b83a2c8cea41b9880aeee0a697b38417879fbbba7",
+      "sourceSha256": "078ecfe224eafbb017f6476870612838bf6dbe38c0b697e12f0c887d0313f17e",
+      "outputSha256": "4c4bee27434928cd6fed034910df42c083904814b0608a0efd20fe70d4f9e0cb",
       "replacements": [
         {
           "before": "---\nname: no-comments\ndescription: \"Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints.\"\ndisable-model-invocation: true\n---\n\n",
@@ -535,7 +535,7 @@
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
         },
         {
-          "before": "`subagent_type: \"Comment Sicko\"`",
+          "before": "`subagent_type: \"comment-sicko\"`",
           "after": "the `comment-sicko` role from the generated runtime binding",
           "expectedOccurrences": 1,
           "category": "tools",
@@ -560,15 +560,15 @@
     {
       "source": "skills/poteto-help/references/recipes.md",
       "output": "src/core/skills/poteto-help/references/recipes.md",
-      "sourceSha256": "1872323419a3e5c7783b1933f7a180ca26c25a6e1f4ec83bd65e091ebbfb812b",
-      "outputSha256": "1872323419a3e5c7783b1933f7a180ca26c25a6e1f4ec83bd65e091ebbfb812b",
+      "sourceSha256": "315b211b6cc6b19e3da7c4a1e8ddde2d8557588713d0b894509bd22821c709da",
+      "outputSha256": "315b211b6cc6b19e3da7c4a1e8ddde2d8557588713d0b894509bd22821c709da",
       "replacements": []
     },
     {
       "source": "skills/poteto-help/SKILL.md",
       "output": "src/core/skills/poteto-help/SKILL.md",
-      "sourceSha256": "3fe669c7c3b8f52c18b7c68ecce01c8691e844b9d2b41a8a6ff6432341451986",
-      "outputSha256": "49b3468ef67c2848c0ed4021547ba08dc714374d732372c60ecc6b26634c6f32",
+      "sourceSha256": "be47823adf42732c579156cf461d0d416f141f038aaa69d6e23fa4e25f2b8eb0",
+      "outputSha256": "8abd2a9abaaf3e9f87d31845d064c9e5414678dbed8102ed662871037b21a5b5",
       "replacements": [
         {
           "before": "---\nname: poteto-help\ndescription: Guides users through pstack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.\ndisable-model-invocation: true\n---\n\n",
@@ -717,8 +717,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autonomous-run.md",
       "output": "src/core/skills/poteto-mode/playbooks/autonomous-run.md",
-      "sourceSha256": "15e54ad3ac92565613980772d8708de6e19cc4690bfd4bb3fb8836522407377b",
-      "outputSha256": "199d382603730875435150d739add9cf1eed15aaf870d0f045a691dc1d3ddae8",
+      "sourceSha256": "6ac974fd2b09748add56493e89f578a35a6a9289e1026515878d81ef3cf129d1",
+      "outputSha256": "ef6c84b7adc5fee3969252c878c270cafffa7f3d848f418c4a9e50d36e6cc5a1",
       "replacements": [
         {
           "before": "`AskQuestion`",
@@ -739,8 +739,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autonomous-run.md",
       "output": "src/core/skills/autonomous-run/SKILL.md",
-      "sourceSha256": "15e54ad3ac92565613980772d8708de6e19cc4690bfd4bb3fb8836522407377b",
-      "outputSha256": "b38f739ea85ebf797b974ba4d5144728f0614f6240ab9e2786a927a2b0b10178",
+      "sourceSha256": "6ac974fd2b09748add56493e89f578a35a6a9289e1026515878d81ef3cf129d1",
+      "outputSha256": "6a2a08ad7cac6dad04a3bce6c14f70d37c5ca4ea9eb77cecd9398b5bd5277e46",
       "replacements": [
         {
           "before": "### Autonomous run",
@@ -775,8 +775,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autopilot-full.md",
       "output": "src/core/skills/poteto-mode/playbooks/autopilot-full.md",
-      "sourceSha256": "05ca30a16242c19d0c78ba1e88cca66f858d75252cb154fd740099fe292de802",
-      "outputSha256": "0739676067cb09ce9b2187cfd840bcb26fb2475e5e925810bc63a3590ff1d52d",
+      "sourceSha256": "41112e0a71dbd38f4bdf64289008c9d2b3cf8dcbb2f91438e4e146bd7b372207",
+      "outputSha256": "bcc0c1d69aa418e746841736ec2a543587f21880aa989e3c6167354140e14bef",
       "replacements": [
         {
           "before": "`deslop` skill from the `cursor-team-kit` plugin (`/deslop`)",
@@ -804,8 +804,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autopilot-full.md",
       "output": "src/core/skills/autopilot-full/SKILL.md",
-      "sourceSha256": "05ca30a16242c19d0c78ba1e88cca66f858d75252cb154fd740099fe292de802",
-      "outputSha256": "11cc6e3aac037ed9fa31784f02fe0ece7f94da3a29ae231f5578563093e4b675",
+      "sourceSha256": "41112e0a71dbd38f4bdf64289008c9d2b3cf8dcbb2f91438e4e146bd7b372207",
+      "outputSha256": "d4502491970d70631c6c1c9a05200045333707a6070a16290fdfb6bad18ae4d4",
       "replacements": [
         {
           "before": "### Autopilot-full",
@@ -841,43 +841,21 @@
           "expectedOccurrences": 1,
           "category": "path",
           "reason": "Promoted entry uses the complete source playbook script tree."
-        },
-        {
-          "before": "references/bugbot-triage.md",
-          "after": "../poteto-mode/references/bugbot-triage.md",
-          "expectedOccurrences": 1,
-          "category": "path",
-          "reason": "Promoted entry resolves source mode references."
         }
       ]
     },
     {
       "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
       "output": "src/core/skills/poteto-mode/playbooks/autopilot-stack.md",
-      "sourceSha256": "007c0a3b12011954a224f54773ef4ad7b75918be0a311914c1b51ad4e794c1e5",
-      "outputSha256": "4f05a44d10e091788b7a78a0ec29f698ab7bc24bc8b0d9ae01377bbaa4db13ef",
-      "replacements": [
-        {
-          "before": "`deslop` skill from the `cursor-team-kit` plugin (`/deslop`)",
-          "after": "available code-cleanup skill from the generated runtime binding",
-          "expectedOccurrences": 1,
-          "category": "tools",
-          "reason": "A source-host plugin is not assumed installed; preserve cleanup before commit."
-        },
-        {
-          "before": "Cursor cloud agent",
-          "after": "independent remote child where supported by the host",
-          "expectedOccurrences": 1,
-          "category": "tools",
-          "reason": "Preserve independent verification without assuming a vendor cloud agent."
-        }
-      ]
+      "sourceSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
+      "outputSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
+      "replacements": []
     },
     {
       "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
       "output": "src/core/skills/autopilot-stack/SKILL.md",
-      "sourceSha256": "007c0a3b12011954a224f54773ef4ad7b75918be0a311914c1b51ad4e794c1e5",
-      "outputSha256": "07910e4adc53e220afef183ee4df3d0ee8d5801d11163b0e11ce2e7f7daed75c",
+      "sourceSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
+      "outputSha256": "2d3a35a55b3390382e2bc501f93559eda0f87aab65a2cdde62b2701227ca430f",
       "replacements": [
         {
           "before": "### Autopilot-stack",
@@ -887,40 +865,19 @@
           "reason": "Promote the source playbook as an explicit portable entry while preserving its full steps."
         },
         {
-          "before": "`deslop` skill from the `cursor-team-kit` plugin (`/deslop`)",
-          "after": "available code-cleanup skill from the generated runtime binding",
-          "expectedOccurrences": 1,
-          "category": "tools",
-          "reason": "A source-host plugin is not assumed installed; preserve cleanup before commit."
-        },
-        {
-          "before": "Cursor cloud agent",
-          "after": "independent remote child where supported by the host",
-          "expectedOccurrences": 1,
-          "category": "tools",
-          "reason": "Preserve independent verification without assuming a vendor cloud agent."
-        },
-        {
           "before": "scripts/",
           "after": "../poteto-mode/scripts/",
           "expectedOccurrences": 1,
           "category": "path",
           "reason": "Promoted entry uses the complete source playbook script tree."
-        },
-        {
-          "before": "references/bugbot-triage.md",
-          "after": "../poteto-mode/references/bugbot-triage.md",
-          "expectedOccurrences": 1,
-          "category": "path",
-          "reason": "Promoted entry resolves source mode references."
         }
       ]
     },
     {
       "source": "skills/poteto-mode/playbooks/babysit.md",
       "output": "src/core/skills/poteto-mode/playbooks/babysit.md",
-      "sourceSha256": "a0346c37c2313f36a863b80f66ee7b98059c2242adf74fc7b3e48abdb9ec6f5a",
-      "outputSha256": "f65787b730ad2350c3e43c636972826d61d326e6f4acd770b15d5e5063816d40",
+      "sourceSha256": "e261c1ff5581e0f8fc6c686f34de4b535f87473e77beabea7dd8323021214610",
+      "outputSha256": "cfe7aee8c69097f557783131940ce1eb3bf05a37ab377fa39b425dbfeb75c0d2",
       "replacements": [
         {
           "before": "Cursor's built-in babysit skill",
@@ -934,8 +891,8 @@
     {
       "source": "skills/poteto-mode/playbooks/babysit.md",
       "output": "src/core/skills/babysit/SKILL.md",
-      "sourceSha256": "a0346c37c2313f36a863b80f66ee7b98059c2242adf74fc7b3e48abdb9ec6f5a",
-      "outputSha256": "6a91a254b4cf9b3a931554fd5e2f38292a5d22814ed11b42045a445132586158",
+      "sourceSha256": "e261c1ff5581e0f8fc6c686f34de4b535f87473e77beabea7dd8323021214610",
+      "outputSha256": "3c7ed665773a69f126e45240a4387c10ad1c8b6b2063b05fde03c4988cbf4fa6",
       "replacements": [
         {
           "before": "### Babysit",
@@ -970,8 +927,8 @@
     {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
       "output": "src/core/skills/poteto-mode/playbooks/bug-fix.md",
-      "sourceSha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13",
-      "outputSha256": "42ce834ab08aefefaf9aba4b24ca6452ed9428ba8e68a977ff0296370d11ca22",
+      "sourceSha256": "66e26542dad131cfd7df80ac0cdf81ed4d85e7b5e3f0eb65b933888760c4831f",
+      "outputSha256": "56456231863e1d65a93160670a658ce692aff7c302e96768abc03b8e6231a875",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -992,8 +949,8 @@
     {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
       "output": "src/core/skills/bug-fix/SKILL.md",
-      "sourceSha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13",
-      "outputSha256": "493b6c8ed0e252b8c11ec56b0c05034be6e9b15cb5212dec5d79f255649741d9",
+      "sourceSha256": "66e26542dad131cfd7df80ac0cdf81ed4d85e7b5e3f0eb65b933888760c4831f",
+      "outputSha256": "b8490ee0420464ddb961f0d5786aa7a6c28bb4b0da695d338806a1e48860d349",
       "replacements": [
         {
           "before": "### Bug fix",
@@ -1028,8 +985,8 @@
     {
       "source": "skills/poteto-mode/playbooks/eval.md",
       "output": "src/core/skills/poteto-mode/playbooks/eval.md",
-      "sourceSha256": "b862bfa2fae2399abf047a8e80d3e3dddb64003af96fb1cebb625216131e36bb",
-      "outputSha256": "8e446e3c3c4f2be98c8a9d2fc6333fd0b12d11bb1dc8a1855a7b4770cd565003",
+      "sourceSha256": "a93d449a908236afa6645179651844094b1547dbab4e484cffcdda630e4b90bf",
+      "outputSha256": "1f3cba8268f6e6ba8b4d61fb211f494eee6e7235f7b1af7d27674c5095ee12e6",
       "replacements": [
         {
           "before": "~/.cursor/projects/*/",
@@ -1043,8 +1000,8 @@
     {
       "source": "skills/poteto-mode/playbooks/eval.md",
       "output": "src/core/skills/eval/SKILL.md",
-      "sourceSha256": "b862bfa2fae2399abf047a8e80d3e3dddb64003af96fb1cebb625216131e36bb",
-      "outputSha256": "055c9a72b78d17a474253767d23b4e8b6f7103874719de098b1e86b7e9bfbfa6",
+      "sourceSha256": "a93d449a908236afa6645179651844094b1547dbab4e484cffcdda630e4b90bf",
+      "outputSha256": "426a35e4003944f12e862c61d699d8b135db6c351900e9e6e1c62f5b83536a42",
       "replacements": [
         {
           "before": "### Eval",
@@ -1072,8 +1029,8 @@
     {
       "source": "skills/poteto-mode/playbooks/feature.md",
       "output": "src/core/skills/poteto-mode/playbooks/feature.md",
-      "sourceSha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62",
-      "outputSha256": "0636da7fb3cb66de52e5c118adfc4ed20acf31383178874d9c873013fe1bc422",
+      "sourceSha256": "af8ce700b99953741cb547e34308fde0cf6b98ce67e1652c800d0deedf53aba1",
+      "outputSha256": "655811733a3b2e9229a72383712c02d4b69b779c972ec56a73bbead6871ad5b1",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -1087,8 +1044,8 @@
     {
       "source": "skills/poteto-mode/playbooks/feature.md",
       "output": "src/core/skills/feature/SKILL.md",
-      "sourceSha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62",
-      "outputSha256": "35af9d7e10e38baa043a1abebe336ea42903fd4b51d91d1e3bb432688eec56eb",
+      "sourceSha256": "af8ce700b99953741cb547e34308fde0cf6b98ce67e1652c800d0deedf53aba1",
+      "outputSha256": "1a5ae1d0f63de0d071973bd5a18272888f205258d92eca84f9517a6719ba307d",
       "replacements": [
         {
           "before": "### Feature",
@@ -1116,8 +1073,8 @@
     {
       "source": "skills/poteto-mode/playbooks/hillclimb.md",
       "output": "src/core/skills/poteto-mode/playbooks/hillclimb.md",
-      "sourceSha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
-      "outputSha256": "45fed9b225db822316fbc1b60d71fc75b6f6268124fe9902e557918949ba38d5",
+      "sourceSha256": "942c1565b75ad02a2cb6230dd7c1ebd87e19f59a00319ebac2b6616007bf018f",
+      "outputSha256": "0a7f7c5b090358e36b59065d7f86dd317943a519521f55e70a2707b1eb5ba694",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -1131,8 +1088,8 @@
     {
       "source": "skills/poteto-mode/playbooks/hillclimb.md",
       "output": "src/core/skills/hillclimb/SKILL.md",
-      "sourceSha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
-      "outputSha256": "45580ad4f66b767ce0b354106809a0579720d625816cd094e6b1cf88e4ea193c",
+      "sourceSha256": "942c1565b75ad02a2cb6230dd7c1ebd87e19f59a00319ebac2b6616007bf018f",
+      "outputSha256": "6aa44d6b1975a58b4ffff6d8dc56b743837992436cdc7eddcc88d8529182bec2",
       "replacements": [
         {
           "before": "### Hillclimb",
@@ -1189,8 +1146,8 @@
     {
       "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
       "output": "src/core/skills/poteto-mode/playbooks/multi-phase-plan.md",
-      "sourceSha256": "27d310e3fc3937a60b8fcbe1318f9d249a7477a722907bf85b3e4eb3dc436b11",
-      "outputSha256": "7661a9943f1411c9c429bd779e38c5ab1e4918a0e5149a3b8991cf6f5d34314c",
+      "sourceSha256": "5f239457bfdec3345c92caa06c59bf0257c662b89353f25a1c02ea942dcd00b1",
+      "outputSha256": "de5c91a55624000a198cd5a38a47e386a27aab35196f0771373c4c8a74b2e68f",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -1212,14 +1169,35 @@
           "expectedOccurrences": 3,
           "category": "tools",
           "reason": "Locate matching host control tools instead of an assumed plugin."
+        },
+        {
+          "before": "node pstack/skills/poteto-mode/scripts/check-plan.mjs <plan.md>",
+          "after": "node \"<absolute installed package>/skills/poteto-mode/scripts/check-plan.mjs\" <plan.md>",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Resolve the installed package once and use the exact portable checker path from either entry."
+        },
+        {
+          "before": "pstack/skills/",
+          "after": "src/core/skills/",
+          "expectedOccurrences": 9,
+          "category": "path",
+          "reason": "Repository source examples refer to the current semantic tree, not the upstream checkout."
+        },
+        {
+          "before": "and fix every line it prints",
+          "after": "and fix every line it prints. Resolve the installed package from this entry. The [bundled checker](../scripts/check-plan.mjs) is the portable helper authorized by the runtime binding",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Provide a real relative link while retaining a package-aware executable command."
         }
       ]
     },
     {
       "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
       "output": "src/core/skills/multi-phase-plan/SKILL.md",
-      "sourceSha256": "27d310e3fc3937a60b8fcbe1318f9d249a7477a722907bf85b3e4eb3dc436b11",
-      "outputSha256": "a6ca379287043f89b0001908f431ad7182fb19ada0d76d3f684b2aecf4344a8c",
+      "sourceSha256": "5f239457bfdec3345c92caa06c59bf0257c662b89353f25a1c02ea942dcd00b1",
+      "outputSha256": "bab54ecb1c879e8ab3947970315d94e9ba0ed7ec14c3e0f36a3a0f283eb80107",
       "replacements": [
         {
           "before": "### Multi-phase or multi-PR plan",
@@ -1262,14 +1240,35 @@
           "expectedOccurrences": 1,
           "category": "path",
           "reason": "Promoted entry resolves source mode references."
+        },
+        {
+          "before": "node pstack/skills/poteto-mode/../poteto-mode/scripts/check-plan.mjs <plan.md>",
+          "after": "node \"<absolute installed package>/skills/poteto-mode/scripts/check-plan.mjs\" <plan.md>",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Resolve the installed package once and use the exact portable checker path from either entry."
+        },
+        {
+          "before": "pstack/skills/",
+          "after": "src/core/skills/",
+          "expectedOccurrences": 9,
+          "category": "path",
+          "reason": "Repository source examples refer to the current semantic tree, not the upstream checkout."
+        },
+        {
+          "before": "and fix every line it prints",
+          "after": "and fix every line it prints. Resolve the installed package from this entry. The [bundled checker](../poteto-mode/scripts/check-plan.mjs) is the portable helper authorized by the runtime binding",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Provide a real relative link while retaining a package-aware executable command."
         }
       ]
     },
     {
       "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
       "output": "src/core/skills/poteto-mode/playbooks/opening-a-pr.md",
-      "sourceSha256": "931070f5674e81a191277253d4e02b1c45d091b223f93bf506d3896a428a5967",
-      "outputSha256": "19b16957a99a81a65822a0d8b6817a73d4624f2ef181fd1acad526253109d824",
+      "sourceSha256": "a5aef646de8b651306c2d10974623650e4a013a245aec1c00525bbe0e31bfa76",
+      "outputSha256": "b7935a08e33e3b2113b3bfef58028b1b758b43e1d5553f421a876c646b528ebf",
       "replacements": [
         {
           "before": "`Task`",
@@ -1290,8 +1289,8 @@
     {
       "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
       "output": "src/core/skills/opening-a-pr/SKILL.md",
-      "sourceSha256": "931070f5674e81a191277253d4e02b1c45d091b223f93bf506d3896a428a5967",
-      "outputSha256": "59a0cccef22bb2d2ce48345f8979592ba1074584b3f10fc3a5b3256339e5d01b",
+      "sourceSha256": "a5aef646de8b651306c2d10974623650e4a013a245aec1c00525bbe0e31bfa76",
+      "outputSha256": "d256a13e20b1ec5d403ccc8c88323afc1d5109d1d281708a6c00242e3456e5fe",
       "replacements": [
         {
           "before": "### Opening a PR",
@@ -1326,8 +1325,8 @@
     {
       "source": "skills/poteto-mode/playbooks/orchestrate.md",
       "output": "src/core/skills/poteto-mode/playbooks/orchestrate.md",
-      "sourceSha256": "d42b4375f1bd4ce23da0b575a198571a2117df7eea10c3c9fc6d92ae1053f7be",
-      "outputSha256": "ffe39a93c771eb18f31cf736cb8223eda7eb72daba3db2d7c4e28a1776b9f96b",
+      "sourceSha256": "08dce6c9e7be1d13bc6944ab9b51665f935c531437f5e088bc53d2a62099ef05",
+      "outputSha256": "cbe24a857aec0468cab856b19efb6bc0a8dca1b499c3757537faba2ca86d8f81",
       "replacements": [
         {
           "before": "`environment: \"cloud\"`",
@@ -1376,8 +1375,8 @@
     {
       "source": "skills/poteto-mode/playbooks/orchestrate.md",
       "output": "src/core/skills/orchestrate/SKILL.md",
-      "sourceSha256": "d42b4375f1bd4ce23da0b575a198571a2117df7eea10c3c9fc6d92ae1053f7be",
-      "outputSha256": "ab91cf666b28862a9eef8b8d15654157afbdb4b193fba3baa0d3a55497fb90e7",
+      "sourceSha256": "08dce6c9e7be1d13bc6944ab9b51665f935c531437f5e088bc53d2a62099ef05",
+      "outputSha256": "5893ece7a499a05ca3fd720b19f4d0700f5ed476d1bc10b0b2eb40b67175d5b0",
       "replacements": [
         {
           "before": "### Orchestrate",
@@ -1469,8 +1468,8 @@
     {
       "source": "skills/poteto-mode/playbooks/perf-issue.md",
       "output": "src/core/skills/poteto-mode/playbooks/perf-issue.md",
-      "sourceSha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
-      "outputSha256": "8cfb4f16fc3b074ebba50b3fbd32ec74c55c8295da4edbbb472a9a522f579b1b",
+      "sourceSha256": "c12aa2f82de7651a11676a3d5fea168f539b7f0faaa3a501d279255dd2a469c8",
+      "outputSha256": "0987cbe0ee9884f4b614c6d76ddc964f397d4125bc7b59420ea7268e03e5f7df",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -1484,8 +1483,8 @@
     {
       "source": "skills/poteto-mode/playbooks/perf-issue.md",
       "output": "src/core/skills/perf-issue/SKILL.md",
-      "sourceSha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
-      "outputSha256": "d6f77b37cc43ee232686b193b6d318b4741a17099875b94088c82d77c9489eb3",
+      "sourceSha256": "c12aa2f82de7651a11676a3d5fea168f539b7f0faaa3a501d279255dd2a469c8",
+      "outputSha256": "9f3a22335b22c0231717ae25aeeb97ee8240579f61233c6b182aeb937474c137",
       "replacements": [
         {
           "before": "### Perf issue",
@@ -1542,8 +1541,8 @@
     {
       "source": "skills/poteto-mode/playbooks/refactoring.md",
       "output": "src/core/skills/poteto-mode/playbooks/refactoring.md",
-      "sourceSha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96",
-      "outputSha256": "4b151bafe90095553b6d38817ad01bb10e9e78b7ddc88724ea27c478a4d232eb",
+      "sourceSha256": "0f5dd38113379ea8cf61e2182eca0a7478eea9a869eb40c2dddab3335aeca197",
+      "outputSha256": "9a15ca8a3997ce446352d3145949ad1292403633de7a2db12a1dc0549a6f1bd2",
       "replacements": [
         {
           "before": "`grok-4.7-xhigh-fast`",
@@ -1557,8 +1556,8 @@
     {
       "source": "skills/poteto-mode/playbooks/refactoring.md",
       "output": "src/core/skills/refactoring/SKILL.md",
-      "sourceSha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96",
-      "outputSha256": "78285552a549e56693bf303bccf5f743c09a0a37a071174db1e00ff459ac5826",
+      "sourceSha256": "0f5dd38113379ea8cf61e2182eca0a7478eea9a869eb40c2dddab3335aeca197",
+      "outputSha256": "aa5630adc65cc13f6359eb64cf5ece18438cd73d151826c08ceb9a46f67df2f4",
       "replacements": [
         {
           "before": "### Refactoring",
@@ -1586,15 +1585,15 @@
     {
       "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
       "output": "src/core/skills/poteto-mode/playbooks/runtime-forensics.md",
-      "sourceSha256": "594f02c40c243a346e1f57b688ecf2ed5e882f21b3d24ed2204d1ac6f1c24a8a",
-      "outputSha256": "594f02c40c243a346e1f57b688ecf2ed5e882f21b3d24ed2204d1ac6f1c24a8a",
+      "sourceSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
+      "outputSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
       "output": "src/core/skills/runtime-forensics/SKILL.md",
-      "sourceSha256": "594f02c40c243a346e1f57b688ecf2ed5e882f21b3d24ed2204d1ac6f1c24a8a",
-      "outputSha256": "57e7a4f06b8c88b97a416a7616d545adafa7b8bc7a6a2c6d546d36a6025f12cf",
+      "sourceSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
+      "outputSha256": "ade34718a994375d34f0e52a05c5fda9c1c49514bf06a3395d943f011a6c6459",
       "replacements": [
         {
           "before": "### Runtime forensics",
@@ -1615,8 +1614,8 @@
     {
       "source": "skills/poteto-mode/playbooks/session-pickup.md",
       "output": "src/core/skills/poteto-mode/playbooks/session-pickup.md",
-      "sourceSha256": "1604fb463f7c7410d43fa024ca76c1c1824c166a01fd69d61f073d06fdca2a47",
-      "outputSha256": "7201d5e006d50853db874afe6e858abba55c5baf0e1bac11197a526338d6955d",
+      "sourceSha256": "d194f2a7ef392c1598ef3f0e3b561370ca25c2c7a78308007af4aa46ada8ee12",
+      "outputSha256": "0704eff1617a4a620cac3825b252f70a62aaaf370132d477364eaa0096add5a8",
       "replacements": [
         {
           "before": "~/.cursor/projects/*/",
@@ -1630,8 +1629,8 @@
     {
       "source": "skills/poteto-mode/playbooks/session-pickup.md",
       "output": "src/core/skills/session-pickup/SKILL.md",
-      "sourceSha256": "1604fb463f7c7410d43fa024ca76c1c1824c166a01fd69d61f073d06fdca2a47",
-      "outputSha256": "6149b5f76fab58ae8b01dfb7cca44d11dec32d88fa48bd06b8e2cd67d97b8842",
+      "sourceSha256": "d194f2a7ef392c1598ef3f0e3b561370ca25c2c7a78308007af4aa46ada8ee12",
+      "outputSha256": "6fd34a665497e9c204e97a04023cd487f9166a7f5f7c347f750fb279b0e2ee20",
       "replacements": [
         {
           "before": "### Session pickup",
@@ -1659,8 +1658,8 @@
     {
       "source": "skills/poteto-mode/playbooks/shipping.md",
       "output": "src/core/skills/poteto-mode/playbooks/shipping.md",
-      "sourceSha256": "19f3f6803a7bbe9ff04f624b03e3b55f07ac0a05e991aa00d5fe51239b920b2a",
-      "outputSha256": "cf9c1c7a9c6d5f95bd4eb65b91277fe1e0045091b1f4f1f5529e3ffd033ce6f0",
+      "sourceSha256": "bf56339bdf7e0223bcff5abf4e8599e3f5b547b3fcc3b4ce9475e6e7dda14a9f",
+      "outputSha256": "64eb171608e29e83ed15193289926bbf9ac3b3cde30461353621a1e5210ddd0e",
       "replacements": [
         {
           "before": "from `cursor-team-kit`",
@@ -1681,8 +1680,8 @@
     {
       "source": "skills/poteto-mode/playbooks/shipping.md",
       "output": "src/core/skills/shipping/SKILL.md",
-      "sourceSha256": "19f3f6803a7bbe9ff04f624b03e3b55f07ac0a05e991aa00d5fe51239b920b2a",
-      "outputSha256": "7ea8ff1a45cffb9a5ef9cdd81959f44ac781fe8e58b2e77ca3c0f6be4a3ccd4d",
+      "sourceSha256": "bf56339bdf7e0223bcff5abf4e8599e3f5b547b3fcc3b4ce9475e6e7dda14a9f",
+      "outputSha256": "a38903a5a78b7be9e8f275195b3b06802f77d3c480de77e6f66bc806cd2a46ec",
       "replacements": [
         {
           "before": "### Shipping",
@@ -1717,15 +1716,15 @@
     {
       "source": "skills/poteto-mode/playbooks/trace-forensics.md",
       "output": "src/core/skills/poteto-mode/playbooks/trace-forensics.md",
-      "sourceSha256": "e8a671fd5511a894f90c933bca75815e7a1d730cb53333075a80b0927e81acfc",
-      "outputSha256": "e8a671fd5511a894f90c933bca75815e7a1d730cb53333075a80b0927e81acfc",
+      "sourceSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5",
+      "outputSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/playbooks/trace-forensics.md",
       "output": "src/core/skills/trace-forensics/SKILL.md",
-      "sourceSha256": "e8a671fd5511a894f90c933bca75815e7a1d730cb53333075a80b0927e81acfc",
-      "outputSha256": "e314ececbaa4f677c2bdf1551c032ecf2770296a9f052dfe6771df681092c8b4",
+      "sourceSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5",
+      "outputSha256": "aca5205239064aac9fbdb6c6137afebeb9be9c6b4c1c67c355b608e64accc167",
       "replacements": [
         {
           "before": "### Trace forensics",
@@ -1775,8 +1774,8 @@
     {
       "source": "skills/poteto-mode/playbooks/worktree-cleanup.md",
       "output": "src/core/skills/poteto-mode/playbooks/worktree-cleanup.md",
-      "sourceSha256": "fc464dc4121926df1704f483c5feca83717c0a40b4651d3e11bd3aedd89441b6",
-      "outputSha256": "e18df39e025dd790d7287c571bb30b2f948c5467a8d1a17be38c5f77c789c2e0",
+      "sourceSha256": "be04ae0afe19d4a4da5bcc4e94455f68dbebd1cda6eb0f456ca0d358ecf76c00",
+      "outputSha256": "1e80b77e06656d64413975e584585f128a74582af9b28af08644c442a8951471",
       "replacements": [
         {
           "before": "Cursor",
@@ -1790,8 +1789,8 @@
     {
       "source": "skills/poteto-mode/playbooks/worktree-cleanup.md",
       "output": "src/core/skills/worktree-cleanup/SKILL.md",
-      "sourceSha256": "fc464dc4121926df1704f483c5feca83717c0a40b4651d3e11bd3aedd89441b6",
-      "outputSha256": "c3153a2c00a4034f783c7d1911baa468b236596fe0931f139abe5d11f64c73d9",
+      "sourceSha256": "be04ae0afe19d4a4da5bcc4e94455f68dbebd1cda6eb0f456ca0d358ecf76c00",
+      "outputSha256": "108c6621883168d84d667896b1d995138f3a6a870170dea2ea0b983fb32946cb",
       "replacements": [
         {
           "before": "### Worktree and simulator cleanup",
@@ -1840,36 +1839,36 @@
     {
       "source": "skills/poteto-mode/scripts/check-plan.mjs",
       "output": "src/core/skills/poteto-mode/scripts/check-plan.mjs",
-      "sourceSha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
-      "outputSha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
+      "sourceSha256": "e58c3d871b09d477be00628d69dd23ffa6c2e3a1728f5b867a841baa8e90278b",
+      "outputSha256": "e58c3d871b09d477be00628d69dd23ffa6c2e3a1728f5b867a841baa8e90278b",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/orch/orch.test.ts",
       "output": "src/core/skills/poteto-mode/scripts/orch/orch.test.ts",
-      "sourceSha256": "773153ac74de6eb15f58d2682f487f5f30672d7efe3ef1d24a131aa9129d279b",
-      "outputSha256": "773153ac74de6eb15f58d2682f487f5f30672d7efe3ef1d24a131aa9129d279b",
+      "sourceSha256": "5e80b416bdcd68e4067690ce857345852fd2e0db3dcf3e25607999cd55b963d2",
+      "outputSha256": "5e80b416bdcd68e4067690ce857345852fd2e0db3dcf3e25607999cd55b963d2",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/orch/orch.ts",
       "output": "src/core/skills/poteto-mode/scripts/orch/orch.ts",
-      "sourceSha256": "f091687df627a0b75fabd54af58945a9cd6c7039ef0622012ac9ed60cd8ec434",
-      "outputSha256": "f091687df627a0b75fabd54af58945a9cd6c7039ef0622012ac9ed60cd8ec434",
+      "sourceSha256": "47c92c57e8276616d8de94665a126bd832e748036afa8d0ffdbacb7946decb5c",
+      "outputSha256": "47c92c57e8276616d8de94665a126bd832e748036afa8d0ffdbacb7946decb5c",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/orch/store.ts",
       "output": "src/core/skills/poteto-mode/scripts/orch/store.ts",
-      "sourceSha256": "0eae7cf69282e827b1227166f2e32cee3560f2f3e65b3f1f2faf6fb83d3b4c5b",
-      "outputSha256": "0eae7cf69282e827b1227166f2e32cee3560f2f3e65b3f1f2faf6fb83d3b4c5b",
+      "sourceSha256": "558cfda533e1ebe7c8d7842604f07e0be7618759cf129b4c2397a8e29516ecea",
+      "outputSha256": "558cfda533e1ebe7c8d7842604f07e0be7618759cf129b4c2397a8e29516ecea",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/package.json",
       "output": "src/core/skills/poteto-mode/scripts/package.json",
-      "sourceSha256": "d1f815091209d49763775cc188e8e06ff32d5fec648bffd2272bc25a165e87c3",
-      "outputSha256": "d1f815091209d49763775cc188e8e06ff32d5fec648bffd2272bc25a165e87c3",
+      "sourceSha256": "fd511a0c01f522e0c781ddd8eccea0e91697a0856c6e6a3261de78a6a0287c72",
+      "outputSha256": "fd511a0c01f522e0c781ddd8eccea0e91697a0856c6e6a3261de78a6a0287c72",
       "replacements": []
     },
     {
@@ -1889,36 +1888,36 @@
     {
       "source": "skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
-      "sourceSha256": "e53e31b7f03068063f53a99a3591b052aaed66e4e2b196b3a364980f60324ab1",
-      "outputSha256": "e53e31b7f03068063f53a99a3591b052aaed66e4e2b196b3a364980f60324ab1",
+      "sourceSha256": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f",
+      "outputSha256": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/watch-pr/github.test.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/github.test.ts",
-      "sourceSha256": "0cbce011050522938523e36bb42a260e92b812dcd2076930fa681672ad316b24",
-      "outputSha256": "0cbce011050522938523e36bb42a260e92b812dcd2076930fa681672ad316b24",
+      "sourceSha256": "70c9f03d8738228763846f2abdd8c7de7be68dba3035041482386a69cbf5639b",
+      "outputSha256": "70c9f03d8738228763846f2abdd8c7de7be68dba3035041482386a69cbf5639b",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/watch-pr/github.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/github.ts",
-      "sourceSha256": "d1bbbafbe8e2c703c84da2029de7f2c4011412512f8cf65a42100f46bcb92c8a",
-      "outputSha256": "d1bbbafbe8e2c703c84da2029de7f2c4011412512f8cf65a42100f46bcb92c8a",
+      "sourceSha256": "a605b8531468dbe4c07b93663c0993a9c11dc7e9179adde970f5c740396451d9",
+      "outputSha256": "a605b8531468dbe4c07b93663c0993a9c11dc7e9179adde970f5c740396451d9",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/watch-pr/policy.test.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/policy.test.ts",
-      "sourceSha256": "a9fedb25feefd1f57ef6a662f80c99018690170a3a8070773a08eaf694d1d3d9",
-      "outputSha256": "a9fedb25feefd1f57ef6a662f80c99018690170a3a8070773a08eaf694d1d3d9",
+      "sourceSha256": "146acabcfee9b6fa3342358eb0a9504aa65fd081bbc15b10adf9c1c5485067d2",
+      "outputSha256": "146acabcfee9b6fa3342358eb0a9504aa65fd081bbc15b10adf9c1c5485067d2",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/scripts/watch-pr/policy.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/policy.ts",
-      "sourceSha256": "68d240505852cf23c9b2dea463342e9e61243f486b3cc86c735d140f9ee7be49",
-      "outputSha256": "68d240505852cf23c9b2dea463342e9e61243f486b3cc86c735d140f9ee7be49",
+      "sourceSha256": "f2a3e31223d05edc05e5473cc3f8f3cb9bd20c202c30c6abe7f21f0f7aee8fbb",
+      "outputSha256": "f2a3e31223d05edc05e5473cc3f8f3cb9bd20c202c30c6abe7f21f0f7aee8fbb",
       "replacements": []
     },
     {
@@ -1945,8 +1944,8 @@
     {
       "source": "skills/poteto-mode/scripts/watch-pr/types.ts",
       "output": "src/core/skills/poteto-mode/scripts/watch-pr/types.ts",
-      "sourceSha256": "64ba6221e3bfe61bbb292337d199cdec6309455477280efb060203dba34e0e91",
-      "outputSha256": "64ba6221e3bfe61bbb292337d199cdec6309455477280efb060203dba34e0e91",
+      "sourceSha256": "0cac435294dc85ce1ba755e8e67f6c5ab163dfa252f2722d6e3a2d68c58fec59",
+      "outputSha256": "0cac435294dc85ce1ba755e8e67f6c5ab163dfa252f2722d6e3a2d68c58fec59",
       "replacements": []
     },
     {
@@ -1959,18 +1958,18 @@
     {
       "source": "skills/poteto-mode/scripts/worktree-audit.sh",
       "output": "src/core/skills/poteto-mode/scripts/worktree-audit.sh",
-      "sourceSha256": "95b8530f3c0ccada8cabc4b0727c052fbc85c141531375aaace65c427af8aecc",
-      "outputSha256": "95b8530f3c0ccada8cabc4b0727c052fbc85c141531375aaace65c427af8aecc",
+      "sourceSha256": "e0a94e5e5b1ff60638916e440600e15851f7b79bc1a1d1f602fde05d465e2ec0",
+      "outputSha256": "e0a94e5e5b1ff60638916e440600e15851f7b79bc1a1d1f602fde05d465e2ec0",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/SKILL.md",
       "output": "src/core/skills/poteto-mode/SKILL.md",
-      "sourceSha256": "03d61d15c5a0f7abc2c558c7323ff3c360dedc2915ebadf3c76c9e872f41cb64",
-      "outputSha256": "2484642be25b36e42bbd1c53309b7f76eac515f5b7ef67028810e9e7d42f46bf",
+      "sourceSha256": "f234661471847cafc4ae9bcb4a9208eb32ed8154ac25b91b2b064ec71bd62167",
+      "outputSha256": "1d171000bf594d4465996e07a871cdd438f701c088cadd8d6775a87e47850200",
       "replacements": [
         {
-          "before": "---\nname: Poteto Mode\ndescription: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.\ndisable-model-invocation: true\nmode: true\nicon: crown\ncolor: yellow\nreminder: New task? Playbook match or rigor needed -> apply /poteto-mode. Casual turn or user opts out -> don't.\n---\n\n",
+          "before": "---\nname: Poteto Mode\ndescription: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.\ndisable-model-invocation: true\nicon: crown\ncolor: yellow\n---\n",
           "after": "---\nname: poteto-mode\ndescription: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
@@ -1979,14 +1978,14 @@
         {
           "before": "/setup-pstack",
           "after": "/setup-oh-my-stack",
-          "expectedOccurrences": 2,
+          "expectedOccurrences": 3,
           "category": "name",
           "reason": "Rename the necessary host setup entry."
         },
         {
           "before": "`grok-4.7-xhigh-fast`",
           "after": "`observed code-model choice`",
-          "expectedOccurrences": 1,
+          "expectedOccurrences": 2,
           "category": "model-selection",
           "reason": "Concrete provider slugs are resolved by the current host inventory and preset."
         },
@@ -2094,6 +2093,13 @@
           "expectedOccurrences": 1,
           "category": "authorization",
           "reason": "Preserve host external-write, credential, billable-operation and user-scope gates."
+        },
+        {
+          "before": "**Match the model to the job.** Before each spawn, start from the role's line or default and pick the reasoning level and speed the job needs. The `/setup-oh-my-stack` budget sets each role's starting level, xhigh by default. Raise it one step, up to max, for the hardest or subtlest work. Lower it one step for judgment and two or more steps for routine work. Use fast mode only when the job is urgent, meaning CI or trunk is red or a person is blocked on the result right now. Otherwise use standard speed, the same slug without `-fast`. Verification is the exception and stays on the `swarm workers` model and speed (`observed code-model choice` by default). Change only the effort level and whether the slug is fast, and keep the family the role names, so a diverse panel stays diverse. If the family has no slug at that level and speed, use its nearest slug. A role on `auto` or `inherit-parent` stays on the parent model. If the Task tool rejects the adjusted slug, do not try another adjusted slug. Use the role's line or default and say so.",
+          "after": "**Match the model to the job.** Before each spawn, start from the role's line or default and pick the reasoning level and speed the job needs. The `/setup-oh-my-stack` budget sets each role's starting level, xhigh by default. Raise it one supported step, up to the host's maximum, for the hardest or subtlest work. Lower it one step for judgment and two or more steps for routine work. Use fast mode only when the job is urgent, meaning CI or trunk is red or a person is blocked on the result right now. Otherwise use standard speed. Verification is the exception and stays on the `swarm workers` model and speed. Change only supported effort and speed options. Keep the model family the role names so a diverse panel stays diverse. If that family lacks the requested settings, use its nearest observed supported settings. A role on `auto` or `inherit-parent` stays on the parent model. If the host rejects the adjusted selection, do not try another adjusted selection. Use the role's original line or default and disclose it. Translate the source host's effort and `-fast` slug examples through the generated model-selection binding rather than inventing model IDs or claiming unsupported option enforcement.",
+          "expectedOccurrences": 1,
+          "category": "model-selection",
+          "reason": "Preserve effort, urgency, family, alias and verifier exceptions through supported native options."
         }
       ]
     },
@@ -2145,8 +2151,8 @@
     {
       "source": "skills/principle-encode-lessons-in-structure/SKILL.md",
       "output": "src/core/skills/principle-encode-lessons-in-structure/SKILL.md",
-      "sourceSha256": "ad12c26209770c52f632d9480c048ac5334ce8e5d6297f83ade59652a56cb3ef",
-      "outputSha256": "9bc4ac6fcb1ccc4ebcef97d4692be532d7c58e6ea4bbc92d66ced9adc99ab212",
+      "sourceSha256": "228963799189f481827d6f28065f278bc2008ffa37030b1234cbd5814d36b9e9",
+      "outputSha256": "1fa1ff619b9c4f922c185ec49f3a997b0d8eb15461acd217ffaed2ed4adeed5c",
       "replacements": [
         {
           "before": "---\nname: principle-encode-lessons-in-structure\ndescription: \"Apply when you catch yourself writing the same instruction a second time, or notice a recurring correction. Encode the rule as a lint, metadata flag, runtime check, or script instead of more text.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2160,8 +2166,8 @@
     {
       "source": "skills/principle-exhaust-the-design-space/SKILL.md",
       "output": "src/core/skills/principle-exhaust-the-design-space/SKILL.md",
-      "sourceSha256": "8583310d7297b7823d75494faa57b003564d436807febecdecbd8321abe5cf6e",
-      "outputSha256": "d997ddf3a01a8527829d8f58d68e9fdb80f4ae5c2147bb46ea35dfc658d1e43c",
+      "sourceSha256": "2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db",
+      "outputSha256": "89167005ec38998fd617725f8f9f45b70afb65ddbad3347bfbab49c37a8886b7",
       "replacements": [
         {
           "before": "---\nname: principle-exhaust-the-design-space\ndescription: \"Apply when facing a novel UI interaction or architectural decision with no precedent in the codebase. Build 2-3 competing prototypes and compare side by side before committing.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2205,8 +2211,8 @@
     {
       "source": "skills/principle-fix-root-causes/SKILL.md",
       "output": "src/core/skills/principle-fix-root-causes/SKILL.md",
-      "sourceSha256": "ba4cd38da1dcc8fe5432feb64457cba95594736a9b21b2ebf8f8c52aee068707",
-      "outputSha256": "d0fb98a22d2a065916cce97e0a9600a1144bd0693b140d1a3fa550a5683743da",
+      "sourceSha256": "2131069d285d82fb799458494f2e4ac8759c9c6a60f9e300828c17874f514c6e",
+      "outputSha256": "9613e2db472399a6703152964fa85cf39732e080032e26bfaae8ca996b03c5ab",
       "replacements": [
         {
           "before": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2235,8 +2241,8 @@
     {
       "source": "skills/principle-guard-the-context-window/SKILL.md",
       "output": "src/core/skills/principle-guard-the-context-window/SKILL.md",
-      "sourceSha256": "d2cef147862576e3d709b7afc149d85196245e8338b9c7eef337c95fba412b3e",
-      "outputSha256": "f534ac8a04d6306d0c76d523057943268c5b63265b6ff325c874208a9fb94df9",
+      "sourceSha256": "af0b9dd70b43628ce4a59a4d332e9d9ad055084e460f430e7a757495c627e81a",
+      "outputSha256": "2ba97ca3e6e44b8228d23928bdccc67a0959065cf2f1e64c14c37c0c884fffc1",
       "replacements": [
         {
           "before": "---\nname: principle-guard-the-context-window\ndescription: \"Apply when context is filling up: large outputs, long files, repeated reads, fan-out planning. Route bulk to subagents; keep summaries in the main thread, not raw payloads.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2250,8 +2256,8 @@
     {
       "source": "skills/principle-laziness-protocol/SKILL.md",
       "output": "src/core/skills/principle-laziness-protocol/SKILL.md",
-      "sourceSha256": "9006579e9e3f33955d17569733db688ae65f22577dc3b21803d219a5a8445aff",
-      "outputSha256": "d9a53e10b5b5e59431b2266ac2af07df095fc820103d4ad5638b03898becc781",
+      "sourceSha256": "1be6e7a435f26a75a76eb848b9c3d611b9977d0f5822361753244da25ca3ca45",
+      "outputSha256": "691f9e63ee559d5bb9901dba02175cfe316af1153de257d470db7b08f6fa1b3b",
       "replacements": [
         {
           "before": "---\nname: principle-laziness-protocol\ndescription: \"Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. Bias toward deletion and the smallest change that solves the problem.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2460,8 +2466,8 @@
     {
       "source": "skills/recall/SKILL.md",
       "output": "src/core/skills/recall/SKILL.md",
-      "sourceSha256": "d265b0e5b6dc5b89c0407f3387d24462c988e1990a37d5359735137908128c5a",
-      "outputSha256": "4b37d9fe1d6812005a13cd514ce32ada8ca24756ac7a744cd942bc74f102f1df",
+      "sourceSha256": "b0ceb996259c3404532f61e4b010df4e3d80d7ddbed85b3c302895723eb62a89",
+      "outputSha256": "c625d4e8d9876d8882a330d3e3ad096b6ce26ac5ed5ab57b0ef7ecc82180f202",
       "replacements": [
         {
           "before": "---\nname: recall\ndescription: \"Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2604,8 +2610,8 @@
     {
       "source": "skills/reflect/SKILL.md",
       "output": "src/core/skills/reflect/SKILL.md",
-      "sourceSha256": "f5e9200f37e2a4567c0eeb0ba244fde66c1b3f35e3b7a883de2f85b3bda7365a",
-      "outputSha256": "abfd98a7dab06530dcc2c7118fd9c178f82523063b7b6f2e7dcd641f1b51de8c",
+      "sourceSha256": "1f5a8c246cdee8251f8667d85bd5d97f6c2801f505843c26ddbd6c621632519b",
+      "outputSha256": "74de05d1aadcb627743e11eb9ca057fc0e5d1a4bc7df4db719cb2ed84d3cd578",
       "replacements": [
         {
           "before": "---\nname: reflect\ndescription: Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.\ndisable-model-invocation: true\n---\n\n",
@@ -2795,8 +2801,8 @@
     {
       "source": "skills/show-me-your-work/SKILL.md",
       "output": "src/core/skills/show-me-your-work/SKILL.md",
-      "sourceSha256": "bcff5f7f9fd23f92c12b251f9cd6b947e9485e1055cfacb6fdd9cae0789d7550",
-      "outputSha256": "3310be387c80c1d4b78c0d48c55a6fdea7a26ba30788a98b6a3b583f346612c4",
+      "sourceSha256": "920a8217cbb62f92a2222fb81fc9eab17ecd554a0277e444a95a927195139bd1",
+      "outputSha256": "7f8bf596e9f79317e060b0ecc537d69419f6c74061c2745885c8557d1ee85ef1",
       "replacements": [
         {
           "before": "---\nname: show-me-your-work\ndescription: \"Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2817,8 +2823,8 @@
     {
       "source": "skills/swarm/SKILL.md",
       "output": "src/core/skills/swarm/SKILL.md",
-      "sourceSha256": "bdcee4168e22428036e93d7cdeec3f391dbc4132f927f6db2540328c22db0273",
-      "outputSha256": "e3057b2a331508b377af07ff5ae0d0587b9ea0ae54d3cbf654432e909405127f",
+      "sourceSha256": "c8fe1b28282e7a051a4041a146a11f076e0fd95252bb010106a58209805303d5",
+      "outputSha256": "121e09356f608070f9ecbd54ac2e7a94d032b2f36e57ab6608e35d843c3fe0c7",
       "replacements": [
         {
           "before": "---\nname: swarm\ndescription: \"Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2955,12 +2961,12 @@
     {
       "source": "skills/unslop/SKILL.md",
       "output": "src/core/skills/unslop/SKILL.md",
-      "sourceSha256": "3126b9e2cf46022f5e0c332e84be5e17a9730669cb3d6ac0a7e5e7e94b1e24fa",
-      "outputSha256": "e021601889305b7e26e87ce5469f0047b4e500626dc6fa593832af443989d8d9",
+      "sourceSha256": "ccab208e315ce05e2fab8eeee2f7879f1289b5c6844840b2d307adf31c79144f",
+      "outputSha256": "b3a8e2ca87637d15666471c53c5e804ad32722988e2d272f15487aa426a69edf",
       "replacements": [
         {
-          "before": "---\nname: unslop\ndescription: Cut AI tells from any writing. Must always apply.\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: unslop\ndescription: Cut AI tells from any writing. Must always apply.\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: unslop\ndescription: Cut AI tells from any writing.\ndisable-model-invocation: true\n---\n",
+          "after": "---\nname: unslop\ndescription: Cut AI tells from any writing.\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -2991,8 +2997,8 @@
     {
       "source": "skills/why/references/sources/code-archaeology.md",
       "output": "src/core/skills/why/references/sources/code-archaeology.md",
-      "sourceSha256": "f6b5c4c3dd4ddc31da446bbbe4d88806e2201f15a76b97b3e44ce25c5862e321",
-      "outputSha256": "f6b5c4c3dd4ddc31da446bbbe4d88806e2201f15a76b97b3e44ce25c5862e321",
+      "sourceSha256": "a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7",
+      "outputSha256": "a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7",
       "replacements": []
     },
     {
@@ -3012,8 +3018,8 @@
     {
       "source": "skills/why/references/sources/incident-postmortem.md",
       "output": "src/core/skills/why/references/sources/incident-postmortem.md",
-      "sourceSha256": "a899470f05f86029630a13a2696491cc708ca7b56a6e822a69ff6e954d6ff8cf",
-      "outputSha256": "a899470f05f86029630a13a2696491cc708ca7b56a6e822a69ff6e954d6ff8cf",
+      "sourceSha256": "bf2661f1a81c37700884a45b77d6289be0c802b065febced31990e6564510839",
+      "outputSha256": "bf2661f1a81c37700884a45b77d6289be0c802b065febced31990e6564510839",
       "replacements": []
     },
     {
@@ -3033,15 +3039,15 @@
     {
       "source": "skills/why/references/sources/sentry.md",
       "output": "src/core/skills/why/references/sources/sentry.md",
-      "sourceSha256": "e0ed11e474c3d248bc5ac16d37ca1439b2db0253a3413252194556643cf8328a",
-      "outputSha256": "e0ed11e474c3d248bc5ac16d37ca1439b2db0253a3413252194556643cf8328a",
+      "sourceSha256": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702",
+      "outputSha256": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702",
       "replacements": []
     },
     {
       "source": "skills/why/references/sources/slack.md",
       "output": "src/core/skills/why/references/sources/slack.md",
-      "sourceSha256": "58fee61d024b3700b407e7acbed367944720ff05adfddb6954d36c88368f3ba7",
-      "outputSha256": "58fee61d024b3700b407e7acbed367944720ff05adfddb6954d36c88368f3ba7",
+      "sourceSha256": "3bc6309f5c7b26ace3b919dbd7f7b048861dd2020f910fe24f656cc74b3b661c",
+      "outputSha256": "3bc6309f5c7b26ace3b919dbd7f7b048861dd2020f910fe24f656cc74b3b661c",
       "replacements": []
     },
     {
@@ -3062,8 +3068,8 @@
     {
       "source": "skills/why/SKILL.md",
       "output": "src/core/skills/why/SKILL.md",
-      "sourceSha256": "fa1d1e9dec14b15381c1ccccad74044d6b6ea3b4af56821f59ba2d8e59b07545",
-      "outputSha256": "13b7a049cd23934e0cac64b0a164f22f6a247a5431be1b9f7307628e8ca8e4c2",
+      "sourceSha256": "144d42e7712723d763e607bc0a969e5f1cdf83ec7228519d87677cc534571bed",
+      "outputSha256": "9e17236b23f19e3daf3604cd26d73b4e2e11887c0f8acbcffeff5e46bedace25",
       "replacements": [
         {
           "before": "---\nname: why\ndescription: \"Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior.\"\ndisable-model-invocation: true\n---\n\n",
@@ -3316,11 +3322,11 @@
     {
       "source": "agents/comment-sicko.md",
       "output": "src/core/roles/comment-sicko/instructions.md",
-      "sourceSha256": "c0fd0383008da45fc78cfac17b9007d62c42f87ad1c8d5c2fb658b1fd01f7c82",
-      "outputSha256": "67e4b02d75545f383f5deda3c55fd28e26d624f1841e5ac8ab25d52a85ff18ad",
+      "sourceSha256": "3e239e40b7b4b9beb2cf7f3ccc57f2388eb8b69bd1ba8ae888ef87ef6e0e2116",
+      "outputSha256": "3013205b7d285e8618b867471456e2c28213743e84e1cc3e727a80e496284d72",
       "replacements": [
         {
-          "before": "---\nname: Comment Sicko\ndescription: A deranged comment-hater that savors deletion and condemns workaround code.\n---\n\n",
+          "before": "---\nname: comment-sicko\ndescription: A deranged comment-hater that savors deletion and condemns workaround code.\n---\n",
           "after": "Host adaptation. Follow the installed package runtime binding and model selection guides. Use only the assigned scope and authority. Report unavailable tools and evidence.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
@@ -3331,17 +3337,53 @@
     {
       "source": "agents/poteto-agent.md",
       "output": "src/core/roles/poteto-agent/instructions.md",
-      "sourceSha256": "abe41c169ecbfe65641f1725f4188d568e046c0dec7fd2dc271abb594c299201",
-      "outputSha256": "661f4f55b44f0daa500c69b8a30248016fb7dbeb5f375ec20deb2bcb021a15a8",
+      "sourceSha256": "979f18abd000d185a0b4c41a2a4111c0910596a7f5c81cbb571885bc721b2bf7",
+      "outputSha256": "15d2f8d0dcae5dccc6595cab040c093b6951d898d317a1f2aacb95fecab77f4f",
       "replacements": [
         {
-          "before": "---\nname: poteto-agent\ndescription: Routing target for `/poteto-mode` and any request for poteto's style. Spawn a fresh `poteto-agent` for each new task, and resume one only in the strict cases that poteto-mode's Subagents section names. Reads the `poteto-mode` skill's `SKILL.md` in full before any work, including its inline Principles index. Substituting `generalPurpose` skips that read and drifts.\nis_background: true\n---\n\n",
+          "before": "---\nname: poteto-agent\ndescription: Delegate subagent for code-writing and helper tasks spawned during a `/poteto-mode` run. Use for delegates, not as the runner for `/poteto-mode` itself. Spawn a fresh `poteto-agent` for each new task, and resume one only in the strict cases that poteto-mode's Subagents section names. Reads the `poteto-mode` skill's `SKILL.md` in full before any work, including its inline Principles index. Substituting `generalPurpose` skips that read and drifts.\nis_background: true\n---\n",
           "after": "Host adaptation. Follow the installed package runtime binding and model selection guides. Use only the assigned scope and authority. Report unavailable tools and evidence.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Runtime role metadata lives in role.json; retain the complete upstream semantic body."
+        },
+        {
+          "before": "With no path, before any other work, search `~/.cursor/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. If more than one file matches, use the copy whose `.cursor-plugin/plugin.json` has the highest `version`. Your skill catalog hides this skill, so a missing catalog entry does not mean pstack is absent.",
+          "after": "With no path, before any other work, locate the installed package through the host's documented package catalog and resolve `skills/poteto-mode/SKILL.md` there. Use the selected installed package rather than guessing a cache path or reading unrelated host plugins. A missing catalog entry alone does not establish that the package is absent.",
+          "expectedOccurrences": 1,
+          "category": "path",
+          "reason": "Resolve installed skill ownership through the native package instead of a Cursor cache."
+        },
+        {
+          "before": "every Task spawn",
+          "after": "every native child spawn",
+          "expectedOccurrences": 1,
+          "category": "tools",
+          "reason": "The parent owns native delegation."
         }
       ]
+    },
+    {
+      "source": "skills/in-your-own-words/SKILL.md",
+      "output": "src/core/skills/in-your-own-words/SKILL.md",
+      "sourceSha256": "fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad",
+      "replacements": [
+        {
+          "before": "---\nname: in-your-own-words\ndescription: \"Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: in-your-own-words\ndescription: \"Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "expectedOccurrences": 1,
+          "category": "frontmatter",
+          "reason": "Expose the new entry explicitly through the host catalog with unchanged semantic body."
+        }
+      ],
+      "outputSha256": "1717f2f56d888c85add7a8a9d5f69b930ef51d5fa51aee23062fbd60443fb66e"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/check-plan.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/check-plan.test.ts",
+      "sourceSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8",
+      "replacements": [],
+      "outputSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8"
     }
   ]
 }
