@@ -1,0 +1,14 @@
+{
+  "commit": "40652238f2135b3a99d0877c1f508c4b5ef07b2e",
+  "tree": "f32d5bf28d7f901a5a9c3fd1ad5f536789097d42",
+  "reviewers": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-f9d24bc4ce48d7213b82d158b361c2d8064e1a53277b5adb36d5489003dd9827",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "summary": "## Findings\n\n### 1. [warning] 默认回退可能重新选择已经拒绝的任务调整目标\n\n**Location**: [tools/t3-orchestration.mjs:773](tools/t3-orchestration.mjs:773)，`prepareDelegation` → `resolveModelFallback`。\n\n**Finding**: 调整目标的拒绝记录被从 `remainingRejections` 中移除。当默认回退目标恰好就是该调整目标时，回退逻辑看不到已有拒绝，会再次返回完全相同的请求。\n\n**Evidence**: 在冻结提交 `40652238` 上通过纯内存 fixture 复现，无 provider 调用：\n\n1. 目录只有 `composer-2-high` 和 `composer-2-max`，保存前者，不设置显式策略。\n2. `hardest` 准备出 `composer-2-max`；保存完整请求及拒绝记录后，正确恢复 `composer-2-high`。\n3. 再加入原始目标的拒绝及其完整 `preparedRequest`，保持之前证据不变。\n4. helper 再次返回 **`composer-2-max`**，原因为 `model-family-default`，尽管该目标已经明确被拒。\n\n第 773 行过滤调整拒绝后，第 562 行无法识别默认目标已被拒绝，因此不会进入等价模型选择或无候选失败路径。\n\n**Suggestion**: 将“恢复原始参数所用的拒绝分类”与“所有已拒绝目标集合”分开。模型回退必须保留完整拒绝历史，排除已拒绝的默认目标及等价候选；没有可用候选时明确失败。补充调整目标与默认目标重合的完整链测试。\n\nROLE_POLICY=independent-frozen-review"
+    }
+  ],
+  "judgment": "Act on repeated refused adjustment target as model default finding. Restore original-line retry classification independently from complete valid refusal history used to block fallback targets. Preserve original-option retry and chain provenance; installation held."
+}

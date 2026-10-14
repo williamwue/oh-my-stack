@@ -336,6 +336,10 @@ a refreshed catalog. Preparation reconstructs each captured request independentl
 `audit.selection.rejectionProvenance` identifies the source for each rejected
 target. A current-catalog or host-reported rejection is labeled separately from
 a captured prepared request. The host still authenticates actual rejection.
+Original-line recovery classifies the adjusted refusal separately, while later
+model fallback retains the complete valid refusal history. A refused adjusted
+target is not retried as a default or equivalent. When every permitted candidate
+is refused or invalid, preparation fails explicitly.
 
 ```js
 {

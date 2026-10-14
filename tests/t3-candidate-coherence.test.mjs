@@ -251,3 +251,114 @@ test('a speed limitation retains coherent speed options while effort still adjus
   assert.deepEqual(prepared.audit.selection.jobLimitations, ['Requested speed for serviceTier is not advertised by this model.']);
   assert.equal(prepared.audit.selection.reason, 'job-profile-adjustment');
 });
+
+async function rejectedAdjustmentChain(t, explicitDefault, equivalent = false) {
+  const configured = target('composer-2-high', { reasoningEffort: 'high', fastMode: false });
+  const adjustedTarget = target('composer-2-max', { reasoningEffort: 'max', fastMode: false });
+  const options = [select('reasoningEffort', ['high', 'max', 'ultra']), { id: 'fastMode', type: 'boolean' }];
+  const models = [configured.model, adjustedTarget.model, ...(equivalent ? ['composer-2-ultra'] : [])].map(id => ({ id, options }));
+  const args = await input(t, configured, models, explicitDefault ? { modelFallbacks: { [routeName]: {
+    strategy: 'interrogate', familyDefaults: { grok: adjustedTarget }, unknownFamilyDefault: adjustedTarget
+  } } } : undefined);
+  args.jobProfile = { kind: 'hardest' };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, adjustedTarget);
+  const adjustedRejection = reject(adjusted, models.map(model => model.id));
+  const original = await prepareT3Delegation({ ...args, stepId: 'original-retry', modelRejections: [adjustedRejection] });
+  assert.deepEqual(original.arguments.target, configured);
+  assert.equal(original.audit.selection.reason, 'job-profile-rejected-original-line');
+  assert.deepEqual(original.audit.selection.rejectedJobTarget, adjustedTarget);
+  assert.equal(original.audit.selection.rejectionProvenance[0].receiptHash, adjusted.audit.receiptHash);
+  return { args, configured, adjusted, original, next: { ...args, stepId: 'after-original-refusal',
+    modelRejections: [adjustedRejection, reject(original)] } };
+}
+
+for (const explicit of [false, true]) {
+  test(`${explicit ? 'explicit' : 'implicit'} default overlapping a refused adjustment fails when no equivalent remains`, async t => {
+    const { next } = await rejectedAdjustmentChain(t, explicit);
+    await assert.rejects(prepareT3Delegation(next), /BLOCKED: no observed valid equivalent on the configured provider/);
+  });
+
+  test(`${explicit ? 'explicit' : 'implicit'} default overlapping a refused adjustment uses its valid IDs for a coherent equivalent`, async t => {
+    const { args, configured, adjusted, original, next } = await rejectedAdjustmentChain(t, explicit, true);
+    const saved = structuredClone(args.resolution);
+    const prepared = await prepareT3Delegation(next);
+    assert.deepEqual(prepared.arguments.target, target('composer-2-ultra', { reasoningEffort: 'ultra', fastMode: false }));
+    assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+    assert.deepEqual(prepared.audit.selection.familyDefault, adjusted.arguments.target);
+    assert.deepEqual(prepared.audit.selection.configuredTarget, configured);
+    assert.deepEqual(prepared.audit.selection.modelRejections, next.modelRejections);
+    assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
+      [adjusted.audit.receiptHash, original.audit.receiptHash]);
+    assert.deepEqual(prepared.audit.selection.optionChanges, [{ option: 'reasoningEffort', change: 'changed', from: 'high', to: 'ultra' }]);
+    assert.deepEqual(args.resolution, saved);
+  });
+}
+
+test('a refused typed max adjustment retries high on the same model ID before excluding an exact max default', async t => {
+  const configured = target('composer-2', { reasoningEffort: 'high' });
+  const adjustedTarget = target(configured.model, { reasoningEffort: 'max' });
+  const args = await input(t, configured, [{ id: configured.model, options: [select('reasoningEffort', ['high', 'max'])] }], {
+    modelFallbacks: { [routeName]: { strategy: 'interrogate', familyDefaults: { grok: adjustedTarget }, unknownFamilyDefault: adjustedTarget } }
+  });
+  args.jobProfile = { kind: 'hardest' };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, adjustedTarget);
+  const adjustedRejection = reject(adjusted, [configured.model]);
+  const original = await prepareT3Delegation({ ...args, stepId: 'same-id-high', modelRejections: [adjustedRejection] });
+  assert.deepEqual(original.arguments.target, configured);
+  assert.equal(original.audit.selection.reason, 'job-profile-rejected-original-line');
+  await assert.rejects(prepareT3Delegation({ ...args, stepId: 'same-id-exhausted', modelRejections: [adjustedRejection, reject(original)] }),
+    /BLOCKED: no observed valid equivalent on the configured provider/);
+});
+
+test('an equivalent candidate already refused as the adjustment stays excluded after a distinct default refusal', async t => {
+  const configured = target('composer-2-high', { reasoningEffort: 'high', fastMode: false });
+  const familyDefault = target('composer-2-high-fast', { reasoningEffort: 'high', fastMode: true });
+  const options = [select('reasoningEffort', ['high', 'max', 'ultra']), { id: 'fastMode', type: 'boolean' }];
+  const args = await input(t, configured,
+    ['composer-2-high', 'composer-2-high-fast', 'composer-2-max-fast', 'composer-2-ultra-fast'].map(id => ({ id, options })), {
+      modelFallbacks: { [routeName]: { strategy: 'interrogate', familyDefaults: { grok: familyDefault }, unknownFamilyDefault: familyDefault } }
+    });
+  args.jobProfile = { kind: 'hardest', urgent: true };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, target('composer-2-max-fast', { reasoningEffort: 'max', fastMode: true }));
+  const adjustedRejection = reject(adjusted);
+  const original = await prepareT3Delegation({ ...args, stepId: 'distinct-original', modelRejections: [adjustedRejection] });
+  assert.deepEqual(original.arguments.target, configured);
+  const history = [adjustedRejection, reject(original)];
+  const preparedDefault = await prepareT3Delegation({ ...args, stepId: 'distinct-default', modelRejections: history });
+  assert.deepEqual(preparedDefault.arguments.target, familyDefault);
+  const modelRejections = [...history, reject(preparedDefault, [adjusted.arguments.target.model, 'composer-2-ultra-fast'])];
+  const prepared = await prepareT3Delegation({ ...args, stepId: 'distinct-equivalent', modelRejections });
+  assert.deepEqual(prepared.arguments.target, target('composer-2-ultra-fast', { reasoningEffort: 'ultra', fastMode: true }));
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+  assert.deepEqual(prepared.audit.selection.modelRejections, modelRejections);
+  assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
+    [adjusted.audit.receiptHash, original.audit.receiptHash, preparedDefault.audit.receiptHash]);
+});
+
+for (const [name, foreign] of [
+  ['known unselected model', target('composer-2-ultra', { reasoningEffort: 'ultra', fastMode: false })],
+  ['different options on the adjusted model', target('composer-2-max')],
+  ['foreign provider', { ...target('composer-2-max', { reasoningEffort: 'max', fastMode: false }), providerInstanceId: 'other-cursor' }]
+]) {
+  test(`complete adjustment refusal history rejects ${name}`, async t => {
+    const { next } = await rejectedAdjustmentChain(t, false, true);
+    await assert.rejects(prepareT3Delegation({ ...next, modelRejections: [...next.modelRejections,
+      { target: foreign, code: 'model-rejected', rawError: 'Foreign rejection.', validModelIds: [] }
+    ] }), /Foreign model rejection target or provider/);
+  });
+}
+
+for (const [name, change] of [
+  ['tampered adjustment receipt', rejection => { rejection.preparedRequest.audit.identity.stepId = 'forged-history'; }],
+  ['removed historical receipt', rejection => { delete rejection.preparedRequest; }]
+]) {
+  test(`complete overlapping-default history rejects a ${name}`, async t => {
+    const { next } = await rejectedAdjustmentChain(t, false, true);
+    const changed = structuredClone(next);
+    change(changed.modelRejections[0]);
+    await assert.rejects(prepareT3Delegation(changed), /Invalid rejected prepared request/);
+  });
+}

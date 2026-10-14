@@ -83,6 +83,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
     "Later rejected targets retain their own modelRejections[].preparedRequest;",
     "keep earlier evidence unchanged and use each request's captured catalog.",
+    "Later model fallback retains all valid refusals, including adjustments;",
+    "never reselect a refused target as a default or equivalent.",
     "Use selectionPolicy for explicit channel fallbacks and ordered trail",
     "candidates. Route modelFallbacks handle evidenced model rejection only:",
     "Without a policy, defaults derive only from runnable observed catalog",

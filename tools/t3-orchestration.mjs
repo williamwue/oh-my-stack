@@ -525,7 +525,7 @@ function rejectionOrigin(rejection, catalog, provenance) {
     ...(captured || known ? { catalogHash: hash(origin) } : {}), ...(captured?.receiptHash ? { receiptHash: captured.receiptHash } : {}) };
 }
 
-function resolveModelFallback(input, provenance = new Map()) {
+function resolveModelFallback(input, provenance = new Map(), rejectedJobTarget) {
   keys(input, ['target', 'catalog', 'rejectionCatalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
   const { routeName, runtimeMode } = input;
   const catalog = parseT3Catalog(input.catalog);
@@ -550,6 +550,7 @@ function resolveModelFallback(input, provenance = new Map()) {
     }
   }
   const permitted = new Set([hash(target), hash(tableDefault)]);
+  if (rejectedJobTarget) permitted.add(hash(rejectedJobTarget));
   const rejectionProvenance = [];
   for (const rejection of evidence) {
     const rejected = rejectionFrom(rejection);
@@ -771,7 +772,9 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   adjustedRejections.forEach(rejectionFrom);
   if (adjustedRejections.length > 1) throw new Error('Duplicate model rejection target');
   const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
-  const modelResolution = resolveModelFallback({ target: jobBase, catalog, policy: fallbackPolicy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode }, provenance);
+  const modelResolution = resolveModelFallback({ target: jobBase, catalog, policy: fallbackPolicy, routeName,
+    modelRejections: remainingRejections.length ? evidence : [], runtimeMode: input.runtimeMode }, provenance,
+    adjustedRejections.length ? job.target : undefined);
   const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
   const selected = (captures.length ? selectBoundTarget : selectTarget)(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
   if (baseSelection) {
