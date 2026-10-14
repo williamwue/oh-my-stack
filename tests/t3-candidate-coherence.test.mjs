@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -23,20 +24,21 @@ const reject = (prepared, validModelIds = []) => ({
   target: prepared.arguments.target, code: 'model-rejected', rawError: 'Host rejected this model.', validModelIds, preparedRequest: prepared
 });
 
-async function input(t, configured, models, selectionPolicy) {
+async function input(t, configured, models, selectionPolicy, selectedRoute = routeName) {
   const bundleRoot = await mkdtemp(path.join(os.tmpdir(), 'oms-t3-coherence-'));
   t.after(() => rm(bundleRoot, { recursive: true, force: true }));
   await mkdir(path.join(bundleRoot, 'config'));
-  await writeFile(path.join(bundleRoot, 'config/t3-role-contracts.json'), JSON.stringify(contracts));
+  const roleContracts = { ...contracts, routes: { [selectedRoute]: contracts.routes[routeName] } };
+  await writeFile(path.join(bundleRoot, 'config/t3-role-contracts.json'), JSON.stringify(roleContracts));
   const catalog = {
     parentThreadId: 'thread/coherence', inheritedProviderInstanceId: 'cursor', inheritedModel: configured.model,
     providers: [{ providerInstanceId: 'cursor', canRunChildTask: true, canRunCrossProviderChildTask: true, models }]
   };
   return {
-    bundleRoot, cwd: bundleRoot, catalog, routeName, task: 'Review bounded candidates.', ownedPaths: [],
+    bundleRoot, cwd: bundleRoot, catalog, routeName: selectedRoute, task: 'Review bounded candidates.', ownedPaths: [],
     runId: 'coherence-run', stepId: 'original', jobProfile: { kind: 'verification' },
-    resolution: configureT3Resolution({ catalog, contracts, preset: 'saved', overrides: {
-      routes: { [routeName]: [configured] }, ...(selectionPolicy === undefined ? {} : { selectionPolicy })
+    resolution: configureT3Resolution({ catalog, contracts: roleContracts, preset: 'saved', overrides: {
+      routes: { [selectedRoute]: [configured] }, ...(selectionPolicy === undefined ? {} : { selectionPolicy })
     } })
   };
 }
@@ -360,5 +362,164 @@ for (const [name, change] of [
     const changed = structuredClone(next);
     change(changed.modelRejections[0]);
     await assert.rejects(prepareT3Delegation(changed), /Invalid rejected prepared request/);
+  });
+}
+
+function immutable(value) {
+  if (value && typeof value === 'object') {
+    Object.values(value).forEach(immutable);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+async function equivalentRefusalChain(t, selectedRoute = routeName, defaultValidIds = ['gpt-default-a']) {
+  const configured = target('gpt-original', { reasoningEffort: 'high' });
+  const familyDefault = target('gpt-default', { reasoningEffort: 'high' });
+  const equivalentA = target('gpt-default-a', { reasoningEffort: 'high' });
+  const equivalentB = target('gpt-default-b', { effort: 'high' });
+  const args = await input(t, configured, [
+    ...[configured, familyDefault, equivalentA].map(value => ({ id: value.model, options: [select('reasoningEffort', ['high'])] })),
+    { id: equivalentB.model, options: [select('effort', ['high'])] },
+    { id: 'gpt-default-0', options: [select('reasoningEffort', ['high'])] },
+    { id: 'claude-equivalent', options: [select('effort', ['high'])] }
+  ], { modelFallbacks: { [selectedRoute]: {
+    strategy: selectedRoute === routeName ? 'interrogate' : 'arena',
+    familyDefaults: { gpt: familyDefault }, unknownFamilyDefault: familyDefault
+  } } }, selectedRoute);
+  const original = await prepareT3Delegation(args);
+  assert.deepEqual(original.arguments.target, configured);
+  const first = immutable(reject(original));
+  const preparedDefault = await prepareT3Delegation({ ...args, stepId: 'chain-default', modelRejections: [first] });
+  assert.deepEqual(preparedDefault.arguments.target, familyDefault);
+  const history = immutable([first, reject(preparedDefault, defaultValidIds)]);
+  const preparedA = await prepareT3Delegation({ ...args, stepId: 'chain-a', modelRejections: history });
+  assert.deepEqual(preparedA.arguments.target, equivalentA);
+  assert.equal(preparedA.audit.selection.reason, 'model-valid-equivalent');
+  return { args, original, preparedDefault, preparedA, equivalentA, equivalentB, history,
+    next: { ...args, stepId: 'chain-b', modelRejections: immutable([...history, reject(preparedA, [equivalentB.model])]) } };
+}
+
+for (const selectedRoute of [routeName, 'arena.runners', 'architect.runners']) {
+  for (const change of ['options', 'model']) {
+    test(`${selectedRoute} continues captured equivalent refusals after earlier ${change} disappear`, async t => {
+      const { args, original, preparedDefault, preparedA, equivalentA, equivalentB, next } = await equivalentRefusalChain(t, selectedRoute);
+      const frozenHistory = structuredClone(next.modelRejections);
+      next.catalog = structuredClone(args.catalog);
+      const provider = next.catalog.providers[0];
+      if (change === 'model') provider.models = provider.models.filter(model => model.id !== equivalentA.model);
+      else provider.models.find(model => model.id === equivalentA.model).options = [select('reasoningEffort', ['low'])];
+      const preparedB = await prepareT3Delegation(next);
+      assert.deepEqual(preparedB.arguments.target, equivalentB);
+      assert.equal(preparedB.audit.selection.reason, 'model-valid-equivalent');
+      assert.deepEqual(preparedB.audit.selection.modelRejections, frozenHistory);
+      assert.deepEqual(preparedB.audit.selection.rejectionProvenance.map(value => value.receiptHash),
+        [original.audit.receiptHash, preparedDefault.audit.receiptHash, preparedA.audit.receiptHash]);
+      assert.deepEqual(preparedB.audit.preparation.chainOrigin, original.audit.preparation.chainOrigin);
+      assert.deepEqual(preparedB.audit.selection.optionChanges,
+        [{ option: 'reasoningEffort', change: 'translated', toOption: 'effort', value: 'high' }]);
+      await assert.rejects(prepareT3Delegation({ ...next, stepId: 'chain-exhausted', modelRejections: [
+        ...next.modelRejections, immutable(reject(preparedB, ['gpt-original', 'gpt-default', equivalentA.model, equivalentB.model]))
+      ] }), /BLOCKED: no observed valid equivalent on the configured provider/);
+      assert.deepEqual(next.modelRejections, frozenHistory);
+    });
+  }
+}
+
+test('a later valid-ID report excludes refused models and never selects an unreported advertised candidate', async t => {
+  const { next, preparedA } = await equivalentRefusalChain(t);
+  const evidence = [...next.modelRejections.slice(0, -1), immutable(reject(preparedA, ['gpt-original', 'gpt-default', 'gpt-default-a']))];
+  await assert.rejects(prepareT3Delegation({ ...next, modelRejections: evidence }), /BLOCKED: no observed valid equivalent/);
+});
+
+for (const empty of [false, true]) {
+  test(`the current equivalent refusal ${empty ? 'with no valid IDs blocks stale candidates' : 'selects only its reported IDs over a nearer stale candidate'}`, async t => {
+    const { next, preparedA, equivalentB } = await equivalentRefusalChain(t, routeName, ['gpt-default-a', 'gpt-default-b']);
+    const farC = target('gpt-distant-equivalent-c', { reasoningEffort: 'high' });
+    const catalog = structuredClone(next.catalog);
+    catalog.providers[0].models.push({ id: farC.model, options: [select('reasoningEffort', ['high'])] });
+    const evidence = immutable([...next.modelRejections.slice(0, -1), reject(preparedA, empty ? [] : [farC.model])]);
+    const savedEvidence = structuredClone(evidence);
+    const current = { ...next, catalog, modelRejections: evidence };
+    if (empty) await assert.rejects(prepareT3Delegation(current), /BLOCKED: no observed valid equivalent on the configured provider/);
+    else {
+      const prepared = await prepareT3Delegation(current);
+      assert.deepEqual(prepared.arguments.target, farC);
+      assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+      assert.deepEqual(prepared.audit.selection.modelRejections, savedEvidence);
+    }
+    assert.equal(catalog.providers[0].models.some(model => model.id === equivalentB.model), true);
+    assert.deepEqual(evidence, savedEvidence);
+  });
+}
+
+test('an arbitrary bare third target stays foreign after a genuine equivalent refusal', async t => {
+  const { next } = await equivalentRefusalChain(t);
+  await assert.rejects(prepareT3Delegation({ ...next, modelRejections: [...next.modelRejections,
+    { target: target('gpt-default-0', { reasoningEffort: 'high' }), code: 'model-rejected', rawError: 'Foreign.', validModelIds: [] }
+  ] }), /Foreign model rejection target or provider/);
+  const bare = structuredClone(next.modelRejections);
+  delete bare.at(-1).preparedRequest;
+  await assert.rejects(prepareT3Delegation({ ...next, modelRejections: bare }), /Foreign model rejection target or provider/);
+});
+
+function reseal(saved) {
+  const canonical = value => Array.isArray(value) ? value.map(canonical)
+    : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
+  const digest = value => createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
+  saved.audit.payloadHash = digest(saved.arguments);
+  const { receiptHash, ...audit } = saved.audit;
+  saved.audit.receiptHash = digest({ tool: saved.tool, arguments: saved.arguments, audit });
+}
+
+for (const [name, change] of [
+  ['mismatched target receipt', (rejection, fixture) => { rejection.preparedRequest = structuredClone(fixture.original); }],
+  ['wrong origin', rejection => { rejection.preparedRequest.audit.preparation.chainOrigin.catalog.parentThreadId = 'foreign-origin'; reseal(rejection.preparedRequest); }],
+  ['forged selected target', rejection => {
+    const saved = rejection.preparedRequest;
+    saved.arguments.target = target('gpt-default-0', { reasoningEffort: 'high' });
+    saved.audit.selection.selectedTarget = structuredClone(saved.arguments.target);
+    rejection.target = structuredClone(saved.arguments.target);
+    reseal(saved);
+  }],
+  ['cross-task receipt', rejection => { rejection.preparedRequest.audit.preparation.input.task = 'Another task.'; reseal(rejection.preparedRequest); }],
+  ['foreign provider', rejection => { rejection.target.providerInstanceId = 'other-cursor'; }]
+]) {
+  test(`equivalent refusal rejects ${name}`, async t => {
+    const fixture = await equivalentRefusalChain(t);
+    const evidence = structuredClone(fixture.next.modelRejections);
+    change(evidence.at(-1), fixture);
+    await assert.rejects(prepareT3Delegation({ ...fixture.next, modelRejections: evidence }), /Invalid rejected prepared request/);
+  });
+}
+
+test('a genuine helper-generated equivalent with a different chain origin stays blocked', async t => {
+  const { args, original, history, equivalentA, equivalentB } = await equivalentRefusalChain(t);
+  const bareHistory = history.map(({ preparedRequest, ...rejection }) => rejection);
+  const foreignCatalog = structuredClone(args.catalog);
+  foreignCatalog.inheritedModel = 'gpt-default';
+  const foreignA = await prepareT3Delegation({ ...args, catalog: foreignCatalog, reviewedModel: 'gpt-original', stepId: 'other-origin-a', modelRejections: bareHistory });
+  assert.deepEqual(foreignA.arguments.target, equivalentA);
+  await assert.rejects(prepareT3Delegation({ ...args, stepId: 'mixed-origin-b', rejectedPreparedRequest: original,
+    modelRejections: [...bareHistory, reject(foreignA, [equivalentB.model])]
+  }), /Invalid rejected prepared request chain origin/);
+});
+
+test('a genuine helper-generated equivalent from another task cannot authorize refusal history', async t => {
+  const { args, history, equivalentA, equivalentB } = await equivalentRefusalChain(t);
+  const bareHistory = history.map(({ preparedRequest, ...rejection }) => rejection);
+  const foreignA = await prepareT3Delegation({ ...args, task: 'Review another bounded task.', stepId: 'other-task-a', modelRejections: bareHistory });
+  assert.deepEqual(foreignA.arguments.target, equivalentA);
+  await assert.rejects(prepareT3Delegation({ ...args, stepId: 'cross-task-b',
+    modelRejections: [...bareHistory, reject(foreignA, [equivalentB.model])]
+  }), /Invalid rejected prepared request provenance/);
+});
+
+for (const selectedRoute of ['arena.runners', 'architect.runners']) {
+  test(`${selectedRoute} keeps later equivalent selection in the default family`, async t => {
+    const { next, preparedA } = await equivalentRefusalChain(t, selectedRoute);
+    await assert.rejects(prepareT3Delegation({ ...next, modelRejections: [
+      ...next.modelRejections.slice(0, -1), immutable(reject(preparedA, ['claude-equivalent']))
+    ] }), /BLOCKED: no observed valid equivalent/);
   });
 }

@@ -340,6 +340,11 @@ Original-line recovery classifies the adjusted refusal separately, while later
 model fallback retains the complete valid refusal history. A refused adjusted
 target is not retried as a default or equivalent. When every permitted candidate
 is refused or invalid, preparation fails explicitly.
+A reconstructed same-origin equivalent may itself be refused and enter the
+validated history. Append refusal records in execution order. The latest default
+or validated equivalent refusal supplies the current `validModelIds`; older
+menus are not combined. An empty current list provides no permitted equivalent.
+The complete history still excludes every refused candidate.
 
 ```js
 {

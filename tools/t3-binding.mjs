@@ -85,6 +85,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "keep earlier evidence unchanged and use each request's captured catalog.",
     "Later model fallback retains all valid refusals, including adjustments;",
     "never reselect a refused target as a default or equivalent.",
+    "Verified same-origin equivalents belong to later refusal history; append",
+    "errors in execution order and use the latest default/equivalent valid IDs.",
     "Use selectionPolicy for explicit channel fallbacks and ordered trail",
     "candidates. Route modelFallbacks handle evidenced model rejection only:",
     "Without a policy, defaults derive only from runnable observed catalog",

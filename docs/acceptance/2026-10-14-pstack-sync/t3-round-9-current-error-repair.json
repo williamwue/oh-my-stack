@@ -1,0 +1,7 @@
+{
+  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Athread-send%3Aoms-r9-current-error-validids-authority-20261014",
+  "status": "completed",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "summary": "Fixed the follow-up in exactly these files:\n\n- [tools/t3-orchestration.mjs](tools/t3-orchestration.mjs:572) uses IDs from the latest default or reconstructed equivalent refusal. An empty list blocks fallback. Full history still validates provenance and excludes refused targets.\n- [tests/t3-candidate-coherence.test.mjs](tests/t3-candidate-coherence.test.mjs:436) adds immutable-history regressions for stale nearB and empty latest IDs.\n\nActual red results were selection of `gpt-default-b` instead of C, and `Missing expected rejection.` Both pass after the fix. The existing A → B chain also passes.\n\nAll **207 tests** passed across the three required suites. `git diff --check` passed. The helper is **974 lines**.\n\nFix Root Causes removed the historical union. Model the Domain guided the reconstructed selection metadata. Test Behavior, Not Implementation and Prove It Works guided red/green verification. Laziness Protocol kept the change small.\n\nUnrelated edits remain preserved. No commits, package/config changes, installation, provider calls, or nested agents. Parent fullcheck and final review remain pending."
+}

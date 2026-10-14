@@ -551,6 +551,7 @@ function resolveModelFallback(input, provenance = new Map(), rejectedJobTarget) 
   }
   const permitted = new Set([hash(target), hash(tableDefault)]);
   if (rejectedJobTarget) permitted.add(hash(rejectedJobTarget));
+  for (const [key, captured] of provenance) if (captured.source === 'captured-prepared-request') permitted.add(key);
   const rejectionProvenance = [];
   for (const rejection of evidence) {
     const rejected = rejectionFrom(rejection);
@@ -568,9 +569,12 @@ function resolveModelFallback(input, provenance = new Map(), rejectedJobTarget) 
     const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
     if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
     const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
+    const latestRejection = evidence.findLast(rejection => hash(rejection.target) === hash(tableDefault)
+      || provenance.get(hash(rejection.target))?.selectionReason === 'model-valid-equivalent');
+    const validIds = new Set(latestRejection.validModelIds);
     const effort = Object.entries(tableDefault.options).find(([id, value]) => effortKeys.has(id) && typeof value === 'string');
     const slugEffort = slugPattern.exec(tableDefault.model)?.[2];
-    const candidates = provider.models.filter(model => defaultRejection.validModelIds.includes(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
+    const candidates = provider.models.filter(model => validIds.has(model.id) && !rejectedIds.has(model.id) && !inheritedAliases.has(model.id))
       .filter(model => routePolicy.strategy !== 'arena' || t3ModelFamily(model.id, policy.modelFamilies) === defaultFamily)
       .map(model => replacementCandidate(tableDefault, model, skipped)).filter(Boolean)
       .map(candidate => ({ ...candidate, rank: [
@@ -694,7 +698,7 @@ async function rejectedPreparation(saved, input, context, target) {
   }
   if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
   return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy, chainOrigin: clone(preparation.chainOrigin),
-    source: 'captured-prepared-request', receiptHash: saved.audit.receiptHash };
+    source: 'captured-prepared-request', selectionReason: selection.reason, receiptHash: saved.audit.receiptHash };
 }
 
 export async function prepareT3Delegation(input) {
