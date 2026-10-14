@@ -2,48 +2,48 @@
   "schemaVersion": 1,
   "generatedBy": "tools/stable-marketplace.mjs",
   "repository": "williamwue/oh-my-stack",
-  "version": "0.16.0",
-  "releaseId": 410696602,
-  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.16.0",
-  "publishedAt": "2026-10-12T14:32:15Z",
+  "version": "0.17.0",
+  "releaseId": 412223983,
+  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/v0.17.0",
+  "publishedAt": "2026-10-14T00:32:18Z",
   "source": {
-    "ref": "v0.16.0",
-    "commit": "c4288e9ce74c99ac2014f7bb34b19bc013cd25d3",
+    "ref": "v0.17.0",
+    "commit": "74ac612dea4b99d08b2ade427100cf6a37e1ebbf",
     "worktreeDirty": false,
     "cleanTaggedCheckout": true
   },
   "assets": [
     {
       "name": "SHA256SUMS",
-      "sha256": "edf18302a8843e31a45bd3ef3f813bf85f524c7f3a3d83e3baecfbcb5f9d98fb"
+      "sha256": "842574324f35503c3adf221598227c09ed92a17b6f626d09f6bead1992d7d740"
     },
     {
-      "name": "oh-my-stack-claude-code-0.16.0.tar.gz",
-      "sha256": "7b295183dfc1a9756976b0ff6f496d50bdf4f4e3487219a3c24678ff8e49c74a"
+      "name": "oh-my-stack-claude-code-0.17.0.tar.gz",
+      "sha256": "ad1e5f00a84cab05ac8261abfd63e8aa4a5d89c819fa1b7e9d3e5de7c4ecd676"
     },
     {
-      "name": "oh-my-stack-claude-plugin-0.16.0.tar.gz",
-      "sha256": "a20d9db2f649306f859cd3220c7a70a45ed61cb6f0c66105840bb28e10c0768e"
+      "name": "oh-my-stack-claude-plugin-0.17.0.tar.gz",
+      "sha256": "c1073ed5d3751ca5f50cc7928a143abd00ce0c7976963f3f6b5dbab2aad726ce"
     },
     {
-      "name": "oh-my-stack-codex-0.16.0.tar.gz",
-      "sha256": "a541ccab2b11fcb8bfe851bb9a607e9aba9f3c8c455b09f6df2edea7c2ebe828"
+      "name": "oh-my-stack-codex-0.17.0.tar.gz",
+      "sha256": "20dc86de862f98c71a0e293d062a907248604efd66d26a65f3444adaaaadd0ea"
     },
     {
-      "name": "oh-my-stack-codex-plugin-0.16.0.tar.gz",
-      "sha256": "384b3fad73f2e56f718672b210c34836ea423cc49c3710cf7854258579c8f301"
+      "name": "oh-my-stack-codex-plugin-0.17.0.tar.gz",
+      "sha256": "cdc51849c4fb229b1999635b90627ca766a5a592c4e1868bd0f6fcb932b6429f"
     },
     {
-      "name": "oh-my-stack-omp-0.16.0.tar.gz",
-      "sha256": "8459e108494f0eb4a92b899775f78d855e144c432b37b0b4e859d69f33c1de5f"
+      "name": "oh-my-stack-omp-0.17.0.tar.gz",
+      "sha256": "73dedbb90638d70680fb31fbd496ee760d217e29c5c9dde5cf9ad664a49ed61d"
     },
     {
-      "name": "oh-my-stack-pi-0.16.0.tar.gz",
-      "sha256": "aee10ab19d8ad8d47f8a127c497282c397c1262614aef21bf2b4b51be0363a7b"
+      "name": "oh-my-stack-pi-0.17.0.tar.gz",
+      "sha256": "672a55ca605ccab68935338b7c85599672d47c6622cbc19f23811ac06a74de98"
     },
     {
       "name": "release-manifest.json",
-      "sha256": "24534d598e320c691b45328198cdf84d5b25900f4d4735edeec198a675a5bb52"
+      "sha256": "c4287b4cd05e43f3d85215460ef70538e3ceef8672dc7f18b2c7e7c086f7b0d9"
     }
   ],
   "files": [
@@ -63,7 +63,7 @@
       "path": "plugins/claude-code/.claude-plugin/plugin.json",
       "size": 425,
       "mode": "0644",
-      "sha256": "d3db098e63da333fbfd1d771b2ee63c7f5e588ac1c574eee3641b395f3df5f36"
+      "sha256": "1dc0f2f141bd6123e7c1d0537270ef6f4c731ce703fd2618266097890a6147dc"
     },
     {
       "path": "plugins/claude-code/agents/comment-sicko.md",
@@ -153,7 +153,7 @@
       "path": "plugins/claude-code/GENERATION.json",
       "size": 383,
       "mode": "0644",
-      "sha256": "bbec1d331e9693a7921ad933a8c964f850d65951881fb72a5842241780717055"
+      "sha256": "2417d93b9bbbcf39ac3b4e95447aedb54e88feb60353c4e9f4ffa090ee8e4c5f"
     },
     {
       "path": "plugins/claude-code/hooks/hooks.json",
@@ -1161,7 +1161,7 @@
       "path": "plugins/codex/.codex-plugin/plugin.json",
       "size": 1013,
       "mode": "0644",
-      "sha256": "44bddeba56a1c05cc30d500bb01540e1a89b8e70d0c51790dd85044259d26be5"
+      "sha256": "f58ce5f4f3986df62c512c58dae9e81bf135db5579f43f73a922bfdc3c1d3261"
     },
     {
       "path": "plugins/codex/agents/comment-sicko.toml",
@@ -1263,7 +1263,7 @@
       "path": "plugins/codex/GENERATION.json",
       "size": 434,
       "mode": "0644",
-      "sha256": "7415f82513a5fbd91d8f10c3ad34921568205c71af5ef3ac4e5a14f7a0c60533"
+      "sha256": "3497b401f83c5dac3c9c5c57245c2297a37b48dadff8baebd6df9a66944f3a04"
     },
     {
       "path": "plugins/codex/hooks/hooks.json",
@@ -2817,7 +2817,7 @@
       "path": "README.md",
       "size": 689,
       "mode": "0644",
-      "sha256": "fea3e22a95b6d803a2890175ae06555c0f8aae032f03f8bccabcb1521edae22b"
+      "sha256": "8d05a7cd3f91066ca3f602c9e82226aed8b77e084ca5c20481ef93c6853677ab"
     }
   ]
 }
