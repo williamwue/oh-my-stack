@@ -11,6 +11,10 @@ default distribution follows pinned pstack 0.15.17 and includes automatic routin
 Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
 Installed releases may differ.
 
+The source candidate offers [opt-in T3 orchestration](docs/t3-orchestration.md)
+through detached Codex and Claude Code builds. This does not update an
+installed plugin or the default release packages.
+
 Describe a task, clarify a requirement, review a change, or inspect a module's
 design. Oh My Stack gives your agent a workflow and asks it to show evidence
 for the result.

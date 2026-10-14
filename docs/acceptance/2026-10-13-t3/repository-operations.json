@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-13T15:01:11.861873+00:00",
+  "executables": [
+    {
+      "path": "tools/t3-binding.mjs",
+      "owner": "local-adapter",
+      "purpose": "Render and validate opt-in T3 bindings in detached native host packages.",
+      "network": false,
+      "writes": [
+        "detached selected package files through the generator"
+      ],
+      "uninstallBehavior": "Repository adapter module; removed with the checkout."
+    },
+    {
+      "path": "tools/t3-orchestration.mjs",
+      "owner": "local-adapter",
+      "purpose": "Validate captured T3 catalogs and prepare isolated resolution, delegated task, cancellation, and scheduler JSON artifacts.",
+      "network": false,
+      "writes": [
+        "explicit new caller-selected JSON output"
+      ],
+      "uninstallBehavior": "Selected package helper is removed with that package; user-owned T3 resolution remains independent."
+    }
+  ],
+  "index": {
+    "operation": "git add -N docs/acceptance/2026-10-13-t3",
+    "purpose": "Expose new acceptance files to diff and validation; not a commit or staged content",
+    "stagedContentPaths": [],
+    "history": [
+      {
+        "invokedAt": "2026-10-13T13:22:43.825Z",
+        "command": "git add -N tools/t3-orchestration.mjs tools/t3-binding.mjs tests/t3-orchestration.test.mjs tests/t3-generation.test.mjs tests/fixtures/t3-catalog.json src/schemas/t3-resolution.schema.json docs/t3-orchestration.md docs/zh-CN/t3-orchestration.md docs/acceptance/2026-10-13-t3"
+      },
+      {
+        "invokedAt": "2026-10-13T13:48:18.798Z",
+        "command": "git add -N docs/acceptance/2026-10-13-t3"
+      },
+      {
+        "invokedAt": "2026-10-13T14:53:57.181Z",
+        "command": "git add -N docs/acceptance/2026-10-13-t3/cursor-probes.json"
+      },
+      {
+        "invokedAt": "2026-10-13T15:01:47.255Z",
+        "command": "git add -N docs/acceptance/2026-10-13-t3"
+      },
+      {
+        "invokedAt": "2026-10-13T15:03:42.136Z",
+        "command": "git add -N docs/acceptance/2026-10-13-t3"
+      }
+    ],
+    "historyEvidence": "Actual exec_command calls in own session 01a13502-b315-7663-a26b-afe7325e59b6; checked through this correction."
+  },
+  "commitCreated": false,
+  "published": false,
+  "updatedAt": "2026-10-13T15:08:11.852093+00:00"
+}

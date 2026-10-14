@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-13T22:31:50.303249Z",
+  "scope": "User-authorized cleanup of the two disposable installation-acceptance providers",
+  "settingsMethod": "Exact removal of providerInstances keys in native settings.json; native UI timed out twice; installed T3 settings service watches file changes",
+  "removedProviders": {
+    "oms_t3_codex_acceptance": {
+      "driver": "codex",
+      "displayName": "OMS T3 验收 Codex",
+      "enabled": true,
+      "config": {
+        "binaryPath": "~/.local/bin/codex",
+        "homePath": "<workspace>/.tmp/t3-install-acceptance/codex-home",
+        "setupMode": "existing"
+      }
+    },
+    "oms_t3_claude_acceptance": {
+      "driver": "claudeAgent",
+      "displayName": "OMS T3 验收 Claude",
+      "enabled": true,
+      "config": {
+        "binaryPath": "~/.local/bin/claude",
+        "launchArgs": "--plugin-dir <workspace>/.tmp/t3-install-acceptance/claude-home/plugins/cache/oms-t3-claude-acceptance/oh-my-stack/0.16.0 --settings <workspace>/.tmp/t3-install-acceptance/claude-session-settings.json"
+      }
+    }
+  },
+  "unrelatedSettingsSemanticallyEqual": true,
+  "otherProviderDefinitionsEqual": true,
+  "normalCodexAndClaudePluginSettingsUnchanged": true,
+  "acceptanceTasksTerminalWithoutPendingChildren": true,
+  "liveCatalogRemovalVerified": true,
+  "temporaryInstallationDirectoryRemoved": true,
+  "retained": [
+    "repository implementation",
+    "durable docs/acceptance/2026-10-13-t3 evidence",
+    "generated .tmp/t3 build candidates",
+    "native original credentials",
+    "historical delegated T3 threads"
+  ],
+  "normalSettingsHashesAtCleanup": {
+    "~/.codex/config.toml": "44c8b9e8191ba2618642e64dc23f1ab0838f1c2e4542d65720e6cc5d2af918ed",
+    "~/.claude/settings.json": "dfe1fcc2dd43a837e09e46d6c077cacb3b08e3280e138670eb304b0172b3d52e"
+  },
+  "completedAt": "2026-10-13T22:32:04.420197Z",
+  "removedTemporaryDirectory": ".tmp/t3-install-acceptance",
+  "originalCredentialSymlinkTargetPreserved": true,
+  "historicalRawIgnoredAcceptanceLogs": "Removed with disposable test directory; curated repository receipts and historical T3 threads retained"
+}

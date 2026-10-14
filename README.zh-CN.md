@@ -10,6 +10,9 @@ pstack 工程工作流，移植到 Codex 和 Claude Code。
 自动路由随默认包提供。交付证据、附加工具和 AIHero 通过[显式扩展](docs/pstack-parity.md)加入。
 现有安装版本可能不同。
 
+源码候选提供[可选 T3 编排](docs/zh-CN/t3-orchestration.md)，生成独立的 Codex 与 Claude Code 包。
+生成操作不会更新已安装插件或默认发行包。
+
 描述任务、澄清需求、审阅改动或检查模块设计。Oh My Stack 为 agent 提供执行步骤，并要求它用实际证据说明结果。
 
 [开始使用](docs/zh-CN/getting-started.md) · [按任务选择入口](docs/zh-CN/guides/common-tasks.md) · [文档中心](docs/zh-CN/README.md)

@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-13T16:06:43.807256Z",
+  "scope": "Installation acceptance after independent review and coordinator corrections",
+  "checks": {
+    "validate": "pass: 4 targets, 8 profiles, 88 Skills",
+    "markdownLint": "pass: 0 issues after fixing missing blank lines in reviewer prose",
+    "diffCheck": "pass",
+    "acceptanceJSON": "valid"
+  },
+  "sourceChangedDuringInstallationAcceptance": false,
+  "sourceCheckSnapshot": "verification.json",
+  "files": {
+    "installation.md": "c4f3f56201ce3fa13ec5049147ee36c7075b54115cd64079b05c6dcfc1af442f",
+    "installation-receipt.json": "973fb588dffe2a905682d3b4b2bfd8f57d82511ae3af0156dab1f0b4ac19d625",
+    "acceptance.md": "4e3a2feae5457a3d571b48e988e852abd0579c5a5fe7ddb81a89cc5059140298",
+    "decisions.tsv": "eaaf2c4eb03721d12250d0f76de92f3b432e6854d43c021ebec5d3e1eb972c51",
+    "installation-trail-review.md": "4b663775fec2ecfa3eb20d74ab6e540a7fdd33de3ac1804314e76618e976b879",
+    "installation-trail-receipt.json": "e8a9a03a2cdf2675e5356fdfc908a1b96d3d163cdbdbc2291b1f176b92b90a9d",
+    "claude-entry-block.json": "1d07e7d2cb84beefcefca925166416eb07b75d219cc07a6a4a8dcc85c32a5150"
+  },
+  "independentTrailReview": {
+    "receipt": "installation-trail-receipt.json",
+    "reportedModel": "claude-opus-5-5",
+    "findings": 5,
+    "implementationDefects": 0,
+    "coordinatorCorrections": "all five record findings addressed; corrected revision not separately reviewed"
+  }
+}

@@ -6,7 +6,7 @@
     "extensions": []
   },
   "target": "claude-code",
-  "sourceVersion": "0.16.0",
+  "sourceVersion": "0.17.0",
   "profiles": [
     "claude-code-default"
   ],

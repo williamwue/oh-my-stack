@@ -16,6 +16,7 @@
 
 - [Complete Skill directory](skill-directory.md)
 - [Optional model configuration](model-configuration.md)
+- [Opt-in T3 orchestration from source](t3-orchestration.md)
 - [Current support policy](support-policy.md)
 - [Third-party sources and adaptations](../THIRD_PARTY_NOTICES.md)
 - [Release notes](releases/0.10.0.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)

@@ -1,0 +1,67 @@
+[
+  {
+    "modelAndEffortVerified": true,
+    "parentId": "01a13502-b315-7663-a26b-afe7325e59b6",
+    "childId": "01a13538-b500-7fd1-b33f-e72aa4f70d09",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "role": "design-runner",
+    "route": "architect.runners",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false
+  },
+  {
+    "modelAndEffortVerified": true,
+    "parentId": "01a13502-b315-7663-a26b-afe7325e59b6",
+    "childId": "01a13533-84e5-7c80-9140-aa9e1efcfa22",
+    "model": "gpt-6-luna",
+    "reasoningEffort": "high",
+    "role": "explorer",
+    "route": "how.explorer",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false
+  },
+  {
+    "modelAndEffortVerified": true,
+    "parentId": "01a13502-b315-7663-a26b-afe7325e59b6",
+    "childId": "01a13538-6f3c-71a3-a1fb-e674a2e5403e",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "design-runner",
+    "route": "architect.runners",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false
+  },
+  {
+    "modelAndEffortVerified": true,
+    "parentId": "01a13502-b315-7663-a26b-afe7325e59b6",
+    "childId": "01a13533-b997-7e32-9f40-a1174e2c7c73",
+    "model": "gpt-6-luna",
+    "reasoningEffort": "high",
+    "role": "explorer",
+    "route": "how.explorer",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false
+  },
+  {
+    "modelAndEffortVerified": true,
+    "parentId": "01a13502-b315-7663-a26b-afe7325e59b6",
+    "childId": "01a13536-2fa8-7480-89ac-e8f2a0271932",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "role": "explainer",
+    "route": "how.explainer",
+    "checkedChildContexts": 1,
+    "messageVerified": false,
+    "messageAudit": "encrypted-in-parent-record",
+    "roleSelectionClaim": false
+  }
+]

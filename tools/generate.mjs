@@ -1,19 +1,23 @@
 #!/usr/bin/env node
 import { codexSkillDescriptions } from "./codex-skill-descriptions.mjs";
 import { loadSourceSkills, sourceCoordinate, validateSourceTarget } from "./source-skills.mjs";
+import { normalizeOrchestration, targetSelection, t3BindingArtifacts, t3ModelSelectionGuide,
+  t3RoleContracts, t3RuntimeBindingGuide, t3SkillBinding, usesT3 } from "./t3-binding.mjs";
 
 import {
   access,
   cp,
+  lstat,
   mkdir,
   mkdtemp,
   readFile,
   readdir,
+  realpath,
   rename,
   rm,
   writeFile,
 } from "node:fs/promises";
-import { dirname, join, relative, resolve, sep } from "node:path";
+import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -346,8 +350,19 @@ function validateDistributionCatalog(catalog) {
   }
 }
 
-export async function loadModel(root = repoRoot, { extensions = [] } = {}) {
+export async function loadModel(root = repoRoot, { extensions = [], orchestration = "native" } = {}) {
   extensions = normalizeExtensions(extensions);
+  orchestration = normalizeOrchestration(orchestration);
+  if (orchestration === "t3") {
+    const sourceRoot = await realpath(root);
+    for (const artifact of t3BindingArtifacts.filter((entry) => !entry.generated)) {
+      const source = join(root, artifact.path);
+      assert(await exists(source), `t3: source artifact is missing: ${artifact.path}`);
+      assert((await lstat(source)).isFile() && (await realpath(source)).startsWith(`${sourceRoot}${sep}`),
+        `t3: source artifact must be a regular file inside the source root: ${artifact.path}`);
+    }
+    await readJson(join(root, "src", "schemas", "t3-resolution.schema.json"));
+  }
   const project = await readJson(join(root, "src", "core", "project.json"));
   validateProject(project);
   const resolutionPolicy = await readJson(join(root, "src", "runtime-resolution", "policy.json"));
@@ -487,7 +502,7 @@ export async function loadModel(root = repoRoot, { extensions = [] } = {}) {
   for (const description of Object.values(codexSkillDescriptions)) {
     assert(description.length > 0 && description.length <= 120, "Codex descriptions must be 1-120 characters");
   }
-  return { extensions, selection, entries, allCoreSkills, root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
+  return { orchestration, extensions, selection, entries, allCoreSkills, root, project, resolutionPolicy, hostRoutes: hostRoutesDocument.routes, resolutionPresets, registry, profiles, adapters, skills, coreSkills, sourceSkills, coreSkillCatalog, skillCatalog, roles };
 }
 
 function codexSkillMetadata(skill) {
@@ -508,6 +523,7 @@ function codexSkillMetadata(skill) {
 
 function renderSkillDocument(skill, adapter, model) {
   if (skill.source) return skill.text;
+  const t3 = usesT3(model, adapter);
   let body = skill.text.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
   const ompRouteBySkill = {
     feature: "code.feature-refactoring",
@@ -516,7 +532,7 @@ function renderSkillDocument(skill, adapter, model) {
     "perf-issue": "code.perf-issue",
     hillclimb: "code.hillclimb",
   };
-  if (["omp", "codex"].includes(adapter.id) && Object.hasOwn(ompRouteBySkill, skill.metadata.name)) {
+  if (!t3 && ["omp", "codex"].includes(adapter.id) && Object.hasOwn(ompRouteBySkill, skill.metadata.name)) {
     body = body.replaceAll("`code.delegates`", `\`${ompRouteBySkill[skill.metadata.name]}\``);
   }
   const frontmatter = [
@@ -528,7 +544,7 @@ function renderSkillDocument(skill, adapter, model) {
     frontmatter.push("disable-model-invocation: true");
   }
   const delegates = skill.metadata.requires.includes("agents.spawn") || Object.hasOwn(ompRouteBySkill, skill.metadata.name);
-  const codexDelegation = adapter.id === "codex" && delegates
+  const codexDelegation = !t3 && adapter.id === "codex" && delegates
     ? [
       "## Codex delegation binding",
       "",
@@ -551,7 +567,7 @@ function renderSkillDocument(skill, adapter, model) {
       "",
     ].join("\n")
     : "";
-  const codexSetup = adapter.id === "codex" && skill.metadata.name === "setup-oh-my-stack"
+  const codexSetup = !t3 && adapter.id === "codex" && skill.metadata.name === "setup-oh-my-stack"
     ? [
       "## Codex activation boundary",
       "",
@@ -568,7 +584,7 @@ function renderSkillDocument(skill, adapter, model) {
       "",
     ].join("\n")
     : "";
-  const codexGitHub = adapter.id === "codex" && ["opening-a-pr", "babysit", "shipping"].includes(skill.metadata.name)
+  const codexGitHub = !t3 && adapter.id === "codex" && ["opening-a-pr", "babysit", "shipping"].includes(skill.metadata.name)
     ? [
       "## Codex GitHub workflow binding",
       "",
@@ -638,7 +654,7 @@ function renderSkillDocument(skill, adapter, model) {
       "",
     ].join("\n")
     : "";
-  const claudeSetup = adapter.id === "claude-code" && skill.metadata.name === "setup-oh-my-stack"
+  const claudeSetup = !t3 && adapter.id === "claude-code" && skill.metadata.name === "setup-oh-my-stack"
     ? [
       "## Claude Code setup boundary",
       "",
@@ -800,7 +816,7 @@ function renderSkillDocument(skill, adapter, model) {
       "the child model, thinking level, and permissions. Preserve panel order and",
       "count. Supply explicit context and an isolated checkout for writing roles.",
       "Report actual model and effort separately from requested configuration.", ""].join("\n") : "";
-  const extension = [piBinding, codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, helpBinding, routingBinding, deliveryBinding].filter(Boolean).join("\n").trimEnd();
+  const extension = [t3 ? t3SkillBinding() : "", piBinding, codexDelegation, codexSetup, codexGitHub, ompSetup, claudeSetup, ompDelegation, helpBinding, routingBinding, deliveryBinding].filter(Boolean).join("\n").trimEnd();
   const extendedBody = extension ? /^# .+\n/.test(body)
     ? body.replace(/^(# .+\n)/, `$1\n${extension}\n`) : `${extension}\n\n${body}` : body;
   return [...frontmatter, "---", "", extendedBody, ""].join("\n");
@@ -885,8 +901,48 @@ function packageSkills(model, includeProbes) {
   return model.skills.filter((skill) => publicNames.has(skill.metadata.name));
 }
 
-export async function renderTarget(stageRoot, model, adapter, { includeProbes = false } = {}) {
+function targetRoutes(model, adapter) {
+  return adapter.id === "pi" ? { ...model.resolutionPolicy.routes,
+    ...Object.fromEntries(model.roles.map((role) => [`role.${role.metadata.name}`, {
+      kind: "single", role: role.metadata.name, workload: role.metadata.workload,
+    }])) }
+    : ["omp", "codex"].includes(adapter.id)
+      ? { ...model.resolutionPolicy.routes, ...model.hostRoutes }
+      : model.resolutionPolicy.routes;
+}
+
+async function canonicalPath(path) {
+  try { return await realpath(path); }
+  catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    return join(await canonicalPath(dirname(path)), basename(path));
+  }
+}
+
+async function assertDetachedOutput(root, outputRoot) {
+  const source = await canonicalPath(resolve(root));
+  const output = await canonicalPath(resolve(outputRoot));
+  const packages = join(source, "packages");
+  const scratch = join(source, ".tmp");
+  const destinations = [output, ...await Promise.all(adapterIds.map((id) => canonicalPath(join(output, "packages", id))))];
+  assert(destinations.every((path) => path !== source && !source.startsWith(path.endsWith(sep) ? path : `${path}${sep}`)
+    && (path.startsWith(`${scratch}${sep}`) || !path.startsWith(`${source}${sep}`))
+    && path !== packages && !path.startsWith(`${packages}${sep}`)),
+    "t3 orchestration requires a detached outputRoot outside protected source paths and ancestors");
+}
+
+function codexSkillEntry(document, name) {
+  const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];
+  const heading = document.match(/^# .+$/m)?.[0] ?? `# ${name}`;
+  return `${frontmatter}\n${heading}\n\nRead the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying\nthis Skill. Read it through the end; if a tool truncates output, continue with\nbounded chunks until the whole file has been read. Do not execute a partial\nprocedure or infer missing instructions. If the file cannot be read, report\nthe limitation and stop before taking workflow actions.\n\nThe user's request sets the scope and authorization. Loading this Skill does\nnot authorize writes, external actions, or running its workflow when the user\nonly asks to inspect or explain it.\n`;
+}
+
+export async function renderTarget(stageRoot, model, adapter, { includeProbes = false, orchestration = model.orchestration ?? "native" } = {}) {
+  model = { ...model, orchestration: normalizeOrchestration(orchestration) };
+  const t3 = usesT3(model, adapter);
+  if (model.orchestration === "t3") await assertDetachedOutput(model.root, stageRoot);
   const target = join(stageRoot, adapter.packageDir);
+  const selection = targetSelection(model, adapter);
   const skills = packageSkills(model, includeProbes);
   const manifest = structuredClone({ ...adapter.manifest, version: model.project.version });
   if (model.entries.some((entry) => entry.kind === "manifest" && entry.path === "manifest/hooks" && entry.targets.includes(adapter.id))) manifest.hooks = "./hooks/hooks.json";
@@ -918,9 +974,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     if (!skill.source && adapter.id === "codex" && Buffer.byteLength(document) > 7500) {
       assert(!await exists(join(skillTarget, "WORKFLOW.md")), `${skill.metadata.name}: reserved generated WORKFLOW.md already exists`);
       await writeText(join(skillTarget, "WORKFLOW.md"), document);
-      const frontmatter = document.match(/^---\n[\s\S]*?\n---\n/)[0];
-      const heading = document.match(/^# .+$/m)?.[0] ?? `# ${skill.metadata.name}`;
-      await writeText(join(skillTarget, "SKILL.md"), `${frontmatter}\n${heading}\n\nRead the [complete workflow](WORKFLOW.md) beside this SKILL.md before applying\nthis Skill. Read it through the end; if a tool truncates output, continue with\nbounded chunks until the whole file has been read. Do not execute a partial\nprocedure or infer missing instructions. If the file cannot be read, report\nthe limitation and stop before taking workflow actions.\n\nThe user's request sets the scope and authorization. Loading this Skill does\nnot authorize writes, external actions, or running its workflow when the user\nonly asks to inspect or explain it.\n`);
+      await writeText(join(skillTarget, "SKILL.md"), codexSkillEntry(document, skill.metadata.name));
     } else {
       await writeText(join(skillTarget, "SKILL.md"), document);
     }
@@ -942,8 +996,8 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   await writeJson(join(target, "SKILL_CATALOG.json"), {
     schemaVersion: 1,
     target: adapter.id,
-    selection: model.selection,
-    resources: model.entries.filter((entry) => !entry.targets || entry.targets.includes(adapter.id))
+    selection,
+    resources: [...model.entries, ...(t3 ? t3BindingArtifacts : [])].filter((entry) => !entry.targets || entry.targets.includes(adapter.id))
       .filter((entry) => !entry.owner || skills.some((skill) => skill.metadata.name === entry.owner)),
     skills: skills.map((skill) => ({
       name: skill.metadata.name,
@@ -964,13 +1018,8 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     await writeText(join(target, "agents", `${role.metadata.name}.${extension}`), renderer(role));
   }
 
-  const routes = adapter.id === "pi" ? { ...model.resolutionPolicy.routes,
-    ...Object.fromEntries(model.roles.map((role) => [`role.${role.metadata.name}`, {
-      kind: "single", role: role.metadata.name, workload: role.metadata.workload,
-    }])) }
-    : ["omp", "codex"].includes(adapter.id)
-      ? { ...model.resolutionPolicy.routes, ...model.hostRoutes }
-      : model.resolutionPolicy.routes;
+  const routes = targetRoutes(model, adapter);
+  if (t3) await writeJson(join(target, "config", "t3-role-contracts.json"), t3RoleContracts(model, adapter, routes));
   if (["codex", "pi"].includes(adapter.id)) {
     await writeJson(join(target, "config", "role-contracts.json"), {
       schemaVersion: 1,
@@ -1008,7 +1057,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
     ),
     adapter: resolutionAdapters[adapter.id],
   });
-  for (const entry of model.entries) {
+  for (const entry of [...model.entries, ...(t3 ? t3BindingArtifacts : [])]) {
     if (!entry.output || entry.generated || entry.targets && !entry.targets.includes(adapter.id)) continue;
     const output = join(target, entry.output);
     await mkdir(dirname(output), { recursive: true });
@@ -1023,13 +1072,13 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       }] }] },
     });
   }
-  await writeText(join(target, "docs", "runtime-binding.md"), runtimeBindingGuide(adapter.id));
-  await writeText(join(target, "docs", "model-selection.md"), modelSelectionGuide(adapter.id));
+  await writeText(join(target, "docs", "runtime-binding.md"), t3 ? t3RuntimeBindingGuide(adapter.id) : runtimeBindingGuide(adapter.id));
+  await writeText(join(target, "docs", "model-selection.md"), t3 ? t3ModelSelectionGuide() : modelSelectionGuide(adapter.id));
 
   await writeJson(join(target, "GENERATION.json"), {
     schemaVersion: 1,
     generatedBy: "tools/generate.mjs",
-    selection: model.selection,
+    selection,
     target: adapter.id,
     sourceVersion: model.project.version,
     profiles: adapter.profiles,
@@ -1048,7 +1097,10 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
   return target;
 }
 
-export async function validateRenderedTarget(target, adapter, model, { includeProbes = false } = {}) {
+export async function validateRenderedTarget(target, adapter, model, { includeProbes = false, orchestration = model.orchestration ?? "native" } = {}) {
+  model = { ...model, orchestration: normalizeOrchestration(orchestration) };
+  const t3 = usesT3(model, adapter);
+  const selection = targetSelection(model, adapter);
   const skills = packageSkills(model, includeProbes);
   const manifestPath = join(target, adapter.manifestPath);
   assert(await exists(manifestPath), `${adapter.id}: generated manifest is missing`);
@@ -1084,6 +1136,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
     assert(!(await exists(join(target, adapter.skillsDir, name))), `${adapter.id}: probe Skill leaked into public package: ${name}`);
   }
   const catalog = await readJson(join(target, "SKILL_CATALOG.json"));
+  assert(JSON.stringify(catalog.selection) === JSON.stringify(selection), `${adapter.id}: catalog selection drift`);
   assert(catalog.target === adapter.id, `${adapter.id}: generated Skill catalog target drift`);
   assert(catalog.skills.length === skills.length, `${adapter.id}: generated Skill catalog length drift`);
   assert(catalog.skills.filter((entry) => entry.audience === "public").length === model.skillCatalog.public.length, `${adapter.id}: generated public Skill catalog drift`);
@@ -1107,7 +1160,35 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
   const routing = model.entries.some((entry) => entry.kind === "hook" && entry.targets.includes(adapter.id));
   assert(Boolean(manifest.hooks) === routing, `${adapter.id}: extension hook declaration drift`);
   assert((await exists(join(target, "hooks", "hooks.json"))) === routing, `${adapter.id}: extension hook files drift`);
-  assert(JSON.stringify(generation.selection) === JSON.stringify(model.selection), `${adapter.id}: selection drift`);
+  assert(JSON.stringify(generation.selection) === JSON.stringify(selection), `${adapter.id}: selection drift`);
+  if (t3) {
+    const resources = catalog.resources.filter((entry) => entry.orchestration === "t3");
+    assert(JSON.stringify(resources) === JSON.stringify(t3BindingArtifacts), `${adapter.id}: T3 artifact declaration drift`);
+    for (const artifact of t3BindingArtifacts) {
+      const path = join(target, artifact.output);
+      assert(await exists(path), `${adapter.id}: T3 artifact is missing: ${artifact.output}`);
+      if (!artifact.generated) {
+        assert((await readFile(path)).equals(await readFile(join(model.root, artifact.path))),
+          `${adapter.id}: T3 artifact source drift: ${artifact.output}`);
+      }
+    }
+    const contracts = await readJson(join(target, "config", "t3-role-contracts.json"));
+    assert(JSON.stringify(contracts) === JSON.stringify(t3RoleContracts(model, adapter, targetRoutes(model, adapter))),
+      `${adapter.id}: T3 role contracts drift`);
+    for (const [name, expected] of [["runtime-binding.md", t3RuntimeBindingGuide(adapter.id)], ["model-selection.md", t3ModelSelectionGuide()]]) {
+      assert(await readFile(join(target, "docs", name), "utf8") === expected, `${adapter.id}: T3 ${name} drift`);
+    }
+    for (const skill of skills.filter((entry) => !entry.source)) {
+      const directory = join(target, adapter.skillsDir, skill.metadata.name);
+      const expected = renderSkillDocument(skill, adapter, model);
+      const wrapped = adapter.id === "codex" && Buffer.byteLength(expected) > 7500;
+      const path = join(directory, wrapped ? "WORKFLOW.md" : "SKILL.md");
+      const document = await readFile(path, "utf8");
+      assert(document === expected, `${adapter.id}: T3 Skill binding drift: ${skill.metadata.name}`);
+      if (wrapped) assert(await readFile(join(directory, "SKILL.md"), "utf8") === codexSkillEntry(expected, skill.metadata.name),
+        `${adapter.id}: T3 entry binding drift: ${skill.metadata.name}`);
+    }
+  }
   if (adapter.id === "pi") {
     assert(await exists(join(target, "extensions", "oms.ts")), "pi: native extension is missing");
     assert(await exists(join(target, "config", "role-contracts.json")), "pi: role contracts are missing");
@@ -1157,8 +1238,10 @@ async function installGeneratedTargets(root, stageRoot, adapters) {
   }
 }
 
-export async function generate({ root = repoRoot, check = false, extensions = [], outputRoot = root } = {}) {
-  const model = await loadModel(root, { extensions });
+export async function generate({ root = repoRoot, check = false, extensions = [], orchestration = "native", outputRoot = root } = {}) {
+  orchestration = normalizeOrchestration(orchestration);
+  if (orchestration === "t3") await assertDetachedOutput(root, outputRoot);
+  const model = await loadModel(root, { extensions, orchestration });
   outputRoot = resolve(outputRoot);
   await mkdir(join(outputRoot, ".tmp"), { recursive: true });
   await mkdir(join(root, ".tmp"), { recursive: true });
@@ -1187,9 +1270,26 @@ export async function generate({ root = repoRoot, check = false, extensions = []
 
 export async function generateProbeTargets({
   root = repoRoot,
-  out = join(root, ".tmp", "probe-packages"), extensions = [],
+  out = join(root, ".tmp", "probe-packages"), extensions = [], orchestration = "native",
 } = {}) {
-  const model = await loadModel(root, { extensions });
+  orchestration = normalizeOrchestration(orchestration);
+  if (orchestration === "t3") await assertDetachedOutput(root, out);
+  const model = await loadModel(root, { extensions, orchestration });
+  if (orchestration === "t3") {
+    await mkdir(join(root, ".tmp"), { recursive: true });
+    const stageRoot = await mkdtemp(join(root, ".tmp", "generate-probes-"));
+    try {
+      for (const adapter of model.adapters) {
+        const target = await renderTarget(stageRoot, model, adapter, { includeProbes: true });
+        await validateRenderedTarget(target, adapter, model, { includeProbes: true });
+      }
+      await mkdir(join(out, ".tmp"), { recursive: true });
+      await installGeneratedTargets(out, stageRoot, model.adapters);
+    } finally {
+      await rm(stageRoot, { recursive: true, force: true });
+    }
+    return model;
+  }
   await rm(out, { recursive: true, force: true });
   await mkdir(out, { recursive: true });
   for (const adapter of model.adapters) {
@@ -1205,17 +1305,19 @@ async function main() {
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (["--check", "--include-probes"].includes(argument)) continue;
-    assert(["--extensions", "--output-root"].includes(argument), `unknown argument ${argument}`);
+    assert(["--extensions", "--output-root", "--orchestration"].includes(argument), `unknown argument ${argument}`);
     const value = argv[++index]; assert(value && !value.startsWith("--"), `${argument}: value is required`);
     if (argument === "--extensions") options.extensions = value.split(",");
+    else if (argument === "--orchestration") options.orchestration = normalizeOrchestration(value);
     else options.outputRoot = resolve(value);
   }
   normalizeExtensions(options.extensions);
   const check = process.argv.includes("--check");
   const includeProbes = process.argv.includes("--include-probes");
+  assert(options.orchestration !== "t3" || options.outputRoot, "t3 orchestration requires a detached --output-root");
   assert(!(check && includeProbes), "--check cannot be combined with --include-probes");
   if (includeProbes) {
-    const model = await generateProbeTargets({ extensions: options.extensions, ...(options.outputRoot ? { out: options.outputRoot } : {}) });
+    const model = await generateProbeTargets({ extensions: options.extensions, orchestration: options.orchestration, ...(options.outputRoot ? { out: options.outputRoot } : {}) });
     console.log(`Generated test-only targets from ${model.skills.length} Skill under .tmp/probe-packages/.`);
     return;
   }

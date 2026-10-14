@@ -16,6 +16,7 @@
 
 - [完整技能目录，英文](../skill-directory.md)
 - [可选模型配置](model-configuration.md)
+- [从源码选择 T3 编排](t3-orchestration.md)
 - [当前支持范围，英文](../support-policy.md)
 - [第三方来源和适配声明，英文](../../THIRD_PARTY_NOTICES.md)
 - [发布说明，英文](../releases/0.10.0.md)与[已发布版本](https://github.com/williamwue/oh-my-stack/releases/latest)

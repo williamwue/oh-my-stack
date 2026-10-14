@@ -1,0 +1,75 @@
+{
+  "effectiveBackendOptionsVerified": false,
+  "observations": [
+    {
+      "probe": "explicit",
+      "observedAt": "2026-10-13T14:47:41.899Z",
+      "sdkRunId": "run-07a7ee93-1bf3-4f0c-b338-c25e15519f55",
+      "status": "error",
+      "error": {
+        "message": "AI Model Not Found Invalid parameters for registry model: \"claude-haiku-5-5\""
+      },
+      "model": {
+        "id": "claude-haiku-5-5",
+        "params": [
+          {
+            "id": "context",
+            "value": "1m"
+          },
+          {
+            "id": "thinking",
+            "value": "true"
+          },
+          {
+            "id": "reasoning_effort",
+            "value": "high"
+          }
+        ]
+      },
+      "source": {
+        "logName": "events.thread-delegated-task-command-3amcp-3a1b161ac3-0fa0-4460-8734-addad4ac3bf0-3adel.log",
+        "line": 5,
+        "recordSha256": "45486c3f2985d8eac6be9c8bbb45c91f8bafca32e72091a6b5c306ae293c622f",
+        "extraction": "selected incoming run.completed fields for this parent-owned task"
+      }
+    },
+    {
+      "probe": "unpinned",
+      "observedAt": "2026-10-13T14:49:56.133Z",
+      "sdkRunId": "run-37d70cef-5ad1-48f9-bf04-c6211f7f6ba0",
+      "status": "finished",
+      "error": null,
+      "model": {
+        "id": "claude-haiku-5-5"
+      },
+      "source": {
+        "logName": "events.thread-delegated-task-command-3amcp-3a1b161ac3-0fa0-4460-8734-addad4ac3bf0-3adel.log",
+        "line": 160,
+        "recordSha256": "4e4c1fafd77ad5bc57f44166cadd6c1c5dc9db1949dedb31e07c6c9b1f6f56fe",
+        "extraction": "selected incoming run.completed fields for this parent-owned task"
+      }
+    },
+    {
+      "probe": "trail",
+      "observedAt": "2026-10-13T14:57:45.588Z",
+      "sdkRunId": "run-34a1d626-b302-4e4f-8efa-7dea7cb67dfd",
+      "status": "finished",
+      "error": null,
+      "model": {
+        "id": "claude-opus-5-5",
+        "params": [
+          {
+            "id": "effort",
+            "value": "high"
+          }
+        ]
+      },
+      "source": {
+        "logName": "events.thread-delegated-task-command-3amcp-3a1b161ac3-0fa0-4460-8734-addad4ac3bf0-3adel.log",
+        "line": 6565,
+        "recordSha256": "505b6fe04d076121454946a77f8c80fc3d1aa9efd19a0c892dbca01c4ef6dee0",
+        "extraction": "selected incoming run.completed fields for this parent-owned task"
+      }
+    }
+  ]
+}

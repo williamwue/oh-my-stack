@@ -1,0 +1,63 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "reviewers": [
+        {
+          "taskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-61769b108e2bf679a1ca589339de1971227cc3b3b44598b871bec543f2eb45bc",
+          "providerInstanceId": "codex",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "workState": "result_available",
+          "hasPendingChildRuns": false,
+          "summary": "Findings and attribution preserved in code-review.md",
+          "effectiveOptionsVerified": false
+        },
+        {
+          "taskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-86d09010fa5bc5aca257cb2b54c33187d09c2fca1b1793463a0ded1252200a11",
+          "providerInstanceId": "codex",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "workState": "result_available",
+          "hasPendingChildRuns": false,
+          "summary": "Findings and attribution preserved in code-review.md",
+          "effectiveOptionsVerified": false
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "reviewers": [
+        {
+          "taskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-a86ca0309227ce34511cd08c1b7806689701c0e5563daa100dc4fefd3dc04706",
+          "providerInstanceId": "codex",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "workState": "result_available",
+          "hasPendingChildRuns": false,
+          "summary": "No findings.\n\nROLE_POLICY=independent-frozen-review",
+          "effectiveOptionsVerified": false
+        },
+        {
+          "taskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-4424851d6ae69fc75a0a0df859d29a716f3f26c8c04cc4f5b465428ba0fa4447",
+          "providerInstanceId": "codex",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "workState": "result_available",
+          "hasPendingChildRuns": false,
+          "summary": "No findings.\n\nROLE_POLICY=independent-frozen-review",
+          "effectiveOptionsVerified": false
+        }
+      ]
+    }
+  ],
+  "trail": {
+    "taskId": "node:delegated-task:command%3Amcp%3A1b161ac3-0fa0-4460-8734-addad4ac3bf0%3Adelegate-task%3Aoms-t3-b5c976509a365a8babdbd7086fbcccd78046b74acd4f274fc5d1d3dad47eeccb",
+    "model": "gpt-6-astra",
+    "status": "completed",
+    "workState": "result_available",
+    "hasPendingChildRuns": false,
+    "differentFamily": false,
+    "effectiveOptionsVerified": false
+  }
+}

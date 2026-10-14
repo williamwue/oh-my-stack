@@ -669,6 +669,26 @@
       "uninstallBehavior": "Not installed in target packages."
     },
     {
+      "path": "tools/t3-binding.mjs",
+      "owner": "local-adapter",
+      "purpose": "Render and validate opt-in T3 bindings in detached native host packages.",
+      "network": false,
+      "writes": [
+        "detached selected package files through the generator"
+      ],
+      "uninstallBehavior": "Repository adapter module; removed with the checkout."
+    },
+    {
+      "path": "tools/t3-orchestration.mjs",
+      "owner": "local-adapter",
+      "purpose": "Validate captured T3 catalogs and prepare isolated resolution, delegated task, cancellation, and scheduler JSON artifacts.",
+      "network": false,
+      "writes": [
+        "explicit new caller-selected JSON output"
+      ],
+      "uninstallBehavior": "Selected package helper is removed with that package; user-owned T3 resolution remains independent."
+    },
+    {
       "path": "tools/validate.mjs",
       "owner": "local-core",
       "purpose": "Validate source contracts and generated packages.",

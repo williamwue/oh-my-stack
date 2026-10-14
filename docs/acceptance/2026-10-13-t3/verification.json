@@ -1,0 +1,45 @@
+{
+  "scope": "source-check snapshot before Cursor authentication",
+  "check": {
+    "command": "npm run check",
+    "result": "pass",
+    "tests": {
+      "total": 436,
+      "pass": 434,
+      "fail": 0,
+      "skipped": 2
+    },
+    "log": ".tmp/t3-verification/check-review-fixes.log",
+    "logSha256": "047ae797a882f5a5a6b56b67d3c0d587b24b2e2acfa7cbb78e073c9b07a80dc6",
+    "environment": "NODE_OPTIONS preload restores copied Homebrew Node library search path; no source test workaround"
+  },
+  "focused": {
+    "command": "node --test tests/t3-orchestration.test.mjs tests/t3-generation.test.mjs",
+    "pass": 30,
+    "fail": 0
+  },
+  "generation": {
+    "defaultCheck": "pass",
+    "selectedCheck": "pass",
+    "defaultPackagesChanged": false,
+    "selectedHostPackages": [
+      "codex",
+      "claude-code"
+    ],
+    "nativeUnchanged": [
+      "omp",
+      "pi"
+    ]
+  },
+  "evidenceLimits": {
+    "installed": false,
+    "published": false,
+    "crossProviderLive": false,
+    "claudeLive": false,
+    "effectiveT3OptionsVerified": false,
+    "prWatchLive": false,
+    "schedulerLive": false,
+    "browserOrDeviceLive": false
+  },
+  "recordedAt": "2026-10-13T13:43:41Z"
+}

@@ -8,6 +8,11 @@ on Codex and Claude Code; Pi and OMP retain the explicit workflow fallback.
 Generating or testing the source does not update an installed plugin or publish
 a release.
 
+The source candidate also supports [opt-in T3 orchestration](t3-orchestration.md)
+through detached Codex and Claude Code builds. Their installation hosts remain
+unchanged. The selected binding changes delegation and host-tool calls without
+adding workflow stages. Default generation retains native bindings.
+
 The [complete source receipt](acceptance/2026-10-11-parity/upstream-files.json)
 records all 165 pinned upstream files. Runtime instructions derive from these
 inputs through exact, reviewed replacements. The derivation record explains
