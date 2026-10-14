@@ -5,7 +5,7 @@ import { existsSync, realpathSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveActiveResolution } from "./model-resolution.mjs";
+import { resolveActiveResolution, resolveTaskSelection } from "./model-resolution.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -33,7 +33,7 @@ function parseArgs(argv) {
 
 export async function prepareDelegation({
   bundleRoot = packageRoot, resolutionPath, cwd, userRoot, routeName, roleName, entry = 1,
-  task, taskName, parentModel, parentReasoning,
+  task, taskName, parentModel, parentReasoning, jobContext, inventoryPath, rejectedAdjustment,
 }) {
   assert(Boolean(routeName) !== Boolean(roleName), "provide exactly one routeName or roleName");
   assert(typeof task === "string" && task.trim(), "task instructions are required");
@@ -66,6 +66,13 @@ export async function prepareDelegation({
   }
   const contract = contracts.roles?.[role];
   assert(contract?.instructions && contract?.description, `unknown or incomplete role ${role}`);
+  const taskInventoryRaw = inventoryPath ? await readFile(inventoryPath, "utf8") : null;
+  const taskSelection = resolveTaskSelection({
+    selection: selection ?? { inheritParent: true }, jobContext,
+    inventory: taskInventoryRaw ? JSON.parse(taskInventoryRaw) : undefined,
+    runtime: "codex", rejectedAdjustment,
+  });
+  selection = taskSelection.selection;
   const model = selection?.inheritParent || !selection ? parentModel : selection.model;
   const reasoning = selection?.inheritParent || !selection ? parentReasoning : selection.reasoning;
   assert(typeof model === "string" && model, "explicit model is required; supply parentModel for inheritance");
@@ -99,6 +106,8 @@ export async function prepareDelegation({
     message,
     audit: {
       role, route: routeName ?? null, entry,
+      taskSelection: { ...taskSelection.audit, inventorySha256: taskInventoryRaw ? hash(taskInventoryRaw) : null,
+        requested: { model, reasoning } },
       contractSha256: hash(contract.instructions.trim()),
       taskSha256: hash(task.trim()),
       resolutionInventorySha256: resolution?.observedInventory?.sha256 ?? null,
@@ -171,6 +180,10 @@ async function main() {
       taskName: options["task-name"],
       parentModel: options["parent-model"],
       parentReasoning: options["parent-reasoning"],
+      jobContext: options["job-context"] ? JSON.parse(await readFile(options["job-context"], "utf8")) : undefined,
+      inventoryPath: options.inventory,
+      rejectedAdjustment: options["rejected-adjustment"]
+        ? JSON.parse(await readFile(options["rejected-adjustment"], "utf8")) : undefined,
     });
   } else {
     assert(options.request && options["parent-record"] && options["child-record"], "--request, --parent-record, and --child-record are required");

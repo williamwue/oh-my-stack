@@ -410,6 +410,7 @@ export async function loadModel(root = repoRoot, { extensions = [], orchestratio
     const text = (await readFile(skillPath, "utf8")).replace(/\r\n/g, "\n");
     const frontmatter = parseSkillFrontmatter(text, relative(root, skillPath));
     validateSkillMetadata(metadata, registry, relative(root, metadataPath));
+    if (frontmatter["disable-model-invocation"] === "true") metadata.invocation = "explicit";
     assert(entry.name === metadata.name, `${relative(root, directory)}: folder and metadata name differ`);
     assert(frontmatter.name === metadata.name, `${relative(root, skillPath)}: frontmatter and metadata name differ`);
     skills.push({ directory, metadata, text, frontmatter });
@@ -553,7 +554,12 @@ function renderSkillDocument(skill, adapter, model) {
       "`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves",
       "the nearest project manifest first, then the user manifest. Supply the named",
       "route/panel entry where configured; otherwise supply the canonical role",
-      "and the observed parent model and effort. Pass",
+      "and the observed parent model and effort. For task adjustment, supply",
+      "`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification",
+      "and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed",
+      "effort alternatives. The saved model stays fixed. Without inventory only",
+      "the saved effort is available. Read `audit.taskSelection` before dispatch.",
+      "Pass",
       "the returned `task_name`, `fork_turns=none`, model, effort, and message",
       "explicitly to the spawn call. Do not use a generated custom-role name as a selector or",
       "claim its TOML was activated. After the worker finishes, run the helper's",
@@ -865,18 +871,38 @@ function renderPiRole(role) {
     instructions: role.instructions.trim() }, null, 2) + "\n";
 }
 
+function portableHelperGuide() {
+  return [
+    "## Portable plan checker", "",
+    "The dependency-free Node helper `skills/poteto-mode/scripts/check-plan.mjs` is supported on this native host.",
+    "Resolve `<installed-package-root>` from the installed package that supplied this guide. Keep the project as the working directory.",
+    'Run `node "<installed-package-root>/skills/poteto-mode/scripts/check-plan.mjs" "/absolute/path/plan.md"`.',
+    "The checker exits 0 for a valid plan, 1 for plan problems, and 2 when the plan argument is missing.",
+    "A successful check validates the plan structure. It does not establish live, performance, review, or release evidence.", "",
+    "Relative to `skills/poteto-mode/SKILL.md` or `WORKFLOW.md`, the helper is `scripts/check-plan.mjs`.",
+    "Relative to `skills/poteto-mode/playbooks/multi-phase-plan.md`, it is `../scripts/check-plan.mjs`.",
+    "Relative to the public `skills/multi-phase-plan/SKILL.md` or `WORKFLOW.md`, it is `../poteto-mode/scripts/check-plan.mjs`.",
+    "These paths are relative to the named document, not the project working directory. Resolve them before invoking Node.", "",
+    "Other source-host helpers under a Skill's scripts directory remain reference-only unless this binding documents their exact native execution.",
+    "Cursor watch-pr, orchestration, and worktree helpers have no execution mapping in this native binding.", "",
+  ].join("\n");
+}
+
 function runtimeBindingGuide(runtime) {
   const binding = runtime === "pi" ? "Use the native oms_delegate tool: start a named route/member with explicit task, cwd and context; collect the returned handle until terminal; cancel owned running handles. For a canonical role named by a playbook, use route role.NAME, member 1: poteto-agent maps to role.poteto-agent and comment-sicko maps to role.comment-sicko. Read-only roles receive read,grep,find,ls. Writing roles require an explicit isolated checkout. Native CLI/RPC uses explicit provider/model/thinking and host login. Missing selectors fail; observed model and effort remain unknown unless independently returned."
     : runtime === "codex" ? "Prepare each worker with scripts/codex-delegation.mjs and pass its model, reasoning_effort, task_name, fork_turns=none and full role/task message to the native spawn tool. Resolve saved configuration with scripts/model-resolution.mjs. Verify observed routing from native records when available."
       : runtime === "omp" ? "Resolve scripts/model-resolution.mjs --runtime omp --cwd WORKSPACE. Select the manifest role/route agent with the native task tool, preserve panel membership and order, and collect each returned task handle. Use the current host cancellation and return tools."
         : "Use the native Agent tool with the configured agent role/model. Preserve the workflow's specified worker count and order; distinguish requested model/effort from observed execution. Record unavailable cancellation or effort evidence explicitly.";
-  const helpers = runtime === "codex" ? "The native bounded GitHub helpers scripts/github-workflow.mjs, scripts/github-autopilot-provider.mjs and scripts/durable-run-state.mjs support only their documented single-PR operations and gates. Read docs/github-workflow.md before invoking them." : "Source-host helpers retained under a Skill's scripts directory are reference-only; their presence does not verify execution on this host.";
-  return `# ${runtime} runtime binding\n\n${binding}\n\n${helpers}\n\nRole contracts preserve upstream task semantics. Follow the selected workflow's stages and review standard. Delegate the workers that workflow calls for. Host authorization and available tool contracts continue to apply.\n`;
+  const helpers = runtime === "codex" ? "The native bounded GitHub helpers scripts/github-workflow.mjs, scripts/github-autopilot-provider.mjs and scripts/durable-run-state.mjs support only their documented single-PR operations and gates. Read docs/github-workflow.md before invoking them." : "";
+  return `# ${runtime} runtime binding\n\n${binding}\n\n${portableHelperGuide()}\n${helpers ? `${helpers}\n\n` : ""}Role contracts preserve upstream task semantics. Follow the selected workflow's stages and review standard. Delegate the workers that workflow calls for. Host authorization and available tool contracts continue to apply.\n`;
 }
 
 function modelSelectionGuide(runtime) {
   const roots = runtime === "pi" ? "~/.pi/agent and project .pi" : runtime === "omp" ? "~/.omp/agent and project .omp" : runtime === "codex" ? "~/.codex and project .codex" : "~/.claude (or CLAUDE_CONFIG_DIR) and project .claude";
-  return `# Model selection\n\nCollect a current inventory with scripts/collect-model-inventory.mjs --runtime ${runtime}. Review every model and effort before scripts/configure-models.mjs --apply. Preview is the default; --output writes only a detached destination. Native scope is ${roots}. scripts/model-resolution.mjs resolves nearest project first, then user configuration; each host owns an independent manifest. Fresh panels contain two entries. Same-target/same-preset reruns preserve saved membership, order, model and effort unless an explicit change requests otherwise. Missing observed model/effort selectors fail. Configuration artifacts do not prove native routing.\n`;
+  const taskAdjustment = runtime === "codex"
+    ? "Use scripts/codex-delegation.mjs prepare --job-context JOB.json --inventory INVENTORY.json. JOB.json contains kind hardest, judgment, routine, or verification and optional boolean urgent. Read audit.taskSelection for configured, selected, and requested values. Without a fresh inventory only the saved entry is available. After a confirmed host rejection of the adjusted choice, supply --rejected-adjustment REJECTION.json with the attempted model, reasoning, and host reason. The helper retries the original role line and records the rejection. The native spawn request has no speed selector, so the helper audits requested speed without emitting an invented field."
+    : "For each task, inspect the native host's current typed model and effort catalog. Use the host's documented selection controls for supported adjustments. A generated agent file alone does not implement per-task overrides. If the native call cannot override a setting, report that limitation and use the saved role line. Use a speed selector only when the live host advertises it. Otherwise report speed as unsupported. After an adjusted choice is rejected, retry the original role line once and report the rejection. Do not guess another model ID.";
+  return `# Model selection\n\nCollect a current inventory with scripts/collect-model-inventory.mjs --runtime ${runtime}. Review every model and effort before scripts/configure-models.mjs --apply. Preview is the default; --output writes only a detached destination. Native scope is ${roots}. scripts/model-resolution.mjs resolves nearest project first, then user configuration; each host owns an independent manifest. Fresh panels contain two entries. Same-target/same-preset reruns preserve saved membership, order, model and effort unless an explicit change requests otherwise. Missing observed model/effort selectors fail. Configuration artifacts do not prove native routing.\n\nSaved personal configuration is the starting budget. Task selection does not rewrite it. Keep the configured model and family, panel membership, and order. Use only effort alternatives in the observed host inventory. Hardest work raises effort one supported level, capped at max or the highest advertised level below max. An explicitly saved effort above max remains unchanged. Judgment lowers it one level. Routine work lowers it two levels or to the lowest supported value. Verification keeps the configured model, effort, and speed. Other tasks request standard speed unless urgency calls for fast. Inherit-parent and auto aliases stay unchanged. Record the original role line, task choice, and any rejected adjustment. Requested settings do not prove backend enforcement.\n\n${taskAdjustment}\n`;
 }
 
 function renderClaudeRole(role) {

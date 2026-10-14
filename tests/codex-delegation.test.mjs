@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -204,4 +206,57 @@ test("every generated Codex spawning workflow carries the same binding while OMP
   const setupWorkflow = setup.includes("WORKFLOW.md")
     ? await readFile(join(bundleRoot, "skills", "setup-oh-my-stack", "WORKFLOW.md"), "utf8") : setup;
   assert.match(setupWorkflow, /configuration artifacts, not evidence/);
+});
+
+
+test("native prepare reports task choices, preserves saved configuration, and retries its original role line", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oms-codex-job-context-"));
+  try {
+    const model = await loadModel();
+    const currentRoot = await renderTarget(root, model, model.adapters.find((adapter) => adapter.id === "codex"));
+    const resolutionPath = join(root, "saved.json");
+    const inventoryPath = join(root, "inventory.json");
+    await writeFile(resolutionPath, JSON.stringify({ schemaVersion: 1, owner: "oh-my-stack", target: "codex",
+      routes: { "code.bug-fix": { kind: "single", role: "poteto-agent",
+        entries: [{ model: "configured-model", reasoning: "high" }] } },
+      roles: { explorer: { inheritParent: true, model: null, reasoning: null } } }));
+    await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: "codex",
+      source: "fixture host inventory", observedAt: "2026-10-14T00:00:00Z",
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "medium", "high", "max"] }] }));
+    const before = await readFile(resolutionPath, "utf8");
+    const common = { bundleRoot: currentRoot, resolutionPath, inventoryPath, routeName: "code.bug-fix",
+      taskName: "bounded_worker", task: "Implement only the assigned files." };
+    for (const [kind, effort] of [["hardest", "max"], ["judgment", "medium"],
+      ["routine", "low"], ["verification", "high"]]) {
+      const request = await prepareDelegation({ ...common, jobContext: { kind } });
+      assert.equal(request.model, "configured-model");
+      assert.equal(request.reasoning_effort, effort);
+      assert.deepEqual(request.audit.taskSelection.requested, { model: "configured-model", reasoning: effort });
+      assert.equal(request.audit.taskSelection.configured.reasoning, "high");
+      assert.equal(request.audit.taskSelection.speed.applied, false);
+      assert.equal(Object.hasOwn(request, "speed"), false);
+    }
+    const retry = await prepareDelegation({ ...common, jobContext: { kind: "hardest" },
+      rejectedAdjustment: { model: "configured-model", reasoning: "max", reason: "unsupported by live host" } });
+    assert.equal(retry.reasoning_effort, "high");
+    assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
+    const inherited = await prepareDelegation({ ...common, routeName: undefined, roleName: "explorer",
+      jobContext: { kind: "routine" }, parentModel: "actual-parent", parentReasoning: "high" });
+    assert.equal(inherited.model, "actual-parent");
+    assert.equal(inherited.reasoning_effort, "high");
+    assert.equal(inherited.audit.taskSelection.reason, "inherited-alias-unchanged");
+    const taskPath = join(root, "task.txt");
+    const jobPath = join(root, "job.json");
+    await writeFile(taskPath, "Implement only the assigned files.");
+    await writeFile(jobPath, JSON.stringify({ kind: "routine", urgent: true }));
+    const cli = await promisify(execFile)(process.execPath, [join(currentRoot, "scripts/codex-delegation.mjs"),
+      "prepare", "--resolution", resolutionPath, "--route", "code.bug-fix", "--task-name", "cli_worker",
+      "--task-file", taskPath, "--job-context", jobPath, "--inventory", inventoryPath], { cwd: root });
+    const prepared = JSON.parse(cli.stdout);
+    assert.equal(prepared.model, "configured-model");
+    assert.equal(prepared.reasoning_effort, "low");
+    assert.equal(prepared.audit.taskSelection.speed.requested, "fast");
+    assert.match(prepared.audit.taskSelection.inventorySha256, /^[a-f0-9]{64}$/);
+    assert.equal(await readFile(resolutionPath, "utf8"), before);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
