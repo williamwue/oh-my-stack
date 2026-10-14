@@ -296,6 +296,12 @@ The audit retains the configured origin, skipped candidates and their reasons,
 and the actual channel's original target as `jobBaseTarget`. Verification keeps
 that channel's options. A rejected adjustment restores those original options.
 
+Every prepared request captures `audit.preparation.chainOrigin`: its earliest
+actual channel, original target options, configured origin, and source catalog.
+Save that first actual request even for verification, unchanged effort, or an
+omitted profile. Reconstructed rejection receipts retain that chain origin when
+the primary channel becomes runnable again. Later receipts must share it.
+
 Save the adjusted request and actual rejection evidence. After rejection of
 that selection, pass the same profile and its `modelRejections` with a new
 `stepId`. Preparation retries the original configured role line, including

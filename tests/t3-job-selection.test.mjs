@@ -802,3 +802,89 @@ test('multiple effort selectors stay coherent with the selected slug and verific
     target('cursor', 'composer-2-max-fast', { reasoningEffort: 'max', effort: 'max', fastMode: true }));
   assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'verification', urgent: true } })).arguments.target, configured);
 });
+
+async function unadjustedChannelFixture(t, profile, level = 'high') {
+  const options = level === null ? [] : [select('reasoningEffort', ['low', 'high', 'max'])];
+  const values = level === null ? {} : { reasoningEffort: level };
+  const configured = target('codex', 'gpt-primary', values);
+  const actual = target('cursor', 'gpt-secondary', values);
+  const replacement = target('cursor', 'gpt-secondary-default', values);
+  const args = await input(t, catalog([{ id: configured.model, options }], [
+    { id: actual.model, options: structuredClone(options) }, { id: replacement.model, options: structuredClone(options) }
+  ]), configured, { fallbackTargets: [actual], modelFallbacks: { 'interrogate.reviewers': {
+    strategy: 'interrogate', familyDefaults: { gpt: configured }, unknownFamilyDefault: configured,
+    providerDefaults: { cursor: { familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement } }
+  } } });
+  args.catalog.providers[0].canRunChildTask = false;
+  if (profile !== undefined) args.jobProfile = profile;
+  const original = await prepareT3Delegation(args);
+  assert.deepEqual(original.arguments.target, actual);
+  return { args, configured, actual, replacement, original };
+}
+
+for (const [name, profile, level] of [
+  ['verification', { kind: 'verification' }, 'high'],
+  ['hardest at ceiling', { kind: 'hardest' }, 'max'],
+  ['no effort selector', { kind: 'hardest' }, null],
+  ['omitted profile', undefined, 'high']
+]) {
+  for (const enabled of [false, true]) {
+    test(`${name} receipt binds the actual channel when primary enabled=${enabled}`, async t => {
+      const { args, configured, actual, replacement, original } = await unadjustedChannelFixture(t, profile, level);
+      const savedResolution = structuredClone(args.resolution);
+      args.catalog.providers[0].canRunChildTask = enabled;
+      const prepared = await prepareT3Delegation({ ...args, stepId: 'unadjusted-default',
+        modelRejections: [{ ...rejection(actual), preparedRequest: original }] });
+      assert.deepEqual(prepared.arguments.target, replacement);
+      assert.deepEqual(prepared.audit.selection.configuredTarget, configured);
+      assert.deepEqual(prepared.audit.preparation.chainOrigin.target, actual);
+      assert.deepEqual(prepared.audit.preparation.chainOrigin.configuredTarget, configured);
+      assert.deepEqual(original.audit.preparation.chainOrigin.target, actual);
+      assert.equal(prepared.audit.selection.reason, 'model-family-default');
+      assert.equal(prepared.audit.selection.rejectionProvenance[0].receiptHash, original.audit.receiptHash);
+      assert.deepEqual(args.resolution, savedResolution);
+      args.catalog.providers[1].canRunChildTask = false;
+      await assert.rejects(prepareT3Delegation({ ...args, stepId: 'disabled-actual',
+        modelRejections: [{ ...rejection(actual), preparedRequest: original }] }), /Provider cursor cannot run child tasks/);
+    });
+  }
+}
+
+for (const profile of [{ kind: 'verification' }, undefined]) {
+  test(`unadjusted channel chain uses each rejected target's receipt across catalog refresh with profile=${profile?.kind}`, async t => {
+    const { args, configured, actual, replacement, original } = await unadjustedChannelFixture(t, profile);
+    args.catalog.providers[0].canRunChildTask = true;
+    args.catalog.providers[1].models[0].options = [];
+    const originalRejection = { ...rejection(actual), preparedRequest: original };
+    const defaultInput = { ...args, stepId: 'captured-channel-default', modelRejections: [originalRejection] };
+    const preparedDefault = await prepareT3Delegation(defaultInput);
+    assert.deepEqual(preparedDefault.arguments.target, replacement);
+    const equivalent = target('cursor', 'gpt-secondary-equivalent', { reasoningEffort: 'high' });
+    args.catalog.providers[1].models = [{ id: equivalent.model, options: [select('reasoningEffort', ['high'])] }];
+    const next = { ...args, stepId: 'captured-channel-equivalent', modelRejections: [originalRejection,
+      { ...rejection(replacement), validModelIds: [equivalent.model], preparedRequest: preparedDefault }
+    ] };
+    const prepared = await prepareT3Delegation(next);
+    assert.deepEqual(prepared.arguments.target, equivalent);
+    assert.deepEqual(prepared.audit.preparation.chainOrigin.target, actual);
+    assert.deepEqual(prepared.audit.preparation.chainOrigin.configuredTarget, configured);
+    assert.deepEqual(prepared.audit.selection.familyDefault, replacement);
+    assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+    assert.deepEqual(prepared.audit.selection.rejectionProvenance.map(value => value.receiptHash),
+      [original.audit.receiptHash, preparedDefault.audit.receiptHash]);
+    next.modelRejections[1].preparedRequest = original;
+    await assert.rejects(prepareT3Delegation(next), /Invalid rejected prepared/);
+  });
+}
+
+for (const resealed of [false, true]) {
+  test(`unadjusted receipt rejects a forged different base channel with checksum recomputed=${resealed}`, async t => {
+    const { args, configured, actual, original } = await unadjustedChannelFixture(t, { kind: 'verification' });
+    const saved = structuredClone(original);
+    saved.audit.preparation.chainOrigin = { ...saved.audit.preparation.chainOrigin, target: configured };
+    if (resealed) reseal(saved);
+    args.catalog.providers[0].canRunChildTask = true;
+    await assert.rejects(prepareT3Delegation({ ...args, stepId: 'forged-chain-channel',
+      modelRejections: [{ ...rejection(actual), preparedRequest: saved }] }), /Invalid rejected prepared/);
+  });
+}

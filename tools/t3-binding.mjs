@@ -74,6 +74,8 @@ export function t3SkillBinding(packageRoot = "../../") {
     "identity. Verification retains speed; aliases remain untouched. Omission",
     "keeps older callers compatible. If an adjusted selection is rejected,",
     "retry the original configured role line in a new step before fallback.",
+    "Save every first actual prepared request, including verification and no-op",
+    "jobs. Its chainOrigin binds later rejections to that actual channel.",
     "Pass rejectedPreparedRequest to retain that choice across catalog changes.",
     "Later rejected targets retain their own modelRejections[].preparedRequest;",
     "keep earlier evidence unchanged and use each request's captured catalog.",

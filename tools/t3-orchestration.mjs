@@ -655,7 +655,7 @@ async function rejectedPreparation(saved, input, context, target) {
     throw new Error('Invalid rejected prepared request preparation');
   }
   if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
-  return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy,
+  return { catalog: parseT3Catalog(preparation.input.catalog), policy: preparation.policy, chainOrigin: clone(preparation.chainOrigin),
     source: 'captured-prepared-request', receiptHash: saved.audit.receiptHash };
 }
 
@@ -687,22 +687,36 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   const originalMissing = !configured.inheritParent && !catalog.providers.find(provider => provider.providerInstanceId === configured.providerInstanceId)?.models.some(model => model.id === configured.model);
   const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(configured));
   const rejectedOriginal = configuredRejection && (originalMissing || configuredRejection.preparedRequest !== undefined);
-  let baseSelection = input.jobProfile !== undefined && input.rejectedPreparedRequest === undefined && !rejectedOriginal
-    ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
-  let jobBase = baseSelection?.target ?? configured;
   const provenance = new Map();
   const context = { catalog, contracts, selectedRole, configured, resolution, scope, reviewedModel, evidence, depth };
-  let job = input.rejectedPreparedRequest !== undefined || rejectedOriginal
-    ? { target: jobBase, limitations: [] } : jobSelection(jobBase, input.jobProfile, catalog);
+  const captures = [];
   if (input.rejectedPreparedRequest !== undefined) {
     const saved = object(input.rejectedPreparedRequest, 'rejectedPreparedRequest');
-    const selection = saved.audit?.selection;
-    if (selection?.reason !== 'job-profile-adjustment'
-      || !evidence.some(rejection => hash(rejection.target) === hash(saved.arguments?.target ?? null))) throw new Error('Invalid rejected prepared request or new step identity');
-    const captured = await rejectedPreparation(saved, input, context, saved.arguments.target);
-    jobBase = targetFrom(selection.jobBaseTarget, captured.catalog);
-    provenance.set(hash(jobBase), { ...captured, source: 'captured-job-base' });
-    provenance.set(hash(saved.arguments.target), captured);
+    if (!evidence.some(rejection => hash(rejection.target) === hash(saved.arguments?.target ?? null))) throw new Error('Invalid rejected prepared request or new step identity');
+    captures.push({ saved, captured: await rejectedPreparation(saved, input, context, saved.arguments.target) });
+  }
+  for (const rejection of evidence) {
+    rejectionFrom(rejection);
+    if (rejection.preparedRequest !== undefined) captures.push({ saved: rejection.preparedRequest,
+      captured: await rejectedPreparation(rejection.preparedRequest, input, context, rejection.target) });
+  }
+  let chainOrigin = captures[0]?.captured.chainOrigin;
+  for (const { captured } of captures) {
+    if (hash(captured.chainOrigin) !== hash(chainOrigin)) throw new Error('Invalid rejected prepared request chain origin');
+  }
+  const baseSelection = chainOrigin
+    ? { target: targetFrom(chainOrigin.target, chainOrigin.catalog), audit: { skipped: clone(captures[0].saved.audit.selection.skipped ?? []) } }
+    : !rejectedOriginal ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
+  const jobBase = baseSelection?.target ?? configured;
+  chainOrigin ??= { configuredTarget: clone(configured), target: clone(jobBase), catalog: clone(catalog) };
+  if (captures.length) provenance.set(hash(jobBase), { catalog: parseT3Catalog(chainOrigin.catalog), source: 'captured-job-base' });
+  const adjustedCapture = captures.find(({ saved }) => saved.audit.selection.reason === 'job-profile-adjustment' || saved.audit.selection.rejectedJobTarget);
+  const job = captures.length || rejectedOriginal
+    ? { target: adjustedCapture ? targetFrom(adjustedCapture.saved.audit.selection.rejectedJobTarget ?? adjustedCapture.saved.arguments.target) : jobBase,
+      limitations: clone(captures[0]?.saved.audit.selection.jobLimitations ?? []) }
+    : jobSelection(jobBase, input.jobProfile, catalog);
+  let fallbackPolicy = policy;
+  for (const { saved, captured } of captures) {
     const defaults = captured.policy.modelFallbacks?.[routeName];
     const candidates = defaults?.providerDefaults?.[jobBase.providerInstanceId] ?? defaults;
     for (const candidate of [...Object.values(candidates?.familyDefaults ?? {}), candidates?.unknownFamilyDefault, candidates?.hostFallback].filter(Boolean)) {
@@ -712,17 +726,8 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
         provenance.set(hash(candidate), { ...captured, source: 'captured-policy-default' });
       }
     }
-    baseSelection = { target: jobBase, audit: { skipped: clone(selection.skipped ?? []) } };
-    job = { target: targetFrom(saved.arguments.target), limitations: clone(selection.jobLimitations ?? []) };
-  }
-  let fallbackPolicy = policy;
-  for (const rejection of evidence) {
-    rejectionFrom(rejection);
-    if (rejection.preparedRequest === undefined) continue;
-    const captured = await rejectedPreparation(rejection.preparedRequest, input, context, rejection.target);
-    provenance.set(hash(rejection.target), captured);
-    const selection = rejection.preparedRequest.audit.selection;
-    if (hash(selection.familyDefault ?? null) === hash(rejection.target) && hash(selection.jobBaseTarget ?? selection.configuredTarget) === hash(jobBase)) fallbackPolicy = captured.policy;
+    provenance.set(hash(saved.arguments.target), captured);
+    if (hash(saved.audit.selection.familyDefault ?? null) === hash(saved.arguments.target)) fallbackPolicy = captured.policy;
   }
   const adjustedRejections = evidence.filter(rejection => hash(job.target) !== hash(jobBase) && hash(rejection.target) === hash(job.target));
   adjustedRejections.forEach(rejectionFrom);
@@ -805,7 +810,7 @@ async function prepareDelegation(input, capturedScope, depth = 0) {
   }
   const prepared = { tool: 'delegate_task', arguments: args, audit: { identity, ...selection, selection: { ...selected.audit, reviewedModel: selectedRole === 'trail-reviewer' ? reviewedModel : null, scope: scope.scope, path: scope.path }, payloadHash: hash(args), roleHash: hash(role), contractsHash: hash(contracts), catalogHash: hash(catalog), observed: false } };
   prepared.audit.preparation = {
-    input: preparationInput(input, catalog, resolution), scope: { scope: scope.scope, path: scope.path }, policy: clone(policy)
+    input: preparationInput(input, catalog, resolution), scope: { scope: scope.scope, path: scope.path }, policy: clone(policy), chainOrigin: clone(chainOrigin)
   };
   prepared.audit.receiptHash = receiptHash(prepared);
   if (priorPreparedRequest) {

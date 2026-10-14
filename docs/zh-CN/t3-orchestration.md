@@ -142,6 +142,10 @@ Routine 和 judgment 不提高原配置的推理档位。
 审计保留配置来源、跳过候选及原因，并将实际渠道的原目标记录为 `jobBaseTarget`。
 Verification 保留实际渠道的选项；调整被拒绝时恢复该渠道的原选项。
 
+所有已准备请求通过 `audit.preparation.chainOrigin` 保存首次实际渠道、原目标选项、配置来源及捕获目录。
+即使是 verification、档位未改变或省略 profile，也保留第一次实际请求。
+主渠道恢复可用后，拒绝链仍属于该首次实际渠道；后续凭据必须有相同来源。
+
 调整后的选择被实际拒绝时，保留已准备请求和错误证据。
 传入相同 profile、`modelRejections` 和新的 `stepId`，下一次请求恢复原角色行及原选项，不继续调整其他变体。
 传入已保存的 `rejectedPreparedRequest` 可在目录变化后仍识别实际被拒绝的选择。
