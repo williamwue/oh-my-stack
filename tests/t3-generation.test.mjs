@@ -7,6 +7,7 @@ import { promisify } from "node:util";
 import test, { after, before } from "node:test";
 import { compareTrees, generate, generateProbeTargets, loadModel, renderTarget, repoRoot, validateRenderedTarget } from "../tools/generate.mjs";
 import { configureT3Resolution, prepareT3Delegation } from "../tools/t3-orchestration.mjs";
+import { pathToFileURL } from "node:url";
 
 const run = promisify(execFile);
 const artifacts = {
@@ -91,7 +92,42 @@ test("selected hosts retain their native manifests and complete pstack bodies wi
     if (adapter.id === "codex") assert.match(entry, /Read the \[complete workflow\]\(WORKFLOW.md\)/);
     const runtimeGuide = await readFile(join(target, "docs/runtime-binding.md"), "utf8");
     assert.match(runtimeGuide, /\(\.\.\/docs\/t3-orchestration.md\)/);
+    assert.match(runtimeGuide, /node "<absolute-package-root>\/skills\/poteto-mode\/scripts\/check-plan.mjs" "<absolute-plan.md>"/);
+    assert.match(runtimeGuide, /Do not execute Cursor worktree-audit.sh/);
+    assert.match(runtimeGuide, /Missing active-thread or pinned-thread\nevidence leaves deletion candidates unresolved/);
+    if (adapter.id === "codex") {
+      assert.match(runtimeGuide, /PR monitoring uses T3 watch_pull_request/);
+      assert.match(runtimeGuide, /Read docs\/github-workflow.md/);
+    }
     assert.doesNotMatch(runtimeGuide, /Prepare each worker with scripts\/codex-delegation|native Agent tool/);
+  }
+});
+
+test("actual packaged helpers prepare fresh default panels and explicit Poteto entry paths on both hosts", async () => {
+  const model = await loadModel(repoRoot, { orchestration: "t3" });
+  const catalog = JSON.parse(await readFile(join(repoRoot, "tests/fixtures/t3-catalog.json"), "utf8"));
+  for (const host of ["codex", "claude-code"]) {
+    const adapter = model.adapters.find(entry => entry.id === host);
+    const bundleRoot = await renderTarget(join(directory, "actual-helpers"), model, adapter);
+    const { configureT3Resolution, prepareT3Delegation } = await import(pathToFileURL(join(bundleRoot, "scripts/t3-orchestration.mjs")).href);
+    const contracts = JSON.parse(await readFile(join(bundleRoot, "config/t3-role-contracts.json"), "utf8"));
+    const resolution = configureT3Resolution({ catalog, contracts });
+    for (const routeName of ["interrogate.reviewers", "architect.runners", "arena.runners", "arena.cross-judge-pool"]) {
+      assert.deepEqual(resolution.routes[routeName].entries, [{ inheritParent: true }, { inheritParent: true }]);
+      const requests = await Promise.all([1, 2].map(entry => prepareT3Delegation({ bundleRoot, catalog, routeName, entry,
+        cwd: directory, userRoot: directory, ownedPaths: [join(directory, "owned")],
+        task: "Execute the frozen bounded assignment.", runId: host, stepId: routeName })));
+      assert.deepEqual(requests.map(request => request.audit.identity.entry), [1, 2]);
+      assert.notEqual(requests[0].arguments.clientRequestId, requests[1].arguments.clientRequestId);
+      assert.deepEqual(requests.map(request => request.tool), ["delegate_task", "delegate_task"]);
+      assert.equal(requests.every(request => !Object.hasOwn(request.arguments, "target")), true);
+    }
+    const request = await prepareT3Delegation({ bundleRoot, catalog, roleName: "poteto-agent", cwd: directory,
+      userRoot: directory, ownedPaths: [join(directory, "owned")], task: "Implement the bounded assignment.", runId: host, stepId: "poteto" });
+    assert.equal(request.arguments.task.includes(join(bundleRoot, "skills/poteto-mode/SKILL.md")), true);
+    assert.equal(request.arguments.task.includes(join(bundleRoot, "skills/poteto-mode/WORKFLOW.md")), true);
+    assert.match(request.arguments.task, /parent owns playbook coordination and independent review/);
+    await access(join(bundleRoot, "skills/poteto-mode/scripts/check-plan.mjs"));
   }
 });
 

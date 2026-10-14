@@ -96,6 +96,11 @@ explicit resolution. The optional `userRoot` input supports isolated checks.
 Preview configuration into a detached file. Reusing a preset preserves saved
 models, option values, panel membership, and order, including saved targets that
 are now unavailable. Replace a panel explicitly to change its order or size.
+Fresh panels instantiate exactly their contract's `defaultCount` independent
+seats. Inherited seats are valid and receive distinct request identities.
+The four default panels each contain two seats. A saved intentional empty
+panel stays empty. A missing configuration prepares these inherited defaults.
+The Arena judge pool still chooses one seat for a judge request.
 New overrides are validated against the current catalog. Inspect availability
 by preparing the selected task; preserving a saved target is not proof that it
 can execute. Refreshing a catalog never silently replaces an unavailable model.
@@ -138,6 +143,7 @@ This enforces the existing trail-review requirement, not an additional stage.
 
 Known prefixes are `gpt`, `claude`, `gemini`, and `grok`, taken from the last
 slash-separated model-ID segment. Provider names never determine the family.
+`cursor-grok-` and `composer-` also identify the Grok family.
 Unknown custom IDs require an explicit `modelFamilies` mapping when family
 independence is required. Mappings cannot contradict a known prefix. They are
 configuration assertions, not backend verification.
@@ -178,6 +184,31 @@ Use `interrogate` only for `interrogate.reviewers`. Use `arena` for
 arbitrary roles or inherited aliases. A mapped default must belong to the
 original provider when used for a rejected seat.
 
+When no `selectionPolicy` exists, configuration derives and saves defaults for
+explicit panel seats from the observed catalog. Preparation also derives them
+for an older configuration without a policy. Inherited defaults need no policy.
+An explicit policy replaces the whole policy and disables inferred additions.
+Same-preset refresh preserves a saved policy without refreshing its targets.
+It also preserves an older configuration without a policy. Explicit panel
+overrides materialize defaults only when that configuration has no policy.
+
+Derived choices use runnable models on each seat's original provider only.
+Within a family, another observed model is preferred over the configured slug.
+Claude defaults prefer observed Opus models. Identifier distance breaks ties,
+then model-ID order. Compatible configured options are retained or translated.
+The unknown-family default uses observed Claude when available, then the
+original host's observed model. No slug or unavailable provider is invented.
+
+Mixed-provider panels save separate `providerDefaults` keyed by exact provider
+instance. Each value contains `familyDefaults`, `unknownFamilyDefault`, and an
+optional `hostFallback`. These targets must remain on that provider.
+If the original provider cannot serve the configured family, the derived
+`hostFallback` uses its inherited model when advertised there, otherwise an
+observed equivalent on that provider. The audit reports
+`model-original-host-default` and the actual family change. It does not label a
+GPT replacement as Claude or Grok. Arena equivalents then stay in the selected
+default's actual family. A disabled provider remains an availability failure.
+
 After an actual model rejection, pass `modelRejections` to `prepare`, retaining
 the rejected explicit `target`, `code: "model-rejected"`, the nonempty
 `rawError`, and the error's `validModelIds`. Evidence is supplied by the host;
@@ -185,8 +216,9 @@ the helper cannot independently authenticate an error string. Do not invent
 rejection evidence from provider unavailability, option errors or a timeout.
 
 The seat first tries its mapped family default. A recognized family without
-a mapping is a configuration error; only an actually unknown family uses the
-mapped Reviewer A default. If that default is also rejected, Interrogate
+a mapping or an explicit `hostFallback` is a configuration error.
+Only an actually unknown family uses the mapped Reviewer A default.
+If that default is also rejected, Interrogate
 chooses the closest observed model among its reported valid IDs, preferring
 the same family and compatible reasoning effort. Arena and Architect keep
 that equivalent within the default's family. A model must also exist on the
@@ -223,6 +255,37 @@ Report substitutions and mismatches, with the task ID; do not label an
 agent-selected target as a model chosen automatically by T3. Reported names do
 not establish effective reasoning effort or backend engine identity.
 
+## Supply the intended job profile
+
+Workflow callers supply `jobProfile` to preparation before invoking the saved
+request. Older callers may omit it to retain their configured selection.
+Use `{"kind":"routine","urgent":false}` for routine work, or choose
+`judgment`, `hardest`, or `verification` as the kind.
+
+Routine work lowers effort two levels. Judgment lowers it one level. Hardest
+work raises it one level, capped at `max`. The ladder is `low`, `medium`, `high`,
+`xhigh`, `max`. Preparation selects the highest advertised level at or below
+the target. Typed effort options need a configured value or an advertised
+`defaultValue`; unknown settings remain unpinned and disclosed.
+
+Urgent work requests advertised fast speed. Other work requests standard speed.
+Verification keeps configured effort and speed. Inherited aliases remain
+untouched. Preparation changes typed effort or speed options when available.
+For effort and speed encoded in a slug, it selects only an advertised variant
+with the exact same model identity prefix. It never guesses a variant.
+Missing supported settings appear in `audit.selection.jobLimitations`.
+
+Save the adjusted request and actual rejection evidence. After rejection of
+that selection, pass the same profile and its `modelRejections` with a new
+`stepId`. Preparation retries the original configured role line, including
+its original options. It does not pick another adjusted variant. Pass the saved
+`rejectedPreparedRequest` to retain the rejected choice across catalog changes.
+The helper checks its payload and assignment identity, not error authenticity.
+If the original line is also rejected, add that evidence before route fallback.
+Audit metadata preserves the configured and selected targets, profile, changed
+options, and rejected job target. Independent records are still required to
+prove that runtime effort or speed was enforced.
+
 ## Delegate one bounded unit
 
 Read `config/t3-role-contracts.json` from the selected package. Choose the
@@ -231,6 +294,10 @@ request with the complete assignment, working directory, owned output paths,
 and stable run and step identifiers.
 
 The prepared task includes the full role contract and installed Skill paths.
+For `poteto-agent`, it includes the absolute entry path under the actual
+`bundleRoot`, plus the complete `WORKFLOW.md` wrapper fallback and principle
+leaf paths. The parent owns playbook coordination and independent review.
+The child owns only its assignment and acceptance checks.
 T3 children receive only their supplied task prompt. They do not inherit the
 parent conversation. A role label alone is insufficient context.
 
@@ -270,6 +337,29 @@ published result remains readable.
 Record requested model options separately from reported provider and model.
 Task responses do not by themselves establish effective option enforcement.
 Use native records when available and disclose missing evidence.
+
+## Resolve portable helpers and local evidence
+
+Read the generated runtime binding before invoking retained helpers.
+The portable plan checker supports this package-aware invocation:
+
+```bash
+node "<absolute-package-root>/skills/poteto-mode/scripts/check-plan.mjs" "<absolute-plan.md>"
+```
+
+The checker validates plan structure. It does not run the plan or establish
+live acceptance. The Codex binding retains bounded native GitHub helpers and
+their documented gates. T3 event watches still own PR monitoring.
+Other source-host scripts remain reference-only unless explicitly supported.
+
+For worktree cleanup, inspect Git worktrees and supported host records for
+active and pinned threads, child tasks, and processes. Missing usage evidence
+leaves deletion candidates unresolved. Preserve cleanup approval gates.
+Cursor transcript, SQLite, snapshot, and storage paths do not apply by
+assumption. Do not execute the retained Cursor audit helper on T3.
+Read transcripts through supported tools or authorized local records.
+A task summary cannot prove complete transcript access or enforced read-only
+execution. Report missing transcript and cleanup-skill capabilities.
 
 ## Associate PRs and use event watches
 

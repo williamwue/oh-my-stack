@@ -57,7 +57,7 @@ test('opaque catalog identifiers and typed options resolve without family infere
   assert.equal(parsed.providers[0].models[0].id, 'custom/opaque:model@1');
   const resolved = configuration({ roles: { implementer: first } });
   assert.deepEqual(resolved.roles.implementer, { providerInstanceId: 'provider/person:one', model: 'custom/opaque:model@1', options: { 'switch-id': false } });
-  assert.deepEqual(resolved.routes['review.panel'], { kind: 'panel', entries: [] });
+  assert.deepEqual(resolved.routes['review.panel'], { kind: 'panel', entries: [{ inheritParent: true }, { inheritParent: true }] });
   assert.deepEqual(resolved.routes['code.unit'], { kind: 'single', entries: [{ inheritParent: true }] });
 });
 
@@ -101,7 +101,7 @@ test('same-preset refresh preserves panel order, length and options; overrides c
   assert.deepEqual(changed.routes['review.panel'].entries, [second, first, second]);
   assert.deepEqual(previous.roles.implementer, first);
   const newPreset = configureT3Resolution({ catalog, contracts, preset: 'another-preset', previous });
-  assert.deepEqual(newPreset.routes['review.panel'], { kind: 'panel', entries: [] });
+  assert.deepEqual(newPreset.routes['review.panel'], { kind: 'panel', entries: [{ inheritParent: true }, { inheritParent: true }] });
 });
 
 test('explicit override can replace a stale catalog selection', () => {
@@ -192,9 +192,21 @@ test('preparation consumes the active project selection without an explicit reso
   assert.equal(prepared.audit.identity.entry, 2);
 });
 
-test('unconfigured panels fail and inherited single roles prepare T3-owned requests', async t => {
+test('fresh panels prepare two independent inherited requests and saved empty panels remain empty', async t => {
   const input = await delegationInput(t, { resolution: configuration() });
-  await assert.rejects(prepareT3Delegation(input), /entry is unavailable/);
+  const panel = await Promise.all([1, 2].map(entry => prepareT3Delegation({ ...input, entry })));
+  assert.deepEqual(panel.map(request => request.audit.identity.entry), [1, 2]);
+  assert.deepEqual(panel.map(request => request.audit.requested), [{ inheritParent: true }, { inheritParent: true }]);
+  assert.notEqual(panel[0].arguments.clientRequestId, panel[1].arguments.clientRequestId);
+  assert.equal(panel.every(request => request.tool === 'delegate_task' && !Object.hasOwn(request.arguments, 'target')), true);
+  await assert.rejects(prepareT3Delegation({ ...input, entry: 3 }), /entry is unavailable/);
+  const empty = configuration({ routes: { 'review.panel': [] } });
+  assert.deepEqual(configureT3Resolution({ catalog, contracts, previous: empty, preset: empty.preset }), empty);
+  await assert.rejects(prepareT3Delegation({ ...input, resolution: empty, entry: 1 }), /entry is unavailable/);
+  const noConfig = { ...input, resolution: undefined, userRoot: input.bundleRoot };
+  const missing = await Promise.all([1, 2].map(entry => prepareT3Delegation({ ...noConfig, entry })));
+  assert.deepEqual(missing.map(request => request.audit.selection.scope), ['inherit-parent', 'inherit-parent']);
+  assert.notEqual(missing[0].arguments.clientRequestId, missing[1].arguments.clientRequestId);
   const prepared = await prepareT3Delegation({ ...input, routeName: undefined, roleName: 'reviewer', entry: 1 });
   assert.equal(prepared.tool, 'delegate_task');
   assert.deepEqual(prepared.audit.requested, { inheritParent: true });
@@ -816,4 +828,148 @@ test('saved unavailable options and provider identities survive refresh but new 
   changedCatalog.providers = changedCatalog.providers.filter(provider => provider.providerInstanceId !== second.providerInstanceId);
   assert.deepEqual(configureT3Resolution({ catalog: changedCatalog, contracts, preset: previous.preset, previous }), previous);
   await assert.rejects(prepareT3Delegation({ ...input, catalog: changedCatalog, entry: 1 }), /cannot run child/);
+});
+
+test('observed route defaults work without manual policy and explicit policy remains authoritative', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  input.resolution = configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
+    overrides: { routes: { [fixture.routeName]: [fixture.configured, fixture.configured] } } });
+  assert.deepEqual(input.resolution.selectionPolicy.modelFallbacks[fixture.routeName].familyDefaults.claude, fixture.tableDefault);
+  const prepared = await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] });
+  assert.deepEqual(prepared.arguments.target, fixture.tableDefault);
+  assert.equal(prepared.audit.selection.reason, 'model-family-default');
+  delete input.resolution.selectionPolicy;
+  assert.deepEqual(configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
+    preset: input.resolution.preset, previous: input.resolution }), input.resolution);
+  assert.deepEqual((await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] })).arguments.target, fixture.tableDefault);
+  const policy = { fallbackTargets: [] };
+  const explicit = configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
+    overrides: { routes: { [fixture.routeName]: [fixture.configured] }, selectionPolicy: policy } });
+  assert.deepEqual(explicit.selectionPolicy, policy);
+  await assert.rejects(prepareT3Delegation({ ...input, resolution: explicit, modelRejections: [fixture.rejection(fixture.configured)] }), /not configured/);
+  input.catalog.providers[1].canRunChildTask = false;
+  await assert.rejects(prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] }), /not configured|cannot run child/);
+  assert.equal(input.catalog.providers[1].canRunChildTask, false);
+});
+
+test('derived host fallback stays on original provider and discloses an unavailable family', async t => {
+  const fixture = modelFallbackFixture('arena');
+  const input = await modelFallbackInput(t, fixture);
+  delete input.resolution.selectionPolicy;
+  input.catalog.providers[1].models = [{ id: 'gpt-6', options: [] }];
+  const prepared = await prepareT3Delegation({ ...input, modelRejections: [fixture.rejection(fixture.configured)] });
+  assert.deepEqual(prepared.arguments.target, { providerInstanceId: 'cursor', model: 'gpt-6', options: {} });
+  assert.equal(prepared.audit.selection.reason, 'model-original-host-default');
+  assert.equal(prepared.audit.selection.configuredFamily, 'claude');
+  assert.equal(prepared.audit.selection.selectedFamily, 'gpt');
+  const observed = observeT3Task({ prepared, observation: taskObservation({ providerInstanceId: 'cursor', model: 'gpt-6' }) });
+  assert.equal(observed.targetMatchesRequest, true);
+  assert.equal(observed.requestedOptionsVerified, false);
+});
+
+test('multiple original providers receive separate observed defaults without migrating a rejected seat', async t => {
+  const fixture = modelFallbackFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const other = { ...fixture.configured, providerInstanceId: 'other-cursor' };
+  input.catalog.providers.push({ ...structuredClone(input.catalog.providers[1]), providerInstanceId: 'other-cursor' });
+  input.resolution = configureT3Resolution({ catalog: input.catalog, contracts: fixture.roleContracts,
+    overrides: { routes: { [fixture.routeName]: [fixture.configured, other] } } });
+  const prepared = await prepareT3Delegation({ ...input, entry: 2, modelRejections: [fixture.rejection(other)] });
+  assert.deepEqual(prepared.arguments.target, { ...fixture.tableDefault, providerInstanceId: 'other-cursor' });
+  assert.equal(prepared.audit.selection.familyDefault.providerInstanceId, 'other-cursor');
+  input.resolution.selectionPolicy.modelFallbacks[fixture.routeName].providerDefaults['other-cursor'].hostFallback.providerInstanceId = 'cursor';
+  await assert.rejects(prepareT3Delegation(input), /preserve their provider/);
+});
+
+test('Cursor Grok prefixes have known family and custom contradictions fail', () => {
+  assert.equal(t3ModelFamily('cursor-grok-4.7-xhigh-fast'), 'grok');
+  assert.equal(t3ModelFamily('custom/composer-2'), 'grok');
+  assert.throws(() => t3ModelFamily('composer-2', { 'composer-2': 'claude' }), /contradicts/);
+  assert.equal(t3ModelFamily('opaque-model', { 'opaque-model': 'claude' }), 'claude');
+});
+
+function jobFixture() {
+  const fixture = modelFallbackFixture();
+  fixture.configured = { ...fixture.configured, model: 'claude-opus-current', options: { effort: 'xhigh', fast: true } };
+  fixture.live.providers[1].models.push({ id: fixture.configured.model, options: [
+    { id: 'effort', type: 'select', options: ['low', 'medium', 'high', 'xhigh', 'max'].map(id => ({ id })) },
+    { id: 'fast', type: 'boolean' }
+  ] });
+  return fixture;
+}
+
+test('typed job profiles adjust effort and speed while preserving configured identity and options', async t => {
+  const fixture = jobFixture();
+  const input = await modelFallbackInput(t, fixture);
+  for (const [kind, urgent, expected] of [
+    ['routine', false, { effort: 'medium', fast: false }],
+    ['judgment', true, { effort: 'high', fast: true }],
+    ['hardest', false, { effort: 'max', fast: false }],
+    ['verification', false, { effort: 'xhigh', fast: true }]
+  ]) {
+    const prepared = await prepareT3Delegation({ ...input, jobProfile: { kind, urgent }, stepId: kind });
+    assert.deepEqual(prepared.arguments.target, { ...fixture.configured, options: expected });
+    assert.deepEqual(prepared.audit.selection.configuredTarget, fixture.configured);
+    assert.deepEqual(prepared.audit.selection.selectedTarget, prepared.arguments.target);
+    assert.equal(prepared.audit.options.effort.verified, false);
+  }
+  assert.deepEqual((await prepareT3Delegation(input)).arguments.target, fixture.configured);
+  assert.deepEqual(input.resolution.routes[fixture.routeName].entries[0], fixture.configured);
+  for (const jobProfile of [{ kind: 'unknown' }, { kind: 'routine', urgent: 'true' }, { kind: 'routine', extra: true }]) {
+    await assert.rejects(prepareT3Delegation({ ...input, jobProfile }), /jobProfile/);
+  }
+  const capped = structuredClone(input);
+  capped.resolution.routes[fixture.routeName].entries[0].options.effort = 'max';
+  assert.equal((await prepareT3Delegation({ ...capped, jobProfile: { kind: 'hardest' } })).arguments.target.options.effort, 'max');
+});
+
+test('advertised slug variants keep model identity and rejected adjustments retry the original line', async t => {
+  const fixture = modelFallbackFixture();
+  fixture.configured = { providerInstanceId: 'cursor', model: 'composer-2-xhigh-fast', options: {} };
+  fixture.live.providers[1].models = ['composer-2-xhigh-fast', 'composer-2-high', 'composer-2-medium', 'composer-2-max-fast', 'composer-3-max'].map(id => ({ id, options: [] }));
+  fixture.policy = {};
+  const input = await modelFallbackInput(t, fixture);
+  const adjusted = await prepareT3Delegation({ ...input, jobProfile: { kind: 'routine' } });
+  assert.deepEqual(adjusted.arguments.target, { ...fixture.configured, model: 'composer-2-medium' });
+  assert.equal(adjusted.audit.selection.reason, 'job-profile-adjustment');
+  const rejected = [fixture.rejection(adjusted.arguments.target)];
+  await assert.rejects(prepareT3Delegation({ ...input, jobProfile: { kind: 'routine' }, modelRejections: rejected, priorPreparedRequest: adjusted }), /Retry identity or payload/);
+  const retried = await prepareT3Delegation({ ...input, stepId: 'original-line', jobProfile: { kind: 'routine' }, modelRejections: rejected });
+  assert.deepEqual(retried.arguments.target, fixture.configured);
+  assert.notEqual(retried.arguments.clientRequestId, adjusted.arguments.clientRequestId);
+  assert.equal(retried.audit.selection.reason, 'job-profile-rejected-original-line');
+  assert.deepEqual(retried.audit.selection.modelRejections, rejected);
+  assert.deepEqual(retried.audit.selection.rejectedJobTarget, adjusted.arguments.target);
+  const drifted = structuredClone(input);
+  drifted.catalog.providers[1].models = drifted.catalog.providers[1].models.filter(model => model.id !== adjusted.arguments.target.model);
+  const afterDrift = await prepareT3Delegation({ ...drifted, stepId: 'original-after-drift', jobProfile: { kind: 'routine' },
+    modelRejections: rejected, rejectedPreparedRequest: adjusted });
+  assert.deepEqual(afterDrift.arguments.target, fixture.configured);
+  assert.deepEqual(afterDrift.audit.selection.rejectedJobTarget, adjusted.arguments.target);
+  const tampered = structuredClone(adjusted);
+  tampered.arguments.target.model = 'composer-3-max';
+  await assert.rejects(prepareT3Delegation({ ...input, stepId: 'tampered', jobProfile: { kind: 'routine' }, modelRejections: rejected,
+    rejectedPreparedRequest: tampered }), /Invalid rejected prepared/);
+  assert.deepEqual((await prepareT3Delegation({ ...input, jobProfile: { kind: 'hardest', urgent: true } })).arguments.target, { ...fixture.configured, model: 'composer-2-max-fast' });
+  assert.deepEqual((await prepareT3Delegation({ ...input, jobProfile: { kind: 'verification' } })).arguments.target, fixture.configured);
+  const missing = await prepareT3Delegation({ ...input, jobProfile: { kind: 'hardest' } });
+  assert.deepEqual(missing.arguments.target, { ...fixture.configured, model: 'composer-2-high' });
+  assert.equal(missing.audit.selection.selectedFamily, 'grok');
+});
+
+test('typed adjustment rejection returns original options and aliases remain untouched', async t => {
+  const fixture = jobFixture();
+  const input = await modelFallbackInput(t, fixture);
+  const adjusted = await prepareT3Delegation({ ...input, jobProfile: { kind: 'judgment' } });
+  const retried = await prepareT3Delegation({ ...input, stepId: 'retry-original', jobProfile: { kind: 'judgment' }, modelRejections: [fixture.rejection(adjusted.arguments.target)] });
+  assert.deepEqual(retried.arguments.target, fixture.configured);
+  for (const alias of [{ inheritParent: true }, { ...fixture.configured, model: 'auto' }, { ...fixture.configured, model: 'inherit-parent' }]) {
+    if (alias.model) input.catalog.providers[1].models.push({ id: alias.model, options: input.catalog.providers[1].models.at(-1).options });
+    input.resolution.routes[fixture.routeName].entries = [alias];
+    const prepared = await prepareT3Delegation({ ...input, jobProfile: { kind: 'routine', urgent: true } });
+    assert.deepEqual(prepared.audit.requested, alias);
+    if (alias.inheritParent) assert.equal(Object.hasOwn(prepared.arguments, 'target'), false);
+    else assert.deepEqual(prepared.arguments.target, alias);
+  }
 });
