@@ -492,3 +492,168 @@ test('original option rejection can still select its configured model fallback a
   assert.deepEqual(prepared.arguments.target, replacement);
   assert.equal(prepared.audit.selection.reason, 'model-family-default');
 });
+
+async function channelFallbackFixture(t) {
+  const options = [select('reasoningEffort', ['low', 'high', 'max']), { id: 'fastMode', type: 'boolean' }];
+  const configured = target('codex', 'gpt-primary', { reasoningEffort: 'high', fastMode: false });
+  const actual = target('cursor', 'gpt-secondary', { reasoningEffort: 'high', fastMode: false });
+  const replacement = target('cursor', 'gpt-secondary-default', { reasoningEffort: 'low', fastMode: false });
+  const args = await input(t, catalog([{ id: configured.model, options }], [
+    { id: actual.model, options }, { id: replacement.model, options }
+  ]), configured, { fallbackTargets: [actual], modelFallbacks: { 'interrogate.reviewers': {
+    strategy: 'interrogate', familyDefaults: { gpt: configured }, unknownFamilyDefault: configured,
+    providerDefaults: { cursor: { familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement } }
+  } } });
+  args.catalog.providers[0].canRunChildTask = false;
+  args.jobProfile = { kind: 'hardest', urgent: true };
+  const adjusted = await prepareT3Delegation(args);
+  assert.deepEqual(adjusted.arguments.target, target('cursor', 'gpt-secondary', { reasoningEffort: 'max', fastMode: true }));
+  const retry = { ...args, stepId: 'channel-original', rejectedPreparedRequest: adjusted,
+    modelRejections: [rejection(adjusted.arguments.target)] };
+  assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, actual);
+  return { args, configured, actual, replacement, adjusted, retry };
+}
+
+for (const enabled of [false, true]) {
+  test(`actual channel rejection uses its own model default when primary enabled=${enabled}`, async t => {
+    const { retry, configured, actual, replacement, adjusted } = await channelFallbackFixture(t);
+    retry.catalog.providers[0].canRunChildTask = enabled;
+    const evidence = [...retry.modelRejections, rejection(actual)];
+    const prepared = await prepareT3Delegation({ ...retry, stepId: 'channel-default', modelRejections: evidence });
+    assert.deepEqual(prepared.arguments.target, replacement);
+    assert.deepEqual(prepared.audit.selection.configuredTarget, configured);
+    assert.deepEqual(prepared.audit.selection.jobBaseTarget, actual);
+    assert.deepEqual(prepared.audit.selection.rejectedJobTarget, adjusted.arguments.target);
+    assert.deepEqual(prepared.audit.selection.modelRejections, evidence);
+    assert.equal(prepared.audit.selection.reason, 'model-family-default');
+    await assert.rejects(prepareT3Delegation({ ...retry, stepId: 'foreign-primary',
+      modelRejections: [...evidence, rejection(configured)] }), /Foreign model rejection/);
+  });
+}
+
+test('captured actual channel original options may disappear before model fallback', async t => {
+  const { retry, configured, actual, replacement } = await channelFallbackFixture(t);
+  retry.catalog.providers[0].canRunChildTask = true;
+  retry.catalog.providers[1].models[0].options[0] = select('reasoningEffort', ['low']);
+  const prepared = await prepareT3Delegation({ ...retry, stepId: 'channel-stale-options',
+    modelRejections: [...retry.modelRejections, rejection(actual)] });
+  assert.deepEqual(prepared.arguments.target, replacement);
+  assert.deepEqual(prepared.audit.selection.configuredTarget, configured);
+  assert.deepEqual(prepared.audit.selection.jobBaseTarget, actual);
+});
+
+test('captured primary original options may disappear while the new default must remain executable', async t => {
+  const { args, configured } = await retryFixture(t);
+  const replacement = target('codex', 'gpt-new-default', { reasoningEffort: 'low', fastMode: false });
+  args.catalog.providers[0].models.push({ id: replacement.model, options: [select('reasoningEffort', ['low'])] });
+  args.catalog.providers[0].models[1].options.push({ id: 'fastMode', type: 'boolean' });
+  args.resolution.selectionPolicy.modelFallbacks = { [args.routeName]: {
+    strategy: 'interrogate', familyDefaults: { gpt: replacement }, unknownFamilyDefault: replacement
+  } };
+  const adjusted = await prepareT3Delegation(args);
+  const modelRejections = [rejection(adjusted.arguments.target), rejection(configured)];
+  args.catalog.providers[0].models[0].options[0] = select('reasoningEffort', ['low']);
+  const retry = { ...args, stepId: 'stale-primary', rejectedPreparedRequest: adjusted, modelRejections };
+  assert.deepEqual((await prepareT3Delegation(retry)).arguments.target, replacement);
+  await assert.rejects(prepareT3Delegation({ ...retry, rejectedPreparedRequest: undefined }), /Unsupported value/);
+  args.catalog.providers[0].models[1].options[0] = select('reasoningEffort', ['high']);
+  await assert.rejects(prepareT3Delegation({ ...retry, stepId: 'invalid-new-default' }), /Unsupported value/);
+});
+
+test('captured rejected default options may disappear before choosing a current equivalent on the actual channel', async t => {
+  const { retry, actual, replacement } = await channelFallbackFixture(t);
+  const equivalent = target('cursor', 'gpt-secondary-equivalent', { fastMode: false });
+  retry.catalog.providers[1].models[1].options[0] = select('reasoningEffort', ['high']);
+  retry.catalog.providers[1].models.push({ id: equivalent.model, options: [{ id: 'fastMode', type: 'boolean' }] });
+  const prepared = await prepareT3Delegation({ ...retry, stepId: 'channel-equivalent', modelRejections: [
+    ...retry.modelRejections, rejection(actual), { ...rejection(replacement), validModelIds: [equivalent.model] }
+  ] });
+  assert.deepEqual(prepared.arguments.target, equivalent);
+  assert.deepEqual(prepared.audit.selection.familyDefault, replacement);
+  assert.equal(prepared.audit.selection.reason, 'model-valid-equivalent');
+});
+
+for (const keys of [['reasoningEffort', 'effort'], ['effort', 'reasoning_effort', 'reasoningEffort']]) {
+  test(`all advertised effort selectors adjust coherently for ${keys.join(',')}`, async t => {
+    const original = Object.fromEntries(keys.map(key => [key, 'high']));
+    const configured = target('codex', 'gpt-multiple-efforts', { ...original, fast: true, fastMode: true, speed: 'fast', serviceTier: 'priority' });
+    const args = await input(t, catalog([{ id: configured.model, options: [
+      ...keys.map(key => select(key, ['low', 'high', 'max'])),
+      { id: 'fast', type: 'boolean' }, { id: 'fastMode', type: 'boolean' },
+      select('speed', ['standard', 'fast']), select('serviceTier', ['default', 'priority'])
+    ] }]), configured);
+    for (const [kind, urgent, level] of [['hardest', true, 'max'], ['routine', false, 'low']]) {
+      const prepared = await prepareT3Delegation({ ...args, jobProfile: { kind, urgent } });
+      assert.deepEqual(prepared.arguments.target, target('codex', configured.model, {
+        ...Object.fromEntries(keys.map(key => [key, level])), fast: urgent, fastMode: urgent,
+        speed: urgent ? 'fast' : 'standard', serviceTier: urgent ? 'priority' : 'default'
+      }));
+    }
+    assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'verification' } })).arguments.target, configured);
+    assert.deepEqual(args.resolution.routes[args.routeName].entries[0], configured);
+  });
+}
+
+test('effort adjustment steps through the intersection of advertised selector levels', async t => {
+  const configured = target('codex', 'gpt-multiple-efforts', { reasoningEffort: 'high', effort: 'high' });
+  const args = await input(t, catalog([{ id: configured.model, options: [
+    select('reasoningEffort', ['minimal', 'low', 'high', 'xhigh', 'max']), select('effort', ['low', 'high', 'max'])
+  ] }]), configured);
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } })).arguments.target,
+    target('codex', configured.model, { reasoningEffort: 'max', effort: 'max' }));
+});
+
+test('contradictory effort selectors are rejected at configuration and preparation boundaries', async t => {
+  const configured = target('codex', 'gpt-multiple-efforts', { reasoningEffort: 'high', effort: 'high' });
+  const args = await input(t, catalog([{ id: configured.model, options: [
+    select('reasoningEffort', ['low', 'high', 'max']), select('effort', ['low', 'high', 'max'])
+  ] }]), configured);
+  const contradictory = { ...configured, options: { reasoningEffort: 'high', effort: 'low' } };
+  assert.throws(() => configureT3Resolution({ catalog: args.catalog, contracts,
+    overrides: { routes: { [args.routeName]: [contradictory] } } }), /Ambiguous reasoning effort/);
+  args.resolution.routes[args.routeName].entries[0] = contradictory;
+  await assert.rejects(prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } }), /Ambiguous reasoning effort/);
+});
+
+test('advertised effort defaults must supply one coherent baseline before adjustment', async t => {
+  const configured = target('codex', 'gpt-multiple-efforts');
+  const args = await input(t, catalog([{ id: configured.model, options: [
+    { ...select('reasoningEffort', ['low', 'high', 'max']), defaultValue: 'high' },
+    { ...select('effort', ['low', 'high', 'max']), defaultValue: 'high' }
+  ] }]), configured);
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } })).arguments.target,
+    target('codex', configured.model, { reasoningEffort: 'max', effort: 'max' }));
+  args.catalog.providers[0].models[0].options[1].defaultValue = 'low';
+  await assert.rejects(prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } }), /Ambiguous reasoning effort/);
+});
+
+test('a captured actual channel becoming unavailable cannot return the rejection chain to the enabled primary', async t => {
+  const { retry, actual } = await channelFallbackFixture(t);
+  retry.catalog.providers[0].canRunChildTask = true;
+  retry.catalog.providers[1].canRunChildTask = false;
+  await assert.rejects(prepareT3Delegation({ ...retry, stepId: 'actual-channel-disabled',
+    modelRejections: [...retry.modelRejections, rejection(actual)] }), /Provider cursor cannot run child tasks/);
+});
+
+test('one pinned effort selector supplies a shared baseline only when every selector supports it', async t => {
+  const configured = target('codex', 'gpt-multiple-efforts', { reasoningEffort: 'high' });
+  const args = await input(t, catalog([{ id: configured.model, options: [
+    select('reasoningEffort', ['low', 'high', 'max']), select('effort', ['low', 'high', 'max'])
+  ] }]), configured);
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } })).arguments.target,
+    target('codex', configured.model, { reasoningEffort: 'max', effort: 'max' }));
+  args.catalog.providers[0].models[0].options[1] = select('effort', ['low', 'max']);
+  await assert.rejects(prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest' } }), /Ambiguous reasoning effort baseline/);
+});
+
+test('multiple effort selectors stay coherent with the selected slug and verification preserves all original selectors', async t => {
+  const configured = target('cursor', 'composer-2-high', { reasoningEffort: 'high', effort: 'high', fastMode: false });
+  const options = [select('reasoningEffort', ['low', 'high', 'xhigh', 'max']), select('effort', ['low', 'high', 'max']),
+    { id: 'fastMode', type: 'boolean' }];
+  const args = await input(t, catalog([{ id: 'gpt-parent' }], [
+    { id: configured.model, options }, { id: 'composer-2-max-fast', options }
+  ]), configured);
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'hardest', urgent: true } })).arguments.target,
+    target('cursor', 'composer-2-max-fast', { reasoningEffort: 'max', effort: 'max', fastMode: true }));
+  assert.deepEqual((await prepareT3Delegation({ ...args, jobProfile: { kind: 'verification', urgent: true } })).arguments.target, configured);
+});

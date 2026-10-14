@@ -130,6 +130,8 @@ function targetFrom(input, catalog) {
     string(id, 'target option id');
     if (typeof value !== 'string' && typeof value !== 'boolean') throw new Error(`Invalid option value for ${id}`);
   }
+  const efforts = Object.entries(options).filter(([id]) => effortKeys.has(id)).map(([, value]) => value);
+  if (new Set(efforts).size > 1) throw new Error('Ambiguous reasoning effort options');
   if (catalog) {
     const provider = catalog.providers.find(value => value.providerInstanceId === input.providerInstanceId);
     if (!provider) throw new Error(`Unknown provider instance ${input.providerInstanceId}`);
@@ -403,7 +405,8 @@ function jobSelection(target, profile, catalog) {
   const limitations = [];
   const slugPattern = /^(.*)-(none|minimal|low|medium|high|xhigh|max|ultra)(-fast)?$/;
   const slug = slugPattern.exec(target.model);
-  const effort = model.options.find(option => effortKeys.has(option.id) && option.type === 'select');
+  const efforts = model.options.filter(option => effortKeys.has(option.id) && option.type === 'select');
+  const effort = efforts[0];
   const speedsFor = model => model.options.filter(option => Object.hasOwn(speedSettings, option.id) && option.type === speedSettings[option.id].type);
   const speeds = speedsFor(model);
   const desiredEffort = (value, values) => {
@@ -414,9 +417,14 @@ function jobSelection(target, profile, catalog) {
         models: [{ id: target.model, reasoningEfforts: supported }] } }).selection.reasoning;
   };
   if (effort) {
-    const configured = selected.options[effort.id] ?? effort.defaultValue ?? slug?.[2];
-    const wanted = desiredEffort(configured, effort.options.map(option => option.id));
-    if (wanted) selected.options[effort.id] = wanted;
+    const pinned = efforts.map(option => selected.options[option.id]).filter(value => value !== undefined);
+    const baselines = pinned.length ? pinned : efforts.map(option => option.defaultValue).filter(value => value !== undefined);
+    if (new Set(baselines).size > 1) throw new Error('Ambiguous reasoning effort defaults');
+    const configured = baselines[0] ?? slug?.[2];
+    const supported = effort.options.map(option => option.id).filter(value => efforts.every(option => compatibleOption(option, value)));
+    if (efforts.length > 1 && configured !== undefined && !supported.includes(configured)) throw new Error('Ambiguous reasoning effort baseline across advertised selectors');
+    const wanted = desiredEffort(configured, supported);
+    if (wanted) for (const option of efforts) selected.options[option.id] = wanted;
     else limitations.push('Reasoning adjustment needs a configured or advertised default effort on the known ladder.');
   }
   for (const speed of speeds) {
@@ -476,10 +484,11 @@ function rejectionFrom(rejection) {
 }
 
 export function resolveT3ModelFallback(input) {
-  keys(input, ['target', 'catalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
+  keys(input, ['target', 'catalog', 'rejectionCatalog', 'policy', 'routeName', 'modelRejections', 'runtimeMode'], 'model fallback input');
   const { routeName, runtimeMode } = input;
   const catalog = parseT3Catalog(input.catalog);
   const target = targetFrom(input.target);
+  const rejectionCatalog = input.rejectionCatalog === undefined ? catalog : parseT3Catalog(input.rejectionCatalog);
   const policy = policyFrom(input.policy ?? {});
   const routePolicy = policy.modelFallbacks?.[routeName];
   const evidence = list(input.modelRejections ?? [], 'modelRejections');
@@ -501,13 +510,13 @@ export function resolveT3ModelFallback(input) {
   unique(evidence.map(rejection => hash(rejection.target)), 'model rejection target');
   const configuredRejection = evidence.find(rejection => hash(rejection.target) === hash(target));
   if (!configuredRejection) throw new Error('Model fallback requires rejection of the configured target first');
-  if (provider.models.some(model => model.id === target.model)) targetFrom(target, catalog);
+  if (input.rejectionCatalog !== undefined || provider.models.some(model => model.id === target.model)) targetFrom(target, rejectionCatalog);
   const defaultRejection = evidence.find(rejection => hash(rejection.target) === hash(tableDefault));
   let selected = tableDefault;
   let reason = family !== null && !defaults.familyDefaults[family] ? 'model-original-host-default' : 'model-family-default';
   if (defaultRejection) {
     const defaultModel = provider.models.find(model => model.id === tableDefault.model);
-    if (defaultModel) targetFrom(tableDefault, catalog);
+    if (input.rejectionCatalog !== undefined || defaultModel) targetFrom(tableDefault, rejectionCatalog);
     const defaultFamily = t3ModelFamily(tableDefault.model, policy.modelFamilies);
     if (routePolicy.strategy === 'arena' && !defaultFamily) throw new Error('Arena model fallback requires a known default family');
     const rejectedIds = new Set(evidence.map(rejection => rejection.target.model));
@@ -623,6 +632,7 @@ async function prepareDelegation(input, capturedScope) {
   let baseSelection = input.jobProfile !== undefined && input.rejectedPreparedRequest === undefined && !rejectedOriginalMissing
     ? selectTarget(configured, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode }) : null;
   let jobBase = baseSelection?.target ?? configured;
+  let rejectionCatalog;
   let job = input.rejectedPreparedRequest !== undefined || rejectedOriginalMissing
     ? { target: jobBase, limitations: [] } : jobSelection(jobBase, input.jobProfile, catalog);
   if (input.rejectedPreparedRequest !== undefined) {
@@ -650,7 +660,8 @@ async function prepareDelegation(input, capturedScope) {
       throw new Error('Invalid rejected prepared request preparation');
     }
     if (hash(rebuilt) !== hash(saved)) throw new Error('Invalid rejected prepared request transition');
-    jobBase = targetFrom(rebuilt.audit.selection.jobBaseTarget);
+    rejectionCatalog = parseT3Catalog(preparation.input.catalog);
+    jobBase = targetFrom(rebuilt.audit.selection.jobBaseTarget, rejectionCatalog);
     baseSelection = { target: jobBase, audit: { skipped: clone(selection.skipped ?? []) } };
     job = { target: targetFrom(saved.arguments.target), limitations: clone(selection.jobLimitations ?? []) };
   }
@@ -658,7 +669,7 @@ async function prepareDelegation(input, capturedScope) {
   adjustedRejections.forEach(rejectionFrom);
   if (adjustedRejections.length > 1) throw new Error('Duplicate model rejection target');
   const remainingRejections = evidence.filter(rejection => !adjustedRejections.includes(rejection));
-  const modelResolution = resolveT3ModelFallback({ target: configured, catalog, policy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode });
+  const modelResolution = resolveT3ModelFallback({ target: jobBase, catalog, rejectionCatalog, policy, routeName, modelRejections: remainingRejections, runtimeMode: input.runtimeMode });
   const requested = remainingRejections.length ? modelResolution.target : adjustedRejections.length ? jobBase : job.target;
   const selected = selectTarget(requested, { catalog, policy, role: selectedRole, reviewedModel, runtimeMode: input.runtimeMode });
   if (baseSelection) {

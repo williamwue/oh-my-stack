@@ -270,7 +270,9 @@ Preparation steps through advertised levels in `none`, `minimal`, `low`,
 `medium`, `high`, `xhigh`, `max`, `ultra` order. A catalog
 with `low`, `high`, and `max` therefore raises `high` to `max` for hardest work.
 Typed effort options need a configured value or an advertised
-`defaultValue`; unknown settings remain unpinned and disclosed.
+`defaultValue`; unknown settings remain unpinned and disclosed. Multiple effort
+selectors use their shared advertised levels; contradictory saved values or
+defaults fail rather than producing conflicting request options.
 
 Urgent work requests advertised fast speed. Other work requests standard speed.
 Boolean `fast` and `fastMode` use `true` for fast and `false` for standard.
@@ -303,7 +305,10 @@ The helper binds the complete receipt and captured preparation inputs, including
 task, working directory, owned paths, configuration, and assignment identity.
 It reconstructs the captured request to verify the original adjustment. These
 checks establish consistency; the host authenticates the rejection evidence.
-If the original line is also rejected, add that evidence before route fallback.
+If the actual channel's original line is also rejected, add that evidence before
+model fallback on that channel. The captured catalog validates rejected request
+provenance; the current catalog validates the new execution target. The configured
+primary channel remains the audit origin.
 Audit metadata preserves the configured and selected targets, profile, changed
 options, and rejected job target. Independent records are still required to
 prove that runtime effort or speed was enforced.
