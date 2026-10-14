@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -237,7 +238,7 @@ test("native prepare reports task choices, preserves saved configuration, and re
       assert.equal(Object.hasOwn(request, "speed"), false);
     }
     const retry = await prepareDelegation({ ...common, jobContext: { kind: "hardest" },
-      rejectedAdjustment: { model: "configured-model", reasoning: "max", reason: "unsupported by live host" } });
+      rejectedAdjustment: { model: "configured-model", reasoning: "max", reason: "local host rejection fixture; backend not verified" } });
     assert.equal(retry.reasoning_effort, "high");
     assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
     const inherited = await prepareDelegation({ ...common, routeName: undefined, roleName: "explorer",
@@ -291,22 +292,176 @@ test("native retry restores high from the captured max request after inventory r
   const f = await staleRetryFixture();
   try {
     const before = await readFile(f.resolutionPath, "utf8");
+    const roleInput = { ...f.common, routeName: undefined, roleName: "implementer" };
+    const rolePrepared = await prepareDelegation(roleInput);
     await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
       models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
-    for (const inventoryPath of [f.inventoryPath, undefined]) {
-      const retry = await prepareDelegation({ ...f.common, inventoryPath,
-        rejectedPreparedRequest: f.rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment });
+    for (const [input, rejectedPreparedRequest] of [[f.common, f.rejectedPreparedRequest], [roleInput, rolePrepared]]) {
+      for (const inventoryPath of [f.inventoryPath, undefined]) {
+        const retry = await prepareDelegation({ ...input, inventoryPath,
+          rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment });
+        assert.equal(retry.model, "configured-model");
+        assert.equal(retry.reasoning_effort, "high");
+        assert.equal(retry.fork_turns, "none");
+        assert.equal(retry.task_name, "bounded_worker");
+        assert.equal(retry.message, rejectedPreparedRequest.message);
+        assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
+        assert.equal(retry.audit.taskSelection.hostRejectionVerified, false);
+        assert.deepEqual(retry.audit.taskSelection.configuredSelection, f.selection);
+        assert.deepEqual(retry.audit.taskSelection.rejectedAdjustment, f.rejectedAdjustment);
+        assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, rejectedPreparedRequest.audit.requestSha256);
+        assert.deepEqual(retry.audit.taskSelection.requested, { model: "configured-model", reasoning: "high" });
+      }
+    }
+    assert.equal(await readFile(f.resolutionPath, "utf8"), before);
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+function rehashPrepared(request) {
+  const { requestSha256, ...audit } = request.audit;
+  request.audit.requestSha256 = createHash("sha256").update(JSON.stringify({ ...request, audit })).digest("hex");
+  return request;
+}
+
+test("native stale retry rejects receipts from another role, profile, task, entry, or scope", async () => {
+  const f = await staleRetryFixture();
+  try {
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
+    const retry = { ...f.common, rejectedPreparedRequest: f.rejectedPreparedRequest,
+      rejectedAdjustment: f.rejectedAdjustment };
+    for (const change of [
+      { routeName: undefined, roleName: "implementer" },
+      { routeName: undefined, roleName: "reviewer" },
+      { jobContext: { kind: "routine" } },
+      { jobContext: { kind: "hardest", urgent: true } },
+      { task: "Implement different files." },
+      { taskName: "another_worker" },
+      { cwd: join(f.root, "another-project") },
+      { userRoot: join(f.root, "another-user") },
+    ]) {
+      await assert.rejects(prepareDelegation({ ...retry, ...change }), /rejected prepared request/);
+    }
+    f.resolution.routes["code.bug-fix"].kind = "panel";
+    f.resolution.routes["code.bug-fix"].entries.push({ ...f.selection });
+    await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, entry: 2 }), /rejected prepared request/);
+    const otherPath = join(f.root, "same-config-another-path.json");
+    await writeFile(otherPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, resolutionPath: otherPath }), /rejected prepared request/);
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native stale retry rejects modified or unbound receipts even with recomputed checksums", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const retry = { ...f.common, inventoryPath: undefined,
+      rejectedPreparedRequest: f.rejectedPreparedRequest, rejectedAdjustment: f.rejectedAdjustment };
+    for (const mutate of [
+      request => { request.fork_turns = "all"; },
+      request => { request.message = "Forged assignment."; },
+      request => { request.model = "guessed-model"; },
+      request => { request.reasoning_effort = "ultra"; },
+      request => { request.audit.role = "reviewer"; },
+      request => { request.audit.route = "hardest.tasks"; },
+      request => { request.audit.contractSha256 = "0".repeat(64); },
+      request => { request.audit.taskSha256 = "0".repeat(64); },
+      request => { request.audit.requestScope.cwd = "/other/project"; },
+      request => { request.audit.resolutionScope = "project"; },
+      request => { request.audit.taskSelection.inventorySha256 = "0".repeat(64); },
+      request => { request.audit.taskSelection.configuredSelection.modelOptions.verbosity = "high"; },
+      request => { request.audit.taskSelection.requested.reasoning = "high"; },
+      request => { request.audit.taskSelection.selected.reasoning = "high"; },
+      request => { request.audit.taskSelection.jobContext = { kind: "routine" }; },
+      request => { request.audit.taskSelection.reason = "saved-role-line"; },
+      request => { request.audit.taskSelection.rejectedAdjustment = { model: "configured-model", reasoning: "max", reason: "forged" }; },
+      request => { request.audit.resolutionProfile = { preset: "other", budget: "other" }; },
+    ]) {
+      const forged = structuredClone(f.rejectedPreparedRequest);
+      mutate(forged);
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: forged }), /rejected prepared request/);
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: rehashPrepared(forged) }), /rejected prepared request/);
+    }
+    for (const invalid of [null, {}, { model: "configured-model", reasoning_effort: "max" }]) {
+      await assert.rejects(prepareDelegation({ ...retry, rejectedPreparedRequest: invalid }), /rejected prepared request/);
+    }
+    await assert.rejects(prepareDelegation({ ...retry, rejectedAdjustment: undefined }), /requires rejectedAdjustment/);
+    for (const change of [{ model: "guessed-model" }, { reasoning: "ultra" }, { reason: "" }]) {
+      await assert.rejects(prepareDelegation({ ...retry,
+        rejectedAdjustment: { ...f.rejectedAdjustment, ...change } }), /must identify/);
+    }
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native stale retry validates the original saved entry and preserves aliased selections", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const retry = { ...f.common, rejectedPreparedRequest: f.rejectedPreparedRequest,
+      rejectedAdjustment: f.rejectedAdjustment };
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low"] }] }));
+    await assert.rejects(prepareDelegation(retry), /saved model and reasoning/);
+    for (const selection of [
+      { ...f.selection, model: "another-family-model" },
+      { ...f.selection, reasoning: "low" },
+      { ...f.selection, modelOptions: { verbosity: "high" } },
+    ]) {
+      f.resolution.routes["code.bug-fix"].entries[0] = selection;
+      await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+      await assert.rejects(prepareDelegation({ ...retry, inventoryPath: undefined }), /rejected prepared request/);
+    }
+    f.resolution.routes["code.bug-fix"].entries[0] = { ...f.selection, reasoning: "invalid-effort" };
+    await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+    await assert.rejects(prepareDelegation({ ...retry, inventoryPath: undefined }), /rejected prepared request/);
+    await assert.rejects(prepareDelegation(retry), /saved model and reasoning/);
+    for (const alias of ["auto", "inherit-parent"]) {
+      f.resolution.roles.explorer.alias = alias;
+      await writeFile(f.resolutionPath, JSON.stringify(f.resolution));
+      const input = { ...f.common, inventoryPath: undefined, routeName: undefined, roleName: "explorer",
+        parentModel: "actual-parent", parentReasoning: "high" };
+      const inherited = await prepareDelegation(input);
+      assert.equal(inherited.model, "actual-parent");
+      assert.equal(inherited.reasoning_effort, "high");
+      assert.equal(inherited.audit.taskSelection.reason, "inherited-alias-unchanged");
+      await assert.rejects(prepareDelegation({ ...input, rejectedPreparedRequest: inherited,
+        rejectedAdjustment: { model: "actual-parent", reasoning: "high", reason: "fixture rejection" } }), /rejected prepared request/);
+      await assert.rejects(prepareDelegation({ ...input, rejectedAdjustment:
+        { model: "actual-parent", reasoning: "high", reason: "fixture rejection" } }), /must identify/);
+    }
+  } finally { await rm(f.root, { recursive: true, force: true }); }
+});
+
+test("native CLI consumes the saved prepared request and exact prior inventory bytes", async () => {
+  const f = await staleRetryFixture();
+  try {
+    const requestPath = join(f.root, "prepared.json");
+    const rejectionPath = join(f.root, "rejection.json");
+    const taskPath = join(f.root, "task.txt");
+    const jobPath = join(f.root, "job.json");
+    await writeFile(requestPath, JSON.stringify(f.prepared));
+    await writeFile(rejectionPath, JSON.stringify(f.rejectedAdjustment));
+    await writeFile(taskPath, f.common.task);
+    await writeFile(jobPath, JSON.stringify(f.common.jobContext));
+    assert.equal(f.prepared.audit.taskSelection.inventoryJson, await readFile(f.inventoryPath, "utf8"));
+    assert.equal(f.prepared.audit.taskSelection.inventorySha256,
+      createHash("sha256").update(await readFile(f.inventoryPath, "utf8")).digest("hex"));
+    assert.equal(f.prepared.audit.requestSha256, rehashPrepared(structuredClone(f.prepared)).audit.requestSha256);
+    assert.deepEqual(f.prepared.audit.taskSelection.configuredSelection, f.selection);
+    await writeFile(f.inventoryPath, JSON.stringify({ ...f.inventory,
+      models: [{ id: "configured-model", reasoningEfforts: ["low", "high"] }] }));
+    for (const inventory of [["--inventory", f.inventoryPath], []]) {
+      const cli = await promisify(execFile)(process.execPath, [join(repoRoot, "tools/codex-delegation.mjs"),
+        "prepare", "--package", bundleRoot, "--resolution", f.resolutionPath, "--route", "code.bug-fix",
+        "--task-name", f.common.taskName, "--task-file", taskPath, "--job-context", jobPath,
+        "--rejected-adjustment", rejectionPath, "--rejected-prepared-request", requestPath,
+        ...inventory], { cwd: f.root });
+      const retry = JSON.parse(cli.stdout);
       assert.equal(retry.model, "configured-model");
       assert.equal(retry.reasoning_effort, "high");
       assert.equal(retry.fork_turns, "none");
-      assert.equal(retry.task_name, "bounded_worker");
       assert.equal(retry.message, f.prepared.message);
-      assert.equal(retry.audit.taskSelection.reason, "adjustment-rejected-retry-original-role-line");
-      assert.deepEqual(retry.audit.taskSelection.configuredSelection, f.selection);
-      assert.deepEqual(retry.audit.taskSelection.rejectedAdjustment, f.rejectedAdjustment);
+      assert.equal(retry.audit.taskSelection.hostRejectionVerified, false);
       assert.equal(retry.audit.taskSelection.rejectedPreparedRequestSha256, f.prepared.audit.requestSha256);
-      assert.deepEqual(retry.audit.taskSelection.requested, { model: "configured-model", reasoning: "high" });
     }
-    assert.equal(await readFile(f.resolutionPath, "utf8"), before);
   } finally { await rm(f.root, { recursive: true, force: true }); }
 });

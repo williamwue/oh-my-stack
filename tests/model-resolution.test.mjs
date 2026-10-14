@@ -306,3 +306,28 @@ test("hardest effort stops at advertised max without selecting ultra or inventin
   assert.equal(prepare("high", { ...inventory,
     models: [{ id: "saved-model", reasoningEfforts: ["high", "ultra"] }] }).selection.reasoning, "high");
 });
+
+
+test("bare rejection cannot authorize a stale retry and the original model options remain intact", () => {
+  const selection = { model: "saved-model", reasoning: "high", speed: "standard",
+    modelOptions: { verbosity: "low" } };
+  const inventory = { schemaVersion: 1, runtime: "codex", source: "local host rejection fixture",
+    observedAt: "2026-10-14T00:00:00Z",
+    models: [{ id: "saved-model", reasoningEfforts: ["low", "high", "max"] }] };
+  const input = { selection, inventory, runtime: "codex", jobContext: { kind: "hardest" } };
+  const prepared = resolveTaskSelection(input);
+  assert.equal(prepared.selection.reasoning, "max");
+  assert.deepEqual(prepared.audit.configuredSelection, { model: "saved-model", reasoning: "high",
+    speed: "standard", modelOptions: { verbosity: "low" } });
+  const rejectedAdjustment = { model: "saved-model", reasoning: "max", reason: "fixture rejection, backend not verified" };
+  const sameCatalog = resolveTaskSelection({ ...input, rejectedAdjustment });
+  assert.deepEqual(sameCatalog.selection, { model: "saved-model", reasoning: "high",
+    speed: "standard", modelOptions: { verbosity: "low" } });
+  for (const observed of [undefined, { ...inventory,
+    models: [{ id: "saved-model", reasoningEfforts: ["low", "high"] }] }]) {
+    assert.throws(() => resolveTaskSelection({ ...input, inventory: observed, rejectedAdjustment }), /must identify/);
+    const unchanged = resolveTaskSelection({ ...input, inventory: observed });
+    assert.equal(unchanged.selection.reasoning, "high");
+    assert.equal(unchanged.selection.model, "saved-model");
+  }
+});

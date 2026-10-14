@@ -66,7 +66,7 @@ export function resolveTaskSelection({ selection, jobContext, inventory, runtime
   const configured = { model: selection.model ?? null, reasoning: selection.reasoning ?? null,
     inheritParent: selection.inheritParent === true, speed: selection.speed ?? null };
   const selected = { ...selection };
-  const audit = { configured, selected: null, jobContext: jobContext ?? null,
+  const audit = { configured, configuredSelection: { ...selection }, selected: null, jobContext: jobContext ?? null,
     reason: "saved-role-line", inventorySource: null, rejectedAdjustment: null,
     speed: { requested: selection.inheritParent || jobContext?.kind === "verification" ? configured.speed
       : jobContext ? jobContext.urgent ? "fast" : "standard" : configured.speed,
