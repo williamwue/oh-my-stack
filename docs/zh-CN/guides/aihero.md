@@ -2,7 +2,7 @@
 
 [English](../../aihero-original-skills.md) | [简体中文](aihero.md)
 
-OMS 当前源码收录了 Matt Pocock 的十六个原版 Skill。直接选择对应入口即可使用，
+OMS 当前源码收录了 Matt Pocock 的二十个原版 Skill。直接选择对应入口即可使用，
 无需先进入 `poteto-mode`。
 
 新增的调研、问卷、项目配置、规格和工单能力需要 **0.10.0 或更高版本**。
@@ -33,11 +33,16 @@ OMS 当前源码收录了 Matt Pocock 的十六个原版 Skill。直接选择对
 | 复盘代理使用的项目环境 | `retro` | 读取指定会话，提出导航、检查、规范和工具改进候选，不直接实施建议。 |
 | 把工作移交给其他会话或工具 | `handoff` | 在操作系统临时目录写入脱敏交接文件，引用已有成果，避免重复保存。 |
 | 诊断难复现的缺陷或性能退化 | `diagnosing-bugs` | 建立针对症状的失败反馈循环，缩小复现、验证假设、修复原因并清理临时探针。 |
+| 分诊 issue 与外部 PR | `triage` | 在已配置的 tracker 上按类别和状态角色流转 issue，验证报告并写出可交给代理的简报；它发布的每条评论都带 AI 声明。 |
+| 把大型工作拆成决策工单地图 | `wayfinder` | 在 tracker 上建立地图 issue 和决策工单，逐个解决；调研类工单交给子代理。 |
+| 带人完成手动配置步骤 | `wizard` | 基于原版模板生成交互式 bash 脚本，覆盖只有人能做的步骤；不会替你端到端运行。 |
+| 在 Claude Code 中拦截危险 git 命令 | `git-guardrails-claude-code` | 询问项目或用户范围，复制原版钩子脚本，并把 `PreToolUse` 钩子合并进设置文件。 |
 | 按规范和需求审查已提交改动 | `code-review` | 独立审查规范与需求两个维度，分别报告发现，不直接实施建议。 |
 
 `codebase-design`、`domain-modeling`、`grilling`、`research` 和
-`writing-for-agents`、`diagnosing-bugs` 和 `code-review` 也可由代理调用。
-其余九个需要用户明确调用；十六个都能单独选择。
+`writing-for-agents`、`diagnosing-bugs`、`code-review`、`wizard` 和
+`git-guardrails-claude-code` 也可由代理调用。
+其余十一个需要用户明确调用；二十个都能单独选择。
 
 ## 先体验一次访谈
 
@@ -114,8 +119,8 @@ Design It Twice 过程比较接口方案。该过程要求至少三个独立的�
 
 它优先编辑已有 `CLAUDE.md`，否则编辑已有 `AGENTS.md`；两者都不存在时
 询问创建哪个。确认后保留原有其他章节，写入 `docs/agents/issue-tracker.md`
-和 `docs/agents/domain.md`。当前未收录原版 `triage`，因此跳过它的可选标签
-配置步骤；规格与工单仍使用 `ready-for-agent` 状态。
+和 `docs/agents/domain.md`。原版 `triage` 现已收录，其可选标签配置步骤可以使用；早期版本的验收记录是在
+没有它的情况下运行的。规格与工单仍使用 `ready-for-agent` 状态。
 
 已有共识后，选择 `to-spec`：
 
@@ -206,7 +211,8 @@ Codex 的 7,500 字节包装入口规则用于 pstack 核心技能；原版保�
 较长的 `writing-for-agents` 和 `diagnosing-bugs`。
 原生完整加载及自动选择效果需另做实际工具验证。
 
-当前未收录原版 `wayfinder` 和 `triage`。完整清单见[技能目录](../../skill-directory.md)。
+`wayfinder`、`triage`、`wizard` 和 `git-guardrails-claude-code` 来自 2026-10-15 批次
+（来源 ID `aihero-20261015`，上游 `49dd158`）。完整清单见[技能目录](../../skill-directory.md)。
 测试工具与限制见[支持范围](../../support-policy.md)，来源与更新流程见
 [第一批记录](../../maintainers/aihero-complements-2026-10-08.md)及
 [第二批记录](../../maintainers/aihero-complements-second-batch-2026-10-08.md)。维护者记录为英文。

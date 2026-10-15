@@ -6,6 +6,10 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+- Add four original AIHero skills to the explicit `aihero` extension at upstream
+  `49dd158`: `triage`, `wayfinder`, `wizard`, and `git-guardrails-claude-code`.
+  They have no pstack equivalent and are absent from the default distribution.
+
 ## 0.16.0 - 2026-10-12
 
 - Allow OS startup checks for the copied-executable tamper fixture without

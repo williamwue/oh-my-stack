@@ -2304,6 +2304,38 @@
       "origin": "pstack",
       "distribution": "core",
       "owner": "in-your-own-words"
+    },
+    {
+      "kind": "skill",
+      "name": "triage",
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/engineering/triage",
+      "origin": "aihero-20261015",
+      "distribution": "aihero",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "wayfinder",
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/engineering/wayfinder",
+      "origin": "aihero-20261015",
+      "distribution": "aihero",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "wizard",
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/engineering/wizard",
+      "origin": "aihero-20261015",
+      "distribution": "aihero",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "git-guardrails-claude-code",
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/misc/git-guardrails-claude-code",
+      "origin": "aihero-20261015",
+      "distribution": "aihero",
+      "audience": "public"
     }
   ]
 }

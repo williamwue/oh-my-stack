@@ -147,6 +147,13 @@ at `f3fc5632f401156837ee3872f14fe33ccf1024ea`, under source ID
 separate immutable snapshot. This includes the original Bash HITL template;
 existing AIHero originals and source hashes are unchanged.
 
+The 2026-10-15 batch selects original `triage`, `wayfinder`, `wizard`, and
+`git-guardrails-claude-code` at `49dd158d1076134a641b33efb035946536778336`,
+under source ID `aihero-20261015`. Their thirteen files and the MIT license
+are retained in a separate immutable snapshot. This includes the original Bash
+wizard template and Claude Code hook script; existing AIHero originals and
+source hashes are unchanged.
+
 ## Current pstack candidate source
 
 The current local candidate imports pstack 0.15.23 from cursor/plugins at

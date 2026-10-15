@@ -711,6 +711,24 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/engineering/wizard/template.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Bash template for a human-run setup wizard; opens URLs, reads typed values, and may write a .env file or set GitHub secrets only after the generated stages are reviewed and run by the user.",
+      "network": false,
+      "writes": [
+        ".env"
+      ],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation."
+    },
+    {
+      "path": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336/skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh",
+      "owner": "AIHero / Matt Pocock Skills (MIT), packaged by oh-my-stack",
+      "purpose": "Original Claude Code PreToolUse hook script; reads the proposed Bash command on stdin and exits 2 for matching dangerous git patterns. Installed into user settings only by the user-invoked skill.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation, and any copied hook and settings entry must be removed by the user."
     }
   ]
 }

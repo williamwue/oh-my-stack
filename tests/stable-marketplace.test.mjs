@@ -38,7 +38,7 @@ async function fixture(root, version = "1.2.3", includePi = false) {
     const payload = join(root, target);
     await mkdir(join(payload, "skills", "original"), { recursive: true });
     await writeFile(join(payload, "skills", "original", "SKILL.md"), `original ${target}\n`);
-    for (const source of ["aihero", "aihero-20261008"]) {
+    for (const source of ["aihero", "aihero-20261008", "aihero-20261015"]) {
       await mkdir(join(payload, "licenses", source), { recursive: true });
       await writeFile(join(payload, "licenses", source, "LICENSE"), `${source} license\n`);
     }
