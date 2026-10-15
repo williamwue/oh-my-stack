@@ -35,31 +35,16 @@ For Windows, use the official `node-v22.23.3-win-x64.zip`, verify its SHA-256,
 and retain the complete extracted distribution so its bundled npm is available.
 Python must be available as `python`; the pipeline creates its own virtual
 environment and uses `Scripts/python.exe`. The same Node/zlib pin, clean tagged
-source, independent review, and downloaded-asset gates apply.
+source, and downloaded-asset gates apply.
 
-## Prepare the source and review
+## Prepare the source
 
 Preserve unrelated work in the main checkout. Use a clean dedicated checkout,
 update the canonical version in `src/core/project.json` and root package/lock
 files for a new plugin release, and regenerate packages with `npm run generate`.
-Complete the normal independent candidate review and resolve findings before
-creating the final tag. Plugin-tooling-only changes need not republish a plugin.
-
-Keep the review verdict outside the source checkout. Its schema is:
-
-```json
-{
-  "schemaVersion": 1,
-  "tree": "THE_EXACT_40_CHARACTER_REVIEWED_GIT_TREE",
-  "verdict": "approved",
-  "evidence": ["path or URL of frozen findings and root judgment"]
-}
-```
-
-This is a maintainer judgment derived from completed review, not a template to
-mark approved before review. Inspect `git rev-parse HEAD^{tree}` and bind the
-actual reviewed tree; a merge commit may preserve that tree while changing the
-commit ID. The producer records both commit and tree.
+Merge and verify the change through the repository's normal pull request flow
+before creating the final tag. Plugin-tooling-only changes need not republish a
+plugin. The producer records both commit and tree.
 
 ## One command
 
@@ -72,7 +57,7 @@ For checks and a prepared tagged candidate, without remote writes:
 ```bash
 "$OMS_RELEASE_NODE" /path/to/current/main/tools/local-release.mjs \
   --source /path/to/clean/tagged-source \
-  --tag v0.11.3 --review /path/to/completed-review.json \
+  --tag v0.11.3 \
   --out /path/to/new/candidate-evidence
 ```
 
@@ -80,12 +65,12 @@ For checks and a prepared tagged candidate, without remote writes:
 `--tag` validates a clean HEAD and produces a development receipt; that receipt
 cannot authorize stable promotion or a formal release.
 
-To publish after the release and review work is authorized:
+To publish after the release is authorized:
 
 ```bash
 "$OMS_RELEASE_NODE" /path/to/current/main/tools/local-release.mjs \
   --source /path/to/clean/tagged-source \
-  --tag v0.11.3 --review /path/to/completed-review.json \
+  --tag v0.11.3 \
   --out /path/to/new/publish-evidence \
   --notes-file /path/to/release-notes.md --publish
 ```
@@ -93,7 +78,7 @@ To publish after the release and review work is authorized:
 The command runs dependency installation, the full repository checks, complete
 book validation and the bilingual Python audit/tests. It builds twice to check
 reproducibility, creates all eight assets, and writes a verification receipt
-only after success. Logs and the review file are retained with hashes. Failed
+only after success. Logs are retained with hashes. Failed
 checks retain evidence and never produce a success receipt.
 
 With `--publish`, it verifies the existing native GitHub account and exact
@@ -141,7 +126,7 @@ manually. The publisher itself configures the helper only for its subprocesses.
 ## Receipt and trust boundary
 
 `verification.json` binds the exact repository, commit, tree, tag, clean source,
-Node/zlib versions, required successful checks, hashed logs, completed review and
+Node/zlib versions, required successful checks, hashed logs and
 all eight artifact hashes/sizes. The stable publisher checks these against the
 server-observed tag and downloaded release, then independently rebuilds with
 the pinned environment. It still validates native write access, safe archive
@@ -150,7 +135,7 @@ lease, and the remote result. Any evidence or artifact drift stops promotion.
 
 This is local maintainer evidence. It is not a signed third-party attestation or
 remote CI result, and it does not defend against a malicious maintainer forging
-both a receipt and its logs. The authorized maintainer owns review and release
+both a receipt and its logs. The authorized maintainer owns release
 judgment. Native installation and live model checks remain separate candidate
 gates; the local command does not claim them from static tests.
 

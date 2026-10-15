@@ -25,8 +25,6 @@ async function fixture(t, tagged = true) {
   delete manifest.source.tree;
   for (const name of assetNames("1.2.3")) await writeFile(join(assets, name), name);
   await json(join(assets, "release-manifest.json"), manifest);
-  const review = { schemaVersion: 1, tree, verdict: "approved", evidence: ["Independent tree review"] };
-  await json(join(root, "review.json"), review);
   const checks = [];
   for (const name of REQUIRED_CHECKS) {
     const log = `logs/${name}.log`, bytes = Buffer.from(`Passed ${name}\n`); await writeFile(join(root, log), bytes);
@@ -34,8 +32,7 @@ async function fixture(t, tagged = true) {
   }
   const receipt = { schemaVersion: 1, kind: "oh-my-stack-local-release", repository: "williamwue/oh-my-stack", source,
     environment: { ...BUILD_ENVIRONMENT, platform: "darwin", arch: "arm64" }, checks,
-    assets: await snapshotAssets(assets, "1.2.3"), review,
-    reviewFile: { path: "review.json", sha256: sha256(await readFile(join(root, "review.json"))) } };
+    assets: await snapshotAssets(assets, "1.2.3") };
   const path = join(root, "verification.json"); await json(path, receipt);
   const args = { path, manifest: tagged ? manifest : undefined, tagCommit: commit, tagTree: tree, assets };
   return { root, assets, manifest, receipt, path, args, read: () => readLocalVerification(args) };
@@ -48,11 +45,11 @@ test("pinned environment and CLI arguments fail before any output", async (t) =>
   const root = await temporary(t), out = join(root, "evidence");
   const cli = resolve("tools/local-release.mjs");
   const result = await exec(process.execPath, ["--input-type=module", "-e",
-    `Object.defineProperty(process.versions, 'zlib', {value:'1.2.12'}); const {main}=await import(${JSON.stringify(`file://${cli}`)}); await main(${JSON.stringify(["--source", root, "--out", out, "--review", join(root, "review.json")])});`]).catch((error) => error);
+    `Object.defineProperty(process.versions, 'zlib', {value:'1.2.12'}); const {main}=await import(${JSON.stringify(`file://${cli}`)}); await main(${JSON.stringify(["--source", root, "--out", out])});`]).catch((error) => error);
   assert.notEqual(result.code, 0); assert.match(result.stderr, /requires Node/); await assert.rejects(access(out));
-  assert.throws(() => parseArgs(["--source", root, "--out", out, "--review", "r", "--publish"]), /publication requires/);
-  assert.throws(() => parseArgs(["--source", root, "--out", out, "--review", "r", "--tag", "v1.2.3-rc.1"]), /vVERSION/);
-  assert.throws(() => parseArgs(["--source", root, "--out", out, "--out", out, "--review", "r"]), /duplicate/);
+  assert.throws(() => parseArgs(["--source", root, "--out", out, "--publish"]), /publication requires/);
+  assert.throws(() => parseArgs(["--source", root, "--out", out, "--tag", "v1.2.3-rc.1"]), /vVERSION/);
+  assert.throws(() => parseArgs(["--source", root, "--out", out, "--out", out]), /duplicate/);
 });
 test("valid tagged evidence and clean HEAD validation evidence verify offline", async (t) => {
   const tagged = await fixture(t), head = await fixture(t, false);
@@ -61,7 +58,7 @@ test("valid tagged evidence and clean HEAD validation evidence verify offline", 
   await assert.rejects(readLocalVerification({ ...head.args, manifest: head.manifest }), /tagged/);
   await assert.rejects(readLocalVerification({ ...tagged.args, manifest: undefined }), /validation-only/);
 });
-test("source, review, required checks, duplicates and asset inventory are bound", async (t) => {
+test("source, required checks, duplicates and asset inventory are bound", async (t) => {
   const f = await fixture(t);
   for (const mutate of [
     (r) => { r.repository = "other/repo"; },
@@ -71,9 +68,6 @@ test("source, review, required checks, duplicates and asset inventory are bound"
     (r) => { r.source.worktreeDirty = true; },
     (r) => { r.source.cleanTaggedCheckout = false; },
     (r) => { r.source.ref = "HEAD"; },
-    (r) => { r.review.tree = "c".repeat(40); },
-    (r) => { r.review.verdict = "pending"; },
-    (r) => { r.review.evidence = [""]; },
     (r) => { r.checks.pop(); },
     (r) => { r.checks[0].exitCode = 1; },
     (r) => { r.checks.push(r.checks[0]); },
@@ -90,7 +84,7 @@ test("source, review, required checks, duplicates and asset inventory are bound"
 });
 test("traversal, symlink files and ancestor directories never count as evidence", async (t) => {
   const f = await fixture(t);
-  for (const log of ["../escape", "/etc/passwd", "logs/../review.json", "logs//npm-ci.log", "logs\\npm-ci.log"]) {
+  for (const log of ["../escape", "/etc/passwd", "logs/../verification.json", "logs//npm-ci.log", "logs\\npm-ci.log"]) {
     const bad = structuredClone(f.receipt); bad.checks[0].log = log; await json(f.path, bad);
     await assert.rejects(f.read(), /unsafe/);
   }
@@ -107,10 +101,10 @@ test("traversal, symlink files and ancestor directories never count as evidence"
   const alias = join(await temporary(t), "evidence-alias"); await symlink(f.root, alias);
   await assert.rejects(readLocalVerification({ ...f.args, path: join(alias, "verification.json") }), /ancestor/);
 });
-test("tampered logs, reviews, assets and extra assets are rejected", async (t) => {
+test("tampered logs, assets and extra assets are rejected", async (t) => {
   const f = await fixture(t);
   for (const [path, pattern] of [[join(f.root, f.receipt.checks[0].log), /log digest/],
-    [join(f.root, "review.json"), /review file digest/], [join(f.assets, f.receipt.assets[0].name), /asset digest/]]) {
+    [join(f.assets, f.receipt.assets[0].name), /asset digest/]]) {
     const original = await readFile(path); await writeFile(path, "tampered"); await assert.rejects(f.read(), pattern); await writeFile(path, original);
   }
   const archive = join(f.assets, f.receipt.assets[0].name), saved = join(f.root, "archive");
@@ -141,23 +135,20 @@ async function gitFixture(t) {
   await json(join(source, "package.json"), { name: "oh-my-stack", private: true });
   await git("add", "."); await git("commit", "--quiet", "-m", "offline fixture"); await git("tag", "v1.2.3");
   const state = await inspectSource(source, "v1.2.3");
-  const review = join(root, "review.json"); await json(review, { schemaVersion: 1, tree: state.tree, verdict: "approved", evidence: ["fixture"] });
-  return { root, source, review, state, git };
+  return { root, source, state, git };
 }
-test("actual Git source and review checks reject mismatches before output", { skip: !pinnedRuntime && "requires pinned release runtime" }, async (t) => {
+test("actual Git source checks reject mismatches before output", { skip: !pinnedRuntime && "requires pinned release runtime" }, async (t) => {
   const f = await gitFixture(t), out = join(f.root, "evidence");
   assert.equal((await inspectSource(f.source)).ref, "HEAD");
   await assert.rejects(inspectSource(f.source, "v1.2.4"), /tag\/version/);
-  await json(f.review, { schemaVersion: 1, tree, verdict: "approved", evidence: ["wrong tree"] });
-  await assert.rejects(main(["--source", f.source, "--out", out, "--review", f.review]), /exact source tree/); await assert.rejects(access(out));
   await writeFile(join(f.source, "untracked"), "dirty"); await assert.rejects(inspectSource(f.source), /clean/);
   await rm(join(f.source, "untracked"));
-  await assert.rejects(main(["--source", f.source, "--out", join(f.source, "evidence"), "--review", f.review]), /outside/);
+  await assert.rejects(main(["--source", f.source, "--out", join(f.source, "evidence")]), /outside/);
 });
 test("a failed real npm check retains logs and does not emit a success receipt", { skip: !pinnedRuntime && "requires pinned release runtime" }, async (t) => {
   const f = await gitFixture(t), out = join(f.root, "evidence");
   // Deliberately no lockfile: npm ci must fail before later checks or remote writes.
-  await assert.rejects(main(["--source", f.source, "--out", out, "--review", f.review]), /npm-ci failed/);
+  await assert.rejects(main(["--source", f.source, "--out", out]), /npm-ci failed/);
   const checks = JSON.parse(await readFile(join(out, "checks.json")));
   assert.equal(checks.length, 1); assert.notEqual(checks[0].exitCode, 0);
   assert.match(await readFile(join(out, checks[0].log), "utf8"), /lockfile|package-lock/i);

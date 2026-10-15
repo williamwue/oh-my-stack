@@ -178,18 +178,16 @@ test("a self-consistent checksum set cannot hide a dirty source or false archive
   }
 });
 
-test("promotion binds clean manifest, exact tag and tree, local checks, review, and monotonic versions", () => {
+test("promotion binds clean manifest, exact tag and tree, local checks, and monotonic versions", () => {
   const tree = "c".repeat(40);
   const manifest = { version: "1.2.3", source: { ref: "v1.2.3", commit, worktreeDirty: false, cleanTaggedCheckout: true } };
   const verification = { schemaVersion: 1, kind: "oh-my-stack-local-release", repository: REPOSITORY,
     source: { ...manifest.source, tree }, environment: { node: "22.23.3", zlib: "1.3.1-e00f703" },
-    review: { tree, verdict: "approved", evidence: ["frozen review"] },
     checks: ["npm-ci", "repository-check", "book-validation", "book-audit", "book-tests", "release-reproducibility"].map((name) => ({ name, exitCode: 0 })) };
   assert.equal(assertPromotion({ manifest, tagCommit: commit, tagTree: tree, verification }), verification);
   for (const bad of [{ tagCommit: "b".repeat(40) }, { tagTree: "d".repeat(40) }, { verification: undefined },
     { verification: { ...verification, checks: verification.checks.slice(1) } },
     { verification: { ...verification, environment: { ...verification.environment, zlib: "1.2.12" } } },
-    { verification: { ...verification, review: { ...verification.review, verdict: "pending" } } },
     { previous: { version: "1.3.0" } },
     { manifest: { ...manifest, source: { ...manifest.source, worktreeDirty: true } } }]) {
     assert.throws(() => assertPromotion({ manifest, tagCommit: commit, tagTree: tree, verification, ...bad }));

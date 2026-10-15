@@ -48,9 +48,6 @@ export function assertPromotion({ manifest, tagCommit, tagTree, verification, pr
   "local verification does not bind the exact clean release tag and tree");
   requireThat(verification.environment?.node === BUILD_ENVIRONMENT.node
     && verification.environment?.zlib === BUILD_ENVIRONMENT.zlib, "local verification used a different build environment");
-  requireThat(verification.review?.tree === tagTree && verification.review?.verdict === "approved"
-    && Array.isArray(verification.review?.evidence) && verification.review.evidence.some((value) => typeof value === "string" && value.trim()),
-  "local verification requires a review of the exact source tree");
   const required = REQUIRED_CHECKS;
   requireThat(Array.isArray(verification.checks) && required.every((name) => verification.checks.filter((check) => check.name === name && check.exitCode === 0).length === 1),
     "local verification is missing successful checks");
