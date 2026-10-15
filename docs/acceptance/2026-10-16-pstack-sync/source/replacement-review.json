@@ -1,0 +1,85 @@
+[
+  {
+    "output": "src/core/skills/principle-attack-the-premise/SKILL.md",
+    "decision": "updated-official-frontmatter",
+    "previous": {
+      "before": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    },
+    "current": {
+      "before": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    }
+  },
+  {
+    "output": "src/core/skills/principle-fix-root-causes/SKILL.md",
+    "decision": "updated-official-frontmatter",
+    "previous": {
+      "before": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    },
+    "current": {
+      "before": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    }
+  },
+  {
+    "output": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md",
+    "decision": "updated-official-frontmatter",
+    "previous": {
+      "before": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    },
+    "current": {
+      "before": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    }
+  },
+  {
+    "output": "src/core/skills/principle-type-system-discipline/SKILL.md",
+    "decision": "updated-official-frontmatter",
+    "previous": {
+      "before": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    },
+    "current": {
+      "before": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
+    }
+  },
+  {
+    "output": "src/core/skills/sharpen/SKILL.md",
+    "decision": "new-explicit-official-skill",
+    "current": {
+      "before": "---\nname: sharpen\ndescription: \"Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.\"\ndisable-model-invocation: true\n---\n\n",
+      "after": "---\nname: sharpen\ndescription: \"Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+      "expectedOccurrences": 1,
+      "category": "frontmatter",
+      "reason": "Preserve the official task-framing behavior and expose it explicitly through the native host catalog."
+    }
+  }
+]

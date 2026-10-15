@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "sourceRoot": "upstream/snapshots/cursor-pstack-october-14/ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a/pstack",
-  "revision": "ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a",
+  "sourceRoot": "upstream/snapshots/cursor-pstack-october-16/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack",
+  "revision": "99743e9c151c8537cbbf1f98bb38f34ef3368453",
   "entries": [
     {
       "source": "skills/architect/references/design-red-flags.md",
@@ -222,8 +222,8 @@
     {
       "source": "skills/correct/SKILL.md",
       "output": "src/core/skills/correct/SKILL.md",
-      "sourceSha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
-      "outputSha256": "27b5376a7f72aefdcfb9ec2153f7424b2339764807bfff190edabdbfedc3021b",
+      "sourceSha256": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
+      "outputSha256": "bbd8bc7e59c3cb9894f56457792b82d8be38f7f920433d489be572657a0124c2",
       "replacements": [
         {
           "before": "---\nname: correct\ndescription: \"Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.\"\ndisable-model-invocation: true\n---\n\n",
@@ -380,8 +380,8 @@
     {
       "source": "skills/interrogate/references/lead-judgment.md",
       "output": "src/core/skills/interrogate/references/lead-judgment.md",
-      "sourceSha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361",
-      "outputSha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361",
+      "sourceSha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87",
+      "outputSha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87",
       "replacements": []
     },
     {
@@ -472,8 +472,8 @@
     {
       "source": "skills/ketchup/SKILL.md",
       "output": "src/core/skills/ketchup/SKILL.md",
-      "sourceSha256": "d9704b154081af306b6583b2752498d454f9d761e9989ff1f037efd414f86bb4",
-      "outputSha256": "76d33a6d6a291627c410aebd4d919cd9947638f28e3a163c158e609c8444ca2a",
+      "sourceSha256": "47b3fb0d5626a40fcb3bd016e68f1cb3d2d313351183e8f6c05d4c7abd76e665",
+      "outputSha256": "461a1941239fd09734dc150fef56f00b6a4eb9d14c859bedd7027e9fe246f8a5",
       "replacements": [
         {
           "before": "---\nname: ketchup\ndescription: \"Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup.\"\ndisable-model-invocation: true\n---\n",
@@ -560,15 +560,15 @@
     {
       "source": "skills/poteto-help/references/recipes.md",
       "output": "src/core/skills/poteto-help/references/recipes.md",
-      "sourceSha256": "315b211b6cc6b19e3da7c4a1e8ddde2d8557588713d0b894509bd22821c709da",
-      "outputSha256": "315b211b6cc6b19e3da7c4a1e8ddde2d8557588713d0b894509bd22821c709da",
+      "sourceSha256": "5fb97a805976a82db0aba5cc8943e88d0cb38b17a0d6b8e89a44633677febb1a",
+      "outputSha256": "5fb97a805976a82db0aba5cc8943e88d0cb38b17a0d6b8e89a44633677febb1a",
       "replacements": []
     },
     {
       "source": "skills/poteto-help/SKILL.md",
       "output": "src/core/skills/poteto-help/SKILL.md",
-      "sourceSha256": "be47823adf42732c579156cf461d0d416f141f038aaa69d6e23fa4e25f2b8eb0",
-      "outputSha256": "8abd2a9abaaf3e9f87d31845d064c9e5414678dbed8102ed662871037b21a5b5",
+      "sourceSha256": "1b0645c25200a19e5863583e117bad684b1b79ba8434823ebf4f6bbcc61e8a75",
+      "outputSha256": "20c9e18c29736c8c9b1f0f9eab02b55f802ecc572fdff48684bfd5cf7668deff",
       "replacements": [
         {
           "before": "---\nname: poteto-help\ndescription: Guides users through pstack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.\ndisable-model-invocation: true\n---\n\n",
@@ -775,8 +775,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autopilot-full.md",
       "output": "src/core/skills/poteto-mode/playbooks/autopilot-full.md",
-      "sourceSha256": "41112e0a71dbd38f4bdf64289008c9d2b3cf8dcbb2f91438e4e146bd7b372207",
-      "outputSha256": "bcc0c1d69aa418e746841736ec2a543587f21880aa989e3c6167354140e14bef",
+      "sourceSha256": "acf4f4a58c11045f9d3e8807d907a877e61ca6432b079f1087d7d30fc931566f",
+      "outputSha256": "ed1f26c2fc9a32b6ce073f7642758757c5a0835de6fa76e5e3c6beb9f8895c12",
       "replacements": [
         {
           "before": "`deslop` skill from the `cursor-team-kit` plugin (`/deslop`)",
@@ -804,8 +804,8 @@
     {
       "source": "skills/poteto-mode/playbooks/autopilot-full.md",
       "output": "src/core/skills/autopilot-full/SKILL.md",
-      "sourceSha256": "41112e0a71dbd38f4bdf64289008c9d2b3cf8dcbb2f91438e4e146bd7b372207",
-      "outputSha256": "d4502491970d70631c6c1c9a05200045333707a6070a16290fdfb6bad18ae4d4",
+      "sourceSha256": "acf4f4a58c11045f9d3e8807d907a877e61ca6432b079f1087d7d30fc931566f",
+      "outputSha256": "0a7f86636fcaeddc80b230daa029f3d8927de9b1faacae21976e50e365e9a21b",
       "replacements": [
         {
           "before": "### Autopilot-full",
@@ -847,15 +847,15 @@
     {
       "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
       "output": "src/core/skills/poteto-mode/playbooks/autopilot-stack.md",
-      "sourceSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
-      "outputSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
+      "sourceSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60",
+      "outputSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60",
       "replacements": []
     },
     {
       "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
       "output": "src/core/skills/autopilot-stack/SKILL.md",
-      "sourceSha256": "fc087aecca59b08e68cfa119a01da7f8633e9d8380f2e8065024ccb618cd92d0",
-      "outputSha256": "2d3a35a55b3390382e2bc501f93559eda0f87aab65a2cdde62b2701227ca430f",
+      "sourceSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60",
+      "outputSha256": "cd86908ab065e402e9c1b41a675ce4158500381b94097552950f889f5a296f2d",
       "replacements": [
         {
           "before": "### Autopilot-stack",
@@ -1965,8 +1965,8 @@
     {
       "source": "skills/poteto-mode/SKILL.md",
       "output": "src/core/skills/poteto-mode/SKILL.md",
-      "sourceSha256": "f234661471847cafc4ae9bcb4a9208eb32ed8154ac25b91b2b064ec71bd62167",
-      "outputSha256": "1d171000bf594d4465996e07a871cdd438f701c088cadd8d6775a87e47850200",
+      "sourceSha256": "c5e6b605f46e5d9fbab31afa7a99d3d50680f2180d1fdfae3a924901bc52d99a",
+      "outputSha256": "6344f07b050a52a3548b8912b197fccd3c77c684bba4df665a2756e3f5e02eb3",
       "replacements": [
         {
           "before": "---\nname: Poteto Mode\ndescription: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.\ndisable-model-invocation: true\nicon: crown\ncolor: yellow\n---\n",
@@ -2106,12 +2106,12 @@
     {
       "source": "skills/principle-attack-the-premise/SKILL.md",
       "output": "src/core/skills/principle-attack-the-premise/SKILL.md",
-      "sourceSha256": "c87bd7536f772f8a403ad8155535ee17a1bbec9a353156693eb3bb1520c87ae3",
-      "outputSha256": "3dc3aa6bcc7777ae8333d13a71e78a7c115537e8eaea903f84b91e61c51cb4a1",
+      "sourceSha256": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
+      "outputSha256": "a6a8e2676c3297118cf7280834f8ed400cef3e5a0ddc2850561134dd0f57c5c7",
       "replacements": [
         {
-          "before": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.\"\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: principle-attack-the-premise\ndescription: \"Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -2211,12 +2211,12 @@
     {
       "source": "skills/principle-fix-root-causes/SKILL.md",
       "output": "src/core/skills/principle-fix-root-causes/SKILL.md",
-      "sourceSha256": "2131069d285d82fb799458494f2e4ac8759c9c6a60f9e300828c17874f514c6e",
-      "outputSha256": "9613e2db472399a6703152964fa85cf39732e080032e26bfaae8ca996b03c5ab",
+      "sourceSha256": "8df3c8c3fe57eb0055a5c8efab8ab144557fdf301da70b1cdc77a3a3ef3f3052",
+      "outputSha256": "5a70ed5a79da965e5055f1540402927db4a17323ac146cc9c006335c5fca04ef",
       "replacements": [
         {
-          "before": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.\"\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: principle-fix-root-causes\ndescription: \"Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -2271,8 +2271,8 @@
     {
       "source": "skills/principle-make-operations-idempotent/SKILL.md",
       "output": "src/core/skills/principle-make-operations-idempotent/SKILL.md",
-      "sourceSha256": "540738217c3da7bf513b9886924ad6a2bc77e58be867f5bd2e1831c74bf2ce70",
-      "outputSha256": "a8f0b270333a96b9e3ed246a75c0f2d7d76d2b1c2580c9c958e245cfd7b8e376",
+      "sourceSha256": "7aa9327cf1f1aa057e95d47a0a78bd88a8f9d556b608866fee939d455a53a019",
+      "outputSha256": "8a9529d6862c7e987b1b2090d38a5a695bb03ac499a45749dd82c9395802fae1",
       "replacements": [
         {
           "before": "---\nname: principle-make-operations-idempotent\ndescription: \"Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. Converge to the same end state regardless of partial prior runs.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2286,8 +2286,8 @@
     {
       "source": "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
       "output": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
-      "sourceSha256": "09978915a4a11990cf0a9a02d9c08cc59e0b7a04c5c24b83aa560fbe4146f75b",
-      "outputSha256": "79a96e88829a0fbff1fffc21cfb5f50dd3c2d8e15701caf412a3fc9946c4d5d2",
+      "sourceSha256": "580ad9bb1a0994ecb924321ba49efc38a2f85c64e22c76fb133f57a78272a2e6",
+      "outputSha256": "2cd3b07126d8884c6541466a8c68bc138b05423015e58e58c5c91168e4e7d32e",
       "replacements": [
         {
           "before": "---\nname: principle-migrate-callers-then-delete-legacy-apis\ndescription: \"Apply when introducing a new internal API while old callers still exist. Migrate callers and delete the old API in the same wave instead of preserving compatibility layers.\"\ndisable-model-invocation: true\n---\n\n",
@@ -2436,12 +2436,12 @@
     {
       "source": "skills/principle-test-behavior-not-implementation/SKILL.md",
       "output": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md",
-      "sourceSha256": "b2b73ba42920f9c3174ecdf808ec6e4591b3a9266ada9a05814f386004266d3a",
-      "outputSha256": "380841e97ce9447250ff03d5ab38e9fc04180248699130047e8b29b86d6f2d8c",
+      "sourceSha256": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6",
+      "outputSha256": "ebfa9cd9029a8f8132259540c00b76c1b7f39caa60597f6f60501bcf81a6fa6e",
       "replacements": [
         {
-          "before": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.\"\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: principle-test-behavior-not-implementation\ndescription: \"Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -2451,12 +2451,12 @@
     {
       "source": "skills/principle-type-system-discipline/SKILL.md",
       "output": "src/core/skills/principle-type-system-discipline/SKILL.md",
-      "sourceSha256": "2e492cef34bb25a20b9115df61f9ef3a9837e3fda144ffda8079e5f45a1b72e8",
-      "outputSha256": "88f6b3a2b99d364a47ee9e42abfd595013b5da6c0da8934d4a5a6c0ffd115bdd",
+      "sourceSha256": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106",
+      "outputSha256": "cc150d79d784c190908aed4de026ba7485347700375a973a81961853d85d846d",
       "replacements": [
         {
-          "before": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.\"\ndisable-model-invocation: true\n---\n\n",
-          "after": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "before": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: principle-type-system-discipline\ndescription: \"Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
           "expectedOccurrences": 1,
           "category": "frontmatter",
           "reason": "Normalize host frontmatter and disclose binding and authorization exceptions without adding stages."
@@ -2823,8 +2823,8 @@
     {
       "source": "skills/swarm/SKILL.md",
       "output": "src/core/skills/swarm/SKILL.md",
-      "sourceSha256": "c8fe1b28282e7a051a4041a146a11f076e0fd95252bb010106a58209805303d5",
-      "outputSha256": "121e09356f608070f9ecbd54ac2e7a94d032b2f36e57ab6608e35d843c3fe0c7",
+      "sourceSha256": "031657cb81e490f9aed5c75d6ff2a4fda35ccafbaf72be604e59481cc4080cdc",
+      "outputSha256": "7f31fa19c63414a6a2e1a96505f10670f7f1652fc639a7af2d3fbd7bab1b8659",
       "replacements": [
         {
           "before": "---\nname: swarm\ndescription: \"Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration.\"\ndisable-model-invocation: true\n---\n\n",
@@ -3384,6 +3384,21 @@
       "sourceSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8",
       "replacements": [],
       "outputSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8"
+    },
+    {
+      "source": "skills/sharpen/SKILL.md",
+      "output": "src/core/skills/sharpen/SKILL.md",
+      "sourceSha256": "6bcd73916696eb9c5b79b6f960983760c34bcc28937c11142dd8d86b5107aa46",
+      "outputSha256": "c571c0cc66bf2c4e19dded40b920f3d9f0df501e5240ca106dec118bcd327a3c",
+      "replacements": [
+        {
+          "before": "---\nname: sharpen\ndescription: \"Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.\"\ndisable-model-invocation: true\n---\n\n",
+          "after": "---\nname: sharpen\ndescription: \"Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.\"\n---\n\nHost adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.\n\n",
+          "expectedOccurrences": 1,
+          "category": "frontmatter",
+          "reason": "Preserve the official task-framing behavior and expose it explicitly through the native host catalog."
+        }
+      ]
     }
   ]
 }

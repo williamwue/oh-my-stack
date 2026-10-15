@@ -12,7 +12,6 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFile(join(root, path), "utf8");
 const json = async (path) => JSON.parse(await read(path));
 const receipt = await json("docs/acceptance/2026-10-14-pstack-sync/source/provenance.json");
-const manifest = await json("upstream/parity-derivations.json");
 
 async function paths(directory, prefix = "") {
   const result = [];
@@ -44,8 +43,6 @@ test("the 0.15.23 snapshot covers every GitHub tree blob and preserves the older
   assert.equal(receipt.delta.modified.length, 61);
   assert.deepEqual(receipt.delta.added, ["plugin.json", "skills/in-your-own-words/SKILL.md", "skills/poteto-mode/scripts/check-plan.test.ts"]);
   assert.deepEqual(receipt.delta.deleted, []);
-  assert.equal(manifest.revision, receipt.revision);
-  assert.equal(manifest.sourceRoot, receipt.sourceRoot);
 });
 
 test("in-your-own-words is discoverable as an explicit public core entry", async () => {

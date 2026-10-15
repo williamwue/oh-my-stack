@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-77 public entries: 53 workflows and 24 principles.
+78 public entries: 54 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -28,7 +28,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-53 entries.
+54 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -73,6 +73,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`runtime-forensics`](../packages/codex/skills/runtime-forensics/SKILL.md) | Diagnose a live process using runtime evidence. | explicit | pstack core / host binding |
 | [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md) | Resume checkpointed work without repeating completed steps. | explicit | pstack core / host binding |
 | [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md) | Configure role models or optional Codex automatic routing. | explicit | pstack core / host binding |
+| [`sharpen`](../packages/codex/skills/sharpen/SKILL.md) | Frame a task around the user's goal, expert methods, and an outside check, then execute. | explicit | pstack core / host binding |
 | [`shipping`](../packages/codex/skills/shipping/SKILL.md) | Land an explicitly authorized PR or stack after independent checks. | explicit | pstack core / host binding |
 | [`show-me-your-work`](../packages/codex/skills/show-me-your-work/SKILL.md) | Record an append-only decision trail for long or delegated work. | explicit | pstack core / host binding |
 | [`swarm`](../packages/codex/skills/swarm/SKILL.md) | Run bounded coverage or races, drain workers, and consolidate verified results. | explicit | pstack core / host binding |

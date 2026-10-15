@@ -6,13 +6,13 @@
     "extensions": []
   },
   "target": "pi",
-  "sourceVersion": "0.18.0",
+  "sourceVersion": "0.19.0",
   "profiles": [
     "pi-default"
   ],
   "skills": {
     "audience": "public",
-    "included": 77,
+    "included": 78,
     "omittedProbes": 12
   },
   "claims": {

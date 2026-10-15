@@ -968,6 +968,21 @@
     },
     {
       "kind": "skill",
+      "name": "sharpen",
+      "path": "src/core/skills/sharpen",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/sharpen/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "sharpen"
+    },
+    {
+      "kind": "skill",
       "name": "shipping",
       "path": "src/core/skills/shipping",
       "origin": "pstack",
@@ -1931,6 +1946,12 @@
     },
     {
       "name": "setup-oh-my-stack",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "sharpen",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"

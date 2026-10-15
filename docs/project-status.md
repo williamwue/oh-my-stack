@@ -1,5 +1,16 @@
 # Project status
 
+## 0.19.0 source candidate (2026-10-16)
+
+The current source candidate follows official pstack 0.15.25 at
+`99743e9c151c8537cbbf1f98bb38f34ef3368453`, with 78 default public Skills.
+It adds explicit `sharpen`, updates catch-up reporting and principles, and
+preserves the existing native and optional T3 execution bindings. See the
+[source migration](upstream-pstack-0.15.25.md) and
+[local acceptance](acceptance/2026-10-16-pstack-sync/result.md).
+This source update does not publish a release or upgrade an installed plugin.
+The sections below retain their historical version and evidence scope.
+
 ## 0.18.0 source and release scope (2026-10-14)
 
 Current source version is [0.18.0](releases/0.18.0.md), following pinned
