@@ -6,6 +6,11 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+- Drop the independent review gate from the local release pipeline: `local-release` no
+  longer takes `--review`, the receipt no longer carries a review, and stable
+  promotion no longer requires one. Hash, reproducibility, tag/tree binding and
+  publication-lease checks are unchanged.
+
 - Add four original AIHero skills to the explicit `aihero` extension at upstream
   `49dd158`: `triage`, `wayfinder`, `wizard`, and `git-guardrails-claude-code`.
   They have no pstack equivalent and are absent from the default distribution.

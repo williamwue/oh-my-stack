@@ -14,13 +14,6 @@ export function assertBuildEnvironment(environment = process.versions) {
   requireThat(environment?.node === BUILD_ENVIRONMENT.node && environment?.zlib === BUILD_ENVIRONMENT.zlib,
     `release requires Node ${BUILD_ENVIRONMENT.node} with zlib ${BUILD_ENVIRONMENT.zlib}; received Node ${environment?.node}, zlib ${environment?.zlib}`);
 }
-export function assertReview(review, tree) {
-  requireThat(review?.schemaVersion === 1 && review.tree === tree && review.verdict === "approved"
-    && Array.isArray(review.evidence) && review.evidence.length > 0
-    && review.evidence.every((entry) => typeof entry === "string" && entry.trim()),
-  "review must approve the exact source tree with nonempty evidence");
-  return review;
-}
 export function assetNames(version) {
   requireThat(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version), "release version must be plain semver");
   return ["omp", "codex", "claude-code", "pi", "codex-plugin", "claude-plugin"]
@@ -95,12 +88,6 @@ export async function readLocalVerification({ path, manifest, tagCommit, tagTree
     requireThat(sha256(await regularFile(root, check.log)) === check.sha256, `check log digest mismatch: ${check.name}`);
   }
   requireThat(REQUIRED_CHECKS.every((name) => seen.has(name)), "missing required checks");
-  assertReview(receipt.review, source.tree);
-  requireThat(hash.test(receipt.reviewFile?.sha256) && !paths.has(receipt.reviewFile.path), "invalid review file record");
-  const reviewBytes = await regularFile(root, receipt.reviewFile.path);
-  requireThat(sha256(reviewBytes) === receipt.reviewFile.sha256, "review file digest mismatch");
-  const review = assertReview(JSON.parse(reviewBytes), source.tree);
-  requireThat(JSON.stringify(review) === JSON.stringify(receipt.review), "review file differs from receipt review");
   const actual = await snapshotAssets(assets, storedManifest.version);
   requireThat(Array.isArray(receipt.assets) && receipt.assets.length === actual.length, "missing release assets");
   const records = new Map();

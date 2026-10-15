@@ -309,13 +309,13 @@ This downloads release assets and writes local evidence, but does not push.
 It verifies the native account's write access and exact repository, a published
 non-prerelease, all eight GitHub asset digests, same-release `SHA256SUMS`, clean
 manifest provenance, safe archive inventories, exact tag commit and tree, a
-verified local check/review receipt, and an independent clean tagged rebuild of all eight assets.
+verified local check receipt, and an independent clean tagged rebuild of all eight assets.
 Cross-platform rebuilding may normalize only gzip's operating-system header
 byte to the published value; every other compressed byte, complete manifest
 and checksum file must match. Any normalization is recorded in the receipt.
 Published downloads and GitHub asset digests are always checked unchanged.
 Maintainer execution requires native repository write permission. Local receipt
-logs, review and eight asset hashes are verified against the same source. Actions
+logs and eight asset hashes are verified against the same source. Actions
 is not a publication authority. The receipt is local maintainer evidence, not a
 signed third-party attestation or a historical CI result.
 Inspect `promotion.json`, `snapshot/STABLE_RELEASE.json`, and the downloads.

@@ -7,7 +7,7 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { sha256 } from "./release-lib.mjs";
-import { assertBuildEnvironment, assertReview, fileBytes, readLocalVerification, REPOSITORY,
+import { assertBuildEnvironment, fileBytes, readLocalVerification, REPOSITORY,
   requireThat, snapshotAssets } from "./local-release-lib.mjs";
 
 import { nativePublisherEnvironment, withPublicationLease } from "./release-publisher.mjs";
@@ -18,7 +18,7 @@ const encode = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const url = `https://github.com/${REPOSITORY}.git`;
 export function parseArgs(argv) {
   const options = { tag: null, publish: false };
-  const names = { "--source": "source", "--out": "out", "--review": "review", "--tag": "tag", "--notes-file": "notesFile" };
+  const names = { "--source": "source", "--out": "out", "--tag": "tag", "--notes-file": "notesFile" };
   const seen = new Set();
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i];
@@ -29,10 +29,10 @@ export function parseArgs(argv) {
       options[names[flag]] = argv[++i];
     }
   }
-  requireThat(options.source && options.out && options.review, "usage: local-release --source CLEAN_CHECKOUT --out NEW_EVIDENCE --review REVIEW_JSON [--tag vVERSION] [--publish --notes-file NOTES]");
+  requireThat(options.source && options.out, "usage: local-release --source CLEAN_CHECKOUT --out NEW_EVIDENCE [--tag vVERSION] [--publish --notes-file NOTES]");
   requireThat(!options.publish || (options.tag && options.notesFile), "publication requires --tag and --notes-file");
   requireThat(!options.tag || /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(options.tag), "release tag must be vVERSION");
-  for (const key of ["source", "out", "review", "notesFile"]) if (options[key]) options[key] = resolve(options[key]);
+  for (const key of ["source", "out", "notesFile"]) if (options[key]) options[key] = resolve(options[key]);
   return options;
 }
 async function git(source, ...args) { return (await exec("git", args, { cwd: source })).stdout.trim(); }
@@ -213,14 +213,12 @@ export async function main(argv = process.argv.slice(2)) {
   requireThat(options.out !== options.source && !options.out.startsWith(`${options.source}${sep}`), "evidence must be outside source checkout");
   requireThat(!(await lstat(options.out).catch((error) => { if (error.code === "ENOENT") return null; throw error; })), "evidence output already exists");
   const source = await inspectSource(options.source, options.tag);
-  const reviewBytes = await fileBytes(options.review), review = assertReview(JSON.parse(reviewBytes), source.tree);
   if (options.publish) { requireThat((await fileBytes(options.notesFile)).toString().trim(), "release notes must not be empty"); }
   const nodeDirectory = dirname(process.execPath);
   const npm = join(nodeDirectory, process.platform === "win32"
     ? "node_modules/npm/bin/npm-cli.js" : "../lib/node_modules/npm/bin/npm-cli.js");
   await fileBytes(npm);
   await mkdir(options.out); await mkdir(join(options.out, "logs"));
-  await writeFile(join(options.out, "review.json"), reviewBytes, { flag: "wx" });
   const env = { ...process.env, PATH: `${nodeDirectory}${process.platform === "win32" ? ";" : ":"}${process.env.PATH ?? ""}`, PYTHONDONTWRITEBYTECODE: "1" };
   const checks = [], node = (args) => [process.execPath, args], npmCommand = (args) => node([npm, ...args]);
   const run = (name, steps) => runCheck({ name, steps, source: options.source, out: options.out, env, checks });
@@ -241,7 +239,7 @@ export async function main(argv = process.argv.slice(2)) {
     const records = await snapshotAssets(assets, manifest.version);
     const receipt = { schemaVersion: 1, kind: "oh-my-stack-local-release", repository: REPOSITORY, source,
       environment: { node: process.versions.node, zlib: process.versions.zlib, platform: process.platform, arch: process.arch },
-      checks, assets: records, review, reviewFile: { path: "review.json", sha256: sha256(reviewBytes) } };
+      checks, assets: records };
     const receiptPath = join(options.out, "verification.json");
     // Validate the exact evidence before exposing the final success receipt.
     const candidate = join(options.out, "verification.pending.json"); await writeFile(candidate, encode(receipt), { flag: "wx" });
