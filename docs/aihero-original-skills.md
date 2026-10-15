@@ -2,7 +2,7 @@
 
 [English](aihero-original-skills.md) | [简体中文](zh-CN/guides/aihero.md)
 
-The `aihero` extension includes sixteen selected original skills from Matt Pocock's
+The `aihero` extension includes twenty selected original skills from Matt Pocock's
 [skills repository](https://github.com/mattpocock/skills). Select one directly
 when you want its original process. You do not need to enter `poteto-mode` first.
 
@@ -36,16 +36,20 @@ covers the newer diagnosis and review originals.
 | Configure original engineering skills for a project | `setup-matt-pocock-skills` | A draft of the tracker and domain-doc settings; waits for confirmation before editing project instructions and configuration. |
 | Capture an agreed feature as a spec | `to-spec` | Synthesizes existing context, confirms testing seams, then writes to the configured tracker. |
 | Split a spec into executable work | `to-tickets` | Proposes vertical slices and blockers; publishes one ticket per item only after you approve. |
+| Triage issues and external PRs | `triage` | Moves issues through category and state roles on the configured tracker, verifies reports, and writes agent-ready briefs; every comment it posts carries an AI disclaimer. |
+| Chart a large effort as decision tickets | `wayfinder` | Creates a map issue and decision tickets on the configured tracker, then resolves them one at a time; research tickets run in subagents. |
+| Walk a human through manual setup | `wizard` | Authors an interactive bash script from the original template for steps only a person can do; it does not run the script end to end. |
+| Block dangerous git commands in Claude Code | `git-guardrails-claude-code` | Asks for project or user scope, copies the original hook script, and merges a `PreToolUse` hook into your settings file. |
 | Write documents an agent consumes | `writing-for-agents` | Shared reference for context pointers, information hierarchy, pruning, and checkable completion criteria. |
 | Retrospect on the agent's project environment | `retro` | Reads the named session and proposes navigation, checks, standards, and tooling improvements; does not implement the proposals. |
 | Export work for another session or tool | `handoff` | Writes a redacted handoff file to the OS temporary directory, referencing existing artifacts instead of duplicating them. |
 | Diagnose a difficult defect or performance regression | `diagnosing-bugs` | Builds a specific failing feedback loop, minimises reproduction, tests hypotheses, fixes the cause, and removes temporary probes. |
 | Review committed changes against standards and a spec | `code-review` | Runs independent Standards and Spec reviews, reporting the axes separately; does not implement the findings. |
 
-`codebase-design`, `domain-modeling`, `grilling`, `research`, and
-`writing-for-agents`, `diagnosing-bugs`, and `code-review` can also be invoked by
-the agent. The other nine require explicit user invocation. All sixteen remain
-separately selectable.
+`codebase-design`, `domain-modeling`, `grilling`, `research`,
+`writing-for-agents`, `diagnosing-bugs`, `code-review`, `wizard`, and
+`git-guardrails-claude-code` can also be invoked by the agent. The other eleven
+require explicit user invocation. All twenty remain separately selectable.
 
 ## Start an interview
 
@@ -146,8 +150,9 @@ writing. For a local trial:
 It prefers an existing `CLAUDE.md`, otherwise an existing `AGENTS.md`, and asks
 which to create if neither exists. It preserves surrounding sections and writes
 `docs/agents/issue-tracker.md` and `docs/agents/domain.md`. The original `triage`
-skill is not included in this selection, so its optional label-configuration
-section is skipped; the spec and ticket workflows still use `ready-for-agent`.
+skill is now part of this selection, so its optional label-configuration
+section can be used; the acceptance records for earlier versions describe runs
+without it, and the spec and ticket workflows still use `ready-for-agent`.
 
 Then use the agreed conversation to create a specification:
 
@@ -253,7 +258,8 @@ originals, including the longer `writing-for-agents` and `diagnosing-bugs`
 entries, remain intact;
 complete native loading and automatic selection are separate live checks.
 
-This selection does not include original `wayfinder` or `triage`. See the
+`wayfinder`, `triage`, `wizard`, and `git-guardrails-claude-code` come from the
+2026-10-15 batch (source ID `aihero-20261015`, upstream `49dd158`). See the
 [Skill directory](skill-directory.md) for what is installed and the
 [support policy](support-policy.md) for tested tools and remaining limits.
 
@@ -262,4 +268,4 @@ Source hashes, dependency closure, and the reviewed update procedure are in the
 [second-batch record](maintainers/aihero-complements-second-batch-2026-10-08.md).
 The [2026-10-12 refresh](maintainers/aihero-refresh-2026-10-12.md) advances the
 first source to `49dd158`, updating grilling confirmations and tracker setup
-templates while retaining the sixteen selected originals.
+templates while retaining the sixteen originals selected at that time.

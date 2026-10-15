@@ -416,6 +416,131 @@
         }
       ],
       "adaptations": []
+    },
+    {
+      "id": "aihero-20261015",
+      "name": "AIHero / Matt Pocock Skills: triage, wayfinder, wizard and git guardrails",
+      "repository": "https://github.com/mattpocock/skills",
+      "revision": "49dd158d1076134a641b33efb035946536778336",
+      "snapshot": "upstream/snapshots/aihero-20261015/49dd158d1076134a641b33efb035946536778336",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        {
+          "path": "skills/engineering/triage/AGENT-BRIEF.md",
+          "sha256": "7f5f87fed3033df1b06e083c480f3e847b1fbb0647746b8a4c6a50f9f26ef44f"
+        },
+        {
+          "path": "skills/engineering/triage/OUT-OF-SCOPE.md",
+          "sha256": "1fbf9b432130c6380aa65813b55553cfda150309b27c595e183f8e335b8a190d"
+        },
+        {
+          "path": "skills/engineering/triage/SKILL.md",
+          "sha256": "917b0baf74be583e74f110857ed45df2766617f75c00baf61fd136d7af515edf"
+        },
+        {
+          "path": "skills/engineering/triage/agents/openai.yaml",
+          "sha256": "2e683717720cf456d165d0bb1a68bb600d0b6a8ccb61841c172e50d26f95351c"
+        },
+        {
+          "path": "skills/engineering/wayfinder/SKILL.md",
+          "sha256": "9be7b478c389605a24517d27752f278933588da97a1b5921b165f455edf4c5b7"
+        },
+        {
+          "path": "skills/engineering/wayfinder/agents/openai.yaml",
+          "sha256": "88bc81a11a6d52ac67aeaa76b8b619e387020d47c5133a4dd4927fd15c4ad073"
+        },
+        {
+          "path": "skills/engineering/wizard/SKILL.md",
+          "sha256": "bdf31d48211ea559878f95a4f344aeabf8d85897488ba564382bab0b000daac1"
+        },
+        {
+          "path": "skills/engineering/wizard/agents/openai.yaml",
+          "sha256": "98f44d682d58e262f160dc59a8befc365e0aa65820dd0261864af26aa8e59d83"
+        },
+        {
+          "path": "skills/engineering/wizard/template.sh",
+          "sha256": "6566f147299bc6f1d941e64591ed04385416d543e11f96f564c7228f5018d0ed"
+        },
+        {
+          "path": "skills/misc/git-guardrails-claude-code/SKILL.md",
+          "sha256": "69b291d655626a01602b998a1836fcb93c058ede68dfafddfd71e87f17074764"
+        },
+        {
+          "path": "skills/misc/git-guardrails-claude-code/agents/openai.yaml",
+          "sha256": "d53cd783fc0ac208dec9a4c267989284384785aab6422dccdaed42f9e40243ec"
+        },
+        {
+          "path": "skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh",
+          "sha256": "234922b83c0a1737ee7300806c21ac0f389b07aaeb65c2d71ccedafbc5e1ea4b"
+        }
+      ],
+      "skills": [
+        {
+          "path": "skills/engineering/triage",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "commands.run",
+            "resources.relative_paths",
+            "interaction.free_text",
+            "issue_tracker.lifecycle"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/wayfinder",
+          "invocation": "explicit",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "commands.run",
+            "interaction.free_text",
+            "issue_tracker.lifecycle",
+            "agents.spawn",
+            "agents.spawn_parallel"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/engineering/wizard",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "commands.run",
+            "resources.relative_paths",
+            "interaction.free_text"
+          ],
+          "dependencies": []
+        },
+        {
+          "path": "skills/misc/git-guardrails-claude-code",
+          "invocation": "automatic",
+          "requires": [
+            "skills.discover",
+            "skills.invoke.explicit",
+            "workspace.inspect",
+            "workspace.write",
+            "commands.run",
+            "resources.relative_paths",
+            "interaction.free_text"
+          ],
+          "dependencies": []
+        }
+      ],
+      "adaptations": []
     }
   ]
 }

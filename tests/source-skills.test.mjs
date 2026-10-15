@@ -12,6 +12,10 @@ test("all selected AIHero originals ship every resource and their invocation mod
   const expected = {
     "diagnosing-bugs": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
     "code-review": { invocation: "automatic", dependencies: [], source: "aihero-20261008" },
+    "triage": { invocation: "explicit", dependencies: [], source: "aihero-20261015" },
+    "wayfinder": { invocation: "explicit", dependencies: [], source: "aihero-20261015" },
+    "wizard": { invocation: "automatic", dependencies: [], source: "aihero-20261015" },
+    "git-guardrails-claude-code": { invocation: "automatic", dependencies: [], source: "aihero-20261015" },
     "writing-for-agents": { invocation: "automatic", dependencies: [] },
     "retro": { invocation: "explicit", dependencies: ["writing-for-agents"] },
     "handoff": { invocation: "explicit", dependencies: [] },
