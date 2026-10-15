@@ -156,7 +156,7 @@ source hashes are unchanged.
 
 ## Current pstack candidate source
 
-The current local candidate imports pstack 0.15.23 from cursor/plugins at
-`ce649c03ac3b75b6ae80cbd15b7e2c536caedb5a` under the MIT license.
+The current local candidate imports pstack 0.15.25 from cursor/plugins at
+`99743e9c151c8537cbbf1f98bb38f34ef3368453` under the MIT license.
 The immutable snapshot contains the original LICENSE. Older notices retain
 their historical source coordinates.

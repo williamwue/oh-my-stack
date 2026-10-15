@@ -70,6 +70,7 @@
     "session-pickup",
     "setup-benny",
     "setup-oh-my-stack",
+    "sharpen",
     "shipping",
     "show-me-your-work",
     "swarm",
@@ -1108,6 +1109,21 @@
       "origin": "pstack",
       "distribution": "core",
       "owner": "setup-oh-my-stack"
+    },
+    {
+      "kind": "skill",
+      "name": "sharpen",
+      "path": "src/core/skills/sharpen",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/sharpen/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "sharpen"
     },
     {
       "kind": "skill",

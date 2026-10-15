@@ -6,7 +6,7 @@
 
 pstack engineering workflows, ported to Codex and Claude Code.
 
-Version 0.18.0 follows pinned pstack 0.15.23 and includes automatic routing.
+Source candidate 0.19.0 follows pinned pstack 0.15.25 and includes automatic routing.
 Pi and OMP retain independent adapters.
 Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
 Installed releases may differ.

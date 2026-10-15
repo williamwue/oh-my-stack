@@ -6,6 +6,11 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+- Update the sole pstack semantic source from official 0.15.23 to 0.15.25 at
+  `99743e9`, preserving prior snapshots and exact host adaptations. Add explicit
+  `sharpen`, adopt the revised principles and catch-up reporting, and regenerate
+  all four native targets with 78 default public Skills. Source candidate: 0.19.0.
+
 - Drop the independent review gate from the local release pipeline: `local-release` no
   longer takes `--review`, the receipt no longer carries a review, and stable
   promotion no longer requires one. Hash, reproducibility, tag/tree binding and
