@@ -35,6 +35,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Selected acceptance records
 
+- [Official pstack update planner: 2026-10-16](../acceptance/2026-10-16-pstack-update-planner/README.md)
 - [Pi RPC and current documentation hardening: 2026-10-16](../acceptance/2026-10-16-pi-doc-hardening/README.md)
 - [AIHero 0.10.0 unreleased source fixture observations](../aihero-original-0.10.0-acceptance.md)
 
