@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { chmod, cp, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { delimiter, join } from 'node:path';
+import { delimiter, dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { assessWorktrees, scanWorktrees } from '../tools/worktree-audit.mjs';
@@ -326,6 +326,51 @@ test('remote target-ref drift during assessment cannot use an earlier merge proo
   assert.equal(output.status, 0, output.stderr);
   const row = resultRow(JSON.parse(output.stdout), f);
   assert.equal(row.verdict, 'unresolved'); assert(hasCode(row, 'MERGE_TARGET_CHANGED'));
+});
+
+for (const kind of ['file', 'directory']) for (const preserve of [false, true]) {
+  test(`symlink ${kind} CLI scans, assesses and rejects invalid commands with preserve-main=${preserve}`, async (t) => {
+    const f = await fixture(t), link = join(f.dir, kind === 'file' ? 'audit.mjs' : 'tools');
+    try { await symlink(kind === 'file' ? CLI : dirname(CLI), link, kind === 'file' ? 'file' : 'dir'); }
+    catch (error) {
+      if (process.platform === 'win32' && error.code === 'EPERM') return t.skip('Windows symlink privilege unavailable');
+      throw error;
+    }
+    const entry = kind === 'file' ? link : join(link, 'worktree-audit.mjs');
+    const run = (...args) => spawnSync(process.execPath, [...(preserve ? ['--preserve-symlinks-main'] : []), entry, ...args],
+      { encoding: 'utf8', timeout: 20_000 });
+    const scanned = run('scan', '--cwd', f.main);
+    assert.equal(scanned.status, 0, scanned.error?.message ?? scanned.stderr);
+    assert.equal(scanned.stderr, '');
+    const scan = JSON.parse(scanned.stdout);
+    assert.deepEqual(scan.issues, []);
+    assert.equal(scan.rows.length, 2);
+    const scanFile = join(f.dir, 'scan.json'), evidenceFile = join(f.dir, 'evidence.json');
+    await writeFile(scanFile, JSON.stringify(scan));
+    await writeFile(evidenceFile, JSON.stringify(evidenceFor(scan, f)));
+    const assessed = run('assess', '--scan', scanFile, '--evidence', evidenceFile);
+    assert.equal(assessed.status, 0, assessed.error?.message ?? assessed.stderr);
+    assert.equal(assessed.stderr, '');
+    assert.equal(resultRow(JSON.parse(assessed.stdout), f).verdict, 'candidate');
+    for (const args of [['delete', '--cwd', f.main], ['scan', '--cwd', f.main, '--fetch', 'true']]) {
+      const rejected = run(...args);
+      assert.equal(rejected.status, 2, rejected.error?.message ?? rejected.stderr);
+      assert.equal(rejected.stdout, '');
+      assert.equal(JSON.parse(rejected.stderr).error, 'INVALID_INPUT');
+    }
+  });
+}
+
+test('library imports remain silent with missing or nonexistent argv entry paths', async (t) => {
+  const f = await fixture(t);
+  for (const entry of [undefined, join(f.dir, 'missing.mjs')]) {
+    const script = `${entry === undefined ? 'delete process.argv[1]' : `process.argv[1] = ${JSON.stringify(entry)}`};` +
+      `const api = await import(${JSON.stringify(pathToFileURL(CLI).href)});` +
+      `if (typeof api.scanWorktrees !== 'function' || typeof api.assessWorktrees !== 'function') process.exitCode = 1;`;
+    const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 4000 });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, ''); assert.equal(result.stderr, '');
+  }
 });
 
 test('CLI assessment serializes the public contract and rejects write modes', async (t) => {

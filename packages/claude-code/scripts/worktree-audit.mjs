@@ -436,7 +436,9 @@ async function main(argv) {
   } else throw failure('INVALID_INPUT');
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+const entryPath = process.argv[1] ? await realpath(resolve(process.argv[1])).catch(() => null) : null;
+const modulePath = await realpath(fileURLToPath(import.meta.url)).catch(() => null);
+if (entryPath && entryPath === modulePath) {
   main(process.argv.slice(2)).catch((error) => {
     process.stderr.write(`${JSON.stringify({ error: error.code ?? 'READ_FAILED', usage: USAGE })}\n`); process.exitCode = 2;
   });
