@@ -52,6 +52,7 @@ export async function checkOmpInstall({ manifestPath, packagePath, omp = "omp",
   const pkg = JSON.parse(await readFile(join(packagePath, "package.json"), "utf8"));
   assert(pkg.name === "oh-my-stack" && pkg.version === manifest.version && pkg.omp?.skills,
     "OMP package name, version, or Skill manifest differs from release");
+  const expectedSkill = await readFile(join(packagePath, "skills/poteto-help/SKILL.md"), "utf8");
 
   const workspace = await mkdtemp(join(tmpdir(), "oms-omp-gate-"));
   try {
@@ -59,9 +60,9 @@ export async function checkOmpInstall({ manifestPath, packagePath, omp = "omp",
     const before = JSON.parse(await command("plugin", "list", "--json"));
     assert(installed(before).length === 0, `${profile}: probe profile is not empty`);
     let baselineError;
-    try { await command("read", "skill://prove-it-works"); }
+    try { await command("read", "skill://poteto-help"); }
     catch (error) { baselineError = error; }
-    assert(/Unknown skill: prove-it-works/.test(baselineError?.stderr ?? ""),
+    assert(/Unknown skill: poteto-help/.test(baselineError?.stderr ?? ""),
       "probe Skill was already discoverable before isolated install");
 
     let primaryError;
@@ -81,8 +82,8 @@ export async function checkOmpInstall({ manifestPath, packagePath, omp = "omp",
         && entry.status === "ok")
         && health.every((entry) => entry.status === "ok" || expectedEmptyProfileWarning(entry)),
       `isolated OMP plugin doctor failed: ${JSON.stringify(health)}`);
-      const skill = await command("read", "skill://prove-it-works");
-      assert(skill.includes("# Prove It Works"), "isolated OMP Skill did not load");
+      const skill = await command("read", "skill://poteto-help");
+      assert(skill.includes(expectedSkill.trim()), "isolated OMP Skill did not load the bundled entry");
     } catch (error) {
       primaryError = error;
     }

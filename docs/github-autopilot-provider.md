@@ -39,6 +39,45 @@ review state. Unknown or incomplete observations cannot establish merge
 readiness. A provider's green checks are not an independent OMS review or
 permission to publish.
 
+## Complete bounded observation in 0.19.0
+
+`inspectPr(input, { signal })` and `diagnosePr(input, { signal })` collect every
+required REST page and GraphQL review-thread page within one observation-local
+budget. Existing calls without a second argument remain valid. The constructor
+accepts `observationLimits` with reductions of the default ceilings:
+`timeoutMs: 45000`, `maxRequests: 64` and `maxBytes: 8388608`. Limits cannot be
+raised through this option. Each native response retains its 2,000,000-byte cap.
+The deadline starts before account discovery and includes policy and final
+identity, PR and branch-ref reads. Concurrent observations have separate scopes.
+
+Numeric REST pages reject duplicate identities, malformed responses, changing
+counts and incomplete terminal pages. Reviews without an advertised total need
+a short or empty terminal page, including an extra request after exactly 100.
+Combined commit statuses retain current-context semantics; historical status
+records are not treated as current failures. Empty combined `pending` status
+alone does not block otherwise successful check runs. Complete unfiltered
+check-suite enumeration must prove that the commit has at most 1,000 suites;
+the documented check-run suite cap otherwise leaves checks unknown. GraphQL
+partial errors, missing nodes, inconsistent decisions/counts and repeated or
+nonadvancing cursors cannot establish readiness.
+
+The final reads revalidate numeric account/repository/PR identities, branch
+names, state, draft status and exact base/head commits. Drift makes gates
+unknown. Pagination is not an atomic GitHub snapshot; merge still performs its
+existing independent re-audits and authorization checks.
+
+The native `gh` transport counts actual stdout and stderr bytes before JSON
+parsing, propagates cancellation and observes actual direct-child exit. It
+allows 250ms for inherited pipes to drain before closing owned streams and
+rejecting truncated output; it does not kill descendants. It removes its
+temporary working directory. Results label this `actual-stdout-stderr`.
+Injected parsed-object transports remain supported; their
+`approximate-serialized-json` accounting measures serialized results rather than
+actual network or process bytes. Budget exhaustion or cancellation rejects the
+observation with a stable error and cannot return a ready PR. These guarantees
+cover PR inspection and diagnosis; repository-only inspection retains its
+per-request transport bounds.
+
 ## Read-only CI diagnostics in 0.6.0
 
 Version 0.6.0 adds `diagnosePr()` for failure investigation. It creates
@@ -69,7 +108,7 @@ The default `github-review` mode retains its normal review gate; its empty
 Use explicit `independent-oms` for the audited app-pinned requirement details.
 Strict `inspectPr()` and `mergePullRequest()` still reject unsuccessful
 required checks. A diagnostic result is never repair, push or merge authority.
-The [drive design](github-babysit-drive-design.md) remains a separate unfinished
+The [drive design](https://github.com/williamwue/oh-my-stack/blob/main/docs/github-babysit-drive-design.md) remains a separate unfinished
 implementation; the workflow adapter still rejects drive mode.
 
 Check classifications follow the documented
@@ -107,7 +146,7 @@ workers or malicious local processes.
   GitHub approval requirement. See the [policy binding](github-workflow.md).
   It does not fabricate approval, bypass checks or enable delayed auto-merge.
 - Inspect the exported methods and executable examples in
-  [the provider tests](../tests/github-autopilot-provider.test.mjs) for the
+  [the provider tests](https://github.com/williamwue/oh-my-stack/blob/main/tests/github-autopilot-provider.test.mjs) for the
   complete argument records. Authorization is local caller evidence; GitHub's
   authentication, permissions and repository protections still apply.
 
@@ -169,10 +208,10 @@ gate failures, ambiguous outcomes and recovery without writing to GitHub.
 Transport tests exercise the real subprocess boundary separately. A live
 read-only repository inspection verifies the current login and target only.
 
-The [hosted acceptance](github-hosted-acceptance-2026-10-03.md) now verifies real
+The [hosted acceptance](https://github.com/williamwue/oh-my-stack/blob/main/docs/github-hosted-acceptance-2026-10-03.md) now verifies real
 PR creation, CI failure/repair and operator-assisted interrupted-create recovery
 on an explicitly authorized disposable repository. The subsequent
-[single-maintainer acceptance](github-single-maintainer-acceptance-2026-10-03.md)
+[single-maintainer acceptance](https://github.com/williamwue/oh-my-stack/blob/main/docs/github-single-maintainer-acceptance-2026-10-03.md)
 verifies protected-target merge and operator-assisted interrupted-merge recovery
 with the explicit OMS review policy. The default independent-GitHub-account
 approval path remains unverified against live GitHub. Full

@@ -1,0 +1,16 @@
+{
+  "tools/pi-delegation.mjs": "2a35da3dd6ce2bd491ad71dc716d33a84754c51fc85d943af56660879d7f4c7b",
+  "tools/check-doc-facts.mjs": "1c37098616d2362b5942fa0a1afd559e97352b03443e9866768ca3fa53c99dcc",
+  "tests/pi-rpc-robustness.test.mjs": "bf8f66505d11c185429a57703fb47a43ba7fc889adeda7a0f5ae221c98f6fb87",
+  "tests/fixtures/pi-rpc-parent.mjs": "232fa83e050bc7ed587620ea2f9f047b07eac8e101390f25680fd3bd8302004b",
+  "tests/fixtures/pi-rpc-child.mjs": "333e3b2fdf5c538f99a2d04cc73229ddaafe9924c3f4ff8fc8ef749264897663",
+  "tests/doc-facts.test.mjs": "5bb5bd50b434d64c201139744faa864c01a517fccad3f8f5b319516dc8f13570",
+  "package.json": "ec27c82e8823f7a793b67f0e2aa1f4bae66e0b4f3745aee46ec3b7e804687c7d",
+  "security/executables.json": "7cbf0ce6d04759694f33c3a2347a7352ea3ffc16535d202c91931f5e3a660730",
+  "README.zh-CN.md": "f8d71eaa430f91adb2c54ba4ee1c7381cee2645bcf25b1335deb65b01263843a",
+  "docs/pi-install.md": "916b4040010d5014c8c791394b469e25455de47f8724d15fdfd1b81a82c5ad17",
+  "packages/codex/scripts/pi-delegation.mjs": "2a35da3dd6ce2bd491ad71dc716d33a84754c51fc85d943af56660879d7f4c7b",
+  "packages/omp/scripts/pi-delegation.mjs": "2a35da3dd6ce2bd491ad71dc716d33a84754c51fc85d943af56660879d7f4c7b",
+  "packages/claude-code/scripts/pi-delegation.mjs": "2a35da3dd6ce2bd491ad71dc716d33a84754c51fc85d943af56660879d7f4c7b",
+  "packages/pi/scripts/pi-delegation.mjs": "2a35da3dd6ce2bd491ad71dc716d33a84754c51fc85d943af56660879d7f4c7b"
+}

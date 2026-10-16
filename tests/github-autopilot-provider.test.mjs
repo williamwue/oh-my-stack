@@ -38,17 +38,17 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
     enforce_admins: { enabled: true }, allow_force_pushes: { enabled: false }, allow_deletions: { enabled: false } };
   let rules = []; let policyError = false; let checksAvailable = true; let graphMissing = false; let checkApp = 123;
   let reviewList = null; let checkRuns = null; let statusResponse = null;
-  const pr = () => ({ number: 7, state: 'open', draft, merged, merge_commit_sha: merged ? MERGE : null,
+  const pr = () => ({ id: 70, node_id: 'PR_70', number: 7, state: 'open', draft, merged, merge_commit_sha: merged ? MERGE : null,
     mergeable: mergeability === 'clean' ? true : null, mergeable_state: mergeability,
     html_url: 'https://github.com/acme/project/pull/7',
-    base: { ref: baseRef, sha: base, repo: { full_name: target.repo } },
-    head: { ref: headRef, sha: head, repo: { full_name: target.repo } } });
+    base: { ref: baseRef, sha: base, repo: { id: 20, full_name: target.repo } },
+    head: { ref: headRef, sha: head, repo: { id: 20, full_name: target.repo } } });
   const transport = async (request) => {
     calls.push(request);
     const { method, path, body } = request;
-    if (path === '/user') return { login: 'maintainer' };
-    if (path === '/repos/acme/project') return { full_name: target.repo, default_branch: 'main', private: true };
-    if (path === '/repos/acme/project/git/ref/heads/main') return { object: { sha: base } };
+    if (path === '/user') return { id: 10, login: 'maintainer' };
+    if (path === '/repos/acme/project') return { id: 20, full_name: target.repo, default_branch: 'main', private: true };
+    if (path === `/repos/acme/project/git/ref/heads/${encodeURIComponent(baseRef)}`) return { object: { sha: base } };
     if (path === `/repos/acme/project/git/ref/heads/${encodeURIComponent(headRef)}`) {
       if (sourceDeleted) throw Error('deleted'); return { object: { sha: head } };
     }
@@ -58,13 +58,17 @@ function fakeGitHub({ createAmbiguous = false, mergeAmbiguous = false } = {}) {
     if (path === '/repos/acme/project/pulls/7') return pr();
     if (path === '/repos/acme/project/pulls/7/reviews?per_page=100')
       return reviewList ?? (reviewState === 'NONE' ? [] : [{ id: 1, user: { login: 'reviewer' }, state: reviewState, commit_id: head }]);
+    if (path.startsWith('/repos/acme/project/commits/') && path.includes('/check-suites'))
+      return { total_count: 1, check_suites: [{ id: 21, head_sha: head }] };
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/check-runs'))
       return checkRuns ?? { total_count: checksAvailable ? 1 : 0, check_runs: checksAvailable ? [{ id: 11, name: 'ci/test', app: { id: checkApp }, head_sha: head,
         status: checks === 'unknown' ? 'queued' : 'completed', conclusion: checks === 'unknown' ? null : checks === 'passed' ? 'success' : 'failure' }] : [] };
     if (path.startsWith('/repos/acme/project/commits/') && path.includes('/status'))
-      return statusResponse ?? { sha: head, state: 'success', total_count: statusTruncated ? 1 : 0, statuses: [] };
-    if (path === '/graphql') return { ...(graphErrors ? { errors: [{ message: 'partial' }] } : {}), data: { repository: { pullRequest: { ...(graphMissing ? {} : { reviewDecision: review }),
-      reviewThreads: { nodes: [{ isResolved: threads === 'resolved' }], pageInfo: { hasNextPage: threads === 'unknown' } } } } } };
+      return statusResponse ?? { sha: head, state: 'pending', total_count: statusTruncated ? 1 : 0, statuses: [] };
+    if (path === '/graphql') return { ...(graphErrors ? { errors: [{ message: 'partial' }] } : {}), data: { repository: { pullRequest: {
+      id: 'PR_70', number: 7, headRefOid: head, ...(graphMissing ? {} : { reviewDecision: review }),
+      reviewThreads: { totalCount: 1, nodes: [{ id: 'THREAD_1', isResolved: threads === 'resolved' }],
+        pageInfo: { hasNextPage: threads === 'unknown', endCursor: 'CURSOR_1' } } } } } };
     if (path.startsWith('/repos/acme/project/pulls?')) return created ? [{ ...pr(), body: calls.find((c) => c.path === '/repos/acme/project/pulls' && c.method === 'POST')?.body?.body }] : [];
     if (method === 'POST' && path === '/repos/acme/project/pulls') { created = true; if (createAmbiguous) throw Error('timeout secret-credential'); return pr(); }
     if (method === 'PUT' && path === '/repos/acme/project/pulls/7/merge') { merged = true; if (mergeAmbiguous) throw Error('timeout secret-credential'); return { merged: true, sha: MERGE }; }

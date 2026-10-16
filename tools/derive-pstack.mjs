@@ -43,7 +43,7 @@ async function physicalContainment(boundary, target, label) {
   assert(!isAbsolute(relation) && !relation.split(sep).includes(".."), `${label}: symlink or junction escapes boundary`);
 }
 
-export async function derivePstack({ root = defaultRoot, check = false } = {}) {
+export async function readPstackDerivations({ root = defaultRoot } = {}) {
   root = resolve(root);
   await physicalContainment(root, resolve(root, "upstream/parity-derivations.json"), "parity manifest");
   const manifest = JSON.parse(await readFile(resolve(root, "upstream/parity-derivations.json"), "utf8"));
@@ -84,8 +84,13 @@ export async function derivePstack({ root = defaultRoot, check = false } = {}) {
       output = output.split(replacement.before).join(replacement.after);
     }
     assert(hash(Buffer.from(output)) === entry.outputSha256, `${label}: derived output hash mismatch`);
-    prepared.push({ path: outputPath, relativePath: entry.output, bytes: Buffer.from(output) });
+    prepared.push({ path: outputPath, relativePath: entry.output, bytes: Buffer.from(output), entry, sourceBytes: source });
   }
+  return { manifest, outputs: prepared };
+}
+
+export async function derivePstack({ root = defaultRoot, check = false } = {}) {
+  const { manifest, outputs: prepared } = await readPstackDerivations({ root });
   if (check) {
     const mismatches = [];
     for (const output of prepared) {

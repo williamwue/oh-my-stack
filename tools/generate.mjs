@@ -890,6 +890,10 @@ function portableHelperGuide() {
     "These paths are relative to the named document, not the project working directory. Resolve them before invoking Node.", "",
     "Other source-host helpers under a Skill's scripts directory remain reference-only unless this binding documents their exact native execution.",
     "Cursor watch-pr, orchestration, and worktree helpers have no execution mapping in this native binding.", "",
+    "## Read-only worktree audit", "",
+    'The OMS-owned helper supports `node "<installed-package-root>/scripts/worktree-audit.mjs" scan --cwd PATH` and `assess --scan FILE --evidence FILE`.',
+    "Read [the evidence contract](worktree-audit.md) before collecting supported host evidence. Missing activity, pinned-thread, child-task or process coverage remains unresolved.",
+    "The helper rechecks local Git identities and status. A candidate is advisory and does not authorize deletion.", "",
   ].join("\n");
 }
 

@@ -6,6 +6,22 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.19.0 - 2026-10-16
+
+- Add a read-only worktree audit with frozen local identities, fresh explicit host
+  evidence and conservative advisory verdicts; preserve cleanup authorization.
+- Paginate native GitHub observation within one shared request, byte and time
+  budget; incomplete, drifting or cancelled observations cannot become ready.
+- Verify the bundled `poteto-help` entry in the native OMP installation gate.
+
+- Add a read-only official pstack update planner for active strict derivations,
+  with complete source receipts, exact-anchor diagnostics, metadata review and
+  local-output conflict reporting. Preview never advances a source pin.
+
+- Contain malformed native Pi RPC records and bound inherited-pipe draining after
+  observed direct-child exit. Preserve truthful cancellation and physical-model
+  checks; add subprocess regressions and current documentation fact checks.
+
 - Update the sole pstack semantic source from official 0.15.23 to 0.15.25 at
   `99743e9`, preserving prior snapshots and exact host adaptations. Add explicit
   `sharpen`, adopt the revised principles and catch-up reporting, and regenerate

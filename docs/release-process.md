@@ -116,7 +116,7 @@ node tools/check-omp-install.mjs \
 The gate verifies archive and installed-tree bytes **before** calling OMP. It
 then performs a real local-path install in a randomly named isolated OMP
 profile, checks the listed version, package target, `plugin doctor`, and
-`skill://prove-it-works`, and uninstalls from that profile. The profile's
+`skill://poteto-help`, and uninstalls from that profile. The profile's
 directory may remain for inspection. In a fresh link-only profile, OMP may
 report `package_manifest: warning (Not created yet)`; that exact warning is
 allowed only when `plugin:oh-my-stack` is healthy. Other warnings fail. A
@@ -131,7 +131,7 @@ verified package into their own profile:
 omp plugin install /absolute/owned/path/oh-my-stack
 omp plugin list --json
 omp plugin doctor --json
-omp read skill://prove-it-works
+omp read skill://poteto-help
 ```
 
 Inspect existing OMP plugins before the final install; a name collision may
@@ -211,7 +211,7 @@ claude plugin list --json
 Alternatively, extract the checksummed
 `oh-my-stack-claude-plugin-<version>.tar.gz` into a dedicated directory and
 register that directory with `claude plugin marketplace add`. Start a fresh
-Claude Code session and invoke `/oh-my-stack:prove-it-works`. `--plugin-dir`
+Claude Code session and invoke `/oh-my-stack:poteto-help`. `--plugin-dir`
 remains a session-only development path, not a persistent install. Update or
 remove the native plugin with:
 

@@ -26,7 +26,7 @@ claude plugin list --json
 在你的项目中新开 Claude Code 会话，在对话中输入：
 
 ```text
-/oh-my-stack:prove-it-works 检查加载情况和工作区事实，不修改文件。
+/oh-my-stack:poteto-help 检查加载情况和工作区事实，不修改文件。
 ```
 
 应得到只读的 Skill 加载与工作区报告，再按[首次使用指南](../getting-started.md)完成任务。

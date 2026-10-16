@@ -64,7 +64,7 @@ marketplace registration refers to it.
 ## Select a Skill
 
 Start a new Codex session in your project. Type `$` and select
-`oh-my-stack:prove-it-works` from the Skill picker. Ask it to check loading
+`oh-my-stack:poteto-help` from the Skill picker. Ask it to check loading
 and workspace facts without changing files.
 
 Then follow [the first-task walkthrough](../getting-started.md).

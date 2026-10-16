@@ -21,7 +21,7 @@ OMS 不需要后台更新进程。更新后新开会话。
 检查 Codex CLI 帮助、OMS marketplace 注册来源、启用状态、实际安装版本和缓存信息。保留其他插件、模型映射、项目文件和旧版发布文件。
 官方 stable Git 来源：只升级 oh-my-stack marketplace，然后对 oh-my-stack@oh-my-stack 执行 plugin add。本地解压来源：从同一正式版本下载 Codex 插件压缩包及 SHA256SUMS，放入新的持久版本目录，先校验再解压，只替换 OMS 的注册来源；不要对本地解压来源执行 Git marketplace upgrade。保持现有来源类型，不静默迁移。
 已是最新版时只验证，不重复安装。自定义、固定提交或来源不明确时，先说明，再决定如何处理。校验或版本不匹配时停止，保留回退来源。
-检查实际安装并启用的插件，以及安装缓存 GENERATION.json 和插件清单中的版本。能操作新 Codex 会话时，选择 oh-my-stack:prove-it-works，只检查加载与工作区；否则给出这个准确的下一步，并标注会话加载待验证。
+检查实际安装并启用的插件，以及安装缓存 GENERATION.json 和插件清单中的版本。能操作新 Codex 会话时，选择 oh-my-stack:poteto-help，只检查加载与工作区；否则给出这个准确的下一步，并标注会话加载待验证。
 报告旧/新版本、来源、校验和安装结果、加载结果及回退步骤。本请求已授权常规更新，不要仅因发现旧版本而再次确认。
 ```
 
@@ -32,7 +32,7 @@ OMS 不需要后台更新进程。更新后新开会话。
 先阅读 https://github.com/williamwue/oh-my-stack/blob/main/docs/guides/update-and-uninstall.md。
 检查 CLI 帮助、OMS marketplace 来源、实际安装版本、范围、启用状态和缓存信息。保留当前安装范围、其他插件、模型映射、项目文件及回退文件；不要另装一份，也不要自行开启自动更新。
 已注册的官方 Git marketplace：只刷新 oh-my-stack，再按原范围更新 oh-my-stack@oh-my-stack。本地 marketplace：先校验同一正式版本的 Claude 插件压缩包和校验文件，再解压并只替换 OMS 来源。保持现有来源类型，不静默切换自定义或固定来源。
-已是最新版时只验证，不重复安装。完整性或版本不匹配时停止。检查安装缓存 GENERATION.json 和插件清单，不能只看 marketplace 列表。能操作新 Claude Code 会话时，调用 /oh-my-stack:prove-it-works，只检查加载与工作区；否则给出这个准确的下一步，并标注加载待验证。
+已是最新版时只验证，不重复安装。完整性或版本不匹配时停止。检查安装缓存 GENERATION.json 和插件清单，不能只看 marketplace 列表。能操作新 Claude Code 会话时，调用 /oh-my-stack:poteto-help，只检查加载与工作区；否则给出这个准确的下一步，并标注加载待验证。
 报告旧/新版本、来源、范围、校验和安装结果、加载结果及回退步骤。本请求已授权常规更新，不要仅因发现旧版本而再次确认。
 ```
 

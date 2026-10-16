@@ -19,14 +19,14 @@ const frontier = { ...target, bottomPr: 7, frozen: true, countersignedBy: 'root-
 
 function fake({ ambiguousCreate = false, ambiguousMerge = false, noGithubReview = false } = {}) {
   const calls = []; let created = false, merged = false;
-  const pr = () => ({ number: 7, state: 'open', merged, draft: false, mergeable: true, mergeable_state: 'clean',
+  const pr = () => ({ id: 70, node_id: 'PR_70', number: 7, state: 'open', merged, draft: false, mergeable: true, mergeable_state: 'clean',
     merge_commit_sha: merged ? MERGE : null, html_url: 'https://github.com/acme/project/pull/7',
-    base: { ref: 'main', sha: BASE, repo: { full_name: target.repo } },
-    head: { ref: 'feature', sha: HEAD, repo: { full_name: target.repo } } });
+    base: { ref: 'main', sha: BASE, repo: { id: 20, full_name: target.repo } },
+    head: { ref: 'feature', sha: HEAD, repo: { id: 20, full_name: target.repo } } });
   const transport = async (r) => {
     calls.push(r); const { method, path } = r;
-    if (path === '/user') return { login: 'maintainer' };
-    if (path === '/repos/acme/project') return { full_name: target.repo, default_branch: 'main' };
+    if (path === '/user') return { id: 10, login: 'maintainer' };
+    if (path === '/repos/acme/project') return { id: 20, full_name: target.repo, default_branch: 'main' };
     if (path === '/repos/acme/project/git/ref/heads/main') return { object: { sha: BASE } };
     if (path === '/repos/acme/project/git/ref/heads/feature') return { object: { sha: HEAD } };
     if (path === '/repos/acme/project/branches/main') return { name: 'main', commit: { sha: BASE }, protected: true };
@@ -38,9 +38,10 @@ function fake({ ambiguousCreate = false, ambiguousMerge = false, noGithubReview 
     if (path === '/repos/acme/project/rules/branches/main?per_page=100') return [];
     if (path === '/repos/acme/project/pulls/7') return pr();
     if (path === '/repos/acme/project/pulls/7/reviews?per_page=100') return noGithubReview ? [] : [{ id: 1, user: { login: 'reviewer' }, state: 'APPROVED', commit_id: HEAD }];
-    if (path.endsWith('/check-runs?per_page=100')) return { total_count: 1, check_runs: [{ name: 'ci/test', app: { id: 123 }, head_sha: HEAD, status: 'completed', conclusion: 'success' }] };
-    if (path.endsWith('/status?per_page=100')) return { sha: HEAD, state: 'success', total_count: 0, statuses: [] };
-    if (path === '/graphql') return { data: { repository: { pullRequest: { reviewDecision: noGithubReview ? null : 'APPROVED', reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } } } } } };
+    if (path.endsWith('/check-suites?per_page=100')) return { total_count: 1, check_suites: [{ id: 1, head_sha: HEAD }] };
+    if (path.endsWith('/check-runs?per_page=100')) return { total_count: 1, check_runs: [{ id: 1, name: 'ci/test', app: { id: 123 }, head_sha: HEAD, status: 'completed', conclusion: 'success' }] };
+    if (path.endsWith('/status?per_page=100')) return { sha: HEAD, state: 'pending', total_count: 0, statuses: [] };
+    if (path === '/graphql') return { data: { repository: { pullRequest: { id: 'PR_70', number: 7, headRefOid: HEAD, reviewDecision: noGithubReview ? null : 'APPROVED', reviewThreads: { totalCount: 0, nodes: [], pageInfo: { hasNextPage: false, endCursor: null } } } } } };
     if (path.startsWith('/repos/acme/project/pulls?')) return created ? [{ ...pr(), body: calls.find((x) => x.method === 'POST' && x.path === '/repos/acme/project/pulls').body.body }] : [];
     if (method === 'POST' && path === '/repos/acme/project/pulls') { created = true; if (ambiguousCreate) throw Error('timeout'); return pr(); }
     if (method === 'PUT' && path === '/repos/acme/project/pulls/7/merge') { merged = true; if (ambiguousMerge) throw Error('timeout'); return { merged: true, sha: MERGE }; }

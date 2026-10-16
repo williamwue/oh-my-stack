@@ -5,6 +5,9 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Build, operate, and release
 
+- [Official pstack update preview](pstack-update-planner.md)
+- [Read-only worktree audit](../worktree-audit.md)
+- [Native GitHub observation and recovery](../github-autopilot-provider.md)
 - [Contributing](../../CONTRIBUTING.md)
 - [Architecture](../architecture.md)
 - [Capabilities and evidence labels](../capabilities.md)
@@ -15,6 +18,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Current source candidate
 
+- [pstack-claude implementation assessment: 2026-10-16](pstack-claude-assessment-2026-10-16.md)
 - [AIHero grilling and tracker setup refresh: 2026-10-12](aihero-refresh-2026-10-12.md)
 - [AIHero second batch: diagnosis and review imports](aihero-complements-second-batch-2026-10-08.md)
 - [AIHero pstack complements: 2026-10-08 import and verification](aihero-complements-2026-10-08.md)
@@ -33,6 +37,10 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Selected acceptance records
 
+- [Worktree and GitHub observation: 2026-10-16](../acceptance/2026-10-16-worktree-github/README.md)
+
+- [Official pstack update planner: 2026-10-16](../acceptance/2026-10-16-pstack-update-planner/README.md)
+- [Pi RPC and current documentation hardening: 2026-10-16](../acceptance/2026-10-16-pi-doc-hardening/README.md)
 - [AIHero 0.10.0 unreleased source fixture observations](../aihero-original-0.10.0-acceptance.md)
 
 - [AIHero 0.9.0 original-skill fixtures](../aihero-original-0.9.0-acceptance.md)
