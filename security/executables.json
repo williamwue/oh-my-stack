@@ -546,6 +546,14 @@
       "uninstallBehavior": "Not installed in target packages; caller-selected stores remain user-owned."
     },
     {
+      "path": "tools/plan-pstack-update.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Preview official pstack Git changes against the active complete receipt and exact derivations without fetching or writing.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
       "path": "tools/pi-delegation.mjs",
       "owner": "oh-my-stack",
       "purpose": "Bind native Pi RPC inventory and bounded child delegation.",

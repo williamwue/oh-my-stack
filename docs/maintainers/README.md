@@ -5,6 +5,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Build, operate, and release
 
+- [Official pstack update preview](pstack-update-planner.md)
 - [Contributing](../../CONTRIBUTING.md)
 - [Architecture](../architecture.md)
 - [Capabilities and evidence labels](../capabilities.md)
