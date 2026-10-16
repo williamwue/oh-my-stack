@@ -64,7 +64,8 @@ Review each changed file and adaptation. Preserve the old snapshot and receipts,
 capture the candidate's complete official tree, and update the current source
 receipt, exact source mappings, metadata, catalogs, provenance and documentation
 through the existing maintenance process. No literal anchor is automatically
-relaxed and no conflict marker is accepted by this planner.
+relaxed. The preview does not merge files or accept updates; matching anchors
+do not establish that the surrounding prose is correct.
 
 After the mappings and hashes are reviewed, use the established materialization
 and generation flow, then run its checks:
