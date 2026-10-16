@@ -79,6 +79,10 @@ for (const mode of ['inherited-stdout', 'inherited-stderr']) {
     assert.equal(result.sameStop, true);
     assert.equal(result.directAlive, false);
     assert.equal(result.descendantAlive, true, 'draining must not kill descendants');
+    if (process.platform !== 'win32') {
+      assert.equal(result.exit.code, null);
+      assert.equal(result.exit.signal, 'SIGKILL');
+    }
   });
 }
 test('termination twice waits for the delayed direct child, then reports its real exit', async () => {
@@ -89,6 +93,10 @@ test('termination twice waits for the delayed direct child, then reports its rea
   assert.equal(result.exit.failure, 'fixture termination');
   assert.deepEqual(result.failures, ['fixture termination']);
   assert.equal(result.directAlive, false);
+  if (process.platform !== 'win32') {
+    assert.equal(result.exit.code, null);
+    assert.equal(result.exit.signal, 'SIGKILL');
+  }
 });
 test('manager cancellation stays running while its delayed direct child is alive', async () => {
   const result = await probe({ mode: 'manager-cancel-delayed' });

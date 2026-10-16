@@ -48,7 +48,7 @@ pstack 工程工作流，移植到 Codex 和 Claude Code。
 | Codex | [stable Git marketplace 或正式发布包](docs/zh-CN/install/codex.md)，无需构建源码。 |
 | Claude Code | [Marketplace 安装](docs/zh-CN/install/claude-code.md)。 |
 | OMP | [通过独立 profile 检查安装](docs/zh-CN/install/omp.md)。不同工作流的实测范围不同。 |
-| Pi | [独立原生包说明](docs/pi-install.md)，当前提供于本地 0.16.0 发行版本。 |
+| Pi | [独立原生包说明](docs/pi-install.md)，由当前源码生成。 |
 
 安装后新开会话。[支持范围](docs/support-policy.md)说明已测试的工具和当前限制。
 

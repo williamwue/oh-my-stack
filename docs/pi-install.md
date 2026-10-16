@@ -1,6 +1,6 @@
 # Pi package
 
-Pi and OMP use different native packages. The local 0.15.0 candidate generates
+Pi and OMP use different native packages. The current source generates
 `packages/pi` with `pi.skills` and `pi.extensions`. See
 [pstack parity](pstack-parity.md) for default and optional contents.
 

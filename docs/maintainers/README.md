@@ -15,6 +15,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Current source candidate
 
+- [pstack-claude implementation assessment: 2026-10-16](pstack-claude-assessment-2026-10-16.md)
 - [AIHero grilling and tracker setup refresh: 2026-10-12](aihero-refresh-2026-10-12.md)
 - [AIHero second batch: diagnosis and review imports](aihero-complements-second-batch-2026-10-08.md)
 - [AIHero pstack complements: 2026-10-08 import and verification](aihero-complements-2026-10-08.md)
@@ -33,6 +34,7 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Selected acceptance records
 
+- [Pi RPC and current documentation hardening: 2026-10-16](../acceptance/2026-10-16-pi-doc-hardening/README.md)
 - [AIHero 0.10.0 unreleased source fixture observations](../aihero-original-0.10.0-acceptance.md)
 
 - [AIHero 0.9.0 original-skill fixtures](../aihero-original-0.9.0-acceptance.md)

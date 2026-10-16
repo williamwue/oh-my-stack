@@ -6,6 +6,10 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+- Contain malformed native Pi RPC records and bound inherited-pipe draining after
+  observed direct-child exit. Preserve truthful cancellation and physical-model
+  checks; add subprocess regressions and current documentation fact checks.
+
 - Update the sole pstack semantic source from official 0.15.23 to 0.15.25 at
   `99743e9`, preserving prior snapshots and exact host adaptations. Add explicit
   `sharpen`, adopt the revised principles and catch-up reporting, and regenerate
