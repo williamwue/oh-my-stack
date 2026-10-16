@@ -6,6 +6,14 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.19.0 - 2026-10-16
+
+- Add a read-only worktree audit with frozen local identities, fresh explicit host
+  evidence and conservative advisory verdicts; preserve cleanup authorization.
+- Paginate native GitHub observation within one shared request, byte and time
+  budget; incomplete, drifting or cancelled observations cannot become ready.
+- Verify the bundled `poteto-help` entry in the native OMP installation gate.
+
 - Add a read-only official pstack update planner for active strict derivations,
   with complete source receipts, exact-anchor diagnostics, metadata review and
   local-output conflict reporting. Preview never advances a source pin.

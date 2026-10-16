@@ -9,6 +9,10 @@ preserves the existing native and optional T3 execution bindings. See the
 [source migration](upstream-pstack-0.15.25.md) and
 [local acceptance](acceptance/2026-10-16-pstack-sync/result.md).
 This source update does not publish a release or upgrade an installed plugin.
+The [0.19.0 release notes](releases/0.19.0.md) describe the complete delivery
+scope, including the official update preview, native Pi hardening, worktree
+audit and bounded GitHub observation. Publication and local installation retain
+separate receipts.
 The sections below retain their historical version and evidence scope.
 
 ## 0.18.0 source and release scope (2026-10-14)
