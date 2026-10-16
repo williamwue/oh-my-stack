@@ -1,21 +1,16 @@
-import { spawn } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdtemp, open, rm, realpath } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { open, rm, realpath } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRun, loadRun } from './durable-run-state.mjs';
+import { GitHubProviderError, createGhTransport, observationLimits, withReadScope, restCollection,
+  reviewThreads } from './github-observation.mjs';
+export { GitHubProviderError, createGhTransport } from './github-observation.mjs';
 
 const ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const REPO = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
 const BRANCH = /^[A-Za-z0-9][A-Za-z0-9._/-]{0,199}$/;
 const SHA = /^[a-f0-9]{40}$/i;
 const LOGIN = /^[A-Za-z0-9-]{1,39}$/;
-const MAX_OUTPUT = 2_000_000;
-
-export class GitHubProviderError extends Error {
-  constructor(code, message) { super(message); this.name = 'GitHubProviderError'; this.code = code; }
-}
 const fail = (code, message) => { throw new GitHubProviderError(code, message); };
 const check = (ok, code, message) => { if (!ok) fail(code, message); };
 const hash = (value) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -77,75 +72,46 @@ function omsEvidence(review, frontier, authorization, intent) {
   'FRONTIER_REQUIRED', 'root-countersigned frozen current bottom PR is required');
 }
 
-/** Official gh API transport. No shell, repository cwd, env file, verbose output, or raw error propagation. */
-export function createGhTransport({ executable = 'gh', timeoutMs = 15_000, maxOutputBytes = MAX_OUTPUT } = {}) {
-  check(Number.isSafeInteger(timeoutMs) && timeoutMs > 0 && timeoutMs <= 60_000, 'INVALID_INPUT', 'timeoutMs out of range');
-  check(Number.isSafeInteger(maxOutputBytes) && maxOutputBytes > 0 && maxOutputBytes <= MAX_OUTPUT, 'INVALID_INPUT', 'maxOutputBytes out of range');
-  return async ({ method = 'GET', path, body }) => {
-    check(['GET', 'POST', 'PUT'].includes(method) && typeof path === 'string' && path.startsWith('/') && !path.includes('://'),
-      'INVALID_REQUEST', 'invalid GitHub API request');
-    const cwd = await mkdtemp(join(tmpdir(), 'oms-gh-api-'));
-    try {
-      const args = ['api', '--hostname', 'github.com', '--method', method, path,
-        '--header', 'Accept: application/vnd.github+json', '--header', 'X-GitHub-Api-Version: 2022-11-28'];
-      if (body !== undefined) args.push('--input', '-');
-      return await new Promise((resolve, reject) => {
-        const child = spawn(executable, args, { cwd, shell: false, stdio: ['pipe', 'pipe', 'pipe'],
-          env: { PATH: process.env.PATH, HOME: process.env.HOME, GH_CONFIG_DIR: process.env.GH_CONFIG_DIR, XDG_CONFIG_HOME: process.env.XDG_CONFIG_HOME } });
-        let output = ''; let bytes = 0; let rejected = false;
-        const rejectSafe = (code) => { if (!rejected) { rejected = true; child.kill('SIGKILL'); reject(new GitHubProviderError(code, 'GitHub API request did not complete safely')); } };
-        const timer = setTimeout(() => rejectSafe('TIMEOUT'), timeoutMs);
-        child.stdout.on('data', (chunk) => { bytes += chunk.length; if (bytes > maxOutputBytes) rejectSafe('OUTPUT_LIMIT'); else output += chunk; });
-        child.stderr.on('data', (chunk) => { bytes += chunk.length; if (bytes > maxOutputBytes) rejectSafe('OUTPUT_LIMIT'); });
-        child.on('error', () => rejectSafe('TRANSPORT_ERROR'));
-        child.stdin.on('error', () => rejectSafe('TRANSPORT_ERROR'));
-        child.on('close', (code) => {
-          clearTimeout(timer);
-          if (rejected) return;
-          if (code !== 0) return rejectSafe('API_ERROR');
-          try { resolve(output.trim() ? JSON.parse(output) : null); }
-          catch { rejectSafe('INVALID_RESPONSE'); }
-        });
-        child.stdin.end(body === undefined ? undefined : JSON.stringify(body));
-      });
-    } finally { await rm(cwd, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }
-  };
-}
-
 export class GitHubAutopilotProvider {
-  constructor({ transport = createGhTransport(), run = null } = {}) { this.transport = transport; this.run = run; }
-  static async create({ storePath, storeRoot, runId = 'github-provider', generation = 1, transport } = {}) {
-    const run = await createRun({ storePath, storeRoot, runId, generation, metadata: { provider: 'github.com' } });
-    return new GitHubAutopilotProvider({ run, transport });
+  constructor({ transport = createGhTransport(), run = null, observationLimits: limits } = {}) {
+    this.transport = transport; this.run = run; this.observationLimits = observationLimits(limits);
   }
-  static async load({ storePath, storeRoot, runId = 'github-provider', generation = 1, transport } = {}) {
+  static async create({ storePath, storeRoot, runId = 'github-provider', generation = 1, transport, observationLimits } = {}) {
+    const run = await createRun({ storePath, storeRoot, runId, generation, metadata: { provider: 'github.com' } });
+    return new GitHubAutopilotProvider({ run, transport, observationLimits });
+  }
+  static async load({ storePath, storeRoot, runId = 'github-provider', generation = 1, transport, observationLimits } = {}) {
     const run = await loadRun({ storePath, storeRoot, runId, generation });
     check(run.state.metadata.provider === 'github.com', 'STORE_MISMATCH', 'journal belongs to another provider');
-    return new GitHubAutopilotProvider({ run, transport });
+    return new GitHubAutopilotProvider({ run, transport, observationLimits });
   }
   async _api(method, path, body) {
     try { return await this.transport({ method, path, body }); }
     catch (error) { if (error instanceof GitHubProviderError) throw error; fail('API_ERROR', 'GitHub API request failed'); }
   }
-  async inspectRepository({ repo, account } = {}) {
+  async _identity({ repo, account }, read = this._api.bind(this)) {
     validateTarget(repo, account);
-    const user = await this._api('GET', '/user');
+    const user = await read('GET', '/user');
     check(user?.login?.toLowerCase() === account.toLowerCase(), 'ACCOUNT_MISMATCH', 'authenticated GitHub account differs from expected account');
-    const remote = await this._api('GET', `/repos/${repo}`);
+    const remote = await read('GET', `/repos/${repo}`);
     check(remote?.full_name?.toLowerCase() === repo.toLowerCase(), 'TARGET_MISMATCH', 'remote repository differs from exact target');
+    return { user, remote };
+  }
+  async inspectRepository(input = {}) {
+    const { user, remote } = await this._identity(input);
     return { repo: remote.full_name, account: user.login, defaultBranch: remote.default_branch ?? null, private: remote.private === true };
   }
-  async _ref(repo, branch) {
-    const ref = await this._api('GET', `/repos/${repo}/git/ref/heads/${encoded(branch)}`);
+  async _ref(repo, branch, read = this._api.bind(this)) {
+    const ref = await read('GET', `/repos/${repo}/git/ref/heads/${encoded(branch)}`);
     validateSha(ref?.object?.sha, 'remote ref SHA');
     return ref.object.sha;
   }
-  async _serverPolicyDefinition(repo, base, baseSha) {
-    const branch = await this._api('GET', `/repos/${repo}/branches/${encoded(base)}`);
+  async _serverPolicyDefinition(repo, base, baseSha, read) {
+    const branch = await read('GET', `/repos/${repo}/branches/${encoded(base)}`);
     check(branch?.name === base && branch?.commit?.sha === baseSha && branch.protected === true,
       'SERVER_POLICY_UNKNOWN', 'base branch protection is absent or unknown');
-    const policy = await this._api('GET', `/repos/${repo}/branches/${encoded(base)}/protection`);
-    const rules = await this._api('GET', `/repos/${repo}/rules/branches/${encoded(base)}?per_page=100`);
+    const policy = await read('GET', `/repos/${repo}/branches/${encoded(base)}/protection`);
+    const rules = await read('GET', `/repos/${repo}/rules/branches/${encoded(base)}?per_page=100`);
     check(Array.isArray(rules) && rules.length < 100 && rules.length === 0,
       'SERVER_POLICY_UNKNOWN', 'active rulesets are not supported by this audited merge policy');
     const required = policy?.required_status_checks;
@@ -191,90 +157,118 @@ export class GitHubAutopilotProvider {
           headSha: r.head_sha, status: r.status, conclusion: r.conclusion ?? null })) };
     });
   }
-  async _serverPolicy(repo, base, baseSha, runs, contexts, { diagnostic = false, headSha, complete = true } = {}) {
-    const policy = await this._serverPolicyDefinition(repo, base, baseSha);
+  async _serverPolicy(repo, base, baseSha, runs, contexts, { diagnostic = false, headSha, complete = true, read = this._api.bind(this) } = {}) {
+    const policy = await this._serverPolicyDefinition(repo, base, baseSha, read);
     if (!diagnostic) check(Array.isArray(runs) && Array.isArray(contexts), 'SERVER_POLICY_UNKNOWN', 'current checks are unavailable');
     const requiredChecks = this._requiredCheckStates(policy.entries, runs, headSha, complete, diagnostic);
     if (!diagnostic) check(requiredChecks.every((entry) => entry.state === 'passed'),
       'REQUIRED_CHECK_BLOCKED', 'required current-head check is missing or unsuccessful');
     return diagnostic ? { ...policy, requiredChecks } : policy;
   }
-  async inspectPr(input = {}) { return this._inspectPr(input, false); }
-  async diagnosePr(input = {}) { return this._inspectPr(clone(input), true); }
-  async _inspectPr({ repo, account, pr, reviewPolicy } = {}, diagnostic = false) {
+  async inspectPr(input = {}, { signal } = {}) { return this._inspectPr(clone(input), false, signal); }
+  async diagnosePr(input = {}, { signal } = {}) { return this._inspectPr(clone(input), true, signal); }
+  async _inspectPr({ repo, account, pr, reviewPolicy } = {}, diagnostic = false, signal) {
     reviewPolicy = reviewPolicyOf(reviewPolicy);
-    await this.inspectRepository({ repo, account }); validatePr(pr);
-    const raw = await this._api('GET', `/repos/${repo}/pulls/${pr}`);
-    check(raw?.number === pr && raw?.base?.repo?.full_name?.toLowerCase() === repo.toLowerCase(), 'TARGET_MISMATCH', 'PR does not belong to exact repository');
-    const headSha = raw.head?.sha; const baseSha = raw.base?.sha;
-    validateSha(headSha, 'PR head SHA'); validateSha(baseSha, 'PR base SHA');
-    const sameRepo = raw.head?.repo?.full_name?.toLowerCase() === repo.toLowerCase();
-    const checks = await this._api('GET', `/repos/${repo}/commits/${headSha}/check-runs?per_page=100`);
-    const statuses = await this._api('GET', `/repos/${repo}/commits/${headSha}/status?per_page=100`);
-    const reviews = await this._api('GET', `/repos/${repo}/pulls/${pr}/reviews?per_page=100`);
-    const graph = await this._api('POST', '/graphql', { query: `query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){pullRequest(number:$number){reviewDecision reviewThreads(first:100){nodes{isResolved} pageInfo{hasNextPage}}}}}`, variables: { owner: repo.split('/')[0], name: repo.split('/')[1], number: pr } });
-    const gpr = graph && (!Object.hasOwn(graph, 'errors') || (Array.isArray(graph.errors) && graph.errors.length === 0))
-      ? graph?.data?.repository?.pullRequest : null;
-    const runs = checks?.check_runs;
-    const contexts = statuses?.statuses;
-    const state = raw.merged === true ? 'merged' : raw.state === 'open' ? 'open' : 'closed';
-    const currentHead = state === 'open' && sameRepo ? await this._ref(repo, raw.head.ref) : null;
-    const checkComplete = Array.isArray(runs) && checks.total_count === runs.length && runs.length < 100
-      && Array.isArray(contexts) && statuses.total_count === contexts.length && contexts.length < 100
-      && statuses?.sha === headSha && statuses?.state !== undefined;
-    const checkShapeKnown = checkComplete && runs.every((r) => validCheckRun(r, diagnostic))
-      && contexts.every((s) => validCommitStatus(s, diagnostic));
-    const diagnosticCheckComplete = checkComplete && ['success', 'failure', 'pending', 'error'].includes(statuses.state)
-      && checkShapeKnown;
-    const allChecks = checkShapeKnown && runs.length + contexts.length > 0
-      && runs.every((r) => r.head_sha === headSha && r.status === 'completed' && ['success', 'neutral', 'skipped'].includes(r.conclusion))
-      && contexts.every((s) => s.state === 'success');
-    const threads = gpr?.reviewThreads;
-    const threadsKnown = Array.isArray(threads?.nodes) && threads.pageInfo?.hasNextPage === false
-      && threads.nodes.length < 100 && threads.nodes.every((t) => typeof t?.isResolved === 'boolean');
-    const reviewThreadsResolved = threadsKnown && threads.nodes.every((t) => t.isResolved === true);
-    const reviewsComplete = Array.isArray(reviews) && reviews.length < 100 && reviews.every((r) =>
-      Number.isSafeInteger(r?.id) && LOGIN.test(r?.user?.login ?? '')
-      && ['APPROVED', 'CHANGES_REQUESTED', 'COMMENTED', 'DISMISSED', 'PENDING'].includes(r.state));
-    const latestByReviewer = new Map();
-    if (reviewsComplete) for (const review of reviews) {
-      const login = review.user.login.toLowerCase();
-      if (['APPROVED', 'CHANGES_REQUESTED', 'DISMISSED'].includes(review.state)
-        && (!latestByReviewer.has(login) || latestByReviewer.get(login).id < review.id)) latestByReviewer.set(login, review);
-    }
-    const approvedReviewers = reviewsComplete ? [...latestByReviewer.entries()]
-      .filter(([, r]) => r.state === 'APPROVED' && r.commit_id === headSha)
-      .map(([login]) => login) : [];
-    let policy = null;
-    if (reviewPolicy === 'independent-oms') {
-      try { policy = await this._serverPolicy(repo, raw.base.ref, baseSha, checkComplete ? runs : null, checkComplete ? contexts : null,
-        { diagnostic, headSha, complete: diagnosticCheckComplete }); }
-      catch (error) { if (error instanceof GitHubProviderError) throw error; fail('SERVER_POLICY_UNKNOWN', 'server policy audit failed'); }
-    }
-    const decisionKnown = gpr && Object.hasOwn(gpr, 'reviewDecision')
-      && ['APPROVED', 'CHANGES_REQUESTED', 'REVIEW_REQUIRED', null].includes(gpr.reviewDecision);
-    const changesRequested = reviewsComplete && [...latestByReviewer.values()].some((r) => r.state === 'CHANGES_REQUESTED');
-    const reviewGate = !decisionKnown || !reviewsComplete ? 'unknown'
-      : changesRequested || gpr.reviewDecision === 'CHANGES_REQUESTED' ? 'blocked'
-      : gpr.reviewDecision === 'APPROVED' ? 'approved'
-      : reviewPolicy === 'independent-oms' && policy?.githubApprovalRequired === false && gpr.reviewDecision === null ? 'not-required'
-      : gpr.reviewDecision === null ? 'unknown' : 'blocked';
-    const gates = {
-      checks: !checkShapeKnown || (diagnostic && (!diagnosticCheckComplete || policy?.requiredChecks.some((c) => c.state === 'unknown'))) ? 'unknown'
-        : allChecks && (!diagnostic || !policy || policy.requiredChecks.every((c) => c.state === 'passed')) ? 'passed' : 'blocked',
-      review: reviewGate,
-      threads: !threadsKnown ? 'unknown' : reviewThreadsResolved ? 'resolved' : 'blocked',
-      mergeability: raw.mergeable === true && raw.mergeable_state === 'clean' ? 'clean' : raw.mergeable == null || raw.mergeable_state === 'unknown' ? 'unknown' : 'blocked',
-    };
-    const mergeableState = ['clean', 'dirty', 'blocked', 'behind', 'unstable', 'has_hooks', 'unknown', 'draft'].includes(raw.mergeable_state)
-      ? raw.mergeable_state : 'unknown';
-    return { repo, account, pr, state, draft: raw.draft === true, sameRepo, base: raw.base.ref, head: raw.head.ref,
-      baseSha, headSha, currentHead, url: raw.html_url ?? null, merged: raw.merged === true,
-      mergeSha: raw.merge_commit_sha ?? null, mergeableState, approvedReviewers, gates, reviewPolicy,
-      ...(diagnostic ? { requiredChecks: policy?.requiredChecks ?? [] } : {}),
-      requiredApprovals: policy?.requiredApprovals ?? null,
-      ready: state === 'open' && raw.draft === false && sameRepo && currentHead === headSha
-        && Object.values(gates).every((v) => ['passed', 'approved', 'not-required', 'resolved', 'clean'].includes(v)) };
+    validateTarget(repo, account); validatePr(pr);
+    return withReadScope(this.transport, { signal, limits: this.observationLimits }, async (read) => {
+      const identity = await this._identity({ repo, account }, read);
+      const raw = await read('GET', `/repos/${repo}/pulls/${pr}`);
+      check(raw?.number === pr && raw?.base?.repo?.full_name?.toLowerCase() === repo.toLowerCase(), 'TARGET_MISMATCH', 'PR does not belong to exact repository');
+      const headSha = raw.head?.sha; const baseSha = raw.base?.sha;
+      validateSha(headSha, 'PR head SHA'); validateSha(baseSha, 'PR base SHA');
+      validateBranch(raw.base.ref, 'PR base'); validateBranch(raw.head.ref, 'PR head');
+      const sameRepo = raw.head?.repo?.full_name?.toLowerCase() === repo.toLowerCase();
+      const commitPath = `/repos/${repo}/commits/${headSha}`;
+      const suites = await restCollection(read, `${commitPath}/check-suites?per_page=100`, {
+        key: 'check_suites', maxTotal: 1000, valid: (s) => s.head_sha === headSha,
+      });
+      // GitHub defaults to filter=latest. Keep the established first-page URL.
+      const checks = await restCollection(read, `${commitPath}/check-runs?per_page=100`, {
+        key: 'check_runs', valid: (r) => validCheckRun(r, true),
+      });
+      let combinedState;
+      const statuses = await restCollection(read, `${commitPath}/status?per_page=100`, {
+        key: 'statuses', valid: (s) => validCommitStatus(s, true),
+        metadata: (s) => {
+          if (s?.sha !== headSha || !['success', 'failure', 'pending'].includes(s?.state)
+            || (combinedState !== undefined && combinedState !== s.state)) return false;
+          combinedState = s.state; return true;
+        },
+      });
+      const contexts = statuses.items; const runs = checks.items;
+      const expectedState = contexts.some((s) => ['failure', 'error'].includes(s.state)) ? 'failure'
+        : contexts.length === 0 || contexts.some((s) => s.state === 'pending') ? 'pending' : 'success';
+      const statusComplete = statuses.complete && combinedState === expectedState
+        && new Set(contexts.map((s) => s.context.toLowerCase())).size === contexts.length;
+      const checkComplete = suites.complete && checks.complete && statusComplete;
+      const allChecks = checkComplete && runs.length + contexts.length > 0
+        && runs.every((r) => r.head_sha === headSha && r.status === 'completed' && ['success', 'neutral', 'skipped'].includes(r.conclusion))
+        && contexts.every((s) => s.state === 'success');
+      const reviews = await restCollection(read, `/repos/${repo}/pulls/${pr}/reviews?per_page=100`, {
+        valid: (r) => LOGIN.test(r?.user?.login ?? '')
+          && ['APPROVED', 'CHANGES_REQUESTED', 'COMMENTED', 'DISMISSED', 'PENDING'].includes(r.state)
+          && SHA.test(r.commit_id ?? ''),
+      });
+      const threads = await reviewThreads(read, repo, pr, raw);
+      const latestByReviewer = new Map();
+      if (reviews.complete) for (const review of reviews.items) {
+        const login = review.user.login.toLowerCase();
+        if (['APPROVED', 'CHANGES_REQUESTED', 'DISMISSED'].includes(review.state)
+          && (!latestByReviewer.has(login) || latestByReviewer.get(login).id < review.id)) latestByReviewer.set(login, review);
+      }
+      const approvedReviewers = reviews.complete ? [...latestByReviewer.entries()]
+        .filter(([, r]) => r.state === 'APPROVED' && r.commit_id === headSha).map(([login]) => login) : [];
+      let policy = null;
+      if (reviewPolicy === 'independent-oms') {
+        try { policy = await this._serverPolicy(repo, raw.base.ref, baseSha, runs,
+          contexts, { diagnostic, headSha, complete: checkComplete, read }); }
+        catch (error) { if (error instanceof GitHubProviderError) throw error; fail('SERVER_POLICY_UNKNOWN', 'server policy audit failed'); }
+      }
+      const changesRequested = reviews.complete && [...latestByReviewer.values()].some((r) => r.state === 'CHANGES_REQUESTED');
+      const decision = threads.decision;
+      const reviewGate = !threads.complete || !reviews.complete ? 'unknown'
+        : changesRequested || decision === 'CHANGES_REQUESTED' ? 'blocked'
+        : decision === 'APPROVED' ? 'approved'
+        : reviewPolicy === 'independent-oms' && policy?.githubApprovalRequired === false && decision === null ? 'not-required'
+        : decision === null ? 'unknown' : 'blocked';
+      const gates = {
+        checks: !checkComplete || (diagnostic && policy?.requiredChecks.some((c) => c.state === 'unknown')) ? 'unknown'
+          : allChecks && (!diagnostic || !policy || policy.requiredChecks.every((c) => c.state === 'passed')) ? 'passed' : 'blocked',
+        review: reviewGate,
+        threads: !threads.complete ? 'unknown' : threads.items.every((t) => t.isResolved) ? 'resolved' : 'blocked',
+        mergeability: raw.mergeable === true && raw.mergeable_state === 'clean' ? 'clean'
+          : raw.mergeable == null || raw.mergeable_state === 'unknown' ? 'unknown' : 'blocked',
+      };
+      const finalIdentity = await this._identity({ repo, account }, read);
+      const finalPr = await read('GET', `/repos/${repo}/pulls/${pr}`);
+      const state = raw.merged === true ? 'merged' : raw.state === 'open' ? 'open' : 'closed';
+      const currentBase = state === 'open' && sameRepo ? await this._ref(repo, raw.base.ref, read) : null;
+      const currentHead = state === 'open' && sameRepo ? await this._ref(repo, raw.head.ref, read) : null;
+      const positiveId = (value) => Number.isSafeInteger(value) && value > 0;
+      const identityPin = ({ user, remote }) => [user.id, user.login, remote.id, remote.full_name];
+      const prPin = (p) => [p?.id, p?.node_id, p?.number, p?.state, p?.draft, p?.merged,
+        p?.base?.ref, p?.base?.sha, p?.base?.repo?.id, p?.base?.repo?.full_name,
+        p?.head?.ref, p?.head?.sha, p?.head?.repo?.id, p?.head?.repo?.full_name,
+        p?.mergeable, p?.mergeable_state];
+      const identityKnown = positiveId(identity.user.id) && positiveId(identity.remote.id)
+        && positiveId(raw.id) && typeof raw.node_id === 'string' && raw.node_id.length > 0
+        && raw.base.repo.id === identity.remote.id && positiveId(raw.head.repo?.id)
+        && (!sameRepo || raw.head.repo.id === identity.remote.id)
+        && ['open', 'closed'].includes(raw.state) && typeof raw.draft === 'boolean' && typeof raw.merged === 'boolean';
+      const consistent = identityKnown && JSON.stringify(identityPin(identity)) === JSON.stringify(identityPin(finalIdentity))
+        && JSON.stringify(prPin(raw)) === JSON.stringify(prPin(finalPr))
+        && (state !== 'open' || !sameRepo || (currentBase === baseSha && currentHead === headSha));
+      if (!consistent) for (const key of Object.keys(gates)) gates[key] = 'unknown';
+      const mergeableState = ['clean', 'dirty', 'blocked', 'behind', 'unstable', 'has_hooks', 'unknown', 'draft'].includes(raw.mergeable_state)
+        ? raw.mergeable_state : 'unknown';
+      return { repo, account, pr, state, draft: raw.draft === true, sameRepo, base: raw.base.ref, head: raw.head.ref,
+        baseSha, headSha, currentHead, currentBase, url: raw.html_url ?? null, merged: raw.merged === true,
+        mergeSha: raw.merge_commit_sha ?? null, mergeableState, approvedReviewers, gates, reviewPolicy,
+        observation: { consistent }, ...(diagnostic ? { requiredChecks: policy?.requiredChecks ?? [] } : {}),
+        requiredApprovals: policy?.requiredApprovals ?? null,
+        ready: consistent && state === 'open' && raw.draft === false && sameRepo && currentHead === headSha
+          && Object.values(gates).every((v) => ['passed', 'approved', 'not-required', 'resolved', 'clean'].includes(v)) };
+    });
   }
   async _append(payload) {
     check(this.run, 'JOURNAL_REQUIRED', 'writes require a durable journal');

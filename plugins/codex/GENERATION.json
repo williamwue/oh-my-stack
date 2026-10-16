@@ -6,7 +6,7 @@
     "extensions": []
   },
   "target": "codex",
-  "sourceVersion": "0.18.0",
+  "sourceVersion": "0.19.0",
   "profiles": [
     "codex-desktop",
     "codex-cli",
@@ -15,7 +15,7 @@
   ],
   "skills": {
     "audience": "public",
-    "included": 77,
+    "included": 78,
     "omittedProbes": 12
   },
   "claims": {
