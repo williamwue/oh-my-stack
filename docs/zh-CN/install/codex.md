@@ -55,7 +55,7 @@ codex plugin list
 
 ## 选择 Skill
 
-在你的项目中新开 Codex 会话。输入 `$`，在 Skill 选择器选择 `oh-my-stack:prove-it-works`。
+在你的项目中新开 Codex 会话。输入 `$`，在 Skill 选择器选择 `oh-my-stack:poteto-help`。
 请求它只检查加载情况和工作区事实，不修改文件。
 
 随后按[首次使用指南](../getting-started.md)完成任务。

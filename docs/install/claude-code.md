@@ -28,7 +28,7 @@ before creating a duplicate. Model configuration is a separate optional step.
 Start a new Claude Code session in your project. In the conversation, type:
 
 ```text
-/oh-my-stack:prove-it-works Check loading and workspace facts without changing files.
+/oh-my-stack:poteto-help Check loading and workspace facts without changing files.
 ```
 
 Expect a read-only report of the loaded Skill and current workspace.
