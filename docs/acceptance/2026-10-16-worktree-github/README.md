@@ -86,3 +86,15 @@ links were corrected before regeneration and the successful complete run.
 Independent final reviews and installed release evidence remain separate gates.
 This record does not claim publication, native installation or live model
 option enforcement from the implementation task's completed status.
+
+## Final native candidate gates
+
+The default 0.19.0 archives were built locally and integrity-verified before
+extraction. The [native candidate receipt](native-candidate.json) records a
+real OMP installation in an isolated profile: list, doctor, complete bundled
+`poteto-help` loading and uninstall cleanup passed without targeting the user's
+profile. Real installed Pi ran the packaged extension with a simulated local
+provider: discovery, native tool start/collect, completed child, cancellation,
+parent shutdown, retry and requested/reported fixture model identity passed.
+No real model account was called. These candidate gates precede publication;
+they are not the later user-scope installation update.
