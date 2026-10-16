@@ -6,6 +6,7 @@ import { isAbsolute, join, parse, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const MAX_AGE_MS = 5 * 60_000;
+const POST_EXIT_DRAIN_MS = 250;
 const LIMITS = { timeMs: 45_000, commands: 4096, bytes: 32 * 1024 * 1024, perCommand: 2 * 1024 * 1024, rows: 128 };
 const SURFACES = ['activeThreads', 'pinnedThreads', 'childTasks', 'processes'];
 const SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/;
@@ -61,30 +62,47 @@ function readScope() {
   async function git(cwd, args, accepted = [0]) {
     check(); commands++; check();
     const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
-    Object.assign(env, { GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0', GIT_NO_REPLACE_OBJECTS: '1', LC_ALL: 'C' });
+    Object.assign(env, { GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0', GIT_NO_REPLACE_OBJECTS: '1', GIT_NO_LAZY_FETCH: '1', LC_ALL: 'C' });
     return new Promise((res, rej) => {
-      const child = spawn('git', ['--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'core.untrackedCache=false', '-C', cwd, ...args],
+      const child = spawn('git', ['--no-lazy-fetch', '--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'core.untrackedCache=false', '-C', cwd, ...args],
         { env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
       const output = [], errors = [];
-      let size = 0, problem;
-      const stop = (code) => { problem ??= failure(code); child.kill('SIGKILL'); };
+      let size = 0, problem, exited = null, settled = false, drainTimer;
+      const stop = (code) => {
+        if (settled) return;
+        problem ??= failure(code);
+        if (!exited) child.kill('SIGKILL');
+      };
       const timer = setTimeout(() => stop('READ_TIMEOUT'), Math.max(1, deadline - performance.now()));
-      for (const [stream, chunks] of [[child.stdout, output], [child.stderr, errors]]) {
-        stream.on('data', (chunk) => {
-          size += chunk.length; bytes += chunk.length;
-          if (size > LIMITS.perCommand || bytes > LIMITS.bytes) stop('READ_BUDGET');
-          else chunks.push(chunk);
-        });
-      }
-      child.on('error', () => { problem ??= failure('GIT_UNAVAILABLE'); });
-      child.on('close', (code) => {
-        clearTimeout(timer);
+      const receive = (chunk, chunks) => {
+        size += chunk.length; bytes += chunk.length;
+        if (size > LIMITS.perCommand || bytes > LIMITS.bytes) stop('READ_BUDGET');
+        else if (!problem) chunks.push(chunk);
+      };
+      const stdout = (chunk) => receive(chunk, output), stderr = (chunk) => receive(chunk, errors);
+      const onError = () => stop('GIT_UNAVAILABLE');
+      const finish = (code) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer); clearTimeout(drainTimer);
+        child.stdout.removeListener('data', stdout); child.stderr.removeListener('data', stderr);
+        child.removeListener('error', onError); child.removeListener('exit', onExit); child.removeListener('close', finish);
         if (problem) return rej(problem);
         if (!accepted.includes(code) || errors.some((chunk) => chunk.length)) return rej(failure('GIT_READ_FAILED'));
-        const raw = Buffer.concat(output), stdout = raw.toString('utf8');
-        if (!raw.equals(Buffer.from(stdout))) return rej(failure('PATH_ENCODING_UNKNOWN'));
-        res({ stdout, code });
-      });
+        const raw = Buffer.concat(output), decoded = raw.toString('utf8');
+        if (!raw.equals(Buffer.from(decoded))) return rej(failure('PATH_ENCODING_UNKNOWN'));
+        res({ stdout: decoded, code });
+      };
+      const onExit = (code) => {
+        exited = { code };
+        drainTimer = setTimeout(() => {
+          problem ??= failure('GIT_READ_FAILED');
+          child.stdout.destroy(); child.stderr.destroy();
+          finish(exited.code);
+        }, POST_EXIT_DRAIN_MS);
+      };
+      child.stdout.on('data', stdout); child.stderr.on('data', stderr);
+      child.once('error', onError); child.once('exit', onExit); child.once('close', finish);
     });
   }
   return { git, check };

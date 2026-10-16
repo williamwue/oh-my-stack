@@ -4,7 +4,7 @@ import { chmod, cp, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, 
 import { tmpdir } from 'node:os';
 import { delimiter, join } from 'node:path';
 import test from 'node:test';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { assessWorktrees, scanWorktrees } from '../tools/worktree-audit.mjs';
 
 const CLI = fileURLToPath(new URL('../tools/worktree-audit.mjs', import.meta.url));
@@ -269,7 +269,7 @@ test('finite age rejects stale scans and fresh-looking evidence on an old scan',
   assert.equal(row.verdict, 'unresolved'); assert(hasCode(row, 'SCAN_NOT_FRESH'));
 });
 
-async function wrapper(f, body) {
+async function wrapper(f, body, before = '') {
   const bin = join(f.dir, 'bin'); await mkdir(bin);
   const actualGit = spawnSync('which', ['git'], { encoding: 'utf8' }).stdout.trim();
   assert(actualGit);
@@ -277,6 +277,7 @@ async function wrapper(f, body) {
   await writeFile(join(bin, 'git'), `#!${process.execPath}\n` +
     `const fs = require('node:fs'); const cp = require('node:child_process');\n` +
     `const args = process.argv.slice(2); fs.appendFileSync(${JSON.stringify(log)}, JSON.stringify(args)+'\\n');\n` +
+    `${before}\n` +
     `const result = cp.spawnSync(${JSON.stringify(actualGit)}, args, {env:process.env});\n` +
     `const marker = ${JSON.stringify(marker)}; const feature = ${JSON.stringify(f.feature)};\n${body}\n` +
     `process.stdout.write(result.stdout || ''); process.stderr.write(result.stderr || ''); process.exit(result.status ?? 1);\n`);
@@ -358,4 +359,139 @@ test('scan and assessment preserve files, index metadata, refs and worktrees', a
   assert.deepEqual(await treeSnapshot(f.dir), before);
   assert.equal(git(f.main, 'worktree', 'list', '--porcelain').split('worktree ').length - 1, 2);
   assert.equal(git(f.feature, 'rev-parse', 'HEAD'), f.head);
+});
+
+test('missing promisor proof objects stay local-only despite an inherited lazy-fetch opt-out', { skip: process.platform === 'win32' }, async (t) => {
+  const source = await fixture(t), remote = join(source.dir, 'remote.git'), main = join(source.dir, 'partial');
+  git(source.dir, 'clone', '--bare', source.main, remote);
+  git(remote, 'config', 'uploadpack.allowFilter', 'true');
+  git(remote, 'config', 'uploadpack.allowAnySHA1InWant', 'true');
+  const proof = git(source.main, 'commit-tree', 'HEAD^{tree}', '-p', 'HEAD', '-m', 'remote-only proof');
+  git(remote, 'fetch', source.main, proof);
+  git(remote, 'update-ref', 'refs/heads/proof-only', proof);
+  git(source.dir, '-c', 'protocol.file.allow=always', 'clone', '--filter=blob:none', '--single-branch', '--branch', 'main', pathToFileURL(remote).href, main);
+  git(main, 'remote', 'rename', 'origin', 'promisor');
+  git(main, 'remote', 'add', 'origin', 'https://github.com/acme/project.git');
+  git(main, 'config', 'protocol.allow', 'never');
+  git(main, 'config', 'protocol.file.allow', 'always');
+  assert.equal(git(main, 'config', '--get', 'remote.promisor.promisor'), 'true');
+  assert.equal(git(main, 'config', '--get', 'remote.promisor.partialclonefilter'), 'blob:none');
+  const canary = join(source.dir, 'fetch-canary'), uploadPack = join(source.dir, 'upload-pack');
+  const traceHome = join(source.dir, 'trace-home'), traceFile = join(source.dir, 'git-trace.jsonl');
+  await mkdir(traceHome);
+  git(source.dir, 'config', '--file', join(traceHome, '.gitconfig'), 'trace2.eventTarget', traceFile);
+  const env = { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))),
+    HOME: traceHome, XDG_CONFIG_HOME: join(traceHome, 'xdg'), GIT_NO_LAZY_FETCH: '0' };
+  const fetches = async () => (await readFile(traceFile, 'utf8')).trim().split('\n').map(JSON.parse)
+    .filter((event) => event.event === 'child_start' && event.argv?.includes('fetch'));
+  const actualGit = spawnSync('which', ['git'], { encoding: 'utf8' }).stdout.trim();
+  await writeFile(uploadPack, `#!${process.execPath}\n` +
+    `require('node:fs').appendFileSync(${JSON.stringify(canary)}, 'fetch\\n');\n` +
+    `const result = require('node:child_process').spawnSync(${JSON.stringify(actualGit)}, ['upload-pack', ...process.argv.slice(2)], {stdio:'inherit'});\n` +
+    `process.exit(result.status ?? 1);\n`);
+  await chmod(uploadPack, 0o755);
+  git(main, 'config', 'remote.promisor.uploadpack', uploadPack);
+  const absent = (path) => spawnSync(actualGit, ['--no-lazy-fetch', '-C', path, 'cat-file', '-e', proof],
+    { env: { ...process.env, GIT_NO_LAZY_FETCH: '1' } }).status !== 0;
+  assert(absent(main), 'the proof commit was excluded from the real partial clone');
+  const control = join(source.dir, 'control');
+  await cp(main, control, { recursive: true });
+  const fetched = spawnSync(actualGit, ['-C', control, 'cat-file', '-t', proof], { env, encoding: 'utf8' });
+  assert.equal(fetched.status, 0, fetched.stderr); assert.equal(fetched.stdout.trim(), 'commit');
+  assert((await fetches()).length > 0, 'Git tracing detects the real lazy-fetch subprocess');
+  assert.match(await readFile(canary, 'utf8'), /fetch/, 'the fetch canary detects a real lazy fetch');
+  await rm(control, { recursive: true });
+  const feature = join(source.dir, 'partial-feature');
+  git(main, 'worktree', 'add', '-b', 'audit-task', feature, 'HEAD^');
+  await rm(canary); await rm(traceFile);
+  const f = { main: await realpath(main), feature: await realpath(feature), baseSha: git(main, 'rev-parse', 'HEAD'), mergeSha: proof };
+  const snapshot = async () => Promise.all([f.main, f.feature, remote].map(treeSnapshot));
+  const before = await snapshot();
+  const scanned = spawnSync(process.execPath, [CLI, 'scan', '--cwd', f.main], { env, encoding: 'utf8', timeout: 20_000 });
+  assert.equal(scanned.status, 0, scanned.stderr);
+  const scan = JSON.parse(scanned.stdout), evidence = evidenceFor(scan, f);
+  assert.deepEqual(scan.issues, []);
+  const scanFile = join(source.dir, 'scan.json'), evidenceFile = join(source.dir, 'evidence.json');
+  await writeFile(scanFile, JSON.stringify(scan)); await writeFile(evidenceFile, JSON.stringify(evidence));
+  const assessed = spawnSync(process.execPath, [CLI, 'assess', '--scan', scanFile, '--evidence', evidenceFile], { env, encoding: 'utf8', timeout: 20_000 });
+  assert.equal(assessed.status, 0, assessed.stderr);
+  const row = resultRow(JSON.parse(assessed.stdout), f);
+  assert(absent(main), 'assessment must leave the proof commit absent');
+  assert.deepEqual(await fetches(), [], 'no audit Git command starts a fetch subprocess');
+  await assert.rejects(readFile(canary), { code: 'ENOENT' });
+  assert.deepEqual(await snapshot(), before, 'all audited and remote repository bytes and file metadata remain unchanged');
+  assert.equal(row.verdict, 'unresolved'); assert(hasCode(row, 'MERGE_OBJECT_UNKNOWN'));
+});
+
+test('Git without the no-lazy-fetch flag fails closed without retrying an unsafe command', { skip: process.platform === 'win32' }, async (t) => {
+  const f = await fixture(t), wrapped = await wrapper(f, '', `if (args.includes('--no-lazy-fetch')) {
+    process.stderr.write('unknown option: --no-lazy-fetch\\n'); process.exit(129);
+  }`);
+  const before = await treeSnapshot(f.main);
+  const output = spawnSync(process.execPath, [CLI, 'scan', '--cwd', f.main], { env: wrapped.env, encoding: 'utf8', timeout: 20_000 });
+  assert.equal(output.status, 0, output.stderr);
+  const scan = JSON.parse(output.stdout);
+  assert(scan.issues.includes('GIT_READ_FAILED')); assert.equal(scan.rows.length, 0);
+  const calls = (await readFile(wrapped.log, 'utf8')).trim().split('\n').map(JSON.parse);
+  assert.equal(calls.length, 1); assert(calls[0].includes('--no-lazy-fetch'));
+  assert.deepEqual(await treeSnapshot(f.main), before);
+});
+
+for (const mode of ['natural', 'budget', 'timeout']) for (const pipe of ['stdout', 'stderr']) {
+  test(`${mode} Git exit bounds inherited ${pipe} draining without killing the descendant`, { skip: process.platform === 'win32' }, async (t) => {
+    const f = await fixture(t), bin = join(f.dir, 'bin'), pidsFile = join(f.dir, 'pids.json');
+    await mkdir(bin);
+    const descendant = `process.send({ready:true}); setInterval(() => {}, 1000);`;
+    await writeFile(join(bin, 'git'), `#!${process.execPath}\n` +
+      `const fs = require('node:fs'), cp = require('node:child_process');\n` +
+      `const child = cp.spawn(process.execPath, ['-e', ${JSON.stringify(descendant)}], {stdio:['ignore', ${JSON.stringify(pipe === 'stdout' ? 'inherit' : 'ignore')}, ${JSON.stringify(pipe === 'stderr' ? 'inherit' : 'ignore')}, 'ipc']});\n` +
+      `child.once('message', () => {\n` +
+      `  fs.writeFileSync(${JSON.stringify(pidsFile)}, JSON.stringify({owned:process.pid, descendant:child.pid}));\n` +
+      `  child.disconnect(); child.unref();\n` +
+      (mode === 'natural' ? `  fs.writeSync(1, ${JSON.stringify(join(f.main, '.git') + '\n')}); process.exit(0);\n` :
+        mode === 'budget' ? `  fs.writeSync(1, 'x'.repeat(3 * 1024 * 1024)); setInterval(() => {}, 1000);\n` :
+          `  fs.writeSync(1, 'ready\\n'); setInterval(() => {}, 1000);\n`) +
+      `});\n`);
+    await chmod(join(bin, 'git'), 0o755);
+    const runner = join(f.dir, 'runner.mjs');
+    await writeFile(runner, `import cp from 'node:child_process'; import {syncBuiltinESMExports} from 'node:module';\n` +
+      `const spawn = cp.spawn; let exited = false, owned; let triggerDeadline;\n` +
+      (mode === 'timeout' ? `const schedule = globalThis.setTimeout; globalThis.setTimeout = (fn, ms, ...args) => {\n` +
+        `  const timer = schedule(fn, ms, ...args); if (ms > 40000) triggerDeadline = () => {clearTimeout(timer); fn(...args);}; return timer;\n` +
+        `};\n` : '') +
+      `cp.spawn = (...args) => {const child = spawn(...args); owned = child; child.once('exit', () => {exited = true;});\n` +
+      (mode === 'timeout' ? `  child.stdout.once('data', () => triggerDeadline());\n` : '') +
+      `  return child;}; syncBuiltinESMExports();\n` +
+      `const {scanWorktrees} = await import(${JSON.stringify(pathToFileURL(CLI).href)});\n` +
+      `const scan = await scanWorktrees({cwd:${JSON.stringify(f.main)}});\n` +
+      `const listeners = [owned.listenerCount('exit'), owned.listenerCount('close'), owned.listenerCount('error'), owned.stdout.listenerCount('data'), owned.stderr.listenerCount('data')];\n` +
+      `console.log(JSON.stringify({scan, exited, code:owned.exitCode, signal:owned.signalCode, pipesDestroyed:owned.stdout.destroyed && owned.stderr.destroyed, listeners}));\n`);
+    try {
+      const output = spawnSync(process.execPath, [runner], { env: { ...process.env, PATH: `${bin}${delimiter}${process.env.PATH}` }, encoding: 'utf8', timeout: 4000 });
+      assert.equal(output.status, 0, output.error?.message ?? output.stderr);
+      const { scan, exited, code, signal, pipesDestroyed, listeners } = JSON.parse(output.stdout);
+      const pids = JSON.parse(await readFile(pidsFile, 'utf8'));
+      assert.equal(exited, true, 'the actual owned-child exit event was observed before settlement');
+      assert.throws(() => process.kill(pids.owned, 0), { code: 'ESRCH' });
+      assert.doesNotThrow(() => process.kill(pids.descendant, 0), 'the handshaken descendant is still alive at settlement');
+      assert.equal(pipesDestroyed, true, 'owned pipe handles are released before settlement');
+      assert.deepEqual(listeners, [0, 0, 0, 0, 0], 'owned lifecycle and data listeners are removed');
+      assert.equal(scan.rows.length, 0);
+      assert.deepEqual(scan.issues, [mode === 'natural' ? 'GIT_READ_FAILED' : mode === 'budget' ? 'READ_BUDGET' : 'READ_TIMEOUT']);
+      assert.equal(mode === 'natural' ? code : signal, mode === 'natural' ? 0 : 'SIGKILL');
+    } finally {
+      const pids = JSON.parse(await readFile(pidsFile, 'utf8').catch(() => '{}'));
+      for (const pid of [pids.owned, pids.descendant]) {
+        if (!pid) continue;
+        try { process.kill(pid, 'SIGKILL'); } catch (error) { if (error.code !== 'ESRCH') throw error; }
+      }
+    }
+  });
+}
+
+test('unavailable Git settles with its original failure after spawn closure', async (t) => {
+  const f = await fixture(t);
+  const output = spawnSync(process.execPath, [CLI, 'scan', '--cwd', f.main], { env: { ...process.env, PATH: join(f.dir, 'absent-bin') }, encoding: 'utf8', timeout: 4000 });
+  assert.equal(output.status, 0, output.stderr);
+  assert.deepEqual(JSON.parse(output.stdout).issues, ['GIT_UNAVAILABLE']);
 });

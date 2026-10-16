@@ -22,7 +22,10 @@ branch and lock state, and tracked, untracked and ignored-file observations.
 Assessment validates the supplied records and re-reads local Git facts to detect
 changes. User Git configuration cannot hide untracked files or submodule state.
 Incomplete recursive inspection, inaccessible paths and changed identities keep
-results unresolved.
+results unresolved. Every Git command uses `GIT_NO_LAZY_FETCH=1` and the
+`--no-lazy-fetch` guard so missing promisor objects cannot trigger a fetch.
+Git versions that reject this guard leave the scan unresolved; there is no
+retry without it.
 
 ## Supported host evidence
 
@@ -66,8 +69,10 @@ Its current commit must equal the evidenced base SHA.
 
 The maximum evidence age is five minutes. The scan has a 45-second shared Git
 read budget, at most 4,096 commands, 32 MiB combined output and 2 MiB per command,
-with at most 128 worktrees. Inputs are bounded to 8 MiB. Exhausted or incomplete
-observations remain unresolved. Any indexed submodule currently carries
+with at most 128 worktrees. Inputs are bounded to 8 MiB. After observing direct-child exit, the reader
+allows 250ms for pipe draining, then closes owned pipes and rejects truncated
+output without signalling descendants. This termination allowance follows the
+read deadline. Exhausted or incomplete observations remain unresolved. Any indexed submodule currently carries
 `SUBMODULE_INSPECTION_INCOMPLETE`; this version does not claim recursive
 submodule inspection. Sparse or assume-unchanged index entries also remain
 unresolved because they can hide local content.

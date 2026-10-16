@@ -98,3 +98,37 @@ provider: discovery, native tool start/collect, completed child, cancellation,
 parent shutdown, retry and requested/reported fixture model identity passed.
 No real model account was called. These candidate gates precede publication;
 they are not the later user-scope installation update.
+
+## Independent review and repaired candidate
+
+Two independent frozen reviews of `ada1eb9` found that missing promisor objects
+could trigger an implicit fetch. The specification reviewer reported P1 with
+four new pack files; the standards reviewer independently reported P2 with
+eight pack-related files. These are distinct reproductions of the same defect,
+not contradictory counts. The specification reviewer also found P2: inherited
+Git pipes could outlive the shared deadline after the direct child exited.
+The standards reviewer passed 115 focused checks and verified distributed
+copies; passing those checks did not invalidate the reproduced defect.
+
+The shared Git reader now sets `GIT_NO_LAZY_FETCH=1` and passes
+`--no-lazy-fetch` for every command, with no unguarded retry. Unsupported Git
+stays unresolved. The real promisor regression has a positive fetch control,
+then proves assessment leaves the missing commit absent, starts no fetch and
+preserves repository bytes despite a caller opt-out. Direct-child exit now
+starts a 250ms pipe-drain allowance; truncation fails and earlier budget/timeout
+errors survive. Six handshaken subprocess cases check descendant survival,
+actual exit, released pipes and listener cleanup. The focused pre-fix run
+produced eight expected failures; all 29 worktree tests passed after repair.
+
+The parent also corrected the GitHub transport's security declaration to cover
+its existing provider-authorized PR writes. Observation collectors remain
+read-only; no new write authority was added.
+
+The [repaired candidate receipt](repaired-candidate.json) preserves exact source
+hashes, archive identities, the successful complete 789-test run with no skips,
+and repeated OMP/Pi native candidate gates. The earlier candidate receipt and
+780-test result above retain their original scope. Native validation used
+Apple Git 2.54.0; unsupported Git was simulated and Windows was not exercised.
+The [delegation record](delegations.json) distinguishes requested targets from
+reported model identities and unverified backend options. Fresh closure reviews
+and final publication/install evidence remain separate gates.

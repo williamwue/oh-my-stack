@@ -491,10 +491,11 @@
     {
       "path": "tools/github-observation.mjs",
       "owner": "oh-my-stack",
-      "purpose": "Bound native GitHub read observations, pagination, cancellation and official gh subprocess output; no remote mutations.",
+      "purpose": "Bound native GitHub read observations and pagination; provide official gh transport also used by the provider for scoped authorized PR mutations.",
       "network": true,
       "writes": [
-        "temporary neutral transport directories, removed after each request"
+        "temporary neutral transport directories, removed after each request",
+        "GitHub pull requests only when the owning provider invokes its scoped authorized creation or merge operation"
       ],
       "uninstallBehavior": "Removed with the source checkout or generated Codex package."
     },
