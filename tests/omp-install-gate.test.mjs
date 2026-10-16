@@ -18,6 +18,7 @@ test("OMP gate preflights bytes, installs in one isolated profile, and cleans up
     const archive = await readFile(join(output, artifact.file));
     await extractArchive(archive, manifest.archiveRoot, packagePath);
     const manifestPath = join(output, "release-manifest.json");
+    const expectedSkill = await readFile(join(packagePath, "skills/poteto-help/SKILL.md"), "utf8");
     const profile = "oms-release-0123456789abcdef";
 
     function fakeRun({ failInstall = false } = {}) {
@@ -43,10 +44,10 @@ test("OMP gate preflights bytes, installs in one isolated profile, and cleans up
           { name: "package_manifest", status: "warning", message: "Not created yet" },
           { name: "plugin:oh-my-stack", status: "ok" },
         ]) };
-        if (action === "read skill://prove-it-works") {
+        if (action === "read skill://poteto-help") {
           if (!active) throw Object.assign(new Error("Unknown skill"),
-            { stderr: "Unknown skill: prove-it-works" });
-          return { stdout: "# Prove It Works" };
+            { stderr: "Unknown skill: poteto-help" });
+          return { stdout: expectedSkill };
         }
         if (action === "plugin uninstall oh-my-stack") {
           active = false;
