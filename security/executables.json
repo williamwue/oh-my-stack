@@ -489,6 +489,16 @@
       "uninstallBehavior": "Source tool and generated Codex package copy are removed with their checkout/package; operation journals and remote pull requests remain for owner-led reconciliation."
     },
     {
+      "path": "tools/github-observation.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Bound native GitHub read observations, pagination, cancellation and official gh subprocess output; no remote mutations.",
+      "network": true,
+      "writes": [
+        "temporary neutral transport directories, removed after each request"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated Codex package."
+    },
+    {
       "path": "tools/github-workflow.mjs",
       "owner": "oh-my-stack",
       "purpose": "Bind explicit Codex PR workflow scope, root authority, independent review and target policy to the GitHub provider; expose inspection and reconciliation through a bounded CLI.",
@@ -719,6 +729,14 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Not installed in target packages."
+    },
+    {
+      "path": "tools/worktree-audit.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Read local Git worktree identities and status, then assess caller-supplied fresh host and merge evidence without fetching or deleting.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout or generated native package; caller-owned evidence remains."
     },
     {
       "path": "upstream/snapshots/aihero-20261008/f3fc5632f401156837ee3872f14fe33ccf1024ea/skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",

@@ -1455,6 +1455,16 @@
     },
     {
       "kind": "script",
+      "path": "tools/github-observation.mjs",
+      "output": "scripts/github-observation.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
+    },
+    {
+      "kind": "script",
       "path": "tools/durable-run-state.mjs",
       "output": "scripts/durable-run-state.mjs",
       "origin": "oms-host",
@@ -1625,6 +1635,42 @@
       "origin": "pstack",
       "distribution": "core",
       "owner": "in-your-own-words"
+    },
+    {
+      "kind": "script",
+      "path": "tools/worktree-audit.mjs",
+      "output": "scripts/worktree-audit.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/worktree-audit.md",
+      "output": "docs/worktree-audit.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "omp",
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/github-autopilot-provider.md",
+      "output": "docs/github-autopilot-provider.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "codex"
+      ]
     }
   ],
   "skills": [

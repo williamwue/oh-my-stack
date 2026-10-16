@@ -161,6 +161,13 @@ Do not execute Cursor worktree-audit.sh or assume Cursor transcript, SQLite,
 snapshot, or storage paths apply to T3. Missing active-thread or pinned-thread
 evidence leaves deletion candidates unresolved. Preserve cleanup approval gates.
 
+The OMS-owned read-only helper supports
+\`node "<absolute-package-root>/scripts/worktree-audit.mjs" scan --cwd PATH\`
+and \`assess --scan FILE --evidence FILE\`. Read
+[the evidence contract](worktree-audit.md) before preparing host evidence.
+It rechecks local Git identities and status; missing host coverage remains
+unresolved. A candidate is advisory and does not authorize deletion.
+
 Read native transcripts only through supported host tools or authorized local
 records. Task summaries do not prove complete transcript access or sandboxed
 read-only execution. Report unavailable transcript evidence. Cleanup skills
