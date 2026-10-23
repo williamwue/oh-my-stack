@@ -50,6 +50,12 @@ change those Skills' native invocation policies.
 
 ## Inspect, preview, apply, and disable
 
+Add `--format text` to `status` or `set` for a readable view of the runtime,
+effective mode, scope and source path. A preview shows both the current state
+and the state after applying the proposed change, including a nearer project
+override that would still win. JSON remains the default for automation.
+The view reports configuration; verify hook activation in a fresh host session.
+
 The optional routing helpers require Node.js 20 or later. They do not collect
 model inventory, load application env files, access credentials, or use a model.
 Replace `/path/to/installed/oh-my-stack` with the installed plugin root.
@@ -59,7 +65,9 @@ Run these commands from the project you want to configure.
 
 ```bash
 node /path/to/installed/oh-my-stack/scripts/routing.mjs status
+node /path/to/installed/oh-my-stack/scripts/routing.mjs status --format text
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mode auto
+node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mode auto --format text
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mode auto --apply
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --scope project --mode manual --apply
 ```

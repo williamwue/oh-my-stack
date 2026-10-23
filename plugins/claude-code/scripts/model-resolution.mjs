@@ -8,10 +8,19 @@ import { fileURLToPath } from "node:url";
 
 const manifestName = "oh-my-stack.resolution.json";
 
-function runtimeDirectory(runtime, scope) {
+export function runtimeDirectory(runtime, scope, { userRoot, codexHome, piCodingAgentDir,
+  claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? null } = {}) {
   if (!['codex', 'omp', 'claude-code', 'pi'].includes(runtime)) throw new Error(`unsupported runtime ${runtime}`);
-  if (runtime === 'pi') return scope === 'user' ? join('.pi', 'agent') : '.pi';
-  return runtime === 'codex' ? '.codex' : runtime === 'claude-code' ? '.claude' : scope === 'user' ? join('.omp', 'agent') : '.omp';
+  const directory = runtime === 'pi' ? '.pi' : runtime === 'codex' ? '.codex' : runtime === 'claude-code' ? '.claude' : '.omp';
+  if (scope !== 'user') return directory;
+  const [variable, home] = runtime === 'codex' ? ['CODEX_HOME', codexHome ?? (userRoot === undefined ? process.env.CODEX_HOME : null)]
+    : runtime === 'pi' ? ['PI_CODING_AGENT_DIR', piCodingAgentDir ?? (userRoot === undefined ? process.env.PI_CODING_AGENT_DIR : null)]
+      : runtime === 'claude-code' ? ['CLAUDE_CONFIG_DIR', claudeConfigDir] : [null, null];
+  if (home) {
+    if (!isAbsolute(home)) throw new Error(`${variable} must be an absolute path`);
+    return resolve(home);
+  }
+  return resolve(userRoot ?? homedir(), directory, ...(['pi', 'omp'].includes(runtime) ? ['agent'] : []));
 }
 
 async function exists(path) {
@@ -30,9 +39,9 @@ async function checkedManifest(path, runtime) {
   return manifest;
 }
 
-export async function resolveActiveResolution({ runtime, cwd = process.cwd(), userRoot = homedir(),
-  claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? null }) {
-  const userDirectory = resolve(userRoot);
+export async function resolveActiveResolution({ runtime, cwd = process.cwd(), userRoot,
+  claudeConfigDir, codexHome, piCodingAgentDir }) {
+  const userDirectory = resolve(userRoot ?? homedir());
   let directory = resolve(cwd);
   while (directory !== userDirectory) {
     const path = join(directory, runtimeDirectory(runtime, 'project'), manifestName);
@@ -41,11 +50,8 @@ export async function resolveActiveResolution({ runtime, cwd = process.cwd(), us
     if (parent === directory) break;
     directory = parent;
   }
-  if (runtime === 'claude-code' && claudeConfigDir && !isAbsolute(claudeConfigDir)) {
-    throw new Error('CLAUDE_CONFIG_DIR must be an absolute path');
-  }
-  const path = join(runtime === 'claude-code' && claudeConfigDir
-    ? resolve(claudeConfigDir) : join(userDirectory, runtimeDirectory(runtime, 'user')), manifestName);
+  const home = runtimeDirectory(runtime, 'user', { userRoot, claudeConfigDir, codexHome, piCodingAgentDir });
+  const path = join(home, manifestName);
   if (await exists(path)) return { scope: 'user', path, manifest: await checkedManifest(path, runtime) };
   return null;
 }
@@ -118,15 +124,16 @@ async function main() {
   for (let index = 0; index < args.length; index += 2) {
     const key = args[index];
     const value = args[index + 1];
-    if (!['--runtime', '--cwd', '--user-root', '--claude-config-dir'].includes(key) || !value || value.startsWith('--')) {
+    if (!['--runtime', '--cwd', '--user-root', '--claude-config-dir', '--codex-home', '--pi-coding-agent-dir'].includes(key) || !value || value.startsWith('--')) {
       throw new Error(`invalid option ${key ?? '<missing>'}`);
     }
     options[key.slice(2)] = value;
   }
   if (!options.runtime) throw new Error('--runtime is required');
   const selected = await resolveActiveResolution({
-    runtime: options.runtime, cwd: options.cwd ?? process.cwd(), userRoot: options['user-root'] ?? homedir(),
+    runtime: options.runtime, cwd: options.cwd ?? process.cwd(), userRoot: options['user-root'],
     claudeConfigDir: options['claude-config-dir'] ?? process.env.CLAUDE_CONFIG_DIR ?? null,
+    codexHome: options['codex-home'], piCodingAgentDir: options['pi-coding-agent-dir'],
   });
   console.log(JSON.stringify(selected ? { scope: selected.scope, path: selected.path } : { scope: null, path: null }));
 }

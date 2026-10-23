@@ -11,14 +11,24 @@ From a source checkout:
 ```sh
 node tools/worktree-audit.mjs scan --cwd /absolute/project > /outside/project/scan.json
 node tools/worktree-audit.mjs assess --scan /outside/project/scan.json --evidence /outside/project/evidence.json
+node tools/worktree-audit.mjs assess --scan /outside/project/scan.json --evidence /outside/project/evidence.json --format text
 ```
 
 In an installed package, resolve its absolute root and substitute
 `scripts/worktree-audit.mjs` for the source path. Redirection is a caller action;
 choose a destination that does not dirty the worktree being assessed.
 
+The optional `assess --format text` view shows verdict totals and each worktree's
+branch, head, readable reason, original reason code and available evidence detail.
+It uses the same assessment as the default JSON output. Preserve JSON for
+machine-readable evidence; text is a status view. Both modes remain read-only,
+and candidate status does not authorize deletion.
+
 The scan freezes worktree paths, physical identities, Git directories, HEADs,
-branch and lock state, and tracked, untracked and ignored-file observations.
+branch and lock state, tracked, untracked and ignored-file observations, and
+HEAD/shared-reflog fingerprints. Both endpoints of each reflog entry are
+checked for commits not preserved by branches, tags, remotes or shared ref
+reflogs. Private HEAD reflogs of other worktrees receive no preservation credit.
 Assessment validates the supplied records and re-reads local Git facts to detect
 changes. User Git configuration cannot hide untracked files or submodule state.
 Incomplete recursive inspection, inaccessible paths and changed identities keep
@@ -69,7 +79,8 @@ Its current commit must equal the evidenced base SHA.
 
 The maximum evidence age is five minutes. The scan has a 45-second shared Git
 read budget, at most 4,096 commands, 32 MiB combined output and 2 MiB per command,
-with at most 128 worktrees. Inputs are bounded to 8 MiB. After observing direct-child exit, the reader
+with at most 128 worktrees. Reflog reachability is capped at 4,096 roots;
+missing, unreadable, malformed, empty or over-budget evidence stays unresolved. Inputs are bounded to 8 MiB. After observing direct-child exit, the reader
 allows 250ms for pipe draining, then closes owned pipes and rejects truncated
 output without signalling descendants. This termination allowance follows the
 read deadline. Exhausted or incomplete observations remain unresolved. Any indexed submodule currently carries

@@ -1,6 +1,6 @@
 ---
 name: autopilot-full
-description: "Build, review, and land a queue only with explicit authorization."
+description: "Build and review a queue to merge-ready, or merge within existing authorization."
 ---
 
 # autopilot-full
