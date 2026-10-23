@@ -1,0 +1,294 @@
+{
+  "pstack": {
+    "plugins/pstack/skills/architect/SKILL.md": {
+      "kind": "policy",
+      "why": "Requires comparing accepted deviations with the saved sketch and rationale, and updating them, before each implementation unit closes.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/architect/references/rationale-template.md": {
+      "kind": "policy",
+      "why": "Adds an Implementation reconciliation section that records accepted deviations and their acceptance sources.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/blast-radius/SKILL.md": {
+      "kind": "policy",
+      "why": "Extends the trigger to run before design when a brief asserts something about existing code.",
+      "since": "0.9.21",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/bro/SKILL.md": {
+      "kind": "policy",
+      "why": "Adds a /bro and say-it-plainly trigger to the description.",
+      "since": "0.9.10",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/create-verification-skill/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Names the generated project skill verify so it replaces Claude Code's bundled user-only /verify and the playbooks can invoke it.",
+      "since": "0.9.29",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-help/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Routes installation, model-sheet loading, and persistent routing preferences to the current runtime's setup sources, gives installed playbooks precedence over upstream guides, and keeps the port's public skill loading, hidden principles, verification-skill naming, local-worker advice, driver and built-in equivalents, excluded make-bot-ui row, and orchestrate wording as prose changes in this fork.",
+      "since": "0.9.71",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/SKILL.md": {
+      "kind": "policy",
+      "why": "Adds the Claude Code, Codex, Pi, GitHub Copilot, and Muse Platform Adaptation section with its task-tool and todo.md fallback (per task slug when sessions share a checkout), the run-or-verify driver line, the deploy-platform and defect-severity triggers, the port's principle summaries, the project playbooks paragraph, and the closed-review-gate rule that the Codex and Pi mappings point to, and it points the Agent-call defaults at the Models section with full tool access and the namespaced pstack:poteto-agent name, requires stopping an abandoned agent before replacing it, renders every reply item as prose, layers technical-writing on top of unslop, and describes Autopilot-full as stopping at merge-ready for the operator's click.",
+      "since": "0.9.2",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/autopilot-full.md": {
+      "kind": "policy",
+      "why": "Owners stop at merge-ready and the operator clicks every merge, with the patch-id rule governing re-verification if trunk moves first, instead of each owner merging after a clean verdict, and the root writes the program objective into standing orders on the go and re-reads it each tick, arms the tick as a dynamic-mode /loop, states the program's size before the first owner starts and waits for the operator's go above three owners, scopes review lanes to what the diff breaks, and stops a PR at two fix-forwards.",
+      "since": "0.9.39",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/autopilot-stack.md": {
+      "kind": "policy",
+      "why": "Records each verdict's head SHA, base SHA, base branch, and patch-id, cancels pending merges and leases each push against the captured remote head before the root rewrites or retargets the chain, and re-verifies a verdict whose applicability to the new base is uncertain.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/babysit.md": {
+      "kind": "policy",
+      "why": "Requires confirming that the first status read reports the requested PR or stack, and naming the merge frontier, before acting on it, and reports the watcher's behind-base gate to the branch owner instead of resolving it, as it does a conflict.",
+      "since": "0.9.39",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/bug-fix.md": {
+      "kind": "policy",
+      "why": "The reply quotes the decisive failing and passing output trimmed to the assertion and counts, not the whole repro verbatim.",
+      "since": "0.9.10",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/feature.md": {
+      "kind": "policy",
+      "why": "Gives every file-writing delegate its own worktree, based on the branch's HEAD when it builds on unmerged commits, and forbids writing in a worktree a delegate still holds.",
+      "since": "0.9.39",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md": {
+      "kind": "port-feature",
+      "why": "Plans read skills from the installed plugin, keep the store under ~/.claude/orchestrate, write the program objective into standing orders, run the tick as a dynamic-mode /loop that re-reads that objective, run live lanes in worktrees through the driver skill the Non-negotiables resolve instead of on cloud VMs with control-ui or control-cli, name the configured swarm workers model instead of a placeholder, and leave rebase and merge authority to the execution playbook.",
+      "since": "0.9.19",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/opening-a-pr.md": {
+      "kind": "policy",
+      "why": "Requires stopping every live agent that holds a worktree before committing, merging, or deploying from it.",
+      "since": "0.9.10",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/orchestrate.md": {
+      "kind": "port-feature",
+      "why": "Runs workers as background subagents in per-writer worktrees under a ~/.claude/orchestrate store because Claude Code has no cloud worker environment, and keeps human rulings in their original wording.",
+      "since": "0.9.29",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/pause-safely.md": {
+      "kind": "policy",
+      "why": "Writes the resume note to the canonical checkpoint directory and preserves artifacts the user asked to keep across the resume.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/session-pickup.md": {
+      "kind": "policy",
+      "why": "Reads the project checkpoint first and applies the human-rulings epistemics when reconstructing state.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/shipping.md": {
+      "kind": "policy",
+      "why": "Lands one PR at a time under the user's landing authority, cancelling pending merges before any chain change, merging only under a service-enforced head condition, arming auto-merge or a queue only behind repository rules that enforce the verdict, and confirming each landing in the destination's history before advancing, with verifiers that drive the real surface through the driver skill in their own worktrees, a matching patch-id that keeps a review only after its applicability to the new base is checked, and the watcher owning blocker classification, with a branch behind its base routed to the topology owner.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/playbooks/worktree-cleanup.md": {
+      "kind": "policy",
+      "why": "Holds a worktree with untracked files or a git lock instead of calling untracked files safe to drop, names the untracked count and the lock reason the audit prints, says that a worktree with both tracked edits and untracked files prints both counts, names the status call the audit counts from and a diff command that covers submodules, says that an empty diff never means nothing is at stake because a diff leaves untracked files out and a plain one can leave a submodule out, says that a wip line can stand for work inside a submodule, limits the prune step's kept-commits claim to commits on the worktree's branch and says a submodule's commits go with the worktree, holds ignored files outside the audit's disposable build and cache directories and commits only the worktree's HEAD reflog reaches, naming the ignored and reflog counts and the commands that list them, and forbids rm -rf around a locked tree.",
+      "since": "0.9.74",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/bootstrap.ts": {
+      "kind": "policy",
+      "why": "Exits with a clear message when run without bun and installs production dependencies without re-executing itself.",
+      "since": "0.9.11",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/check-plan.mjs": {
+      "kind": "port-feature",
+      "why": "Checks for the port's plan skeleton markers (standing orders, installed-plugin reads, an hourly cadence, the configured swarm workers model), requires a box under each program task and under Close the program, opens and closes a code fence at any indentation so a fence inside a list item counts, and strips a leading byte-order mark before parsing.",
+      "since": "0.9.19",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/check-plan.test.ts": {
+      "kind": "port-feature",
+      "why": "Gives upstream's valid-plan fixture the boxes under each program task and under Close the program, the standing-orders, installed-plugin, and hourly lines, and the configured swarm workers lane line that the port's checker requires.",
+      "since": "0.9.83",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/orch/orch.test.ts": {
+      "kind": "policy",
+      "why": "Covers the guards the port adds to orch/store.ts: single-line table cells and frontier SHAs from exact branch refs when a same-named tag points elsewhere or survives its deleted branch, a pull request from another repository or a deleted fork that shares a stack branch's name, a stack pushed from the checkout's fork through the branch's push remote, a checkout whose branch has no push remote, the --limit on every gh pr list call, injecting the fake forge through the store's forgePaths option instead of rewriting PATH and giving the CLI only PATH and ORCH_STORE instead of the whole environment. For the stale-lock takeover it races two processes for a stale lock to show only one replaces it, refuses every writer, forced or not, while a live writer holds the takeover claim, pauses a second process at its unlink of the lock to show a forced writer is refused mid-takeover, pauses a holder at the unlink of its release to show a forced writer is refused there too, kills one there to show the next writer clears its claim, removes the lock there to show the takeover carries on, and pauses one after it has listed a dead claimant to show it leaves alone a claim made since. Kills a writer after every lock call, with and without a stale lock, to show the next writer gets in, fails the hard link to show the exclusive open still refuses a live lock, plants and removes a rival lock between a failed create and the read to show the create is retried, and points the lock at a missing file to show the retry ends. Expects unit add to return ids and tracks as written, round-trips unit cells and inbox pointers that start with a formula or quote character and pins their quoted form on disk, reads rows written before the quote was stripped without dropping a leading quote, and times out the gh pr list --head and --base calls against a forge that ignores SIGTERM, with a budget a saturated machine can meet.",
+      "since": "0.9.47",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/orch/store.ts": {
+      "kind": "policy",
+      "why": "Adds guards for temp-file cleanup, single-line status table cells, and frontier SHAs resolved from exact local branch refs, so a leading-dash or tag-shadowed branch name reaches git only as refs/heads/<branch>, reads the current branch from the full HEAD ref because --short names a tag-shadowed branch heads/<branch>, keeps in the gh chain only pull requests whose head repository is the one the current branch pushes to (branch.<branch>.pushRemote, remote.pushDefault, branch.<branch>.remote, then origin) because gh matches --head and --base by branch name alone, names the pull requests it left out when a branch has no other, lists up to 1000 pull requests per gh call instead of gh's 30, runs the forge and git without an env override, and takes forge executable paths as the forgePaths open option so tests can inject a fake, since Bun ignores a PATH changed after startup. Serializes stale-lock takeovers behind a claim directory that holds one file named for the claimant's pid, staged under a private name and renamed into place. A live claim refuses every other writer, forced or not, and the next writer removes a dead claimant's file by name before it claims. Inside the claim the takeover re-reads the lock, refuses when the holder changed, and carries on when the lock is already gone. The release reads and unlinks its own lock behind the same claim, so a forced takeover cannot replace the lock between the two, and stages a new claim until a live claimant finishes or dies. Creates the lock by writing the pid to a private file and hard-linking it into place, so a writer killed mid-create cannot leave a lock with no pid in it, and falls back to an exclusive open where the link fails for any reason other than an existing lock. Creates the lock again, twice at most, when it vanishes between a failed create and the read of its holder, and reports a lock it cannot read as held by an unknown pid. Quotes a cell that starts with a spreadsheet formula character or a quote only when writing a TSV or an inbox pointer, and strips that quote when reading one, so ids and branches round-trip unchanged. A row written before this change keeps a leading quote unless another quote or a formula character follows it; that is the shape the store writes, so such a row loses its first quote on read. Bounds each forge call with a timeout that kills the forge with SIGKILL and that the forgeTimeoutMs open option overrides.",
+      "since": "0.9.13",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/package.json": {
+      "kind": "policy",
+      "why": "Typechecks through the root tsconfig.json so the port-only modules are covered.",
+      "since": "0.9.23",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/cli.test.ts": {
+      "kind": "policy",
+      "why": "Supplies the shared deadline and landing revision the port's watcher requires, and checks that a PR with no checks configured gets a first-sighting status cell and, after one WAITING poll, a READY verdict that names the absence, and that mergeability GitHub has not computed is named in the status table, the WAITING line, and the TIMEOUT line, that a retry after a mid-read change is not called a failed query, that a command that could not run gets an install action, that an --interval longer than one timer can sleep is refused, and the two help lines the port rewrote.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/cli.ts": {
+      "kind": "policy",
+      "why": "Threads one WatchDeadline through discovery, commands, and polling, reports a deadline verdict instead of throwing, rejects an --interval longer than one timer can sleep, and says in its help that --interval does not shorten the 60 second no-checks confirmation and that exit 0 from --status-only does not mean ready.",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts": {
+      "kind": "policy",
+      "why": "Extends the fake reader with the base revision, the default branch, and a factsOnReread option for every pullRequest read after the first, parses its facts through the real parsePullRequest, and tags each rollup page, repeating the last one across polls, so a test can replay a head commit with no rollup.",
+      "since": "0.9.10",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/github.test.ts": {
+      "kind": "policy",
+      "why": "Covers the port's GitHub reader: completed conclusions that gh buckets as pending, a checkout PR paired with a different explicit repository, a full open-PR page refused as a possibly cut stack, a stack that never takes a PR headed at the default branch as parent, child, or seed under the default branch the repository reports, while a fork branch of the same name still stacks, a check-rollup cursor that repeats or returns to an earlier page, a review-thread cursor that repeats, a review-thread page that promises more pages without a cursor, a binary that cannot be spawned, the base revision field, and a no-checks reading that needs both check reads to agree and fails closed otherwise.",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/github.ts": {
+      "kind": "policy",
+      "why": "Runs every gh and git call under the shared deadline, reports a binary that cannot be spawned as a non-retryable query failure, reads the base revision, pages through every review thread, refuses a review-thread or check-rollup cursor that does not advance and a review-thread page that promises more pages without a cursor, fails completed conclusions that gh buckets as pending, refuses a checkout PR paired with a different explicit repository, reads the repository's default branch, leaves every PR whose head is that branch in the PR's own repository out of stack ordering as parent, child, and seed, orders a stack only through branches in the PR's own repository, while rejecting duplicate head branches, cycles, and a full open-PR page, and reads a repository with no checks configured as its own result when gh reports none and the head commit has no rollup.",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/policy.test.ts": {
+      "kind": "policy",
+      "why": "Covers the review-required and branch-protection merge gates and their wait for pending checks, the behind-base gate that stops without waiting for pending or unreported checks and outranks a required review but not requested changes, the wait while GitHub has not computed mergeability (never ready and never a query error, re-polled at the interval, timing out at the caller's deadline, one status row on a one-shot pass, and blockers that do not depend on it still stopping at once), a PR with no checks configured (waiting in single, stack, and queued mode until the reading has persisted for 60 seconds however short the interval, each PR timed from its own first sighting and unconfirmed when the caller supplies no confirmer, timing out there under a shorter deadline, ready once it has, still stopped by conflicts, threads, and gates, honouring checks that register on the next poll, and failing closed while the head may not have reported), the second facts read in the snapshot plan and the retry when the PR's state, merge time, head branch, gate, review, draft, or conflict state changes between the two reads, except mergeability that the first read had not computed, and the shared deadline in the poll loop.",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/policy.ts": {
+      "kind": "policy",
+      "why": "Stops at the review-required and branch-protection merge gates once checks finish, and at the behind-base gate at once and ahead of a required review, since updating the branch restarts its checks, waits at the poll interval while GitHub has not computed mergeability, never as a query error, and builds a ready proof only from a MERGEABLE reading, re-reads the PR facts after the checks and retries a snapshot whose head, base, mergeability, review, or draft state changed in between, leaving mergeability out of that comparison when the first read had not computed it, reads review threads and checks concurrently, reports a PR with no checks configured as ready only when no commit on it has reported checks and the same head has shown none for 60 seconds of wall time whatever the poll interval, waiting until then as it waits on pending checks, and honours the shared deadline in the poll loop.",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/render.ts": {
+      "kind": "policy",
+      "why": "Renders the review-required, behind-base, and merge-blocked states as status cells and as merge-gate blockers with their next action, and shows a PR with no checks configured as a no-checks cell and a checks=none line on its READY verdict, with a first sighting as its own cell, WAITING line, and TIMEOUT line, and mergeability GitHub has not computed as its own Merge cell, WAITING line, and TIMEOUT line, words a retry after the PR changed mid-read as that and not as a failed query, and tells a caller whose command could not run to install it.",
+      "since": "0.9.43",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/types.compile.ts": {
+      "kind": "policy",
+      "why": "Adds the landing revision to the compile-time type fixture and pins that a first sighting of no checks is not readiness proof.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/types.ts": {
+      "kind": "policy",
+      "why": "Adds the review-required, behind-base, and merge-blocked gate reasons, the landing revision on open PR facts and in the ready proof, the head repository of an open PR, the default-branch reader method, deadline, spawn-failed, snapshot-changed, and invalid-stack query failures, the mergeability-unknown wait reason, and the no-checks reading (a none-reported fast path, a no-rollup page, the ci-none state, the ci-unreported first sighting, and the checks-unreported wait reason).",
+      "since": "0.9.24",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/principle-build-the-lever/SKILL.md": {
+      "kind": "policy",
+      "why": "Requires executable semantic controls for each claimed comparison output and refusal or inconclusive results when required observations are missing.",
+      "since": "0.9.91",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/principle-prove-it-works/SKILL.md": {
+      "kind": "policy",
+      "why": "Adds checks that the process behind a result was sound, that a failing check fails for the predicted reason, and that a success report rests on the real state and exit code rather than truncated output.",
+      "since": "0.1.0",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/principle-test-behavior-not-implementation/SKILL.md": {
+      "kind": "policy",
+      "why": "Counts a constant pin as behavior when the value is a promise to users, such as a documented default.",
+      "since": "0.9.82",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/recall/SKILL.md": {
+      "kind": "policy",
+      "why": "Sweeps the locations the project's standing rules name before reporting anything as never recorded and applies the human-rulings epistemics, on top of Claude Code's transcript path.",
+      "since": "0.9.2",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/reflect/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Finds the session transcript with the port's find-transcript.mjs under the Claude Code projects directory that claude-project-dir.mjs prints, keeps the parent's conclusions out of the reviewer prompts (a fallback digest records events without a verdict, and nothing goes beside a transcript path), and drops Cursor's readonly agent mode and inline model column.",
+      "since": "0.1.0",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/setup-pstack/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Writes the override sheet at each runtime's own path, loaded by @-include on Claude Code, pasted into AGENTS.md on Codex, and read directly by the Muse plugin hook since none has Cursor's always-applied rules, replaces Cursor's budget step with a default effort and per-role effort levels, adds the SessionStart hook toggle and names the Pi extension as a reader of it, lists every runtime's sheet path in a table, routes GitHub Copilot to copilot.md, and numbers its verification and formal verification offers as steps 9 and 10.",
+      "since": "0.9.2",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/show-me-your-work/SKILL.md": {
+      "kind": "policy",
+      "why": "Documents that log.sh also neutralizes a cell opening with a double quote.",
+      "since": "0.9.41",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/show-me-your-work/scripts/log.sh": {
+      "kind": "policy",
+      "why": "Prefixes a cell opening with a double quote so a spreadsheet or TSV reader cannot parse it as a quoted field, appends each row through one perl syswrite so parallel writers cannot interleave rows longer than the shell's stdio buffer, reports a short or failed write, and falls back to upstream's printf when perl is missing or does not work.",
+      "since": "0.9.41",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/tdd/SKILL.md": {
+      "kind": "policy",
+      "why": "Requires quoting the failure content, not the assertion line, as evidence that the new test fails for the intended reason.",
+      "since": "0.9.21",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/why/references/epistemics.md": {
+      "kind": "policy",
+      "why": "Adds the Claims about human decisions section that five other files cite for keeping a ruling's original wording and scope.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/why/references/investigator-prompt.md": {
+      "kind": "policy",
+      "why": "Tells investigators to return a human ruling's attributable original wording per the epistemics section.",
+      "since": "0.9.34",
+      "upstream": "not-proposed"
+    },
+    "plugins/pstack/skills/why/references/synthesizer-prompt.md": {
+      "kind": "policy",
+      "why": "Adds a step that applies the human-rulings epistemics, and gives the Direct-claim example a URL the link validator resolves.",
+      "since": "0.9.17",
+      "upstream": "not-proposed"
+    }
+  },
+  "thermos": {
+    "plugins/pstack/skills/thermo-nuclear-code-quality-review/SKILL.md": {
+      "kind": "policy",
+      "why": "Adds a Report Format section requiring one summary report plus one detail file per subsystem or reviewer.",
+      "since": "0.9.11",
+      "upstream": "not-proposed"
+    }
+  }
+}

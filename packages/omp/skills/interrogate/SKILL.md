@@ -29,6 +29,8 @@ Host adaptation. Read the installed package's [runtime binding](../../docs/runti
 
 # Interrogate
 
+Independent review remains incomplete when the host cannot spawn a separate reviewer, read its result, or observe completion. Preserve available independent findings and label the missing verdict BLOCKED. Self-review, tests, and CI cannot complete an independent verdict. Continue work that does not depend on it. If only parallel spawning is unavailable, run separate reviewers sequentially without sharing their findings. Fresh review rounds follow the installed runtime binding.
+
 Spawn one reviewer per configured model to adversarially review code changes. The adversarial signal comes from model diversity, not assigned personas. The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
 ## Step 1, Scope

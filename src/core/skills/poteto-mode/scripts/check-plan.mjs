@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import process from "node:process";
+import MarkdownIt from "./vendor/markdown-it/markdown-it.esm.min.mjs";
 
 const RULE =
 	"Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.";
@@ -34,7 +35,7 @@ if (!file) {
 	process.exit(2);
 }
 
-const raw = fs.readFileSync(file, "utf8").split(/\r?\n/);
+const raw = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n");
 const problems = [];
 const fail = (line, message) => problems.push(`${file}:${line}: ${message}`);
 
@@ -44,31 +45,17 @@ if (raw[0] === "---") {
 }
 
 const lines = [];
-let fence = null;
-const openingFence = (text) => {
-	const match = text.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
-	if (!match || (match[1][0] === "`" && match[2].includes("`"))) return null;
-	return { char: match[1][0], length: match[1].length };
-};
-const closingFence = (text, opening) => {
-	const match = text.match(/^ {0,3}(`+|~+)[ \t]*$/);
-	return Boolean(
-		match &&
-		match[1][0] === opening.char &&
-		match[1].length >= opening.length,
-	);
-};
+// Match the renderer's default dialect and its nesting limit of 100.
+const markdown = new MarkdownIt("default", { maxNesting: 100 });
+const fenceLines = new Set();
+for (const token of markdown.parse(raw.slice(start).join("\n"), {})) {
+	if (token.type !== "fence") continue;
+	for (let i = start + token.map[0]; i < start + token.map[1]; i++) fenceLines.add(i);
+}
 for (let i = start; i < raw.length; i++) {
 	const text = raw[i];
 	const n = i + 1;
-	let code = Boolean(fence);
-	if (fence && closingFence(text, fence)) {
-		code = false;
-		fence = null;
-	} else if (!fence) {
-		fence = openingFence(text);
-		code = Boolean(fence);
-	}
+	const code = fenceLines.has(i);
 	lines.push({ n, text, code });
 	if (code) continue;
 	const prose = text

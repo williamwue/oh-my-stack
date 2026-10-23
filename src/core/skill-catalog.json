@@ -15,6 +15,7 @@
     "bro",
     "bug-fix",
     "correct",
+    "create-formal-verification-skill",
     "create-verification-skill",
     "eval",
     "feature",
@@ -25,6 +26,7 @@
     "interrogate",
     "investigation",
     "ketchup",
+    "maintain-formal-verification-skill",
     "maintain-verification-skill",
     "make-bot-ui",
     "multi-phase-plan",
@@ -73,6 +75,7 @@
     "sharpen",
     "shipping",
     "show-me-your-work",
+    "statechart",
     "swarm",
     "tdd",
     "teach",
@@ -597,6 +600,27 @@
       "kind": "reference",
       "path": "src/core/skills/poteto-mode/**",
       "origin": "pstack",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/markdown-it.esm.min.mjs",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/LICENSES.txt",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/SOURCE.json",
+      "origin": "oms",
       "distribution": "core",
       "owner": "poteto-mode"
     },
@@ -2397,6 +2421,91 @@
       "distribution": "core",
       "targets": [
         "codex"
+      ]
+    },
+    {
+      "kind": "skill",
+      "name": "create-formal-verification-skill",
+      "path": "src/core/skills/create-formal-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "maintain-formal-verification-skill",
+      "path": "src/core/skills/maintain-formal-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "statechart",
+      "path": "src/core/skills/statechart",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/create-formal-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "create-formal-verification-skill"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/maintain-formal-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "maintain-formal-verification-skill"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/statechart/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "statechart"
+    },
+    {
+      "kind": "script",
+      "path": "tools/claude-transcript-location.mjs",
+      "output": "scripts/claude-transcript-location.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/claude-transcripts.md",
+      "output": "docs/claude-transcripts.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "script",
+      "path": "tools/claude-delegation.mjs",
+      "output": "scripts/claude-delegation.mjs",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "kind": "reference",
+      "path": "docs/claude-delegation.md",
+      "output": "docs/claude-delegation.md",
+      "origin": "oms-host",
+      "distribution": "core",
+      "targets": [
+        "claude-code"
       ]
     }
   ]

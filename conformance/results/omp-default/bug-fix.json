@@ -4,6 +4,13 @@
   "scenario": "bug-fix",
   "profile": "omp-default",
   "sourceEvidence": "evals/evidence/omp-18.2.6/bug-fix-delegated.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "346e1e5afaf8a69be987baa25245821ab9a3e5c606206f2dc955552a9d915fc1",
+    "fixtureRevision": "6294b673ba9ea72c27d5dece6b7023e43feba0bae21dd0a90d72ea6f275a7c3f"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "omp",

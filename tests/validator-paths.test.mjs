@@ -135,6 +135,26 @@ test("unlisted tool and skill scripts reject while dependency directories are pr
   assert.equal(pruned.length, 0);
 }));
 
+test("Python, CommonJS and shell entrypoints require inventory while Python libraries do not", async () => fixture(async (root) => {
+  await put(root, "security/executables.json", { schemaVersion: 1, entries: [] });
+  await put(root, "tools/library.py", "def render(value):\n    return value\n");
+  await put(root, "tools/library.ts", "export const render = (value: string) => value;\n");
+  await validateExecutableInventory(root);
+  for (const [path, content] of [
+    ["tools/new.py", "#!/usr/bin/env python3\nprint('fixture')\n"],
+    ["tools/new.py", "if __name__ == '__main__':\n    print('fixture')\n"],
+    ["tools/new.cjs", "console.log('fixture');\n"],
+    ["tools/new.sh", "#!/bin/sh\nexit 0\n"],
+    ["tools/new.ts", "#!/usr/bin/env bun\nconsole.log('fixture');\n"],
+    ["src/core/skills/example/scripts/run.py", "if __name__ == \"__main__\":\n    print('fixture')\n"],
+    ["src/core/skills/example/scripts/run.cjs", "console.log('fixture');\n"],
+  ]) {
+    await put(root, path, content);
+    await assert.rejects(validateExecutableInventory(root), /executable is missing from security inventory/, path);
+    await rm(join(root, path));
+  }
+}));
+
 test("upstream import source and target fields reject escapes before file reads", async () => fixture(async (root) => {
   await put(root, "upstream/sources.yaml", "sources:\n  - id: source\n    baseline_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    verified_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
   const config = {

@@ -15,8 +15,8 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-async function fixtureRecord(fixture) {
-  const root = join(repoRoot, "evals", "fixtures", fixture);
+async function fixtureRecord(sourceRoot, fixture) {
+  const root = join(sourceRoot, "evals", "fixtures", fixture);
   const files = await filesUnder(root);
   assert(files.length > 0, `${fixture}: fixture is empty`);
   const artifacts = [];
@@ -34,9 +34,20 @@ function assertionMap(sourceEvidence) {
   return new Map(sourceEvidence.assertions.map((entry) => [entry.id, entry]));
 }
 
-export async function buildConformance({ check = false } = {}) {
-  const model = await loadModel(repoRoot);
-  const manifest = await readJson(join(repoRoot, "conformance", "scenarios.json"));
+export async function buildConformance({ check = false, root = repoRoot } = {}) {
+  const model = await loadModel(root);
+  const manifest = await readJson(join(root, "conformance", "scenarios.json"));
+  const observations = await readJson(join(root, "conformance", "source-observations.json"));
+  assert(observations.schemaVersion === 1 && observations.kind === "reviewed-historical-snapshot"
+    && /^\d{4}-\d{2}-\d{2}$/.test(observations.reviewedAt) && observations.migrationNote?.trim(), "Invalid conformance observation record");
+  assert(Array.isArray(observations.observations), "Conformance observation pins are required");
+  const pins = new Map();
+  for (const pin of observations.observations) {
+    const id = `${pin.scenario}/${pin.profile}`;
+    assert(!pins.has(id) && /^[a-f0-9]{64}$/.test(pin.sha256) && /^[a-f0-9]{64}$/.test(pin.fixtureRevision), `Invalid or duplicate conformance observation: ${id}`);
+    pins.set(id, pin);
+  }
+  const usedPins = new Set();
   assert(manifest.schemaVersion === 1, "conformance scenarios: schemaVersion must be 1");
   const ids = manifest.scenarios.map((scenario) => scenario.id);
   assert(new Set(ids).size === ids.length, "conformance scenarios: duplicate id");
@@ -44,16 +55,23 @@ export async function buildConformance({ check = false } = {}) {
     JSON.stringify([...ids].sort()) === JSON.stringify([...manifest.requiredScenarioFamilies].sort()),
     "conformance scenarios: required families must appear exactly once",
   );
-  const outputRoot = join(repoRoot, "conformance", "results");
+  const outputRoot = join(root, "conformance", "results");
   const expected = new Map();
   for (const scenario of manifest.scenarios) {
     assert(["verified", "pending"].includes(scenario.status), `${scenario.id}: invalid status`);
     if (scenario.status === "pending") continue;
-    const fixture = await fixtureRecord(scenario.fixture);
+    const fixture = await fixtureRecord(root, scenario.fixture);
     for (const [profileId, evidencePath] of Object.entries(scenario.evidence)) {
       const profile = model.profiles.get(profileId);
       assert(profile, `${scenario.id}: unknown profile ${profileId}`);
-      const source = await readJson(join(repoRoot, evidencePath));
+      const id = `${scenario.id}/${profileId}`;
+      const pin = pins.get(id);
+      assert(pin?.evidence === evidencePath, `${id}: missing or mismatched observation pin`);
+      usedPins.add(id);
+      assert(pin.fixtureRevision === fixture.revision, `${id}: fixture observation drift; new runtime evidence is required`);
+      const sourceBytes = await readFile(join(root, evidencePath));
+      assert(pin.sha256 === sha256(sourceBytes), `${id}: source evidence observation drift; review the evidence before recording a new observation`);
+      const source = JSON.parse(sourceBytes);
       assert(source.result === "pass", `${scenario.id}/${profileId}: source evidence is not passing`);
       assert(source.profile === profileId, `${scenario.id}/${profileId}: source evidence profile drift`);
       assert(source.fixture === scenario.fixture, `${scenario.id}/${profileId}: source fixture drift`);
@@ -78,6 +96,13 @@ export async function buildConformance({ check = false } = {}) {
         scenario: scenario.id,
         profile: profileId,
         sourceEvidence: evidencePath,
+        sourceBinding: {
+          kind: observations.kind,
+          reviewedAt: observations.reviewedAt,
+          record: "conformance/source-observations.json",
+          sourceSha256: pin.sha256,
+          fixtureRevision: pin.fixtureRevision,
+        },
         result: "pass",
         coordinate: {
           runtime,
@@ -101,9 +126,10 @@ export async function buildConformance({ check = false } = {}) {
       expected.set(path, `${JSON.stringify(document, null, 2)}\n`);
     }
   }
+  assert(usedPins.size === pins.size, "Unexpected conformance observation pins");
   if (check) {
     for (const [path, content] of expected) {
-      assert(await readFile(path, "utf8") === content, `${relative(repoRoot, path)}: generated conformance drift`);
+      assert(await readFile(path, "utf8") === content, `${relative(root, path)}: generated conformance drift`);
     }
     const actual = (await filesUnder(outputRoot)).filter((path) => path.endsWith(".json"));
     assert(actual.length === expected.size, "conformance/results contains unexpected records");

@@ -28,6 +28,37 @@ test("routing defaults to manual and previews never create configuration", () =>
   assert.equal((await resolveRouting(options)).enabled, false);
 }));
 
+test("readable routing distinguishes saved state, preview and nearer overrides", () => fixture(async (options) => {
+  const command = join(repoRoot, "tools", "routing.mjs");
+  const env = { ...process.env, CODEX_HOME: options.configHome };
+  const call = (args, cwd = options.cwd) => execFileSync(process.execPath, [command, ...args], { cwd, env, encoding: "utf8", stdio: "pipe" });
+  const initial = call(["status", "--format", "text"]);
+  assert.match(initial, /manual \(disabled\); scope=default/);
+  assert.match(initial, /Verify hook activation/);
+  const preview = call(["set", "--scope", "user", "--mode", "auto", "--format", "text"]);
+  assert.match(preview, /Effective now: manual/);
+  assert.match(preview, /Effective after apply: auto \(enabled\); scope=user/);
+  await assert.rejects(readFile(join(options.configHome, "oh-my-stack/routing.json")), { code: "ENOENT" });
+  call(["set", "--scope", "user", "--mode", "auto", "--apply"]);
+  await configureRouting({ ...options, scope: "project", mode: "manual", apply: true });
+  const shadowed = call(["set", "--scope", "user", "--mode", "auto", "--format", "text"]);
+  assert.match(shadowed, /Effective after apply: manual \(disabled\); scope=project/);
+  assert.match(shadowed, /nearest project override/);
+  const nested = join(options.cwd, "nested");
+  await mkdir(join(nested, ".oh-my-stack"), { recursive: true });
+  await writeFile(join(nested, ".oh-my-stack/routing.json"), JSON.stringify({ schemaVersion: 1, owner: "oh-my-stack", target: "codex", mode: "manual" }));
+  assert.match(call(["set", "--scope", "project", "--mode", "auto", "--format", "text"], nested), /Effective after apply: manual/);
+  const applied = call(["set", "--scope", "project", "--mode", "auto", "--apply", "--format", "text"]);
+  assert.match(applied, /Applied: auto/);
+  assert.match(applied, /Effective now: auto \(enabled\); scope=project/);
+  const json = JSON.parse(call(["status"]));
+  assert.deepEqual(Object.keys(json).sort(), ["enabled", "mode", "path", "scope"]);
+  for (const suffix of [["--format", "html"], ["--format", "text", "--format", "json"]]) {
+    assert.throws(() => call(["set", "--scope", "user", "--mode", "manual", "--apply", ...suffix]));
+  }
+  assert.equal(JSON.parse(call(["status", "--cwd", options.root])).mode, "auto", "invalid output options must not write the user configuration");
+}));
+
 test("project manual overrides user auto without modifying the personal default", () => fixture(async (options) => {
   const user = await configureRouting({ ...options, scope: "user", mode: "auto", apply: true });
   const before = await readFile(user.path, "utf8");

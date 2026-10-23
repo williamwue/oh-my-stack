@@ -4,6 +4,11 @@ Use `tools/plan-pstack-update.mjs` for the active schema-2 imports and exact
 parity derivations. The older `sync-upstream.mjs` remains a historical schema-1
 tool; its apply and accept paths must not advance the current pin.
 
+For joint source maintenance, use the
+[dual-reference planner](dual-reference.md), which includes this official preview
+and adds secondary-reference changes and adoption impacts. This official-only
+entry retains its identity and validation contract.
+
 ## Prepare the input
 
 Provide a local Git checkout of `cursor/plugins` containing both the pinned

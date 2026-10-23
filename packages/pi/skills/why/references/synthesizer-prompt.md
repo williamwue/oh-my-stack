@@ -37,7 +37,7 @@ You MUST follow `references/epistemics.md`. Read it in full before writing. The 
 
 ## Instructions
 
-1. **Read all investigator findings** and weigh the evidence yourself. Investigators gathered raw evidence, not conclusions.
+1. **Read all investigator findings** and weigh the evidence yourself. Investigators gathered raw evidence, not conclusions. Apply [Claims about human decisions](epistemics.md#claims-about-human-decisions) to human rulings. Preserve the original scope and source. Label agent interpretations. Copies of one summary are one dependent evidence chain. If the original is unavailable, leave its exact scope uncertain.
 2. **Merge overlaps.** When several investigators cite the same PR, ticket, or doc, give it one authoritative reference.
 3. **Surface contradictions.** When two items disagree, show both. Don't pick one.
 4. **Calibrate each claim.** Find its evidence and tier. Direct: cite it and state it plainly. Inferred: hedge it and show the inference. Speculative: mark it. No evidence: put it in the gaps.

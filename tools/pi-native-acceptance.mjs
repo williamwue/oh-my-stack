@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm, stat, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +15,8 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
   const cwd = join(temporary, 'checkout');
   let routeName = 'fixture';
   await mkdir(agentDir); await mkdir(cwd);
+  const sessionDir = join(temporary, 'sessions'); await mkdir(sessionDir);
+  const activityFile = join(cwd, 'activity-fixture.txt'); await writeFile(activityFile, 'owned native activity fixture\n');
   const manifest = { schemaVersion: 1, owner: 'oh-my-stack', target: 'pi', routes: {
     fixture: { kind: 'single', role: 'reader', entries: [{ model: 'oms-local/child', reasoning: 'none' }] },
   } };
@@ -50,10 +52,13 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     const body = JSON.parse(Buffer.concat(chunks).toString());
     const text = JSON.stringify(body.messages ?? []);
     requests.push({ model: body.model, hold: text.includes('hold-child'), retry: text.includes('retry-child') });
-    if (text.includes('retry-child')) { response.writeHead(503, { 'Content-Type': 'application/json' }); response.end(JSON.stringify({ error: { message: 'local simulated overload', type: 'server_error' } })); return; }
+    if (body.model === 'child' && text.includes('retry-child')) { response.writeHead(503, { 'Content-Type': 'application/json' }); response.end(JSON.stringify({ error: { message: 'local simulated overload', type: 'server_error' } })); return; }
     response.writeHead(200, { 'Content-Type': 'text/event-stream' });
     if (text.includes('hold-child') && body.model === 'child') return;
     let delta = { content: 'Native local fixture completed.' }, finish = 'stop';
+    if (body.model === 'child' && text.includes('observe-tool') && !body.messages.some(message => message.role === 'tool')) {
+      delta = { tool_calls: [{ index: 0, id: 'native-read', type: 'function', function: { name: 'read', arguments: JSON.stringify({ path: activityFile }) } }] }; finish = 'tool_calls';
+    }
     if (body.model === 'parent') {
       if (text.includes('shutdown-parent') && parentRound > 0) return;
       nativeToolObserved ||= body.tools?.some(tool => tool.function?.name === 'oms_delegate') === true;
@@ -64,11 +69,27 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
         if (!nativeToolObserved) { response.end('data: [DONE]\n\n'); return; }
         const collected = JSON.parse(typeof result.content === 'string' ? result.content : result.content[0].text);
         delta = { tool_calls: [{ index: 0, id: 'oms-collect', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'collect', id: collected.id, wait: true }) } }] }; finish = 'tool_calls';
-      } else {
+      } else if (parentRound === 2) {
+        const result = [...body.messages].reverse().find(message => message.role === 'tool');
+        const completed = JSON.parse(typeof result.content === 'string' ? result.content : result.content[0].text);
+        assert.equal(completed.status, 'completed');
+        delta = { tool_calls: [{ index: 0, id: 'oms-list', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'list' }) } }] }; finish = 'tool_calls';
+      } else if (parentRound === 3) {
         const result = [...body.messages].reverse().find(message => message.role === 'tool');
         const collected = JSON.parse(typeof result.content === 'string' ? result.content : result.content[0].text);
-        assert.equal(collected.status, 'completed');
-        assert.equal(collected.observed.model, 'oms-local/child');
+        assert.equal(collected.active, 0); assert.equal(collected.tasks.length, 1);
+        assert.equal(collected.tasks[0].status, 'completed');
+        assert(collected.tasks[0].session.id); assert(!Object.hasOwn(collected.tasks[0], 'output'));
+        assert.equal(collected.tasks[0].observed.model, 'oms-local/child');
+        delta = { tool_calls: [{ index: 0, id: 'oms-failing-start', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'start', route: routeName, task: 'retry-child', cwd }) } }] }; finish = 'tool_calls';
+      } else if (parentRound === 4) {
+        const result = [...body.messages].reverse().find(message => message.role === 'tool');
+        const started = JSON.parse(typeof result.content === 'string' ? result.content : result.content[0].text);
+        delta = { tool_calls: [{ index: 0, id: 'oms-failing-collect', type: 'function', function: { name: 'oms_delegate', arguments: JSON.stringify({ action: 'collect', id: started.id, wait: true }) } }] }; finish = 'tool_calls';
+      } else {
+        const result = [...body.messages].reverse().find(message => message.role === 'tool');
+        const failed = JSON.parse(typeof result.content === 'string' ? result.content : result.content[0].text);
+        assert.equal(failed.status, 'failed'); assert(failed.error);
       }
       parentRound++;
     }
@@ -98,6 +119,18 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     const start = await manager.execute({ action: 'start', route: routeName, task: 'Read the local fixture', cwd }, { cwd });
     const normal = await manager.execute({ action: 'collect', id: start.id, wait: true });
     assert.equal(normal.status, 'completed'); assert.deepEqual(normal.selected, normal.observed);
+    const activities = [];
+    const activeStart = await manager.execute({ action: 'start', route: routeName, task: 'observe-tool: read the explicit activity fixture', cwd, sessionDir },
+      { cwd, onUpdate: update => activities.push(update.activity) });
+    const activeResult = await manager.execute({ action: 'collect', id: activeStart.id, wait: true });
+    assert.equal(activeResult.status, 'completed'); assert(activeResult.session.id);
+    assert.equal(activeResult.session.source, 'native-get-state');
+    assert.equal(dirname(activeResult.session.file), await realpath(sessionDir)); assert((await stat(activeResult.session.file)).isFile());
+    assert(activities.some(activity => activity.tool?.name === 'read' && activity.tool.running));
+    assert(activities.some(activity => activity.tool?.name === 'read' && !activity.tool.running));
+    const owned = await manager.execute({ action: 'list' });
+    assert(owned.tasks.some(task => task.id === activeStart.id && task.session.file === activeResult.session.file));
+    assert(owned.tasks.every(task => !Object.hasOwn(task, 'output')));
     const hold = await manager.execute({ action: 'start', route: routeName, task: 'hold-child', cwd }, { cwd });
     const deadline = Date.now() + 15000;
     while (!requests.some(request => request.hold)) {
@@ -121,9 +154,11 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     await parent.request('prompt', { message: 'Invoke OMS start, collect, then report the fixture result.' });
     await Promise.race([parentComplete, new Promise((_, reject) => setTimeout(() => reject(new Error('native extension tool execution timed out')), 20000).unref())]);
     assert(nativeToolObserved, `native provider request must advertise registered oms_delegate tool: ${diagnostics.join('').slice(0, 4096)} ${JSON.stringify(toolEvents.filter(event => event.type.includes('extension'))).slice(0,4096)}`);
-    assert.equal(parentRound, 3, 'native parent must execute start, collect and final response');
+    assert.equal(parentRound, 6, 'native parent must execute successful and failed start/collect, list and final response');
     const results = toolEvents.filter(event => event.type === 'tool_execution_end' && event.toolName === 'oms_delegate');
-    assert.equal(results.length, 2); assert(results.every(event => event.isError !== true));
+    assert.equal(results.length, 5); assert(results.slice(0,4).every(event => event.isError !== true));
+    assert.equal(results[4].isError, true, 'failed collection must reach the native Pi tool error envelope');
+    assert.equal(results[4].result.details.status, 'failed');
     const exit = await parent.stop(); assert.equal(exit.code, 0); assert.equal(exit.failure, null);
     parentRound = 0;
     parent = createPiRpcConnection({ binary, cwd, env, args: ['--provider', 'oms-local', '--model', 'parent', '--thinking', 'off', '--tools', 'read,oms_delegate', '-e', join(bundle, 'extensions/oms.ts')] });
@@ -146,7 +181,7 @@ export async function runPiNativeAcceptance({ binary, packageRoot } = {}) {
     if (fixtureError) throw fixtureError;
     assert.equal(await readFile(join(agentDir, 'settings.json'), 'utf8'), settings, 'acceptance must preserve native settings');
     return { native: true, provider: 'simulated local OpenAI-compatible fixture', liveAccount: false,
-      fixtureHostResolver: !packageRoot, route: routeName, extensionDiscovery: true, nativeToolStartCollect: true,
+      fixtureHostResolver: !packageRoot, route: routeName, extensionDiscovery: true, nativeToolStartCollect: true, nativeToolList: true, nativeFailedCollect: true, nativeActivity: true, explicitSessionPersistence: true,
       childExecution: normal.status, childCancellation: cancelled.status, nativeParentShutdown: true, retryRequests: 1,
       inventoryModels: inventory.models.length, selected: normal.selected, observed: normal.observed };
   } finally {

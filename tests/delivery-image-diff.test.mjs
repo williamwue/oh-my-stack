@@ -180,3 +180,22 @@ test('zlib validates exact decoded size, expansion bound, stream checksum and co
   rejects(envelope(ihdr(1, 1), Buffer.concat([compressed, Buffer.from([0])])), /trailing compressed data/);
   rejects(envelope(ihdr(1, 1), Buffer.concat([compressed, compressed])), /trailing compressed data/);
 });
+
+// Equal aggregate colors must not hide a change in their positions.
+test('known-bad control detects swapped pixels despite identical color totals', () => {
+  const red = [255, 0, 0, 255], blue = [0, 0, 255, 255];
+  const baseline = encode(2, 1, [...red, ...blue]);
+  const swapped = encode(2, 1, [...blue, ...red]);
+  assert.equal(compareImages({ baseline, current: baseline }).changedPixels, 0);
+  const result = compareImages({ baseline, current: swapped });
+  assert.equal(result.changedPixels, 2);
+  assert.equal(result.maxChannelDelta, 255);
+  assert.deepEqual(result.boundingBox, { x: 0, y: 0, width: 2, height: 1 });
+});
+
+test('comparison never returns a match with a missing required image', () => {
+  for (const value of [undefined, null, Buffer.alloc(0)]) {
+    assert.throws(() => compareImages({ baseline: onePixel, current: value }));
+    assert.throws(() => compareImages({ baseline: value, current: onePixel }));
+  }
+});

@@ -3,7 +3,7 @@
 Generated from the packaged public catalog and Skill descriptions. To refresh this file,
 run `npm run docs:generate` from the source checkout. `npm run docs:check` checks for drift.
 
-78 public entries: 54 workflows and 24 principles.
+81 public entries: 57 workflows and 24 principles.
 
 This directory reflects the generated source packages. Released installations may differ;
 see [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
@@ -11,6 +11,21 @@ and the [AIHero guide](aihero-original-skills.md) for version requirements.
 
 For a first task, start with [the walkthrough](getting-started.md) or
 [common task examples](guides/common-tasks.md). You do not need to learn every entry.
+
+## Skill navigation
+
+Choose the task group, then read the selected Skill. Use the full catalog for other workflows.
+
+- **Start and setup:** [`poteto-help`](../packages/codex/skills/poteto-help/SKILL.md), [`poteto-mode`](../packages/codex/skills/poteto-mode/SKILL.md), [`oms-auto`](../packages/codex/skills/oms-auto/SKILL.md), [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md).
+- **Plan and design:** [`multi-phase-plan`](../packages/codex/skills/multi-phase-plan/SKILL.md), [`architect`](../packages/codex/skills/architect/SKILL.md).
+- **Build and fix:** [`feature`](../packages/codex/skills/feature/SKILL.md), [`bug-fix`](../packages/codex/skills/bug-fix/SKILL.md), [`tdd`](../packages/codex/skills/tdd/SKILL.md), [`perf-issue`](../packages/codex/skills/perf-issue/SKILL.md).
+- **Review and prove:** [`interrogate`](../packages/codex/skills/interrogate/SKILL.md), [`swarm`](../packages/codex/skills/swarm/SKILL.md), [`create-verification-skill`](../packages/codex/skills/create-verification-skill/SKILL.md).
+- **Deliver:** [`opening-a-pr`](../packages/codex/skills/opening-a-pr/SKILL.md), [`babysit`](../packages/codex/skills/babysit/SKILL.md), [`shipping`](../packages/codex/skills/shipping/SKILL.md), [`autopilot-full`](../packages/codex/skills/autopilot-full/SKILL.md), [`autopilot-stack`](../packages/codex/skills/autopilot-stack/SKILL.md).
+- **Resume and status:** [`pause-safely`](../packages/codex/skills/pause-safely/SKILL.md), [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md), [`ketchup`](../packages/codex/skills/ketchup/SKILL.md), [`recall`](../packages/codex/skills/recall/SKILL.md).
+
+**Principles (24, read as needed):** [`principle-attack-the-premise`](../packages/codex/skills/principle-attack-the-premise/SKILL.md), [`principle-boundary-discipline`](../packages/codex/skills/principle-boundary-discipline/SKILL.md), [`principle-build-the-lever`](../packages/codex/skills/principle-build-the-lever/SKILL.md), [`principle-encode-lessons-in-structure`](../packages/codex/skills/principle-encode-lessons-in-structure/SKILL.md), [`principle-exhaust-the-design-space`](../packages/codex/skills/principle-exhaust-the-design-space/SKILL.md), [`principle-experience-first`](../packages/codex/skills/principle-experience-first/SKILL.md), [`principle-explain-the-number`](../packages/codex/skills/principle-explain-the-number/SKILL.md), [`principle-fix-root-causes`](../packages/codex/skills/principle-fix-root-causes/SKILL.md), [`principle-foundational-thinking`](../packages/codex/skills/principle-foundational-thinking/SKILL.md), [`principle-guard-the-context-window`](../packages/codex/skills/principle-guard-the-context-window/SKILL.md), [`principle-laziness-protocol`](../packages/codex/skills/principle-laziness-protocol/SKILL.md), [`principle-make-operations-idempotent`](../packages/codex/skills/principle-make-operations-idempotent/SKILL.md), [`principle-migrate-callers-then-delete-legacy-apis`](../packages/codex/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md), [`principle-minimize-reader-load`](../packages/codex/skills/principle-minimize-reader-load/SKILL.md), [`principle-model-the-domain`](../packages/codex/skills/principle-model-the-domain/SKILL.md), [`principle-never-block-on-the-human`](../packages/codex/skills/principle-never-block-on-the-human/SKILL.md), [`principle-outcome-oriented-execution`](../packages/codex/skills/principle-outcome-oriented-execution/SKILL.md), [`principle-prove-it-works`](../packages/codex/skills/principle-prove-it-works/SKILL.md), [`principle-redesign-from-first-principles`](../packages/codex/skills/principle-redesign-from-first-principles/SKILL.md), [`principle-separate-before-serializing-shared-state`](../packages/codex/skills/principle-separate-before-serializing-shared-state/SKILL.md), [`principle-sequence-verifiable-units`](../packages/codex/skills/principle-sequence-verifiable-units/SKILL.md), [`principle-subtract-before-you-add`](../packages/codex/skills/principle-subtract-before-you-add/SKILL.md), [`principle-test-behavior-not-implementation`](../packages/codex/skills/principle-test-behavior-not-implementation/SKILL.md), [`principle-type-system-discipline`](../packages/codex/skills/principle-type-system-discipline/SKILL.md).
+
+This is a documentation index. Invocation metadata and the host's native picker remain authoritative.
 
 ## Invocation and sources
 
@@ -28,7 +43,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 
 ## Workflows
 
-54 entries.
+57 entries.
 
 | Skill | When to use it | Invocation | Source |
 | --- | --- | --- | --- |
@@ -37,7 +52,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`authoring-a-skill`](../packages/codex/skills/authoring-a-skill/SKILL.md) | Create or revise a scoped Skill and check its behavior. | explicit | pstack core / host binding |
 | [`automate-me`](../packages/codex/skills/automate-me/SKILL.md) | Capture a user's recurring work conventions in a personal Skill. | explicit | pstack core / host binding |
 | [`autonomous-run`](../packages/codex/skills/autonomous-run/SKILL.md) | Run a bounded task until its completion condition is verified. | explicit | pstack core / host binding |
-| [`autopilot-full`](../packages/codex/skills/autopilot-full/SKILL.md) | Build, review, and land a queue only with explicit authorization. | explicit | pstack core / host binding |
+| [`autopilot-full`](../packages/codex/skills/autopilot-full/SKILL.md) | Build and review a queue to merge-ready, or merge within existing authorization. | explicit | pstack core / host binding |
 | [`autopilot-stack`](../packages/codex/skills/autopilot-stack/SKILL.md) | Build and review a linear change stack; leave landing to the operator. | explicit | pstack core / host binding |
 | [`babysit`](../packages/codex/skills/babysit/SKILL.md) | Check or repair a pull request; require separate merge authorization. | explicit | pstack core / host binding |
 | [`benchmark-checklist`](../packages/codex/skills/benchmark-checklist/SKILL.md) | Vet performance measurements before reporting or acting on them. | explicit | pstack core / host binding |
@@ -45,6 +60,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`bro`](../packages/codex/skills/bro/SKILL.md) | Restate the last answer plainly without changing its meaning. | explicit | pstack core / host binding |
 | [`bug-fix`](../packages/codex/skills/bug-fix/SKILL.md) | Reproduce, fix, and independently verify a software defect. | automatic | pstack core / host binding |
 | [`correct`](../packages/codex/skills/correct/SKILL.md) | Prevent repeated repository mistakes with structural checks and failing proof. | explicit | pstack core / host binding |
+| [`create-formal-verification-skill`](../packages/codex/skills/create-formal-verification-skill/SKILL.md) | Create a project-local formal check and prove it catches a broken property. | explicit | pstack core / host binding |
 | [`create-verification-skill`](../packages/codex/skills/create-verification-skill/SKILL.md) | Create and exercise a project-local user-path verification Skill. | explicit | pstack core / host binding |
 | [`eval`](../packages/codex/skills/eval/SKILL.md) | Compare workflow variants with blinded outputs and a frozen rubric. | explicit | pstack core / host binding |
 | [`feature`](../packages/codex/skills/feature/SKILL.md) | Add or change behavior with design and end-to-end verification. | explicit | pstack core / host binding |
@@ -55,6 +71,7 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`interrogate`](../packages/codex/skills/interrogate/SKILL.md) | Review frozen inputs with independent reviewers and root judgment. | explicit | pstack core / host binding |
 | [`investigation`](../packages/codex/skills/investigation/SKILL.md) | Answer an engineering question from evidence without changing code. | explicit | pstack core / host binding |
 | [`ketchup`](../packages/codex/skills/ketchup/SKILL.md) | Catch up on this chat, current work status, and decisions waiting on you. | explicit | pstack core / host binding |
+| [`maintain-formal-verification-skill`](../packages/codex/skills/maintain-formal-verification-skill/SKILL.md) | Update formal verification after code changes and distinguish drift from bugs. | explicit | pstack core / host binding |
 | [`maintain-verification-skill`](../packages/codex/skills/maintain-verification-skill/SKILL.md) | Audit and update a verification Skill using source and live behavior. | explicit | pstack core / host binding |
 | [`make-bot-ui`](../packages/codex/skills/make-bot-ui/SKILL.md) | Build a local control page for an authenticated webhook. | explicit | pstack core / host binding |
 | [`multi-phase-plan`](../packages/codex/skills/multi-phase-plan/SKILL.md) | Write a dependency plan with verifiable units and live checks. | explicit | pstack core / host binding |
@@ -73,9 +90,10 @@ and [support policy](support-policy.md) for source and testing boundaries.
 | [`runtime-forensics`](../packages/codex/skills/runtime-forensics/SKILL.md) | Diagnose a live process using runtime evidence. | explicit | pstack core / host binding |
 | [`session-pickup`](../packages/codex/skills/session-pickup/SKILL.md) | Resume checkpointed work without repeating completed steps. | explicit | pstack core / host binding |
 | [`setup-oh-my-stack`](../packages/codex/skills/setup-oh-my-stack/SKILL.md) | Configure role models or optional Codex automatic routing. | explicit | pstack core / host binding |
-| [`sharpen`](../packages/codex/skills/sharpen/SKILL.md) | Frame a task around the user's goal, expert methods, and an outside check, then execute. | explicit | pstack core / host binding |
+| [`sharpen`](../packages/codex/skills/sharpen/SKILL.md) | Rewrite a task prompt using expert methods while preserving the user's choices. | explicit | pstack core / host binding |
 | [`shipping`](../packages/codex/skills/shipping/SKILL.md) | Land an explicitly authorized PR or stack after independent checks. | explicit | pstack core / host binding |
 | [`show-me-your-work`](../packages/codex/skills/show-me-your-work/SKILL.md) | Record an append-only decision trail for long or delegated work. | explicit | pstack core / host binding |
+| [`statechart`](../packages/codex/skills/statechart/SKILL.md) | Draw user-visible statecharts from TLA+ models and replay discovered bugs. | explicit | pstack core / host binding |
 | [`swarm`](../packages/codex/skills/swarm/SKILL.md) | Run bounded coverage or races, drain workers, and consolidate verified results. | explicit | pstack core / host binding |
 | [`tdd`](../packages/codex/skills/tdd/SKILL.md) | Use for requested TDD or cheap local regression tests; skip unclear or costly test paths. | explicit | pstack core / host binding |
 | [`teach`](../packages/codex/skills/teach/SKILL.md) | Explain mechanics and rationale plainly while preserving evidence and uncertainty. | explicit | pstack core / host binding |

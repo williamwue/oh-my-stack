@@ -7,7 +7,7 @@ Host adaptation. Read the installed package's [runtime binding](../../docs/runti
 
 # Blast radius
 
-Find what a change breaks somewhere else, before it ships. Use for "blast radius of X", "what could this break", or reviewing a small diff you don't trust yet.
+Find what a change breaks somewhere else, before it ships. Use for "blast radius of X", "what could this break", or reviewing a small diff you don't trust yet. When a brief asserts current-code behavior, run the consumer census and executable safe-because check before designing against that premise. Treat the assertion as a hypothesis. This trigger applies to asserted existing behavior and does not make Blast radius mandatory for every task.
 
 Companion to `how` and `why`. `how` tells you what the code does. `why` tells you why it's shaped that way. Blast radius tells you what it breaks somewhere else.
 

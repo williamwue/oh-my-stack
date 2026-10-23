@@ -876,10 +876,32 @@ function renderPiRole(role) {
     instructions: role.instructions.trim() }, null, 2) + "\n";
 }
 
+export function renderSkillNavigation(names, skillRoot) {
+  const available = new Set(names);
+  const groups = [
+    ["Start and setup", ["poteto-help", "poteto-mode", "oms-auto", "setup-oh-my-stack"]],
+    ["Plan and design", ["multi-phase-plan", "architect", "grilling"]],
+    ["Build and fix", ["feature", "bug-fix", "tdd", "perf-issue"]],
+    ["Review and prove", ["interrogate", "swarm", "code-review", "create-verification-skill"]],
+    ["Deliver", ["opening-a-pr", "babysit", "shipping", "autopilot-full", "autopilot-stack"]],
+    ["Resume and status", ["pause-safely", "session-pickup", "ketchup", "recall"]],
+  ];
+  const link = (name) => `[\`${name}\`](${skillRoot}/${name}/SKILL.md)`;
+  const lines = ["## Skill navigation", "", "Choose the task group, then read the selected Skill. Use the full catalog for other workflows.", ""];
+  for (const [title, members] of groups) {
+    const selected = members.filter((name) => available.has(name));
+    if (selected.length) lines.push(`- **${title}:** ${selected.map(link).join(", ")}.`);
+  }
+  const principles = [...available].filter((name) => name.startsWith("principle-")).sort();
+  if (principles.length) lines.push("", `**Principles (${principles.length}, read as needed):** ${principles.map(link).join(", ")}.`);
+  lines.push("", "This is a documentation index. Invocation metadata and the host's native picker remain authoritative.", "");
+  return lines.join("\n");
+}
+
 function portableHelperGuide() {
   return [
     "## Portable plan checker", "",
-    "The dependency-free Node helper `skills/poteto-mode/scripts/check-plan.mjs` is supported on this native host.",
+    "The self-contained Node helper `skills/poteto-mode/scripts/check-plan.mjs` is supported on this native host. No runtime installation is required.",
     "Resolve `<installed-package-root>` from the installed package that supplied this guide. Keep the project as the working directory.",
     'Run `node "<installed-package-root>/skills/poteto-mode/scripts/check-plan.mjs" "/absolute/path/plan.md"`.',
     "The checker exits 0 for a valid plan, 1 for plan problems, and 2 when the plan argument is missing.",
@@ -888,28 +910,43 @@ function portableHelperGuide() {
     "Relative to `skills/poteto-mode/playbooks/multi-phase-plan.md`, it is `../scripts/check-plan.mjs`.",
     "Relative to the public `skills/multi-phase-plan/SKILL.md` or `WORKFLOW.md`, it is `../poteto-mode/scripts/check-plan.mjs`.",
     "These paths are relative to the named document, not the project working directory. Resolve them before invoking Node.", "",
+    "## Statechart helper", "",
+    'Run `node "<installed-package-root>/skills/statechart/scripts/statechart.mjs" --help` for the official commands and exit codes.',
+    "The portable Node scripts support from-spec and from-chart. Use a scratch folder and explicit absolute input and output paths.",
+    "TLC execution requires a separately installed TLA2TOOLS JAR and Java through the documented TLA2TOOLS and JAVA settings.",
+    "PNG rendering additionally requires mermaid-cli and a working browser. Missing tools are unavailable checks, not successful verification.", "",
     "Other source-host helpers under a Skill's scripts directory remain reference-only unless this binding documents their exact native execution.",
     "Cursor watch-pr, orchestration, and worktree helpers have no execution mapping in this native binding.", "",
     "## Read-only worktree audit", "",
     'The OMS-owned helper supports `node "<installed-package-root>/scripts/worktree-audit.mjs" scan --cwd PATH` and `assess --scan FILE --evidence FILE`.',
+    "Add `--format text` to assess for readable verdicts and reasons; JSON remains the default evidence format.",
     "Read [the evidence contract](worktree-audit.md) before collecting supported host evidence. Missing activity, pinned-thread, child-task or process coverage remains unresolved.",
     "The helper rechecks local Git identities and status. A candidate is advisory and does not authorize deletion.", "",
   ].join("\n");
 }
 
 function runtimeBindingGuide(runtime) {
-  const binding = runtime === "pi" ? "Use the native oms_delegate tool: start a named route/member with explicit task, cwd and context; collect the returned handle until terminal; cancel owned running handles. For a canonical role named by a playbook, use route role.NAME, member 1: poteto-agent maps to role.poteto-agent and comment-sicko maps to role.comment-sicko. Read-only roles receive read,grep,find,ls. Writing roles require an explicit isolated checkout. Native CLI/RPC uses explicit provider/model/thinking and host login. Missing selectors fail; observed model and effort remain unknown unless independently returned."
+  const binding = runtime === "pi" ? "Use the native oms_delegate tool: start a named route/member with explicit task, cwd and context; collect the returned handle until terminal; cancel owned running handles. Use action list for owned activity/session metadata without output; collect returns the bounded output. Sessions stay ephemeral unless start explicitly supplies an existing absolute sessionDir. For a canonical role named by a playbook, use route role.NAME, member 1: poteto-agent maps to role.poteto-agent and comment-sicko maps to role.comment-sicko. Read-only roles receive read,grep,find,ls. Writing roles require an explicit isolated checkout. Native CLI/RPC uses explicit provider/model/thinking and host login. Missing selectors fail; observed model and effort remain unknown unless independently returned."
     : runtime === "codex" ? "Prepare each worker with scripts/codex-delegation.mjs and pass its model, reasoning_effort, task_name, fork_turns=none and full role/task message to the native spawn tool. Resolve saved configuration with scripts/model-resolution.mjs. Verify observed routing from native records when available."
       : runtime === "omp" ? "Resolve scripts/model-resolution.mjs --runtime omp --cwd WORKSPACE. Select the manifest role/route agent with the native task tool, preserve panel membership and order, and collect each returned task handle. Use the current host cancellation and return tools."
-        : "Use the native Agent tool with the configured agent role/model. Preserve the workflow's specified worker count and order; distinguish requested model/effort from observed execution. Record unavailable cancellation or effort evidence explicitly.";
+        : "Prepare native Agent calls with scripts/claude-delegation.mjs using the configured agent role/model and captured native capabilities. Read docs/claude-delegation.md for per-call effort, environment precedence and correlated evidence. Preserve the workflow's specified worker count and order; distinguish requested model/effort from observed execution. Record unavailable cancellation or effort evidence explicitly.";
   const helpers = runtime === "codex" ? "The native bounded GitHub helpers scripts/github-workflow.mjs, scripts/github-autopilot-provider.mjs and scripts/durable-run-state.mjs support only their documented single-PR operations and gates. Read docs/github-workflow.md before invoking them." : "";
-  return `# ${runtime} runtime binding\n\n${binding}\n\n${portableHelperGuide()}\n${helpers ? `${helpers}\n\n` : ""}Role contracts preserve upstream task semantics. Follow the selected workflow's stages and review standard. Delegate the workers that workflow calls for. Host authorization and available tool contracts continue to apply.\n`;
+  return `# ${runtime} runtime binding\n\n${binding}\n\n${portableHelperGuide()}${runtime === "claude-code" ? `
+## Locate the current native transcript
+
+Prefer the transcript path supplied by the host. Otherwise run \`node "<installed-package-root>/scripts/claude-transcript-location.mjs"\` with the native CLAUDE_CODE_SESSION_ID and optional CLAUDE_CONFIG_DIR.
+The helper returns JSON and reads directory and file metadata only. Exit 0 means a file was located; it does not prove its contents or the work. Exit 1 means unavailable or ambiguous; exit 2 means invalid input.
+Use \`--transcript ABSOLUTE_PATH\` for an explicit host path and \`--session-id ID\` to constrain it. Missing or multiple matches must stay unresolved; do not substitute cwd-derived chats.
+Read [native transcript evidence](claude-transcripts.md) for scope and limitations.
+` : ""}\n${helpers ? `${helpers}\n\n` : ""}Role contracts preserve upstream task semantics. Follow the selected workflow's stages and review standard. Delegate the workers that workflow calls for. Host authorization and available tool contracts continue to apply.\n`;
 }
 
 function modelSelectionGuide(runtime) {
-  const roots = runtime === "pi" ? "~/.pi/agent and project .pi" : runtime === "omp" ? "~/.omp/agent and project .omp" : runtime === "codex" ? "~/.codex and project .codex" : "~/.claude (or CLAUDE_CONFIG_DIR) and project .claude";
+  const roots = runtime === "pi" ? "PI_CODING_AGENT_DIR (default ~/.pi/agent) and project .pi" : runtime === "omp" ? "~/.omp/agent and project .omp" : runtime === "codex" ? "CODEX_HOME (default ~/.codex) and project .codex" : "~/.claude (or CLAUDE_CONFIG_DIR) and project .claude";
   const taskAdjustment = runtime === "codex"
     ? "Use scripts/codex-delegation.mjs prepare --job-context JOB.json --inventory INVENTORY.json. JOB.json contains kind hardest, judgment, routine, or verification and optional boolean urgent. Read audit.taskSelection for configured, selected, and requested values. Without a fresh inventory only the saved entry is available. After a confirmed host rejection of the adjusted choice, supply --rejected-adjustment REJECTION.json with the attempted model, reasoning, and host reason. Keep the full prepared request and supply --rejected-prepared-request REQUEST.json with the rejection when the inventory has changed or is omitted. The helper validates the captured request before restoring the original role line. Retry audit.taskSelection retains the captured inventory evidence; currentInventory fields record the refreshed compatibility catalog or null when omitted. The host authenticates rejection evidence. The native spawn request has no speed selector, so the helper audits requested speed without emitting an invented field."
+    : runtime === "claude-code"
+      ? "Use scripts/claude-delegation.mjs prepare --input REQUEST.json for native Agent requests. Supply a captured Claude Code version, advertised subagent types, and model IDs mapped to native selectors and supported reasoningEfforts. Native per-call effort requires version 2.1.292 or later. The helper preserves subagent_type and passes effort directly; environment CLAUDE_CODE_EFFORT_LEVEL takes precedence. Keep the complete prepared result. After an actual adjusted-effort rejection, supply rejectedAdjustment and that result as rejectedPreparedRequest; captured capabilities validate the original request and current capabilities validate the restored selection. Verify the actual dispatch and child-ID-correlated hook record using the verify command; preparation never proves effective effort. Read docs/claude-delegation.md. T3 bindings use target.options instead."
     : "For each task, inspect the native host's current typed model and effort catalog. Use the host's documented selection controls for supported adjustments. A generated agent file alone does not implement per-task overrides. If the native call cannot override a setting, report that limitation and use the saved role line. Use a speed selector only when the live host advertises it. Otherwise report speed as unsupported. After an adjusted choice is rejected, retry the original role line once and report the rejection. Do not guess another model ID.";
   return `# Model selection\n\nCollect a current inventory with scripts/collect-model-inventory.mjs --runtime ${runtime}. Review every model and effort before scripts/configure-models.mjs --apply. Preview is the default; --output writes only a detached destination. Native scope is ${roots}. scripts/model-resolution.mjs resolves nearest project first, then user configuration; each host owns an independent manifest. Fresh panels contain two entries. Same-target/same-preset reruns preserve saved membership, order, model and effort unless an explicit change requests otherwise. Missing observed model/effort selectors fail. Configuration artifacts do not prove native routing.\n\nSaved personal configuration is the starting budget. Task selection does not rewrite it. Keep the configured model and family, panel membership, and order. Use only effort alternatives in the observed host inventory. Hardest work raises effort one supported level, capped at max or the highest advertised level below max. An explicitly saved effort above max remains unchanged. Judgment lowers it one level. Routine work lowers it two levels or to the lowest supported value. Verification keeps the configured model, effort, and speed. Other tasks request standard speed unless urgency calls for fast. Inherit-parent and auto aliases stay unchanged. Record the original role line, task choice, and any rejected adjustment. Requested settings do not prove backend enforcement.\n\n${taskAdjustment}\n`;
 }
@@ -1055,7 +1092,7 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
 
   const routes = targetRoutes(model, adapter);
   if (t3) await writeJson(join(target, "config", "t3-role-contracts.json"), t3RoleContracts(model, adapter, routes));
-  if (["codex", "pi"].includes(adapter.id)) {
+  if (["codex", "pi", "claude-code"].includes(adapter.id)) {
     await writeJson(join(target, "config", "role-contracts.json"), {
       schemaVersion: 1,
       target: adapter.id,
@@ -1107,7 +1144,8 @@ export async function renderTarget(stageRoot, model, adapter, { includeProbes = 
       }] }] },
     });
   }
-  await writeText(join(target, "docs", "runtime-binding.md"), t3 ? t3RuntimeBindingGuide(adapter.id) : runtimeBindingGuide(adapter.id));
+  const navigation = renderSkillNavigation(skills.map((skill) => skill.metadata.name), "../skills");
+  await writeText(join(target, "docs", "runtime-binding.md"), `${t3 ? t3RuntimeBindingGuide(adapter.id) : runtimeBindingGuide(adapter.id)}\n${navigation}`);
   await writeText(join(target, "docs", "model-selection.md"), t3 ? t3ModelSelectionGuide() : modelSelectionGuide(adapter.id));
 
   await writeJson(join(target, "GENERATION.json"), {
@@ -1210,7 +1248,7 @@ export async function validateRenderedTarget(target, adapter, model, { includePr
     const contracts = await readJson(join(target, "config", "t3-role-contracts.json"));
     assert(JSON.stringify(contracts) === JSON.stringify(t3RoleContracts(model, adapter, targetRoutes(model, adapter))),
       `${adapter.id}: T3 role contracts drift`);
-    for (const [name, expected] of [["runtime-binding.md", t3RuntimeBindingGuide(adapter.id)], ["model-selection.md", t3ModelSelectionGuide()]]) {
+    for (const [name, expected] of [["runtime-binding.md", `${t3RuntimeBindingGuide(adapter.id)}\n${renderSkillNavigation(skills.map((skill) => skill.metadata.name), "../skills")}`], ["model-selection.md", t3ModelSelectionGuide()]]) {
       assert(await readFile(join(target, "docs", name), "utf8") === expected, `${adapter.id}: T3 ${name} drift`);
     }
     for (const skill of skills.filter((entry) => !entry.source)) {

@@ -6,7 +6,7 @@
 
 pstack 工程工作流，移植到 Codex 和 Claude Code。
 
-0.19.0 源码候选以固定的 pstack 0.15.25 为准，并提供独立 Pi 与 OMP 适配；
+0.20.0 源码候选以固定的 pstack 0.15.30 为准，并提供独立 Pi 与 OMP 适配；
 自动路由随默认包提供。交付证据、附加工具和 AIHero 通过[显式扩展](docs/pstack-parity.md)加入。
 现有安装版本可能不同。
 

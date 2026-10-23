@@ -1,5 +1,8 @@
 // Short discovery metadata; complete workflow instructions remain in SKILL.md.
 export const codexSkillDescriptions = {
+  "create-formal-verification-skill": "Create a project-local formal check and prove it catches a broken property.",
+  "maintain-formal-verification-skill": "Update formal verification after code changes and distinguish drift from bugs.",
+  "statechart": "Draw user-visible statecharts from TLA+ models and replay discovered bugs.",
   "authoring-a-skill": "Create or revise a scoped Skill and check its behavior.",
   "automate-me": "Capture a user's recurring work conventions in a personal Skill.",
   "blast-radius": "Prove the safety assumptions and downstream risks of a change.",
@@ -9,7 +12,7 @@ export const codexSkillDescriptions = {
   "figure-it-out": "Plan and verify a complex task with an auditable decision trail.",
   "hillclimb": "Improve one metric through bounded measured attempts.",
   "in-your-own-words": "Restate the user's goal and problem before work starts.",
-  "sharpen": "Frame a task around the user's goal, expert methods, and an outside check, then execute.",
+  "sharpen": "Rewrite a task prompt using expert methods while preserving the user's choices.",
   "ketchup": "Catch up on this chat, current work status, and decisions waiting on you.",
   "maintain-verification-skill": "Audit and update a verification Skill using source and live behavior.",
   "make-bot-ui": "Build a local control page for an authenticated webhook.",
@@ -29,7 +32,7 @@ export const codexSkillDescriptions = {
   "teach": "Explain mechanics and rationale plainly while preserving evidence and uncertainty.",
   "why": "Investigate design rationale using cited history and available evidence sources.",
   "autonomous-run": "Run a bounded task until its completion condition is verified.",
-  "autopilot-full": "Build, review, and land a queue only with explicit authorization.",
+  "autopilot-full": "Build and review a queue to merge-ready, or merge within existing authorization.",
   "autopilot-stack": "Build and review a linear change stack; leave landing to the operator.",
   "babysit": "Check or repair a pull request; require separate merge authorization.",
   "bug-fix": "Reproduce, fix, and independently verify a software defect.",

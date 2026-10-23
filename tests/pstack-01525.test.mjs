@@ -22,7 +22,7 @@ async function paths(directory, prefix = "") {
   return result.sort();
 }
 
-test("the active 0.15.25 snapshot matches every official Git blob and retains all 0.15.23 bytes", async () => {
+test("the historical 0.15.25 snapshot retains its official blobs after advancing the active pin", async () => {
   assert.equal(receipt.repository, "https://github.com/cursor/plugins");
   assert.equal(receipt.revision, "99743e9c151c8537cbbf1f98bb38f34ef3368453");
   assert.equal(receipt.tree, "3b74ce7f478b3c2d4f6fd9c70a5d39f8664dc862");
@@ -40,8 +40,8 @@ test("the active 0.15.25 snapshot matches every official Git blob and retains al
   }
   for (const path of [".cursor-plugin/plugin.json", "plugin.json"])
     assert.equal((await json(`${receipt.sourceRoot}/${path}`)).version, "0.15.25");
-  assert.equal(manifest.revision, receipt.revision);
-  assert.equal(manifest.sourceRoot, receipt.sourceRoot);
+  assert.equal(manifest.revision, "4ec7ffa173eaa70d3d9467a627baf0954645a353");
+  assert.notEqual(manifest.sourceRoot, receipt.sourceRoot);
   assert.equal(receipt.previousRevision, previous.revision);
   const before = new Map(previous.files.map(file => [file.path, file.sha256]));
   const after = new Map(receipt.files.map(file => [file.path, file.sha256]));
@@ -51,14 +51,14 @@ test("the active 0.15.25 snapshot matches every official Git blob and retains al
     added: ["skills/sharpen/SKILL.md"], deleted: [],
   });
   assert.equal(receipt.delta.modified.length, 19);
-  assert.equal((await derivePstack({ root, check: true })).entries, 167);
+  assert.equal((await derivePstack({ root, check: true })).entries, 181);
 });
 
-test("sharpen preserves the official task execution and outside-check contract on all native targets", async () => {
-  const official = await read(`${receipt.sourceRoot}/skills/sharpen/SKILL.md`);
+test("sharpen preserves the current official prompt-only contract on all native targets", async () => {
+  const official = await read(`${manifest.sourceRoot}/skills/sharpen/SKILL.md`);
   const body = official.slice(official.indexOf("\n---\n") + 5);
-  assert.match(official, /always keep one outside check that the result is right/);
-  assert.match(official, /then do the work\. Don't hand back a rewritten prompt/);
+  assert.match(official, /other than you or me, would show the result is right/);
+  assert.match(official, /Then rewrite my prompt/);
   assert.equal((await json("src/core/skills/sharpen/skill.json")).invocation, "explicit");
   assert.ok((await json("src/core/skill-catalog.json")).public.includes("sharpen"));
   assert.ok((await read("src/core/skills/sharpen/SKILL.md")).endsWith(body));
@@ -78,12 +78,24 @@ test("official principle rewrites and concise review guidance survive exact deri
   for (const name of ["principle-attack-the-premise", "principle-fix-root-causes", "principle-make-operations-idempotent", "principle-test-behavior-not-implementation", "principle-type-system-discipline", "principle-migrate-callers-then-delete-legacy-apis"]) {
     const source = await read(`${receipt.sourceRoot}/skills/${name}/SKILL.md`);
     const body = source.slice(source.indexOf("\n---\n") + 5);
-    assert.ok((await read(`src/core/skills/${name}/SKILL.md`)).endsWith(body), name);
+    const output = `src/core/skills/${name}/SKILL.md`;
+    const current = await read(output);
+    if (name === "principle-test-behavior-not-implementation") {
+      const entry = manifest.entries.find(entry => entry.output === output);
+      const policies = entry.replacements.filter(replacement => replacement.category === "policy");
+      assert.deepEqual(policies.map(replacement => replacement.adoptionId), ["documented-public-test-promises"]);
+      const registry = await json("upstream/reference-adoptions.json");
+      const adoption = registry.adoptions.find(adoption => adoption.id === policies[0].adoptionId);
+      assert.equal(adoption.kind, "policy"); assert.equal(adoption.decision, "adapted");
+      assert.ok(adoption.derivations.includes(output));
+      assert.ok(current.includes(body.trim()), "the public-promise clarification preserves the complete official principle");
+      await derivePstack({ check: true });
+    } else assert.ok(current.endsWith(body), name);
   }
   assert.equal(await read("src/core/skills/interrogate/references/lead-judgment.md"), await read(`${receipt.sourceRoot}/skills/interrogate/references/lead-judgment.md`));
   const ketchup = await read("src/core/skills/ketchup/SKILL.md");
-  assert.match(ketchup, /under 150 words, not counting visuals/);
-  assert.match(ketchup, /list the action items as plain bullets/);
+  assert.match(ketchup, /Never cut items or shrink them to stay under a word count/);
+  assert.match(ketchup, /Give each item.s risk even when it is low/);
   assert.match(ketchup, /Never invent a number/);
   for (const name of ["autopilot-full", "autopilot-stack"])
     assert.match(await read(`src/core/skills/${name}/SKILL.md`), /catch the operator up per the \*\*ketchup\*\* skill/);

@@ -4,6 +4,13 @@
   "scenario": "behavior-preserving-refactor",
   "profile": "omp-default",
   "sourceEvidence": "evals/evidence/omp-18.2.6/refactoring-routing.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "223ee8e2dfdb5117d765705a3d95c7887567087dade7cfd6685c7518195aebff",
+    "fixtureRevision": "f5582b948a3fad3bb275d98fe134b56705e4f9a6428880b985391e282b302f02"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "omp",

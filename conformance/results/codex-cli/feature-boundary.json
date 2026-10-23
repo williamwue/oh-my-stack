@@ -4,6 +4,13 @@
   "scenario": "feature-boundary",
   "profile": "codex-cli",
   "sourceEvidence": "evals/evidence/codex-cli-0.155.1/feature-routing.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "bfc323ba7aeb6fd43cd702513686a9f7c787da2c0bdba6845981d9679d3122a6",
+    "fixtureRevision": "4b348555d619387a6ea2183bebcb55e2b59829b43ce8791ecc96848fe80fe2ee"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "codex",

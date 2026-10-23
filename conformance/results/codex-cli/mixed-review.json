@@ -4,6 +4,13 @@
   "scenario": "mixed-review",
   "profile": "codex-cli",
   "sourceEvidence": "evals/evidence/codex-cli-0.155.1/mixed-review.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "4f0c5fcfc9d85f64ba9b8ea3ad5d97d330097e77f1791e1f9a8660c9a9a26d56",
+    "fixtureRevision": "206c9a2e8c86a0fe8a60e55a0103e19383d786aca1d4e59bd7e4cb2cbbb71514"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "codex",

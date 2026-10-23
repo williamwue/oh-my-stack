@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 import { createArchive, packageInventory, sha256 } from "./release-lib.mjs";
+import { buildConformance } from "./build-conformance.mjs";
 
 const execFileAsync = promisify(execFile);
 export const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -179,6 +180,7 @@ async function buildClaudeMarketplaceBundle({ root, out, project, bundle }) {
 }
 
 export async function buildRelease({ root = repoRoot, out, tag = null }) {
+  await buildConformance({ root, check: true });
   const project = JSON.parse(await readFile(join(root, "src/core/project.json"), "utf8"));
   const config = JSON.parse(await readFile(join(root, "src/packaging/release.json"), "utf8"));
   if (config.schemaVersion !== 1 || config.archiveRoot !== project.name) throw new Error("invalid release configuration");

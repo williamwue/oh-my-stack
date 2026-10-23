@@ -1,7 +1,7 @@
 import { execFile, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { readFile, realpath, stat } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { EventEmitter } from 'node:events';
 import { promisify } from 'node:util';
@@ -19,7 +19,9 @@ const isRpcModel = value => isRecord(value) && isText(value.provider) && isText(
   && (value.api === undefined || isText(value.api));
 const responseShapes = {
   get_available_models: data => isRecord(data) && Array.isArray(data.models) && data.models.every(isRpcModel),
-  get_state: data => isRecord(data) && isRpcModel(data.model) && isText(data.thinkingLevel),
+  get_state: data => isRecord(data) && isRpcModel(data.model) && isText(data.thinkingLevel)
+    && (data.sessionId === undefined || isText(data.sessionId) && data.sessionId.length <= 256)
+    && (data.sessionFile === undefined || typeof data.sessionFile === 'string' && data.sessionFile.length <= 4096),
   get_available_thinking_levels: data => isRecord(data) && Array.isArray(data.levels) && data.levels.every(isText),
   prompt: data => isRecord(data) && isText(data.disposition),
 };
@@ -30,6 +32,10 @@ function validRpcMessage(message) {
       && (message.error === undefined || typeof message.error === 'string')
       && (!message.success || !Object.hasOwn(responseShapes, message.command) || responseShapes[message.command](message.data));
   }
+  if (message.type === 'tool_execution_start') return isText(message.toolCallId) && isText(message.toolName)
+    && message.toolCallId.length <= 256 && message.toolName.length <= 256;
+  if (message.type === 'tool_execution_end') return isText(message.toolCallId) && message.toolCallId.length <= 256
+    && (message.toolName === undefined || isText(message.toolName) && message.toolName.length <= 256);
   if (message.type === 'message_end') {
     const assistant = message.message;
     if (!isRecord(assistant) || !isText(assistant.role)) return false;
@@ -58,10 +64,12 @@ export function binaryVector(binary = process.env.OMS_PI_CLI
 }
 
 export function createPiRpcConnection({ binary, cwd, args = [], signal, timeoutMs = 20000,
-  outputLimitBytes = 1048576, env = process.env } = {}) {
+  outputLimitBytes = 1048576, env = process.env, sessionDir } = {}) {
   if (signal?.aborted) throw abortError();
+  if (sessionDir !== undefined && (typeof sessionDir !== 'string' || !isAbsolute(sessionDir))) throw new Error('Pi sessionDir must be an absolute directory');
   const vector = binaryVector(binary);
-  const child = spawn(vector.command, [...vector.args, ...PI_ISOLATION_ARGS, ...args], {
+  const isolation = sessionDir === undefined ? PI_ISOLATION_ARGS : PI_ISOLATION_ARGS.filter(arg => arg !== '--no-session');
+  const child = spawn(vector.command, [...vector.args, ...isolation, ...(sessionDir ? ['--session-dir', sessionDir] : []), ...args], {
     cwd, env, shell: false, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'],
   });
   const events = new EventEmitter();
@@ -200,6 +208,7 @@ async function gitWorktreeRoot(cwd, label, signal, timeoutMs) {
 }
 const snapshot = task => structuredClone({ id: task.id, status: task.status, route: task.route, member: task.member,
   role: task.role, requested: task.requested, selected: task.selected, observed: task.observed,
+  cwd: task.cwd, session: task.session, activity: task.activity,
   output: task.output, outputTruncated: task.outputTruncated === true, error: task.error, pid: task.connection?.pid ?? null });
 
 export function createPiDelegationManager({ binary, packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..'),
@@ -221,6 +230,9 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
     if (params.context != null && (typeof params.context !== 'string' || params.context.length > 65536)) throw new Error('Pi context must be a bounded string or explicit file pointers');
     const cwd = await realpath(resolve(params.cwd ?? context.cwd ?? process.cwd()));
     if (!(await stat(cwd)).isDirectory()) throw new Error('Pi cwd must be a directory');
+    if (params.sessionDir !== undefined && (typeof params.sessionDir !== 'string' || !isAbsolute(params.sessionDir))) throw new Error('Pi sessionDir must be an existing absolute directory');
+    const sessionDir = params.sessionDir === undefined ? undefined : await realpath(params.sessionDir);
+    if (sessionDir && !(await stat(sessionDir)).isDirectory()) throw new Error('Pi sessionDir must be an existing absolute directory');
     const resolution = await active(cwd);
     const manifest = resolution?.manifest;
     if (!manifest || manifest.target !== 'pi') throw new Error('Pi has no active Pi model resolution; run model setup first');
@@ -262,11 +274,13 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
     const combined = AbortSignal.any([lifetime.signal, controller.signal, ...(context.signal ? [context.signal] : [])]);
     const task = { id: randomUUID(), route: params.route, member, role: roleName, status: 'running',
       requested, selected: { model: selectedModel, thinking: selectedThinking },
-      observed: { model: null, thinking: null }, output: '', error: null, controller, writingWorktree };
+      observed: { model: null, thinking: null }, cwd, session: { id: null, file: null, persistence: sessionDir ? 'requested' : 'disabled', source: 'unobserved' },
+      activity: { phase: 'starting', at: new Date().toISOString(), tool: null, messages: 0, toolCalls: 0 },
+      output: '', error: null, controller, writingWorktree };
     if (combined.aborted) throw abortError();
     if (tasks.size >= maxTasks || [...tasks.values()].filter(item => item.status === 'running').length >= maxActiveTasks) throw new Error('Pi task capacity reached');
     if (writingWorktree && [...tasks.values()].some(item => item.status === 'running' && item.writingWorktree === writingWorktree)) throw new Error('Pi Git worktree already has an active writer');
-    const connection = connectionFactory({ binary, cwd, env, signal: combined, timeoutMs,
+    const connection = connectionFactory({ binary, cwd, env, sessionDir, signal: combined, timeoutMs,
       args: ['--provider', chosen.provider, '--model', chosen.id, '--thinking', selectedThinking,
         '--tools', role.writes ? 'read,grep,find,ls,bash,edit,write' : 'read,grep,find,ls',
         '--system-prompt', systemPrompt] });
@@ -276,13 +290,37 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
     let resolveSettled;
     const completion = new Promise(resolvePromise => { resolveSettled = resolvePromise; });
     const fail = error => { task.error ??= error.message; resolveSettled(); };
+    const note = change => {
+      task.activity = { ...task.activity, ...change, at: new Date().toISOString() };
+      context.onUpdate?.(snapshot(task));
+    };
+    const observeSession = state => {
+      if (task.session.id && state.sessionId && task.session.id !== state.sessionId) throw new Error('Pi native session identity changed');
+      const file = typeof state.sessionFile === 'string' && isAbsolute(state.sessionFile) && state.sessionFile.endsWith('.jsonl') ? state.sessionFile : null;
+      if (file) {
+        const difference = sessionDir ? relative(sessionDir, file) : null;
+        if (!sessionDir || !difference || isAbsolute(difference) || difference === '..' || difference.startsWith(`..${sep}`)) {
+          throw new Error('Pi session file is outside the selected persistence directory');
+        }
+        if (task.session.file && task.session.file !== file) throw new Error('Pi native session file changed');
+      }
+      task.session = { ...task.session, id: state.sessionId ?? task.session.id,
+        file: file ?? task.session.file, source: 'native-get-state' };
+    };
     const onEvent = message => {
+      if (message.type === 'agent_start' || message.type === 'turn_start') note({ phase: 'running' });
+      if (message.type === 'tool_execution_start') note({ phase: 'tool',
+        tool: { id: message.toolCallId, name: message.toolName, running: true }, toolCalls: task.activity.toolCalls + 1 });
+      if (message.type === 'tool_execution_end' && task.activity.tool?.id === message.toolCallId) {
+        note({ phase: 'running', tool: { ...task.activity.tool, running: false } });
+      }
       if (message.type === 'auto_retry_start' || message.type === 'auto_compaction_start') {
         fail(new Error(`Pi attempted ${message.type}; OMS permits no hidden retry or compaction`));
         connection.terminate(new Error(task.error));
       }
       if (message.type === 'message_end' && message.message?.role === 'assistant') {
         const assistant = message.message;
+        note({ phase: 'running', messages: task.activity.messages + 1 });
         task.observed.model = assistant.provider && assistant.model ? `${assistant.provider}/${assistant.model}` : task.observed.model;
         const text = assistant.content.filter(item => item.type === 'text').map(item => item.text).join('\n');
         const output = `${task.output}${task.output ? '\n' : ''}${text}`;
@@ -291,7 +329,7 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
         if (task.observed.model !== selectedModel) fail(new Error('Pi response model differs from the configured physical model'));
         if (assistant.stopReason === 'error' || assistant.stopReason === 'aborted') fail(new Error(assistant.errorMessage?.slice(0, 1024) ?? `Pi assistant ${assistant.stopReason}`));
       }
-      if (message.type === 'agent_settled') { settled = true; resolveSettled(); }
+      if (message.type === 'agent_settled') { settled = true; note({ phase: 'settled' }); resolveSettled(); }
     };
     connection.events.on('event', onEvent);
     connection.events.on('failure', fail);
@@ -306,6 +344,7 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
         if (!advertised) throw new Error(`Pi native CLI does not advertise ${selectedModel}; extension-only providers and virtual routes are unsupported`);
         if (advertised.api === 'pi-virtual') throw new Error('Pi unverified virtual routes are unsupported; choose an advertised physical model');
         const state = await connection.request('get_state');
+        observeSession(state);
         task.observed = { model: modelId(state?.model), thinking: state?.thinkingLevel ?? null };
         if (task.observed.model !== selectedModel || task.observed.thinking !== selectedThinking) throw new Error('Pi native model/thinking selection differs from requested route');
         const levels = await connection.request('get_available_thinking_levels');
@@ -313,6 +352,7 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
         const accepted = await connection.request('prompt', { message: `${params.task}${params.context ? `\n\nExplicit context:\n${params.context}` : ''}` });
         if (accepted?.disposition !== 'started') throw new Error(`Pi prompt did not start: ${accepted?.disposition ?? 'unknown'}`);
         await completion;
+        if (sessionDir && settled && !task.error && !combined.aborted) observeSession(await connection.request('get_state'));
       } catch (error) { fail(error); }
       finally {
         clearTimeout(timer);
@@ -320,6 +360,8 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
         const exit = await connection.stop();
         task.status = combined.aborted ? 'cancelled' : task.error || exit.failure || exit.code !== 0 || !settled ? 'failed' : 'completed';
         task.error ??= exit.failure ?? (task.status === 'failed' ? 'Pi did not complete successfully' : null);
+        task.activity = { ...task.activity, phase: task.status, at: new Date().toISOString(),
+          tool: task.activity.tool ? { ...task.activity.tool, running: false } : null };
         connection.events.removeListener('event', onEvent);
         connection.events.removeListener('failure', fail);
         context.onUpdate?.(snapshot(task));
@@ -346,10 +388,12 @@ export function createPiDelegationManager({ binary, packageRoot = resolve(dirnam
         try { return await Promise.race([start(params, { ...context, signal }), interrupted]); }
         finally { clearTimeout(timer); signal.removeEventListener('abort', onAbort); }
       }
+      if (params.action === 'list') return { active: [...tasks.values()].filter(task => task.status === 'running').length,
+        tasks: [...tasks.values()].map(task => { const { output, outputTruncated, ...summary } = snapshot(task); return summary; }) };
       const task = tasks.get(params.id);
       if (!task) throw new Error('unknown Pi task id');
       if (params.action === 'cancel') { task.controller.abort(); await task.done; return snapshot(task); }
-      if (params.action !== 'collect') throw new Error('Pi action must be start, collect or cancel');
+      if (params.action !== 'collect') throw new Error('Pi action must be start, list, collect or cancel');
       if (params.wait === true) {
         if (context.signal?.aborted) { task.controller.abort(); await task.done; return snapshot(task); }
         const abort = () => task.controller.abort();

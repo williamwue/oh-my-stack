@@ -56,6 +56,121 @@ async function assess(f, change = () => {}) {
   return { scan, evidence, report: await assessWorktrees({ scan, evidence }) };
 }
 
+async function privateCommit(f, reset = false) {
+  if (!reset) git(f.feature, 'checkout', '--detach');
+  git(f.feature, 'commit', '--allow-empty', '-m', 'private work');
+  const commit = git(f.feature, 'rev-parse', 'HEAD');
+  if (reset) git(f.feature, 'reset', '--hard', f.head);
+  else git(f.feature, 'checkout', 'task');
+  return commit;
+}
+
+for (const reset of [false, true]) {
+  test(`${reset ? 'reset-away' : 'detached'} commits kept only by the linked HEAD reflog hold`, async (t) => {
+    const f = await fixture(t), commit = await privateCommit(f, reset);
+    if (reset) git(f.feature, 'reflog', 'expire', '--expire=all', 'refs/heads/task');
+    assert.equal(git(f.main, 'branch', '--all', '--contains', commit), '');
+    assert(git(f.feature, 'reflog', '--format=%H', 'HEAD').split('\n').includes(commit));
+    const row = resultRow((await assess(f)).report, f);
+    assert.equal(row.verdict, 'hold');
+    assert(hasCode(row, 'HEAD_REFLOG_ONLY_COMMITS'));
+  });
+}
+
+test('the old endpoint of a HEAD reflog entry also preserves private commits', async (t) => {
+  const f = await fixture(t), commit = await privateCommit(f);
+  const log = join(git(f.feature, 'rev-parse', '--absolute-git-dir'), 'logs', 'HEAD');
+  const last = (await readFile(log, 'utf8')).trimEnd().split('\n').at(-1);
+  await writeFile(log, `${last}\n`);
+  assert(!git(f.feature, 'reflog', '--format=%H', 'HEAD').split('\n').includes(commit));
+  const row = resultRow((await assess(f)).report, f);
+  assert.equal(row.verdict, 'hold'); assert(hasCode(row, 'HEAD_REFLOG_ONLY_COMMITS'));
+});
+
+for (const preservation of ['branch', 'tag', 'annotated-tag', 'remote', 'shared-reflog', 'shared-old-endpoint']) {
+  test(`HEAD reflog commits preserved by ${preservation} remain candidates`, async (t) => {
+    const f = await fixture(t), commit = await privateCommit(f, preservation.startsWith('shared'));
+    if (preservation === 'branch') git(f.main, 'branch', 'keep', commit);
+    if (preservation === 'tag') git(f.main, 'tag', 'keep', commit);
+    if (preservation === 'annotated-tag') git(f.main, 'tag', '-a', 'keep', commit, '-m', 'keep work');
+    if (preservation === 'remote') git(f.main, 'update-ref', 'refs/remotes/origin/keep', commit);
+    if (preservation === 'shared-old-endpoint') {
+      const log = join(git(f.main, 'rev-parse', '--absolute-git-dir'), 'logs', 'refs', 'heads', 'task');
+      const last = (await readFile(log, 'utf8')).trimEnd().split('\n').at(-1);
+      await writeFile(log, `${last}\n`);
+    }
+    const row = resultRow((await assess(f)).report, f);
+    assert.equal(row.verdict, 'candidate', JSON.stringify(row.reasons));
+    assert.deepEqual(row.reasons, []);
+  });
+}
+
+test('a descendant held by a shared ref preserves the whole private history', async (t) => {
+  const f = await fixture(t), commit = await privateCommit(f);
+  git(f.feature, 'checkout', '--detach', commit);
+  git(f.feature, 'commit', '--allow-empty', '-m', 'preserved descendant');
+  git(f.feature, 'branch', 'keep-descendant');
+  git(f.feature, 'checkout', 'task');
+  assert.equal(resultRow((await assess(f)).report, f).verdict, 'candidate');
+});
+
+test('each linked worktree keeps its own HEAD reflog evidence', async (t) => {
+  const f = await fixture(t), second = join(f.dir, 'second');
+  git(f.main, 'worktree', 'add', '-b', 'task-two', second, f.head);
+  git(second, 'checkout', '--detach');
+  git(second, 'commit', '--allow-empty', '-m', 'second private work');
+  const commit = git(second, 'rev-parse', 'HEAD');
+  git(second, 'checkout', 'task-two');
+  const other = { ...f, feature: await realpath(second) };
+  const scan = await scanWorktrees({ cwd: f.feature }), evidence = evidenceFor(scan, f);
+  evidence.entries.push(evidenceFor(scan, other).entries[0]);
+  const report = await assessWorktrees({ scan, evidence });
+  assert.equal(resultRow(report, f).verdict, 'candidate');
+  const row = resultRow(report, other);
+  assert.equal(row.verdict, 'hold'); assert(hasCode(row, 'HEAD_REFLOG_ONLY_COMMITS'));
+  assert.equal(row.reasons.find((reason) => reason.code === 'HEAD_REFLOG_ONLY_COMMITS').detail, commit);
+});
+
+for (const damage of ['empty', 'missing', 'unreadable', 'truncated', 'missing-last-record', 'malformed', 'unknown-object', 'oversized']) {
+  test(`${damage} HEAD reflog evidence cannot produce a candidate`, async (t) => {
+    const f = await fixture(t), log = join(git(f.feature, 'rev-parse', '--absolute-git-dir'), 'logs', 'HEAD');
+    const original = await readFile(log, 'utf8');
+    if (damage === 'empty') await writeFile(log, '');
+    if (damage === 'missing') await rm(log);
+    if (damage === 'unreadable') await chmod(log, 0);
+    if (damage === 'truncated') await writeFile(log, original.slice(0, -1));
+    if (damage === 'missing-last-record') await writeFile(log, `${original.trimEnd().split('\n').slice(0, -1).join('\n')}\n`);
+    if (damage === 'malformed') await writeFile(log, `${original}bad record\n`);
+    if (damage === 'unknown-object') await writeFile(log, original.replace(/^0{40}/, 'a'.repeat(40)));
+    if (damage === 'oversized') await writeFile(log, original.repeat(Math.ceil(2 * 1024 * 1024 / original.length) + 1));
+    try {
+      const row = resultRow((await assess(f)).report, f);
+      assert.equal(row.verdict, 'unresolved', JSON.stringify(row.reasons));
+      assert(hasCode(row, damage === 'oversized' ? 'READ_BUDGET' : 'HEAD_REFLOG_UNKNOWN'));
+    } finally { if (damage === 'unreadable') await chmod(log, 0o644); }
+  });
+}
+
+test('missing HEAD reflog fields in an older scan cannot establish safety', async (t) => {
+  const f = await fixture(t), scan = structuredClone(await scanWorktrees({ cwd: f.main }));
+  for (const row of scan.rows) delete row.headReflog;
+  scan.id = await hashScan(scan);
+  const row = resultRow(await assessWorktrees({ scan, evidence: evidenceFor(scan, f) }), f);
+  assert.equal(row.verdict, 'unresolved'); assert(hasCode(row, 'HEAD_REFLOG_UNKNOWN'));
+});
+
+for (const shared of [false, true]) {
+  test(`${shared ? 'shared' : 'HEAD'} reflog drift invalidates a scan with an unchanged tip`, async (t) => {
+    const f = await fixture(t), scan = await scanWorktrees({ cwd: f.main }), evidence = evidenceFor(scan, f);
+    const log = shared ? join(git(f.main, 'rev-parse', '--absolute-git-dir'), 'logs', 'refs', 'heads', 'task') :
+      join(git(f.feature, 'rev-parse', '--absolute-git-dir'), 'logs', 'HEAD');
+    await writeFile(log, (await readFile(log, 'utf8')).replace('feature', 'changed-message'));
+    assert.equal(git(f.feature, 'rev-parse', 'HEAD'), f.head);
+    const row = resultRow(await assessWorktrees({ scan, evidence }), f);
+    assert.equal(row.verdict, 'unresolved'); assert(hasCode(row, 'WORKTREE_CHANGED_SINCE_SCAN'));
+  });
+}
+
 test('squash proof produces an advisory candidate without source-head ancestry', async (t) => {
   const f = await fixture(t);
   assert.equal(spawnSync('git', ['-C', f.main, 'merge-base', '--is-ancestor', f.head, f.baseSha]).status, 1);
@@ -371,6 +486,33 @@ test('library imports remain silent with missing or nonexistent argv entry paths
     assert.equal(result.status, 0, result.stderr);
     assert.equal(result.stdout, ''); assert.equal(result.stderr, '');
   }
+});
+
+test('readable assessment preserves verdicts and evidence reasons', async (t) => {
+  const f = await fixture(t), scan = await scanWorktrees({ cwd: f.main }), evidence = evidenceFor(scan, f);
+  const scanFile = join(f.dir, 'scan.json'), evidenceFile = join(f.dir, 'evidence.json');
+  await writeFile(scanFile, JSON.stringify(scan));
+  await writeFile(evidenceFile, JSON.stringify(evidence));
+  const run = (...extra) => spawnSync(process.execPath, [CLI, 'assess', '--scan', scanFile, '--evidence', evidenceFile, ...extra], { encoding: 'utf8', timeout: 20_000 });
+  const json = run(), rendered = run('--format', 'text');
+  assert.equal(json.status, 0, json.stderr);
+  assert.equal(rendered.status, 0, rendered.stderr);
+  const report = JSON.parse(json.stdout);
+  for (const row of report.rows) {
+    assert.ok(rendered.stdout.includes(`${row.verdict.toUpperCase()} ${JSON.stringify(row.path)}`));
+    for (const reason of row.reasons) assert.ok(rendered.stdout.includes(`[${reason.code}]`));
+  }
+  assert.match(rendered.stdout, /candidate=1/);
+  assert.match(rendered.stdout, /does not authorize deletion/);
+  evidence.entries = [];
+  await writeFile(evidenceFile, JSON.stringify(evidence));
+  const missing = run('--format', 'text');
+  assert.equal(missing.status, 0, missing.stderr);
+  assert.match(missing.stdout, /UNRESOLVED/);
+  assert.match(missing.stdout, /\[EVIDENCE_IDENTITY_MISMATCH\]/);
+  assert.equal(run('--format', 'html').status, 2);
+  assert.equal(run('--format', 'text', '--format', 'json').status, 2);
+  assert.equal(git(f.feature, 'status', '--porcelain'), '');
 });
 
 test('CLI assessment serializes the public contract and rejects write modes', async (t) => {

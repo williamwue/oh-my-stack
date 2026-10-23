@@ -8,6 +8,7 @@
     "scenario",
     "profile",
     "sourceEvidence",
+    "sourceBinding",
     "result",
     "coordinate",
     "providerInventoryEvidence",
@@ -23,6 +24,18 @@
     "scenario": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "profile": { "type": "string" },
     "sourceEvidence": { "type": "string" },
+    "sourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reviewedAt", "record", "sourceSha256", "fixtureRevision"],
+      "properties": {
+        "kind": { "const": "reviewed-historical-snapshot" },
+        "reviewedAt": { "type": "string", "format": "date" },
+        "record": { "const": "conformance/source-observations.json" },
+        "sourceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "fixtureRevision": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
     "result": { "const": "pass" },
     "coordinate": {
       "type": "object",

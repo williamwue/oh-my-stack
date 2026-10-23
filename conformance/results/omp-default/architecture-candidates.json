@@ -4,6 +4,13 @@
   "scenario": "architecture-candidates",
   "profile": "omp-default",
   "sourceEvidence": "evals/evidence/omp-18.2.6/architecture-candidates.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "a2e655efd1d59f17b7a024d41b872db60c1a37f9b3742578247b474ccd19aca7",
+    "fixtureRevision": "2ceb0b9233244ff484123f0e5a08bc14c6d2df233dd67ef3368ac8a1a19f2f0e"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "omp",

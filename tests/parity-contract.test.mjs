@@ -42,8 +42,8 @@ async function fixture(t, sourceName = "skills/no-comments/SKILL.md") {
 }
 
 test("complete pinned runtime bodies, references, helpers, and promoted playbooks derive exactly", async () => {
-  assert.equal(manifest.revision, "99743e9c151c8537cbbf1f98bb38f34ef3368453");
-  assert.equal(manifest.sourceRoot, `upstream/snapshots/cursor-pstack-october-16/${manifest.revision}/pstack`);
+  assert.equal(manifest.revision, "4ec7ffa173eaa70d3d9467a627baf0954645a353");
+  assert.equal(manifest.sourceRoot, `upstream/snapshots/cursor-pstack-october-23/${manifest.revision}/pstack`);
   const sourceRoot = join(root, manifest.sourceRoot);
   const sources = await paths(sourceRoot);
   const runtimeSources = sources.filter((path) => path.startsWith("skills/") || path.startsWith("agents/") || path.startsWith("automations/benny/skills/") || path.startsWith("automations/benny/templates/"));
@@ -112,7 +112,7 @@ test("default source workflows do not acquire the optional OMS machine-evidence 
   assert.match(enhanced, /references\/poteto-mode\/delivery-evidence\.md/);
   assert.match(enhanced, /Use this entry only when the user selects enhanced delivery/);
   const setup = await read("src/core/skills/setup-oh-my-stack/SKILL.md");
-  assert.deepEqual([...setup.matchAll(/^### \d\. (.*)$/gm)].map((match) => match[1]), ["Detect available models", "Load current state", "Budget, map, and confirm", "Validate", "Write the host configuration", "Confirm", "Offer a verification skill (optional)"]);
+  assert.deepEqual([...setup.matchAll(/^### \d\. (.*)$/gm)].map((match) => match[1]), ["Detect available models", "Load current state", "Budget, map, and confirm", "Validate", "Write the host configuration", "Confirm", "Offer a verification skill (optional)", "Offer a formal verification skill (optional)"]);
   assert.doesNotMatch(setup, /Choose automatic routing|Enable automatic routing/);
   assert.match(await read("src/core/skills/oms-auto/references/routing-setup.md"), /Enable automatic routing/);
   assert.match(await read("src/core/roles/synthesizer/instructions.md"), /spot-check citations through available evidence/);

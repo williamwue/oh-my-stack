@@ -44,6 +44,8 @@ Transcripts live at `the active workspace transcript path supplied by the genera
 5. Verify against live state. Take the PRs, branches, and tickets that the mining and the sweep surfaced and check them with `git` and `gh`. When the answer hinges on what an agent actually did (the tools it ran, files it read, errors it hit), read the full transcript, not just a trimmed local copy.
 6. Write the brief to the contract below. Group by thread. Stay on the named topic.
 
+Before a negative claim that an item was never recorded, search every record location named by the project's standing instructions within the stated workspace and time scope. If a designated record is unavailable, report that gap and qualify the absence claim. For human rulings, use [Claims about human decisions](../why/references/epistemics.md#claims-about-human-decisions). Keep original wording and source separate from copied agent summaries. This preserves provenance and does not add a consent gate.
+
 ## Output contract
 
 Lead with the capsule, then the thread status, then the problems, then the next move. Deeper detail goes below or gets cut.

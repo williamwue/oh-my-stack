@@ -94,6 +94,23 @@ test("three-way merge classifies overlapping edits as a typed conflict", async (
   assert.match(merged.text, /<<<<<<< example\.md:local/);
 });
 
+test("multiple conflict hunks remain typed conflicts under diff3 configuration", async () => {
+  const base = Array.from({ length: 40 }, (_, index) => `line ${index}`).join("\n") + "\n";
+  const input = {
+    base,
+    local: base.replace("line 2\n", "local 2\n").replace("line 35\n", "local 35\n"),
+    candidate: base.replace("line 2\n", "upstream 2\n").replace("line 35\n", "upstream 35\n"),
+  };
+  const result = spawnSync(process.execPath, ["--input-type=module", "-e",
+    `import {mergeText} from ${JSON.stringify(new URL('../tools/sync-upstream.mjs',import.meta.url).href)}; console.log(JSON.stringify(await mergeText(${JSON.stringify(input)})));`,
+  ], { encoding: "utf8", env: { ...process.env, GIT_CONFIG_COUNT: "1", GIT_CONFIG_KEY_0: "merge.conflictStyle", GIT_CONFIG_VALUE_0: "diff3" } });
+  assert.equal(result.status, 0, result.stderr);
+  const merged = JSON.parse(result.stdout);
+  assert.equal(merged.status, "conflict");
+  assert.equal((merged.text.match(/^<<<<<<< /gm) ?? []).length, 2);
+  assert.doesNotMatch(merged.text, /^\|{7}/m);
+});
+
 test("deletion distinguishes unchanged, missing, modified, and binary local state", () => {
   const base = Buffer.from("unchanged\n");
   assert.deepEqual(classifyDeletion({ base, local: null }), { status: "already-deleted" });

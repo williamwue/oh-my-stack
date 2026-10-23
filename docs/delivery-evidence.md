@@ -59,6 +59,11 @@ and frozen executable bytes, cwd, timeout and output limits. Omitted required
 checks remain unverified. Checks may have side effects; the original task
 authorization determines whether executing them is appropriate.
 
+Existing file operands in check argv must be repository-local immutable paths,
+whether written as absolute paths or relative to the check cwd. External files
+and symlink operands are rejected. This freezes named operands and executables;
+it does not discover imported dependencies or files embedded inside option values.
+
 ## Final evidence
 
 Evidence has `version`, `taskId`, `lockSha256`, `finalSource`, `artifacts`, `units`

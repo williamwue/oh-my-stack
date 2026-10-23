@@ -6,6 +6,26 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.20.0 - 2026-10-23
+
+- Advance the primary official pstack baseline to 0.15.30 at `4ec7ffa`, with
+  81 default public Skills, formal verification creation/maintenance and TLA+
+  statecharts. Preserve fixed source receipts and exact host derivations.
+- Establish continuous dual-reference maintenance: official pstack first,
+  pstack-claude second, with adoption decisions, whole-source update previews
+  and complete current-module coverage and fingerprints.
+- Harden Markdown destination validation, HEAD-reflog preservation, transcript
+  identity, subprocess lifecycle bounds, native home resolution, Claude retry
+  receipts, executable discovery and frozen harness checks.
+- Replace the plan checker's custom Markdown grammar with a pinned, licensed
+  self-contained parser distributed across all generated targets.
+- Add readable routing and worktree assessment, explicit merge-ready/merged
+  program targets, visible repair history, shared resume summaries and grouped
+  Skill navigation. Preserve user configuration and existing action authority.
+- Keep native release packages and optional T3 builds distinct. Actual Claude
+  Code account/session verification and the five recorded future host features
+  remain outside this release's verified scope.
+
 ## 0.19.0 - 2026-10-16
 
 - Add a read-only worktree audit with frozen local identities, fresh explicit host

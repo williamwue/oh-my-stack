@@ -84,8 +84,13 @@ test("latest landing and verification contracts retain root authority and merge-
   assert.match(stack, /Only you rebase or retarget a link/);
   assert.match(stack, /Once landing starts, nobody writes to the chain except the post-merge retarget/);
   const shipping = await read("src/core/skills/shipping/SKILL.md");
-  assert.match(shipping, /move its patch onto the merge result, and push with `--force-with-lease`/);
-  assert.match(shipping, /verdict covers the patch, not its commits/);
+  assert.match(shipping, /verify its recorded old-parent boundary, replay only its own commits/);
+  assert.match(shipping, /explicit lease on the captured remote SHA/);
+  assert.match(shipping, /Reconcile a refused lease rather than refreshing it/);
+  assert.match(shipping, /A verdict covers a patch/);
+  assert.match(shipping, /checking applicability to the new destination and dependencies/);
+  assert.match(shipping, /A head guard alone does not atomically guard the base/);
+  assert.match(shipping, /confirm the merged state, approved head, intended destination, merge commit and its ancestry/);
   const orchestrate = await read("src/core/skills/orchestrate/SKILL.md");
   assert.match(orchestrate, /walks the PR base chain through the checkout's current branch/);
   assert.match(orchestrate, /Workers never rebase and never retarget or merge PRs/);

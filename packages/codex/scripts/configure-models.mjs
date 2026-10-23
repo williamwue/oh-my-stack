@@ -4,8 +4,9 @@ import { createHash } from "node:crypto";
 import { existsSync, realpathSync } from "node:fs";
 import { access, lstat, mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { runtimeDirectory } from "./model-resolution.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const defaultPackageRoot = resolve(scriptDirectory, "..");
@@ -273,7 +274,7 @@ async function safeWrite(path, content) {
 
 export async function configure({
   packageRoot, inventoryPath, outputRoot, projectRoot, userRoot,
-  claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? null, selections = {}, roleSelections = {},
+  claudeConfigDir, codexHome, piCodingAgentDir, selections = {}, roleSelections = {},
   routeSelections = {}, panelSelections = {}, presetName, budget, uniformReasoning, apply,
 }) {
   const packageDirectory = resolve(packageRoot ?? defaultPackageRoot);
@@ -293,17 +294,14 @@ export async function configure({
   assert(!uniformReasoning || uniformReasoning === "preset" || effortOrder.includes(uniformReasoning),
     `unknown uniform reasoning ${uniformReasoning}`);
   assert(["codex", "omp", "claude-code", "pi"].includes(descriptor.target), "role configuration is unsupported for this target");
-  assert(!userDirectory || descriptor.target !== "claude-code" || !claudeConfigDir || isAbsolute(claudeConfigDir),
-    "CLAUDE_CONFIG_DIR must be an absolute path for user setup");
   const outputDirectory = projectDirectory
-    ? join(projectDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? ".omp" : descriptor.target === "pi" ? ".pi" : ".claude")
+    ? join(projectDirectory, runtimeDirectory(descriptor.target, "project"))
     : userDirectory
-      ? descriptor.target === "claude-code" && claudeConfigDir ? resolve(claudeConfigDir)
-        : join(userDirectory, descriptor.target === "codex" ? ".codex" : descriptor.target === "omp" ? join(".omp", "agent") : descriptor.target === "pi" ? join(".pi", "agent") : ".claude")
+      ? runtimeDirectory(descriptor.target, "user", { userRoot, claudeConfigDir, codexHome, piCodingAgentDir })
       : resolve(outputRoot);
   assert(outputDirectory !== resolve("/"), "output directory cannot be the filesystem root");
   if (userDirectory && descriptor.target === "omp") await assertNotSymlink(join(userDirectory, ".omp"));
-  if (userDirectory && descriptor.target === "pi") await assertNotSymlink(join(userDirectory, ".pi"));
+  if (userDirectory && descriptor.target === "pi") await assertNotSymlink(dirname(outputDirectory));
   await assertNotSymlink(outputDirectory);
   await assertNotSymlink(join(outputDirectory, "agents"));
   const inventoryRaw = await readFile(resolve(inventoryPath));
@@ -518,6 +516,7 @@ async function main() {
     outputRoot: arguments_.output,
     projectRoot: arguments_.projectRoot,
     userRoot: arguments_.user ? homedir() : undefined,
+    codexHome: process.env.CODEX_HOME, piCodingAgentDir: process.env.PI_CODING_AGENT_DIR,
     selections: arguments_.selections,
     roleSelections: arguments_.roles,
     routeSelections: arguments_.routes,

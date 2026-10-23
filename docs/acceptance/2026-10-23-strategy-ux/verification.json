@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "status": "local-verification-passed",
+  "date": "2026-10-23",
+  "officialRevision": "4ec7ffa173eaa70d3d9467a627baf0954645a353",
+  "referenceRevision": "356c6e0f978df729eb16f227d795f34d221c5aad",
+  "fullCheck": {
+    "command": "npm run check",
+    "exitCode": 0,
+    "tests": {
+      "tests": 988,
+      "pass": 948,
+      "fail": 0,
+      "skipped": 40,
+      "cancelled": 0
+    },
+    "skips": {
+      "TLC unavailable": 38,
+      "pinned release runtime unavailable": 2
+    },
+    "logSha256": "5f814bb3d3be2e1d497146147b154d7caa8df23f703be8b004148f9e5fe8e472",
+    "localLog": ".tmp/strategy-ux-20261023/check-final.log"
+  },
+  "focusedChecks": {
+    "readableRouting": 1,
+    "readableWorktreeAssessment": 1,
+    "skillDirectory": 2,
+    "documentationFacts": 14
+  },
+  "generation": {
+    "nativeTargets": 4,
+    "detachedSelection": "t3 + aihero",
+    "detachedTargets": 4,
+    "t3BoundTargets": [
+      "codex",
+      "claude-code"
+    ],
+    "checkExitCode": 0,
+    "localLog": ".tmp/strategy-ux-20261023/t3-final.log",
+    "logSha256": "6710f5f31aaad3563603d68c07d04c765779794fd254a957295f7f86acdbb9da"
+  },
+  "consistency": {
+    "exactDerivations": 181,
+    "adoptions": 31,
+    "adapted": 30,
+    "rejected": 1,
+    "reviewedModules": 229,
+    "reviewedFiles": 764,
+    "reassessedModules": [
+      "skill:autopilot-full",
+      "skill:multi-phase-plan",
+      "skill:pause-safely",
+      "skill:poteto-help",
+      "skill:poteto-mode",
+      "skill:session-pickup",
+      "support:upstream",
+      "test-infrastructure",
+      "tool:check-doc-facts",
+      "tool:codex-skill-descriptions",
+      "tool:generate",
+      "tool:generate-skill-directory",
+      "tool:routing",
+      "tool:worktree-audit"
+    ],
+    "unchangedSkillMetadataFiles": 98,
+    "navigationLinks": 376
+  },
+  "packages": [
+    {
+      "target": "codex",
+      "selection": {
+        "base": "pstack",
+        "extensions": []
+      },
+      "skills": 81,
+      "links": 46,
+      "principles": 24
+    },
+    {
+      "target": "claude-code",
+      "selection": {
+        "base": "pstack",
+        "extensions": []
+      },
+      "skills": 81,
+      "links": 46,
+      "principles": 24
+    },
+    {
+      "target": "omp",
+      "selection": {
+        "base": "pstack",
+        "extensions": []
+      },
+      "skills": 81,
+      "links": 46,
+      "principles": 24
+    },
+    {
+      "target": "pi",
+      "selection": {
+        "base": "pstack",
+        "extensions": []
+      },
+      "skills": 81,
+      "links": 46,
+      "principles": 24
+    },
+    {
+      "target": "codex",
+      "selection": {
+        "base": "pstack",
+        "extensions": [
+          "aihero"
+        ],
+        "orchestration": "t3"
+      },
+      "skills": 101,
+      "links": 48,
+      "principles": 24
+    },
+    {
+      "target": "claude-code",
+      "selection": {
+        "base": "pstack",
+        "extensions": [
+          "aihero"
+        ],
+        "orchestration": "t3"
+      },
+      "skills": 101,
+      "links": 48,
+      "principles": 24
+    },
+    {
+      "target": "omp",
+      "selection": {
+        "base": "pstack",
+        "extensions": [
+          "aihero"
+        ]
+      },
+      "skills": 101,
+      "links": 48,
+      "principles": 24
+    },
+    {
+      "target": "pi",
+      "selection": {
+        "base": "pstack",
+        "extensions": [
+          "aihero"
+        ]
+      },
+      "skills": 101,
+      "links": 48,
+      "principles": 24
+    }
+  ],
+  "sourceAndDocumentationHashes": [
+    {
+      "path": "docs/automatic-routing.md",
+      "sha256": "4f2c0cabacabdecb4fc3f890f14dc85316771e6df6840fa6cf08171b90b7cb13"
+    },
+    {
+      "path": "docs/skill-directory.md",
+      "sha256": "1137f14d59fbfd2a612030aa62f002c1738b75ff659b98a7e713357a77f0e775"
+    },
+    {
+      "path": "docs/worktree-audit.md",
+      "sha256": "6d2a96cf94cafb6f1cffe62de6e0dfa71d3f58568da1d37ea53c01cc3d0f97d4"
+    },
+    {
+      "path": "docs/zh-CN/automatic-routing.md",
+      "sha256": "3cc1fa3f77f02d2182b41fb23c5c730c5db4bbf29af5a41c5b67ee9b6e9d161a"
+    },
+    {
+      "path": "src/core/skills/autopilot-full/SKILL.md",
+      "sha256": "9322c4d59d22cb3e2d2cf3c3dcd864f4ba28761a24996b6732128f75f35678fc"
+    },
+    {
+      "path": "src/core/skills/multi-phase-plan/SKILL.md",
+      "sha256": "3cd4b98355750ae8c0f61b9c7a5f860ceb0e1596e0d186e509f511ab6b4c8d3d"
+    },
+    {
+      "path": "src/core/skills/pause-safely/SKILL.md",
+      "sha256": "9178a697962c1344e35e4b5d0631b2756a88d48ee91b768ad47d0bcb643066dd"
+    },
+    {
+      "path": "src/core/skills/poteto-help/SKILL.md",
+      "sha256": "8e165dda2d98b3da4dba9e74929393e690a0fc43a9e5e4c8ca824bbd04b7b11a"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/SKILL.md",
+      "sha256": "ebd755f24f0a9dce63ceb4ca4f5f9a420a0a7a6d5ec0e66012cee0895dc1098e"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/playbooks/autopilot-full.md",
+      "sha256": "39776f5055bc90d95e8a292ce94247cbfd68fdb590c02001374d732d64c85294"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "sha256": "f5ea13f116d850e81bb5b48039166925e188fb79d3bf5458320bd146b956c335"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/playbooks/pause-safely.md",
+      "sha256": "f774d25066efdac8cf712e7382deeac2df23cbfbbdd147cd016ff8d6a613f2c2"
+    },
+    {
+      "path": "src/core/skills/poteto-mode/playbooks/session-pickup.md",
+      "sha256": "c10278c38ec680697cf52fe245885b99f51c1e73a64cb55d6f2529281f24c26c"
+    },
+    {
+      "path": "src/core/skills/session-pickup/SKILL.md",
+      "sha256": "3c28efc820dca9973049537a4cd3198c7cb104be3fe75021149a619562b51ef0"
+    },
+    {
+      "path": "tests/doc-facts.test.mjs",
+      "sha256": "86e505ae91bba7c2d3da70edf8961b434410ad0365c34ff736ca31454f84dabf"
+    },
+    {
+      "path": "tests/routing.test.mjs",
+      "sha256": "969c857e76105bfcd7c0922a830d92570082f266bbfa3bbf761c0ebfed8f6e5e"
+    },
+    {
+      "path": "tests/skill-directory.test.mjs",
+      "sha256": "49ce82ffa6484051667b818a201a4e16939a99bb80fa4673946e44d57e486ce2"
+    },
+    {
+      "path": "tests/worktree-audit.test.mjs",
+      "sha256": "08d1bd9d48d752ecbc4e1b214b99badd2e5acd8683a06e6769e3454a07b385a8"
+    },
+    {
+      "path": "tools/check-doc-facts.mjs",
+      "sha256": "60fb7d3ecfa73a7f371682a4a2f7dfa96c84c45d61dddfc5069296b84f3a82b3"
+    },
+    {
+      "path": "tools/codex-skill-descriptions.mjs",
+      "sha256": "04c543d9bbb6c213956a607cf107ae3dcac80758393ddb099308b598eed84d28"
+    },
+    {
+      "path": "tools/generate-skill-directory.mjs",
+      "sha256": "8e014f59b9a3506e9ecd1a676193f1ce9d1d4bbf5ff867b9b1da8ce7cb20ce0c"
+    },
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "039ae2776f48abad98a858ba418ec04826d4e78561a869be330c60ff89226fc5"
+    },
+    {
+      "path": "tools/routing.mjs",
+      "sha256": "4c1e0fc64fc5615d6069a8af15180fdcc3a9d33372fd9e24e0361b7ce60ec48b"
+    },
+    {
+      "path": "tools/worktree-audit.mjs",
+      "sha256": "2a3f6f248960f19301a26cd2cadb085fc73498981267eb085416c42a328f9279"
+    },
+    {
+      "path": "upstream/module-reviews.json",
+      "sha256": "eddb4f6d23f31c750763323049355dadc8accd779eb27264bce2bfc3d0bb442b"
+    },
+    {
+      "path": "upstream/parity-derivations.json",
+      "sha256": "f385c89af241860790699b979507e0ca5b2852971bf0bba188e9bfe544056c0e"
+    },
+    {
+      "path": "upstream/reference-adoptions.json",
+      "sha256": "f806276e68477ce9c18a7951fca360b0cb5c6cc97b1338ddacf954c53de57883"
+    }
+  ],
+  "limits": [
+    "Local fixtures and generated source only",
+    "No new independent review or cross-family Trail review",
+    "No actual Claude Code or paid model execution",
+    "No personal configuration writes, installation, publication, commit or push"
+  ]
+}

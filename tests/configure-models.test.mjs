@@ -17,6 +17,35 @@ const selections = {
 };
 const execFileAsync = promisify(execFile);
 
+for (const [target, option, variable] of [["codex", "codexHome", "CODEX_HOME"], ["pi", "piCodingAgentDir", "PI_CODING_AGENT_DIR"]]) {
+  test(`${target} user configuration writes only its explicit or ambient native home`, async t => {
+    const root = await mkdtemp(join(tmpdir(), "oms-config-native-home-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const packageRoot = join(repoRoot, "packages", target), inventoryPath = join(root, "inventory.json");
+    await writeFile(inventoryPath, JSON.stringify({ schemaVersion: 1, runtime: target,
+      observedAt: "2026-10-23T00:00:00Z", source: "offline native home fixture",
+      models: Object.values(selections).map(value => ({ id: value.split("@")[0], reasoningEfforts: ["low", "medium", "high"] })) }));
+    const nativeHome = join(root, "custom"), manifestPath = join(nativeHome, "oh-my-stack.resolution.json");
+    const options = { packageRoot, inventoryPath, userRoot: root, selections, [option]: nativeHome };
+    assert.equal((await configure({ ...options, apply: false })).configuration.manifestPath, manifestPath);
+    await assert.rejects(readFile(manifestPath));
+    if (target === "pi") {
+      await mkdir(join(root, "unrelated"));
+      await symlink(join(root, "unrelated"), join(root, ".pi"));
+    }
+    await configure({ ...options, apply: true });
+    assert.equal(JSON.parse(await readFile(manifestPath, "utf8")).target, target);
+    const ambientHome = join(root, "ambient");
+    const result = await execFileAsync(process.execPath, [join(repoRoot, "tools/configure-models.mjs"),
+      "--package", packageRoot, "--inventory", inventoryPath, "--fast", selections.fast,
+      "--balanced", selections.balanced, "--deep", selections.deep, "--apply"],
+    { env: { ...process.env, HOME: root, [variable]: ambientHome } });
+    assert.equal(JSON.parse(result.stdout).configuration.manifestPath, join(ambientHome, "oh-my-stack.resolution.json"));
+    await assert.rejects(readFile(join(root, target === "codex" ? ".codex" : ".pi/agent", "oh-my-stack.resolution.json")));
+    await assert.rejects(configure({ ...options, [option]: "relative", apply: true }), /absolute path/);
+  });
+}
+
 test("upgrading saved code and Architect roles refreshes native contracts while retaining model effort and panel size", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-native-contract-upgrade-"));
   try {

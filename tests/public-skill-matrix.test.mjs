@@ -47,6 +47,7 @@ test("public Skill matrix verifier requires the exact catalog and headings", asy
   const missingSkill = structuredClone(payload);
   missingSkill.batches.at(-1).requested.pop();
   missingSkill.batches.at(-1).observed.pop();
+  if (!missingSkill.batches.at(-1).requested.length) missingSkill.batches.pop();
   await writeFile(report, JSON.stringify(missingSkill));
   assert.throws(verify, /exact public catalog/);
   }

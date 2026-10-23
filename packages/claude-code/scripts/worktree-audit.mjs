@@ -10,7 +10,7 @@ const POST_EXIT_DRAIN_MS = 250;
 const LIMITS = { timeMs: 45_000, commands: 4096, bytes: 32 * 1024 * 1024, perCommand: 2 * 1024 * 1024, rows: 128 };
 const SURFACES = ['activeThreads', 'pinnedThreads', 'childTasks', 'processes'];
 const SHA = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/;
-const USAGE = 'worktree-audit.mjs scan --cwd PATH | assess --scan FILE --evidence FILE';
+const USAGE = 'worktree-audit.mjs scan --cwd PATH | assess --scan FILE --evidence FILE [--format json|text]';
 
 function failure(code) { return Object.assign(new Error(code), { code }); }
 function requireInput(ok) { if (!ok) throw failure('INVALID_INPUT'); }
@@ -105,7 +105,39 @@ function readScope() {
       child.once('error', onError); child.once('exit', onExit); child.once('close', finish);
     });
   }
-  return { git, check };
+  async function reflog(path) {
+    check(); commands++; check();
+    const file = await open(path, constants.O_RDONLY | constants.O_NONBLOCK | constants.O_NOFOLLOW);
+    try {
+      const before = await file.stat({ bigint: true });
+      if (!before.isFile() || (before.mode & 0o444n) === 0n) throw failure('REFLOG_UNREADABLE');
+      if (before.size > BigInt(LIMITS.perCommand)) throw failure('READ_BUDGET');
+      const buffer = Buffer.alloc(Number(before.size) + 1);
+      let length = 0, count;
+      do {
+        check();
+        ({ bytesRead: count } = await file.read(buffer, length, buffer.length - length, null));
+        length += count; bytes += count; check();
+      } while (count && length < buffer.length);
+      const after = await lstat(path, { bigint: true });
+      for (const key of ['dev', 'ino', 'size', 'mtimeNs', 'ctimeNs']) {
+        if (before[key] !== after[key]) throw failure('REFLOG_CHANGED_DURING_READ');
+      }
+      if (BigInt(length) !== before.size) throw failure('REFLOG_CHANGED_DURING_READ');
+      const raw = buffer.subarray(0, length).toString('utf8');
+      if (!buffer.subarray(0, length).equals(Buffer.from(raw)) || (raw && !raw.endsWith('\n'))) throw failure('INCOMPLETE_REFLOG');
+      const roots = new Set();
+      let tip = null;
+      for (const line of raw ? raw.slice(0, -1).split('\n') : []) {
+        const match = /^([a-f0-9]{40}|[a-f0-9]{64}) ([a-f0-9]{40}|[a-f0-9]{64}) [^\0\n]+ <[^<>\0\n]*> \d+ [+-]\d{4}(?:\t[^\0\n]*)?$/.exec(line);
+        if (!match || match[1].length !== match[2].length) throw failure('INCOMPLETE_REFLOG');
+        tip = match[2];
+        for (const sha of match.slice(1, 3)) if (!/^0+$/.test(sha)) roots.add(sha);
+      }
+      return { fingerprint: digest(raw), roots: [...roots].sort(), tip };
+    } finally { await file.close(); }
+  }
+  return { git, check, reflog };
 }
 
 async function pathIdentity(path, scope) {
@@ -198,8 +230,45 @@ async function gitLocks(identity, scope) {
   return locks.sort();
 }
 
+async function reflogReachability(path, identity, scope) {
+  async function directory(path, optional = false) {
+    scope.check();
+    let info;
+    try { info = await lstat(path); }
+    catch (error) { if (optional && error.code === 'ENOENT') return false; throw error; }
+    if (!info.isDirectory() || (info.mode & 0o444) === 0 || (info.mode & 0o111) === 0) throw failure('REFLOG_UNREADABLE');
+    return true;
+  }
+  await directory(join(identity.gitDir.canonicalPath, 'logs'));
+  const head = await scope.reflog(join(identity.gitDir.canonicalPath, 'logs', 'HEAD'));
+  if (!head.roots.length || head.tip !== identity.head) throw failure('HEAD_REFLOG_UNKNOWN');
+  const shared = [], roots = new Set();
+  let entries = 0;
+  async function walk(path) {
+    if (!await directory(path, true)) return;
+    const dir = await opendir(path);
+    for await (const entry of dir) {
+      scope.check();
+      if (++entries > 10_000) throw failure('READ_BUDGET');
+      const child = join(path, entry.name);
+      if (entry.isDirectory()) await walk(child);
+      else {
+        const log = await scope.reflog(child);
+        shared.push([child, log.fingerprint]);
+        for (const sha of log.roots) roots.add(sha);
+      }
+    }
+  }
+  if (await directory(join(identity.commonDir.canonicalPath, 'logs'), true)) await walk(join(identity.commonDir.canonicalPath, 'logs', 'refs'));
+  if (head.roots.length + roots.size > 4096) throw failure('READ_BUDGET');
+  const refs = (await scope.git(path, ['for-each-ref', '--format=%(refname) %(objectname)', 'refs/heads/', 'refs/tags/', 'refs/remotes/'])).stdout;
+  const output = (await scope.git(path, ['rev-list', '--max-count=1', ...head.roots, '--not', '--branches', '--tags', '--remotes', ...roots, '--'])).stdout;
+  if (output && !/^(?:[a-f0-9]{40}|[a-f0-9]{64})\n$/.test(output)) throw failure('INCOMPLETE_GIT_OUTPUT');
+  return { head: head.fingerprint, shared: digest(shared.sort(([a], [b]) => a.localeCompare(b))), refs: digest(refs), unpreserved: output.trimEnd() || null };
+}
+
 async function observeRow(item, scope) {
-  const row = { ...item, identity: null, main: false, status: null, index: [], gitLocks: [], issues: [] };
+  const row = { ...item, identity: null, main: false, status: null, index: [], gitLocks: [], headReflog: null, issues: [] };
   try {
     row.identity = await identityAt(item.path, scope);
     row.main = row.identity.gitDir.canonicalPath === row.identity.commonDir.canonicalPath;
@@ -213,6 +282,8 @@ async function observeRow(item, scope) {
       if (match[1] === 'S' || match[1] === match[1].toLowerCase()) row.issues.push('INDEX_HIDES_CONTENT');
       if (match[2] === '160000') row.issues.push('SUBMODULE_INSPECTION_INCOMPLETE');
     }
+    try { row.headReflog = await reflogReachability(item.path, row.identity, scope); }
+    catch (error) { row.issues.push(['READ_BUDGET', 'READ_TIMEOUT'].includes(error.code) ? error.code : 'HEAD_REFLOG_UNKNOWN'); }
     if (stable(row.identity) !== stable(await identityAt(item.path, scope))) row.issues.push('IDENTITY_CHANGED_DURING_READ');
   } catch (error) { row.issues.push(error.code ?? 'LOCAL_READ_FAILED'); }
   row.issues = [...new Set(row.issues)];
@@ -295,6 +366,10 @@ function validateScan(scan) {
     requireInput(row.head === null || SHA.test(row.head));
     for (const flag of ['main', 'locked', 'prunable', 'bare', 'detached']) requireInput(typeof row[flag] === 'boolean');
     requireInput(row.branch === null || text(row.branch));
+    if (row.headReflog !== undefined && row.headReflog !== null) {
+      requireInput(object(row.headReflog) && ['head', 'shared', 'refs'].every((key) => /^[a-f0-9]{64}$/.test(row.headReflog[key])));
+      requireInput(row.headReflog.unpreserved === null || SHA.test(row.headReflog.unpreserved));
+    }
     if (row.identity) validateIdentity(row.identity);
     if (row.status) requireInput(object(row.status) && typeof row.status.dirty === 'boolean' && typeof row.status.ignored === 'boolean' && Array.isArray(row.status.records) && row.status.records.every(text));
   }
@@ -369,6 +444,8 @@ function localReasons(row) {
   if (!row.identity || !row.status) reasons.push(reason('unknown', 'LOCAL_INSPECTION_INCOMPLETE'));
   if (row.status?.dirty) reasons.push(reason('hold', 'DIRTY_WORKTREE'));
   if (row.status?.ignored) reasons.push(reason('hold', 'IGNORED_CONTENT'));
+  if (!row.headReflog) reasons.push(reason('unknown', 'HEAD_REFLOG_UNKNOWN'));
+  if (row.headReflog?.unpreserved) reasons.push(reason('hold', 'HEAD_REFLOG_ONLY_COMMITS', row.headReflog.unpreserved));
   return reasons;
 }
 export async function assessWorktrees(input) {
@@ -423,18 +500,38 @@ async function readJson(path) {
     return JSON.parse(buffer.subarray(0, length).toString('utf8'));
   } finally { await file.close(); }
 }
+function readableAssessment(result) {
+  const counts = { hold: 0, unresolved: 0, candidate: 0 };
+  for (const row of result.rows) counts[row.verdict] += 1;
+  const lines = ['Worktree assessment (read-only, advisory)',
+    `hold=${counts.hold}; unresolved=${counts.unresolved}; candidate=${counts.candidate}`,
+    `Scan: ${result.scanId}`, result.evidenceProvenance, result.limitation];
+  const describe = (item) => `${item.kind}: ${item.code.replaceAll('_', ' ').toLowerCase()} [${item.code}]${item.detail === undefined ? '' : `; evidence=${JSON.stringify(item.detail)}`}`;
+  for (const issue of result.issues) lines.push(`Global evidence: ${describe(issue)}`);
+  for (const row of result.rows) {
+    lines.push('', `${row.verdict.toUpperCase()} ${JSON.stringify(row.path)}`,
+      `  branch=${JSON.stringify(row.branch)}; head=${row.head}`);
+    for (const item of row.reasons) lines.push(`  ${describe(item)}`);
+    if (!row.reasons.length) lines.push('  Evidence checks passed; candidate status does not authorize deletion.');
+  }
+  return lines.join('\n');
+}
+
 async function main(argv) {
   const [action, ...args] = argv, flags = {};
   for (let index = 0; index < args.length; index += 2) {
-    requireInput(['--cwd', '--scan', '--evidence'].includes(args[index]) && !Object.hasOwn(flags, args[index]) && text(args[index + 1]));
+    requireInput(['--cwd', '--scan', '--evidence', '--format'].includes(args[index]) && !Object.hasOwn(flags, args[index]) && text(args[index + 1]));
     flags[args[index]] = args[index + 1];
   }
+  const format = flags['--format'] ?? 'json';
+  requireInput(['json', 'text'].includes(format) && (action === 'assess' || !Object.hasOwn(flags, '--format')));
+  delete flags['--format'];
   let result;
   if (action === 'scan' && Object.keys(flags).length === 1 && flags['--cwd']) result = await scanWorktrees({ cwd: flags['--cwd'] });
   else if (action === 'assess' && Object.keys(flags).length === 2 && flags['--scan'] && flags['--evidence']) {
     result = await assessWorktrees({ scan: await readJson(flags['--scan']), evidence: await readJson(flags['--evidence']) });
   } else throw failure('INVALID_INPUT');
-  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  process.stdout.write(`${format === 'text' ? readableAssessment(result) : JSON.stringify(result, null, 2)}\n`);
 }
 const entryPath = process.argv[1] ? await realpath(resolve(process.argv[1])).catch(() => null) : null;
 const modulePath = await realpath(fileURLToPath(import.meta.url)).catch(() => null);

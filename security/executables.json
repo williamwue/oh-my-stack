@@ -190,12 +190,26 @@
     {
       "path": "src/core/skills/poteto-mode/scripts/check-plan.mjs",
       "owner": "pstack-derived",
-      "purpose": "Pinned upstream helper preserved as reference; native host execution is not advertised.",
-      "network": true,
-      "writes": [
-        "Reference only; executing upstream helpers may change repository or remote state."
-      ],
+      "purpose": "Read a local plan, classify fenced code with the bundled parser, and report official plan-policy diagnostics through the supported portable CLI.",
+      "network": false,
+      "writes": [],
       "uninstallBehavior": "Removed with the source checkout or generated package."
+    },
+    {
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/markdown-it.esm.min.mjs",
+      "owner": "local-core",
+      "purpose": "Parse plan Markdown in memory for fence source ranges. Imported read-only library; no network access or filesystem writes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the owning generated Skill package."
+    },
+    {
+      "path": "src/core/skills/poteto-mode/scripts/orch/orch.ts",
+      "owner": "cursor-pstack",
+      "purpose": "Retain the official Bun orchestration CLI as a reference-only source resource; native hosts use their documented OMS/T3 owners.",
+      "network": true,
+      "writes": ["Source-host orchestration store and task artifacts if separately executed; no native execution mapping"],
+      "uninstallBehavior": "Removed with the package; preserved source artifacts and task state remain separately owned."
     },
     {
       "path": "src/core/skills/poteto-mode/scripts/worktree-audit.sh",
@@ -276,6 +290,14 @@
         "docs/books/pstack"
       ],
       "uninstallBehavior": "Repository maintenance tool; removed with the checkout."
+    },
+    {
+      "path": "tools/books/preview-pstack-epub.py",
+      "owner": "local-core",
+      "purpose": "Serve allowlisted local EPUBs and pinned reader assets on 127.0.0.1 for visual QA; no outbound requests.",
+      "network": true,
+      "writes": [],
+      "uninstallBehavior": "Stop the foreground loopback server; the script is removed with the checkout and reader dependencies remain caller-owned."
     },
     {
       "path": "tools/books/render-pstack-svg.cjs",
@@ -570,7 +592,8 @@
       "purpose": "Bind native Pi RPC inventory and bounded child delegation.",
       "network": true,
       "writes": [
-        "explicit child worktree or disposable local acceptance fixture; no personal configuration writes"
+        "explicit child worktree or disposable local acceptance fixture; no personal configuration writes",
+        "Pi child session files only when a caller explicitly selects sessionDir"
       ],
       "uninstallBehavior": "Removed with the source checkout or generated package."
     },
@@ -764,6 +787,120 @@
       "network": false,
       "writes": [],
       "uninstallBehavior": "Repository snapshot remains historical; each packaged copy is removed with its owned Skill installation, and any copied hook and settings entry must be removed by the user."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/chart-to-tla.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": false,
+      "writes": [
+        "explicit scratch outputs; TLC temporary files; optional npx renderer cache"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/compare-charts.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": false,
+      "writes": [
+        "explicit scratch outputs; TLC temporary files; optional npx renderer cache"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/lib.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/model/OutputFolder.map.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/statechart.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": true,
+      "writes": [
+        "explicit scratch outputs; TLC temporary files; optional npx renderer cache"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/test/statechart.test.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": true,
+      "writes": [
+        "explicit scratch outputs; TLC temporary files; optional npx renderer cache"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "src/core/skills/statechart/scripts/tlc-to-chart.mjs",
+      "owner": "pstack-derived",
+      "purpose": "Official statechart CLI, model mapping or test resource; preserve upstream bytes.",
+      "network": false,
+      "writes": [
+        "explicit scratch outputs; TLC temporary files; optional npx renderer cache"
+      ],
+      "uninstallBehavior": "Removed with the source checkout or generated package; user-selected outputs remain user-owned."
+    },
+    {
+      "path": "tools/claude-transcript-location.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Locate one authorized native Claude transcript by explicit host path or session identity without reading chat bodies.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the owning installed package; user transcripts remain untouched."
+    },
+    {
+      "path": "tools/pstack-source.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Read bounded committed Git objects and contained local source files for both reference planners.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout."
+    },
+    {
+      "path": "tools/reference-adoptions.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Validate dual-reference receipts, output fingerprints and adoption decisions without network or writes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout."
+    },
+    {
+      "path": "tools/plan-reference-update.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Preview official and secondary-reference changes and their impact on recorded OMS adoptions without fetching or applying.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout."
+    },
+    {
+      "path": "tools/claude-delegation.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Prepare per-call native Claude Agent effort and verify child-correlated observations without dispatch or configuration writes.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout or installed native package."
+    },
+    {
+      "path": "tools/module-review.mjs",
+      "owner": "oh-my-stack",
+      "purpose": "Enumerate active source and verification modules and validate fixed-source review coverage, evidence paths and fingerprints without writes or network.",
+      "network": false,
+      "writes": [],
+      "uninstallBehavior": "Removed with the source checkout; not installed into runtime packages."
     }
   ]
 }

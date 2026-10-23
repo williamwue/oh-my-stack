@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workflow: Create Formal Verification Skill"
+  short_description: "Create a project-local formal check and prove it catches a broke"
+  default_prompt: "Use $create-formal-verification-skill for this task."
+policy:
+  allow_implicit_invocation: false

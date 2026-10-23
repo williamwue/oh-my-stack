@@ -4,6 +4,13 @@
   "scenario": "mixed-review",
   "profile": "omp-default",
   "sourceEvidence": "evals/evidence/omp-18.2.6/mixed-review.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "24495b949bdbf43c69be90c0a418c4c072f7db8cebac4e4f217b0ef00da83d42",
+    "fixtureRevision": "206c9a2e8c86a0fe8a60e55a0103e19383d786aca1d4e59bd7e4cb2cbbb71514"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "omp",

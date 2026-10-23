@@ -502,6 +502,27 @@
       "owner": "poteto-mode"
     },
     {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/markdown-it.esm.min.mjs",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/LICENSES.txt",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/poteto-mode/scripts/vendor/markdown-it/SOURCE.json",
+      "origin": "oms",
+      "distribution": "core",
+      "owner": "poteto-mode"
+    },
+    {
       "kind": "skill",
       "name": "principle-attack-the-premise",
       "path": "src/core/skills/principle-attack-the-premise",
@@ -1510,6 +1531,51 @@
         "claude-code",
         "pi"
       ]
+    },
+    {
+      "kind": "skill",
+      "name": "create-formal-verification-skill",
+      "path": "src/core/skills/create-formal-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "maintain-formal-verification-skill",
+      "path": "src/core/skills/maintain-formal-verification-skill",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "skill",
+      "name": "statechart",
+      "path": "src/core/skills/statechart",
+      "origin": "pstack",
+      "distribution": "core",
+      "audience": "public"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/create-formal-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "create-formal-verification-skill"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/maintain-formal-verification-skill/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "maintain-formal-verification-skill"
+    },
+    {
+      "kind": "reference",
+      "path": "src/core/skills/statechart/**",
+      "origin": "pstack",
+      "distribution": "core",
+      "owner": "statechart"
     }
   ],
   "skills": [
@@ -1592,6 +1658,12 @@
       "invocation": "explicit"
     },
     {
+      "name": "create-formal-verification-skill",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
       "name": "create-verification-skill",
       "audience": "public",
       "category": "workflow",
@@ -1647,6 +1719,12 @@
     },
     {
       "name": "ketchup",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "maintain-formal-verification-skill",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"
@@ -1917,6 +1995,12 @@
     },
     {
       "name": "show-me-your-work",
+      "audience": "public",
+      "category": "workflow",
+      "invocation": "explicit"
+    },
+    {
+      "name": "statechart",
       "audience": "public",
       "category": "workflow",
       "invocation": "explicit"

@@ -1,19 +1,55 @@
 # Project status
 
-## 0.19.0 source candidate (2026-10-16)
+## 0.20.0 source candidate (2026-10-23)
 
-The current source candidate follows official pstack 0.15.25 at
-`99743e9c151c8537cbbf1f98bb38f34ef3368453`, with 78 default public Skills.
-It adds explicit `sharpen`, updates catch-up reporting and principles, and
-preserves the existing native and optional T3 execution bindings. See the
-[source migration](upstream-pstack-0.15.25.md) and
-[local acceptance](acceptance/2026-10-16-pstack-sync/result.md).
+The current source candidate follows official pstack 0.15.30 at
+`4ec7ffa173eaa70d3d9467a627baf0954645a353`, with 81 default public Skills.
+It adds formal verification creation and maintenance, TLA+ statecharts,
+and updated catch-up and prompt-rewrite behavior. Native and optional T3
+bindings retain their existing ownership. See the
+[source migration](upstream-pstack-0.15.30.md) and
+[local acceptance](acceptance/2026-10-23-pstack-sync/result.md).
 This source update does not publish a release or upgrade an installed plugin.
-The [0.19.0 release notes](releases/0.19.0.md) describe the complete delivery
-scope, including the official update preview, native Pi hardening, worktree
-audit and bounded GitHub observation. Publication and local installation retain
-separate receipts.
 The sections below retain their historical version and evidence scope.
+
+### Strategy usability convergence
+
+The strategy update adds readable routing and worktree assessment, explicit
+autopilot delivery targets, visible program/repair state, compact resume state
+and grouped Skill navigation. Existing model selection, independent-review
+identity and preservation boundaries remain in force. See the
+[bounded implementation and verification](acceptance/2026-10-23-strategy-ux/result.md).
+Source generation is separate from installation and live Claude Code execution.
+
+### Deferred host capabilities
+
+Recorded at the user's request on 2026-10-23. All five items are **TODO,
+unscheduled**. They describe future capability expansion beyond the completed
+[current-module review](acceptance/2026-10-23-module-review/result.md).
+Recording them does not start implementation, select a release, install a host
+or authorize account-backed probes. Existing capability decisions and acceptance
+records retain their named scope.
+
+The secondary comparison source is pstack-claude
+`356c6e0f978df729eb16f227d795f34d221c5aad`. Reassess the fixed official and
+secondary implementations through [dual-reference maintenance](maintainers/dual-reference.md)
+when an item is scheduled; a reference implementation alone does not establish
+OMS compatibility.
+
+| ID | Future capability | Reference and acceptance boundary |
+| --- | --- | --- |
+| HOST-COPILOT | Native GitHub Copilot support | Compare the fixed port's README and `plugins/pstack/skills/setup-pstack/copilot.md`. Require native package discovery, observed account model selection, hook coexistence and one bounded workflow before declaring support. Do not copy its models or personal configuration automatically. |
+| HOST-MUSE | Native Muse support | Compare the fixed port's README and native tool mappings. Verify plugin loading, the host's approval and discovery behavior, model/effort mapping and one bounded workflow. Installation and account execution remain separate acceptance steps. |
+| PI-QUESTIONS | Pi human-question tool | Compare `plugins/pstack/pi/ask.ts` and its Pi tool mapping. Define root interactive-session support, explicit unsupported results in print/JSON or child contexts, and cancellation/timeout semantics. A default choice, timeout or missing reply is not a user answer or approval. |
+| PI-WAKE | Pi one-shot wakeup | Compare `plugins/pstack/pi/schedule.ts` and its Pi tool mapping. Queue due work until idle, bind it to the owning session/run, cancel on shutdown, and reject stale rearming after a stop. Do not schedule in a mode whose process exits before delivery. |
+| PI-LOOP | Pi recurring and self-paced loop | Reuse the supported wake mechanism. Verify interval and self-paced execution, serial iterations, stop/replacement behavior and rejection of wakeups from an obsolete iteration. No daemon, implicit enablement or inherited merge authority is introduced by this item. |
+
+The fixed reference documents these mechanisms in its
+[README](https://github.com/michael-denyer/pstack-claude/blob/356c6e0f978df729eb16f227d795f34d221c5aad/README.md)
+and [Pi tool mapping](https://github.com/michael-denyer/pstack-claude/blob/356c6e0f978df729eb16f227d795f34d221c5aad/plugins/pstack/skills/poteto-mode/references/pi-tools.md).
+Implementation should reuse OMS's existing capabilities, native bindings and
+acceptance records. T3 continues to use its host-owned interaction and scheduler
+tools; these Pi items do not replace them.
 
 ## 0.18.0 source and release scope (2026-10-14)
 

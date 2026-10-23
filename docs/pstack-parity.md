@@ -1,7 +1,7 @@
 # Pinned pstack core and optional extensions
 
-Source candidate 0.19.0 targets pstack 0.15.25 at
-`99743e9c151c8537cbbf1f98bb38f34ef3368453`. Its default packages contain
+Source candidate 0.20.0 targets pstack 0.15.30 at
+`4ec7ffa173eaa70d3d9467a627baf0954645a353`. Its default packages contain
 upstream workflows, built-in OMS automatic routing, and the bindings needed by
 Codex, Claude Code, Pi and OMP. Routing hooks and configuration are supported
 on Codex and Claude Code; Pi and OMP retain the explicit workflow fallback.
@@ -13,8 +13,8 @@ through detached Codex and Claude Code builds. Their installation hosts remain
 unchanged. The selected binding changes delegation and host-tool calls without
 adding workflow stages. Default generation retains native bindings.
 
-The [complete source receipt](acceptance/2026-10-16-pstack-sync/upstream-files.json)
-records all 169 pinned upstream files. The [0.15.25 migration](upstream-pstack-0.15.25.md)
+The [complete source receipt](acceptance/2026-10-23-pstack-sync/upstream-files.json)
+records all 184 pinned upstream files. The [0.15.30 migration](upstream-pstack-0.15.30.md)
 describes the official delta and retained adaptations. Previous snapshots and receipts remain
 historical evidence. Version 0.18.0 targeted pstack 0.15.23. Runtime instructions derive from these
 inputs through exact, reviewed replacements. The derivation record explains
@@ -25,6 +25,16 @@ Markdown style checks exclude exactly the derived Markdown paths and their
 generated host copies, as listed in the derivation manifest. Their source
 wording and formatting are checked by derivation hashes instead. Local prose,
 adapter code and optional additions keep their usual checks.
+
+## Reference priority
+
+Official pstack remains the preferred workflow baseline. The pinned
+pstack-claude secondary reference supplies implementation comparisons and
+explicitly reviewed policy alternatives through
+[dual-reference maintenance](maintainers/dual-reference.md).
+Current workflow bodies still derive from official pstack. A future policy
+adoption must have a named registry decision and an exact `policy` replacement;
+reference snapshots do not become runtime inputs automatically.
 
 ## Select a distribution
 
