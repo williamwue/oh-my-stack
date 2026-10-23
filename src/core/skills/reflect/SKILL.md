@@ -19,7 +19,7 @@ Before fanning out, find this conversation's transcript in the `agent-transcript
 ls -t <agent-transcripts>/*.jsonl <agent-transcripts>/*/*.jsonl <agent-transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10
 ```
 
-That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.
+That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. Use only the installed runtime binding's supported exact-session transcript access. The source-host layout example above is not a portable finder. If no supported transcript is available, pass a factual digest in turn order. List the user prompts and corrections, tool calls and observed results, and files touched. Label missing evidence. Add no diagnosis, cause, or verdict to that digest.
 
 ## 2. Spawn three reviewers in parallel
 
@@ -33,7 +33,7 @@ Each reviewer and the synthesizer name a role line in the `effective host model 
 | Tooling | `reflect tooling` | `observed code-model choice` | `references/tooling-reviewer.md` |
 | Divergent | `reflect judgment, divergent, synthesizer` | `observed judgment-model choice` | `references/divergent-reviewer.md` |
 
-Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the native child delegation response body.
+Pass each template verbatim, substituting the transcript path or factual digest where marked. Do not add a focus note, suspected cause, or preferred conclusion beside the evidence. Reviewers return findings in the native child delegation response body.
 
 ## 3. Synthesize
 

@@ -1,0 +1,4735 @@
+{
+  "schemaVersion": 1,
+  "operation": "preview-only",
+  "repository": "https://github.com/cursor/plugins",
+  "baseline": {
+    "revision": "99743e9c151c8537cbbf1f98bb38f34ef3368453",
+    "version": "0.15.25",
+    "sourceRoot": "upstream/snapshots/cursor-pstack-october-16/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack",
+    "fileCount": 169
+  },
+  "candidate": {
+    "revision": "4ec7ffa173eaa70d3d9467a627baf0954645a353",
+    "version": "0.15.30",
+    "fileCount": 184
+  },
+  "status": "blocked",
+  "files": [
+    {
+      "path": ".cursor-plugin/plugin.json",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b75609951c8a558e74f1eb20e15493933754eb2695fd2059d7f435f913889bb3",
+      "newSha256": "fa7d12176796787ce8503adcbb740fb43f5476e3df3d5e829a7835b3a9c8297d"
+    },
+    {
+      "path": ".gitignore",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "8ffe9de56bd30c1a95cd945262d6e3ac355ada4111551dde41f67851b9f1fc55",
+      "newSha256": "8ffe9de56bd30c1a95cd945262d6e3ac355ada4111551dde41f67851b9f1fc55"
+    },
+    {
+      "path": "LICENSE",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e",
+      "newSha256": "bc957ca6bee02792566a1a028d105e02e247c6e77cf057061674273da77b200e"
+    },
+    {
+      "path": "README.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "98b107ff8b5e0468dfefbd4c9892a09b7b372958c4131bc7e2d7b4d4182aaa75",
+      "newSha256": "095b3c4d9e4ceb11e01293d9bde7b0346a7a1262ad1f12b3394d3a0d1bef689b"
+    },
+    {
+      "path": "agents/comment-sicko.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3e239e40b7b4b9beb2cf7f3ccc57f2388eb8b69bd1ba8ae888ef87ef6e0e2116",
+      "newSha256": "3e239e40b7b4b9beb2cf7f3ccc57f2388eb8b69bd1ba8ae888ef87ef6e0e2116"
+    },
+    {
+      "path": "agents/poteto-agent.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "979f18abd000d185a0b4c41a2a4111c0910596a7f5c81cbb571885bc721b2bf7",
+      "newSha256": "979f18abd000d185a0b4c41a2a4111c0910596a7f5c81cbb571885bc721b2bf7"
+    },
+    {
+      "path": "assets/logo.png",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "672f6791589ef758b0ced2c4c477913fa2758623c438e265639a0d539ce90695",
+      "newSha256": "672f6791589ef758b0ced2c4c477913fa2758623c438e265639a0d539ce90695"
+    },
+    {
+      "path": "automations/benny/FOR_AGENTS.md",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a125e317dec1b8731fdc71f404c669f1127a73af932f7a7b8b8744a5542328a7",
+      "newSha256": "a125e317dec1b8731fdc71f404c669f1127a73af932f7a7b8b8744a5542328a7"
+    },
+    {
+      "path": "automations/benny/README.md",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ca3c42cbb7f0bf7068f7407eb355815e6c234d5c2786942f3cbe751a3690024b",
+      "newSha256": "ca3c42cbb7f0bf7068f7407eb355815e6c234d5c2786942f3cbe751a3690024b"
+    },
+    {
+      "path": "automations/benny/skills/reproduce-and-fix-issues/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1363cc07343fe86aab42853b1bd4563288cbcbdf12f1c265b3b3b1afa25c09cb",
+      "newSha256": "1363cc07343fe86aab42853b1bd4563288cbcbdf12f1c265b3b3b1afa25c09cb"
+    },
+    {
+      "path": "automations/benny/skills/reproduce-and-fix-issues/references/control-adapter.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "58b0615d2fca895f9a20df83266e280042b0d585b5f2fd324e2094a682fd846b",
+      "newSha256": "58b0615d2fca895f9a20df83266e280042b0d585b5f2fd324e2094a682fd846b"
+    },
+    {
+      "path": "automations/benny/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1e5c7c8522daec3e43fcc2e73ceb97289ded65b552949ce65a11cc8eb3d2b6ee",
+      "newSha256": "1e5c7c8522daec3e43fcc2e73ceb97289ded65b552949ce65a11cc8eb3d2b6ee"
+    },
+    {
+      "path": "automations/benny/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29",
+      "newSha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+    },
+    {
+      "path": "automations/benny/skills/setup-benny/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "5a3cbe63360c9f6373b6cb6c79a1eaf7e0eba181bfaa1577e2e6431af3407282",
+      "newSha256": "5a3cbe63360c9f6373b6cb6c79a1eaf7e0eba181bfaa1577e2e6431af3407282"
+    },
+    {
+      "path": "automations/benny/skills/triage-issue-reports/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "216a758b8711e64d19a55e6032c496527daac6364d010611040f3c04ef1a448f",
+      "newSha256": "216a758b8711e64d19a55e6032c496527daac6364d010611040f3c04ef1a448f"
+    },
+    {
+      "path": "automations/benny/skills/triage-issue-reports/references/routing.example.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "e5e53013692568cf69da8e8b302fff929fe2fbc9aec1a4651fd7997e2c7a4025",
+      "newSha256": "e5e53013692568cf69da8e8b302fff929fe2fbc9aec1a4651fd7997e2c7a4025"
+    },
+    {
+      "path": "automations/benny/templates/configuration.example.yaml",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "13e24b4ce9b9a0913916e85fe3b080b88d45f8e55dccfe8ae38e0751a997b6f5",
+      "newSha256": "13e24b4ce9b9a0913916e85fe3b080b88d45f8e55dccfe8ae38e0751a997b6f5"
+    },
+    {
+      "path": "automations/benny/templates/reproduce-automation-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "71ec574f1844e379394ae4ef14c48d7df10afbaa319d395c788d7f856f0e6899",
+      "newSha256": "71ec574f1844e379394ae4ef14c48d7df10afbaa319d395c788d7f856f0e6899"
+    },
+    {
+      "path": "automations/benny/templates/triage-automation-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "e0bba594547834f013ec805915610eb597e7929efe3ffbe85ae00339ee16d474",
+      "newSha256": "e0bba594547834f013ec805915610eb597e7929efe3ffbe85ae00339ee16d474"
+    },
+    {
+      "path": "docs/guide/01-setup.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "86d0330f245d16254a2069955f993c15d96cf29cd1a73690a0164074b7ac1190",
+      "newSha256": "384655bdecc713122ca69a485723c58462002a1d512415e94e48597d0dce2fa5"
+    },
+    {
+      "path": "docs/guide/02-poteto-mode.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "979f61ca3d44cb8e68affda40327d32797e93fa9cc53ced7444c15e2600897e1",
+      "newSha256": "d168829def6c410b1afd87d1a6eb297df385f89faa9b31260684074e9e4eb52a"
+    },
+    {
+      "path": "docs/guide/03-understand.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "0090afa9b8670adf175466a2a973ff4349e95ed67d2aa8cebdfc55ff4b7382c9",
+      "newSha256": "1ac97cbad51c15c18b3aade8634d81c8bbe50d2b3135c75c113ddb2a6dcb7af0"
+    },
+    {
+      "path": "docs/guide/04-design.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "31f2abe6e9b29feafd1a9eece8f4fe21992f86b8c19ab2e9b5c11a20f36587e7",
+      "newSha256": "cff616278303b533e617c5c4408af6d28895edbb8687d6ce99bb5dd1f6644a6c"
+    },
+    {
+      "path": "docs/guide/05-build-and-clean.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a93cc7771f7b35c7b54d0120b6f66e8367794ce6791237e889a30e7585c190fa",
+      "newSha256": "1284e80595ae4f214dfa7c5c5f7758ff90a47b3273aa7b8142e51e574f5c5290"
+    },
+    {
+      "path": "docs/guide/06-verify-and-ship.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3ef0eed5ea084dfbbaf1b1ae9e08d84f2c8a2b536ffb3ef5226710bf105f70e6",
+      "newSha256": "9276f7a20f72c115536e0a12f08aa2e9699fcd7498c217d9a02a7149c7d3a4a8"
+    },
+    {
+      "path": "docs/guide/07-overnight.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d7bd33a3d880768688dff4c1c2b5481ca9f0f194f5d97e44b65c9f96624d3ff0",
+      "newSha256": "b767a5dc5d7257efdb5cc8cfac92acfbb18fe8e023a3438339f4b45ce4a9264a"
+    },
+    {
+      "path": "docs/guide/08-principles.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "cffa270108189345351aab16835e95540ba3c765bb5f1b8c1de843a96a212421",
+      "newSha256": "0b26b85292f0c09768abe727c9e92987dbf81f5b439a4871034c2fd1c4cb1723"
+    },
+    {
+      "path": "docs/guide/09-make-it-yours.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "157e0c20ad3c657857c2fbbea3afd26895b71b8f68475bc56f4c382dcdd0e118",
+      "newSha256": "50642f7f894988f7c263700f46478e7aed7eb94a257683350d91a9a0d70dc141"
+    },
+    {
+      "path": "docs/guide/10-recipes-and-pitfalls.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c652474764b08da4a6364d85f5d03cf1fc1cf35e9d7c549348fb66e2d09f7b1f",
+      "newSha256": "006d8282db567aeae57398d5de1f3a802af2e3ac1a1f564198c384183fca3f92"
+    },
+    {
+      "path": "docs/guide/README.md",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "49d92cfe91e01c04bd1150e5b000ee4fd4dfda8ce789b66a9dda98f7e5456e00",
+      "newSha256": "5c888d034d38f380789fad57c2c6fa7307ace803a0622cdde9e57fa2afe182de"
+    },
+    {
+      "path": "docs/guide/images/design.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f",
+      "newSha256": "b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f"
+    },
+    {
+      "path": "docs/guide/images/overnight.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8",
+      "newSha256": "4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8"
+    },
+    {
+      "path": "docs/guide/images/recipes.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8",
+      "newSha256": "9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8"
+    },
+    {
+      "path": "docs/guide/images/router.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da",
+      "newSha256": "525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da"
+    },
+    {
+      "path": "docs/guide/images/understanding.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279",
+      "newSha256": "b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279"
+    },
+    {
+      "path": "docs/guide/images/verification.jpg",
+      "change": "unchanged",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a",
+      "newSha256": "2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a"
+    },
+    {
+      "path": "docs/harness/claude-code.md",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "c79e2283d3a83c6be3dd1cac33f9c074067c95e610ae6e0a16d9fdee84058927"
+    },
+    {
+      "path": "plugin.json",
+      "change": "modified",
+      "ownership": "source-only",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "68f0ddbdda23d1e663b48c881f1b896305a3dcdc320ff83c65dd24cd9ac6850f",
+      "newSha256": "b17556047a5df5fd2c42550af8d965ece3c2e55aa68082def5951e09f4788ae1"
+    },
+    {
+      "path": "skills/architect/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "31f8e97a52bfa5432edd61f68ade2a8632ef0bacbc2d2a6802d7a0e6821944ac",
+      "newSha256": "31f8e97a52bfa5432edd61f68ade2a8632ef0bacbc2d2a6802d7a0e6821944ac"
+    },
+    {
+      "path": "skills/architect/references/design-red-flags.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce",
+      "newSha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce"
+    },
+    {
+      "path": "skills/architect/references/rationale-template.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "0cedfccdc7b47fc881febd5a8293eecbc542c20f8df825639904a8102d2eb5d3",
+      "newSha256": "0cedfccdc7b47fc881febd5a8293eecbc542c20f8df825639904a8102d2eb5d3"
+    },
+    {
+      "path": "skills/architect/references/runner-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "21dd5314aab778c5007228027a4591d97693fbec6ab86524037772b63f40948e",
+      "newSha256": "21dd5314aab778c5007228027a4591d97693fbec6ab86524037772b63f40948e"
+    },
+    {
+      "path": "skills/arena/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ed72f6c132b1ce3974d949581d0adc5dade424fe20793ac3b4c4fae22ecb9354",
+      "newSha256": "ed72f6c132b1ce3974d949581d0adc5dade424fe20793ac3b4c4fae22ecb9354"
+    },
+    {
+      "path": "skills/automate-me/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "30b35f3628c4fd8c11af0ada06d14cdc3b28901810caca2480f627d4d21acfbe",
+      "newSha256": "30b35f3628c4fd8c11af0ada06d14cdc3b28901810caca2480f627d4d21acfbe"
+    },
+    {
+      "path": "skills/benchmark-checklist/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0",
+      "newSha256": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0"
+    },
+    {
+      "path": "skills/blast-radius/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
+      "newSha256": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436"
+    },
+    {
+      "path": "skills/bro/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb",
+      "newSha256": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb"
+    },
+    {
+      "path": "skills/correct/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
+      "newSha256": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba"
+    },
+    {
+      "path": "skills/create-formal-verification-skill/SKILL.md",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "6c934cd15a9583533ff9b7a9cad62775d7e80402d26d3ba7f74f79ea21a1d8eb"
+    },
+    {
+      "path": "skills/create-verification-skill/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d353973547bf8ad8977eca645f4cd4feaed0d32f4b43d1448f906b0a76c4d694",
+      "newSha256": "d353973547bf8ad8977eca645f4cd4feaed0d32f4b43d1448f906b0a76c4d694"
+    },
+    {
+      "path": "skills/create-verification-skill/references/feature-map-example/README.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba",
+      "newSha256": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba"
+    },
+    {
+      "path": "skills/create-verification-skill/references/feature-map-example/create-note.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7",
+      "newSha256": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7"
+    },
+    {
+      "path": "skills/create-verification-skill/references/feature-map-example/search.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823",
+      "newSha256": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823"
+    },
+    {
+      "path": "skills/figure-it-out/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "bdb23cdbd82a1e6af094b495691c832a6f7f3ab9706ba9edbeb664ef51a726e1",
+      "newSha256": "bdb23cdbd82a1e6af094b495691c832a6f7f3ab9706ba9edbeb664ef51a726e1"
+    },
+    {
+      "path": "skills/how/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "08a00079bb15b4258874ac3ff62d4ca7e94350ffedb521d0fd296dc9dd21904e",
+      "newSha256": "08a00079bb15b4258874ac3ff62d4ca7e94350ffedb521d0fd296dc9dd21904e"
+    },
+    {
+      "path": "skills/how/references/explainer-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff",
+      "newSha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff"
+    },
+    {
+      "path": "skills/how/references/explorer-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1",
+      "newSha256": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1"
+    },
+    {
+      "path": "skills/in-your-own-words/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad",
+      "newSha256": "fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad"
+    },
+    {
+      "path": "skills/interrogate/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a16dfe179005abc22a4651b82f25b0c8ab953284276efe4e6dc341958fb63647",
+      "newSha256": "a16dfe179005abc22a4651b82f25b0c8ab953284276efe4e6dc341958fb63647"
+    },
+    {
+      "path": "skills/interrogate/references/code-quality-review.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8",
+      "newSha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8"
+    },
+    {
+      "path": "skills/interrogate/references/lead-judgment.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87",
+      "newSha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87"
+    },
+    {
+      "path": "skills/interrogate/references/reviewer-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f6005cc2b535006fca97a96c5bfda49df57312eedf1ffd8d1aaaf3eb33817c25",
+      "newSha256": "f6005cc2b535006fca97a96c5bfda49df57312eedf1ffd8d1aaaf3eb33817c25"
+    },
+    {
+      "path": "skills/interrogate/references/rubric.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "0f9c6bdb0b96e26dbde5f6407f417e0c02f54080e7a1268d8994f3c3ec6c5ac0",
+      "newSha256": "0f9c6bdb0b96e26dbde5f6407f417e0c02f54080e7a1268d8994f3c3ec6c5ac0"
+    },
+    {
+      "path": "skills/ketchup/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "47b3fb0d5626a40fcb3bd016e68f1cb3d2d313351183e8f6c05d4c7abd76e665",
+      "newSha256": "f2923ffd14f6fc778f75a47aaed1f317fb5fd00b5701ca769d6446c74106dead"
+    },
+    {
+      "path": "skills/maintain-formal-verification-skill/SKILL.md",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c"
+    },
+    {
+      "path": "skills/maintain-verification-skill/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8",
+      "newSha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8"
+    },
+    {
+      "path": "skills/make-bot-ui/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3624c8ef16cf2e48deb2a4049e72c6962a9431c8d6c6af90e7bd7ea0375224ec",
+      "newSha256": "ad19d0bc6764287ec08c2521701974e7dac941f72e4d0fe81a24f4614494586f"
+    },
+    {
+      "path": "skills/no-comments/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "078ecfe224eafbb017f6476870612838bf6dbe38c0b697e12f0c887d0313f17e",
+      "newSha256": "078ecfe224eafbb017f6476870612838bf6dbe38c0b697e12f0c887d0313f17e"
+    },
+    {
+      "path": "skills/poteto-help/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1b0645c25200a19e5863583e117bad684b1b79ba8434823ebf4f6bbcc61e8a75",
+      "newSha256": "7022e2cd0d65d5964151444c4efa82a34792a6644210a0ba60d7d6cfa69c72b8"
+    },
+    {
+      "path": "skills/poteto-help/references/prompting.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "463f450c44a60afd001a2f69fdf8a5dea174351f339369b12ec3c41515e564d3",
+      "newSha256": "463f450c44a60afd001a2f69fdf8a5dea174351f339369b12ec3c41515e564d3"
+    },
+    {
+      "path": "skills/poteto-help/references/recipes.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "5fb97a805976a82db0aba5cc8943e88d0cb38b17a0d6b8e89a44633677febb1a",
+      "newSha256": "f2d573014f72f7c798b1998b45f4360a8a83e7b8026c4ed9074e56c5a9d49338"
+    },
+    {
+      "path": "skills/poteto-mode/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c5e6b605f46e5d9fbab31afa7a99d3d50680f2180d1fdfae3a924901bc52d99a",
+      "newSha256": "2755f102e7a6d0496b429d1031a22fb353e1f3d523543367caeaae5c4ed6f544"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa",
+      "newSha256": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/autonomous-run.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6ac974fd2b09748add56493e89f578a35a6a9289e1026515878d81ef3cf129d1",
+      "newSha256": "6ac974fd2b09748add56493e89f578a35a6a9289e1026515878d81ef3cf129d1"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/autopilot-full.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "acf4f4a58c11045f9d3e8807d907a877e61ca6432b079f1087d7d30fc931566f",
+      "newSha256": "acf4f4a58c11045f9d3e8807d907a877e61ca6432b079f1087d7d30fc931566f"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60",
+      "newSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/babysit.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "e261c1ff5581e0f8fc6c686f34de4b535f87473e77beabea7dd8323021214610",
+      "newSha256": "e261c1ff5581e0f8fc6c686f34de4b535f87473e77beabea7dd8323021214610"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/bug-fix.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "66e26542dad131cfd7df80ac0cdf81ed4d85e7b5e3f0eb65b933888760c4831f",
+      "newSha256": "66e26542dad131cfd7df80ac0cdf81ed4d85e7b5e3f0eb65b933888760c4831f"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/eval.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a93d449a908236afa6645179651844094b1547dbab4e484cffcdda630e4b90bf",
+      "newSha256": "a93d449a908236afa6645179651844094b1547dbab4e484cffcdda630e4b90bf"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/feature.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "af8ce700b99953741cb547e34308fde0cf6b98ce67e1652c800d0deedf53aba1",
+      "newSha256": "af8ce700b99953741cb547e34308fde0cf6b98ce67e1652c800d0deedf53aba1"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/hillclimb.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "942c1565b75ad02a2cb6230dd7c1ebd87e19f59a00319ebac2b6616007bf018f",
+      "newSha256": "942c1565b75ad02a2cb6230dd7c1ebd87e19f59a00319ebac2b6616007bf018f"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/investigation.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46",
+      "newSha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "5f239457bfdec3345c92caa06c59bf0257c662b89353f25a1c02ea942dcd00b1",
+      "newSha256": "5f239457bfdec3345c92caa06c59bf0257c662b89353f25a1c02ea942dcd00b1"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/opening-a-pr.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a5aef646de8b651306c2d10974623650e4a013a245aec1c00525bbe0e31bfa76",
+      "newSha256": "a5aef646de8b651306c2d10974623650e4a013a245aec1c00525bbe0e31bfa76"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/orchestrate.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "08dce6c9e7be1d13bc6944ab9b51665f935c531437f5e088bc53d2a62099ef05",
+      "newSha256": "08dce6c9e7be1d13bc6944ab9b51665f935c531437f5e088bc53d2a62099ef05"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/pause-safely.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d",
+      "newSha256": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/perf-issue.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c12aa2f82de7651a11676a3d5fea168f539b7f0faaa3a501d279255dd2a469c8",
+      "newSha256": "c12aa2f82de7651a11676a3d5fea168f539b7f0faaa3a501d279255dd2a469c8"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/prototype.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962",
+      "newSha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/refactoring.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "0f5dd38113379ea8cf61e2182eca0a7478eea9a869eb40c2dddab3335aeca197",
+      "newSha256": "0f5dd38113379ea8cf61e2182eca0a7478eea9a869eb40c2dddab3335aeca197"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/runtime-forensics.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
+      "newSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/session-pickup.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d194f2a7ef392c1598ef3f0e3b561370ca25c2c7a78308007af4aa46ada8ee12",
+      "newSha256": "d194f2a7ef392c1598ef3f0e3b561370ca25c2c7a78308007af4aa46ada8ee12"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/shipping.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "bf56339bdf7e0223bcff5abf4e8599e3f5b547b3fcc3b4ce9475e6e7dda14a9f",
+      "newSha256": "bf56339bdf7e0223bcff5abf4e8599e3f5b547b3fcc3b4ce9475e6e7dda14a9f"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/trace-forensics.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5",
+      "newSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/visual-parity.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c",
+      "newSha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c"
+    },
+    {
+      "path": "skills/poteto-mode/playbooks/worktree-cleanup.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "be04ae0afe19d4a4da5bcc4e94455f68dbebd1cda6eb0f456ca0d358ecf76c00",
+      "newSha256": "be04ae0afe19d4a4da5bcc4e94455f68dbebd1cda6eb0f456ca0d358ecf76c00"
+    },
+    {
+      "path": "skills/poteto-mode/references/bugbot-triage.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b2d146c770d8d3593e1ef3d77b668039b8e1f78093ea1a86f1d45d7f99614309",
+      "newSha256": "b2d146c770d8d3593e1ef3d77b668039b8e1f78093ea1a86f1d45d7f99614309"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/bootstrap.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361",
+      "newSha256": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/bun.lock",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46",
+      "newSha256": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/check-plan.mjs",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100755",
+      "newMode": "100755",
+      "oldSha256": "e58c3d871b09d477be00628d69dd23ffa6c2e3a1728f5b867a841baa8e90278b",
+      "newSha256": "e58c3d871b09d477be00628d69dd23ffa6c2e3a1728f5b867a841baa8e90278b"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/check-plan.test.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8",
+      "newSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/orch/orch.test.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "5e80b416bdcd68e4067690ce857345852fd2e0db3dcf3e25607999cd55b963d2",
+      "newSha256": "5e80b416bdcd68e4067690ce857345852fd2e0db3dcf3e25607999cd55b963d2"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/orch/orch.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100755",
+      "newMode": "100755",
+      "oldSha256": "47c92c57e8276616d8de94665a126bd832e748036afa8d0ffdbacb7946decb5c",
+      "newSha256": "47c92c57e8276616d8de94665a126bd832e748036afa8d0ffdbacb7946decb5c"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/orch/store.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "558cfda533e1ebe7c8d7842604f07e0be7618759cf129b4c2397a8e29516ecea",
+      "newSha256": "558cfda533e1ebe7c8d7842604f07e0be7618759cf129b4c2397a8e29516ecea"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/package.json",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "fd511a0c01f522e0c781ddd8eccea0e91697a0856c6e6a3261de78a6a0287c72",
+      "newSha256": "fd511a0c01f522e0c781ddd8eccea0e91697a0856c6e6a3261de78a6a0287c72"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/cli.test.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1",
+      "newSha256": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/cli.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680",
+      "newSha256": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f",
+      "newSha256": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/github.test.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "70c9f03d8738228763846f2abdd8c7de7be68dba3035041482386a69cbf5639b",
+      "newSha256": "70c9f03d8738228763846f2abdd8c7de7be68dba3035041482386a69cbf5639b"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/github.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a605b8531468dbe4c07b93663c0993a9c11dc7e9179adde970f5c740396451d9",
+      "newSha256": "a605b8531468dbe4c07b93663c0993a9c11dc7e9179adde970f5c740396451d9"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/policy.test.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "146acabcfee9b6fa3342358eb0a9504aa65fd081bbc15b10adf9c1c5485067d2",
+      "newSha256": "146acabcfee9b6fa3342358eb0a9504aa65fd081bbc15b10adf9c1c5485067d2"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/policy.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f2a3e31223d05edc05e5473cc3f8f3cb9bd20c202c30c6abe7f21f0f7aee8fbb",
+      "newSha256": "f2a3e31223d05edc05e5473cc3f8f3cb9bd20c202c30c6abe7f21f0f7aee8fbb"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/render.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604",
+      "newSha256": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/tsconfig.json",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45",
+      "newSha256": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/types.compile.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6",
+      "newSha256": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/types.ts",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "0cac435294dc85ce1ba755e8e67f6c5ab163dfa252f2722d6e3a2d68c58fec59",
+      "newSha256": "0cac435294dc85ce1ba755e8e67f6c5ab163dfa252f2722d6e3a2d68c58fec59"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/watch-pr/watch-pr",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100755",
+      "newMode": "100755",
+      "oldSha256": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4",
+      "newSha256": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4"
+    },
+    {
+      "path": "skills/poteto-mode/scripts/worktree-audit.sh",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100755",
+      "newMode": "100755",
+      "oldSha256": "e0a94e5e5b1ff60638916e440600e15851f7b79bc1a1d1f602fde05d465e2ec0",
+      "newSha256": "e0a94e5e5b1ff60638916e440600e15851f7b79bc1a1d1f602fde05d465e2ec0"
+    },
+    {
+      "path": "skills/principle-attack-the-premise/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
+      "newSha256": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599"
+    },
+    {
+      "path": "skills/principle-boundary-discipline/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "62ac2862c2caa22dd14531f51c9c6bb445ceb198ca98a687e25b4d47c1f10a28",
+      "newSha256": "62ac2862c2caa22dd14531f51c9c6bb445ceb198ca98a687e25b4d47c1f10a28"
+    },
+    {
+      "path": "skills/principle-build-the-lever/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3434b0ad0c640c6f1d7960be7a8986c3bcdc14e26060360dec29903df60074ff",
+      "newSha256": "3434b0ad0c640c6f1d7960be7a8986c3bcdc14e26060360dec29903df60074ff"
+    },
+    {
+      "path": "skills/principle-encode-lessons-in-structure/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "228963799189f481827d6f28065f278bc2008ffa37030b1234cbd5814d36b9e9",
+      "newSha256": "228963799189f481827d6f28065f278bc2008ffa37030b1234cbd5814d36b9e9"
+    },
+    {
+      "path": "skills/principle-exhaust-the-design-space/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db",
+      "newSha256": "2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db"
+    },
+    {
+      "path": "skills/principle-experience-first/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b",
+      "newSha256": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b"
+    },
+    {
+      "path": "skills/principle-explain-the-number/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "cd5a25f9e7cf023627ccb470dc5faa97542f29b4319496a32b839a8e1e988047",
+      "newSha256": "cd5a25f9e7cf023627ccb470dc5faa97542f29b4319496a32b839a8e1e988047"
+    },
+    {
+      "path": "skills/principle-fix-root-causes/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "8df3c8c3fe57eb0055a5c8efab8ab144557fdf301da70b1cdc77a3a3ef3f3052",
+      "newSha256": "8df3c8c3fe57eb0055a5c8efab8ab144557fdf301da70b1cdc77a3a3ef3f3052"
+    },
+    {
+      "path": "skills/principle-foundational-thinking/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2",
+      "newSha256": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2"
+    },
+    {
+      "path": "skills/principle-guard-the-context-window/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "af0b9dd70b43628ce4a59a4d332e9d9ad055084e460f430e7a757495c627e81a",
+      "newSha256": "af0b9dd70b43628ce4a59a4d332e9d9ad055084e460f430e7a757495c627e81a"
+    },
+    {
+      "path": "skills/principle-laziness-protocol/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1be6e7a435f26a75a76eb848b9c3d611b9977d0f5822361753244da25ca3ca45",
+      "newSha256": "1be6e7a435f26a75a76eb848b9c3d611b9977d0f5822361753244da25ca3ca45"
+    },
+    {
+      "path": "skills/principle-make-operations-idempotent/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "7aa9327cf1f1aa057e95d47a0a78bd88a8f9d556b608866fee939d455a53a019",
+      "newSha256": "7aa9327cf1f1aa057e95d47a0a78bd88a8f9d556b608866fee939d455a53a019"
+    },
+    {
+      "path": "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "580ad9bb1a0994ecb924321ba49efc38a2f85c64e22c76fb133f57a78272a2e6",
+      "newSha256": "580ad9bb1a0994ecb924321ba49efc38a2f85c64e22c76fb133f57a78272a2e6"
+    },
+    {
+      "path": "skills/principle-minimize-reader-load/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1ea2b7fef2391cae5844c4efdbd59031f775e8a52d06b7495d707229a200dcca",
+      "newSha256": "1ea2b7fef2391cae5844c4efdbd59031f775e8a52d06b7495d707229a200dcca"
+    },
+    {
+      "path": "skills/principle-model-the-domain/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "52c0d85e0c3827c41c18299b642657d7b47eaf77b7b31609e42e0df42b84c75f",
+      "newSha256": "52c0d85e0c3827c41c18299b642657d7b47eaf77b7b31609e42e0df42b84c75f"
+    },
+    {
+      "path": "skills/principle-never-block-on-the-human/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f",
+      "newSha256": "05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f"
+    },
+    {
+      "path": "skills/principle-outcome-oriented-execution/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "10eb91633aa570355ba4bb37088fcade2b22e498df7a58edc749e65bc5a78e2d",
+      "newSha256": "10eb91633aa570355ba4bb37088fcade2b22e498df7a58edc749e65bc5a78e2d"
+    },
+    {
+      "path": "skills/principle-prove-it-works/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ec79a15025bac8d33d62011c54f3b612733fd2a024e623b531b3637aa75070e2",
+      "newSha256": "ec79a15025bac8d33d62011c54f3b612733fd2a024e623b531b3637aa75070e2"
+    },
+    {
+      "path": "skills/principle-redesign-from-first-principles/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034",
+      "newSha256": "170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034"
+    },
+    {
+      "path": "skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb",
+      "newSha256": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb"
+    },
+    {
+      "path": "skills/principle-sequence-verifiable-units/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2ccbbacc56ace5afdfb8670cef19d7bd009fb2a0033b9a741cbdf2b6baf72187",
+      "newSha256": "2ccbbacc56ace5afdfb8670cef19d7bd009fb2a0033b9a741cbdf2b6baf72187"
+    },
+    {
+      "path": "skills/principle-subtract-before-you-add/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f",
+      "newSha256": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f"
+    },
+    {
+      "path": "skills/principle-test-behavior-not-implementation/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6",
+      "newSha256": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6"
+    },
+    {
+      "path": "skills/principle-type-system-discipline/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106",
+      "newSha256": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106"
+    },
+    {
+      "path": "skills/recall/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b0ceb996259c3404532f61e4b010df4e3d80d7ddbed85b3c302895723eb62a89",
+      "newSha256": "b0ceb996259c3404532f61e4b010df4e3d80d7ddbed85b3c302895723eb62a89"
+    },
+    {
+      "path": "skills/reflect/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "1f5a8c246cdee8251f8667d85bd5d97f6c2801f505843c26ddbd6c621632519b",
+      "newSha256": "1f5a8c246cdee8251f8667d85bd5d97f6c2801f505843c26ddbd6c621632519b"
+    },
+    {
+      "path": "skills/reflect/references/divergent-reviewer.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f6030d88e20e906ef5e2d9ba44cb013ce610c49c2fe2ef74c377d32e0dc9e939",
+      "newSha256": "f6030d88e20e906ef5e2d9ba44cb013ce610c49c2fe2ef74c377d32e0dc9e939"
+    },
+    {
+      "path": "skills/reflect/references/judgment-reviewer.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "38f917619fbf346062d643e0ad6b12fc952d58678dfcbbf42ffcf6d8b9c08307",
+      "newSha256": "38f917619fbf346062d643e0ad6b12fc952d58678dfcbbf42ffcf6d8b9c08307"
+    },
+    {
+      "path": "skills/reflect/references/synthesizer.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6af816963de74d1a1aef4070273c1ff533d2072732e488e159ddc0b299fec3cd",
+      "newSha256": "6af816963de74d1a1aef4070273c1ff533d2072732e488e159ddc0b299fec3cd"
+    },
+    {
+      "path": "skills/reflect/references/tooling-reviewer.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "f81b8697e7366fbbc18feba52c6e3253a101f751091364ebc4396a1d9b5753b4",
+      "newSha256": "f81b8697e7366fbbc18feba52c6e3253a101f751091364ebc4396a1d9b5753b4"
+    },
+    {
+      "path": "skills/setup-pstack/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d61b47256a18155a81c8e5ef95e3cc6569ce8c18317c35c4dd9c8015cf68cb59",
+      "newSha256": "b45512f6ca5e96e81681984683b7472bfe892581da3a89a73cca4159438f29ed"
+    },
+    {
+      "path": "skills/sharpen/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6bcd73916696eb9c5b79b6f960983760c34bcc28937c11142dd8d86b5107aa46",
+      "newSha256": "563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2"
+    },
+    {
+      "path": "skills/show-me-your-work/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "920a8217cbb62f92a2222fb81fc9eab17ecd554a0277e444a95a927195139bd1",
+      "newSha256": "920a8217cbb62f92a2222fb81fc9eab17ecd554a0277e444a95a927195139bd1"
+    },
+    {
+      "path": "skills/show-me-your-work/references/decision-log-template.tsv",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76",
+      "newSha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+    },
+    {
+      "path": "skills/show-me-your-work/scripts/log.sh",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100755",
+      "newMode": "100755",
+      "oldSha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e",
+      "newSha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e"
+    },
+    {
+      "path": "skills/statechart/SKILL.md",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "9b2a6dccf86286646cffb3bd00f7ee060d6c26983e566c766d4be53aa56f9445"
+    },
+    {
+      "path": "skills/statechart/scripts/chart-to-tla.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "9f794e273d0729ae874d68a67bfa1df4ebddc12420b7ab5081fdf58dceb729e4"
+    },
+    {
+      "path": "skills/statechart/scripts/compare-charts.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "12f4dc4700093156978ef1785b92739c8cf1e8375b8d13201fcdc2006a20c43b"
+    },
+    {
+      "path": "skills/statechart/scripts/lib.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "941280e42b9dbfd2b40116287a2ebbc6e391b826876a001b1ba7aff365c1e41d"
+    },
+    {
+      "path": "skills/statechart/scripts/model/OutputFolder.cfg",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "8b9662ab7d51de9d54f84abab02888822da9c01ce4f1b86a6453a8a513773995"
+    },
+    {
+      "path": "skills/statechart/scripts/model/OutputFolder.map.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "33f2ef1c2ba397573206640843fffbc228d066e53fe5ced779d82f99600f3fd8"
+    },
+    {
+      "path": "skills/statechart/scripts/model/OutputFolder.tla",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "75bef6811d9a8e56bd702fd8d782e52101918c8dc05c6cc9dc43d02b9fe1b56f"
+    },
+    {
+      "path": "skills/statechart/scripts/statechart.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "3c3ed2a29b9f0b2d037b434ef205f505939ac713c6a16f9a806844d513f957a0"
+    },
+    {
+      "path": "skills/statechart/scripts/test/statechart.test.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "02302548c175f6bfc707aee30bd7ee81a2b1754eca6818c550bf20a68361e7cd"
+    },
+    {
+      "path": "skills/statechart/scripts/test/sync.mmd",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "cb1f5387058a0f79d6187eb217690588a2e2d384637b4d53cbc4bb050c570757"
+    },
+    {
+      "path": "skills/statechart/scripts/test/upload.mmd",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "bbc1fa70e26cbcbcc7cde5d8fb7eda26df34b6d973053bf13c40b18527ff0e76"
+    },
+    {
+      "path": "skills/statechart/scripts/tlc-to-chart.mjs",
+      "change": "added",
+      "ownership": "source-only",
+      "oldMode": null,
+      "newMode": "100644",
+      "oldSha256": null,
+      "newSha256": "77aa854918f9c5d04fd3ad8838da39f24d8e05a2217a5c3be039d678509c6ef2"
+    },
+    {
+      "path": "skills/swarm/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "031657cb81e490f9aed5c75d6ff2a4fda35ccafbaf72be604e59481cc4080cdc",
+      "newSha256": "031657cb81e490f9aed5c75d6ff2a4fda35ccafbaf72be604e59481cc4080cdc"
+    },
+    {
+      "path": "skills/tdd/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
+      "newSha256": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f"
+    },
+    {
+      "path": "skills/teach/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "bd286e5a6290673be2cd28aef7af2ec7f1fb138e6bce156ea657368c7e7fc8a4",
+      "newSha256": "bd286e5a6290673be2cd28aef7af2ec7f1fb138e6bce156ea657368c7e7fc8a4"
+    },
+    {
+      "path": "skills/technical-writing/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "61fe9c424a798ebf36ad94941f87be049cb8827bdf86d21474a0dde37b513c43",
+      "newSha256": "61fe9c424a798ebf36ad94941f87be049cb8827bdf86d21474a0dde37b513c43"
+    },
+    {
+      "path": "skills/typescript-best-practices/SKILL.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "28f9e61710e205f6f3c5476f333483cff0e988f6a5b639e2faad536344b40c5e",
+      "newSha256": "ec1dac086d3708e5940d45d250c30a37dd953b4e3cb2ca0692f5851d7a039e27"
+    },
+    {
+      "path": "skills/typescript-best-practices/references/patterns.md",
+      "change": "modified",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
+      "newSha256": "12e70c9419a8b3f5d6a1ab80e272c1f00a43ac0b3bbf72d68199033570e5de77"
+    },
+    {
+      "path": "skills/unslop/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "ccab208e315ce05e2fab8eeee2f7879f1289b5c6844840b2d307adf31c79144f",
+      "newSha256": "ccab208e315ce05e2fab8eeee2f7879f1289b5c6844840b2d307adf31c79144f"
+    },
+    {
+      "path": "skills/why/SKILL.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "144d42e7712723d763e607bc0a969e5f1cdf83ec7228519d87677cc534571bed",
+      "newSha256": "144d42e7712723d763e607bc0a969e5f1cdf83ec7228519d87677cc534571bed"
+    },
+    {
+      "path": "skills/why/references/epistemics.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "d54a2361b2d5973bc3fe2edf62f446d87935974d4b40d47f23b9529f956ca758",
+      "newSha256": "d54a2361b2d5973bc3fe2edf62f446d87935974d4b40d47f23b9529f956ca758"
+    },
+    {
+      "path": "skills/why/references/investigator-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "c44afba186f899094f3694e6c9d6de5d14ff7c4ce28b787a9f50fc789c9a7fc3",
+      "newSha256": "c44afba186f899094f3694e6c9d6de5d14ff7c4ce28b787a9f50fc789c9a7fc3"
+    },
+    {
+      "path": "skills/why/references/source-playbook.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a",
+      "newSha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a"
+    },
+    {
+      "path": "skills/why/references/sources/code-archaeology.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7",
+      "newSha256": "a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7"
+    },
+    {
+      "path": "skills/why/references/sources/databricks.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6",
+      "newSha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6"
+    },
+    {
+      "path": "skills/why/references/sources/datadog.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "b139faac5dc11b8f26c8255dce6033c1a6ac143b038d3dd103f2034c5dbec9cd",
+      "newSha256": "b139faac5dc11b8f26c8255dce6033c1a6ac143b038d3dd103f2034c5dbec9cd"
+    },
+    {
+      "path": "skills/why/references/sources/incident-postmortem.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "bf2661f1a81c37700884a45b77d6289be0c802b065febced31990e6564510839",
+      "newSha256": "bf2661f1a81c37700884a45b77d6289be0c802b065febced31990e6564510839"
+    },
+    {
+      "path": "skills/why/references/sources/linear.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c",
+      "newSha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c"
+    },
+    {
+      "path": "skills/why/references/sources/notion.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997",
+      "newSha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997"
+    },
+    {
+      "path": "skills/why/references/sources/sentry.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702",
+      "newSha256": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702"
+    },
+    {
+      "path": "skills/why/references/sources/slack.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "3bc6309f5c7b26ace3b919dbd7f7b048861dd2020f910fe24f656cc74b3b661c",
+      "newSha256": "3bc6309f5c7b26ace3b919dbd7f7b048861dd2020f910fe24f656cc74b3b661c"
+    },
+    {
+      "path": "skills/why/references/synthesizer-prompt.md",
+      "change": "unchanged",
+      "ownership": "derived",
+      "oldMode": "100644",
+      "newMode": "100644",
+      "oldSha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb",
+      "newSha256": "11c62671aa7b7a6e3d36929ffe2b59bf95e6ca664eee4d93e6ee527dd3390ddb"
+    }
+  ],
+  "derivations": [
+    {
+      "source": "skills/architect/references/design-red-flags.md",
+      "output": "src/core/skills/architect/references/design-red-flags.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce"
+    },
+    {
+      "source": "skills/architect/references/rationale-template.md",
+      "output": "src/core/skills/architect/references/rationale-template.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "0cedfccdc7b47fc881febd5a8293eecbc542c20f8df825639904a8102d2eb5d3"
+    },
+    {
+      "source": "skills/architect/references/runner-prompt.md",
+      "output": "src/core/skills/architect/references/runner-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "21dd5314aab778c5007228027a4591d97693fbec6ab86524037772b63f40948e"
+    },
+    {
+      "source": "skills/architect/SKILL.md",
+      "output": "src/core/skills/architect/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "authorization",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "bba2ac198ec2a66bd9452c8667592f863d9667b888f9a573584e8ed5e91fea49"
+    },
+    {
+      "source": "skills/arena/SKILL.md",
+      "output": "src/core/skills/arena/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "f1e3e0eb351b590c9aa67fe8271c80ddd0da67ebae8f52331f44dc63923098ec"
+    },
+    {
+      "source": "skills/automate-me/SKILL.md",
+      "output": "src/core/skills/automate-me/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 4,
+          "observed": 4
+        },
+        {
+          "replacement": 5,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 7,
+          "category": "path",
+          "expected": 4,
+          "observed": 4
+        }
+      ],
+      "proposedOutputSha256": "3a80e210ef4306887c1e982cb110141bbff03778253f4a8f489e7a5ea7c68217"
+    },
+    {
+      "source": "skills/benchmark-checklist/SKILL.md",
+      "output": "src/core/skills/benchmark-checklist/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "a9957c90330f7b64b7ee00fc115383a775f87b179b8b84a9321f16e6a8d2bd0d"
+    },
+    {
+      "source": "skills/blast-radius/SKILL.md",
+      "output": "src/core/skills/blast-radius/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ddcd2f61ddfbffe41438b453cf2cb3728ad0cac2801c3371ebd057df778b036f"
+    },
+    {
+      "source": "skills/bro/SKILL.md",
+      "output": "src/core/skills/bro/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ccc706c0bd3e100a408518985441e41087730da52044fba6b33fd381338f88d6"
+    },
+    {
+      "source": "skills/correct/SKILL.md",
+      "output": "src/core/skills/correct/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "bbd8bc7e59c3cb9894f56457792b82d8be38f7f920433d489be572657a0124c2"
+    },
+    {
+      "source": "skills/create-verification-skill/references/feature-map-example/create-note.md",
+      "output": "src/core/skills/create-verification-skill/references/feature-map-example/create-note.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7"
+    },
+    {
+      "source": "skills/create-verification-skill/references/feature-map-example/README.md",
+      "output": "src/core/skills/create-verification-skill/references/feature-map-example/README.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba"
+    },
+    {
+      "source": "skills/create-verification-skill/references/feature-map-example/search.md",
+      "output": "src/core/skills/create-verification-skill/references/feature-map-example/search.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823"
+    },
+    {
+      "source": "skills/create-verification-skill/SKILL.md",
+      "output": "src/core/skills/create-verification-skill/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 3,
+          "observed": 3
+        }
+      ],
+      "proposedOutputSha256": "1fc95a4b410363e1a97dce99386a86b3fc16fd966c5a1a186c2ee9cf8fd8ab51"
+    },
+    {
+      "source": "skills/figure-it-out/SKILL.md",
+      "output": "src/core/skills/figure-it-out/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ffd6ae1cdbfb0bcc6bea8b7ed7f476902c157aa7cf6de986be3a7dcb9fd6b99e"
+    },
+    {
+      "source": "skills/how/references/explainer-prompt.md",
+      "output": "src/core/skills/how/references/explainer-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff"
+    },
+    {
+      "source": "skills/how/references/explorer-prompt.md",
+      "output": "src/core/skills/how/references/explorer-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1"
+    },
+    {
+      "source": "skills/how/SKILL.md",
+      "output": "src/core/skills/how/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "15d811e20863ee4b88e717436982ba26353daaa4777574eb805e9f9e6f79270b"
+    },
+    {
+      "source": "skills/interrogate/references/code-quality-review.md",
+      "output": "src/core/skills/interrogate/references/code-quality-review.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8"
+    },
+    {
+      "source": "skills/interrogate/references/lead-judgment.md",
+      "output": "src/core/skills/interrogate/references/lead-judgment.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87"
+    },
+    {
+      "source": "skills/interrogate/references/reviewer-prompt.md",
+      "output": "src/core/skills/interrogate/references/reviewer-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "f6005cc2b535006fca97a96c5bfda49df57312eedf1ffd8d1aaaf3eb33817c25"
+    },
+    {
+      "source": "skills/interrogate/references/rubric.md",
+      "output": "src/core/skills/interrogate/references/rubric.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "0f9c6bdb0b96e26dbde5f6407f417e0c02f54080e7a1268d8994f3c3ec6c5ac0"
+    },
+    {
+      "source": "skills/interrogate/SKILL.md",
+      "output": "src/core/skills/interrogate/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 9,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "c075d88d85b545bdb60ff748597365a0b93cbe1337714f78c524a2d039bed325"
+    },
+    {
+      "source": "skills/ketchup/SKILL.md",
+      "output": "src/core/skills/ketchup/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 0
+        }
+      ],
+      "proposedOutputSha256": null
+    },
+    {
+      "source": "skills/maintain-verification-skill/SKILL.md",
+      "output": "src/core/skills/maintain-verification-skill/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "13ab424523a1700fea62e64ba0ed61090276a4d52abbfeabae28109f46188fa9"
+    },
+    {
+      "source": "skills/make-bot-ui/SKILL.md",
+      "output": "src/core/skills/make-bot-ui/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 0
+        }
+      ],
+      "proposedOutputSha256": null
+    },
+    {
+      "source": "skills/no-comments/SKILL.md",
+      "output": "src/core/skills/no-comments/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "4c4bee27434928cd6fed034910df42c083904814b0608a0efd20fe70d4f9e0cb"
+    },
+    {
+      "source": "skills/poteto-help/references/prompting.md",
+      "output": "src/core/skills/poteto-help/references/prompting.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "463f450c44a60afd001a2f69fdf8a5dea174351f339369b12ec3c41515e564d3"
+    },
+    {
+      "source": "skills/poteto-help/references/recipes.md",
+      "output": "src/core/skills/poteto-help/references/recipes.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "f2d573014f72f7c798b1998b45f4360a8a83e7b8026c4ed9074e56c5a9d49338"
+    },
+    {
+      "source": "skills/poteto-help/SKILL.md",
+      "output": "src/core/skills/poteto-help/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "name",
+          "expected": 11,
+          "observed": 11
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 4,
+          "observed": 4
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 3,
+          "observed": 5
+        }
+      ],
+      "proposedOutputSha256": null
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "output": "src/core/skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9c2d036aad4a6c19f1fad9bfbc5f34aad9b5877b312e7886cc7785cb4d1cc97d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "output": "src/core/skills/authoring-a-skill/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "8e8e3d1e81f538c0172ed1ff8a1388ddbc521a7347f05369e2f275b096aab507"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autonomous-run.md",
+      "output": "src/core/skills/poteto-mode/playbooks/autonomous-run.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ef6c84b7adc5fee3969252c878c270cafffa7f3d848f418c4a9e50d36e6cc5a1"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autonomous-run.md",
+      "output": "src/core/skills/autonomous-run/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "6a2a08ad7cac6dad04a3bce6c14f70d37c5ca4ea9eb77cecd9398b5bd5277e46"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-full.md",
+      "output": "src/core/skills/poteto-mode/playbooks/autopilot-full.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ed1f26c2fc9a32b6ce073f7642758757c5a0835de6fa76e5e3c6beb9f8895c12"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-full.md",
+      "output": "src/core/skills/autopilot-full/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0a7f86636fcaeddc80b230daa029f3d8927de9b1faacae21976e50e365e9a21b"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "output": "src/core/skills/poteto-mode/playbooks/autopilot-stack.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "c6bcb18b2ce605e77a2a2225854590a4b9a687911f79331746d91a4fe9a52e60"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "output": "src/core/skills/autopilot-stack/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "cd86908ab065e402e9c1b41a675ce4158500381b94097552950f889f5a296f2d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/babysit.md",
+      "output": "src/core/skills/poteto-mode/playbooks/babysit.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "cfe7aee8c69097f557783131940ce1eb3bf05a37ab377fa39b425dbfeb75c0d2"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/babysit.md",
+      "output": "src/core/skills/babysit/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "3c7ed665773a69f126e45240a4387c10ad1c8b6b2063b05fde03c4988cbf4fa6"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/bug-fix.md",
+      "output": "src/core/skills/poteto-mode/playbooks/bug-fix.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "56456231863e1d65a93160670a658ce692aff7c302e96768abc03b8e6231a875"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/bug-fix.md",
+      "output": "src/core/skills/bug-fix/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "b8490ee0420464ddb961f0d5786aa7a6c28bb4b0da695d338806a1e48860d349"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/eval.md",
+      "output": "src/core/skills/poteto-mode/playbooks/eval.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1f3cba8268f6e6ba8b4d61fb211f494eee6e7235f7b1af7d27674c5095ee12e6"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/eval.md",
+      "output": "src/core/skills/eval/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "426a35e4003944f12e862c61d699d8b135db6c351900e9e6e1c62f5b83536a42"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/feature.md",
+      "output": "src/core/skills/poteto-mode/playbooks/feature.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "655811733a3b2e9229a72383712c02d4b69b779c972ec56a73bbead6871ad5b1"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/feature.md",
+      "output": "src/core/skills/feature/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1a5ae1d0f63de0d071973bd5a18272888f205258d92eca84f9517a6719ba307d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/hillclimb.md",
+      "output": "src/core/skills/poteto-mode/playbooks/hillclimb.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0a7f7c5b090358e36b59065d7f86dd317943a519521f55e70a2707b1eb5ba694"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/hillclimb.md",
+      "output": "src/core/skills/hillclimb/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "6aa44d6b1975a58b4ffff6d8dc56b743837992436cdc7eddcc88d8529182bec2"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/investigation.md",
+      "output": "src/core/skills/poteto-mode/playbooks/investigation.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/investigation.md",
+      "output": "src/core/skills/investigation/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "6f87f116e040be00eed19c2ad10d3f0d261121ec2a0ad82fc3f93ebba391cb2f"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "output": "src/core/skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "path",
+          "expected": 9,
+          "observed": 9
+        },
+        {
+          "replacement": 6,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "de5c91a55624000a198cd5a38a47e386a27aab35196f0771373c4c8a74b2e68f"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "output": "src/core/skills/multi-phase-plan/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 5,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 6,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "path",
+          "expected": 9,
+          "observed": 9
+        },
+        {
+          "replacement": 9,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "bab54ecb1c879e8ab3947970315d94e9ba0ed7ec14c3e0f36a3a0f283eb80107"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
+      "output": "src/core/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "b7935a08e33e3b2113b3bfef58028b1b758b43e1d5553f421a876c646b528ebf"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
+      "output": "src/core/skills/opening-a-pr/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "d256a13e20b1ec5d403ccc8c88323afc1d5109d1d281708a6c00242e3456e5fe"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/orchestrate.md",
+      "output": "src/core/skills/poteto-mode/playbooks/orchestrate.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "cbe24a857aec0468cab856b19efb6bc0a8dca1b499c3757537faba2ca86d8f81"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/orchestrate.md",
+      "output": "src/core/skills/orchestrate/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "path",
+          "expected": 4,
+          "observed": 4
+        }
+      ],
+      "proposedOutputSha256": "5893ece7a499a05ca3fd720b19f4d0700f5ed476d1bc10b0b2eb40b67175d5b0"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/pause-safely.md",
+      "output": "src/core/skills/poteto-mode/playbooks/pause-safely.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/pause-safely.md",
+      "output": "src/core/skills/pause-safely/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "705174f89dbed4313071102d879c216baeeb0d339833a82d864750e3fb2e9aa5"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/perf-issue.md",
+      "output": "src/core/skills/poteto-mode/playbooks/perf-issue.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0987cbe0ee9884f4b614c6d76ddc964f397d4125bc7b59420ea7268e03e5f7df"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/perf-issue.md",
+      "output": "src/core/skills/perf-issue/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9f3a22335b22c0231717ae25aeeb97ee8240579f61233c6b182aeb937474c137"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/prototype.md",
+      "output": "src/core/skills/poteto-mode/playbooks/prototype.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/prototype.md",
+      "output": "src/core/skills/prototype/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "22a3af903237e3848f3da940dcf749635f8fa9b1e6c863bddbe2300212f0cf5c"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/refactoring.md",
+      "output": "src/core/skills/poteto-mode/playbooks/refactoring.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9a15ca8a3997ce446352d3145949ad1292403633de7a2db12a1dc0549a6f1bd2"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/refactoring.md",
+      "output": "src/core/skills/refactoring/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "aa5630adc65cc13f6359eb64cf5ece18438cd73d151826c08ceb9a46f67df2f4"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
+      "output": "src/core/skills/poteto-mode/playbooks/runtime-forensics.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
+      "output": "src/core/skills/runtime-forensics/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ade34718a994375d34f0e52a05c5fda9c1c49514bf06a3395d943f011a6c6459"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/session-pickup.md",
+      "output": "src/core/skills/poteto-mode/playbooks/session-pickup.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0704eff1617a4a620cac3825b252f70a62aaaf370132d477364eaa0096add5a8"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/session-pickup.md",
+      "output": "src/core/skills/session-pickup/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "6fd34a665497e9c204e97a04023cd487f9166a7f5f7c347f750fb279b0e2ee20"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/shipping.md",
+      "output": "src/core/skills/poteto-mode/playbooks/shipping.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "64eb171608e29e83ed15193289926bbf9ac3b3cde30461353621a1e5210ddd0e"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/shipping.md",
+      "output": "src/core/skills/shipping/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "a38903a5a78b7be9e8f275195b3b06802f77d3c480de77e6f66bc806cd2a46ec"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/trace-forensics.md",
+      "output": "src/core/skills/poteto-mode/playbooks/trace-forensics.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "ef0bbf79856a4ae1a8993d54c1a1da159cb97623941b652c0069cf75a017e0f5"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/trace-forensics.md",
+      "output": "src/core/skills/trace-forensics/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "aca5205239064aac9fbdb6c6137afebeb9be9c6b4c1c67c355b608e64accc167"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/visual-parity.md",
+      "output": "src/core/skills/poteto-mode/playbooks/visual-parity.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/visual-parity.md",
+      "output": "src/core/skills/visual-parity/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1df0c0376d118b5a528c735e089e688f6a9bf6bd665b34ae8a360ca8cb5627c4"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/worktree-cleanup.md",
+      "output": "src/core/skills/poteto-mode/playbooks/worktree-cleanup.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1e80b77e06656d64413975e584585f128a74582af9b28af08644c442a8951471"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/worktree-cleanup.md",
+      "output": "src/core/skills/worktree-cleanup/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 2,
+          "observed": 2
+        }
+      ],
+      "proposedOutputSha256": "108c6621883168d84d667896b1d995138f3a6a870170dea2ea0b983fb32946cb"
+    },
+    {
+      "source": "skills/poteto-mode/references/bugbot-triage.md",
+      "output": "src/core/skills/poteto-mode/references/bugbot-triage.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "b2d146c770d8d3593e1ef3d77b668039b8e1f78093ea1a86f1d45d7f99614309"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/bootstrap.ts",
+      "output": "src/core/skills/poteto-mode/scripts/bootstrap.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/bun.lock",
+      "output": "src/core/skills/poteto-mode/scripts/bun.lock",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/check-plan.mjs",
+      "output": "src/core/skills/poteto-mode/scripts/check-plan.mjs",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "e58c3d871b09d477be00628d69dd23ffa6c2e3a1728f5b867a841baa8e90278b"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/orch/orch.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/orch/orch.test.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "5e80b416bdcd68e4067690ce857345852fd2e0db3dcf3e25607999cd55b963d2"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/orch/orch.ts",
+      "output": "src/core/skills/poteto-mode/scripts/orch/orch.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "47c92c57e8276616d8de94665a126bd832e748036afa8d0ffdbacb7946decb5c"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/orch/store.ts",
+      "output": "src/core/skills/poteto-mode/scripts/orch/store.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "558cfda533e1ebe7c8d7842604f07e0be7618759cf129b4c2397a8e29516ecea"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/package.json",
+      "output": "src/core/skills/poteto-mode/scripts/package.json",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "fd511a0c01f522e0c781ddd8eccea0e91697a0856c6e6a3261de78a6a0287c72"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/cli.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/cli.test.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/cli.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/cli.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/github.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/github.test.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "70c9f03d8738228763846f2abdd8c7de7be68dba3035041482386a69cbf5639b"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/github.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/github.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "a605b8531468dbe4c07b93663c0993a9c11dc7e9179adde970f5c740396451d9"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/policy.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/policy.test.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "146acabcfee9b6fa3342358eb0a9504aa65fd081bbc15b10adf9c1c5485067d2"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/policy.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/policy.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "f2a3e31223d05edc05e5473cc3f8f3cb9bd20c202c30c6abe7f21f0f7aee8fbb"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/render.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/render.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/tsconfig.json",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/tsconfig.json",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/types.compile.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/types.compile.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/types.ts",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/types.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "0cac435294dc85ce1ba755e8e67f6c5ab163dfa252f2722d6e3a2d68c58fec59"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/watch-pr/watch-pr",
+      "output": "src/core/skills/poteto-mode/scripts/watch-pr/watch-pr",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/worktree-audit.sh",
+      "output": "src/core/skills/poteto-mode/scripts/worktree-audit.sh",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "e0a94e5e5b1ff60638916e440600e15851f7b79bc1a1d1f602fde05d465e2ec0"
+    },
+    {
+      "source": "skills/poteto-mode/SKILL.md",
+      "output": "src/core/skills/poteto-mode/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 0
+        }
+      ],
+      "proposedOutputSha256": null
+    },
+    {
+      "source": "skills/principle-attack-the-premise/SKILL.md",
+      "output": "src/core/skills/principle-attack-the-premise/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "a6a8e2676c3297118cf7280834f8ed400cef3e5a0ddc2850561134dd0f57c5c7"
+    },
+    {
+      "source": "skills/principle-boundary-discipline/SKILL.md",
+      "output": "src/core/skills/principle-boundary-discipline/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "711d9038fc8f1d86ae19d77f5521c497a36d3f1c14d4944da5e41e621d9bbdea"
+    },
+    {
+      "source": "skills/principle-build-the-lever/SKILL.md",
+      "output": "src/core/skills/principle-build-the-lever/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "c694ffbbf8f7d868d7ee6af9f4c51436488e022b6b9fb6f176e351c6b7df387e"
+    },
+    {
+      "source": "skills/principle-encode-lessons-in-structure/SKILL.md",
+      "output": "src/core/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1fa1ff619b9c4f922c185ec49f3a997b0d8eb15461acd217ffaed2ed4adeed5c"
+    },
+    {
+      "source": "skills/principle-exhaust-the-design-space/SKILL.md",
+      "output": "src/core/skills/principle-exhaust-the-design-space/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "89167005ec38998fd617725f8f9f45b70afb65ddbad3347bfbab49c37a8886b7"
+    },
+    {
+      "source": "skills/principle-experience-first/SKILL.md",
+      "output": "src/core/skills/principle-experience-first/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "50d89c0601302aa621da6ec8285d0063c27117b8c1f9cf0b906e71b67e6a93e5"
+    },
+    {
+      "source": "skills/principle-explain-the-number/SKILL.md",
+      "output": "src/core/skills/principle-explain-the-number/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9417ca99c50abdb7d5fa963f64a9f2b809226f4fdf0905f99f0f6de58dae390e"
+    },
+    {
+      "source": "skills/principle-fix-root-causes/SKILL.md",
+      "output": "src/core/skills/principle-fix-root-causes/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "5a70ed5a79da965e5055f1540402927db4a17323ac146cc9c006335c5fca04ef"
+    },
+    {
+      "source": "skills/principle-foundational-thinking/SKILL.md",
+      "output": "src/core/skills/principle-foundational-thinking/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "da68c2d0fdb1c008cb8f794e115fc3317b3b9fadf5b30569f5c01da02d777a65"
+    },
+    {
+      "source": "skills/principle-guard-the-context-window/SKILL.md",
+      "output": "src/core/skills/principle-guard-the-context-window/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "2ba97ca3e6e44b8228d23928bdccc67a0959065cf2f1e64c14c37c0c884fffc1"
+    },
+    {
+      "source": "skills/principle-laziness-protocol/SKILL.md",
+      "output": "src/core/skills/principle-laziness-protocol/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "691f9e63ee559d5bb9901dba02175cfe316af1153de257d470db7b08f6fa1b3b"
+    },
+    {
+      "source": "skills/principle-make-operations-idempotent/SKILL.md",
+      "output": "src/core/skills/principle-make-operations-idempotent/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "8a9529d6862c7e987b1b2090d38a5a695bb03ac499a45749dd82c9395802fae1"
+    },
+    {
+      "source": "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "output": "src/core/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "2cd3b07126d8884c6541466a8c68bc138b05423015e58e58c5c91168e4e7d32e"
+    },
+    {
+      "source": "skills/principle-minimize-reader-load/SKILL.md",
+      "output": "src/core/skills/principle-minimize-reader-load/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "e70ca33748563912c52da45cebee1e4e10a0fec5fd64cd7e3bbf123bf04c0e63"
+    },
+    {
+      "source": "skills/principle-model-the-domain/SKILL.md",
+      "output": "src/core/skills/principle-model-the-domain/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "c6b597967f9098be38953eb1aa7d40aa491dc35a65587bc2145047b50f6a0332"
+    },
+    {
+      "source": "skills/principle-never-block-on-the-human/SKILL.md",
+      "output": "src/core/skills/principle-never-block-on-the-human/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "cd50ad1cc7c34d5616bd02ec49301ae9089aba5acaa9fa577e66003fee1a7592"
+    },
+    {
+      "source": "skills/principle-outcome-oriented-execution/SKILL.md",
+      "output": "src/core/skills/principle-outcome-oriented-execution/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "eeb64ae994e48420b345d9fc36ceaa482f546cae67f9f0cfbd33f30c65c9abe4"
+    },
+    {
+      "source": "skills/principle-prove-it-works/SKILL.md",
+      "output": "src/core/skills/principle-prove-it-works/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "82f54b17c98be5fff119b4ca06aa5c5391d8057a2e732fd707005fc291ff2b69"
+    },
+    {
+      "source": "skills/principle-redesign-from-first-principles/SKILL.md",
+      "output": "src/core/skills/principle-redesign-from-first-principles/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "6933a778bbe95d60fcdd401cbc5b696275996583d379952a5e9331acb6c87322"
+    },
+    {
+      "source": "skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "output": "src/core/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "03185f202138596b08c23825f395a89a6d7908c7949dfb8c1c43bad681563ca2"
+    },
+    {
+      "source": "skills/principle-sequence-verifiable-units/SKILL.md",
+      "output": "src/core/skills/principle-sequence-verifiable-units/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "e80771940bef4a85e4b0ebc425d89e41b3e57b635d8c0410d8b8b3823e111bc6"
+    },
+    {
+      "source": "skills/principle-subtract-before-you-add/SKILL.md",
+      "output": "src/core/skills/principle-subtract-before-you-add/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "680d370629dd53b14cb3ec3858cf85e4746ad6876fe52c178661b5b70fe843c9"
+    },
+    {
+      "source": "skills/principle-test-behavior-not-implementation/SKILL.md",
+      "output": "src/core/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "ebfa9cd9029a8f8132259540c00b76c1b7f39caa60597f6f60501bcf81a6fa6e"
+    },
+    {
+      "source": "skills/principle-type-system-discipline/SKILL.md",
+      "output": "src/core/skills/principle-type-system-discipline/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "cc150d79d784c190908aed4de026ba7485347700375a973a81961853d85d846d"
+    },
+    {
+      "source": "skills/recall/SKILL.md",
+      "output": "src/core/skills/recall/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "c625d4e8d9876d8882a330d3e3ad096b6ce26ac5ed5ab57b0ef7ecc82180f202"
+    },
+    {
+      "source": "skills/reflect/references/divergent-reviewer.md",
+      "output": "src/core/skills/reflect/references/divergent-reviewer.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "82ed1c3a18d26cf43861e41b9147fd812601030aa4ac76fade6ccdf66788e43a"
+    },
+    {
+      "source": "skills/reflect/references/judgment-reviewer.md",
+      "output": "src/core/skills/reflect/references/judgment-reviewer.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "28f7726b8be671d2cc35cac490f9882eb1530fc6c0e2e05d7d39ab2a7f7addf2"
+    },
+    {
+      "source": "skills/reflect/references/synthesizer.md",
+      "output": "src/core/skills/reflect/references/synthesizer.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "6af816963de74d1a1aef4070273c1ff533d2072732e488e159ddc0b299fec3cd"
+    },
+    {
+      "source": "skills/reflect/references/tooling-reviewer.md",
+      "output": "src/core/skills/reflect/references/tooling-reviewer.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9c2df4b12a6d940119b4aeed3a16f644abb5e6eaef6b453660d6852b4333ef6d"
+    },
+    {
+      "source": "skills/reflect/SKILL.md",
+      "output": "src/core/skills/reflect/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 9,
+          "category": "tools",
+          "expected": 3,
+          "observed": 3
+        },
+        {
+          "replacement": 10,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 11,
+          "category": "tools",
+          "expected": 2,
+          "observed": 2
+        },
+        {
+          "replacement": 12,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "74de05d1aadcb627743e11eb9ca057fc0e5d1a4bc7df4db719cb2ed84d3cd578"
+    },
+    {
+      "source": "skills/setup-pstack/SKILL.md",
+      "output": "src/core/skills/setup-oh-my-stack/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "name",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "authorization",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 9,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 10,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 11,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9a0c30e3cff7fe1b3629ca4644585be3b4791d860b6120c102cedd399cddc6f5"
+    },
+    {
+      "source": "skills/show-me-your-work/references/decision-log-template.tsv",
+      "output": "src/core/skills/show-me-your-work/references/decision-log-template.tsv",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76"
+    },
+    {
+      "source": "skills/show-me-your-work/scripts/log.sh",
+      "output": "src/core/skills/show-me-your-work/scripts/log.sh",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e"
+    },
+    {
+      "source": "skills/show-me-your-work/SKILL.md",
+      "output": "src/core/skills/show-me-your-work/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "7f8bf596e9f79317e060b0ecc537d69419f6c74061c2745885c8557d1ee85ef1"
+    },
+    {
+      "source": "skills/swarm/SKILL.md",
+      "output": "src/core/skills/swarm/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 9,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "7f31fa19c63414a6a2e1a96505f10670f7f1652fc639a7af2d3fbd7bab1b8659"
+    },
+    {
+      "source": "skills/tdd/SKILL.md",
+      "output": "src/core/skills/tdd/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "adfa670e8c1991673ef712418e643144bdc117a13ecfbb705fc9923822600d4b"
+    },
+    {
+      "source": "skills/teach/SKILL.md",
+      "output": "src/core/skills/teach/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0f3fabc3b388308946f1b40b91b50481f07a7899dafe2d28288cfb3a01861005"
+    },
+    {
+      "source": "skills/technical-writing/SKILL.md",
+      "output": "src/core/skills/technical-writing/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "fa5031faa6abca11910f1554403439810e358a4bb6d7de314933bdc7d65c88ad"
+    },
+    {
+      "source": "skills/typescript-best-practices/references/patterns.md",
+      "output": "src/core/skills/typescript-best-practices/references/patterns.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "12e70c9419a8b3f5d6a1ab80e272c1f00a43ac0b3bbf72d68199033570e5de77"
+    },
+    {
+      "source": "skills/typescript-best-practices/SKILL.md",
+      "output": "src/core/skills/typescript-best-practices/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "8315f2e001ec183a6b92c7108afdd3a61f96cbabb109ec083480b2b5a085230e"
+    },
+    {
+      "source": "skills/unslop/SKILL.md",
+      "output": "src/core/skills/unslop/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "b3a8e2ca87637d15666471c53c5e804ad32722988e2d272f15487aa426a69edf"
+    },
+    {
+      "source": "skills/why/references/epistemics.md",
+      "output": "src/core/skills/why/references/epistemics.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "d54a2361b2d5973bc3fe2edf62f446d87935974d4b40d47f23b9529f956ca758"
+    },
+    {
+      "source": "skills/why/references/investigator-prompt.md",
+      "output": "src/core/skills/why/references/investigator-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "c44afba186f899094f3694e6c9d6de5d14ff7c4ce28b787a9f50fc789c9a7fc3"
+    },
+    {
+      "source": "skills/why/references/source-playbook.md",
+      "output": "src/core/skills/why/references/source-playbook.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a"
+    },
+    {
+      "source": "skills/why/references/sources/code-archaeology.md",
+      "output": "src/core/skills/why/references/sources/code-archaeology.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7"
+    },
+    {
+      "source": "skills/why/references/sources/databricks.md",
+      "output": "src/core/skills/why/references/sources/databricks.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6"
+    },
+    {
+      "source": "skills/why/references/sources/datadog.md",
+      "output": "src/core/skills/why/references/sources/datadog.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "b139faac5dc11b8f26c8255dce6033c1a6ac143b038d3dd103f2034c5dbec9cd"
+    },
+    {
+      "source": "skills/why/references/sources/incident-postmortem.md",
+      "output": "src/core/skills/why/references/sources/incident-postmortem.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "bf2661f1a81c37700884a45b77d6289be0c802b065febced31990e6564510839"
+    },
+    {
+      "source": "skills/why/references/sources/linear.md",
+      "output": "src/core/skills/why/references/sources/linear.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c"
+    },
+    {
+      "source": "skills/why/references/sources/notion.md",
+      "output": "src/core/skills/why/references/sources/notion.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997"
+    },
+    {
+      "source": "skills/why/references/sources/sentry.md",
+      "output": "src/core/skills/why/references/sources/sentry.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702"
+    },
+    {
+      "source": "skills/why/references/sources/slack.md",
+      "output": "src/core/skills/why/references/sources/slack.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "3bc6309f5c7b26ace3b919dbd7f7b048861dd2020f910fe24f656cc74b3b661c"
+    },
+    {
+      "source": "skills/why/references/synthesizer-prompt.md",
+      "output": "src/core/skills/why/references/synthesizer-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "3a45a4df428b1e8f1f00d15203aee8634653d97e8a5b3e1ca69e80dcbfdc848f"
+    },
+    {
+      "source": "skills/why/SKILL.md",
+      "output": "src/core/skills/why/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 4,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 5,
+          "category": "model-selection",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 6,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 7,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 8,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 9,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 10,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "9e17236b23f19e3daf3604cd26d73b4e2e11887c0f8acbcffeff5e46bedace25"
+    },
+    {
+      "source": "automations/benny/skills/reproduce-and-fix-issues/references/control-adapter.md",
+      "output": "src/core/skills/reproduce-and-fix-issues/references/control-adapter.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "756a8b0314d13f45c8b301ffd6285c0ccf6186e1439769c977436880dec77c5d"
+    },
+    {
+      "source": "automations/benny/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+      "output": "src/core/skills/reproduce-and-fix-issues/references/feature-map.example.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "5c57f13f295f9ff8a02284a6b4bac3e300502b542997ebfbcd68d0519bdbfc20"
+    },
+    {
+      "source": "automations/benny/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+      "output": "src/core/skills/reproduce-and-fix-issues/references/verify-existing-fix.md",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "c90eae00abcdec71a58fa8d60f2c495b082a526ad50b8e8e494837609129bf29"
+    },
+    {
+      "source": "automations/benny/skills/reproduce-and-fix-issues/SKILL.md",
+      "output": "src/core/skills/reproduce-and-fix-issues/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "407017561fe1e48a82b5520cbf29d9a43d47b90c5ec5a635e1e22d44bcfd3bf6"
+    },
+    {
+      "source": "automations/benny/skills/setup-benny/SKILL.md",
+      "output": "src/core/skills/setup-benny/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "tools",
+          "expected": 5,
+          "observed": 5
+        },
+        {
+          "replacement": 3,
+          "category": "path",
+          "expected": 12,
+          "observed": 12
+        },
+        {
+          "replacement": 4,
+          "category": "path",
+          "expected": 3,
+          "observed": 3
+        }
+      ],
+      "proposedOutputSha256": "8269e9ebca30e06da1b88b53322b6b21a4da9c506ad1ddf6d83f343a49444c81"
+    },
+    {
+      "source": "automations/benny/skills/triage-issue-reports/references/routing.example.md",
+      "output": "src/core/skills/triage-issue-reports/references/routing.example.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "27a7c78280669bb8990516e522276a44365e6806ac6e46e44babe916755e0a78"
+    },
+    {
+      "source": "automations/benny/skills/triage-issue-reports/SKILL.md",
+      "output": "src/core/skills/triage-issue-reports/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "edc6c28b4850b2755b369f52261f8474623ed8a6e1cafeb9215b913abd72be58"
+    },
+    {
+      "source": "automations/benny/templates/configuration.example.yaml",
+      "output": "src/core/skills/setup-benny/references/configuration.example.yaml",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "13e24b4ce9b9a0913916e85fe3b080b88d45f8e55dccfe8ae38e0751a997b6f5"
+    },
+    {
+      "source": "automations/benny/templates/reproduce-automation-prompt.md",
+      "output": "src/core/skills/setup-benny/references/reproduce-automation-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "e3afcc9d23e7c96083e9429dbfbb328bbfa826bcbdd8ef3ecfc412e2cdf45d4f"
+    },
+    {
+      "source": "automations/benny/templates/triage-automation-prompt.md",
+      "output": "src/core/skills/setup-benny/references/triage-automation-prompt.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "0dd2c9fb525a18e4fd112b037c477ed09595ac9576e767d138b5c20111b1da02"
+    },
+    {
+      "source": "agents/comment-sicko.md",
+      "output": "src/core/roles/comment-sicko/instructions.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "3013205b7d285e8618b867471456e2c28213743e84e1cc3e727a80e496284d72"
+    },
+    {
+      "source": "agents/poteto-agent.md",
+      "output": "src/core/roles/poteto-agent/instructions.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 2,
+          "category": "path",
+          "expected": 1,
+          "observed": 1
+        },
+        {
+          "replacement": 3,
+          "category": "tools",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "15d2f8d0dcae5dccc6595cab040c093b6951d898d317a1f2aacb95fecab77f4f"
+    },
+    {
+      "source": "skills/in-your-own-words/SKILL.md",
+      "output": "src/core/skills/in-your-own-words/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 1
+        }
+      ],
+      "proposedOutputSha256": "1717f2f56d888c85add7a8a9d5f69b930ef51d5fa51aee23062fbd60443fb66e"
+    },
+    {
+      "source": "skills/poteto-mode/scripts/check-plan.test.ts",
+      "output": "src/core/skills/poteto-mode/scripts/check-plan.test.ts",
+      "localState": "clean",
+      "anchorChecks": [],
+      "proposedOutputSha256": "c80f3ea043b81f219b92c4c8a3af6bdd4f8d32ea596ec15b5b9e0252645f2ae8"
+    },
+    {
+      "source": "skills/sharpen/SKILL.md",
+      "output": "src/core/skills/sharpen/SKILL.md",
+      "localState": "clean",
+      "anchorChecks": [
+        {
+          "replacement": 1,
+          "category": "frontmatter",
+          "expected": 1,
+          "observed": 0
+        }
+      ],
+      "proposedOutputSha256": null
+    }
+  ],
+  "metadataReviews": [
+    {
+      "source": "skills/create-formal-verification-skill/SKILL.md",
+      "kind": "skill",
+      "name": "create-formal-verification-skill",
+      "metadata": "src/core/skills/create-formal-verification-skill/skill.json",
+      "proposedOutput": "src/core/skills/create-formal-verification-skill/SKILL.md"
+    },
+    {
+      "source": "skills/maintain-formal-verification-skill/SKILL.md",
+      "kind": "skill",
+      "name": "maintain-formal-verification-skill",
+      "metadata": "src/core/skills/maintain-formal-verification-skill/skill.json",
+      "proposedOutput": "src/core/skills/maintain-formal-verification-skill/SKILL.md"
+    },
+    {
+      "source": "skills/statechart/SKILL.md",
+      "kind": "skill",
+      "name": "statechart",
+      "metadata": "src/core/skills/statechart/skill.json",
+      "proposedOutput": "src/core/skills/statechart/SKILL.md"
+    }
+  ],
+  "issues": [
+    {
+      "code": "ANCHOR_OCCURRENCE_MISMATCH",
+      "path": "skills/ketchup/SKILL.md",
+      "severity": "blocking",
+      "output": "src/core/skills/ketchup/SKILL.md",
+      "replacement": 1,
+      "category": "frontmatter",
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "code": "ANCHOR_OCCURRENCE_MISMATCH",
+      "path": "skills/make-bot-ui/SKILL.md",
+      "severity": "blocking",
+      "output": "src/core/skills/make-bot-ui/SKILL.md",
+      "replacement": 1,
+      "category": "frontmatter",
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "code": "ANCHOR_OCCURRENCE_MISMATCH",
+      "path": "skills/poteto-help/SKILL.md",
+      "severity": "blocking",
+      "output": "src/core/skills/poteto-help/SKILL.md",
+      "replacement": 8,
+      "category": "tools",
+      "expected": 3,
+      "observed": 5
+    },
+    {
+      "code": "ANCHOR_OCCURRENCE_MISMATCH",
+      "path": "skills/poteto-mode/SKILL.md",
+      "severity": "blocking",
+      "output": "src/core/skills/poteto-mode/SKILL.md",
+      "replacement": 1,
+      "category": "frontmatter",
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "code": "ANCHOR_OCCURRENCE_MISMATCH",
+      "path": "skills/sharpen/SKILL.md",
+      "severity": "blocking",
+      "output": "src/core/skills/sharpen/SKILL.md",
+      "replacement": 1,
+      "category": "frontmatter",
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "code": "SEMANTIC_MAPPING_REQUIRED",
+      "path": "skills/create-formal-verification-skill/SKILL.md",
+      "severity": "review",
+      "metadata": "src/core/skills/create-formal-verification-skill/skill.json",
+      "proposedOutput": "src/core/skills/create-formal-verification-skill/SKILL.md"
+    },
+    {
+      "code": "SEMANTIC_MAPPING_REQUIRED",
+      "path": "skills/maintain-formal-verification-skill/SKILL.md",
+      "severity": "review",
+      "metadata": "src/core/skills/maintain-formal-verification-skill/skill.json",
+      "proposedOutput": "src/core/skills/maintain-formal-verification-skill/SKILL.md"
+    },
+    {
+      "code": "SEMANTIC_MAPPING_REQUIRED",
+      "path": "skills/statechart/SKILL.md",
+      "severity": "review",
+      "metadata": "src/core/skills/statechart/skill.json",
+      "proposedOutput": "src/core/skills/statechart/SKILL.md"
+    }
+  ],
+  "targets": [
+    "claude-code",
+    "codex",
+    "omp",
+    "pi"
+  ],
+  "requiredChecks": [
+    "node tools/derive-pstack.mjs --check",
+    "npm run generate",
+    "npm run check"
+  ],
+  "application": "Review mappings, metadata and provenance before using the existing exact derivation and generation flow. This plan cannot be applied."
+}

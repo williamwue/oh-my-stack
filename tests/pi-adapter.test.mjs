@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm, symlink, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -9,6 +9,34 @@ import { createPiDelegationManager, createPiRpcConnection, PI_ISOLATION_ARGS } f
 import { collectPiInventory } from '../tools/pi-inventory.mjs';
 
 const execFileAsync = promisify(execFile);
+
+test('native extension preserves task records and marks failed or abandoned collection as errors', async () => {
+  const source = await readFile(new URL('../src/runtime/pi/extension.ts', import.meta.url), 'utf8');
+  const executable = source.replace(/^import .*;\n/gm, '')
+    .replace('export default function (pi: ExtensionAPI)', 'return function (pi)')
+    .replaceAll('import.meta.url', JSON.stringify(import.meta.url));
+  let result, registered;
+  const manager = { execute: async () => result, shutdown: async () => {} };
+  const Type = new Proxy({}, { get: () => value => value });
+  const register = new Function('createPiDelegationManager','Type','resolve','dirname','fileURLToPath',executable)(
+    () => manager, Type, value => value, value => value, value => value);
+  register({ on() {}, registerTool: tool => { registered = tool; }, getThinkingLevel: () => 'off' });
+  for (const [action, value, isError] of [
+    ['start',{status:'running',id:'owned'},false],
+    ['collect',{status:'completed',output:'result'},false],
+    ['collect',{status:'failed',error:'offline provider failure'},true],
+    ['collect',{status:'cancelled',output:''},true],
+    ['cancel',{status:'cancelled',id:'owned'},false],
+    ['list',{active:0,tasks:[]},false],
+  ]) {
+    result = value;
+    const envelope = await registered.execute('call',{action},undefined,undefined,{cwd:'/fixture'});
+    assert.equal(envelope.isError,isError,`${action}: ${value.status}`);
+    assert.deepEqual(envelope.details,value);
+    assert.deepEqual(JSON.parse(envelope.content[0].text),value);
+  }
+});
+
 async function git(cwd, ...args) {
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
   return execFileAsync('git', ['-c', 'core.hooksPath=', ...args], { cwd, env, windowsHide: true, timeout: 5000 });
@@ -25,12 +53,13 @@ createInterface({input:process.stdin}).on('line',line=>{
  let data;
  if(r.type==='get_available_models')data={models:[{provider:'fixture',id:'first',api:process.env.PI_TEST_MODE==='virtual'?'pi-virtual':'openai-completions'},{provider:'fixture',id:'second'}]};
  if(r.type==='set_model')model={provider:r.provider,id:r.modelId};
- if(r.type==='get_state')data={model,thinkingLevel:process.env.PI_TEST_MODE==='mismatch'?'high':level};
+ if(r.type==='get_state')data={model,thinkingLevel:process.env.PI_TEST_MODE==='mismatch'?'high':level,sessionId:'native-session-id',...(args.includes('--session-dir')?{sessionFile:process.env.PI_TEST_MODE==='session-escape'?'/outside-session.jsonl':value('--session-dir')+'/native.jsonl'}:{})};
  if(r.type==='get_available_thinking_levels')data={levels:model.id==='first'?['off','low','high']:['off']};
  if(r.type==='prompt'){
    data={disposition:'started'};
    setTimeout(()=>{
      if(process.env.PI_TEST_MODE==='hang')return;
+     if(process.env.PI_TEST_MODE==='activity'){emit({type:'tool_execution_start',toolCallId:'owned-tool',toolName:'read',args:{path:'do-not-summarize-secret'}});return;}
      if(process.env.PI_TEST_MODE==='retry'){emit({type:'auto_retry_start',delayMs:1000});return;}
      if(process.env.PI_TEST_MODE==='unicode'){
        const line=Buffer.from(JSON.stringify({type:'message_end',message:{role:'assistant',provider:model.provider,model:model.id,content:[{type:'text',text:'中文结果'}],stopReason:'stop'}})+'\n');
@@ -73,6 +102,43 @@ async function run(manager, root, extra = {}) {
   const initial = await manager.execute({ action: 'start', route: 'panel', task: 'Inspect', cwd: root, ...extra }, { cwd: root });
   return manager.execute({ action: 'collect', id: initial.id, wait: true });
 }
+
+test('owned task listing exposes bounded live tool/session metadata without tool arguments or outputs', async t => {
+  const f = await fixture(t, 'activity');
+  assert.deepEqual(await f.manager.execute({ action: 'list' }), { active: 0, tasks: [] });
+  const foreign = createPiDelegationManager({ packageRoot: f.root }); t.after(() => foreign.shutdown());
+  let observed;
+  const live = new Promise(resolve => { observed = resolve; });
+  const initial = await f.manager.execute({ action: 'start', route: 'panel', task: 'Observe fixture', cwd: f.root },
+    { cwd: f.root, onUpdate: update => { if (update.activity?.tool?.running) observed(update); } });
+  const activity = await live;
+  assert.equal(activity.id, initial.id); assert.equal(activity.activity.phase, 'tool');
+  assert.deepEqual(activity.activity.tool, { id: 'owned-tool', name: 'read', running: true });
+  const listed = await f.manager.execute({ action: 'list' });
+  assert.equal(listed.active, 1); assert.equal(listed.tasks.length, 1);
+  assert.deepEqual(await foreign.execute({ action: 'list' }), { active: 0, tasks: [] });
+  assert.equal(listed.tasks[0].session.id, 'native-session-id');
+  assert.equal(listed.tasks[0].session.file, null); assert.equal(listed.tasks[0].session.persistence, 'disabled');
+  assert(!Object.hasOwn(listed.tasks[0], 'output')); assert(!JSON.stringify(listed).includes('do-not-summarize-secret'));
+  listed.tasks[0].activity.tool.name = 'mutated';
+  assert.equal((await f.manager.execute({ action: 'collect', id: initial.id })).activity.tool.name, 'read');
+  await f.manager.execute({ action: 'cancel', id: initial.id });
+  const stopped = await f.manager.execute({ action: 'list' });
+  assert.equal(stopped.active, 0); assert.equal(stopped.tasks[0].activity.phase, 'cancelled');
+  assert.equal(stopped.tasks[0].activity.tool.running, false);
+});
+
+test('session persistence requires an explicit directory and reports only native session identity', async t => {
+  const f = await fixture(t), sessionDir = join(f.root, 'sessions'); await mkdir(sessionDir);
+  await assert.rejects(run(f.manager, f.root, { sessionDir: 'relative' }), /absolute directory/);
+  await assert.rejects(run(f.manager, f.root, { sessionDir: join(f.root, 'fake rpc.mjs') }), /absolute directory/);
+  const result = await run(f.manager, f.root, { sessionDir });
+  assert.equal(result.status, 'completed'); assert.equal(result.session.file, join(await realpath(sessionDir), 'native.jsonl'));
+  assert.equal(result.session.source, 'native-get-state'); assert.equal(result.session.persistence, 'requested');
+  const requests = (await readFile(f.log, 'utf8')).trim().split('\n').map(JSON.parse);
+  assert(requests[0].args.includes('--session-dir')); assert(!requests[0].args.includes('--no-session'));
+  assert.equal((await f.manager.execute({ action: 'list' })).tasks[0].activity.phase, 'completed');
+});
 
 test('Pi native RPC inventory uses model-specific advertised levels without persistent settings commands', async t => {
   const f = await fixture(t);
@@ -312,4 +378,12 @@ test('missing native CLI and hung RPC commands fail within the bounded lifecycle
   const hanging = createPiRpcConnection({ binary: { command: process.execPath, args: [hang] }, cwd: f.root, timeoutMs: 50 });
   await assert.rejects(hanging.request('get_state'), /timed out/);
   await hanging.stop();
+});
+
+
+test('native session paths outside the explicitly selected directory fail before prompting', async t => {
+  const f = await fixture(t, 'session-escape'), sessionDir = join(f.root, 'sessions'); await mkdir(sessionDir);
+  const result = await run(f.manager, f.root, { sessionDir });
+  assert.equal(result.status, 'failed'); assert.match(result.error, /outside the selected persistence directory/);
+  assert(!(await readFile(f.log, 'utf8')).includes('"type":"prompt"'));
 });

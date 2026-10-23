@@ -156,7 +156,36 @@ source hashes are unchanged.
 
 ## Current pstack candidate source
 
-The current local candidate imports pstack 0.15.25 from cursor/plugins at
-`99743e9c151c8537cbbf1f98bb38f34ef3368453` under the MIT license.
+The current local candidate imports pstack 0.15.30 from cursor/plugins at
+`4ec7ffa173eaa70d3d9467a627baf0954645a353` under the MIT license.
 The immutable snapshot contains the original LICENSE. Older notices retain
 their historical source coordinates.
+
+## Pinned pstack-claude reference evidence
+
+Selected files from michael-denyer/pstack-claude at
+`356c6e0f978df729eb16f227d795f34d221c5aad` are retained for maintenance comparison
+under `upstream/snapshots/pstack-claude/`. The reference is MIT licensed; its
+original LICENSE is preserved alongside the selected files. The complete
+selection and hashes are recorded in `upstream/reference-receipts/`.
+These snapshots are reference evidence and are excluded from runtime packages.
+Implementation inspirations and policy decisions are recorded separately in
+`upstream/reference-adoptions.json`.
+
+## Markdown-it browser parser
+
+The portable plan checker includes an unchanged copy of the markdown-it 15.0.1
+browser ESM distribution from the existing local installation. Markdown-it is
+MIT licensed, copyright Vitaly Puzrin and Alex Kocharin. Its bundled dependency
+families include mdurl, entities, linkify-it, uc.micro and punycode.js. Retained
+notices include the Joyent/Node URL-code notice in mdurl and the BSD-2-Clause
+conditions and disclaimer for entities.
+
+Complete license texts ship beside the parser in
+[LICENSES.txt](src/core/skills/poteto-mode/scripts/vendor/markdown-it/LICENSES.txt).
+Artifact bytes, local license-source coordinates, hashes, the lockfile receipt
+and the update procedure are recorded in
+[SOURCE.json](src/core/skills/poteto-mode/scripts/vendor/markdown-it/SOURCE.json).
+These records verify local installed bytes and lock metadata. They do not
+independently attest the npm tarball or the publisher bundle's internal
+dependency versions.

@@ -27,7 +27,7 @@ try {
   const version = "(\\d+\\.\\d+\\.\\d+(?:-[\\w.-]+)?)";
   const source = ["source version", new RegExp(`Source candidate ${version}`, "g"), project.version];
   const pin = ["upstream pin", new RegExp(`pstack ${version}`, "g"), upstream.version];
-  const revision = ["upstream revision", /`([a-f0-9]{40})`/g, imports.revision];
+  const revision = ["upstream revision", /pstack \d+\.\d+\.\d+ at\s+`([a-f0-9]{40})`/g, imports.revision];
   const rules = [
     ["README.md", "intro", [source, pin]],
     ["README.zh-CN.md", "intro", [["source version", new RegExp(`${version} 源码候选`, "g"), project.version], pin]],

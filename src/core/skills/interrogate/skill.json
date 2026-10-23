@@ -17,9 +17,9 @@
   ],
   "fallbacks": {
     "agents.model_override": "use_available_reviewers_and_disclose_unverified_model_diversity",
-    "agents.read_result": "root_runs_two_frozen_review_passes_then_synthesizes",
-    "agents.spawn": "root_runs_two_frozen_review_passes_then_synthesizes",
+    "agents.read_result": "mark_incomplete_blocked_independent_review_preserve_available_independent_findings_without_a_complete_verdict_continue_unrelated_work",
+    "agents.spawn": "mark_incomplete_blocked_independent_review_preserve_available_independent_findings_without_a_complete_verdict_continue_unrelated_work",
     "agents.spawn_parallel": "run_independent_reviewers_sequentially_without_cross_contamination",
-    "agents.wait": "root_runs_two_frozen_review_passes_then_synthesizes"
+    "agents.wait": "mark_incomplete_blocked_independent_review_preserve_available_independent_findings_without_a_complete_verdict_continue_unrelated_work"
   }
 }

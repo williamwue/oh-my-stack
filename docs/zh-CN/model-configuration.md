@@ -62,6 +62,12 @@ Haiku 用于快速探索，Sonnet 用于常规实现，Opus 用于深度分析�
 在支持的工具中，项目配置优先于用户默认值。
 需要应用时，请求 Skill 写入已经审阅的具体映射。
 
+用户范围的查找、设置和检查会使用 Codex 的 `CODEX_HOME`、Pi 的
+`PI_CODING_AGENT_DIR`；默认目录分别为 `~/.codex` 和 `~/.pi/agent`。
+项目中的 `.codex`、`.pi` 配置仍然优先，自定义原生目录必须是绝对路径。
+隔离调用可显式指定 `userRoot`，避免读取环境中的 Codex/Pi 目录；
+需要自定义目录时再明确提供 `codexHome` 或 `piCodingAgentDir`。
+
 配置与插件版本是两回事。升级插件保留模型映射；卸载插件不删除用户配置文件。
 AIHero 原版技能继续使用原有调度指令，不注入 OMS 模型路由。
 

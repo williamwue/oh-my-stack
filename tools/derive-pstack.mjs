@@ -5,7 +5,7 @@ import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const defaultRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const categories = new Set(["frontmatter", "name", "path", "tools", "model-selection", "authorization"]);
+const categories = new Set(["frontmatter", "name", "path", "tools", "model-selection", "authorization", "policy"]);
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
 function assert(condition, message) {
@@ -73,12 +73,25 @@ export async function readPstackDerivations({ root = defaultRoot } = {}) {
     assert(Array.isArray(entry.replacements), `${label}: replacements must be an array`);
     for (const [index, replacement] of entry.replacements.entries()) {
       const context = `${label} replacement ${index + 1}`;
-      exactKeys(replacement, ["before", "after", "expectedOccurrences", "category", "reason"], context);
+      exactKeys(replacement, ["before", "after", "expectedOccurrences", "category", "reason", "adoptionId"], context);
       assert(typeof replacement.before === "string" && replacement.before.length > 0, `${context}: empty anchor`);
       assert(typeof replacement.after === "string" && replacement.before !== replacement.after, `${context}: invalid replacement`);
       assert(Number.isSafeInteger(replacement.expectedOccurrences) && replacement.expectedOccurrences > 0, `${context}: expectedOccurrences must be positive`);
       assert(categories.has(replacement.category), `${context}: unsupported adaptation category`);
       assert(typeof replacement.reason === "string" && replacement.reason.trim().length > 0, `${context}: rationale is required`);
+      if (replacement.category !== "policy") assert(replacement.adoptionId === undefined, `${context}: adoptionId is reserved for policy replacements`);
+      if (replacement.category === "policy") {
+        const registryPath = contained(root, "upstream/reference-adoptions.json", "policy registry");
+        await physicalContainment(root, registryPath, "policy registry");
+        const registry = JSON.parse(await readFile(registryPath, "utf8"));
+        assert(registry.schemaVersion === 1 && Array.isArray(registry.adoptions)
+          && registry.adoptions.some(adoption => adoption.kind === "policy"
+            && ["adopted", "adapted"].includes(adoption.decision)
+            && typeof adoption.id === "string" && replacement.adoptionId === adoption.id
+            && Array.isArray(adoption.outputs) && adoption.outputs.some(output => output.path === entry.output)
+            && Array.isArray(adoption.derivations) && adoption.derivations.includes(entry.output)),
+        `${context}: policy replacement requires a named adopted decision`);
+      }
       const count = output.split(replacement.before).length - 1;
       assert(count === replacement.expectedOccurrences, `${context}: expected ${replacement.expectedOccurrences} occurrences, observed ${count}`);
       output = output.split(replacement.before).join(replacement.after);

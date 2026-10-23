@@ -16,13 +16,14 @@ if (!output || !isAbsolute(output) || process.argv.length !== 4) {
       if (input.length > 1_000_000) throw new Error("hook input exceeded 1 MB");
     }
     const event = JSON.parse(input);
-    if (event.hook_event_name === "PreToolUse" && /^ohmystack-[a-z0-9-]+$/.test(event.agent_type ?? "")) {
+    if (event.hook_event_name === "PreToolUse" && /^(?:ohmystack-[a-z0-9-]+|oh-my-stack:[a-z0-9-]+)$/.test(event.agent_type ?? "")) {
+      const bounded = value => typeof value === "string" && value.length <= 256 ? value : null;
       const record = {
-        agentId: event.agent_id,
-        agentType: event.agent_type,
+        agentId: bounded(event.agent_id),
+        agentType: bounded(event.agent_type),
         hookEvent: event.hook_event_name,
-        tool: event.tool_name,
-        effort: event.effort?.level ?? null,
+        tool: bounded(event.tool_name),
+        effort: ["low", "medium", "high", "xhigh", "max"].includes(event.effort?.level) ? event.effort.level : null,
       };
       let before;
       try { before = await lstat(output); }

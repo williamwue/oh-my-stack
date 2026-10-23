@@ -4,6 +4,13 @@
   "scenario": "behavior-preserving-refactor",
   "profile": "codex-cli",
   "sourceEvidence": "evals/evidence/codex-cli-0.155.1/refactoring-routing.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "df71f4403028d4fd2a3506a8d2c5b120bd18eaa086a43fb864908da028ff87b1",
+    "fixtureRevision": "f5582b948a3fad3bb275d98fe134b56705e4f9a6428880b985391e282b302f02"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "codex",

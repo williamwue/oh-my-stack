@@ -77,6 +77,13 @@ Review the proposed models, reasoning efforts, number of workers, and setup
 scope. Project configuration takes precedence over user defaults where
 supported. Ask the Skill to apply the exact reviewed mapping when you want it.
 
+User-scope lookup, setup and inspection honor `CODEX_HOME` for Codex and
+`PI_CODING_AGENT_DIR` for Pi. Without those overrides their defaults are
+`~/.codex` and `~/.pi/agent`; project `.codex` or `.pi` configuration still wins.
+Native home overrides must be absolute. Isolated programmatic callers can pass
+an explicit `userRoot` to suppress ambient Codex/Pi overrides, or explicitly
+supply `codexHome` / `piCodingAgentDir` to choose a custom native directory.
+
 Configuration and plugin versions are separate. An upgrade preserves your
 mapping; removing the plugin does not delete user-owned setup files.
 AIHero originals retain their original delegation instructions and do not

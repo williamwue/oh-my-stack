@@ -23,6 +23,16 @@ to the agent. Explain expected output and file changes. Keep the English and
 Chinese README and first-task instructions consistent. Preserve original
 third-party Skill text and dated evidence.
 
+## Compare both references
+
+Before changing implementation, workflow policy or source pins, follow
+[dual-reference maintenance](docs/maintainers/dual-reference.md). Official pstack
+is the preferred baseline; pstack-claude is a continuously tracked secondary
+reference. Reuse an existing solution where it fits, adapt the host boundary
+where needed, and record reasons and evidence for remaining differences.
+The reference planner reports changes; the adoption check verifies receipts
+and fingerprints. Neither proves the quality of the comparison.
+
 ## Find the owning files
 
 | Change | Files |
@@ -49,7 +59,8 @@ and the complete audit commands in [CI](.github/workflows/ci.yml).
 ## Publish an authorized release
 
 Follow the [release process](docs/release-process.md). It requires independent
-review, current CI, clean tagged builds, and downloaded-asset checks.
+review, the required local release receipts, clean tagged builds, and
+downloaded-asset checks. GitHub Actions is an optional manual check.
 Local checks and a documentation edit do not authorize publishing or merging.
 Cloud operations follow [AGENTS.md](AGENTS.md) and the
 [official operations instructions](docs/operations/official-cloud-operations.md).

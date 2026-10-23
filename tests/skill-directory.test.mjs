@@ -4,6 +4,18 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { generateSkillDirectory } from "../tools/generate-skill-directory.mjs";
+import { renderSkillNavigation } from "../tools/generate.mjs";
+
+test("navigation groups only selected skills and keeps principle leaves discoverable", () => {
+  const selected = ["poteto-mode", "session-pickup", "principle-prove-it-works"];
+  const output = renderSkillNavigation(selected, "../skills");
+  for (const name of selected) assert.ok(output.includes(`../skills/${name}/SKILL.md`));
+  assert.match(output, /Start and setup/);
+  assert.match(output, /Resume and status/);
+  assert.match(output, /Principles \(1, read as needed\)/);
+  assert.doesNotMatch(output, /bug-fix|setup-oh-my-stack|check-/);
+  assert.match(output, /native picker remain authoritative/);
+});
 
 test("directory check rejects stale or missing documentation without rewriting it", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-directory-"));

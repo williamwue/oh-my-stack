@@ -32,8 +32,10 @@ test("Claude effort hook records only bounded child identity and effective effor
   });
   assert.equal((await invoke(output, { ...event, agent_type: "unrelated" })).code, 0);
   assert.equal((await readFile(output, "utf8")).split("\n").filter(Boolean).length, 1);
+  assert.equal((await invoke(output, { ...event, agent_type: "oh-my-stack:reviewer" })).code, 0);
+  assert.equal(JSON.parse((await readFile(output, "utf8")).trim().split("\n")[1]).agentType, "oh-my-stack:reviewer");
   const symlinkPath = join(root, "symlink.jsonl");
   await symlink(output, symlinkPath);
   assert.notEqual((await invoke(symlinkPath, event)).code, 0);
-  assert.equal((await readFile(output, "utf8")).split("\n").filter(Boolean).length, 1);
+  assert.equal((await readFile(output, "utf8")).split("\n").filter(Boolean).length, 2);
 });

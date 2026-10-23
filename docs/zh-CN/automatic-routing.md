@@ -77,6 +77,10 @@ CLI 跟进验收已观察到已安装插件在启动、恢复和压缩后执行 
 
 ## Claude Code 适配
 
+检查状态或预览时可加 `--format text`，直观看到运行时、实际生效的模式、范围和配置路径。
+预览同时展示当前状态与应用后的状态；若更近的项目配置仍会覆盖此次设置，也会明确说明。
+默认继续输出 JSON。配置保存成功与原生 hook 已生效分开验证，后者需要在新会话观察。
+
 加载含此适配的插件后，运行 `/oh-my-stack:oms-auto` 请求配置自动路由，选择开启、关闭
 或保持现状，再选择个人默认或仅当前项目。完成选择后保存设置，无需另写开启指令。
 路由设置不探测模型，不修改模型或推理强度配置；默认仍为手动模式。
@@ -85,6 +89,7 @@ CLI 跟进验收已观察到已安装插件在启动、恢复和压缩后执行 
 
 ```bash
 node /path/to/installed/oh-my-stack/scripts/routing.mjs status --runtime claude-code
+node /path/to/installed/oh-my-stack/scripts/routing.mjs status --runtime claude-code --format text
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto
 node /path/to/installed/oh-my-stack/scripts/routing.mjs set --runtime claude-code --scope user --mode auto --apply
 ```

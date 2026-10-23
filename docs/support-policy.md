@@ -1,6 +1,6 @@
 # Support policy
 
-The current source is a local 0.19.0 candidate with a [pinned pstack core and
+The current source is a local 0.20.0 candidate with a [pinned pstack core and
 explicit extensions](pstack-parity.md). Historical observations below apply to
 their named versions and tasks. Support is limited to the
 observed tools, installation surfaces, and tasks below. Entry discovery and

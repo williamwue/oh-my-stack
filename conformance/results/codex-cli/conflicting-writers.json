@@ -4,6 +4,13 @@
   "scenario": "conflicting-writers",
   "profile": "codex-cli",
   "sourceEvidence": "evals/evidence/codex-cli-0.155.1/conflicting-writers.json",
+  "sourceBinding": {
+    "kind": "reviewed-historical-snapshot",
+    "reviewedAt": "2026-10-23",
+    "record": "conformance/source-observations.json",
+    "sourceSha256": "762714ad821c7c84269f7e4c40e7f7a512a424f7a6379fefff1aea0e21da9fb3",
+    "fixtureRevision": "491e63d287119ba8fbef234f74785fafa6b06e1b913965e5a78711e12e92c377"
+  },
   "result": "pass",
   "coordinate": {
     "runtime": "codex",

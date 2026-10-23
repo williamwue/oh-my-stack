@@ -40,17 +40,26 @@ test("current documentation passes without writing its inputs", async () => fixt
   assert.deepEqual(await Promise.all(inputs.map((path) => readFile(join(directory, path), "utf8"))), before);
 }));
 
+test("secondary and acceptance revisions do not replace the official baseline fact", async () => fixture(async (directory) => {
+  await replace(directory, "docs/project-status.md", "### Deferred host capabilities", "### Extra reference\n\nSecondary revision `1111111111111111111111111111111111111111`.\n\n### Deferred host capabilities");
+  assert.equal(check(directory).status, 0);
+  await replace(directory, "docs/project-status.md", `\`${imports.revision}\``, "`0000000000000000000000000000000000000000`");
+  const result = check(directory);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /upstream revision is 0000/);
+}));
+
 for (const [name, path, before, after, diagnostic] of [
-  ["stale source", "README.md", "Source candidate 0.19.0", "Source candidate 0.15.0", /source version/],
-  ["stale upstream", "README.zh-CN.md", "pstack 0.15.25", "pstack 0.15.23", /upstream pin/],
-  ["stale count", "docs/project-status.md", "with 78 default", "with 77 default", /public count/],
-  ["stale revision", "docs/pstack-parity.md", "`99743e9c151c8537cbbf1f98bb38f34ef3368453`", "`0000000000000000000000000000000000000000`", /upstream revision/],
+  ["stale source", "README.md", "Source candidate 0.20.0", "Source candidate 0.15.0", /source version/],
+  ["stale upstream", "README.zh-CN.md", "pstack 0.15.30", "pstack 0.15.23", /upstream pin/],
+  ["stale count", "docs/project-status.md", "with 81 default", "with 77 default", /public count/],
+  ["stale revision", "docs/pstack-parity.md", "`4ec7ffa173eaa70d3d9467a627baf0954645a353`", "`0000000000000000000000000000000000000000`", /upstream revision/],
   ["stale Pi candidate", "docs/pi-install.md", "The current source generates", "The local 0.15.0 candidate generates", /Pi source scope/],
   ["stale Pi table", "README.zh-CN.md", "由当前源码生成", "当前提供于本地 0.16.0 发行版本", /Pi installation row/],
-  ["missing source", "docs/support-policy.md", "current source is a local 0.19.0 candidate", "source has workflows", /found 0/],
-  ["duplicate source", "README.md", "Source candidate 0.19.0", "Source candidate 0.19.0. Source candidate 0.19.0", /found 2/],
-  ["missing pin", "README.md", "pstack 0.15.25", "pstack", /found 0/],
-  ["missing count", "docs/project-status.md", "with 78 default public Skills", "with public Skills", /found 0/],
+  ["missing source", "docs/support-policy.md", "current source is a local 0.20.0 candidate", "source has workflows", /found 0/],
+  ["duplicate source", "README.md", "Source candidate 0.20.0", "Source candidate 0.20.0. Source candidate 0.20.0", /found 2/],
+  ["missing pin", "README.md", "pstack 0.15.30", "pstack", /found 0/],
+  ["missing count", "docs/project-status.md", "with 81 default public Skills", "with public Skills", /found 0/],
   ["missing Pi row", "README.md", "| Pi |", "| Other |", /Pi installation row/],
 ]) {
   test(`rejects ${name}`, async () => fixture(async (directory) => {

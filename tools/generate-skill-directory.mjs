@@ -2,7 +2,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseSkillFrontmatter, repoRoot } from "./generate.mjs";
+import { parseSkillFrontmatter, renderSkillNavigation, repoRoot } from "./generate.mjs";
 
 const escapeCell = (value) => value.replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
 
@@ -47,6 +47,7 @@ export async function generateSkillDirectory({ root = repoRoot, check = false } 
     "and the [AIHero guide](aihero-original-skills.md) for version requirements.", "",
     "For a first task, start with [the walkthrough](getting-started.md) or",
     "[common task examples](guides/common-tasks.md). You do not need to learn every entry.", "",
+    renderSkillNavigation(entries.map((entry) => entry.name), "../packages/codex/skills"),
     "## Invocation and sources", "",
     "Select `oh-my-stack:<name>` in Codex, or use `/oh-my-stack:<name>` in the Claude Code",
     "conversation. `explicit` requires user selection; `automatic` also allows the agent",

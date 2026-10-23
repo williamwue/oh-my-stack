@@ -41,4 +41,4 @@ Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspender
    This is the canonical **sequence-verifiable-units** principle skill, the failing test first and the fix on top.
 6. Run **Opening a PR**.
 
-**Reply:** what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.
+**Reply:** what was broken, root cause, fix, how you verified. State the predicted failing behavior, then quote the decisive actual failing and passing repro output and exit statuses. Trim to the mismatch and relevant counts. An unrelated failure or assertion line alone is not proof.

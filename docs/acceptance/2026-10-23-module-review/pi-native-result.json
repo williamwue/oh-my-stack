@@ -1,0 +1,26 @@
+{
+  "native": true,
+  "provider": "simulated local OpenAI-compatible fixture",
+  "liveAccount": false,
+  "fixtureHostResolver": false,
+  "route": "how.explorer",
+  "extensionDiscovery": true,
+  "nativeToolStartCollect": true,
+  "nativeToolList": true,
+  "nativeFailedCollect": true,
+  "nativeActivity": true,
+  "explicitSessionPersistence": true,
+  "childExecution": "completed",
+  "childCancellation": "cancelled",
+  "nativeParentShutdown": true,
+  "retryRequests": 1,
+  "inventoryModels": 2,
+  "selected": {
+    "model": "oms-local/child",
+    "thinking": "off"
+  },
+  "observed": {
+    "model": "oms-local/child",
+    "thinking": "off"
+  }
+}

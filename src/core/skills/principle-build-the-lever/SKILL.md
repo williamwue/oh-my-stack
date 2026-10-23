@@ -18,6 +18,7 @@ Default to building the lever. Skip it only when the task is trivial, a couple o
 - A deterministic lever beats fan-out. If the tool can process every unit in one pass, run it yourself. Don't fan out delegates to hand-apply what a script can do.
 - When you fan work out to subagents, write the lever as a skill they all read: the recipe, the verification contract, and the do-not-touch fences in one artifact. Keep it outside the delegates' write scope so they can't quietly edit the contract.
 - Applying this principle produces a file. If you cited it and there is no codemod, script, generator, or delegate skill in the diff, you didn't apply it.
+- For a comparison tool, seed a known-bad change for each output it claims to compare. Confirm each mismatch is reported, including assignment changes that preserve totals. Missing required input must be refused or reported inconclusive, never counted as a match. Keep these controls with the experiment and rerun them before trusting the result.
 - Commit the lever when the work outlives the session.
 
 The bar is triviality, not repetition. A one-off still earns a lever when the lever is what makes the work checkable. Per the [Laziness Protocol](../principle-laziness-protocol/SKILL.md), build the smallest script that does or proves the job, never a framework.

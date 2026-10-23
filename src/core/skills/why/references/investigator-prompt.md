@@ -8,6 +8,8 @@ You are investigating the historical context and motivation behind a piece of co
 
 Work like a **careful, cautious, and precise investigator**. Surface evidence and describe it accurately, including the parts that don't fit a tidy story. Boring and exact beats plausible. One verbatim quote with a precise citation is worth more than a paragraph of summary.
 
+For human rulings, follow [Claims about human decisions](epistemics.md#claims-about-human-decisions). Return the original attributable wording and source. Label agent interpretations, missing originals, and copied summaries.
+
 ## The Question
 
 > {QUESTION}

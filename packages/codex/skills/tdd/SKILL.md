@@ -16,7 +16,7 @@ Do not force a test when it would be impractical. If the available test would re
 1. **Understand the bug.** Identify the intended behavior, current behavior, affected path, and smallest observable reproduction.
 2. **Choose the narrowest executable check.** Prefer the closest unit, component, integration, or regression test already used for that codepath. If no practical test path is obvious, do not create one from scratch just to satisfy the workflow.
 3. **Write the failing test first.** Add the smallest focused test that would have caught the bug. The test should encode intended behavior, not mirror the current implementation.
-4. **Run the new test before fixing.** Confirm it fails for the intended reason. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
+4. **Run the new test before fixing.** Confirm it fails for the intended reason. State the predicted disagreement before running it, then quote the decisive failure content and exit status. An unrelated exception or arbitrary red status does not prove the test measures the defect. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
 5. **Fix the bug.** Make the smallest production change that satisfies the intended behavior while preserving nearby contracts.
 6. **Rerun the regression test.** Confirm the test now passes.
 

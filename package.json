@@ -1,6 +1,6 @@
 {
   "name": "oh-my-stack",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "Portable, verifiable engineering workflows for agent runtimes.",
   "private": true,
   "type": "module",
@@ -26,7 +26,7 @@
     "validate": "node tools/validate.mjs",
     "check:books": "node tools/books/validate-pstack-book.mjs",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\"",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests/*.test.mjs src/core/skills/statechart/scripts/test/statechart.test.mjs",
     "check": "npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test",
     "docs:generate": "node tools/generate-skill-directory.mjs",
     "docs:check": "node tools/generate-skill-directory.mjs --check && node tools/check-doc-facts.mjs",
@@ -34,6 +34,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "markdown-it": "15.0.1",
     "markdownlint-cli2": "0.23.3",
     "@resvg/resvg-js": "2.6.2"
   }

@@ -162,12 +162,14 @@ export async function mergeText({ base, local, candidate, path = "file" }) {
     ]);
     const result = spawnSync(
       "git",
-      ["merge-file", "-p", "-L", `${path}:local`, "-L", `${path}:base`, "-L", `${path}:upstream`, localPath, basePath, candidatePath],
+      ["merge-file", "-p", "--no-diff3", "-L", `${path}:local`, "-L", `${path}:base`, "-L", `${path}:upstream`, localPath, basePath, candidatePath],
       { encoding: "utf8" },
     );
     if (result.status === 0) return { status: "merged", text: result.stdout };
-    if (result.status === 1) return { status: "conflict", text: result.stdout };
-    throw new Error(`git merge-file failed for ${path}: ${(result.stderr || result.stdout).trim()}`);
+    if (result.status >= 1 && result.status <= 127 && result.stdout.includes(`<<<<<<< ${path}:local`)) {
+      return { status: "conflict", text: result.stdout };
+    }
+    throw new Error(`git merge-file failed for ${path}: ${result.error?.message || (result.stderr || result.stdout).trim()}`);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

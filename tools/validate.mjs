@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, realpath } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import MarkdownIt from "markdown-it";
 import {
   filesUnder,
   loadModel,
@@ -11,6 +12,8 @@ import {
   repoRoot,
   validateRenderedTarget,
 } from "./generate.mjs";
+import { readReferenceAdoptions } from "./reference-adoptions.mjs";
+import { validateModuleReviews } from "./module-review.mjs";
 import { readSourceRecord, transformPortableSkill } from "./sync-upstream.mjs";
 
 function assert(condition, message) {
@@ -57,29 +60,29 @@ function validationFiles(root, directory, { excludeSnapshots = false } = {}) {
   });
 }
 
+const markdown = new MarkdownIt("commonmark");
+const normalizeLink = markdown.normalizeLink;
+// Keep malformed percent escapes visible to local-path validation instead of
+// letting URL normalization turn them into valid literal-percent filenames.
+markdown.normalizeLink = (target) => /%(?![0-9a-f]{2})/i.test(target)
+  ? target : normalizeLink(target);
+
+function* markdownTargets(tokens) {
+  for (const token of tokens) {
+    if (token.type === "link_open") yield token.attrGet("href");
+    if (token.type === "image") yield token.attrGet("src");
+    else if (token.children) yield* markdownTargets(token.children);
+  }
+}
+
 export async function validateLocalMarkdownLinks(root) {
   // Immutable third-party snapshots contain upstream links and template URLs.
   // Validate their integrity through provenance hashes, not local link resolution.
   const markdownFiles = (await validationFiles(root, root, { excludeSnapshots: true }))
     .filter((path) => path.endsWith(".md"));
   for (const path of markdownFiles) {
-    // Fenced examples are literal templates, not links in the rendered document.
-    let fence = null;
-    const text = (await readFile(path, "utf8")).split(/\r?\n/).filter((line) => {
-      const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
-      if (fence) {
-        if (marker && marker[1][0] === fence.character
-          && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
-        return false;
-      }
-      if (marker && !(marker[1][0] === "`" && marker[2].includes("`"))) {
-        fence = { character: marker[1][0], length: marker[1].length };
-        return false;
-      }
-      return true;
-    }).join("\n").replace(/(`+)([\s\S]*?)\1/g, "");
-    for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
-      const target = match[1];
+    const tokens = markdown.parse(await readFile(path, "utf8"), {});
+    for (const target of markdownTargets(tokens)) {
       if (/^(?:https?:\/\/|mailto:|#)/.test(target)) continue;
       if (within(join(root, "src/core/skills"), path)
         && ["../../docs/runtime-binding.md", "../../docs/model-selection.md"].includes(target)) continue;
@@ -91,6 +94,8 @@ export async function validateLocalMarkdownLinks(root) {
       const resolved = resolve(dirname(path), decoded);
       assert(within(root, resolved, true), `${relative(root, path)}: link escapes repository`);
       assert(await exists(resolved), `${relative(root, path)}: missing local link ${target}`);
+      assert(within(await realpath(root), await realpath(resolved), true),
+        `${relative(root, path)}: link escapes repository`);
     }
   }
 }
@@ -113,9 +118,13 @@ export async function validateExecutableInventory(root) {
   for (const executableRoot of executableRoots) {
     for (const path of await validationFiles(root, executableRoot)) {
       const key = relative(root, path);
-      const isTool = within(join(root, "tools"), path) && path.endsWith(".mjs");
+      const isToolPath = within(join(root, "tools"), path);
+      const pythonEntry = path.endsWith(".py") && /^(?:#![^\n]*python[^\n]*|\s*if\s+__name__\s*==\s*['"]__main__['"]\s*:)/m.test(await readFile(path, "utf8"));
+      const typeScriptEntry = path.endsWith(".ts") && /^(?:#![^\n]*(?:node|bun|tsx|ts-node)\b)|\bimport\.meta\.main\b/m.test(await readFile(path, "utf8"));
+      const isScript = /\.(?:mjs|cjs|js|sh)$/.test(path) || pythonEntry || typeScriptEntry;
+      const isTool = isToolPath && isScript;
       const isSkillScript = relative(join(root, "src", "core", "skills"), path)
-        .split(sep).includes("scripts") && /\.(?:mjs|sh)$/.test(path);
+        .split(sep).includes("scripts") && isScript;
       const isRuntime = within(join(root, "src/runtime"), path) && /\.(?:mjs|js|ts)$/.test(path);
       if (!isTool && !isSkillScript && !isRuntime) continue;
       assert(seen.has(path), `${key}: executable is missing from security inventory`);
@@ -415,6 +424,8 @@ export async function validate(root = repoRoot) {
   await validateJsonDocuments(root);
   await validateRuntimeEvidence(root, model);
   await validateUpstreamState(root);
+  const sourceState = await readReferenceAdoptions({ root });
+  await validateModuleReviews({ root, sourceState });
   await validateSemanticDerivations(root);
   await validateDerivedResourceClosure(root);
   await validateLocalMarkdownLinks(root);

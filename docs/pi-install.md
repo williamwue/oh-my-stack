@@ -39,6 +39,28 @@ installation; paths and versions differ between machines.
 The `oms_delegate` tool starts one configured route member and returns a task
 handle. `collect` returns its state or waits for completion; `cancel` stops it.
 Writing roles need `independentCheckout: true` and a separate Git checkout.
+Use `action: "list"` to inspect only the current manager's owned handles,
+including running count, cached activity phase, last tool name/ID/running flag,
+message/tool counts and native session identity. The list omits output and tool
+arguments; `collect` returns bounded output for one explicit handle. Snapshots
+are copies and carry the last observation time rather than implying a fresh
+host scan. Completed and cancelled handles remain available within the existing
+retained-task bound; shutdown still stops running children.
+
+By default `--no-session` keeps children ephemeral. An explicit start
+`sessionDir` must name an existing absolute directory; this opts that child into
+Pi's native session persistence there. The bridge reports the `sessionId` and
+absolute `.jsonl` `sessionFile` returned by native `get_state`, never a guessed
+filename or a directory scan. A file path is host metadata, not proof that its
+contents or all model behavior were verified. No session contents are read by
+listing. Missing session paths remain null. Persistence is never enabled by
+listing, collection or installation.
+
+Failed terminal tasks set Pi's native tool error flag. Collecting a cancelled
+task also reports an error because no completed result exists. A successful
+cancel command, a running task and an empty list remain successful operations;
+the full task record stays available in the result details.
+
 The parent and child Git worktree roots must differ. Two active writers cannot
 reserve the same worktree, even when their working directories differ.
 Parent shutdown cancels owned children. The bridge does not automatically
@@ -54,7 +76,9 @@ isolated local simulated provider using the generated package:
 node tools/pi-native-acceptance.mjs --cli /absolute/path/to/cli.js --package packages/pi
 ```
 
-It checks extension discovery, native tool start/collect, child completion,
+It checks extension discovery, successful and failed native tool collection,
+start/list, observed tool
+activity, explicit session-file persistence, child completion,
 cancellation, parent shutdown, model selection and retry interception. It does
 not verify a live account or provider. Read-only tools and a working directory
 are not an operating-system sandbox. Unsupported extension-only providers and

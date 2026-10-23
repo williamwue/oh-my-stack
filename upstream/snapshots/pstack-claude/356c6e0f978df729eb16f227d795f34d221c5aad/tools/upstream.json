@@ -1,0 +1,53 @@
+{
+  "remote": "https://github.com/cursor/plugins",
+  "components": {
+    "pstack": {
+      "upstreamPath": "pstack",
+      "localPath": "plugins/pstack",
+      "sha": "7b353f78f6ec193bdbe48ed8059444eb09b6878e",
+      "exclude": [
+        ".cursor-plugin/",
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "assets/",
+        "automations/",
+        "docs/",
+        "plugin.json",
+        "skills/make-bot-ui/",
+        "skills/poteto-mode/scripts/worktree-audit.sh"
+      ]
+    },
+    "cursor-team-kit": {
+      "upstreamPath": "cursor-team-kit/skills",
+      "localPath": "plugins/pstack/skills",
+      "sha": "e46364b8be46000b7df0f260550cd712afbb8d36",
+      "exclude": [
+        "check-compiler-errors/",
+        "control-cli/",
+        "control-ui/",
+        "loop-on-ci/",
+        "new-branch-and-pr/",
+        "pr-review-canvas/",
+        "review-and-ship/",
+        "run-smoke-tests/",
+        "thermo-nuclear-code-quality-review/",
+        "verify-this/",
+        "weekly-review/",
+        "workflow-from-chats/"
+      ]
+    },
+    "thermos": {
+      "upstreamPath": "thermos",
+      "localPath": "plugins/pstack",
+      "sha": "118e73b0e196e4d49d5aade7ce6dd8985a621f68",
+      "exclude": [
+        ".cursor-plugin/",
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md",
+        "assets/"
+      ]
+    }
+  }
+}

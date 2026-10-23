@@ -3,7 +3,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, realpathSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { createInterface } from "node:readline";
+import { StringDecoder } from "node:string_decoder";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -102,36 +102,122 @@ export function normalizeClaudeProbe(alias, result) {
   return { id, reasoningEfforts: claudeReasoningEfforts(alias, id) };
 }
 
-function run(command, args, timeoutMs = 60_000) {
-  return new Promise((resolvePromise, reject) => {
-    const javascript = /\.(?:mjs|cjs|js)$/i.test(command);
-    const child = spawn(javascript ? process.execPath : command, javascript ? [command, ...args] : args,
-      { stdio: ["ignore", "pipe", "pipe"] });
-    let stdout = "";
-    let stderr = "";
-    const timeout = setTimeout(() => child.kill(), timeoutMs);
-    child.stdout.setEncoding("utf8");
-    child.stderr.setEncoding("utf8");
-    child.stdout.on("data", (chunk) => { stdout += chunk; });
-    child.stderr.on("data", (chunk) => { stderr += chunk; });
-    child.on("error", (error) => { clearTimeout(timeout); reject(error); });
-    child.on("close", (code) => {
-      clearTimeout(timeout);
-      if (code === 0) resolvePromise({ stdout, stderr });
-      else reject(new Error(`${command} ${args.join(" ")} exited ${code}${code === null ? " or timed out" : ""}: ${stderr.trim()}`));
-    });
-  });
+function inventoryLimits(runtime, overrides) {
+  const limits = {
+    timeoutMs: runtime === "codex" ? 30_000 : 60_000,
+    terminateGraceMs: 1000,
+    exitWaitMs: 1000,
+    postExitDrainMs: 250,
+    stdoutLimitBytes: 8 * 1024 * 1024,
+    stderrLimitBytes: 64 * 1024,
+    requestLimitBytes: 64 * 1024,
+    maxModels: 10_000,
+    maxPages: 100,
+  };
+  for (const [key, value] of Object.entries(overrides)) {
+    assert(Object.hasOwn(limits, key) && Number.isSafeInteger(value) && value > 0 && value <= limits[key],
+      `invalid inventory limit ${key}`);
+    limits[key] = value;
+  }
+  return limits;
 }
 
-async function collectOmp(binary) {
-  const { stdout } = await run(binary, ["models", "--json", "--no-extensions"]);
+function inventoryProcess(command, args, limits, { input = false, timeoutMessage } = {}) {
+  const javascript = /\.(?:mjs|cjs|js)$/i.test(command);
+  const child = spawn(javascript ? process.execPath : command, javascript ? [command, ...args] : args,
+    { stdio: [input ? "pipe" : "ignore", "pipe", "pipe"] });
+  const label = `${command} ${args.join(" ")}`;
+  const chunks = { stdout: [], stderr: [] };
+  const bytes = { stdout: 0, stderr: 0 };
+  let failure, exited, finished = false, killTimer, exitTimer, drainTimer;
+  let resolveClosed, rejectClosed;
+  const closed = new Promise((resolvePromise, reject) => { resolveClosed = resolvePromise; rejectClosed = reject; });
+  const timeout = setTimeout(() => fail(new Error(timeoutMessage ?? `${label} timed out`)), limits.timeoutMs);
+
+  function signalChild(signal) {
+    try { child.kill(signal); }
+    catch (error) { failure = new Error(`${failure.message}; ${signal} failed: ${error.message}`, { cause: failure }); }
+  }
+
+  function finish(code, exitSignal) {
+    if (finished) return;
+    finished = true;
+    for (const timer of [timeout, killTimer, exitTimer, drainTimer]) clearTimeout(timer);
+    child.stdin?.destroy();
+    child.stdout.destroy();
+    child.stderr.destroy();
+    const stdout = Buffer.concat(chunks.stdout).toString("utf8");
+    const stderr = Buffer.concat(chunks.stderr).toString("utf8");
+    if (!failure && (code !== 0 || exitSignal)) {
+      failure = new Error(`${label} exited ${code}, signal ${exitSignal ?? "none"}: ${stderr.trim()}`);
+    }
+    if (failure) rejectClosed(failure);
+    else resolveClosed({ stdout, stderr });
+  }
+
+  function fail(error) {
+    if (finished || failure) return;
+    failure = error;
+    clearTimeout(timeout);
+    child.stdin?.destroy();
+    if (exited) return;
+    signalChild("SIGTERM");
+    killTimer = setTimeout(() => {
+      if (exited || finished) return;
+      signalChild("SIGKILL");
+      exitTimer = setTimeout(() => {
+        failure = new Error(`${failure.message}; direct-child exit was not observed after SIGKILL`, { cause: failure });
+        child.unref();
+        finish(null, null);
+      }, limits.exitWaitMs);
+    }, limits.terminateGraceMs);
+  }
+
+  for (const stream of ["stdout", "stderr"]) {
+    child[stream].on("data", chunk => {
+      if (finished || failure) return;
+      bytes[stream] += chunk.length;
+      if (bytes[stream] > limits[`${stream}LimitBytes`]) {
+        fail(new Error(`${label} ${stream} limit exceeded`));
+        return;
+      }
+      if (stream === "stderr" || !input) chunks[stream].push(chunk);
+    });
+    child[stream].on("error", fail);
+  }
+  child.stdin?.on("error", fail);
+  child.on("error", error => {
+    fail(error);
+    if (!child.pid) finish(null, null);
+  });
+  child.on("exit", (code, exitSignal) => {
+    exited = { code, signal: exitSignal };
+    clearTimeout(killTimer);
+    clearTimeout(exitTimer);
+    drainTimer = setTimeout(() => {
+      fail(new Error(`${label} stdio did not close after direct-child exit`));
+      finish(exited.code, exited.signal);
+    }, limits.postExitDrainMs);
+  });
+  child.on("close", finish);
+  return { child, closed, fail, get failed() { return Boolean(failure); } };
+}
+
+async function run(command, args, limits) {
+  return inventoryProcess(command, args, limits).closed;
+}
+
+async function collectOmp(binary, limits) {
+  const { stdout } = await run(binary, ["models", "--json", "--no-extensions"], limits);
+  const payload = JSON.parse(stdout);
+  assert(!Array.isArray(payload?.models) || payload.models.length <= limits.maxModels, "omp model count limit exceeded");
   return {
     source: `${binary} models --json --no-extensions`,
-    models: normalizeOmpModels(JSON.parse(stdout)),
+    models: normalizeOmpModels(payload),
   };
 }
 
-async function collectClaude(binary, aliases, confirmed) {
+async function collectClaude(binary, aliases, confirmed, limits) {
   assert(confirmed, "Claude model probes consume account usage; pass --confirm-claude-probes after reviewing the aliases");
   assert(Array.isArray(aliases) && aliases.length > 0, "provide --claude-models haiku,sonnet,opus (or a reviewed subset)");
   const requests = aliases.map((entry) => {
@@ -146,7 +232,7 @@ async function collectClaude(binary, aliases, confirmed) {
   for (const { alias, model, pinned } of requests) {
     const { stdout } = await run(binary, ["-p", "Reply with exactly OK.", "--model", model,
       "--output-format", "json", "--max-turns", "1", "--permission-mode", "plan",
-      "--permission-prompts", "none", "--restricted"]);
+      "--permission-prompts", "none", "--restricted"], limits);
     const result = JSON.parse(stdout);
     const observed = normalizeClaudeProbe(alias, result);
     assert(!pinned || observed.id === model, `${alias}: requested ${model} but observed ${observed.id}; refusing fallback`);
@@ -158,92 +244,100 @@ async function collectClaude(binary, aliases, confirmed) {
   };
 }
 
-function collectCodex(binary) {
-  return new Promise((resolvePromise, reject) => {
-    const child = spawn(binary, ["app-server", "--stdio"], { stdio: ["pipe", "pipe", "pipe"] });
-    const lines = createInterface({ input: child.stdout });
-    const models = [];
-    let requestId = 2;
-    let complete = false;
-    let stderr = "";
-    const timeout = setTimeout(() => {
-      child.kill();
-      reject(new Error("codex app-server model/list timed out"));
-    }, 30_000);
+async function collectCodex(binary, limits) {
+  const process_ = inventoryProcess(binary, ["app-server", "--stdio"], limits,
+    { input: true, timeoutMessage: "codex app-server model/list timed out" });
+  const { child, fail } = process_;
+  const decoder = new StringDecoder("utf8");
+  const models = [];
+  const cursors = new Set();
+  let requestId = 2, complete = false, buffer = "", pages = 0, requestBytes = 0;
 
-    function send(message) {
-      child.stdin.write(`${JSON.stringify(message)}\n`);
+  function send(message) {
+    if (process_.failed) return;
+    const request = `${JSON.stringify(message)}\n`;
+    const bytes = Buffer.byteLength(request);
+    if (requestBytes + bytes > limits.requestLimitBytes || child.stdin.writableLength + bytes > limits.requestLimitBytes) {
+      fail(new Error("codex request buffer limit exceeded"));
+      return;
     }
+    requestBytes += bytes;
+    child.stdin.write(request);
+  }
 
-    child.stderr.setEncoding("utf8");
-    child.stderr.on("data", (chunk) => { stderr += chunk; });
-    child.on("error", (error) => {
-      clearTimeout(timeout);
-      reject(error);
-    });
-    lines.on("line", (line) => {
-      let message;
-      try {
-        message = JSON.parse(line);
-      } catch {
-        return;
-      }
-      if (message.id !== requestId) return;
+  function receive(line) {
+    if (!line.trim() || process_.failed) return;
+    try {
+      const message = JSON.parse(line);
+      assert(message && typeof message === "object" && !Array.isArray(message), "codex emitted invalid RPC message");
+      if (message.id !== requestId && message.id !== 1) return;
       if (message.error) {
-        clearTimeout(timeout);
-        child.kill();
-        reject(new Error(`codex model/list failed: ${message.error.message ?? JSON.stringify(message.error)}`));
-        return;
+        throw new Error(`codex ${message.id === 1 ? "initialize" : "model/list"} failed: ${message.error.message ?? JSON.stringify(message.error)}`);
       }
-      models.push(...(message.result?.data ?? []));
-      const cursor = message.result?.nextCursor;
+      if (message.id === 1 || complete) return;
+      assert(Array.isArray(message.result?.data), "codex model/list result must contain a data array");
+      const cursor = message.result.nextCursor;
+      assert(cursor === undefined || cursor === null || typeof cursor === "string", "codex model/list returned an invalid cursor");
+      pages += 1;
+      assert(pages <= limits.maxPages, "codex model/list page limit exceeded");
+      assert(models.length + message.result.data.length <= limits.maxModels, "codex model count limit exceeded");
+      models.push(...message.result.data);
       if (cursor) {
+        assert(!cursors.has(cursor), "codex model/list repeated pagination cursor");
+        assert(pages < limits.maxPages, "codex model/list page limit exceeded");
+        assert(Buffer.byteLength(cursor) <= limits.requestLimitBytes, "codex request buffer limit exceeded");
+        cursors.add(cursor);
         requestId += 1;
         send({ method: "model/list", id: requestId, params: { cursor, limit: 100, includeHidden: false } });
       } else {
         complete = true;
         child.stdin.end();
       }
-    });
-    child.on("close", (code) => {
-      clearTimeout(timeout);
-      if (!complete) {
-        reject(new Error(`${binary} app-server exited ${code} before model/list completed: ${stderr.trim()}`));
-        return;
-      }
-      if (code !== 0) {
-        reject(new Error(`${binary} app-server exited ${code}: ${stderr.trim()}`));
-        return;
-      }
-      try {
-        resolvePromise({
-          source: `${binary} app-server model/list (includeHidden=false)`,
-          models: normalizeCodexModels(models),
-        });
-      } catch (error) {
-        reject(error);
-      }
-    });
+    } catch (error) {
+      fail(error instanceof SyntaxError ? new Error("codex emitted invalid or incomplete RPC JSON", { cause: error }) : error);
+    }
+  }
 
-    send({
-      method: "initialize",
-      id: 1,
-      params: {
-        clientInfo: { name: "oh_my_stack", title: "Oh My Stack", version: "0.1.0" },
-      },
-    });
-    send({ method: "initialized", params: {} });
-    send({ method: "model/list", id: requestId, params: { limit: 100, includeHidden: false } });
+  child.stdout.on("data", chunk => {
+    if (process_.failed) return;
+    buffer += decoder.write(chunk);
+    let index;
+    while (!process_.failed && (index = buffer.indexOf("\n")) !== -1) {
+      const line = buffer.slice(0, index);
+      buffer = buffer.slice(index + 1);
+      receive(line);
+    }
   });
+  child.stdout.on("end", () => {
+    if (process_.failed) return;
+    buffer += decoder.end();
+    if (buffer.trim()) receive(buffer);
+    buffer = "";
+  });
+
+  send({
+    method: "initialize",
+    id: 1,
+    params: { clientInfo: { name: "oh_my_stack", title: "Oh My Stack", version: "0.1.0" } },
+  });
+  send({ method: "initialized", params: {} });
+  send({ method: "model/list", id: requestId, params: { limit: 100, includeHidden: false } });
+  const { stderr } = await process_.closed;
+  assert(complete, `${binary} app-server exited before model/list completed: ${stderr.trim()}`);
+  return {
+    source: `${binary} app-server model/list (includeHidden=false)`,
+    models: normalizeCodexModels(models),
+  };
 }
 
 export async function collectInventory({ runtime, ompBin = "omp", codexBin = "codex", claudeBin = "claude",
-  piBin = "pi", piCli, cwd = process.cwd(), signal,
+  piBin = "pi", piCli, cwd = process.cwd(), signal, limits = {},
   claudeModels = ["haiku", "sonnet", "opus"], confirmClaudeProbes = false, now = new Date() }) {
+  const budgets = inventoryLimits(runtime, limits);
   let observed;
-  if (runtime === "omp") observed = await collectOmp(ompBin);
-  else if (runtime === "codex") observed = await collectCodex(codexBin);
-  else if (runtime === "claude-code") observed = await collectClaude(claudeBin, claudeModels, confirmClaudeProbes);
+  if (runtime === "omp") observed = await collectOmp(ompBin, budgets);
+  else if (runtime === "codex") observed = await collectCodex(codexBin, budgets);
+  else if (runtime === "claude-code") observed = await collectClaude(claudeBin, claudeModels, confirmClaudeProbes, budgets);
   else if (runtime === "pi") {
     const { collectPiInventory } = await import("./pi-inventory.mjs");
     observed = await collectPiInventory({ binary: piCli ? { command: piBin, args: [resolve(piCli)] } : piBin, cwd, signal });

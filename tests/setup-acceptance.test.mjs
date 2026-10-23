@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
@@ -12,6 +12,28 @@ import { repoRoot } from "../tools/generate.mjs";
 import { inspectSetup, renderSetupReceipt } from "../tools/setup-acceptance.mjs";
 
 const execFileAsync = promisify(execFile);
+
+for (const [target, option, variable] of [["codex", "codexHome", "CODEX_HOME"], ["pi", "piCodingAgentDir", "PI_CODING_AGENT_DIR"]]) {
+  test(`${target} setup inspection and receipt resolve the native home and project shadow`, async t => {
+    const { root, projectRoot: project, resolutionPath: localPath } = await fixture(target);
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const nativeHome = join(root, "native");
+    const resolutionPath = join(nativeHome, "oh-my-stack.resolution.json");
+    await rename(dirname(localPath), nativeHome);
+    const manifest = JSON.parse(await readFile(resolutionPath, "utf8"));
+    const input = { resolutionPath, cwd: project, userRoot: root, [option]: nativeHome };
+    assert.equal((await inspectSetup(input)).effectiveConfiguration.matchesAuditedResolution, true);
+    assert.match(await renderSetupReceipt(input), /Audited manifest selected: true/);
+    const cli = await execFileAsync(process.execPath, [join(repoRoot, "tools/setup-acceptance.mjs"),
+      "--resolution", resolutionPath, "--cwd", project], { env: { ...process.env, HOME: root, [variable]: nativeHome } });
+    assert.equal(JSON.parse(cli.stdout).effectiveConfiguration.path, resolutionPath);
+    const local = join(project, target === "codex" ? ".codex" : ".pi");
+    await mkdir(local); await writeFile(join(local, "oh-my-stack.resolution.json"), JSON.stringify(manifest));
+    const audit = await inspectSetup(input);
+    assert.equal(audit.effectiveConfiguration.scope, "project");
+    assert.equal(audit.effectiveConfiguration.matchesAuditedResolution, false);
+  });
+}
 
 async function fixture(target) {
   const root = await mkdtemp(join(tmpdir(), `ohmystack-setup-${target}-`));

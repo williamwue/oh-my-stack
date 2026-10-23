@@ -5,6 +5,8 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Build, operate, and release
 
+- [Dual-reference maintenance and adoption records](dual-reference.md)
+- [Complete current-module review and drift checks](module-review.md)
 - [Official pstack update preview](pstack-update-planner.md)
 - [Read-only worktree audit](../worktree-audit.md)
 - [Native GitHub observation and recovery](../github-autopilot-provider.md)
@@ -18,6 +20,8 @@ Dated records below establish only their named version, tool, and bounded task.
 
 ## Current source candidate
 
+- [Unscheduled host expansion: Copilot, Muse and Pi interaction/scheduling](../project-status.md#deferred-host-capabilities)
+- [Complete current-module dual-reference audit: 2026-10-23](module-audit-2026-10-23/README.md)
 - [pstack-claude implementation assessment: 2026-10-16](pstack-claude-assessment-2026-10-16.md)
 - [AIHero grilling and tracker setup refresh: 2026-10-12](aihero-refresh-2026-10-12.md)
 - [AIHero second batch: diagnosis and review imports](aihero-complements-second-batch-2026-10-08.md)
@@ -36,6 +40,14 @@ Dated records below establish only their named version, tool, and bounded task.
 - [Historical host compatibility records](../host-compatibility.md)
 
 ## Selected acceptance records
+
+- [Strategy usability convergence: 2026-10-23](../acceptance/2026-10-23-strategy-ux/result.md)
+
+- [Complete current-module review: 2026-10-23](../acceptance/2026-10-23-module-review/result.md)
+
+- [Native effort and Pi observation: 2026-10-23](../acceptance/2026-10-23-native-convergence/result.md)
+
+- [Dual-reference maintenance: 2026-10-23](../acceptance/2026-10-23-dual-reference/result.md)
 
 - [Worktree and GitHub observation: 2026-10-16](../acceptance/2026-10-16-worktree-github/README.md)
 

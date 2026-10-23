@@ -152,7 +152,16 @@ The portable plan checker supports this exact package-aware command:
 \`node "<absolute-package-root>/skills/poteto-mode/scripts/check-plan.mjs" "<absolute-plan.md>"\`
 
 The checker validates plan structure only. It does not execute the plan or
-prove live acceptance. Other source-host helpers under Skill scripts remain
+prove live acceptance.
+
+The portable Statechart helper is also supported:
+\`node "<absolute-package-root>/skills/statechart/scripts/statechart.mjs" --help\`.
+Use its official from-spec/from-chart commands in an authorized scratch folder
+with explicit inputs. TLC requires the separately supplied TLA2TOOLS JAR and
+Java; PNG rendering needs mermaid-cli and its browser. Missing dependencies
+remain unavailable checks. Pure Node conversion does not prove TLC or UI results.
+
+Other source-host helpers under Skill scripts remain
 reference-only unless this binding supports their exact operation.
 ${helpers}
 For worktree cleanup, inspect git worktree list and the host's active and pinned
@@ -186,7 +195,7 @@ configuration. Same-preset refresh preserves saved targets and ordered entries;
 availability is checked when preparing the selected task.
 selectionPolicy supplies explicit channel fallbacks, ordered trail candidates
 and route-scoped modelFallbacks. Without a policy, prepare derives observed
-defaults on the original provider; configure saves them for explicit panels.
+defaults on the original provider; configuration leaves implicit defaults unsaved.
 An explicit policy replaces the whole policy, including derived defaults.
 Confirmed model rejection can select a mapped
 family default, then an observed equivalent from the rejection's valid IDs.

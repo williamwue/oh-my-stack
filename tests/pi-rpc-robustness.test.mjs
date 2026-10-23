@@ -36,7 +36,9 @@ function failedAndUsable(result, error) {
   assert.equal(result.recovery.directAlive, false);
 }
 
-for (const record of [null, true, 7, 'text', [], {}, { type: 7 }, { type: '' }]) {
+for (const record of [null, true, 7, 'text', [], {}, { type: 7 }, { type: '' },
+  { type: 'tool_execution_start', toolCallId: {}, toolName: 'read' },
+  { type: 'tool_execution_end', toolCallId: 'x', toolName: [] }]) {
   test(`invalid RPC envelope ${JSON.stringify(record)} fails without crashing the parent`, async () => {
     failedAndUsable(await probe({ mode: 'record', record }), 'Pi emitted invalid RPC message');
   });
@@ -54,6 +56,8 @@ for (const [responseCommand, responsePatch] of [
   ['get_available_models', { command: 7 }], ['get_available_models', { success: false, error: {} }],
   ['get_available_models', { data: { models: {} } }], ['get_available_models', { data: { models: [null] } }],
   ['get_state', { data: { model: { provider: {}, id: 'physical' }, thinkingLevel: 'low' } }],
+  ['get_state', { data: { model: { provider: 'fixture', id: 'physical' }, thinkingLevel: 'low', sessionId: {} } }],
+  ['get_state', { data: { model: { provider: 'fixture', id: 'physical' }, thinkingLevel: 'low', sessionFile: [] } }],
   ['get_available_thinking_levels', { data: { levels: 'low' } }], ['prompt', { data: { disposition: {} } }],
 ]) {
   test(`invalid ${responseCommand} response ${JSON.stringify(responsePatch)} is a bounded failure`, async () => {

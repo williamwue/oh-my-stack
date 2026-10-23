@@ -37,3 +37,12 @@ Removing or replacing evidence must preserve references from capability
 profiles and related-evidence links. Do not rewrite historical observations to
 make a later release appear more capable than the runtime that was actually
 tested.
+
+Historical conformance reconstruction uses `conformance/source-observations.json`
+to pin the saved fixture revisions and the evidence bytes reviewed during the
+2026-10-23 maintenance pass. A changed fixture or evidence file blocks both
+checking and regeneration before new passing records are written. Release builds
+check those records before packaging. The `reviewed-historical-snapshot` binding
+does not claim that the original runs captured source-evidence hashes or that a
+new live run occurred. New behavior needs new runtime evidence. These targeted
+validators do not constitute general validation of every declared JSON Schema.

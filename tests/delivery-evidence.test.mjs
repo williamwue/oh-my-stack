@@ -60,6 +60,40 @@ test('real CLI freeze, inspect and root-owned narrow verification', async t => {
   assert.deepEqual(JSON.parse(await fs.readFile(path.join(f.root,'task/report.json'),'utf8')),report);
 });
 
+test('absolute and cwd-relative check scripts must be frozen and remain unchanged', async t => {
+  const f = await fixture(t);
+  const check = f.plan.checks[0];
+  check.cwd = 'harness';
+  f.plan.immutablePaths = ['harness/config.json'];
+  for (const script of [path.join(f.root,'harness/combined.mjs'),'./combined.mjs']) {
+    check.argv = [process.execPath,script];
+    await write(f.root,'task/plan.json',f.plan);
+    await assert.rejects(freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/absolute-lock.json'}), /Check argv file must be immutable: harness\/combined\.mjs/);
+  }
+  f.plan.immutablePaths.push('harness/combined.mjs');
+  check.argv = [process.execPath,path.join(f.root,'harness/combined.mjs')];
+  await write(f.root,'task/plan.json',f.plan);
+  const frozen = await freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/absolute-lock.json'});
+  f.options.lock = frozen.lockPath; f.options.expectedLockSha256 = frozen.lockSha256;
+  f.evidence.lockSha256 = frozen.lockSha256; await f.refresh();
+  assert.equal((await verifyDelivery({...f.options,runChecks:['combined']})).acceptance,'accepted');
+  await write(f.root,'harness/combined.mjs',"console.log('replaced check');\n");
+  const report = await verifyDelivery({...f.options,runChecks:['combined']});
+  assert.equal(report.acceptance,'rejected');
+  assert.match(report.structure.errors.join(),/Immutable pin mismatch/);
+});
+
+test('external check-script files cannot bypass repository-local immutable pins', async t => {
+  const f = await fixture(t);
+  const external = await fs.mkdtemp(path.join(os.tmpdir(),'delivery-external-'));
+  t.after(() => fs.rm(external,{recursive:true,force:true}));
+  const script = path.join(external,'external.mjs'); await fs.writeFile(script,'process.exit(0);\n');
+  for (const arg of [script,path.relative(f.root,script)]) {
+    f.plan.checks[0].argv = [process.execPath,arg]; await write(f.root,'task/plan.json',f.plan);
+    await assert.rejects(freezeAcceptance({root:f.root,plan:'task/plan.json',out:'task/external-lock.json'}), /Check argv file is outside repository/);
+  }
+});
+
 test('normalization and rendering alone fail until the public path cooperates; baseline may change', async t => {
   const f = await fixture(t);
   await write(f.root,'src/normalize.mjs','export const normalize = value => value.trim();\n'); await f.refresh();

@@ -10,12 +10,12 @@ export default function (pi: ExtensionAPI) {
   pi.registerTool({
     name: 'oms_delegate',
     label: 'Oh My Stack delegation',
-    description: 'Start one configured Pi route member, collect its bounded result, or cancel it. Writing roles require an explicit independent checkout. No automatic panel or synthesis.',
+    description: 'Start one configured Pi route member, list owned task activity and session metadata, collect its bounded result, or cancel it. Writing roles require an explicit independent checkout. No automatic panel or synthesis.',
     parameters: Type.Object({
-      action: Type.Union([Type.Literal('start'), Type.Literal('collect'), Type.Literal('cancel')]),
+      action: Type.Union([Type.Literal('start'), Type.Literal('list'), Type.Literal('collect'), Type.Literal('cancel')]),
       route: Type.Optional(Type.String()), member: Type.Optional(Type.Integer({ minimum: 1 })),
       task: Type.Optional(Type.String()), cwd: Type.Optional(Type.String()),
-      context: Type.Optional(Type.String()), independentCheckout: Type.Optional(Type.Boolean()),
+      context: Type.Optional(Type.String()), sessionDir: Type.Optional(Type.String()), independentCheckout: Type.Optional(Type.Boolean()),
       id: Type.Optional(Type.String()), wait: Type.Optional(Type.Boolean()),
     }),
     async execute(_toolCallId, params, signal, onUpdate, ctx) {
@@ -23,7 +23,10 @@ export default function (pi: ExtensionAPI) {
         signal, cwd: ctx.cwd, parentModel: ctx.model, parentThinking: pi.getThinkingLevel(),
         onUpdate: update => onUpdate?.({ content: [{ type: 'text', text: JSON.stringify(update) }], details: update }),
       });
-      return { content: [{ type: 'text', text: JSON.stringify(result) }], details: result };
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result) }], details: result,
+        isError: result.status === 'failed' || params.action === 'collect' && result.status === 'cancelled',
+      };
     },
   });
 }

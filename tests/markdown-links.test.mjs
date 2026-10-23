@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
@@ -121,6 +121,131 @@ test("frozen historical reports keep original paths without exempting changed or
     await assert.rejects(validatePublicHygiene(root), /absolute macOS home path/);
     await writeFile(copied, `${"-----BEGIN "}PRIVATE KEY-----\nexample\n`);
     await assert.rejects(validatePublicHygiene(root), /contains a private key/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+
+test("Markdown destinations support angle brackets, nesting, escapes, titles and references", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-destinations-"));
+  try {
+    for (const name of ["guide (draft).md", "nested(one(two)).md", "compact(draft).md", "plain.md"])
+      await writeFile(join(root, name), "# Guide\n");
+    for (const link of [
+      '[guide](<guide (draft).md>)',
+      '[guide](<guide (draft).md> "A title")',
+      '[guide](nested(one(two)).md)',
+      String.raw`[guide](<guide \(draft\).md> 'A title')`,
+      '[guide](plain.md (A title))',
+      String.raw`[guide](compact\(draft\).md)`,
+      String.raw`[guide](plain.md "A \"quoted\" title")`,
+      '[guide][ref]\n\n[ref]: <guide (draft).md> "A title"',
+      '[guide][ref]\n\n[ref]: nested(one(two)).md',
+      '`[example](missing.md)`\n~~~md\n[example](missing.md)\n~~~',
+      '[remote](https://example.com/a(b) "Remote")',
+    ]) {
+      await writeFile(join(root, "README.md"), link);
+      await validateLocalMarkdownLinks(root);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+
+test("parsed destinations retain missing, URI, traversal and symlink rejection", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-link-controls-"));
+  const outside = await mkdtemp(join(tmpdir(), "oh-my-stack-link-outside-"));
+  try {
+    await writeFile(join(outside, "secret.md"), "outside\n");
+    await symlink(outside, join(root, "escape"), "dir");
+    for (const [destination, error] of [
+      ['<missing (draft).md> "Title"', /missing local link/],
+      ['missing(one(two)).md', /missing local link/],
+      ['<%GG> "Title"', /malformed local link/],
+      ['<&#37;GG>', /malformed local link/],
+      ['<%FF>', /malformed local link/],
+      ['<..%2f..%2foutside.md>', /link escapes repository/],
+      ['<escape/secret.md> "Title"', /link escapes repository/],
+    ]) {
+      for (const markdown of [
+        `[guide](${destination})`,
+        `[guide][ref]\n\n[ref]: ${destination}`,
+      ]) {
+        await writeFile(join(root, "README.md"), markdown);
+        await assert.rejects(validateLocalMarkdownLinks(root), error);
+      }
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+    await rm(outside, { recursive: true, force: true });
+  }
+});
+
+
+for (const [label, markdown] of [
+  ["nested labels", "[outer [inner]](../outside.md)"],
+  ["multiline labels", "[first\nsecond](../outside.md)"],
+  ["blockquote references", "> [guide][ref]\n>\n> [ref]: ../outside.md"],
+  ["list references", "- [guide][ref]\n\n  [ref]: ../outside.md"],
+  ["entity traversal", "[guide](&period;&period;&sol;outside.md)"],
+  ["numeric traversal", "[guide](&#46;&#x2e;&#47;outside.md)"],
+  ["entity image traversal", "![guide](&period;&period;&sol;outside.md)"],
+]) {
+  test(`rendered Markdown rejects traversal through ${label}`, async () => {
+    const root = await mkdtemp(join(tmpdir(), "oh-my-stack-rendered-links-"));
+    try {
+      await writeFile(join(root, "README.md"), markdown);
+      await assert.rejects(validateLocalMarkdownLinks(root), /link escapes repository/);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+}
+
+test("rendered destinations decode named and numeric entities before splitting fragments", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-entity-links-"));
+  try {
+    for (const name of ["guide.md", "a&b.md", "guide draft.md", "hash#name.md", "%GG"])
+      await writeFile(join(root, name), "# Guide\n");
+    for (const markdown of [
+      "[readme](README&#46;md)",
+      "[guide](guide&#46;md)",
+      "[guide](guide&period;md)",
+      "[guide](guide&#x2e;md&#35;section)",
+      "[guide](guide.md&num;section)",
+      "[fragment](&num;section)",
+      "[guide](a&amp;b.md)",
+      "![guide](<guide&#32;draft.md>)",
+      "[guide](hash%23name.md#section)",
+      "[percent](%25GG)",
+      "[guide][ref]\n\n[ref]: guide&#46;md&#35;section",
+    ]) {
+      await writeFile(join(root, "README.md"), markdown);
+      await validateLocalMarkdownLinks(root);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("literal code and unused references do not create rendered destinations", async () => {
+  const root = await mkdtemp(join(tmpdir(), "oh-my-stack-literal-links-"));
+  try {
+    for (const markdown of [
+      "    [example](missing.md)",
+      "> ```md\n> [example](missing.md)\n> ```",
+      "- ~~~md\n  [example](missing.md)\n  ~~~",
+      "``[example](missing`file.md)``",
+      String.raw`\[example](missing.md)`,
+      "[unused]: missing.md",
+    ]) {
+      await writeFile(join(root, "README.md"), markdown);
+      await validateLocalMarkdownLinks(root);
+    }
+    await writeFile(join(root, "README.md"), "![example](missing.png)");
+    await assert.rejects(validateLocalMarkdownLinks(root), /missing local link missing.png/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

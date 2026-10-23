@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -13,6 +13,43 @@ import { resolveActiveResolution, resolveTaskSelection } from "../tools/model-re
 import { inspectSetup } from "../tools/setup-acceptance.mjs";
 
 const execFileAsync = promisify(execFile);
+
+for (const [runtime, option, variable] of [["codex", "codexHome", "CODEX_HOME"], ["pi", "piCodingAgentDir", "PI_CODING_AGENT_DIR"]]) {
+  test(`${runtime} resolution honors explicit and ambient native homes with isolated user roots`, async t => {
+    const root = await mkdtemp(join(tmpdir(), "oms-native-home-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const project = join(root, "project"), nativeHome = join(root, "native"), name = "oh-my-stack.resolution.json";
+    await mkdir(project); await mkdir(nativeHome);
+    await writeFile(join(nativeHome, name), JSON.stringify({ schemaVersion: 1, owner: "oh-my-stack", target: runtime,
+      roles: { reviewer: { model: "native-home-model", reasoning: "high" } } }));
+    const explicit = await resolveActiveResolution({ runtime, cwd: project, userRoot: root, [option]: nativeHome });
+    assert.equal(explicit?.path, join(nativeHome, name));
+    const script = join(repoRoot, "tools/model-resolution.mjs");
+    const env = { ...process.env, HOME: root, [variable]: nativeHome };
+    const ambient = await execFileAsync(process.execPath, [script, "--runtime", runtime, "--cwd", project], { env });
+    assert.equal(JSON.parse(ambient.stdout).path, join(nativeHome, name));
+    if (runtime === "codex") {
+      const source = `const { prepareDelegation } = await import(${JSON.stringify(new URL("../tools/codex-delegation.mjs", import.meta.url).href)});
+        console.log(JSON.stringify(await prepareDelegation(${JSON.stringify({ bundleRoot: join(repoRoot, "packages/codex"),
+          cwd: project, roleName: "reviewer", taskName: "native_home", task: "Inspect the assigned fixture." })})));`;
+      const delegated = await execFileAsync(process.execPath, ["--input-type=module", "--eval", source], { env });
+      const prepared = JSON.parse(delegated.stdout);
+      assert.equal(prepared.model, "native-home-model");
+      assert.equal(prepared.audit.resolutionScope, "user");
+      assert.equal(prepared.audit.requestScope.resolutionPath, await realpath(join(nativeHome, name)));
+    }
+    const isolated = await execFileAsync(process.execPath, [script, "--runtime", runtime, "--cwd", project, "--user-root", root], { env });
+    assert.equal(JSON.parse(isolated.stdout).path, null);
+    await assert.rejects(resolveActiveResolution({ runtime, cwd: project, userRoot: root, [option]: "relative" }), /absolute path/);
+    await assert.rejects(execFileAsync(process.execPath, [script, "--runtime", runtime, "--cwd", project],
+      { env: { ...env, [variable]: "relative" } }), /absolute path/);
+    const local = join(project, runtime === "codex" ? ".codex" : ".pi");
+    await mkdir(local);
+    await writeFile(join(local, name), JSON.stringify({ schemaVersion: 1, owner: "oh-my-stack", target: runtime }));
+    const shadowed = await resolveActiveResolution({ runtime, cwd: project, userRoot: root, [option]: nativeHome });
+    assert.equal(shadowed.scope, "project"); assert.equal(shadowed.path, join(local, name));
+  });
+}
 
 test("Pi uses independent native user and nearest project resolution without OMP fallthrough", async () => {
   const root = await mkdtemp(join(tmpdir(), "oms-pi-native-resolution-"));

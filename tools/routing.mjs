@@ -112,22 +112,47 @@ export async function configureRouting({ mode, scope, cwd = process.cwd(), confi
   return { scope, path, config, changed, applied: apply, effective: await resolveRouting({ cwd, configHome, runtime }) };
 }
 
+function readableRouting(command, result, runtime) {
+  const describe = (value) => `${value.mode} (${value.enabled ? "enabled" : "disabled"}); scope=${value.scope}; source=${value.path ?? "built-in default"}`;
+  const lines = [`Runtime: ${runtime}`];
+  if (command === "status") lines.push(`Effective routing configuration: ${describe(result)}`);
+  else {
+    lines.push(`${result.applied ? "Applied" : "Preview"}: ${result.config.mode}; scope=${result.scope}; destination=${result.path}`);
+    lines.push(`Effective now: ${describe(result.effective)}`);
+    if (!result.applied) {
+      const shadowed = result.effective.scope === "project"
+        && (result.scope === "user" || result.effective.path !== result.path);
+      const proposed = shadowed ? result.effective : {
+        mode: result.config.mode, enabled: result.config.mode === "auto", scope: result.scope, path: result.path,
+      };
+      lines.push(`Effective after apply: ${describe(proposed)}`, "No files written. Add --apply to save this setting.");
+    }
+    if (result.effective.scope === "project" && result.effective.path !== result.path) {
+      lines.push("The nearest project override takes precedence over this destination.");
+    }
+  }
+  lines.push("This reports configuration. Verify hook activation in a new host session.");
+  return lines.join("\n");
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const command = argv[0];
-  if (!["status", "set"].includes(command)) throw new Error("Usage: routing.mjs status | set --scope user|project --mode auto|manual [--runtime codex|claude-code] [--apply] [--cwd PATH]");
+  if (!["status", "set"].includes(command)) throw new Error("Usage: routing.mjs status | set --scope user|project --mode auto|manual [--runtime codex|claude-code] [--apply] [--cwd PATH] [--format json|text]");
   const options = {};
   for (let index = 1; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === "--apply" && command === "set" && !options.apply) options.apply = true;
-    else if (["--scope", "--mode", "--cwd", "--runtime"].includes(arg) && !(arg.slice(2) in options)) {
+    else if (["--scope", "--mode", "--cwd", "--runtime", "--format"].includes(arg) && !(arg.slice(2) in options)) {
       const value = argv[++index];
       if (!value || value.startsWith("--")) throw new Error(`missing value for ${arg}`);
       options[arg.slice(2)] = value;
     } else throw new Error(`invalid option ${arg}`);
   }
-  if (command === "status" && (options.scope || options.mode)) throw new Error("status accepts only --cwd and --runtime");
-  const result = command === "status" ? await resolveRouting(options) : await configureRouting(options);
-  process.stdout.write(`${JSON.stringify(result)}\n`);
+  const { format = "json", ...settings } = options;
+  if (!["json", "text"].includes(format)) throw new Error("--format must be json or text");
+  if (command === "status" && (options.scope || options.mode)) throw new Error("status accepts only --cwd, --runtime and --format");
+  const result = command === "status" ? await resolveRouting(settings) : await configureRouting(settings);
+  process.stdout.write(`${format === "text" ? readableRouting(command, result, settings.runtime ?? "codex") : JSON.stringify(result)}\n`);
 }
 
 if (process.argv[1] && existsSync(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {

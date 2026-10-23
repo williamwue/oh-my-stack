@@ -16,6 +16,12 @@ Skill instructions through the pinned source mappings and exact replacements in
 `upstream/parity-derivations.json`. Run `node tools/derive-pstack.mjs` to materialize
 the pstack bodies in `src/core/skills`; do not hand-edit their generated bodies.
 Local adapter and extension instructions retain their declared source owner.
+Before changing an OMS implementation, workflow policy, or upstream pin, follow
+[dual-reference maintenance](docs/maintainers/dual-reference.md). Compare the
+corresponding fixed official pstack and pstack-claude implementations, then record
+reuse, adaptation, deferral or rejection with evidence in the adoption registry.
+Reassess affected modules in the [complete module review](docs/maintainers/module-review.md)
+before updating their source fingerprints in `upstream/module-reviews.json`.
 Regenerate `packages` with `npm run generate` instead of changing runtime copies
 by hand. See [the distribution boundary](docs/pstack-parity.md).
 

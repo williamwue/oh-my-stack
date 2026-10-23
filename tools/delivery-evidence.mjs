@@ -237,10 +237,16 @@ export async function freezeAcceptance(options) {
   for (const check of plan.checks) {
     await safe(root, check.cwd, 'directory'); executables.push({ id: check.id, ...await executable(check.argv[0]) });
     for (const arg of check.argv.slice(1)) {
-      if (arg.startsWith('-') || path.isAbsolute(arg)) continue;
-      const rel = path.posix.normalize(path.posix.join(check.cwd, arg));
-      let stat; try { stat = await fs.lstat(path.join(root, rel)); } catch { continue; }
-      if (stat.isFile() && !pins.has(rel)) fail(`Check argv file must be immutable: ${rel}`);
+      if (arg.startsWith('-')) continue;
+      const absolute = path.resolve(root, check.cwd, arg);
+      let stat;
+      try { stat = await fs.lstat(absolute); }
+      catch (error) { if (['ENOENT','ENOTDIR'].includes(error.code)) continue; throw error; }
+      if (!stat.isFile() && !stat.isSymbolicLink()) continue;
+      const rel = path.relative(root, absolute).split(path.sep).join('/');
+      if (rel === '..' || rel.startsWith('../') || path.isAbsolute(rel)) fail(`Check argv file is outside repository: ${arg}`);
+      await safe(root, rel);
+      if (!pins.has(rel)) fail(`Check argv file must be immutable: ${rel}`);
     }
   }
   const immutable = await Promise.all([...pins].sort((a,b) => a.localeCompare(b, 'en')).map(rel => pin(root, rel)));

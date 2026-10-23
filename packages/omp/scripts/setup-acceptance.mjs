@@ -151,13 +151,13 @@ async function verifyClaude({ parentRecord, childRecord, hookRecord, routeName, 
 }
 
 export async function inspectSetup({ resolutionPath, routeName, entry = 1, parentRecord, childRecord, requestPath,
-  hookRecord, cwd, userRoot, claudeConfigDir }) {
+  hookRecord, cwd, userRoot, claudeConfigDir, codexHome, piCodingAgentDir }) {
   const path = resolve(resolutionPath);
   const manifest = JSON.parse(await readFile(path, "utf8"));
   assert(manifest.schemaVersion === 1 && manifest.owner === "oh-my-stack" && ["omp", "codex", "claude-code", "pi"].includes(manifest.target),
     "an applied OMP, Codex, Claude Code, or Pi Oh My Stack resolution is required");
   const ownedFilesVerified = await checkOwnedFiles(path, manifest);
-  const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot, claudeConfigDir }) : null;
+  const active = cwd ? await resolveActiveResolution({ runtime: manifest.target, cwd, userRoot, claudeConfigDir, codexHome, piCodingAgentDir }) : null;
   const effectiveConfiguration = cwd ? {
     cwd: resolve(cwd),
     scope: active?.scope ?? null,
@@ -199,8 +199,8 @@ export async function inspectSetup({ resolutionPath, routeName, entry = 1, paren
     ? "model-verified-effort-unverified" : "verified", observed: verified };
 }
 
-export async function renderSetupReceipt({ resolutionPath, cwd, userRoot, claudeConfigDir }) {
-  const audit = await inspectSetup({ resolutionPath, cwd, userRoot, claudeConfigDir });
+export async function renderSetupReceipt({ resolutionPath, cwd, userRoot, claudeConfigDir, codexHome, piCodingAgentDir }) {
+  const audit = await inspectSetup({ resolutionPath, cwd, userRoot, claudeConfigDir, codexHome, piCodingAgentDir });
   const manifest = JSON.parse(await readFile(resolve(resolutionPath), "utf8"));
   const roles = Object.entries(manifest.roles ?? {});
   const routes = Object.entries(manifest.routes ?? {});
@@ -265,13 +265,13 @@ async function main() {
     assert(!args.route && !args["parent-record"] && !args["child-record"] && !args.request && !args["hook-record"],
       "markdown receipt is for configuration inspection without runtime records");
     console.log(await renderSetupReceipt({ resolutionPath: args.resolution, cwd: args.cwd,
-      claudeConfigDir: args["claude-config-dir"] }));
+      claudeConfigDir: args["claude-config-dir"], codexHome: args["codex-home"], piCodingAgentDir: args["pi-coding-agent-dir"] }));
     return;
   }
   const result = await inspectSetup({ resolutionPath: args.resolution, routeName: args.route,
     entry: args.entry ? Number(args.entry) : 1, parentRecord: args["parent-record"],
     childRecord: args["child-record"], requestPath: args.request, hookRecord: args["hook-record"],
-    cwd: args.cwd, claudeConfigDir: args["claude-config-dir"] });
+    cwd: args.cwd, claudeConfigDir: args["claude-config-dir"], codexHome: args["codex-home"], piCodingAgentDir: args["pi-coding-agent-dir"] });
   console.log(JSON.stringify(result, null, 2));
 }
 

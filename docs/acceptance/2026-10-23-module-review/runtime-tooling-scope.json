@@ -1,0 +1,121 @@
+{
+  "kind": "runtime-tooling-frozen-review",
+  "files": [
+    {
+      "path": "tools/module-review.mjs",
+      "sha256": "9346ce87e3fd3a63a965c245094463b458094c120e576808a3cb4a8bf901bf65"
+    },
+    {
+      "path": "tools/validate.mjs",
+      "sha256": "14f6797c97b3800d6374b59c0d8072132ae484e027fae43298b91671b79ea41d"
+    },
+    {
+      "path": "tools/delivery-evidence.mjs",
+      "sha256": "2d72f517adc309c6817b14ddf9f24e2136553169bbe6f358365b2d94904cea62"
+    },
+    {
+      "path": "tools/sync-upstream.mjs",
+      "sha256": "9a1226e151e3628ef206d9c636f3cca4f48822d285b68ea58a8666c747fb5674"
+    },
+    {
+      "path": "tools/build-conformance.mjs",
+      "sha256": "128f8c65186258630b7e50c089d0027b82712224355dc10e11bcb67e7619c07c"
+    },
+    {
+      "path": "tools/build-release.mjs",
+      "sha256": "ca7e1961e5e17c5cc99afade9fc79fe51ca114e910c7cd379ad19d945dc83bcb"
+    },
+    {
+      "path": "tools/collect-model-inventory.mjs",
+      "sha256": "b87d275c0ac192b0b4581ef38acc269db74cb3d6f7b01ddabdc77125d72135f7"
+    },
+    {
+      "path": "tools/model-resolution.mjs",
+      "sha256": "f7b8827f01e56a5dd2f16fe4b3e783a31a5eb7ec22db60870d1d253e6e9b11a1"
+    },
+    {
+      "path": "tools/configure-models.mjs",
+      "sha256": "13d369a5a36aacfb396061a2039fc20eda64169ae6f1d708415bf3110eaf0129"
+    },
+    {
+      "path": "tools/setup-acceptance.mjs",
+      "sha256": "b8685861cb869d9f4f76ab66c847dc4c24f6410449dbc7a701055586101af78c"
+    },
+    {
+      "path": "tools/claude-delegation.mjs",
+      "sha256": "733eb596a52c22ded53c26fa54ceeeecbacb8e478fc48da0836407d7879a77dc"
+    },
+    {
+      "path": "src/runtime/pi/extension.ts",
+      "sha256": "8d8360d01e5c57a013b0cfd1b74da2148ab548e4f3e90ceb8ebee329d9edc608"
+    },
+    {
+      "path": "tools/pi-native-acceptance.mjs",
+      "sha256": "3659319f23bb8270ff0cff5cedf39646306297adce4c248c0e13702c6e3fe8fa"
+    },
+    {
+      "path": "tools/t3-binding.mjs",
+      "sha256": "1e26e8861d14b0790addb6103b18c1d16129abbe0afe23f4e723cac90fe772bb"
+    },
+    {
+      "path": "tools/generate.mjs",
+      "sha256": "130f93ce3d6823c9589c774c68c8be3cb64813f6951e7e7dc5cbafa95b2aa66d"
+    },
+    {
+      "path": "src/schemas/conformance-result.schema.json",
+      "sha256": "d6fc6beb662a5ce3a26e3ab18f4041ec19002131792707a2fc194364cb5b394f"
+    },
+    {
+      "path": "conformance/source-observations.json",
+      "sha256": "2bbc7da7d8e02b83aa0753d75174b4c1cd0cbbe2024a7a11598e8e570201de8b"
+    },
+    {
+      "path": "security/executables.json",
+      "sha256": "3059f80160e13ae1a3f5b0c17606066d97b88667c8670c3e4584afff74edb85a"
+    },
+    {
+      "path": "tests/module-review.test.mjs",
+      "sha256": "92347c4dfb7b171b25a784d0f8ca30cca0886f0da991e7726146e9c8febdb4d7"
+    },
+    {
+      "path": "tests/validator-paths.test.mjs",
+      "sha256": "ec0d071a72e28ea2cc06fa3ba41ab4e334d4b3e0f3ee909ad194fb3aec4534b5"
+    },
+    {
+      "path": "tests/delivery-evidence.test.mjs",
+      "sha256": "5c2479507081a1ce18649b4b8f0db97bc135165bcec6332c0031feecc830e85c"
+    },
+    {
+      "path": "tests/sync-upstream.test.mjs",
+      "sha256": "d20eef611d2f6ef9f6ddca94da93ad1cc52af2e74049e6d898af2deaad36325a"
+    },
+    {
+      "path": "tests/conformance.test.mjs",
+      "sha256": "de46d1e5dd38bdc8c1a5dc7f6f1a89a880a02fa1860c4deb56c8b8bb0b3ac1d2"
+    },
+    {
+      "path": "tests/collect-model-inventory.test.mjs",
+      "sha256": "129604b42fb04818e1bce8e2df07b58631c110703a847b67a3ba03a49601efc4"
+    },
+    {
+      "path": "tests/model-resolution.test.mjs",
+      "sha256": "8f23d06e9b7da7b8b186d01bd016c040987b695b59246546824686b84592874a"
+    },
+    {
+      "path": "tests/configure-models.test.mjs",
+      "sha256": "4f6140015fb59047e12cda548823c5e405ac551937c883a034874db12cbdeec0"
+    },
+    {
+      "path": "tests/setup-acceptance.test.mjs",
+      "sha256": "9061ca2eef7ae50d3f6393a7982037167d70e46f45e77816cf7425623a13e823"
+    },
+    {
+      "path": "tests/claude-delegation.test.mjs",
+      "sha256": "1a5fa6fa974147cb9c04c4c35d28f4b20b0cc9dfeb26d461b90aa7bfcdaed32a"
+    },
+    {
+      "path": "tests/pi-adapter.test.mjs",
+      "sha256": "cc0d5855af9f9064b0865a0feee02bd83577f3a5ef74deaf112d8f9208080242"
+    }
+  ]
+}
