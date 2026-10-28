@@ -1,6 +1,0 @@
-interface:
-  display_name: "Principle: Type System Discipline"
-  short_description: "Model valid states and parse external data at typed boundaries."
-  default_prompt: "Use $principle-type-system-discipline for this task."
-policy:
-  allow_implicit_invocation: false

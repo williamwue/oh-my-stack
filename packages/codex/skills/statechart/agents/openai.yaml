@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Statechart"
-  short_description: "Draw user-visible statecharts from TLA+ models and replay discov"
-  default_prompt: "Use $statechart for this task."
-policy:
-  allow_implicit_invocation: false

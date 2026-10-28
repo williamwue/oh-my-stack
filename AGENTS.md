@@ -11,23 +11,19 @@ Use the existing maintainer account through official OAuth/CLI login. Do not req
 
 ## Development entry
 
-Use the [README](README.md) for architecture and local commands. Edit semantic
-Skill instructions through the pinned source mappings and exact replacements in
-`upstream/parity-derivations.json`. Run `node tools/derive-pstack.mjs` to materialize
-the pstack bodies in `src/core/skills`; do not hand-edit their generated bodies.
-Local adapter and extension instructions retain their declared source owner.
-Before changing an OMS implementation, workflow policy, or upstream pin, follow
-[dual-reference maintenance](docs/maintainers/dual-reference.md). Compare the
-corresponding fixed official pstack and pstack-claude implementations, then record
-reuse, adaptation, deferral or rejection with evidence in the adoption registry.
-Reassess affected modules in the [complete module review](docs/maintainers/module-review.md)
-before updating their source fingerprints in `upstream/module-reviews.json`.
-Regenerate `packages` with `npm run generate` instead of changing runtime copies
-by hand. See [the distribution boundary](docs/pstack-parity.md).
+Use the [README](README.md) for current architecture and commands. Formal generation
+uses the complete fixed sources in `upstream/distribution.json` through
+`tools/generate.mjs`. Do not edit generated packages or vendored source bytes.
+Read [the source transition](docs/maintainers/upstream-0.21.0.md) before changing
+pins, packaging, T3 mappings or checks. Compare both repositories as separate
+histories and record capability decisions with evidence. Preserve upstream model
+configuration paths and defaults; never migrate personal sheets automatically.
 
-For Skill or generator changes, run `npm run check` and fix failures caused by
-the change. Generated packages and fixture checks establish local consistency;
-report live model, installation, and production evidence separately.
+The old `src/core/skills`, roles, parity derivations, adapter engines and their
+registries are retained historical implementation, not formal distribution
+inputs. Their old derivation commands must not regenerate current packages.
+Run `npm run check` with official Node 22.23.3 / zlib 1.3.1-e00f703 and Bun 1.4.4.
+Report fixture, installation, live host and publication evidence separately.
 
 ## Current management entry (2026-10-01)
 

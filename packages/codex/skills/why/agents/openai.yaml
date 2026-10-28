@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Why"
-  short_description: "Investigate design rationale using cited history and available e"
-  default_prompt: "Use $why for this task."
-policy:
-  allow_implicit_invocation: false

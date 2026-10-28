@@ -1,42 +1,19 @@
 ---
 name: how
-description: "Explain a code path or subsystem using verified repository evidence."
+description: "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation."
 ---
-
-## Codex delegation binding
-
-For every delegated worker in this workflow, derive the exact `model`,
-`reasoning_effort`, and complete role-plus-task `message` with
-`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
-the nearest project manifest first, then the user manifest. Supply the named
-route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. For task adjustment, supply
-`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
-and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
-effort alternatives. The saved model stays fixed. Without inventory only
-the saved effort is available. Read `audit.taskSelection` before dispatch.
-Keep the complete prepared request. If the host rejects its adjustment,
-supply `--rejected-adjustment ERROR.json` and
-`--rejected-prepared-request REQUEST.json` to retry the original role line
-even after the inventory changes. A request checksum binds the receipt;
-the host remains responsible for authenticating the rejection evidence.
-Pass
-the returned `task_name`, `fork_turns=none`, model, effort, and message
-explicitly to the spawn call. Do not use a generated custom-role name as a selector or
-claim its TOML was activated. After the worker finishes, run the helper's
-`verify` mode on the persisted parent and child records when available; it
-checks the spawn metadata, parent link, and child `turn_context`.
-The persisted spawn message may be encrypted; disclose when its exact
-role/task text cannot be audited. If records are unavailable, state that
-runtime model resolution is unverified.
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # How
 
+On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.
+
+On GitHub Copilot, read the [platform mapping](../poteto-mode/references/copilot-tools.md), including its per-skill notes, before following this skill.
+
+On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), including its per-skill notes, before following this skill.
+
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is a native child with the bounded role from the generated runtime binding and read-only workspace authority. Explorers use the `how explorer` line in the `effective host model resolution` rule (default `observed code-model choice`), and every explainer uses the `how explainer` line (default `observed judgment-model choice`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the host rejects a configured model, reconcile it against the current inventory and generated model selection guide. Use only an observed, authorized replacement and disclose it; never guess a slug. Alias entries inherit the parent model and are not rejected real model names. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+Every spawn is a `Agent` subagent with `subagent_type: "general-purpose"` and `readonly: true`. Explorers use the `how explorer` line in `pstack-models.md` (default in [Models](#models)), and every explainer uses the `how explainer` line (default in [Models](#models)). Set `model` to that line's value, or to the default if the sheet or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the `Agent` tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message. Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## 1. Assess complexity
 
@@ -62,3 +39,14 @@ Present the explainer's output. Light edits for clarity or context from the conv
 ## Output format
 
 The explanation uses the sections defined in `references/explainer-prompt.md`, dropping any that do not apply: Overview, Key Concepts, How It Works, Where Things Live, Gotchas.
+
+## Models
+
+Role defaults, stamped from `plugins/pstack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the `pstack-models.md` override sheet overrides each at runtime; `/setup-pstack` writes it and lists its path per runtime.
+
+- how explorer: `opus`
+- how explainer: `opus`
+
+## Reasoning effort
+
+A role value in the override sheet may name a reasoning effort after its model, as in `opus @xhigh`. Levels on Claude Code: `low`, `medium`, `high`, `xhigh`, `max`. Which ones apply depends on the model. A value without `@` takes the sheet's `default effort` line, a level or `session`, and `session` when the sheet has no such line. `session` sets no effort, so the dispatch is the usual one. Strip the suffix before reading the model: `inherit-parent` or `auto` still omits `model` at every level, and a model name is passed as `model`. Pass the level as the dispatch's effort field and keep the `subagent_type` you would otherwise use. That is `effort` on the Claude Code `Agent` call and `reasoning_effort` on Codex's `spawn_agent`. On Muse it is `effort` on a Workflow child; a `subagent_spawn` dispatch keeps the session's effort.

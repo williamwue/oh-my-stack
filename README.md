@@ -1,151 +1,70 @@
 # Oh My Stack
 
-![Oh My Stack — pstack engineering workflows, ported to Codex and Claude Code](assets/social/oh-my-stack-brand-social-preview-2026-10-07.jpg)
-
-[English](README.md) | [简体中文](README.zh-CN.md)
-
-pstack engineering workflows, ported to Codex and Claude Code.
-
-Source candidate 0.20.0 follows pinned pstack 0.15.30 and includes automatic routing.
-Pi and OMP retain independent adapters.
-Delivery evidence, extras and AIHero remain [explicit extensions](docs/pstack-parity.md).
-Installed releases may differ.
-
-The source offers [opt-in T3 orchestration](docs/t3-orchestration.md)
-through detached Codex and Claude Code builds. This does not update an
-installed plugin or the default release packages.
-
-Describe a task, clarify a requirement, review a change, or inspect a module's
-design. Oh My Stack gives your agent a workflow and asks it to show evidence
-for the result.
-
-[Get started](docs/getting-started.md) · [Choose a task](docs/guides/common-tasks.md) ·
-[Documentation](docs/README.md)
+OMS 0.21.0 distributes pinned pstack-claude workflows with necessary T3 host
+mapping and the complete selected AIHero extension. Codex, Claude Code and Pi
+are supported package targets. OMP is retired from new releases.
 
 ## Install
 
-Copy the prompt for your tool into an agent conversation with access to this
-machine. The agent can download, install, and check the plugin for you.
+Codex:
 
-### Codex
-
-```text
-Install Oh My Stack for Codex on this machine using the latest published release.
-Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/codex.md
-Preserve my existing model configuration and project files. Complete installation and version checks, then load poteto-help in a fresh session and confirm the installed catalog.
-Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
+```sh
+codex plugin marketplace add williamwue/oh-my-stack --ref stable
+codex plugin add oh-my-stack@oh-my-stack
 ```
 
-### Claude Code
+Claude Code:
 
-```text
-Install Oh My Stack for Claude Code on this machine at user scope.
-Read and follow https://github.com/williamwue/oh-my-stack/blob/main/docs/install/claude-code.md
-Use the latest published release and preserve my existing model configuration and project files. Complete installation and version checks, then load poteto-help in a fresh session and confirm the installed catalog.
-Report the installed version and checks performed. If I need to restart or take a manual step, give me the exact next action.
+```sh
+claude plugin marketplace add https://github.com/williamwue/oh-my-stack.git#stable
+claude plugin install oh-my-stack@oh-my-stack --scope user
 ```
 
-For detailed prompts, existing installations, and optional model setup, see
-[install with an agent](docs/install/with-agent.md).
+Pi: download `oh-my-stack-pi-0.21.0.tar.gz` from the
+[latest release](https://github.com/williamwue/oh-my-stack/releases/latest), verify
+SHA256SUMS and the release manifest, extract its `oh-my-stack` root to a dedicated
+directory, then run `pi install /absolute/path/to/oh-my-stack`.
 
-For manual installation, use the guide for your tool. Each tool needs its own installation.
+Restart the host, invoke `oh-my-stack:poteto-help` (Pi: `poteto-help`), and verify
+the loaded path/version. Native hooks may require host trust. Existing upstream
+`pstack-models.md` sheets follow upstream rules. Installation never migrates,
+overwrites or deletes personal configuration. Use an isolated host home to try
+pure defaults. `setup-pstack` is an explicit configuration action.
 
-| Your tool | Installation guide |
-| --- | --- |
-| Codex | [Stable Git marketplace or released archive](docs/install/codex.md); no source build required. |
-| Claude Code | [Marketplace installation](docs/install/claude-code.md). |
-| OMP | [Installation with profile checks](docs/install/omp.md). Live acceptance differs by workflow. |
-| Pi | [Independent native package](docs/pi-install.md), included in the native distribution. |
+## Sources and boundaries
 
-Start a new session after installation. See [support](docs/support-policy.md)
-for tested tools and limitations.
+The direct workflow source is pstack-claude 0.9.107; its complete source and fixed
+receipt are committed in `upstream/vendor/pstack-claude` and
+`upstream/distribution.json`. Official pstack is independently pinned for
+comparison. OMS changes plugin identity and native namespace at packaging time,
+retaining upstream model defaults, reasoning settings, agents, workflows and
+failure rules. T3 dispatch uses one [host mapping](src/adapters/t3-tools.md).
+AIHero skills remain independently invocable; they are not workflow stages.
 
-## Update an existing installation
+The selected 20 originals are listed with their full paths in the receipt.
+`prototype` is additionally included as wayfinder's current dependency. Original
+text, trigger markers, resources and licenses are retained. See
+[source review and test retirement](docs/maintainers/upstream-0.21.0.md).
 
-[Copy an update prompt or use the native commands](docs/guides/update-and-uninstall.md).
-The guide detects the existing source and scope, preserves model configuration,
-and separates a read-only update check from an authorized update.
+## Maintain and release
 
-## Quick start
-
-First, open your project in a new agent session and select `poteto-help` to
-confirm the installed entries. `prove-it-works` is available in the optional
-`extras` distribution.
-
-Then try a read-only task through `poteto-mode`.
-
-In Codex, type `$` and select `oh-my-stack:poteto-mode` from the Skill picker.
-Send this request with that selection:
-
-```text
-Explain this project's main modules and request entry points.
-Use actual file references. Read only; do not change files.
+```sh
+npm ci --ignore-scripts
+npm run generate
+npm run check
 ```
 
-In Claude Code, enter this in the conversation:
+Set `OMS_BUN` to a Bun 1.4.4 executable when it is not the default `bun`.
+Checks run the fixed upstream generator and fixture suite in a temporary Git
+checkout, plus upstream orchestration typechecks/tests, source/resource checks,
+archive reproducibility, installation and archive-to-stable integration tests.
+Windows, actual model/provider calls and live T3 child execution are separate
+acceptance; fixtures do not certify them.
 
-```text
-/oh-my-stack:poteto-mode Explain this project's main modules and request entry points. Use actual file references. Read only; do not change files.
-```
+Publish only after independent review, normal PR merge and a clean exact tag.
+The [local release pipeline](docs/local-release.md) retains the official pinned
+Node/zlib build, native gh identity, publication lease, downloads and tag rebuild,
+and expected-head stable protection. New releases have seven assets: three
+runtime archives, two marketplace archives, release-manifest.json and SHA256SUMS.
 
-Look for a code explanation with file references. The agent must report gaps
-it cannot verify. Follow the [first-task walkthrough](docs/getting-started.md)
-for installation checks, expected results, and troubleshooting.
-
-## Choose an entry for your task
-
-| What you want to do | Entry | What to expect |
-| --- | --- | --- |
-| Fix a bug, build a feature, or let the agent choose an engineering workflow | `poteto-mode` | A workflow matched to your request, work within your stated scope, and verification. |
-| Clarify a requirement and record agreed terminology and decisions | `grill-with-docs` | Question rounds, glossary updates, and architectural decision records when needed. |
-| Stress-test an idea through conversation | `grill-me` | Questions and recommendations, followed by a pause for your answers. |
-| Review a change | `interrogate` | Independent reviews of a fixed change and a root-owned judgment. |
-| Find modules worth improving | `improve-codebase-architecture` | An architecture report and a choice of candidates before implementation. |
-| Ask how to use the tool | `poteto-help` | An explanation and a suggested prompt. It does not start that task. |
-
-Select `oh-my-stack:<entry>` in Codex, or type `/oh-my-stack:<entry>` in
-Claude Code. [Common task examples](docs/guides/common-tasks.md) give you
-prompts and describe their expected file changes.
-
-`poteto-mode` routes the pstack-derived engineering workflows. The AIHero entries
-in the table require the `aihero` extension in the source candidate. Invoke those
-originals directly when installed. There is no automatic AIHero-to-pstack
-pipeline. The [AIHero guide](docs/aihero-original-skills.md) explains the
-selected originals and their dependencies.
-
-Basic use inherits the agent's model when no Oh My Stack mapping is configured.
-Use [optional model configuration](docs/model-configuration.md) to choose models
-and reasoning budgets for roles and review panels.
-
-[Automatic routing](docs/automatic-routing.md) is included in the default package.
-New installations use manual mode until configured. Upgrades preserve existing
-user settings and project overrides.
-
-## More documentation
-
-- [First task](docs/getting-started.md)
-- [Complete Skill directory](docs/skill-directory.md)
-- [Pinned core and optional extensions](docs/pstack-parity.md)
-- [Optional local delivery evidence checker](docs/delivery-evidence.md)
-- [Updates and removal](docs/guides/update-and-uninstall.md)
-- [FAQ and troubleshooting](docs/faq.md)
-- [Support policy](docs/support-policy.md)
-- [Latest release](https://github.com/williamwue/oh-my-stack/releases/latest)
-
-## Development
-
-To contribute, read [CONTRIBUTING.md](CONTRIBUTING.md). It links the build,
-architecture, testing, and release documentation.
-The [previous README](docs/maintainers/readme-0.9.0.md) retains the historical
-implementation and acceptance narrative.
-
-## Reading
-
-[kaito's pstack book](docs/books/pstack/README.md) is available in English and
-Simplified Chinese. Its guide and OMS companion provide additional background.
-
-## Attribution
-
-pstack-derived workflows include cross-tool adaptations. Selected AIHero skills
-retain their pinned original content. See [third-party notices](THIRD_PARTY_NOTICES.md)
-for sources, changes, and licensing. Oh My Stack uses the [MIT license](LICENSE).
+MIT. See the source LICENSE/NOTICE files and [third-party notices](THIRD_PARTY_NOTICES.md).

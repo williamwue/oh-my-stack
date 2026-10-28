@@ -2,6 +2,15 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+// This tooling is bun-only (import.meta.dir, Bun.spawnSync, bun.lock). Fail with a
+// clear message instead of an opaque `import.meta.dir is undefined` crash under node.
+if (typeof Bun === "undefined") {
+  console.error(
+    "pstack poteto-mode tooling requires bun (https://bun.sh). Install bun, then re-run."
+  );
+  process.exit(1);
+}
+
 const scriptsDirectory = import.meta.dir;
 const nodeModulesDirectory = join(scriptsDirectory, "node_modules");
 const commanderPackagePath = join(
@@ -33,7 +42,7 @@ export function ensureDependenciesInstalled(): void {
   }
 
   const result = Bun.spawnSync(
-    [process.execPath, "install", "--frozen-lockfile"],
+    [process.execPath, "install", "--frozen-lockfile", "--production"],
     { cwd: scriptsDirectory }
   );
   if (result.exitCode !== 0) {
@@ -50,13 +59,4 @@ export function ensureDependenciesInstalled(): void {
   }
 
   writeFileSync(installKeyPath, `${installKey}\n`);
-
-  const restarted = Bun.spawnSync([process.execPath, ...process.argv.slice(1)], {
-    cwd: process.cwd(),
-    env: process.env,
-    stdin: "inherit",
-    stdout: "inherit",
-    stderr: "inherit",
-  });
-  process.exit(restarted.exitCode ?? 1);
 }

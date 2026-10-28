@@ -1,36 +1,7 @@
 ---
 name: figure-it-out
-description: "Plan and verify a complex task with an auditable decision trail."
+description: "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
 ---
-
-## Codex delegation binding
-
-For every delegated worker in this workflow, derive the exact `model`,
-`reasoning_effort`, and complete role-plus-task `message` with
-`../../scripts/codex-delegation.mjs prepare` relative to this Skill. It resolves
-the nearest project manifest first, then the user manifest. Supply the named
-route/panel entry where configured; otherwise supply the canonical role
-and the observed parent model and effort. For task adjustment, supply
-`--job-context JOB.json` with `kind` hardest, judgment, routine, or verification
-and optional boolean `urgent`, plus `--inventory INVENTORY.json` for observed
-effort alternatives. The saved model stays fixed. Without inventory only
-the saved effort is available. Read `audit.taskSelection` before dispatch.
-Keep the complete prepared request. If the host rejects its adjustment,
-supply `--rejected-adjustment ERROR.json` and
-`--rejected-prepared-request REQUEST.json` to retry the original role line
-even after the inventory changes. A request checksum binds the receipt;
-the host remains responsible for authenticating the rejection evidence.
-Pass
-the returned `task_name`, `fork_turns=none`, model, effort, and message
-explicitly to the spawn call. Do not use a generated custom-role name as a selector or
-claim its TOML was activated. After the worker finishes, run the helper's
-`verify` mode on the persisted parent and child records when available; it
-checks the spawn metadata, parent link, and child `turn_context`.
-The persisted spawn message may be encrypted; disclose when its exact
-role/task text cannot be audited. If records are unavailable, state that
-runtime model resolution is unverified.
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Figure it out
 
@@ -56,7 +27,7 @@ Decompose into atomic, independently-landable units. Sequence riskiest-unknown-f
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
 - For one-way-door design decisions, run the **architect** skill (it runs **arena**). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the **laziness-protocol** principle skill).
-- Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the **separate-before-serializing-shared-state** principle skill). Don't over-fan. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+- Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the **separate-before-serializing-shared-state** principle skill). Don't over-fan. Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill.
 - Write the designed phase list down. That list is what the human reviews.
 
 Then execute the design. Add its steps to the todolist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.

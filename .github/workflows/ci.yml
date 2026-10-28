@@ -20,6 +20,11 @@ jobs:
           node-version: 22.23.3
           cache: npm
 
+      - name: Set up pinned upstream Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: 1.4.4
+
       - name: Install development dependencies
         run: npm ci --ignore-scripts
 
@@ -29,7 +34,7 @@ jobs:
       - name: Audit bilingual book sources
         run: |
           python3 -m venv .tmp/book-audit-env
-          .tmp/book-audit-env/bin/python -m pip install -r tools/books/requirements.txt
+          .tmp/book-audit-env/bin/python -m pip install -r tools/books/regression-requirements.txt
           node tools/books/validate-pstack-book.mjs --complete
           .tmp/book-audit-env/bin/python tools/books/audit-source.py
-          .tmp/book-audit-env/bin/python tests/pstack-book-audit.test.py
+          .tmp/book-audit-env/bin/python tools/books/test-regressions.py

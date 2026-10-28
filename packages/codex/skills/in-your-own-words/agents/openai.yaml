@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: In Your Own Words"
-  short_description: "Restate the user's goal and problem before work starts."
-  default_prompt: "Use $in-your-own-words for this task."
-policy:
-  allow_implicit_invocation: false

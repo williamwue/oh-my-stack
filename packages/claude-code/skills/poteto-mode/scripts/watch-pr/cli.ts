@@ -1,4 +1,5 @@
 import { setTimeout as delay } from "node:timers/promises";
+import { DeadlineExceeded, WatchDeadline } from "./deadline.ts";
 import {
   Command,
   CommanderError,
@@ -12,7 +13,9 @@ import {
   resolveContext,
 } from "./github.ts";
 import {
+  NO_CHECKS_CONFIRM_SECONDS,
   runQueued,
+  deadlineVerdict,
   runSimple,
   statusQueryVerdict,
   verdictFactory,
@@ -35,6 +38,15 @@ function positiveNumber(value: string): number {
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed <= 0)
     throw new InvalidArgumentError("must be greater than zero");
+  return parsed;
+}
+// A timer delay above 2^31 - 1 ms is replaced with 1 ms, so a longer sleep
+// would return at once and the loop would poll without pause.
+const MAX_SLEEP_SECONDS = (2 ** 31 - 1) / 1_000;
+function sleepSeconds(value: string): number {
+  const parsed = positiveNumber(value);
+  if (parsed > MAX_SLEEP_SECONDS)
+    throw new InvalidArgumentError(`must be at most ${MAX_SLEEP_SECONDS}`);
   return parsed;
 }
 function nonNegativeNumber(value: string): number {
@@ -107,7 +119,12 @@ export function parseArgs(
       "frozen bottom-to-top queue (queued mode only)",
       stackPrList
     )
-    .option("--interval <seconds>", "poll interval", positiveNumber, 60)
+    .option(
+      "--interval <seconds>",
+      `poll interval; a PR with no checks takes ${NO_CHECKS_CONFIRM_SECONDS} seconds to confirm whatever this is`,
+      sleepSeconds,
+      60
+    )
     .option(
       "--sweep-interval <seconds>",
       "whole-stack sweep interval",
@@ -126,7 +143,11 @@ export function parseArgs(
       positiveInteger,
       5
     )
-    .option("--status-only", "print one status table and exit 0", false)
+    .option(
+      "--status-only",
+      "print one status table and exit; exit 0 means the table was read, not that the PR is ready",
+      false
+    )
     .option("--allow-draft", "do not treat a draft as a merge gate", false)
     .option("--pretty", "render human text instead of JSON", false);
   program.parse(argv, { from: "user" });
@@ -151,14 +172,17 @@ export function parseArgs(
   };
 }
 export interface CliRuntime {
+  readonly deadline: WatchDeadline;
   readonly reader: T.GitHubReader;
   readonly clock: WatchClock;
   readonly stdout: (value: string) => void;
   readonly stderr: (value: string) => void;
 }
-function realRuntime(): CliRuntime {
+function realRuntime(timeout: number): CliRuntime {
+  const deadline = new WatchDeadline(timeout, () => performance.now() / 1_000);
   return {
-    reader: new GhGitHubReader(),
+    deadline,
+    reader: new GhGitHubReader(deadline),
     clock: {
       now: () => performance.now() / 1_000,
       observedAt: () => new Date().toISOString(),
@@ -172,15 +196,22 @@ function realRuntime(): CliRuntime {
 }
 export async function main(
   argv: readonly string[],
-  runtime: CliRuntime = realRuntime()
+  supplied?: CliRuntime
 ): Promise<number> {
   let options: CliOptions;
   try {
-    options = parseArgs(argv, runtime);
+    options = parseArgs(
+      argv,
+      supplied ?? {
+        stdout: (value) => process.stdout.write(value),
+        stderr: (value) => process.stderr.write(value),
+      }
+    );
   } catch (error) {
     if (!(error instanceof CommanderError)) throw error;
     return error.exitCode === 0 ? 0 : 64;
   }
+  const runtime = supplied ?? realRuntime(options.polling.timeout);
   const render = options.pretty ? renderPretty : renderJson;
   const emit = (verdict: T.ProgressVerdict): void =>
     runtime.stdout(render(verdict));
@@ -198,16 +229,28 @@ export async function main(
         ? [seed]
         : await discoverStack(runtime.reader, seed));
   } catch (error) {
-    if (!(error instanceof WatcherQueryError)) throw error;
-    const verdict = statusQueryVerdict(
-      verdictFactory(runtime.clock, options.mode),
-      1,
-      error.failure
-    );
+    if (
+      !(error instanceof WatcherQueryError) &&
+      !(error instanceof DeadlineExceeded)
+    )
+      throw error;
+    const verdict =
+      error instanceof DeadlineExceeded
+        ? deadlineVerdict(verdictFactory(runtime.clock, options.mode))
+        : statusQueryVerdict(
+            verdictFactory(runtime.clock, options.mode),
+            1,
+            error.failure
+          );
     runtime.stdout(render(verdict));
     return verdict.exitCode;
   }
-  const dependencies = { reader: runtime.reader, clock: runtime.clock, emit };
+  const dependencies = {
+    reader: runtime.reader,
+    clock: runtime.clock,
+    emit,
+    deadline: runtime.deadline,
+  };
   const verdict =
     options.mode === "queued-stack" && !options.statusOnly
       ? await runQueued({ dependencies, contexts, options: options.polling })

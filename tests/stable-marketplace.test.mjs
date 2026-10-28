@@ -29,12 +29,12 @@ test("Actions identity cannot publish through the local-only gate", () => {
     account: "maintainer", automation: { repository: REPOSITORY } }), /local pipeline/);
 });
 
-async function fixture(root, version = "1.2.3", includePi = false) {
+async function fixture(root, version = "1.2.3", includePi = true) {
   const assets = join(root, "assets");
   await mkdir(assets);
   const manifest = { schemaVersion: 1, name: "oh-my-stack", version, archiveRoot: "oh-my-stack",
     source: { ref: `v${version}`, commit, worktreeDirty: false, cleanTaggedCheckout: true }, artifacts: [], pluginBundles: [] };
-  for (const target of ["omp", "codex", "claude-code", ...(includePi ? ["pi"] : [])]) {
+  for (const target of ["codex", "claude-code", ...(includePi ? ["pi"] : [])]) {
     const payload = join(root, target);
     await mkdir(join(payload, "skills", "original"), { recursive: true });
     await writeFile(join(payload, "skills", "original", "SKILL.md"), `original ${target}\n`);

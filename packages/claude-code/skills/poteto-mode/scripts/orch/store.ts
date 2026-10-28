@@ -3,8 +3,8 @@ import { randomUUID } from "node:crypto";
 import type { Dirent } from "node:fs";
 import {
   access,
+  link,
   mkdir,
-  open,
   readFile,
   readdir,
   rename,
@@ -17,6 +17,8 @@ import { basename, dirname, join, resolve } from "node:path";
 const UNIT_HEADER = "id\ttrack\tstate\tbranch\tpr\tsha\tbrief";
 const LEDGER_HEADER = "pr\tsha\tverdict\tevidence\tverifier\tts";
 const LOCK_FILE = ".orch.lock";
+const TAKEOVER_DIR = ".orch.lock.takeover";
+const FORGE_TIMEOUT_MS = 60_000;
 
 export type Verdict =
   | "live-ui-verified"
@@ -177,6 +179,8 @@ export interface AddStandingParams {
 
 export interface OpenStoreOptions {
   readonly force?: boolean;
+  readonly forgePaths?: Readonly<Partial<Record<Forge, string>>>;
+  readonly forgeTimeoutMs?: number;
   readonly onLockStolen?: (holder: string) => void;
   readonly onStaleLock?: (holder: string) => void;
 }
@@ -294,13 +298,21 @@ export function parseVerdict(value: string): Verdict {
   return verdict;
 }
 
+// A spreadsheet reads a leading = + - or @ as a formula and a leading ' as a
+// text marker. Such a cell is written with one more ' and unquoteCell strips it.
 function cleanCell(value: string): string {
   const cleaned = value.replace(/[\t\n\r]/g, " ");
-  return /^[=+\-@]/.test(cleaned) ? `'${cleaned}` : cleaned;
+  return /^['=+\-@]/.test(cleaned) ? `'${cleaned}` : cleaned;
+}
+
+// A row written before cells were unquoted on read can start with a ' that is
+// data, so only a ' that cleanCell would have added is stripped.
+function unquoteCell(value: string): string {
+  return /^'['=+\-@]/.test(value) ? value.slice(1) : value;
 }
 
 function requiredCell(value: string, label: string): string {
-  const cleaned = cleanCell(value);
+  const cleaned = value.replace(/[\t\n\r]/g, " ");
   if (cleaned.trim().length === 0) {
     throw new UserError(`${label} must not be empty`);
   }
@@ -343,7 +355,7 @@ async function atomicWrite(path: string, contents: string): Promise<void> {
     await writeFile(temporary, contents, { flag: "wx" });
     await rename(temporary, path);
   } finally {
-    await rm(temporary, { force: true });
+    await rm(temporary, { force: true }).catch(() => {});
   }
 }
 
@@ -384,59 +396,145 @@ async function acquireLock(
   options: OpenStoreOptions
 ): Promise<() => Promise<void>> {
   const path = join(store, LOCK_FILE);
+  const takeover = join(store, TAKEOVER_DIR);
   const pid = String(process.pid);
+
+  // A writer killed between an exclusive open and its write leaves an empty
+  // lock, which names no pid to judge dead. The pid goes into a private file
+  // that is hard-linked into place, so the lock appears with its pid in it.
+  // A filesystem without hard links gets the exclusive open.
   const create = async (): Promise<void> => {
-    const handle = await open(path, "wx");
-    await handle.writeFile(`${pid}\n`);
-    await handle.close();
-  };
-
-  const takeOver = async (): Promise<void> => {
-    await unlink(path);
+    const pidFile = `${path}.${pid}.${randomUUID()}`;
+    await writeFile(pidFile, `${pid}\n`, { flag: "wx" });
     try {
-      await create();
-    } catch (retryError) {
-      if (errorCode(retryError) === "EEXIST") {
-        const retryHolder =
-          (await readFile(path, "utf8")).trim() || "unknown";
-        throw new UserError(`store lock held by pid ${retryHolder}`);
+      await link(pidFile, path);
+    } catch (error) {
+      if (errorCode(error) === "EEXIST") {
+        throw error;
       }
-      throw retryError;
+      await writeFile(path, `${pid}\n`, { flag: "wx" });
+    } finally {
+      await unlink(pidFile).catch(() => {});
     }
   };
 
-  try {
-    await create();
-  } catch (error) {
-    if (errorCode(error) !== "EEXIST") {
-      throw error;
+  // Resolves to null once this writer holds the lock, or to the pid in the
+  // lock that stopped it. A holder can release between the failed create and
+  // the read, and a lock that vanished can be created again.
+  const lockOrHolder = async (): Promise<string | null> => {
+    for (let retries = 2; ; retries -= 1) {
+      try {
+        await create();
+        return null;
+      } catch (error) {
+        if (errorCode(error) !== "EEXIST") {
+          throw error;
+        }
+      }
+      try {
+        return (await readFile(path, "utf8")).trim() || "unknown";
+      } catch (error) {
+        if (errorCode(error) !== "ENOENT" || retries === 0) {
+          return "unknown";
+        }
+      }
     }
-    let holder = "unknown";
+  };
+
+  // POSIX cannot unlink a file only if its content still matches, so each
+  // read-and-unlink runs behind a claim: a directory that holds one file
+  // named for the claimant's pid. rename cannot replace a directory that
+  // holds a file, so a claim excludes every other writer, and a dead
+  // claimant's file is removed by name, which cannot remove a live claimant's.
+  // Resolves to false, without running the body, when a live writer holds
+  // the claim.
+  const claimed = async (body: () => Promise<void>): Promise<boolean> => {
+    const staged = `${takeover}.${pid}.${randomUUID()}`;
+    const discard = (): Promise<void> =>
+      rm(staged, { recursive: true, force: true }).catch(() => {});
+    await mkdir(staged);
     try {
-      holder = (await readFile(path, "utf8")).trim() || "unknown";
-    } catch {
-      holder = "unknown";
+      await writeFile(join(staged, pid), "");
+      for (const claimant of await readdir(takeover).catch(() => [])) {
+        if (holderIsDead(claimant)) {
+          await rm(join(takeover, claimant), { force: true });
+        }
+      }
+      await rename(staged, takeover);
+    } catch (error) {
+      await discard();
+      const code = errorCode(error);
+      if (code !== "ENOTEMPTY" && code !== "EEXIST") {
+        throw error;
+      }
+      return false;
     }
+    try {
+      await body();
+    } finally {
+      await rename(takeover, staged).catch(() => {});
+      await discard();
+    }
+    return true;
+  };
+
+  const takeOver = async (holder: string): Promise<void> => {
+    const replaced = await claimed(async () => {
+      try {
+        const current = (await readFile(path, "utf8")).trim() || "unknown";
+        if (current !== holder) {
+          throw new UserError(`store lock held by pid ${current}`);
+        }
+        await unlink(path);
+      } catch (error) {
+        if (errorCode(error) !== "ENOENT") {
+          throw error;
+        }
+      }
+      const blocker = await lockOrHolder();
+      if (blocker !== null) {
+        throw new UserError(`store lock held by pid ${blocker}`);
+      }
+    });
+    if (!replaced) {
+      throw new UserError(
+        `store lock held by pid ${holder} is being replaced by another writer; retry`
+      );
+    }
+  };
+
+  const holder = await lockOrHolder();
+  if (holder !== null) {
     if (holderIsDead(holder)) {
       options.onStaleLock?.(holder);
-      await takeOver();
+      await takeOver(holder);
     } else if (options.force) {
       options.onLockStolen?.(holder);
-      await takeOver();
+      await takeOver(holder);
     } else {
       throw new UserError(`store lock held by pid ${holder}`);
     }
   }
 
+  // A claimant that refuses the release is replacing the lock. It finishes or
+  // dies, and the next claim sweeps a dead one, so the release tries again.
   return async (): Promise<void> => {
-    try {
-      if ((await readFile(path, "utf8")).trim() === pid) {
-        await unlink(path);
+    const removeOwn = async (): Promise<void> => {
+      try {
+        if ((await readFile(path, "utf8")).trim() === pid) {
+          await unlink(path);
+        }
+      } catch (error) {
+        if (errorCode(error) !== "ENOENT") {
+          throw error;
+        }
       }
-    } catch (error) {
-      if (errorCode(error) !== "ENOENT") {
-        throw error;
+    };
+    for (;;) {
+      if (await claimed(removeOwn)) {
+        return;
       }
+      await new Promise((resolve) => setTimeout(resolve, 10));
     }
   };
 }
@@ -457,7 +555,7 @@ async function readTsv(
       if (cells.length !== width) {
         throw new UserError(`${basename(path)} has a malformed row`);
       }
-      return cells;
+      return cells.map(unquoteCell);
     });
 }
 
@@ -579,7 +677,7 @@ async function readPointers(
       /\r?\n$/,
       ""
     );
-    const row = raw.split("\t");
+    const row = raw.split("\t").map(unquoteCell);
     if (/[\r\n]/.test(raw) || row.length !== 5) {
       throw new UserError(`inbox pointer ${entry.name} is malformed`);
     }
@@ -882,7 +980,7 @@ function changed(before: StatusSummary | null, after: StatusSummary): string {
 }
 
 function markdown(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+  return value.replace(/[\t\n\r]/g, " ").replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
 }
 
 function table(
@@ -974,6 +1072,12 @@ interface ForgePullRequestQuery {
   readonly stateField: string;
   readonly headField: string;
   readonly baseField: string;
+  // gh matches --head and --base by branch name alone, so the chain keeps only
+  // PRs whose head repository, paired with headRepositoryOwner.login or
+  // null for a deleted fork, is the one the checkout pushes to.
+  readonly headRepositoryField?: string;
+  // gh lists 30 pull requests unless told otherwise.
+  readonly listArgs: readonly string[];
   readonly states: ReadonlyMap<string, FrontierPrState>;
 }
 
@@ -984,6 +1088,8 @@ const FORGE_PULL_REQUEST_QUERIES: Readonly<
     stateField: "state",
     headField: "headRefName",
     baseField: "baseRefName",
+    headRepositoryField: "headRepository",
+    listArgs: ["--limit", "1000"],
     states: new Map<string, FrontierPrState>([
       ["OPEN", "OPEN"],
       ["MERGED", "MERGED"],
@@ -994,6 +1100,7 @@ const FORGE_PULL_REQUEST_QUERIES: Readonly<
     stateField: "status",
     headField: "headRef",
     baseField: "baseRef",
+    listArgs: [],
     states: new Map<string, FrontierPrState>([
       ["open", "OPEN"],
       ["draft", "OPEN"],
@@ -1010,28 +1117,71 @@ export function parseForge(value: string): Forge {
   throw new UserError("forge must be gh or origin");
 }
 
+// Bun resolves a command spawned without an env option against its startup
+// PATH, so tests point the store at a fake forge executable instead.
+interface ForgeExecutable {
+  readonly path: string;
+  readonly timeout: number;
+}
+
 interface ForgePullRequest {
   readonly pr: number;
   readonly state: FrontierPrState;
   readonly branch: string;
   readonly base: string;
+  // owner/name in lower case; null when the forge does not say or the head
+  // repository is gone.
+  readonly repository: string | null;
+}
+
+interface ForgePullRequests {
+  // PRs whose head is in the repository the checkout pushes to.
+  readonly local: readonly ForgePullRequest[];
+  readonly foreign: readonly ForgePullRequest[];
+}
+
+// Resolves to null when the forge reports no head repository or the repository
+// is gone, and to undefined when the field is malformed.
+function headRepository(
+  row: Record<string, unknown>,
+  field: string | undefined
+): string | null | undefined {
+  if (field === undefined) {
+    return null;
+  }
+  const value = row[field];
+  if (value === null) {
+    return null;
+  }
+  const owner = row.headRepositoryOwner;
+  return isRecord(value) &&
+    typeof value.name === "string" &&
+    value.name.length > 0 &&
+    isRecord(owner) &&
+    typeof owner.login === "string" &&
+    owner.login.length > 0
+    ? `${owner.login}/${value.name}`.toLowerCase()
+    : undefined;
 }
 
 function runTool({
   command,
   args,
   repo,
+  executable,
 }: {
   command: string;
   args: readonly string[];
   repo: string;
+  executable?: ForgeExecutable;
 }): string {
   try {
-    return execFileSync(command, args, {
+    return execFileSync(executable?.path ?? command, args, {
       cwd: repo,
       encoding: "utf8",
-      env: process.env,
       stdio: ["ignore", "pipe", "pipe"],
+      timeout: executable?.timeout,
+      killSignal: "SIGKILL",
     });
   } catch (error) {
     throw new UserError(
@@ -1044,13 +1194,17 @@ function listPullRequests({
   filter,
   branch,
   forge,
+  executable,
   repo,
+  localRepository,
 }: {
   filter: "--head" | "--base";
   branch: string;
   forge: Forge;
+  executable: ForgeExecutable;
   repo: string;
-}): readonly ForgePullRequest[] {
+  localRepository: string | null;
+}): ForgePullRequests {
   const query = FORGE_PULL_REQUEST_QUERIES[forge];
   const command = `${forge} pr list ${filter} ${branch}`;
   // Every state is fetched because a merged or closed PR still anchors the
@@ -1064,12 +1218,20 @@ function listPullRequests({
       branch,
       "--state",
       "all",
+      ...query.listArgs,
       "--json",
-      ["number", query.stateField, query.headField, query.baseField].join(
-        ","
-      ),
+      [
+        "number",
+        query.stateField,
+        query.headField,
+        query.baseField,
+        ...(query.headRepositoryField
+          ? [query.headRepositoryField, "headRepositoryOwner"]
+          : []),
+      ].join(","),
     ],
     repo,
+    executable,
   });
   let value: unknown;
   try {
@@ -1080,12 +1242,15 @@ function listPullRequests({
   if (!isUnknownArray(value)) {
     throw new UserError(`${command} output is not a JSON array`);
   }
-  return value.map((row) => {
+  const rows = value.map((row): ForgePullRequest => {
     const status = isRecord(row) ? row[query.stateField] : undefined;
     const state =
       typeof status === "string" ? (query.states.get(status) ?? null) : null;
     const head = isRecord(row) ? row[query.headField] : undefined;
     const base = isRecord(row) ? row[query.baseField] : undefined;
+    const repository = isRecord(row)
+      ? headRepository(row, query.headRepositoryField)
+      : undefined;
     if (
       !isRecord(row) ||
       typeof row.number !== "number" ||
@@ -1095,33 +1260,64 @@ function listPullRequests({
       typeof head !== "string" ||
       head.length === 0 ||
       typeof base !== "string" ||
-      base.length === 0
+      base.length === 0 ||
+      repository === undefined
     ) {
       throw new UserError(`${command} output has an invalid PR row`);
     }
-    return { pr: row.number, state, branch: head, base };
+    return { pr: row.number, state, branch: head, base, repository };
   });
+  const isLocal = (row: ForgePullRequest): boolean =>
+    localRepository === null || row.repository === localRepository;
+  return {
+    local: rows.filter(isLocal),
+    foreign: rows.filter((row) => !isLocal(row)),
+  };
 }
 
 function branchPullRequest({
   branch,
   forge,
+  executable,
   repo,
+  localRepository,
 }: {
   branch: string;
   forge: Forge;
+  executable: ForgeExecutable;
   repo: string;
+  localRepository: string | null;
 }): ForgePullRequest {
-  const rows = listPullRequests({ filter: "--head", branch, forge, repo });
-  const row = rows[0];
+  const { local, foreign } = listPullRequests({
+    filter: "--head",
+    branch,
+    forge,
+    executable,
+    repo,
+    localRepository,
+  });
+  // A branch may have closed or merged historical PRs after stack surgery.
+  // Prefer its sole active PR, but retain historical anchors when none is open.
+  const active = local.filter((row) => row.state === "OPEN");
+  const candidates = active.length > 0 ? active : local;
+  const row = candidates[0];
   if (row === undefined) {
+    const ignored =
+      foreign.length === 0 || localRepository === null
+        ? ""
+        : ` from ${localRepository} (ignored ${foreign
+            .map(
+              (item) =>
+                `#${item.pr} from ${item.repository ?? "a deleted repository"}`
+            )
+            .join(", ")})`;
     throw new UserError(
-      `branch ${branch} has no pull request; open one with ${forge} pr create, or resolve the frontier from a branch whose chain is fully submitted`
+      `branch ${branch} has no pull request${ignored}; open one with ${forge} pr create, or resolve the frontier from a branch whose chain is fully submitted`
     );
   }
-  if (rows.length > 1) {
+  if (candidates.length > 1) {
     throw new UserError(
-      `branch ${branch} has multiple pull requests (${rows.map((item) => `#${item.pr}`).join(", ")}); close the stale ones first`
+      `branch ${branch} has multiple pull requests (${candidates.map((item) => `#${item.pr}`).join(", ")}); close the stale ones first`
     );
   }
   return row;
@@ -1130,15 +1326,24 @@ function branchPullRequest({
 function openChildren({
   branch,
   forge,
+  executable,
   repo,
+  localRepository,
 }: {
   branch: string;
   forge: Forge;
+  executable: ForgeExecutable;
   repo: string;
+  localRepository: string | null;
 }): readonly ForgePullRequest[] {
-  return listPullRequests({ filter: "--base", branch, forge, repo }).filter(
-    (row) => row.state === "OPEN"
-  );
+  return listPullRequests({
+    filter: "--base",
+    branch,
+    forge,
+    executable,
+    repo,
+    localRepository,
+  }).local.filter((row) => row.state === "OPEN");
 }
 
 function runGit({
@@ -1158,7 +1363,10 @@ function branchSha({
   branch: string;
   repo: string;
 }): string {
-  const sha = runGit({ args: ["rev-parse", branch], repo });
+  const sha = runGit({
+    args: ["rev-parse", "--verify", `refs/heads/${branch}^{commit}`],
+    repo,
+  });
   if (!/^[0-9a-f]{40,64}$/i.test(sha)) {
     throw new UserError(`git rev-parse ${branch} returned an invalid SHA`);
   }
@@ -1166,7 +1374,49 @@ function branchSha({
 }
 
 function currentBranch(repo: string): string {
-  return runGit({ args: ["symbolic-ref", "--short", "HEAD"], repo });
+  // --short prints heads/<branch> for a branch that shares a tag's name.
+  return runGit({ args: ["symbolic-ref", "HEAD"], repo }).replace(
+    /^refs\/heads\//,
+    ""
+  );
+}
+
+// The repository the branch pushes to, as owner/name in lower case, from the
+// remote git itself would push it to.
+function pushRepository({
+  branch,
+  repo,
+}: {
+  branch: string;
+  repo: string;
+}): string {
+  const configured = (key: string): string | null => {
+    try {
+      return runGit({ args: ["config", "--get", key], repo }) || null;
+    } catch {
+      return null;
+    }
+  };
+  const remote =
+    configured(`branch.${branch}.pushRemote`) ??
+    configured("remote.pushDefault") ??
+    configured(`branch.${branch}.remote`) ??
+    "origin";
+  let url: string;
+  try {
+    url = runGit({ args: ["remote", "get-url", "--push", remote], repo });
+  } catch {
+    throw new UserError(
+      `branch ${branch} has no push remote (remote ${remote} has no URL), so the chain cannot tell which pull requests are the checkout's own`
+    );
+  }
+  const match = /([^/:]+)\/([^/]+?)(?:\.git)?\/?$/.exec(url);
+  const owner = match?.[1];
+  const name = match?.[2];
+  if (owner === undefined || name === undefined) {
+    throw new UserError(`remote ${remote} URL ${url} does not name a repository`);
+  }
+  return `${owner}/${name}`.toLowerCase();
 }
 
 function trunkBranch(repo: string): string {
@@ -1181,14 +1431,32 @@ function trunkBranch(repo: string): string {
   }
 }
 
-function resolveFrontier(repo: string, forge: Forge): readonly FrontierPr[] {
+function resolveFrontier({
+  repo,
+  forge,
+  executable,
+}: {
+  repo: string;
+  forge: Forge;
+  executable: ForgeExecutable;
+}): readonly FrontierPr[] {
   const trunk = trunkBranch(repo);
   const current = currentBranch(repo);
   if (current === trunk) {
     return [];
   }
+  const localRepository =
+    FORGE_PULL_REQUEST_QUERIES[forge].headRepositoryField === undefined
+      ? null
+      : pushRepository({ branch: current, repo });
   const seen = new Set([current]);
-  let bottom = branchPullRequest({ branch: current, forge, repo });
+  let bottom = branchPullRequest({
+    branch: current,
+    forge,
+    executable,
+    repo,
+    localRepository,
+  });
   const chain = [bottom];
   while (bottom.base !== trunk) {
     if (seen.has(bottom.base)) {
@@ -1197,12 +1465,24 @@ function resolveFrontier(repo: string, forge: Forge): readonly FrontierPr[] {
       );
     }
     seen.add(bottom.base);
-    bottom = branchPullRequest({ branch: bottom.base, forge, repo });
+    bottom = branchPullRequest({
+      branch: bottom.base,
+      forge,
+      executable,
+      repo,
+      localRepository,
+    });
     chain.unshift(bottom);
   }
   let tip = current;
   for (;;) {
-    const children = openChildren({ branch: tip, forge, repo });
+    const children = openChildren({
+      branch: tip,
+      forge,
+      executable,
+      repo,
+      localRepository,
+    });
     const child = children[0];
     if (child === undefined) {
       break;
@@ -1562,7 +1842,14 @@ export function openStore(
           throw new UserError("--prs must not contain duplicates");
         }
         const old = await readFrontier(store);
-        const prs = resolveFrontier(repo, forge);
+        const prs = resolveFrontier({
+          repo,
+          forge,
+          executable: {
+            path: options.forgePaths?.[forge] ?? forge,
+            timeout: options.forgeTimeoutMs ?? FORGE_TIMEOUT_MS,
+          },
+        });
         if (pin !== undefined) {
           validateFrontierPin({
             actual: prs.map((row) => row.pr),

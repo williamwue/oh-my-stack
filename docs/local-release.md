@@ -77,14 +77,14 @@ To publish after the release is authorized:
 
 The command runs dependency installation, the full repository checks, complete
 book validation and the bilingual Python audit/tests. It builds twice to check
-reproducibility, creates all eight assets, and writes a verification receipt
+reproducibility, creates all seven assets, and writes a verification receipt
 only after success. Logs are retained with hashes. Failed
 checks retain evidence and never produce a success receipt.
 
 With `--publish`, it verifies the existing native GitHub account and exact
 repository, acquires a repository publication lease, pushes the unchanged release
 tag, creates or resumes a draft,
-downloads and verifies all eight draft assets, publishes a non-prerelease,
+downloads and verifies all seven draft assets, publishes a non-prerelease,
 verifies public downloads again, and runs the gated stable publisher with the
 same Node process environment. The archive byte check is unchanged. Published
 assets are never overwritten. An existing identical release can resume stable
@@ -127,7 +127,7 @@ manually. The publisher itself configures the helper only for its subprocesses.
 
 `verification.json` binds the exact repository, commit, tree, tag, clean source,
 Node/zlib versions, required successful checks, hashed logs and
-all eight artifact hashes/sizes. The stable publisher checks these against the
+all seven artifact hashes/sizes. The stable publisher checks these against the
 server-observed tag and downloaded release, then independently rebuilds with
 the pinned environment. It still validates native write access, safe archive
 inventories, previous stable ownership, monotonic version, an expected-head

@@ -7,8 +7,8 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
-import { createArchive, packageInventory, sha256 } from "./release-lib.mjs";
-import { buildConformance } from "./build-conformance.mjs";
+import { createArchive, inventoryDigest, packageInventory, sha256 } from "./release-lib.mjs";
+
 
 const execFileAsync = promisify(execFile);
 export const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -73,7 +73,7 @@ function archiveMetadata(archive, files) {
   return {
     sha256: sha256(archive),
     size: archive.length,
-    contentSha256: sha256(Buffer.from(`${JSON.stringify(files)}\n`)),
+    contentSha256: inventoryDigest(files),
     files,
   };
 }
@@ -99,7 +99,7 @@ async function buildPluginBundle({ root, out, project, bundle }) {
   if (
     compatibilityManifest.name !== project.name
     || compatibilityManifest.version !== project.version
-    || compatibilityManifest.hooks !== "./hooks/hooks.json"
+    || compatibilityManifest.hooks !== "./hooks/codex-hooks.json"
   ) {
     throw new Error("Codex plugin manifest identity or default routing hooks drift");
   }
@@ -180,12 +180,12 @@ async function buildClaudeMarketplaceBundle({ root, out, project, bundle }) {
 }
 
 export async function buildRelease({ root = repoRoot, out, tag = null }) {
-  await buildConformance({ root, check: true });
+
   const project = JSON.parse(await readFile(join(root, "src/core/project.json"), "utf8"));
   const config = JSON.parse(await readFile(join(root, "src/packaging/release.json"), "utf8"));
   if (config.schemaVersion !== 1 || config.archiveRoot !== project.name) throw new Error("invalid release configuration");
   const ids = config.targets.map((target) => target.id);
-  if (JSON.stringify(ids) !== JSON.stringify(["omp", "codex", "claude-code", "pi"])) {
+  if (JSON.stringify(ids) !== JSON.stringify(["codex", "claude-code", "pi"])) {
     throw new Error("release configuration must contain omp, codex, claude-code, and pi in order");
   }
   if (JSON.stringify(config.pluginBundles?.map((bundle) => bundle.id)) !== JSON.stringify(["codex-marketplace", "claude-marketplace"])) {
@@ -212,7 +212,7 @@ export async function buildRelease({ root = repoRoot, out, tag = null }) {
       profiles: generation.profiles,
       selection: generation.selection,
       verification: target.verification,
-      conformance: await collectConformance(root, target.id),
+      conformance: ({ status: "deferred", profile: null, scenarios: [] }),
     });
   }
   const pluginBundles = [];

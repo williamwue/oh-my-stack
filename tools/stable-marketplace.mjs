@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
-import { packageInventory, parseArchive, sha256 } from "./release-lib.mjs";
+import { inventoryDigest, packageInventory, parseArchive, sha256 } from "./release-lib.mjs";
 import { assertBuildEnvironment, BUILD_ENVIRONMENT, readLocalVerification, REQUIRED_CHECKS } from "./local-release-lib.mjs";
 
 import { nativePublisherEnvironment } from "./release-publisher.mjs";
@@ -87,7 +87,7 @@ function validateArchive(bytes, entry, root) {
   requireThat(sha256(bytes) === entry.sha256 && bytes.length === entry.size, `manifest digest/size mismatch: ${entry.file}`);
   const files = parseArchive(bytes, root);
   requireThat(JSON.stringify(inventory(files)) === JSON.stringify(entry.files), `archive inventory mismatch: ${entry.file}`);
-  if (entry.contentSha256) requireThat(sha256(Buffer.from(`${JSON.stringify(entry.files)}\n`)) === entry.contentSha256,
+  if (entry.contentSha256) requireThat(inventoryDigest(entry.files) === entry.contentSha256,
     `content inventory digest mismatch: ${entry.file}`);
   return files;
 }
@@ -98,8 +98,7 @@ export async function buildStableMarketplace({ assets, release, out }) {
   requireThat(release.draft === false && release.prerelease === false && release.published_at
     && Number.isSafeInteger(release.id) && semver.test(version) && release.tag_name === `v${version}`
     && release.html_url === `${URL}/releases/tag/v${version}`, "not a published stable release of the expected repository");
-  const targets = ["omp", "codex", "claude-code"];
-  if (release.assets.some((asset) => asset.name === `oh-my-stack-pi-${version}.tar.gz`)) targets.push("pi");
+  const targets = ["codex", "claude-code", "pi"];
   const archiveNames = [...targets, "codex-plugin", "claude-plugin"]
     .map((target) => `oh-my-stack-${target}-${version}.tar.gz`);
   const names = [...archiveNames, "release-manifest.json", "SHA256SUMS"].sort();

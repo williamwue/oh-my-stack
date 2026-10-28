@@ -1,3 +1,16 @@
+# Current distribution 0.21.0
+
+Active direct workflow source: michael-denyer/pstack-claude e2cbd491f94ee4ece30e028b9ff69a8b418d1723.
+Official comparison: cursor/plugins c742dd61706fbacc1b95f1a20b7b988cf096ce6c.
+AIHero originals: mattpocock/skills 59db609eb1e18aaf59b63284d0e52255aff0c63c.
+All are MIT licensed. Each package includes upstream LICENSE, LICENSE-cursor-team-kit,
+LICENSE-thermos, NOTICE.md, NOTICE-skills.md and LICENSE-AIHero. Full original trees,
+receipts and the explicit 20-skill selection plus prototype dependency are committed
+under upstream/vendor and upstream/distribution.json. OMS adapts plugin identity,
+namespaces and T3 dispatch pointers in the packaging layer. Model policy and personal
+configuration locations retain upstream behavior. The following entries document the
+previous implementation and its retained historical sources.
+
 # Third-party notices
 
 ## The pstack book by kaito
