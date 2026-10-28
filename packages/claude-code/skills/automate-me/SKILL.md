@@ -1,22 +1,25 @@
 ---
 name: automate-me
-description: "Use for \\\"automate me\\\", \\\"create/update/refresh my -mode skill\\\", \\\"turn/capture my preferences or working style into a skill\\\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts."
-disable-model-invocation: true
+description: "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via plugin-dev:skill-development + unslop, optionally pulling fresh evidence from recent transcripts."
 ---
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Automate me
 
+On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.
+
+On GitHub Copilot, read the [platform mapping](../poteto-mode/references/copilot-tools.md), including its per-skill notes, before following this skill.
+
+On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), including its per-skill notes, before following this skill.
+
 A guided flow for turning the user's working conventions into a skill agents will follow. The output is one `-mode` skill tailored to them (e.g. `jay-mode`, `priya-mode`).
 
-This skill orchestrates three others: an inline mining pass (see step 1), the host's available skill-authoring workflow (authoring), and the **unslop** skill (prose discipline). It sequences them. It doesn't replace them.
+This skill orchestrates three others: an inline mining pass (see step 1), the **plugin-dev:skill-development** skill (authoring), and the **unslop** skill (prose discipline). It sequences them. It doesn't replace them.
 
 ## Flow
 
 ### 0. Check for an existing skill
 
-Look recursively for `<project-skill-root>/**/*-mode/SKILL.md` and `<authorized-user-skill-root>/*-mode/SKILL.md` matching the user's handle. Mode skills can live in a personal category directory (`<project-skill-root>/<handle>/`), not only at the top level. If one exists, confirm intent with the host's available fixed-choice question tool (unless they already said "update my skill" or similar):
+Look recursively for `.claude/skills/**/*-mode/SKILL.md` and `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/*-mode/SKILL.md` matching the user's handle. Mode skills can live in a personal category directory (`.claude/skills/<handle>/`), not only at the top level. If one exists, confirm intent with `AskUserQuestion` (unless they already said "update my skill" or similar):
 
 - Update the existing skill (default for repeat runs)
 - Start fresh (rare, ask why before doing it)
@@ -28,9 +31,9 @@ Update mode changes the rest of the flow:
 
 ### 1. Mine their history
 
-Locate the active workspace's transcripts before fanning out. The system prompt names the workspace's `agent-transcripts/` directory. Use only that path. Don't glob across `unrelated host workspace transcript roots`. That crosses workspace boundaries and reads private chats from unrelated projects.
+Locate the active workspace's transcripts before fanning out. Claude Code stores them at `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects/<encoded-cwd>/*.jsonl`. Run `node <plugin>/skills/reflect/scripts/claude-project-dir.mjs` to print this session's directory rather than building `<encoded-cwd>` by hand. Use only that path. Don't glob across `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects/`. That crosses workspace boundaries and reads private chats from unrelated projects.
 
-Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill. Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
+Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill. Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
 
 - Response preferences (length, tone, format, "dumb it down" corrections)
 - Delegation habits (subagents, models, specialized workflows, parallelism)
@@ -43,7 +46,7 @@ Cross-check across slices before elevating a signal. Patterns seen in 2+ slices 
 
 ### 2. Ask the user directly
 
-Mining misses intent that hasn't come up yet. Use the the host's available fixed-choice question tool tool (structured multi-choice) rather than asking the user to type from scratch.
+Mining misses intent that hasn't come up yet. Use the `AskUserQuestion` tool (structured multi-choice) rather than asking the user to type from scratch.
 
 Shape: one or two questions with 4-6 options each, `allow_multiple: true` for category questions. Start broad ("Which areas matter most?"), then follow up on selected areas with specific options. After the structured rounds, one free-form chat question catches anything the options missed.
 
@@ -66,17 +69,17 @@ The **poteto-mode** skill shows the shape. Read it for granularity. Don't copy i
 
 ### 4. Draft the skill
 
-Use the host's available skill-authoring workflow skill to author the skill. Placement:
+Use the **plugin-dev:skill-development** skill to author the skill. Placement:
 
-- Path: preserve an existing mode skill's category. For a new mode, use `<project-skill-root>/<handle>/<handle>-mode/SKILL.md` when the repo has an established personal category for that handle. Otherwise default to `<project-skill-root>/<handle>-mode/SKILL.md` in the project (or `<authorized-user-skill-root>/<handle>-mode/` if the user prefers a personal skill).
+- Path: preserve an existing mode skill's category. For a new mode, use `.claude/skills/<handle>/<handle>-mode/SKILL.md` when the repo has an established personal category for that handle. Otherwise default to `.claude/skills/<handle>-mode/SKILL.md` in the project (or `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/<handle>-mode/` if the user prefers a personal skill).
 - Handle: the user's first name or chosen identifier.
 - Frontmatter `description`: trigger on their name + `/<handle>-mode` + "work in their style", not on generic keywords like "write code" or "review PR".
-- Frontmatter formatting: follow the host skill-authoring workflow's YAML rules. Keep `description` as one YAML scalar. Quote it or use `description: >-` with indented continuation lines when punctuation or wrapping requires it.
+- Frontmatter formatting: follow `plugin-dev:skill-development`'s YAML rules. Keep `description` as one YAML scalar. Quote it or use `description: >-` with indented continuation lines when punctuation or wrapping requires it.
 - Frontmatter `disable-model-invocation: true` by default. Opt out only if the user explicitly wants their mode to apply on every turn.
 
 ### 5. Iterate on prose
 
-Apply the **unslop** skill and the host skill-authoring workflow's writing guidelines to every line.
+Apply the **unslop** skill and `plugin-dev:skill-development`'s writing guidelines to every line.
 
 Show the draft to the user and take feedback. Expect multiple iterations. Cut ruthlessly. A mode skill is not a manual.
 
@@ -95,11 +98,12 @@ Work in a worktree off main. Commit and open a PR. Don't push to main directly.
 
 ## Evaluation
 
-A `-mode` skill is subjective output. A the host skill-authoring workflow-style test/iterate benchmark loop isn't useful here. Vibe-check with the user: does it read like them? Did it miss anything? Then ship.
+A `-mode` skill is subjective output. A `plugin-dev:skill-development`-style test/iterate benchmark loop isn't useful here. Vibe-check with the user: does it read like them? Did it miss anything? Then ship.
 
 Run a description-optimization loop only if the skill's trigger accuracy turns out to be a problem in practice.
 
 ## When not to use
 
-- User wants a task-specific skill (not working conventions): the host skill-authoring workflow alone, no mining required.
+- User wants a task-specific skill (not working conventions): `plugin-dev:skill-development` alone, no mining required.
 - User wants to capture one narrow workflow (e.g. "how I write commit messages"). That's a regular skill, not a mode skill.
+

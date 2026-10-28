@@ -16,7 +16,7 @@ export function assertBuildEnvironment(environment = process.versions) {
 }
 export function assetNames(version) {
   requireThat(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version), "release version must be plain semver");
-  return ["omp", "codex", "claude-code", "pi", "codex-plugin", "claude-plugin"]
+  return ["codex", "claude-code", "pi", "codex-plugin", "claude-plugin"]
     .map((target) => `oh-my-stack-${target}-${version}.tar.gz`).concat("release-manifest.json", "SHA256SUMS").sort();
 }
 // Resolve only system ancestors (for example macOS /var -> /private/var).

@@ -1,9 +1,7 @@
 ---
 name: tdd
-description: "Use for requested TDD or cheap local regression tests; skip unclear or costly test paths."
+description: "Use only when the user explicitly asks for TDD, a failing test, or a regression test, OR when the bug has an obvious cheap local test target. Skip when the test path is unclear, expensive, integration-heavy, or not requested."
 ---
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # TDD Bug Fix
 
@@ -16,7 +14,7 @@ Do not force a test when it would be impractical. If the available test would re
 1. **Understand the bug.** Identify the intended behavior, current behavior, affected path, and smallest observable reproduction.
 2. **Choose the narrowest executable check.** Prefer the closest unit, component, integration, or regression test already used for that codepath. If no practical test path is obvious, do not create one from scratch just to satisfy the workflow.
 3. **Write the failing test first.** Add the smallest focused test that would have caught the bug. The test should encode intended behavior, not mirror the current implementation.
-4. **Run the new test before fixing.** Confirm it fails for the intended reason. State the predicted disagreement before running it, then quote the decisive failure content and exit status. An unrelated exception or arbitrary red status does not prove the test measures the defect. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
+4. **Run the new test before fixing.** Confirm it fails for the intended reason. Quote the failure content, not the assertion line: an exception, an empty result against a literal, and the predicted mismatch all print red, and only the last one proves the test measures the bug. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
 5. **Fix the bug.** Make the smallest production change that satisfies the intended behavior while preserving nearby contracts.
 6. **Rerun the regression test.** Confirm the test now passes.
 
@@ -38,6 +36,6 @@ Prefer no new test over a bad test. A bad test is one that mostly tests mocks, e
 
 Report the evidence, not just the outcome:
 
-- Name the failing-before test or executable check and the failure it produced.
+- Name the failing-before test or executable check and quote the failure it produced, trimmed to the diff.
 - Name the passing-after test run and any nearby validation performed.
 - If failing-before evidence could not be demonstrated, state why and describe the closest regression check used instead.

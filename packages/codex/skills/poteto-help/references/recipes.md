@@ -16,7 +16,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 ## Build
 
 - Bug: `/poteto-mode <symptom>. repro first, then fix and verify.`
-- Bug in an app: `/poteto-mode repro this with /verify-<app>. if it repros on main, fix it and show me a video as proof.`
+- Bug in an app: `/poteto-mode repro this with /verify. if it repros on main, fix it and show me a video as proof.`
 - Bug with a cheap test: `/poteto-mode repro <bug> first. if there's a cheap test path, /tdd it. then fix and rerun.`
 - Feature: `/poteto-mode add <behavior>. <current output> stays byte-identical. verify both.`
 - Refactor: `/poteto-mode move <code> into one module, zero behavior change. record the current output first and prove it's unchanged after.`
@@ -33,7 +33,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 ## Review and ship
 
-- `/interrogate the whole branch, but skeptically. don't change anything yet. no nitpicks unless it's a real bug or regression.` Read the dismissals too.
+- `/interrogate the whole branch, but skeptically. don't change anything yet. no nitpicks unless it's a real bug or regression.` Read the Dropped list too.
 - `/create-formal-verification-skill prove <property> holds in <module>, even when <steps> interleave or retry.` After merges or refactors in that code: `/maintain-formal-verification-skill`.
 - `/swarm check every package under <dir> against its check script. one worker per package. one report.`
 - `/poteto-mode open the pr. small ordered commits, evidence in the description.`
@@ -46,6 +46,6 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 - `/show-me-your-work catch me up on what you did last night.` Read its Attention section first.
 - `/ketchup` catches you up on this chat since your last message and lists every call that waits on you.
 - `/poteto-mode full autopilot on this queue. each item is independent.`
-- `/poteto-mode autopilot these changes but stack them, don't ship. i'll land the stack.`
+- `/poteto-mode autopilot these changes, but don't merge. i'll land them.`
 - `/reflect capture what we learned so the next run doesn't repeat it.` Approve only edits that change a future decision.
 - `/bro` restates the last reply in plain words.

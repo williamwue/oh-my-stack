@@ -227,10 +227,10 @@ export async function main(argv = process.argv.slice(2)) {
     await run("repository-check", [npmCommand(["run", "check"])]);
     const python = join(options.out, "python", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
     await run("book-environment", [[process.platform === "win32" ? "python" : "python3", ["-m", "venv", join(options.out, "python")]],
-      [python, ["-m", "pip", "install", "-r", join(options.source, "tools/books/requirements.txt")]]]);
+      [python, ["-m", "pip", "install", "-r", join(options.source, "tools/books/regression-requirements.txt")]]]);
     await run("book-validation", [node(["tools/books/validate-pstack-book.mjs", "--complete"])]);
     await run("book-audit", [[python, ["tools/books/audit-source.py"]]]);
-    await run("book-tests", [[python, ["tests/pstack-book-audit.test.py"]]]);
+    await run("book-tests", [[python, ["tools/books/test-regressions.py"]]]);
     const tagArgs = options.tag ? ["--tag", options.tag] : [];
     await run("release-reproducibility", [node(["tools/build-release.mjs", "--check", ...tagArgs])]);
     await run("release-build", [node(["tools/build-release.mjs", "--out", join(options.out, "assets"), ...tagArgs])]);

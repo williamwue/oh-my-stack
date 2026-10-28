@@ -1,11 +1,12 @@
 ---
 name: typescript-best-practices
-description: "Apply type and boundary guidance to TS or TSX work."
+description: TypeScript best practices. Use when reading or editing any .ts or .tsx file.
+paths: ["**/*.ts", "**/*.tsx"]
 ---
 
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
-
 # TypeScript best practices
+
+On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), including its per-skill notes, before following this skill.
 
 Apply the **type-system-discipline** principle skill first.
 

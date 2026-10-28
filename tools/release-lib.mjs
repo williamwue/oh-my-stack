@@ -239,3 +239,6 @@ export async function uninstallOwned({ destination, target }) {
     await rm(work, { recursive: true, force: true });
   }
 }
+
+// Canonical content inventory digest: compact JSON, one trailing LF.
+export const inventoryDigest = files => sha256(Buffer.from(`${JSON.stringify(files)}\n`));

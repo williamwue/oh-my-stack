@@ -50,16 +50,6 @@
   ],
   "targets": [
     {
-      "id": "omp",
-      "packageDir": "packages/omp",
-      "verification": {
-        "static": "verified",
-        "discovery": "deferred",
-        "lifecycle": "verified",
-        "endToEnd": "deferred"
-      }
-    },
-    {
       "id": "codex",
       "packageDir": "packages/codex",
       "verification": {

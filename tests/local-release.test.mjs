@@ -109,8 +109,8 @@ test("tampered logs, assets and extra assets are rejected", async (t) => {
   }
   const archive = join(f.assets, f.receipt.assets[0].name), saved = join(f.root, "archive");
   await cp(archive, saved); await rm(archive); await symlink(saved, archive); await assert.rejects(f.read(), /regular/);
-  await rm(archive); await cp(saved, archive); await writeFile(join(f.assets, "extra"), "extra"); await assert.rejects(f.read(), /exactly 8/);
-  await rm(join(f.assets, "extra")); await rm(archive); await assert.rejects(f.read(), /exactly 8/); await cp(saved, archive);
+  await rm(archive); await cp(saved, archive); await writeFile(join(f.assets, "extra"), "extra"); await assert.rejects(f.read(), /exactly 7/);
+  await rm(join(f.assets, "extra")); await rm(archive); await assert.rejects(f.read(), /exactly 7/); await cp(saved, archive);
   const log = join(f.root, f.receipt.checks[0].log); await rm(log); await assert.rejects(f.read(), { code: "ENOENT" });
 });
 test("release resume preserves published assets and accepts only matching draft subsets", () => {

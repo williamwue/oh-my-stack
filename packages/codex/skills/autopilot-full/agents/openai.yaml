@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Autopilot Full"
-  short_description: "Build and review a queue to merge-ready, or merge within existin"
-  default_prompt: "Use $autopilot-full for this task."
-policy:
-  allow_implicit_invocation: false

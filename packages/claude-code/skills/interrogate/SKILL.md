@@ -1,78 +1,46 @@
 ---
 name: interrogate
-description: "Use for \\\"interrogate\\\", \\\"adversarial review\\\", \\\"multi-model review\\\", \\\"challenge this\\\", \\\"stress test this code\\\", \\\"find blind spots\\\", or \\\"tear this apart\\\". Multiple LLM reviewers challenge changes from independent angles."
-disable-model-invocation: true
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive."
 ---
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Interrogate
 
-Independent review remains incomplete when the host cannot spawn a separate reviewer, read its result, or observe completion. Preserve available independent findings and label the missing verdict BLOCKED. Self-review, tests, and CI cannot complete an independent verdict. Continue work that does not depend on it. If only parallel spawning is unavailable, run separate reviewers sequentially without sharing their findings. Fresh review rounds follow the installed runtime binding.
+On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.
 
-Spawn one reviewer per configured model to adversarially review code changes. The adversarial signal comes from model diversity, not assigned personas. The deliverable is a synthesized verdict. Do NOT auto-apply changes.
+On GitHub Copilot, read the [platform mapping](../poteto-mode/references/copilot-tools.md), including its per-skill notes, before following this skill.
 
-## Step 1, Scope
+On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), including its per-skill notes, before following this skill.
 
-Identify what to review from context:
+Adversaries try to break a change or a design. A finding survives only when a run proves it. Report the findings. Do not apply fixes.
 
-- If the user points at specific files or a diff, use that.
-- If on a feature branch, run `git diff main...HEAD` (or the appropriate base branch) for the full changeset.
-- If the user's message references recent work, gather the relevant files.
+## Frame
 
-Package the diff or file contents with any surrounding context files the reviewers need to understand the code.
+The scope is what the user names. Otherwise it is the branch diff from its merge base with the base branch, through the working tree. State the intent with the **in-your-own-words** skill, from the user's message, the commits, and the PR description. Ask the user when the intent is unclear.
 
-## Step 2, Intent
+## Fan out
 
-Before spawning reviewers, state the intent in one clear paragraph from the user's message, commit messages, the PR description if one exists, and the code. If you're unsure about the intent, ask the user before proceeding.
+Run Phase A steps 3 and 4 and Phase B of the **arena** skill, with four changes. Read the `interrogate reviewers` line in place of `arena runners`. Copy the scope's uncommitted changes into each worktree. Spawn each adversary as `general-purpose`. In place of the arena task and rationale, give each adversary the scope, the intent, and this brief:
 
-## Step 3, Spawn Reviewers
+> Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.
 
-Launch all reviewers in a single message with the native child-delegation tool, one per entry on the `interrogate reviewers` line in `the effective host model resolution`, labeled Reviewer A, B, and so on to match the entry count. If the rule or that line is missing, use the table defaults.
+## Verify
 
-| Subagent | Default model |
-|----------|---------------|
-| Reviewer A | `observed judgment-model choice` |
-| Reviewer B | `observed code-model choice` |
+Verify each finding per arena Phase F by rerunning its command. Keep a finding when the output shows the failure and the failure breaks the intent. Drop the rest. Merge findings that share a root cause.
 
-Each reviewer gets the bounded role from the generated runtime binding, read-only workspace authority, and `model` set to its configured entry, or its table default when there is no configured line. Omit `model` for an `auto` or `inherit-parent` entry, so that reviewer runs on the parent model.
+Skip arena Phases C, D, and E. Adversaries find different failures, so the verdict keeps every verified finding, not one adversary's list.
 
-If the native child-delegation tool rejects a configured entry, run that reviewer on its family's table default and say so. Resolve model families from observed host metadata. In the source-host examples, `cursor-grok-*` and `composer-*` belong to the `grok-*` family. A refused `composer-*` entry runs on Reviewer B's default. With no family match, use the observed host reviewer preset only when authorized. If it rejects a table default, spawn with the closest equivalent from the valid slugs in its error message (prefer the same family and reasoning tier), and open a separate PR to update the default table. Do not block the review on the slug issue. Never treat an alias entry as a rejected slug or apply either fallback to it.
+## Output
 
-Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+- **Intent**: the restatement.
+- **Findings**: for each verified finding, the command, its output, how it breaks the intent, and the adversaries that found it. Say "no verified findings" when none survive.
+- **Dropped**: for each adversary, the count of dropped findings and why.
 
-## Step 4, Synthesize
+## Models
 
-As results come back, build a unified picture. Parse every reviewer's findings. Merge findings that describe the same issue differently, and note which models raised each one. Findings two or more models raised independently are the highest signal. Read a lone model's finding, but weight it accordingly. Note disagreements. If one model flags something and another explicitly says the opposite, that is context for the verdict.
+Role defaults, stamped from `plugins/pstack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the `pstack-models.md` override sheet overrides each at runtime; `/setup-pstack` writes it and lists its path per runtime.
 
-## Step 5, Lead Judgment
+- interrogate reviewers: `opus`, `fable`, `sonnet`, `haiku`
 
-You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator. Read `references/lead-judgment.md` for the full framework. Put every finding in one of four buckets, with the model(s) that raised it and a one-line rationale.
+## Reasoning effort
 
-- **Act on**. Real issues affecting correctness, security, or maintainability given the actual goals. They would block a real PR.
-- **Consider**. Legitimate, but you're not sure they outweigh the cost of addressing them now. Worth the user's attention.
-- **Noted**. Technically valid but not actionable. Context-dependent, premature optimization, or low-impact at this stage.
-- **Dismissed**. Wrong, nitpicky, or missing context, with a brief reason.
-
-## Output Format
-
-### Intent
-> [The stated intent paragraph from Step 2]
-
-### Reviewers
-- Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
-
-### Act On
-[Each: description, which models raised it, why it matters.]
-
-### Consider
-[Each: description, which models raised it, the tradeoff.]
-
-### Noted
-[Brief list.]
-
-### Dismissed
-[Each with a brief rationale.]
-
-### Agreement Map
-[Where models agreed and diverged, and what that pattern tells us.]
+A role value in the override sheet may name a reasoning effort after its model, as in `opus @xhigh`. Levels on Claude Code: `low`, `medium`, `high`, `xhigh`, `max`. Which ones apply depends on the model. A value without `@` takes the sheet's `default effort` line, a level or `session`, and `session` when the sheet has no such line. `session` sets no effort, so the dispatch is the usual one. Strip the suffix before reading the model: `inherit-parent` or `auto` still omits `model` at every level, and a model name is passed as `model`. Pass the level as the dispatch's effort field and keep the `subagent_type` you would otherwise use. That is `effort` on the Claude Code `Agent` call and `reasoning_effort` on Codex's `spawn_agent`. On Muse it is `effort` on a Workflow child; a `subagent_spawn` dispatch keeps the session's effort.

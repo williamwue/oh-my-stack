@@ -1,6 +1,6 @@
 {
   "name": "oh-my-stack",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Portable, verifiable engineering workflows for agent runtimes.",
   "private": true,
   "type": "module",
@@ -23,14 +23,16 @@
     "conformance:check": "node tools/build-conformance.mjs --check",
     "release:build": "node tools/build-release.mjs",
     "release:check": "node tools/build-release.mjs --check",
-    "validate": "node tools/validate.mjs",
+    "validate": "node tools/validate-distribution.mjs",
     "check:books": "node tools/books/validate-pstack-book.mjs",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\"",
-    "test": "node --test tests/*.test.mjs src/core/skills/statechart/scripts/test/statechart.test.mjs",
-    "check": "npm run generate:check && npm run docs:check && npm run conformance:check && npm run release:check && npm run validate && npm run check:books && npm run lint:markdown && npm test",
+    "test": "node --test tests/distribution.test.mjs tests/release.test.mjs tests/local-release.test.mjs tests/release-publisher.test.mjs tests/stable-marketplace.test.mjs tests/local-release-workflows.test.mjs tests/pstack-book.test.mjs tests/git-lease-acceptance.test.mjs",
+    "check": "npm run generate:check && npm run validate && npm run release:check && npm test && npm run check:upstream && npm run check:books",
     "docs:generate": "node tools/generate-skill-directory.mjs",
     "docs:check": "node tools/generate-skill-directory.mjs --check && node tools/check-doc-facts.mjs",
-    "release:local": "node tools/local-release.mjs"
+    "release:local": "node tools/local-release.mjs",
+    "check:upstream": "node tools/check-upstream.mjs",
+    "check:books:python": "python3 tools/books/test-regressions.py"
   },
   "license": "MIT",
   "devDependencies": {

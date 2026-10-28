@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Sharpen"
-  short_description: "Rewrite a task prompt using expert methods while preserving the "
-  default_prompt: "Use $sharpen for this task."
-policy:
-  allow_implicit_invocation: false

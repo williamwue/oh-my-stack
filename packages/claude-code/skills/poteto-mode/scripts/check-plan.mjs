@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import process from "node:process";
-import MarkdownIt from "./vendor/markdown-it/markdown-it.esm.min.mjs";
 
 const RULE =
 	"Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.";
-const LANES = /Ten lanes on `[^`<>]+` at the PR head/;
+const LANES = "Ten lanes on the configured `swarm workers` model at the PR head";
 const SUB_BLOCKS = [
 	"Depends on.",
 	"Files.",
@@ -18,7 +17,7 @@ const SUB_BLOCKS = [
 	"Merge.",
 ];
 const PROGRAM_H3 = ["Arm the program", "Spawn owners", "PR mechanics", "Verdict and merge", "Boot recipe"];
-const PROGRAM_MARKERS = ["git show origin/main:", "/loop 1h", "status message"];
+const PROGRAM_MARKERS = ["standing orders", "installed plugin", /hourly|every hour/, "status message"];
 const HOW_TO_READ_MARKERS = [
 	"One box is one unit of work",
 	"names the evidence",
@@ -35,7 +34,7 @@ if (!file) {
 	process.exit(2);
 }
 
-const raw = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n");
+const raw = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "").split(/\r?\n/);
 const problems = [];
 const fail = (line, message) => problems.push(`${file}:${line}: ${message}`);
 
@@ -45,21 +44,35 @@ if (raw[0] === "---") {
 }
 
 const lines = [];
-// Match the renderer's default dialect and its nesting limit of 100.
-const markdown = new MarkdownIt("default", { maxNesting: 100 });
-const fenceLines = new Set();
-for (const token of markdown.parse(raw.slice(start).join("\n"), {})) {
-	if (token.type !== "fence") continue;
-	for (let i = start + token.map[0]; i < start + token.map[1]; i++) fenceLines.add(i);
-}
+let fence = null;
+const openingFence = (text) => {
+	const match = text.match(/^[ \t]*(`{3,}|~{3,})(.*)$/);
+	if (!match || (match[1][0] === "`" && match[2].includes("`"))) return null;
+	return { char: match[1][0], length: match[1].length };
+};
+const closingFence = (text, opening) => {
+	const match = text.match(/^[ \t]*(`+|~+)[ \t]*$/);
+	return Boolean(
+		match &&
+		match[1][0] === opening.char &&
+		match[1].length >= opening.length,
+	);
+};
 for (let i = start; i < raw.length; i++) {
 	const text = raw[i];
 	const n = i + 1;
-	const code = fenceLines.has(i);
+	let code = Boolean(fence);
+	if (fence && closingFence(text, fence)) {
+		code = false;
+		fence = null;
+	} else if (!fence) {
+		fence = openingFence(text);
+		code = Boolean(fence);
+	}
 	lines.push({ n, text, code });
 	if (code) continue;
 	const prose = text
-		.replace(/`[^`]*`/g, "`")
+		.replace(/(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)/g, "`")
 		.replace(/!\[[^\]]*\]\([^)]*\)/g, "")
 		.replace(/\]\([^)]*\)/g, "]");
 	if (/[\u2013\u2014]/.test(prose)) fail(n, "long dash");
@@ -67,15 +80,18 @@ for (let i = start; i < raw.length; i++) {
 	if (/: \S/.test(prose)) fail(n, "mid-sentence colon");
 }
 
-const h2 = (l) => (!l.code && l.text.startsWith("## ") ? l.text.slice(3).trim() : null);
-const sections = [];
-for (const l of lines) {
-	const title = h2(l);
-	if (title !== null) sections.push({ title, n: l.n, body: [] });
-	else if (sections.length) sections.at(-1).body.push(l);
+function sectionsAtLevel(lines, prefix) {
+	const sections = [];
+	for (const l of lines) {
+		if (!l.code && l.text.startsWith(prefix)) {
+			sections.push({ title: l.text.slice(prefix.length).trim(), n: l.n, body: [] });
+		} else if (sections.length) sections.at(-1).body.push(l);
+	}
+	return sections;
 }
+const sections = sectionsAtLevel(lines, "## ");
 const find = (title) => sections.find((s) => s.title === title);
-const bodyText = (s) => s.body.map((l) => l.text).join("\n");
+const bodyText = (s) => s.body.filter((l) => !l.code).map((l) => l.text).join("\n");
 const boxes = (ls) => ls.filter((l) => !l.code && BOX.test(l.text)).map((l) => ({ n: l.n, text: l.text.match(BOX)[1] }));
 
 const h1 = lines.findIndex((l) => !l.code && l.text.startsWith("# "));
@@ -93,20 +109,26 @@ if (h1 !== -1 && howToRead) {
 const program = find("Program checklist");
 if (!program) fail(1, 'no "## Program checklist" section');
 else {
-	const h3s = program.body.filter((l) => !l.code && l.text.startsWith("### ")).map((l) => l.text.slice(4).trim());
+	const tasks = sectionsAtLevel(program.body, "### ");
 	let cursor = 0;
 	for (const name of PROGRAM_H3) {
-		const at = h3s.findIndex((t, i) => i >= cursor && t.startsWith(name));
+		const at = tasks.findIndex((t, i) => i >= cursor && t.title.startsWith(name));
 		if (at === -1) fail(program.n, `Program checklist lacks "### ${name}" in order`);
-		else cursor = at + 1;
+		else {
+			const task = tasks[at];
+			if (boxes(task.body).length === 0) fail(task.n, `${task.title} has no box`);
+			cursor = at + 1;
+		}
 	}
 	for (const marker of PROGRAM_MARKERS) {
-		if (!bodyText(program).includes(marker)) fail(program.n, `Program checklist lacks "${marker}"`);
+		const ok = marker instanceof RegExp ? marker.test(bodyText(program)) : bodyText(program).includes(marker);
+		if (!ok) fail(program.n, `Program checklist lacks "${marker}"`);
 	}
 }
 
 const close = find("Close the program");
 if (!close) fail(1, 'no "## Close the program" section');
+else if (boxes(close.body).length === 0) fail(close.n, "Close the program has no box");
 const programIndex = sections.indexOf(program);
 const closeIndex = sections.indexOf(close);
 const prSections = programIndex === -1 || closeIndex === -1 ? [] : sections.slice(programIndex + 1, closeIndex);
@@ -142,7 +164,7 @@ for (const pr of prSections) {
 
 	const live = block("Verify, live.");
 	if (live) {
-		if (!LANES.test(live.rest)) fail(live.n, `${pr.title}: Verify, live lacks "Ten lanes on \`<swarm workers model>\` at the PR head" with the model filled in`);
+		if (!live.rest.includes(LANES)) fail(live.n, `${pr.title}: Verify, live lacks "${LANES}"`);
 		const lanes = boxes(live.lines).map((b) => ({ ...b, m: b.text.match(/^Lane (\d+)\. /) }));
 		const numbers = lanes.filter((b) => b.m).map((b) => Number(b.m[1])).sort((a, b) => a - b);
 		if (numbers.join(",") !== "1,2,3,4,5,6,7,8,9,10") fail(live.n, `${pr.title}: lanes are [${numbers.join(",")}], expected 1 to 10`);
@@ -165,7 +187,7 @@ for (const pr of prSections) {
 		if (gate.rest.startsWith("None.")) {
 			if (gateBoxes.length) fail(gate.n, `${pr.title}: Review gate says None but has boxes`);
 		} else {
-			const text = gate.lines.map((l) => l.text).join("\n");
+			const text = gate.lines.filter((l) => !l.code).map((l) => l.text).join("\n");
 			if (gateBoxes.length === 0) fail(gate.n, `${pr.title}: Review gate has no box`);
 			for (const word of ["screenshot", "video", "operator"]) {
 				if (!text.includes(word)) fail(gate.n, `${pr.title}: Review gate lacks "${word}"`);

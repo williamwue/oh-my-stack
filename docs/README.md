@@ -1,39 +1,15 @@
-# Oh My Stack documentation
+# OMS documentation
 
-[English](README.md) | [简体中文](zh-CN/README.md)
+Current release: 0.21.0. Supported targets: Codex, Claude Code and Pi.
 
-## Start using Oh My Stack
+- [Install and first use](../README.md)
+- [Source, adaptation and test decisions](maintainers/upstream-0.21.0.md)
+- [Support boundaries](support-policy.md)
+- [Release pipeline](local-release.md)
+- [T3 host mapping](../src/adapters/t3-tools.md)
+- [AIHero originals and dependency receipt](../upstream/distribution.json)
 
-- [Complete your first task](getting-started.md).
-- [Copy a prompt and let an agent install it](install/with-agent.md).
-- Install for [Codex](install/codex.md), [Claude Code](install/claude-code.md), or [OMP](install/omp.md).
-- [Choose an entry for a common task](guides/common-tasks.md).
-- [Use the selected AIHero originals](aihero-original-skills.md).
-- [Update or remove your installation](guides/update-and-uninstall.md).
-- [Resolve common problems](faq.md).
-
-## Look up an option
-
-- [Complete Skill directory](skill-directory.md)
-- [Optional model configuration](model-configuration.md)
-- [Opt-in T3 orchestration from source](t3-orchestration.md)
-- [Current support policy](support-policy.md)
-- [Third-party sources and adaptations](../THIRD_PARTY_NOTICES.md)
-- [Release notes](releases/0.10.0.md) and [published releases](https://github.com/williamwue/oh-my-stack/releases/latest)
-
-The five research and planning originals require 0.10.0 or later. Check the
-[published release](https://github.com/williamwue/oh-my-stack/releases/latest)
-and your installed version. Dated acceptance records describe only the
-versions and tools named in those records.
-
-## Contribute or inspect the implementation
-
-Start with [CONTRIBUTING.md](../CONTRIBUTING.md).
-
-- [Architecture](architecture.md) and [design decisions](decisions/0001-portable-core.md)
-- [Release procedure](release-process.md)
-- [Source operations tools](operations-guide.md)
-- [Maintainer records and acceptance history](maintainers/README.md)
-- [pstack book and OMS companion](books/pstack/README.md)
-
-Maintainer publication: [Local release pipeline](local-release.md).
+The older routing, model-policy, role, delivery and OMP guides describe the
+retained 0.20 implementation. They are historical, not installation or workflow
+instructions for the current release. Use the installed upstream poteto-help and
+setup-pstack for workflow and model configuration.

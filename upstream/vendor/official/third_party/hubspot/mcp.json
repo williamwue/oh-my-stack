@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "hubspot": {
+      "type": "http",
+      "url": "https://mcp.hubspot.com",
+      "auth": {
+        "CLIENT_ID": "${CLIENT_ID}",
+        "CLIENT_SECRET": "${CLIENT_SECRET}"
+      }
+    }
+  }
+}

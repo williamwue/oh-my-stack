@@ -4,3 +4,6 @@ dist/
 .tmp/
 coverage/
 __pycache__/
+
+# Upstream checks install only frozen test dependencies.
+upstream/vendor/**/node_modules/

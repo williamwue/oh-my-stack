@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Poteto Mode"
-  short_description: "Route engineering work while preserving required design, judgmen"
-  default_prompt: "Use $poteto-mode for this task."
-policy:
-  allow_implicit_invocation: false

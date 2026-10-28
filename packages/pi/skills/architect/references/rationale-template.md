@@ -28,7 +28,7 @@ The prose that ships alongside the type sketch. One page. Sentence-case headings
 
 ## Implementation reconciliation
 
-Record accepted deviations and their acceptance sources. Update the affected usage, outcome contracts, signatures, and ownership in this design before closing the unit or handing the contract to another worker. Explain local deviations that leave the shared contract valid. Keep unaccepted changes and unresolved objections visible. Do not create a parallel per-unit ledger.
+*During implementation, record accepted deviations and their acceptance sources here, and update the affected usage, outcome contracts, signatures, and ownership in this design. Record why local deviations leave the shared contract valid. Keep unaccepted changes unresolved. Reconcile before closing a unit or handing its contract to the next worker.*
 
 ## Open questions and risks
 

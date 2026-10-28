@@ -1,0 +1,1 @@
+These are the user's saved pstack model choices from the Muse model sheet. Each role line is an explicit model instruction for that role; `inherit-parent` or `auto` runs it on the parent session's model. Use these instead of reading the sheet:

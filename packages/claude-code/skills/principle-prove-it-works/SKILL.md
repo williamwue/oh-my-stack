@@ -1,10 +1,8 @@
 ---
 name: principle-prove-it-works
 description: "Apply after completing a task, before declaring done. Verify against the real artifact (run the feature, read the actual value, inspect the diff), not a proxy, self-report, or 'it compiles.'"
-disable-model-invocation: true
+user-invocable: false
 ---
-
-Host adaptation. Read the installed package's [runtime binding](../../docs/runtime-binding.md) for delegation, tools, paths, transcript access, and control surfaces, and [model selection](../../docs/model-selection.md) for the named routes and ordered panels below. These bindings translate host calls; they add no workflow stages. Continue already authorized implementation through its checks. Advice-only requests end with advice. Publication, merge, deployment, billable requests, credential access, and user-scope configuration retain the host and project authorization gates. A workflow step naming one of these actions does not grant that authority. Source-host helpers under `scripts/` are reference-only unless the generated binding identifies supported execution for that exact helper; use the documented native helper only for the capability it supports. Report unavailable capabilities and verification separately.
 
 # Prove It Works
 
@@ -16,8 +14,11 @@ Check the real thing, not a proxy:
 - Check process liveness directly, not indirectly through derived state
 - Read the actual value, not a cached or derived representation
 - When verification fails, suspect the observation method before suspecting the system
+- Before you report success (merged, sent, started), read the real state and the exit code. Truncated output (`| tail -1`) and your own echo prove nothing
 
-Before reporting a completed action, read the real state and command exit status. Name the actual record each load-bearing fact came from and confirm it is the record the project designates. For failing-first checks, state the predicted failure, then quote the decisive observed mismatch and passing result with their statuses. An assertion line, unrelated exception, empty result, or arbitrary red status is not evidence of the predicted defect.
+Verify the process as well as the outcome. A correct result can rest on a broken process, and a review that checks results passes it: a clause reconstructed from the user's paste instead of the durable record, a constraint honored by chance from a file never read. For each fact you relied on, name the record it came from and confirm that record is the one the project's rules point at.
+
+Red is a colour, not a measurement. A failing check proves the instrument only when the failure content is the disagreement you predicted. An exception, an empty collection against a non-empty literal, and a real mismatch all print red, so quote the assertion's diff (`Extra items in the right set`), never the assertion (`assert {...} == {...}`). A convergence probe keys on behavior only the new artifact can produce, never an identity field the old one also emits. A same-SHA restart lets old code report the new commit SHA.
 
 ## Script the check when you can
 

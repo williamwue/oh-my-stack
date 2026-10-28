@@ -1,0 +1,12 @@
+{
+  "name": "oh-my-stack",
+  "plugins": [
+    {
+      "name": "oh-my-stack",
+      "source": {
+        "source": "local",
+        "path": "./packages/codex"
+      }
+    }
+  ]
+}

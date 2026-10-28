@@ -1,6 +1,0 @@
-interface:
-  display_name: "Workflow: Tdd"
-  short_description: "Use for requested TDD or cheap local regression tests; skip uncl"
-  default_prompt: "Use $tdd for this task."
-policy:
-  allow_implicit_invocation: false

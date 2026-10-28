@@ -37,12 +37,13 @@ You MUST follow `references/epistemics.md`. Read it in full before writing. The 
 
 ## Instructions
 
-1. **Read all investigator findings** and weigh the evidence yourself. Investigators gathered raw evidence, not conclusions. Apply [Claims about human decisions](epistemics.md#claims-about-human-decisions) to human rulings. Preserve the original scope and source. Label agent interpretations. Copies of one summary are one dependent evidence chain. If the original is unavailable, leave its exact scope uncertain.
-2. **Merge overlaps.** When several investigators cite the same PR, ticket, or doc, give it one authoritative reference.
-3. **Surface contradictions.** When two items disagree, show both. Don't pick one.
-4. **Calibrate each claim.** Find its evidence and tier. Direct: cite it and state it plainly. Inferred: hedge it and show the inference. Speculative: mark it. No evidence: put it in the gaps.
-5. **Verify citations by spot-checking.** If you're uncertain a cited item exists or says what the investigator claims, check it by reading the codebase or calling MCP tools. Don't propagate errors. Do not write files, commit, or modify external state.
-6. **Don't overreach.** The user will act on this. Leave an open question open rather than fill it with a confident guess.
+1. **Read all investigator findings** and weigh the evidence yourself. Investigators gathered raw evidence, not conclusions.
+2. Apply [Claims about human decisions](epistemics.md#claims-about-human-decisions) to claims about human rulings. Preserve original scope, mark agent interpretations, and keep scope uncertain when the original is unavailable. Repeated copies of one summary are one evidence chain.
+3. **Merge overlaps.** When several investigators cite the same PR, ticket, or doc, give it one authoritative reference.
+4. **Surface contradictions.** When two items disagree, show both. Don't pick one.
+5. **Calibrate each claim.** Find its evidence and tier. Direct: cite it and state it plainly. Inferred: hedge it and show the inference. Speculative: mark it. No evidence: put it in the gaps.
+6. **Verify citations by spot-checking.** If you're uncertain a cited item exists or says what the investigator claims, check it by reading the codebase or calling MCP tools. Don't propagate errors. Do not write files, commit, or modify external state.
+7. **Don't overreach.** The user will act on this. Leave an open question open rather than fill it with a confident guess.
 
 ## Output Format
 
@@ -62,7 +63,7 @@ File paths, line ranges, key symbols. Two or three lines to orient a cold reader
 
 Claims with textual evidence, each quoted or paraphrased and cited precisely:
 
-- **[Direct]** {Claim}. Source: `[PR #123](url)` / ticket ID / file:line. {Brief quote or paraphrase.}
+- **[Direct]** {Claim}. Source: [PR #123](https://example.com/pr/123) / ticket ID / file:line. {Brief quote or paraphrase.}
 - **[Supported]** {Claim}. Evidence: {list of items and what each contributes}.
 
 `[Direct]` is single-source, explicit evidence. `[Supported]` is multiple indirect items converging on a conclusion.
