@@ -1,0 +1,18 @@
+{
+  "id": "pstack-book",
+  "name": "pstack 书籍",
+  "kind": "book",
+  "description": "阅读入口及可选电子书下载，不加载到代理上下文。",
+  "source": "https://zenn.dev/sc30gsw/books/080faba713547b",
+  "readingUrl": "https://github.com/williamwue/oh-my-stack/blob/v1.0.0/docs/books/README.md",
+  "releaseUrl": "https://github.com/williamwue/oh-my-stack/releases/tag/pstack-book-2026-10-13",
+  "authorizationUrl": "https://github.com/williamwue/oh-my-stack/blob/v1.0.0/docs/books/AUTHORIZATION.md",
+  "configure": "阅读本地 reading.md；可用 install pstack-book -DownloadBooks 下载已发布的电子书。",
+  "assets": [
+    { "name": "pstack-zh-CN.epub", "sha256": "8bdc644fd737d0b470b1d957eaeddf8ba5f55e0be1e0ff62ef907e6f61aa4340" },
+    { "name": "pstack-zh-CN.pdf", "sha256": "0d6de4004fb00645c60f2cefff98f37d22bbe4371400cd8bb38b59fa6ef6e8bf" },
+    { "name": "pstack-en.epub", "sha256": "771e128883659e308cb08b9ca9e308ad5701faaf3cca8ccc781d2e9103faabcf" },
+    { "name": "pstack-en.pdf", "sha256": "fbb4c034293506d2e0b621ecd876dff31b3a75e3b7963a492380012a21da8ba8" }
+  ],
+  "assetBaseUrl": "https://github.com/williamwue/oh-my-stack/releases/download/pstack-book-2026-10-13"
+}

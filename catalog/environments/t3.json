@@ -1,0 +1,20 @@
+{
+  "id": "t3",
+  "name": "T3 Code",
+  "kind": "t3",
+  "backends": [
+    "codex",
+    "claude"
+  ],
+  "commands": [
+    "t3",
+    "t3code"
+  ],
+  "processes": [
+    "t3",
+    "t3code",
+    "t3-code",
+    "T3 Code",
+    "T3 Code*"
+  ]
+}

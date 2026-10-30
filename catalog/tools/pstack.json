@@ -1,0 +1,13 @@
+{
+  "id": "pstack",
+  "name": "pstack",
+  "kind": "plugin",
+  "default": true,
+  "marketplace": "pstack-claude",
+  "selector": "pstack@pstack-claude",
+  "source": "https://github.com/michael-denyer/pstack-claude.git",
+  "revision": "22b5e137e945cb65dd29dac5fc703c13d83a00aa",
+  "branch": "main",
+  "configure": "在宿主中运行 pstack:setup-pstack，选择自己可用的模型。",
+  "docs": "https://github.com/michael-denyer/pstack-claude"
+}
