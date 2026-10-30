@@ -25,5 +25,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - shell: ${{ matrix.shell }}
+      - name: Test Windows PowerShell 5.1
+        if: matrix.shell == 'powershell'
+        shell: powershell
+        run: ./tests/run.ps1
+      - name: Test PowerShell 7
+        if: matrix.shell == 'pwsh'
+        shell: pwsh
         run: ./tests/run.ps1
