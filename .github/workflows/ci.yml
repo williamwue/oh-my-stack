@@ -1,4 +1,4 @@
-name: OMS Windows
+name: OMS lifecycle
 on:
   pull_request:
   push:
@@ -7,11 +7,23 @@ permissions:
   contents: read
 jobs:
   lifecycle:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            shell: powershell
+          - os: windows-latest
+            shell: pwsh
+          - os: macos-15
+            shell: pwsh
+          - os: macos-15-intel
+            shell: pwsh
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - shell: powershell
+      - shell: ${{ matrix.shell }}
         run: ./tests/run.ps1

@@ -14,6 +14,7 @@ function Test-Environment($Target) {
     foreach ($process in @(Get-Process -ErrorAction SilentlyContinue)) {
         foreach ($pattern in $Target.processes) { if ($process.ProcessName -like $pattern) { return $true } }
     }
+    if ((Get-OmsPlatform) -eq 'macos') { return Test-MacApplication $Target }
     return $false
 }
 function Select-Options([string] $Title, [object[]] $Options, [string[]] $Defaults) {
@@ -49,6 +50,7 @@ function Get-StatusRow($Item, $Target, [string] $StateRoot) {
         [pscustomobject]@{ Component=$Item.id; Environment=$Target.id; Runtime=$runtime; Status='host-missing'; Managed=[bool]$record; Version=$null }
         continue
     }
+    $hostConfigRoot = Get-HostConfigRoot $runtime
     $plugin = Get-Plugin $runtime $Item.selector
     $status = 'not-installed'
     if ($plugin) {
@@ -59,6 +61,7 @@ function Get-StatusRow($Item, $Target, [string] $StateRoot) {
     if ($record -and $Target.id -notin @($record.environments)) { $status='not-configured' }
     if (-not $record -and $Target.kind -eq 't3' -and $plugin) { $status='unmanaged-unverified' }
     if($record -and $plugin){try{Assert-Source $plugin $runtime $Item.marketplace $record.source}catch{$status='source-conflict'}}
-    [pscustomobject]@{ Component=$Item.id; Environment=$Target.id; Runtime=$runtime; Status=$status; Managed=[bool]$record; Version=$plugin.version }
+    if($record -and -not (Test-HostConfigRoot $record $hostConfigRoot)){$status='host-config-conflict'}
+    [pscustomobject]@{ Component=$Item.id; Environment=$Target.id; Runtime=$runtime; Status=$status; Managed=[bool]$record; Version=$plugin.version; ConfigRoot=$hostConfigRoot; Source=$record.source }
     }
 }
