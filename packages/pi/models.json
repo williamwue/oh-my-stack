@@ -28,10 +28,10 @@
     { "role": "interrogate reviewers", "models": "panel", "skill": "interrogate" }
   ],
   "codex": {
-    "default": "gpt-6-sol",
+    "default": "gpt-6.1-sol",
     "strongest": "gpt-6-astra",
-    "worker": "gpt-6-sol",
-    "panel": ["gpt-6-astra", "gpt-6-sol", "gpt-6-luna"]
+    "worker": "gpt-6.1-sol",
+    "panel": ["gpt-6-astra", "gpt-6.1-sol", "gpt-6.1-terra", "gpt-6-luna"]
   },
   "pi": {
     "fallback": "anthropic",
@@ -45,13 +45,13 @@
       "openai": {
         "opus": "openai/gpt-6.1-sol",
         "fable": "openai/gpt-6-astra",
-        "sonnet": "openai/gpt-6-sol",
+        "sonnet": "openai/gpt-6.1-sol",
         "haiku": "openai/gpt-6-luna"
       },
       "openai-codex": {
         "opus": "openai-codex/gpt-6.1-sol",
         "fable": "openai-codex/gpt-6-astra",
-        "sonnet": "openai-codex/gpt-6-sol",
+        "sonnet": "openai-codex/gpt-6.1-sol",
         "haiku": "openai-codex/gpt-6-luna"
       }
     }

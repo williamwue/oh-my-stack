@@ -69,9 +69,9 @@
       "reason": "Reassessed current source integrity, resource closure, safe releases and retained book/Git protections; upstream fixture suite replaces retired local workflow assertions"
     }
   },
-  "review": "Independent source review, implementation review and frozen final recheck completed in this session; documented findings fixed. No remote/live acceptance inferred.",
+  "review": "Original 0.9.107 transition had independent source, implementation and frozen final reviews. The 2026-10-30 refresh to 0.9.112 retains those architecture decisions; its new validation and limits are recorded in docs/maintainers/upstream-0.21.0.md. No new independent review or remote/live acceptance inferred.",
   "pins": {
-    "pstack-claude": "e2cbd491f94ee4ece30e028b9ff69a8b418d1723",
+    "pstack-claude": "22b5e137e945cb65dd29dac5fc703c13d83a00aa",
     "official": "c742dd61706fbacc1b95f1a20b7b988cf096ce6c",
     "aihero": "59db609eb1e18aaf59b63284d0e52255aff0c63c"
   }

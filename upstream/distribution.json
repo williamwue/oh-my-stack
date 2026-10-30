@@ -1,7 +1,7 @@
 {
   "pstack-claude": {
     "repository": "https://github.com/michael-denyer/pstack-claude",
-    "revision": "e2cbd491f94ee4ece30e028b9ff69a8b418d1723",
+    "revision": "22b5e137e945cb65dd29dac5fc703c13d83a00aa",
     "path": "upstream/vendor/pstack-claude",
     "files": [
       {
@@ -13,8 +13,8 @@
       {
         "path": ".claude-plugin/marketplace.json",
         "mode": "100644",
-        "blob": "e5dad8f984f2c6430dbf0007026e158b911ba75a",
-        "sha256": "f0ed28dfea7ea99bf4e1eb94b4870569b5ef77858350679af9154b5e136c82b5"
+        "blob": "a74404c50d16ab3744f9cfb2b88460c6ef357d91",
+        "sha256": "19b4c34f09521289465f4800edafefda47bc30a45244ec50bbf20edef2844ca3"
       },
       {
         "path": ".github/FUNDING.yml",
@@ -53,16 +53,22 @@
         "sha256": "18d1324c0d6ddce7fcfbb9871ef9b95917274ede19167a48e99af6dc3973fa31"
       },
       {
+        "path": ".github/scripts/statechart-watchdog.sh",
+        "mode": "100644",
+        "blob": "3be50e621df6ac420c06bd51774371d68190d03c",
+        "sha256": "e0eeee61d1e6f1e28465325ac9b167f6692a3b2bb660b88dd7131d59382a0a02"
+      },
+      {
         "path": ".github/workflows/ci.yml",
         "mode": "100644",
-        "blob": "2e297f05a8cf6c2b908c195ae7002a7c7f93f45d",
-        "sha256": "97ce17ee5c5149cddb69e4c3bd24966931c0f51a1d9bc199bab0c74c4b02f308"
+        "blob": "dec6b449cf725461662df18f7d3db3c00467c093",
+        "sha256": "898a7c945cfd728149f952fab8095a2356ade957433b07145cd1723706953a0d"
       },
       {
         "path": ".github/workflows/security.yml",
         "mode": "100644",
-        "blob": "33f95b6c3cfe2416f7568b6c0d051e365f64c3eb",
-        "sha256": "cf48de1a520217653f1cca2bd8d729e01100ea91c7e8110f122a9a9cc1031ec8"
+        "blob": "86c108b677881485dfc38f4659cb56cb8395a062",
+        "sha256": "fef74067211095fb2288450770f82060a28307fd4e27e309318159adcc589d63"
       },
       {
         "path": ".gitignore",
@@ -85,8 +91,8 @@
       {
         "path": "CHANGES.md",
         "mode": "100644",
-        "blob": "004f3b30112e359198acc1039e54a8ec9757c605",
-        "sha256": "1d21759b174df161f65c4765de863cc2e400040c93aba436c5f565219ebe843c"
+        "blob": "b09090f954e190736092caeb26160d92f9937081",
+        "sha256": "65ebb839e884887220daaad56df6c7ef0b2cba0f749ce07be887acaacfbb58cb"
       },
       {
         "path": "CONTEXT.md",
@@ -133,8 +139,8 @@
       {
         "path": "README.md",
         "mode": "100644",
-        "blob": "6bd9aba387bcc4c461ad4c1c88aad59f667f1141",
-        "sha256": "78b397bb613988d5d7a4b91f4cdddfca55c28d35ff11644bd882f597e726fc82"
+        "blob": "5699545fe29fdde33193cc16289138b97a468f73",
+        "sha256": "348d6999803a7aa5c9aedbefd684618ea2c82646a66de7eb2a047d063bb1674e"
       },
       {
         "path": "SECURITY.md",
@@ -145,8 +151,8 @@
       {
         "path": "VERSION",
         "mode": "100644",
-        "blob": "ab00bb8124c23622fe9e10d4acb4241a37c77c41",
-        "sha256": "45ae62da0c4f327fbf426bf4a68a8de318d23958053f3b46b7753e12976364da"
+        "blob": "6304baf0ac83a5648a726ff7903056befa569cc2",
+        "sha256": "4c5bca1515c8a8aabdc08f6270f10a3650e65a03518762feea3451ae7665a740"
       },
       {
         "path": "assets/pstack-overview.png",
@@ -181,8 +187,8 @@
       {
         "path": "docs/reference.md",
         "mode": "100644",
-        "blob": "8f89084279c20a1f105654a87c6ce5b049f95d78",
-        "sha256": "a70d04c68bd17759cd56f4aa16305bf3cba22571bb9a7b84ba6dbfb41ba4c69a"
+        "blob": "689357e998322dcf22f56a1211a58d858bfefdb2",
+        "sha256": "7994c6b07fbc3ed37c479690444c2159059bee184831e46b84e36e6a0924565b"
       },
       {
         "path": "lean/Model/WatchPoll.lean",
@@ -223,8 +229,8 @@
       {
         "path": "package.json",
         "mode": "100644",
-        "blob": "f81a84489a9a4b0bb9755098f86b11dc300ca576",
-        "sha256": "2d89862bab2d35efa6111d45cc53dde9e32b5cd9c4f887371a59fd3f199d1742"
+        "blob": "0051425280332b2181376704c9cf3a8c59d94dab",
+        "sha256": "40d8b29248e32d1a830e348fddb7c771fd38cae539969c5644766d4ada26348f"
       },
       {
         "path": "plugins/pstack/.claude-plugin/icon.png",
@@ -235,14 +241,14 @@
       {
         "path": "plugins/pstack/.claude-plugin/plugin.json",
         "mode": "100644",
-        "blob": "c0458eae70284af8da613203283bf70bf277b5e6",
-        "sha256": "d2b589e8b9a9bea844ee22ccf7f650355d77dd13cfc25a6e9b369798e7e94c59"
+        "blob": "2e209b06c239157eea724304d88953bf0b53265d",
+        "sha256": "9cf7be533d0c44958b56daada7e96dbb6ada37ab6b1a0c378e4318d4794c14f7"
       },
       {
         "path": "plugins/pstack/.codex-plugin/plugin.json",
         "mode": "100644",
-        "blob": "bbd2a1c66c292a13eaa628342b7f3229cf177fe6",
-        "sha256": "313a1681afc8ca4e735afa32b82ac23e4a2e7600341fe9c9fd525bed5c9086de"
+        "blob": "610dd72c44da34225c5a81443f0871bb7109d6ca",
+        "sha256": "cefb18b4972ddffc9806a590e1c453bfba074b2248c627d3a55211e90bebc16d"
       },
       {
         "path": "plugins/pstack/.codex-plugin/prompts/architect.md",
@@ -505,14 +511,14 @@
       {
         "path": "plugins/pstack/.github/plugin/plugin.json",
         "mode": "100644",
-        "blob": "56a564f271e430853edfdac67fdcf2401f6c4a50",
-        "sha256": "d6c52016807323bb26f5b2d0a3cbc89024e4c047115de1b384d75b0f44e0ec8c"
+        "blob": "34f331fb8ba5377cbe5915a3e32dc8bde6fe38b4",
+        "sha256": "f0c2741ce72404db1909af5fe72cdb08f6e6b367f638172ac085ef7dd494076e"
       },
       {
         "path": "plugins/pstack/.muse-plugin/plugin.json",
         "mode": "100644",
-        "blob": "fbb4faa543ebcdf09e09b89ba6b4b82d324e4131",
-        "sha256": "cc1e1f8dcd6aaddfee47a885612833d74c8c04ef1cf9e4ef995ba51334e17587"
+        "blob": "9ce3083b12c74bd5a44a890ac64b1e9f8cf09bed",
+        "sha256": "b226ecb7f8fc48a9eb3a393c446777f4de3035c35584bb241c17ffeb92e3fa09"
       },
       {
         "path": "plugins/pstack/README.md",
@@ -559,8 +565,8 @@
       {
         "path": "plugins/pstack/hooks/codex-hooks.json",
         "mode": "100644",
-        "blob": "ddf270a18da2e9a3d6d99d528c9e9159a84a7d79",
-        "sha256": "630f19ec51144243233159be10730d818022b9828e699f7ef44b532b00ce4b73"
+        "blob": "838075e7345445c7cc74258673d8b21bc177ea24",
+        "sha256": "888be7aea8d208a6017f2c7aa23a26e3f2442ad823c247faf7377df086ddb789"
       },
       {
         "path": "plugins/pstack/hooks/copilot-context.awk",
@@ -649,20 +655,20 @@
       {
         "path": "plugins/pstack/hooks/session-start.ps1",
         "mode": "100644",
-        "blob": "79ec595c1fdc100cd8f2014b7d81ff08082cece1",
-        "sha256": "b9db4bdd3c75d3b467a11fb8c19dedf89a033b8d2f2de2b2b8722b0bf3ac6928"
+        "blob": "2d161a60655b6946b940b4d73315b6f15afaba9e",
+        "sha256": "d08e3b433e71733630a604539d512cd7613ee4852bfbc156cf6e783dad952f66"
       },
       {
         "path": "plugins/pstack/hooks/session-start.sh",
         "mode": "100755",
-        "blob": "831be7fc265242951848c860a4f2fe33d2f79876",
-        "sha256": "df23030d9e6d34a98f165508ab601093ab8458b8b11e52bb571327ba4cfa5397"
+        "blob": "b646433bcbe52b51714ba83018bd757e301e158b",
+        "sha256": "8863efcff6a0e888b3a6775331d59c45edf21add0586981328762bd9121331fe"
       },
       {
         "path": "plugins/pstack/models.json",
         "mode": "100644",
-        "blob": "418a7ee3a98c9f58970cdd1e435f7115a654c821",
-        "sha256": "5e876ca15ae9ad4d0cc32b6473d3671eb06e6814db0bd8a757f6c9ee8853f751"
+        "blob": "0d6320f3fc57437f3238e19d03db4e4efa19bc25",
+        "sha256": "f253e3b8debeeb4f4f8fb9fdf68251e3c12dd95802d7b3ff4f72ba4ef288dc30"
       },
       {
         "path": "plugins/pstack/pi/agent-text.ts",
@@ -1111,8 +1117,8 @@
       {
         "path": "plugins/pstack/skills/poteto-mode/references/codex-tools.md",
         "mode": "100644",
-        "blob": "feff5f6dda7b729c74edde842a8cda36c3b64de5",
-        "sha256": "207f29bb3ee70eaca5c55d3a90ccb04138cb6b6c12420a9780785059d9dc6da2"
+        "blob": "545eef512b7eb1dffb3316737516e98b2f92c186",
+        "sha256": "088fe0f3edddef1df9c4993263e6829f71ea01d92bedf73ed7ed8374003cb955"
       },
       {
         "path": "plugins/pstack/skills/poteto-mode/references/copilot-tools.md",
@@ -1153,14 +1159,14 @@
       {
         "path": "plugins/pstack/skills/poteto-mode/references/muse-tools.md",
         "mode": "100644",
-        "blob": "42d571e5a606cbba667d419389648bee7c5b9991",
-        "sha256": "2b43568839b82b8fbeda319039b3827994c7973196839c1228509ea0e3677079"
+        "blob": "0c89c8b11b10d5c9285c27f614febb4a0f2af09f",
+        "sha256": "d12a3454fb3127520736f466b6b931939a4facea3744a1258c704c09399ad220"
       },
       {
         "path": "plugins/pstack/skills/poteto-mode/references/pi-tools.md",
         "mode": "100644",
-        "blob": "2dc7c7e877715be969642cb11937009b4e982422",
-        "sha256": "ce32b9808756fd89811fd3f5bf8025181de797dba4c1e6f6c52a563a460f5a92"
+        "blob": "40bccc9d7c3d01861657359c76b7fe211608cc64",
+        "sha256": "9159f1a3ea625c8f4e6ce7c441b93b8cab6900077d5baa12f217de1bc48ea2f0"
       },
       {
         "path": "plugins/pstack/skills/poteto-mode/references/resume-storage.md",
@@ -1183,8 +1189,8 @@
       {
         "path": "plugins/pstack/skills/poteto-mode/scripts/bootstrap.ts",
         "mode": "100644",
-        "blob": "ea4d5c491b1c4fa48b7b47a38d1386db92665a90",
-        "sha256": "020120f37f75ca776c3db8941b8a0d1407738012a534fe0651c83c907b0ea74d"
+        "blob": "2a4e9650bc8c54806244368a4e19fada3836c99c",
+        "sha256": "b79bcb78103b1752464a621d8c6dd7be82319ec10efc019ebb0892ba7330cd9a"
       },
       {
         "path": "plugins/pstack/skills/poteto-mode/scripts/bun.lock",
@@ -1269,6 +1275,12 @@
         "mode": "100644",
         "blob": "97e60e09b2d882d4bc008efecaaea9698f5f1d03",
         "sha256": "15866f3205190026465d5deff238039b38d29fc009440e44ebdd81ebf5fb509f"
+      },
+      {
+        "path": "plugins/pstack/skills/poteto-mode/scripts/watch-pr/fresh-install.test.ts",
+        "mode": "100644",
+        "blob": "fd0a5ad65ec6a65174aaf2fd9f5f7cdcb066ff6c",
+        "sha256": "c2c4cdb50223241aebc610d79f2be07cb160cde9815fe2203eb5c1bbd121ff91"
       },
       {
         "path": "plugins/pstack/skills/poteto-mode/scripts/watch-pr/github.test.ts",
@@ -4525,26 +4537,26 @@
       {
         "path": "tests/runtime-packaging.test.mjs",
         "mode": "100644",
-        "blob": "1124ffafb3d76aaea044c06cf20d36bf7ed450c8",
-        "sha256": "f44e583d3fd5d8d0aaee61be5cf0368cec856dcd11fa11c3e96ff68cbfbe246f"
+        "blob": "26a2a7ee441f48b11cb49047f4725ae06daf700c",
+        "sha256": "23b0f39eaba6f9c3ac43cfd5e48441fdd57920d2e2a385eb6d160cfdb6ad4b47"
       },
       {
         "path": "tests/session-hook-sheets.mjs",
         "mode": "100644",
-        "blob": "f55e91c0e29f0cc879d3907398072100beaa13e2",
-        "sha256": "ae0ad9becc430142b572656690e0603910fd8b69680eddec4c15701076da9570"
+        "blob": "4f919ac4001d69a5b69478054e84949f723e905e",
+        "sha256": "ca8866fbc0d824df5e7c7d04a5cf32922f54a52cacbb0c25720ac2ee64ae0843"
       },
       {
         "path": "tests/session-hook-windows.test.mjs",
         "mode": "100644",
-        "blob": "0eb89fee5b46d1e32ab4cb6cf901108a9d725bb6",
-        "sha256": "98b28bd77164d79024d2a2f0da8834b4ba42fe5ac33fac36cc2d6975a6c05b26"
+        "blob": "99076d813c4f4801450671470c4ba0bc8900435d",
+        "sha256": "4cac1b2b89522fa2c44b8bdb7646bac7b2d145401a3871b44a0c64f1b11dccaf"
       },
       {
         "path": "tests/session-hook.test.mjs",
         "mode": "100644",
-        "blob": "3cc04ccc484a4fddf9397a11e50d0eae334a6859",
-        "sha256": "9187f99d3e9fa11e5c14db32b2610fe6f6ae98e3f60c704279a7d9260ba20f21"
+        "blob": "4f2eb7df66bc8193f3b7c80eb4c797b33fa8f28d",
+        "sha256": "24b668a7846d158c9b81d11e0e4b1e49a2e0835096434949658358ffe6edff1d"
       },
       {
         "path": "tests/shipping-git.test.mjs",
@@ -4627,8 +4639,8 @@
       {
         "path": "tools/forks.json",
         "mode": "100644",
-        "blob": "07d5519562e5a06ca354afcbdc3987009291ff40",
-        "sha256": "aabb04343859a52465b97e5655b549beda7839e54dbbff50f0c78b5773617a85"
+        "blob": "59e6acc806912414c7bc6bf6d2ad2e73d74b71ef",
+        "sha256": "47523ee3844538506feb707a0b589449ce8a7dd520df45d3aebb28a15c744595"
       },
       {
         "path": "tools/generate.mjs",
@@ -4651,8 +4663,8 @@
       {
         "path": "tools/runtimes.mjs",
         "mode": "100644",
-        "blob": "05a80f0082a66eda22223f1e1b42293c667c973e",
-        "sha256": "e9e5faf32df7564731c9f0dfdc5313f3b830ac86ce76d1d313f2e114f0c9c130"
+        "blob": "6b76d6d6ff7952db924ec4a39c76bb557e06a7d9",
+        "sha256": "eb8ac40031afa1de784c5c86ed69057057f55a211ff6a6ddf3fcc7cab129d8cf"
       },
       {
         "path": "tools/substitutions.json",

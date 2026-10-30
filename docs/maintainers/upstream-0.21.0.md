@@ -3,7 +3,7 @@
 ## Reviewed source decisions
 
 Direct workflow source: michael-denyer/pstack-claude
-`e2cbd491f94ee4ece30e028b9ff69a8b418d1723` (0.9.107). Independent official
+`22b5e137e945cb65dd29dac5fc703c13d83a00aa` (0.9.112). Independent official
 reference: cursor/plugins `c742dd61706fbacc1b95f1a20b7b988cf096ce6c`.
 AIHero: mattpocock/skills `59db609eb1e18aaf59b63284d0e52255aff0c63c`.
 Complete Git trees with modes, blob IDs and SHA256 receipts are in
@@ -63,7 +63,59 @@ Original upstream tests remain untouched. Full upstream fixtures are distinct
 from live Pi/model, Windows and T3 host execution. Retained books keep their
 existing complete validator and Python audit/tests in the formal release gate.
 
-## Local candidate evidence and limits
+## Port refresh on 2026-10-30
+
+The direct source advances from 0.9.107 (`e2cbd49`) to 0.9.112
+(`22b5e137e945cb65dd29dac5fc703c13d83a00aa`), covering nine commits.
+`tools/update-port-source.mjs` reads the complete tree directly from a Git
+repository with the expected origin, checks ancestry, and records original modes,
+blob IDs and SHA256 hashes. It bypasses checkout line-ending conversion.
+
+The refresh adopts the bootstrap restart after installing commander, GPT-6.1 Sol
+defaults and worker mappings, GPT-6.1 Terra in the Codex panel, and the shared
+PowerShell SessionStart decoder with an explicit runtime argument. Muse Windows
+hook declarations remain in the original source; OMS still distributes only
+Codex, Claude Code and Pi. Existing personal model sheets are not modified.
+Upstream CI watchdog and documentation changes are retained in the snapshot.
+
+The official reference and AIHero source pins are unchanged. The port still
+declares official pstack baseline `ab1f702`; the Project tracker/Orchestrate
+decision above remains deferred. Initial validation used OMS 0.21.0; the release
+candidate now uses 0.21.1. This refresh does not itself establish publication or
+live host installation.
+
+### Refresh verification
+
+Checks use official Node 22.23.3 (zlib 1.3.1-e00f703) and Bun 1.4.4 in a
+temporary tool directory on Windows. Complete source receipts, original model
+bytes and AIHero resources pass explicit `validateDistribution()` verification.
+Generated package equality and reproducible builds of seven release outputs pass.
+The 53 OMS Node tests initially report 52 passes and one failure because the
+temporary Node directory lacked npm. After adding npm to that directory, the
+failed test (`a failed real npm check retains logs and does not emit a success
+receipt`) passes on its own. Book validation and all seven Python regression
+scripts pass with UTF-8 mode and isolated declared dependencies.
+
+The PowerShell Codex hook in each of the three generated packages executes
+successfully with an isolated home and emits the OMS namespace. This checks
+the packaged hook process, not a live Codex, Claude Code or Pi host session.
+The original Windows hook suite passes all 84 tests when rerun with Bun's
+per-test timeout raised to 30 seconds; the first full-suite run timed out one
+PowerShell process at the default five seconds.
+
+`npm run check` does not have a successful end-to-end run on this machine.
+The separately attempted upstream gate stops at `tools/generate.mjs --check`
+with Windows path and shell executable-mode failures. An isolated original-source
+test run also reports failures and was stopped after reaching repeated Pi fixture
+process-launch failures (`EFTYPE`); it has no complete pass/fail total. These
+failures are not waived or fixed by editing vendored code. Linux upstream
+fixture acceptance, live host installation, model calls,
+T3 dispatch and publication have not been established for this refresh.
+The original scripts typecheck passes. Their 275-test selection reports 232
+passes and 43 failures on Windows, including missing POSIX fixture executables
+and a timeout. Those failures remain open; the original tests are unchanged.
+
+## Local candidate evidence and limits (original 0.9.107 transition)
 
 Independent source, implementation and frozen final reviews completed. Findings
 fixed: missing prototype dependency, unsupported manifest residue, T3 standalone

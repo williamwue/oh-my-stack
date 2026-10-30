@@ -6,6 +6,16 @@ promise permanent configuration or runtime API compatibility.
 
 ## Unreleased
 
+## 0.21.1 - 2026-10-30
+
+- Update the complete pstack-claude source from 0.9.107 to 0.9.112, including
+  first-run bootstrap restart, GPT-6.1 defaults and Windows SessionStart fixes.
+- Retain the official reference, AIHero sources, T3 mapping and personal model
+  configuration rules. Official Project tracker/Orchestrate remains deferred.
+- Regenerate the Codex, Claude Code and Pi packages with source receipts.
+  Full upstream acceptance remains blocked on Windows; this entry does not
+  establish publication or live host installation.
+
 ## 0.20.0 - 2026-10-23
 
 - Advance the primary official pstack baseline to 0.15.30 at `4ec7ffa`, with

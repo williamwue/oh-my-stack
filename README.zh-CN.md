@@ -1,6 +1,6 @@
 # Oh My Stack
 
-OMS 0.21.0 distributes pinned pstack-claude workflows with necessary T3 host
+OMS 0.21.1 distributes pinned pstack-claude workflows with necessary T3 host
 mapping and the complete selected AIHero extension. Codex, Claude Code and Pi
 are supported package targets. OMP is retired from new releases.
 
@@ -20,7 +20,7 @@ claude plugin marketplace add https://github.com/williamwue/oh-my-stack.git#stab
 claude plugin install oh-my-stack@oh-my-stack --scope user
 ```
 
-Pi: download `oh-my-stack-pi-0.21.0.tar.gz` from the
+Pi: download `oh-my-stack-pi-0.21.1.tar.gz` from the
 [latest release](https://github.com/williamwue/oh-my-stack/releases/latest), verify
 SHA256SUMS and the release manifest, extract its `oh-my-stack` root to a dedicated
 directory, then run `pi install /absolute/path/to/oh-my-stack`.
@@ -33,7 +33,7 @@ pure defaults. `setup-pstack` is an explicit configuration action.
 
 ## Sources and boundaries
 
-The direct workflow source is pstack-claude 0.9.107; its complete source and fixed
+The direct workflow source is pstack-claude 0.9.112; its complete source and fixed
 receipt are committed in `upstream/vendor/pstack-claude` and
 `upstream/distribution.json`. Official pstack is independently pinned for
 comparison. OMS changes plugin identity and native namespace at packaging time,

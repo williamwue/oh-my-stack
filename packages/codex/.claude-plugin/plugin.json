@@ -1,7 +1,7 @@
 {
   "name": "oh-my-stack",
   "displayName": "Oh My Stack",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "description": "If you want to go fast, go deep first. pstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence. Ported from cursor/plugins/pstack to Claude Code. Original pstack by Lauren Tan (poteto).",
   "author": {
     "name": "Michael Denyer",

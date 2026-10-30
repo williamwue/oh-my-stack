@@ -39,24 +39,26 @@ test('canonical inventory digest uses compact JSON with one LF',()=>{
  assert.notEqual(inventoryDigest(files),sha256(Buffer.from(JSON.stringify(files,null,2)+'\n')));
 });
 test('clean tagged archives install and promote through the real stable builder',async()=>{
+ const version=JSON.parse(await readFile(join(repoRoot,'src/core/project.json'),'utf8')).version;
+ const tag=`v${version}`;
  const temp=await mkdtemp(join(tmpdir(),'oms-distribution-'));
  try{
   const root=join(temp,'source');await mkdir(root);
   for(const path of ['packages','src/core/project.json','src/packaging/release.json']){await mkdir(join(root,path,'..'),{recursive:true});await cp(join(repoRoot,path),join(root,path),{recursive:true});}
   const git=(...args)=>execFileSync('git',['-c','user.name=Test','-c','user.email=test@example.invalid',...args],{cwd:root,encoding:'utf8'}).trim();
-  git('init','--quiet');git('add','.');git('commit','--quiet','-m','fixture');git('tag','v0.21.0');
-  const assets=join(temp,'assets');const manifest=await buildRelease({root,out:assets,tag:'v0.21.0'});
+  git('init','--quiet');git('add','.');git('commit','--quiet','-m','fixture');git('tag',tag);
+  const assets=join(temp,'assets');const manifest=await buildRelease({root,out:assets,tag});
   assert.equal(manifest.source.commit,git('rev-parse','HEAD'));assert.equal(manifest.source.cleanTaggedCheckout,true);
   for(const artifact of manifest.artifacts){
    const destination=join(temp,'installed',artifact.target);
    await installArchive({archive:await readFile(join(assets,artifact.file)),artifact,destination,archiveRoot:manifest.archiveRoot});
    assert.deepEqual(await packageInventory(destination),artifact.files);
   }
-  const release={id:1,tag_name:'v0.21.0',html_url:'https://github.com/williamwue/oh-my-stack/releases/tag/v0.21.0',draft:false,prerelease:false,published_at:'2026-10-28T00:00:00Z',assets:[]};
+  const release={id:1,tag_name:tag,html_url:`https://github.com/williamwue/oh-my-stack/releases/tag/${tag}`,draft:false,prerelease:false,published_at:'2026-10-28T00:00:00Z',assets:[]};
   const {readdir}=await import('node:fs/promises');
   for(const name of await readdir(assets)){const data=await readFile(join(assets,name));release.assets.push({name,state:'uploaded',digest:'sha256:'+sha256(data),size:data.length});}
   const result=await buildStableMarketplace({assets,release,out:join(temp,'stable')});
-  assert.equal(result.receipt.version,'0.21.0');
+  assert.equal(result.receipt.version,version);
   const stable=await readFile(join(temp,'stable/plugins/codex/skills/wayfinder/SKILL.md'));
   assert.deepEqual(stable,await readFile(join(repoRoot,'packages/codex/skills/wayfinder/SKILL.md')));
   manifest.artifacts[0].contentSha256=sha256(Buffer.from(JSON.stringify(manifest.artifacts[0].files,null,2)+'\n'));

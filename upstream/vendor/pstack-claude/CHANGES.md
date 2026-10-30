@@ -2,6 +2,30 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 0.9.112 - The Muse SessionStart hook runs on Windows without sh
+
+The Muse plugin now declares two SessionStart hooks, so Muse on Windows gets the mandate and the sheet's usable role lines when the harness PATH has no `sh`. `session-start` runs the shared shell script, and `session-start-windows` runs `hooks/session-start.ps1 muse`. Muse's native hook schema takes one command per hook and rejects a per-OS variant such as `commandWindows`, so each hook stands down on the OS the other owns. On a machine without one of the two programs, that hook records a failed spawn at session start and the other delivers the context. @LuckyProtein found and fixed this in [#332](https://github.com/michael-denyer/pstack-claude/pull/332).
+
+`session-start.ps1` takes the runtime name, as `session-start.sh` does, and serves Codex and Muse through one sheet decoder. The decoder now drops one leading byte-order mark, as the shell reader and Pi do, and the script compares sheet text ordinally, as the shell hook compares bytes. PowerShell's `-ccontains` compares by culture, and under ICU globalization, as in pwsh 7, it skips zero-width characters. A `session hook: off` line after a second byte-order mark or a zero-width space used to turn off only the Codex Windows hook; every hook now keeps it on.
+
+**Verified.** `tests/session-hook-sheets.mjs` adds `roleCases`, 35 sheets with the role lines each one adds, and the shell and PowerShell Muse suites both run them. `tests/session-hook-windows.test.mjs` runs the PowerShell hook under `PSTACK_REQUIRE_WINDOWS_HOOK=1` with only the PowerShell directory on PATH, over `sheetCases`, `roleCases`, the XDG and USERPROFILE sheet paths, and the Linux stand-down. `tests/session-hook.test.mjs` covers the shell script standing down under a Windows `uname`. On PowerShell 7.6.9, under both ICU and invariant globalization, `session-start.ps1` prints the same bytes as `session-start.sh` for both runtimes on 59 sheets.
+
+## 0.9.111 - GPT-6.1 Sol replaces GPT-6 Sol everywhere
+
+The Codex worker example and the `sonnet` entry of the Pi `openai` and `openai-codex` tables move from `gpt-6-sol` to `gpt-6.1-sol`. GPT-6.1 Sol is the newer Sol and costs less than GPT-6 Sol, so no role has a reason to stay on the older model. `models.json` no longer names `gpt-6-sol`.
+
+## 0.9.110 - GPT-6.1 Sol is the Codex default and panel Sol
+
+The Codex single-model example is `gpt-6.1-sol`, the model the Pi tables map `opus` to, and the Codex panel example is `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna`. The worker example stays `gpt-6-sol`, the model the Pi tables map `sonnet` to.
+
+## 0.9.109 - GPT-6.1 Terra joins the Codex panel
+
+The Codex panel example is `gpt-6-astra`, `gpt-6-sol`, `gpt-6.1-terra`, `gpt-6-luna`, so a ChatGPT panel has four models like the Claude panel. The Pi tables are unchanged, because Pi's model catalog does not list `gpt-6.1-terra`.
+
+## 0.9.108 - watch-pr, ship-pr, and orch run on the first call after an update
+
+`bootstrap.ts` runs the calling script again in a new Bun process after it installs `commander`, as upstream's does. The port had dropped that step in 0.9.23, so the first run after each plugin update imported `commander` in the process that had just installed it. Bun did not find the new `node_modules`, and the run failed with `Cannot find package 'commander'` unless Bun's auto-install fetched the package from the registry. The failure reproduced on macOS and Windows 11 with Bun 1.4.4 under `bun --no-install`. `watch-pr/fresh-install.test.ts` runs each entry point that way from a copy of the scripts with no `node_modules`. [#326](https://github.com/michael-denyer/pstack-claude/issues/326), filed by @Thanaen, found the cause.
+
 ## 0.9.107 - Exclude fenced examples from plan requirements
 
 `check-plan.mjs` no longer counts text inside a fenced example toward the required plan guidance, program markers, or review-gate evidence. A plan whose only verification rule or review evidence appears in an example now fails the check. Regression tests cover all three sections.
