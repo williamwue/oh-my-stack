@@ -60,7 +60,29 @@ function Assert-Source($Plugin, [string] $Runtime, [string] $Marketplace, [strin
     if (-not $actual) { throw '宿主未提供可验证来源。' }
     $actual = $actual -replace '^\\\\\?\\',''
     $Expected = $Expected -replace '^\\\\\?\\',''
-    if (($actual.TrimEnd('/','\') -replace '\.git$','') -ne ($Expected.TrimEnd('/','\') -replace '\.git$','')) { throw '插件来源冲突，保留现有安装。' }
+    if ([IO.Path]::IsPathRooted($actual) -and [IO.Path]::IsPathRooted($Expected)) {
+        $actual = Resolve-OmsDirectory $actual
+        $Expected = Resolve-OmsDirectory $Expected
+    }
+    $comparison = $(if ((Get-OmsPlatform) -eq 'windows') { [StringComparison]::OrdinalIgnoreCase } else { [StringComparison]::Ordinal })
+    if (-not [string]::Equals(($actual.TrimEnd('/','\') -replace '\.git$',''), ($Expected.TrimEnd('/','\') -replace '\.git$',''), $comparison)) { throw '插件来源冲突，保留现有安装。' }
 }
 function Record-Path([string] $StateRoot, [string] $Component, [string] $Runtime) { Join-Path $StateRoot "installations/$Component-$Runtime.json" }
 function Get-Record([string] $Path) { if (Test-Path -LiteralPath $Path) { Read-Json $Path } }
+
+function Get-HostConfigRoot([string] $Runtime) {
+    switch ($Runtime) {
+        'codex' { $configured = $env:CODEX_HOME; $fallback = '.codex' }
+        'claude' { $configured = $env:CLAUDE_CONFIG_DIR; $fallback = '.claude' }
+        default { throw "未知宿主：$Runtime" }
+    }
+    if (-not $configured) { return Resolve-OmsDirectory (Join-Path $HOME $fallback) }
+    # Reject ambiguous relative paths rather than bind a record to the wrong host.
+    if (-not [IO.Path]::IsPathRooted($configured)) { throw "$Runtime 配置目录必须为绝对路径：$configured" }
+    Resolve-OmsDirectory $configured
+}
+function Test-HostConfigRoot($Record, [string] $ConfigRoot) {
+    if (-not $Record.hostConfigRoot) { return $true } # Keep 1.0.1 records readable.
+    $comparison = $(if ((Get-OmsPlatform) -eq 'windows') { [StringComparison]::OrdinalIgnoreCase } else { [StringComparison]::Ordinal })
+    [string]::Equals((Resolve-OmsDirectory $Record.hostConfigRoot).TrimEnd([IO.Path]::DirectorySeparatorChar), $ConfigRoot.TrimEnd([IO.Path]::DirectorySeparatorChar), $comparison)
+}

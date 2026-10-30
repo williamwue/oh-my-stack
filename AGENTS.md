@@ -1,6 +1,6 @@
 # OMS
 
-Build a small Windows developer starter kit. Keep components and target
+Build a small Windows and macOS developer starter kit. Keep components and target
 environments separate. Codex, Claude Code and T3 Code are peer user-facing
 targets. Shared native installations must not be removed while another target
 uses them.

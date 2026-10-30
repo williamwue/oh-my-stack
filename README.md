@@ -1,11 +1,12 @@
 # Oh My Stack
 
-OMS 是 Windows 开发环境启动包：选择工具，检测本机环境，统一完成安装和管理。
+OMS 是 Windows 和 macOS 开发环境启动包：选择工具，检测本机环境，统一完成安装和管理。
 不需要分别查找仓库、插件市场或手动复制 Skills。
 
 ## 开始使用
 
-需要 Windows PowerShell 5.1 或 PowerShell 7；安装 pstack 还需要 Git。
+Windows 需要 Windows PowerShell 5.1 或 PowerShell 7；macOS 需要 PowerShell 7（`pwsh`）。
+安装 pstack 还需要 Git。Linux 暂不支持；OMS 不安装 WSL 或兼容层。
 对应开发宿主应已安装，账号登录及原生安全授权由用户完成。
 
 ```powershell
@@ -14,8 +15,9 @@ cd oh-my-stack
 ./oms.ps1
 ```
 
-也可以下载 [1.0.1 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.0.1)，解压后运行脚本。
-当前版本为 1.0.1；[发布与旧版迁移说明](docs/release-1.0.0.md)。
+也可以下载 [1.1.0 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.0)。
+核对 `SHA256SUMS.txt` 后解压 `oms-1.1.0.zip`，Windows 和 macOS 使用同一份源码包。
+当前版本为 1.1.0；[本版发布说明](docs/release-1.1.0.md)、[旧版迁移说明](docs/release-1.0.0.md)。
 
 界面默认勾选 pstack 和 AIHero，可切换选项。随后自动检测已有环境，展示计划。
 确认后安装；输入 `c` 可自定义目标环境。T3 Code 与 Codex、Claude Code 并列，
@@ -38,6 +40,36 @@ cd oh-my-stack
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./oms.ps1 list
 ```
+
+## macOS 使用
+
+先按 [Microsoft 官方指引](https://learn.microsoft.com/powershell/scripting/install/install-powershell-on-macos)
+安装适合本机架构的 PowerShell 7。OMS 不自动安装 PowerShell 或任何 Agent 宿主。
+在 Terminal 中运行（目录可以包含空格）：
+
+```sh
+git clone https://github.com/williamwue/oh-my-stack.git
+cd oh-my-stack
+pwsh -NoProfile -File ./oms.ps1 list
+pwsh -NoProfile -File ./oms.ps1
+pwsh -NoProfile -File ./oms.ps1 status -Json
+```
+
+Codex、Claude Code 的 CLI 必须在当前 Terminal 的 PATH 中。T3 同时检测 CLI、
+运行中的进程和 `/Applications`、`~/Applications` 下的 `T3 Code.app`、
+`T3 Code (Nightly).app`、`T3 Code (Customized).app`。检测到 T3 应用不代表
+后端已安装；选择 T3 后仍需可用的 Codex 或 Claude CLI，不额外安装宿主。
+
+```sh
+pwsh -NoProfile -File ./oms.ps1 install -Component pstack,aihero -Environment codex,t3 -Yes
+pwsh -NoProfile -File ./oms.ps1 install pstack-book -DownloadBooks -Yes
+pwsh -NoProfile -File ./tests/run.ps1
+```
+
+上述显式环境示例仅适用于已安装 Codex 和 T3 的机器；交互流程默认选择检测到的环境。
+原生登录、插件与 hook 信任仍在对应宿主中完成。安装后新开会话，分别确认
+`pstack:poteto-mode`、`pstack:bro`、`mattpocock-skills:ask-matt` 等可用名称。
+它们是 skills 集合，不是同名 MCP 工具。
 
 ## 收录工具与环境
 
@@ -80,9 +112,15 @@ OMS 不自动接管已有的同名插件；发现冲突时保留原安装并给�
 `integrations/pstack/`。仓库不保存整份第三方源码。pstack 默认安装目录中审核的
 提交，`update` 获取上游 main 的新提交并重新适配；AIHero 遵循宿主原生更新方式。
 
-准备好的包、安装记录、书籍保存在 `%LOCALAPPDATA%/oh-my-stack/`。
+准备好的包、安装记录、书籍在 Windows 保存在 `%LOCALAPPDATA%/oh-my-stack/`，
+在 macOS 保存在 `~/Library/Application Support/oh-my-stack/`。
 `-StateRoot` 可以改变 OMS 数据位置，但不隔离宿主配置。做真实安装测试还需
-设置宿主原生隔离目录，例如独立且已创建的 `CODEX_HOME`。
+设置宿主原生隔离目录，例如独立且已创建的 `CODEX_HOME` 和 `CLAUDE_CONFIG_DIR`。
+OMS 沿用当前进程的这些变量；未设置时分别使用 `~/.codex` 和 `~/.claude`，
+不自动切到测试目录，也不修改模型设置或凭据。显式配置目录需为绝对路径。
+新管理记录绑定配置目录，`status -Json` 显示 `ConfigRoot` 和管理来源 `Source`；
+目录不一致时阻止安装、更新和卸载，并报告 `host-config-conflict`。旧 1.0.1 记录
+继续使用原有来源校验；如需在另一个宿主配置目录安装，请同时使用独立 `-StateRoot`。
 
 本地适配包通过路径注册，因此由 `oms update` 管理更新。原始许可证与作者
 声明保留在下载的包中；书籍不适用 OMS 自有代码的 MIT 许可证。
@@ -94,4 +132,5 @@ OMS 不自动接管已有的同名插件；发现冲突时保留原安装并给�
 ```
 
 测试使用本地 Git 夹具和假的宿主 CLI，不联网、不调用模型、不修改个人配置。
-真实宿主测试单独记录。不支持的环境明确跳过，不安装 WSL 来满足验证。
+真实宿主测试单独记录；[macOS 实现与本机验证](docs/macos.md)。
+不支持的环境明确跳过，不安装 WSL 来满足验证。

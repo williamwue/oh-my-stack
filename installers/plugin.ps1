@@ -3,6 +3,8 @@ if (-not $Runtime -or -not (Get-Command $Runtime -ErrorAction SilentlyContinue))
 $recordPath = Record-Path $StateRoot $Item.id $Runtime
 $record = Get-Record $recordPath
 if ($record -and ($record.schemaVersion -ne 2 -or -not $record.environments -or $record.component -ne $Item.id -or $record.runtime -ne $Runtime -or $record.selector -ne $Item.selector)) { throw '管理记录不匹配或来自旧版 OMS，未自动接管。' }
+$hostConfigRoot = Get-HostConfigRoot $Runtime
+if ($record -and -not (Test-HostConfigRoot $record $hostConfigRoot)) { throw '宿主配置目录与管理记录不一致；请使用对应的 CODEX_HOME / CLAUDE_CONFIG_DIR 或独立 -StateRoot，未修改安装。' }
 $plugin = Get-Plugin $Runtime $Item.selector
 $hadPlugin = [bool]$plugin
 if ($Action -eq 'uninstall') {
@@ -66,7 +68,7 @@ try {
     $plugin = Get-Plugin $Runtime $Item.selector
     if (-not $plugin) { throw '宿主未报告安装成功。' }
     Assert-Source $plugin $Runtime $Item.marketplace $source
-    Write-Json $recordPath @{ schemaVersion=2; component=$Item.id; runtime=$Runtime; selector=$Item.selector; source=$source; environments=$allTargets; version=$plugin.version }
+    Write-Json $recordPath @{ schemaVersion=2; component=$Item.id; runtime=$Runtime; selector=$Item.selector; source=$source; environments=$allTargets; version=$plugin.version; hostConfigRoot=$hostConfigRoot }
 } catch {
     $failure = $_
     if (-not $hadPlugin) {

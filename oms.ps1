@@ -8,10 +8,12 @@ param(
     [switch] $DownloadBooks,
     [switch] $Json,
     [switch] $Open,
-    [string] $StateRoot = "$env:LOCALAPPDATA/oh-my-stack"
+    [string] $StateRoot
 )
 $ErrorActionPreference = 'Stop'
-if ([System.Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw '首版 OMS 仅支持 Windows。' }
+. (Join-Path $PSScriptRoot 'lib/platform.ps1')
+$null = Get-OmsPlatform
+if (-not $PSBoundParameters.ContainsKey('StateRoot')) { $StateRoot = Get-DefaultStateRoot }
 Import-Module (Join-Path $PSScriptRoot 'lib/oms.psm1') -Force
 try {
     Invoke-Oms -Action $Action -Component $Component -Environments $Environment -Custom:$Custom -Yes:$Yes -DownloadBooks:$DownloadBooks -Json:$Json -Open:$Open -StateRoot $StateRoot -Root $PSScriptRoot

@@ -1,4 +1,5 @@
 ﻿$ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'platform.ps1')
 . (Join-Path $PSScriptRoot 'common.ps1')
 . (Join-Path $PSScriptRoot 'environments.ps1')
 

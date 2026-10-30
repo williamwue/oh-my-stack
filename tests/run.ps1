@@ -1,5 +1,5 @@
 ﻿$ErrorActionPreference='Stop'
-$root=Join-Path ([IO.Path]::GetTempPath()) ('oms-test-'+[guid]::NewGuid().ToString('N').Substring(0,8))
+$root=Join-Path ([IO.Path]::GetTempPath()) ('oms test-'+[guid]::NewGuid().ToString('N').Substring(0,8))
 $app=Join-Path $root 'app';$bin=Join-Path $root 'bin';$state=Join-Path $root 'state';$gitSource=Join-Path $root 'source'
 foreach($dir in @($app,$bin,$gitSource)){[IO.Directory]::CreateDirectory($dir)|Out-Null}
 $repository=Split-Path -Parent $PSScriptRoot
@@ -7,19 +7,24 @@ foreach($entry in @('oms.ps1','lib','catalog','installers','integrations')){Copy
 $dbPath=Join-Path $root 'host.json'
 $oldPath=$env:PATH;$oldDb=$env:OMS_TEST_DB;$oldFail=$env:OMS_TEST_FAIL
 $oldBookFail=$env:OMS_TEST_BOOK_FAIL
-$env:PATH="$bin;$env:PATH";$env:OMS_TEST_DB=$dbPath;$env:OMS_TEST_FAIL=''
+$oldCodexHome=$env:CODEX_HOME;$oldClaudeConfig=$env:CLAUDE_CONFIG_DIR
+$env:CODEX_HOME=Join-Path $root 'codex home';$env:CLAUDE_CONFIG_DIR=Join-Path $root 'claude home'
+foreach($dir in @($env:CODEX_HOME,$env:CLAUDE_CONFIG_DIR)){[IO.Directory]::CreateDirectory($dir)|Out-Null}
+$env:PATH="$bin$([IO.Path]::PathSeparator)$env:PATH";$env:OMS_TEST_DB=$dbPath;$env:OMS_TEST_FAIL=''
+$powerShell=(Get-Process -Id $PID).Path
 $script:passed=0
 function Assert($Value,[string]$Message){if(-not $Value){throw "ASSERT: $Message"};$script:passed++}
 function Write-Utf8([string]$Path,[string]$Text){[IO.Directory]::CreateDirectory((Split-Path -Parent $Path))|Out-Null;[IO.File]::WriteAllText($Path,$Text,[Text.UTF8Encoding]::new($false))}
+function PhysicalPath([string]$Path){ & (Get-Module oms) {param($Directory) Resolve-OmsDirectory $Directory} $Path }
 function ReadDb{Get-Content -LiteralPath $dbPath -Raw -Encoding UTF8|ConvertFrom-Json}
 function SaveDb($Value){Write-Utf8 $dbPath ($Value|ConvertTo-Json -Depth 12)}
 function Run([string[]]$Arguments,[int]$Expected=0){
     $ErrorActionPreference='Continue'
-    $out=@(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $app 'oms.ps1') @Arguments -StateRoot $state -Yes 2>&1)
+    $out=@(& $powerShell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $app 'oms.ps1') @Arguments -StateRoot $state -Yes 2>&1)
     if($LASTEXITCODE -ne $Expected){throw "exit $LASTEXITCODE != $Expected : $out"}
     $out -join "`n"
 }
-function Test-Git([string[]]$Arguments){$out=@(& git.exe @Arguments)-join "`n";if($LASTEXITCODE){throw "Git failed: $Arguments"};$out}
+function Test-Git([string[]]$Arguments){$out=@(& git @Arguments)-join "`n";if($LASTEXITCODE){throw "Git failed: $Arguments"};$out}
 
 $mock=@'
 $ErrorActionPreference='Stop'
@@ -59,7 +64,19 @@ if($args[1] -eq 'marketplace' -and $args[2] -eq 'add'){
 }
 [IO.File]::WriteAllText($env:OMS_TEST_DB,($db|ConvertTo-Json -Depth 12),[Text.UTF8Encoding]::new($false));'ok';exit 0
 '@
-foreach($runtime in @('codex','claude')){[IO.File]::WriteAllText((Join-Path $bin "$runtime.ps1"),$mock,[Text.UTF8Encoding]::new($true))}
+foreach($runtime in @('codex','claude')){
+    $mockPath=Join-Path $bin "$runtime.ps1"
+    [IO.File]::WriteAllText($mockPath,$mock,[Text.UTF8Encoding]::new($true))
+    if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
+        # Use real subprocesses on Unix, including arguments with spaces and UTF-8.
+        $shellPowerShell="'" + $powerShell.Replace("'", "'\''") + "'"
+        $shellMock="'" + $mockPath.Replace("'", "'\''") + "'"
+        $shim=Join-Path $bin $runtime
+        Write-Utf8 $shim ("#!/bin/sh`nexec $shellPowerShell -NoProfile -File $shellMock " + '"$@"' + "`n")
+        & chmod +x $shim
+        if($LASTEXITCODE){throw 'Could not make mock CLI executable'}
+    }
+}
 SaveDb @{installed=@();markets=@();calls=@()}
 Test-Git -Arguments @('init','--quiet','--initial-branch=main',$gitSource)|Out-Null
 Test-Git -Arguments @('-C',$gitSource,'config','core.autocrlf','false')|Out-Null
@@ -77,6 +94,81 @@ Write-Utf8 $catalogPath ($catalog|ConvertTo-Json -Depth 12)
 $recordPath=Join-Path $state 'installations/pstack-codex.json'
 try{
     Import-Module (Join-Path $app 'lib/oms.psm1') -Force
+    $platformChecks=& (Get-Module oms) {
+        param($FixtureRoot,$AppPath)
+        $platform=Get-OmsPlatform
+        $defaultRoot=Get-DefaultStateRoot
+        $macRoot=Get-DefaultStateRoot -Platform macos
+        $oldLocalAppData=$env:LOCALAPPDATA
+        try {
+            $env:LOCALAPPDATA=Join-Path $FixtureRoot 'Local App Data'
+            $windowsRoot=Get-DefaultStateRoot -Platform windows
+            $env:LOCALAPPDATA=''
+            $missingLocalAppDataRejected=$false
+            try { Get-DefaultStateRoot -Platform windows | Out-Null } catch { $missingLocalAppDataRejected=$true }
+        } finally { $env:LOCALAPPDATA=$oldLocalAppData }
+        $unsupportedRejected=$false
+        try { Get-DefaultStateRoot -Platform linux | Out-Null } catch { $unsupportedRejected=$true }
+        $target=Read-Json (Join-Path $AppPath 'catalog/environments/t3.json')
+        $appRoot=Join-Path $FixtureRoot 'Applications'
+        [IO.Directory]::CreateDirectory($appRoot)|Out-Null
+        $missingApp= -not (Test-MacApplication $target @($appRoot))
+        $detected=@(foreach($name in @('T3 Code.app','T3 Code (Nightly).app','T3 Code (Customized).app')){
+            $bundle=Join-Path $appRoot $name
+            [IO.Directory]::CreateDirectory($bundle)|Out-Null
+            Test-MacApplication $target @($appRoot)
+            Remove-Item -LiteralPath $bundle -Recurse
+        })
+        [IO.Directory]::CreateDirectory((Join-Path $appRoot 'Unrelated.app'))|Out-Null
+        $unrelatedRejected= -not (Test-MacApplication $target @($appRoot))
+        $codexRoot=Get-HostConfigRoot codex
+        $claudeRoot=Get-HostConfigRoot claude
+        $oldCodex=$env:CODEX_HOME;$oldClaude=$env:CLAUDE_CONFIG_DIR
+        try {
+            $env:CODEX_HOME='';$env:CLAUDE_CONFIG_DIR=''
+            $defaultCodex=Get-HostConfigRoot codex
+            $defaultClaude=Get-HostConfigRoot claude
+            $env:CODEX_HOME='relative-home'
+            $relativeRejected=$false
+            try { Get-HostConfigRoot codex | Out-Null } catch { $relativeRejected=$true }
+        } finally { $env:CODEX_HOME=$oldCodex;$env:CLAUDE_CONFIG_DIR=$oldClaude }
+        [pscustomobject]@{
+            Platform=$platform;DefaultRoot=$defaultRoot;MacRoot=$macRoot;WindowsRoot=$windowsRoot
+            MissingLocalAppDataRejected=$missingLocalAppDataRejected;UnsupportedRejected=$unsupportedRejected
+            MissingApp=$missingApp;Detected=$detected;UnrelatedRejected=$unrelatedRejected
+            CodexRoot=$codexRoot;ClaudeRoot=$claudeRoot;DefaultCodex=$defaultCodex;DefaultClaude=$defaultClaude
+            RelativeRejected=$relativeRejected
+        }
+    } $root $app
+    $expectedPlatform=$(if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){'windows'}else{'macos'})
+    Assert ($platformChecks.Platform -eq $expectedPlatform) 'native platform detected'
+    Assert ($platformChecks.MacRoot -eq (Join-Path $HOME 'Library/Application Support/oh-my-stack')) 'macOS state uses Application Support'
+    Assert ($platformChecks.WindowsRoot -eq (Join-Path $root 'Local App Data/oh-my-stack')) 'Windows LOCALAPPDATA path preserved'
+    Assert ($platformChecks.DefaultRoot -eq $(if($expectedPlatform -eq 'windows'){Join-Path $env:LOCALAPPDATA 'oh-my-stack'}else{$platformChecks.MacRoot})) 'default state path follows current platform'
+    Assert ($platformChecks.MissingLocalAppDataRejected -and $platformChecks.UnsupportedRejected) 'invalid platform and missing Windows data root fail closed'
+    Assert ($platformChecks.MissingApp -and $platformChecks.UnrelatedRejected) 'unrelated or missing applications do not imply T3 exists'
+    Assert (@($platformChecks.Detected | Where-Object {$_ -eq $true}).Count -eq 3) 'T3 stable, Nightly and Customized bundles detected without CLI'
+    Assert ($platformChecks.CodexRoot -eq (PhysicalPath $env:CODEX_HOME) -and $platformChecks.ClaudeRoot -eq (PhysicalPath $env:CLAUDE_CONFIG_DIR)) 'explicit native host config roots honored'
+    Assert ($platformChecks.DefaultCodex -eq (PhysicalPath (Join-Path $HOME '.codex')) -and $platformChecks.DefaultClaude -eq (PhysicalPath (Join-Path $HOME '.claude'))) 'default native host config roots resolved'
+    Assert ($platformChecks.RelativeRejected) 'ambiguous relative native config path rejected'
+    if($expectedPlatform -eq 'macos'){
+        $aliasChecks=& (Get-Module oms) {
+            param($FixtureRoot)
+            $physical=Resolve-OmsDirectory $FixtureRoot
+            $alias=Join-Path $FixtureRoot 'directory alias'
+            New-Item -ItemType SymbolicLink -Path $alias -Target $physical | Out-Null
+            $plugin=[pscustomobject]@{marketplaceSource=@{source=$physical}}
+            Assert-Source $plugin codex pstack-claude $alias
+            $same=Test-HostConfigRoot ([pscustomobject]@{hostConfigRoot=$alias}) $physical
+            $conflict=$false
+            $different=Join-Path $FixtureRoot 'different'
+            [IO.Directory]::CreateDirectory($different)|Out-Null
+            try { Assert-Source $plugin codex pstack-claude $different } catch { $conflict=$true }
+            [pscustomobject]@{Same=$same;Conflict=$conflict}
+        } $root
+        Assert ($aliasChecks.Same) 'macOS symbolic directory aliases share host config identity'
+        Assert ($aliasChecks.Conflict) 'different physical source remains a conflict on macOS'
+    }
     $selected=& (Get-Module oms) {
         $script:answers=[Collections.Queue]::new()
         $script:answers.Enqueue('1,3');$script:answers.Enqueue('')
@@ -96,6 +188,21 @@ try{
     Run -Arguments @('install','pstack','-Environment','codex,t3')|Out-Null
     $record=Get-Content -LiteralPath $recordPath -Raw|ConvertFrom-Json
     Assert ($record.environments.Count -eq 2) 'two target associations'
+    Assert ($record.hostConfigRoot -eq (PhysicalPath $env:CODEX_HOME)) 'record binds installation to native config root'
+    $correctHome=$env:CODEX_HOME
+    try {
+        $env:CODEX_HOME=Join-Path $root 'another codex home'
+        $beforeCalls=@((ReadDb).calls).Count
+        Run -Arguments @('install','pstack','-Environment','codex') -Expected 1|Out-Null
+        Run -Arguments @('update','pstack','-Environment','codex') -Expected 1|Out-Null
+        Run -Arguments @('uninstall','pstack','-Environment','codex') -Expected 1|Out-Null
+        $conflict=Run -Arguments @('status','pstack','-Environment','codex','-Json')|ConvertFrom-Json
+        Assert ($conflict[0].Status -eq 'host-config-conflict') 'status identifies changed host config root'
+        Assert (@((ReadDb).calls).Count -eq $beforeCalls) 'changed config root cannot install, update or uninstall another host installation'
+    } finally { $env:CODEX_HOME=$correctHome }
+    $nativeStatus=Run -Arguments @('status','pstack','-Environment','codex','-Json')|ConvertFrom-Json
+    Assert ($nativeStatus[0].ConfigRoot -eq (PhysicalPath $env:CODEX_HOME) -and $nativeStatus[0].Source -eq $record.source) 'status reports config root and managed source'
+
     Assert (@((ReadDb).installed).Count -eq 2) 'T3 covers both available backends without duplicate Codex registration'
     $mapping=Join-Path $record.source 'plugins/pstack/skills/poteto-mode/references/t3-tools.md'
     Assert (Test-Path -LiteralPath $mapping) 'T3 mapping included without a flag'
@@ -204,4 +311,4 @@ try{
     Assert ($downloadResult.Partials -eq 0) 'failed download cleans only its own temporary file'
     Assert ($downloadResult.Retried) 'partial book download can be retried without ownership conflict'
     Write-Output "PASS: $script:passed assertions; isolated fixture $root"
-}finally{$env:PATH=$oldPath;$env:OMS_TEST_DB=$oldDb;$env:OMS_TEST_FAIL=$oldFail;$env:OMS_TEST_BOOK_FAIL=$oldBookFail}
+}finally{$env:PATH=$oldPath;$env:OMS_TEST_DB=$oldDb;$env:OMS_TEST_FAIL=$oldFail;$env:OMS_TEST_BOOK_FAIL=$oldBookFail;$env:CODEX_HOME=$oldCodexHome;$env:CLAUDE_CONFIG_DIR=$oldClaudeConfig}
