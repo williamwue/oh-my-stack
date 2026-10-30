@@ -1,0 +1,13 @@
+{
+  "id": "pstack",
+  "name": "pstack-claude",
+  "kind": "plugin",
+  "description": "上游开发工作流与 Skills；可选 T3 Code 薄适配。",
+  "marketplace": "pstack-claude",
+  "selector": "pstack@pstack-claude",
+  "source": "https://github.com/michael-denyer/pstack-claude.git",
+  "t3Source": "https://github.com/williamwue/pstack-claude-t3.git",
+  "reviewedRevision": "22b5e137e945cb65dd29dac5fc703c13d83a00aa",
+  "configure": "在宿主中运行 pstack:setup-pstack。模型选择与配置文件由上游管理。",
+  "docs": "https://github.com/michael-denyer/pstack-claude"
+}

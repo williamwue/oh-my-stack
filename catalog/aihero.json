@@ -1,0 +1,11 @@
+{
+  "id": "aihero",
+  "name": "AIHero / Matt Pocock Skills",
+  "kind": "plugin",
+  "description": "独立安装原版 Skills，不裁剪、不混入 pstack。",
+  "marketplace": "mattpocock",
+  "selector": "mattpocock-skills@mattpocock",
+  "source": "https://github.com/mattpocock/skills.git",
+  "configure": "在目标项目的宿主会话中运行 setup-matt-pocock-skills；按上游引导选择 tracker 和文档位置。",
+  "docs": "https://github.com/mattpocock/skills"
+}
