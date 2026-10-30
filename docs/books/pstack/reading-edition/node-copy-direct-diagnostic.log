@@ -1,7 +1,0 @@
-{
-  "processExecutable": "/opt/homebrew/Cellar/node@22/22.23.3/bin/node",
-  "libraryPathPresent": true,
-  "status": 1,
-  "signal": null,
-  "stderr": ""
-}

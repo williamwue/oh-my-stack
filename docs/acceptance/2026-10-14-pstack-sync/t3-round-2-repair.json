@@ -1,7 +1,0 @@
-{
-  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-9db6096dcaca4f0414924bffb951e21da11aba108da24f0c7d9b7f8ac28114e7",
-  "status": "completed",
-  "provider": "codex",
-  "model": "gpt-6.1-sol",
-  "summary": "已完成 Astra 两项修复及新增 Grok 两项修复。\n\n- effort 复用原生计算，支持 `none/minimal/ultra`，保留最高档上限及 verification、alias 规则。\n- 重试绑定完整准备来源，并从捕获输入重建请求核对转换。目录刷新和合法回退仍通过测试。\n- slug 与类型化选项选择一致的广告变体。缺少匹配变体时保留原目标并记录 limitation。\n- 每个广告速度键分别调整，缺少对应值时按键记录 limitation。\n\n仅修改：\n\n- [tools/t3-orchestration.mjs](tools/t3-orchestration.mjs)，现为 852 行。\n- [tests/t3-job-selection.test.mjs](tests/t3-job-selection.test.mjs)。\n\n红态与绿态输出：\n\n```text\nAstra\n# tests 38\n# pass 20\n# fail 18\n\nGrok\n# tests 54\n# pass 46\n# fail 8\n\n最终\n# tests 108\n# pass 108\n# fail 0\n```\n\n`git diff --check` 通过。指定命令退出成功，但 `t3-packages.test.mjs` 不存在。另跑生成测试得到 9/10；失败报告原生快照中的 `docs/model-selection.md`、`scripts/codex-delegation.mjs` 差异，留给父任务生成及 fullcheck。[检查日志](/tmp/oms-round2-package-check.log)。\n\n应用了 Model the Domain 和 Boundary Discipline 来组织档位与回执校验。Fix Root Causes、Test Behavior, Not Implementation、Prove It Works 指导了红态复现及请求级验证。\n\n校验和与重建检查证明一致性，不认证用户回执或后端错误。未提交、安装、改动原生文件或生成包，也未嵌套委派。\n\n"
-}

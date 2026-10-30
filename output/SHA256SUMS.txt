@@ -1,5 +1,0 @@
-0d6de4004fb00645c60f2cefff98f37d22bbe4371400cd8bb38b59fa6ef6e8bf  pdf/pstack-zh-CN.pdf
-8bdc644fd737d0b470b1d957eaeddf8ba5f55e0be1e0ff62ef907e6f61aa4340  epub/pstack-zh-CN.epub
-fbb4c034293506d2e0b621ecd876dff31b3a75e3b7963a492380012a21da8ba8  pdf/pstack-en.pdf
-771e128883659e308cb08b9ca9e308ad5701faaf3cca8ccc781d2e9103faabcf  epub/pstack-en.epub
-620d51e12c7f4c1454d2ab32fbb4def53cab92d5e94ca01baa00a701662ae63a  epub/pstack-zh-CN-sample.epub

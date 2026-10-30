@@ -1,3 +1,0 @@
-OPTION=Amber
-SCORE=3
-EVIDENCE_MARKER=amber-panel-ok

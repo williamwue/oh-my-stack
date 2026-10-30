@@ -1,7 +1,0 @@
-{
-  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-ab2dad1b89fc699804c4fad5dd8e2d3149577adb74414b6d672202d8dbc391d5",
-  "status": "completed",
-  "provider": "codex",
-  "model": "gpt-6.1-sol",
-  "summary": "Fixed on base `5585401`, uncommitted.\n\n- [t3-orchestration.mjs](tools/t3-orchestration.mjs:690) now reconstructs receipts before channel selection. Canonical `chainOrigin` preserves the earliest actual channel, original options, configured target, and origin catalog independently of job adjustment. Later receipts must share that origin.\n- [t3-job-selection.test.mjs](tests/t3-job-selection.test.mjs:806) adds 12 regression tests covering verification, ceiling/no-effort jobs, omitted profiles, primary recovery, B→D refusals across catalog refresh, and forged origins.\n\nRequired command ran red-first, then green:\n\n```text\nnode --test tests/t3-job-selection.test.mjs tests/t3-orchestration.test.mjs\n\nRed:   # tests 150   # pass 140   # fail 10\nGreen: # tests 150   # pass 150   # fail 0\n```\n\n`git diff --check` passes. Helper remains under 1,000 lines at 928.\n\nModel the Domain shaped `chainOrigin`. Fix Root Causes removed the adjustment gate. Test Behavior and Prove It Works shaped the public-API checks. Laziness Protocol kept the fix in the existing module.\n\nOnly the two owned files were edited. Other changes were preserved. Regeneration, full check, and final review remain parent-owned. No commits, installation, configuration changes, provider calls, or nested agents.\n\n"
-}

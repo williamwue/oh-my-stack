@@ -1,8 +1,0 @@
-{
-  "$schema": "../schemas/project.schema.json",
-  "schemaVersion": 1,
-  "name": "oh-my-stack",
-  "displayName": "Oh My Stack",
-  "version": "0.21.0",
-  "description": "Portable, verifiable engineering workflows for agent runtimes."
-}
