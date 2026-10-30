@@ -1,7 +1,0 @@
-{
-  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-e26d0a4b34d2882e0f0f4bfb606c267ffd3e354cda1b44c39a394d9388d08190",
-  "status": "completed",
-  "provider": "codex",
-  "model": "gpt-6.1-sol",
-  "summary": "Fixed within the two owned files.\n\n- [tools/t3-orchestration.mjs](tools/t3-orchestration.mjs:598) now validates captured chains directly at the final execution boundary. Provider unavailability fails explicitly. Fresh requests retain generic channel fallback. Helper length is 938 lines.\n- [tests/t3-job-selection.test.mjs](tests/t3-job-selection.test.mjs:785) covers the exact recovery case, resumed refusals/defaults, availability checks, and retained request/audit metadata. Verification, no-op, omitted-profile, and captured-default receipt cases pass.\n\nBoth requested test files were run.\n\n```text\nRed\nerror: 'Missing expected rejection.'\n# pass 150\n# fail 1\n\nGreen\nℹ pass 155\nℹ fail 0\n```\n\n`git diff --check` passed.\n\nApplied principles shaped the change. Model the Domain kept `chainOrigin` authoritative. Laziness Protocol kept one final selection boundary. Fix Root Causes required reproduction first. Test Behavior used public helper requests. Prove It Works required running both test files.\n\nNo commits or installation changes. Regeneration, full checks, and independent review remain with the parent.\n\n"
-}

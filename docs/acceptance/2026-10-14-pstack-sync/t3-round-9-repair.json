@@ -1,8 +1,0 @@
-{
-  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-a3d3d365acfc733e3783485d2606191d435b50335252ea70404ffe82acde97f7",
-  "status": "completed",
-  "provider": "codex",
-  "model": "gpt-6.1-sol",
-  "summary": "Fixed round9 on `5d7bb984`, within the two owned files.\n\n- [t3-orchestration.mjs](tools/t3-orchestration.mjs:552) now admits targets through validated, reconstructed provenance with a shared chain origin. Candidate IDs come from validated refusal history. Complete refusal exclusion and the final channel lock remain enforced.\n- [t3-candidate-coherence.test.mjs](tests/t3-candidate-coherence.test.mjs:405) covers original → default → A → B, removed historical models/options, exhaustion, unreported candidates, forged/mismatched receipts, genuine foreign origins/tasks, and Arena/Architect family restrictions.\n\nBefore the fix:\n\n```text\nerror: 'Foreign model rejection target or provider'\n# pass 0\n# fail 9\n```\n\nAfter the fix, the required three-suite command passed:\n\n```text\n# tests 205\n# pass 205\n# fail 0\n```\n\n`git diff --check` passed. The helper is **972 lines**; no extraction was needed.\n\nModel the Domain guided the provenance-map change. Fix Root Causes and Test Behavior, Not Implementation guided the failing public-request regressions. Laziness Protocol kept the runtime change small. Prove It Works guided the required suite verification.\n\nUnrelated edits were preserved. No commits, package generation, installation, configuration changes, provider calls, publication, or nested agents. Parent integration, full checks, and review remain pending.\n\n",
-  "integrationStatus": "Current-error candidate-authority follow-up pending; fullcheck not yet run."
-}

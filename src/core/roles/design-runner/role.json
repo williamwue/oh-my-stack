@@ -1,9 +1,0 @@
-{
-  "$schema": "../../../schemas/role.schema.json",
-  "schemaVersion": 1,
-  "name": "design-runner",
-  "description": "Produce one independent architectural candidate within assigned artifact output paths.",
-  "workload": "deep",
-  "constraints": ["independent_session", "reasoning_required"],
-  "writes": true
-}

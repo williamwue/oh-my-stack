@@ -1,4 +1,0 @@
-schema_version: 2
-derivations: upstream/parity-derivations.json
-distribution: src/core/skill-catalog.json
-historical_ownership: upstream/history/pre-strict-parity/ownership.yaml

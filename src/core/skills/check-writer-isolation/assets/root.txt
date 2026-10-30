@@ -1,1 +1,0 @@
-ROOT_MARKER=writer-isolation-root-ok

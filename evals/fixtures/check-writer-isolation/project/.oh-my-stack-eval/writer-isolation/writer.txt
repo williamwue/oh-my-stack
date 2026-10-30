@@ -1,1 +1,0 @@
-WRITER_STATE=base

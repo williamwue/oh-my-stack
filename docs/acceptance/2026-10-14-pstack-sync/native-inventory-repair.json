@@ -1,7 +1,0 @@
-{
-  "taskId": "node:delegated-task:command%3Amcp%3A7472fbcd-06e9-4092-80fa-0e1325b42f98%3Adelegate-task%3Aoms-t3-91c4611795f0e4d5d974d65e42b2a241592be9d20e93bd5b047c8264ab0db908",
-  "status": "completed",
-  "provider": "codex",
-  "model": "gpt-6.1-sol",
-  "summary": "已修复 finding 4，仅修改两个授权文件。\n\n- [tools/codex-delegation.mjs](tools/codex-delegation.mjs:151) 使用捕获请求的审计恢复 `inventoryJson`、`inventorySha256`、`inventorySource`。当前兼容性目录单独保存在 `currentInventory*`。\n- [tests/codex-delegation.test.mjs](tests/codex-delegation.test.mjs:327) 新增刷新与省略目录的回归，并加强角色及 CLI 回执验证。\n\n先红后绿的原始结果：\n\n```text\nnot ok 1 - native retry preserves captured inventory evidence with refreshed current catalog\nnot ok 2 - native retry preserves captured inventory evidence with omitted current catalog\n```\n\n```text\nok 1 - native retry preserves captured inventory evidence with refreshed current catalog\nok 2 - native retry preserves captured inventory evidence with omitted current catalog\n```\n\n指定命令全部通过：\n\n```text\nnode --test tests/codex-delegation.test.mjs tests/model-resolution.test.mjs tests/portable-helpers.test.mjs\n# tests 26\n# pass 26\n# fail 0\n```\n\n授权文件的 `git diff --check` 通过。原有校验和、回执绑定及 alias 测试仍通过，`hostRejectionVerified` 保持 `false`，没有声称认证过真实宿主拒绝。\n\n应用了 Model the Domain 区分两份目录证据，Fix Root Causes 修复审计来源，Test Behavior, Not Implementation 验证实际回执，Laziness Protocol 保持最小实现改动，Prove It Works 运行指定检查。\n\n未提交、未改包或配置、未调用 provider、未启动嵌套代理。他人的改动保留。fullcheck 与集成留给父任务。\n\n"
-}

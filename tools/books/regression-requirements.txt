@@ -1,2 +1,0 @@
--r requirements.txt
-lxml==6.1.3

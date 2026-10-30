@@ -1,43 +1,49 @@
 {
-  "name": "oh-my-stack",
-  "version": "0.21.1",
-  "description": "Portable, verifiable engineering workflows for agent runtimes.",
+  "name": "pstack",
   "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=20"
+  "version": "0.9.112",
+  "description": "If you want to go fast, go deep first. pstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence. Pi package of the Claude Code plugin; skills are shared, tool names resolve via skills/poteto-mode/references/pi-tools.md. Original pstack by Lauren Tan (poteto).",
+  "author": {
+    "name": "Michael Denyer",
+    "url": "https://github.com/michael-denyer"
   },
-  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/williamwue/oh-my-stack.git"
-  },
-  "bugs": {
-    "url": "https://github.com/williamwue/oh-my-stack/issues"
-  },
-  "scripts": {
-    "generate": "node tools/generate.mjs",
-    "generate:check": "node tools/generate.mjs --check",
-    "generate:probes": "node tools/generate.mjs --include-probes",
-    "conformance": "node tools/build-conformance.mjs",
-    "conformance:check": "node tools/build-conformance.mjs --check",
-    "release:build": "node tools/build-release.mjs",
-    "release:check": "node tools/build-release.mjs --check",
-    "validate": "node tools/validate-distribution.mjs",
-    "check:books": "node tools/books/validate-pstack-book.mjs",
-    "lint:markdown": "markdownlint-cli2 \"**/*.md\"",
-    "test": "node --test tests/distribution.test.mjs tests/release.test.mjs tests/local-release.test.mjs tests/release-publisher.test.mjs tests/stable-marketplace.test.mjs tests/local-release-workflows.test.mjs tests/pstack-book.test.mjs tests/git-lease-acceptance.test.mjs",
-    "check": "npm run generate:check && npm run validate && npm run release:check && npm test && npm run check:upstream && npm run check:books",
-    "docs:generate": "node tools/generate-skill-directory.mjs",
-    "docs:check": "node tools/generate-skill-directory.mjs --check && node tools/check-doc-facts.mjs",
-    "release:local": "node tools/local-release.mjs",
-    "check:upstream": "node tools/check-upstream.mjs",
-    "check:books:python": "python3 tools/books/test-regressions.py"
-  },
+  "homepage": "https://github.com/michael-denyer/pstack-claude",
+  "repository": "https://github.com/michael-denyer/pstack-claude",
   "license": "MIT",
-  "devDependencies": {
-    "markdown-it": "15.0.1",
-    "markdownlint-cli2": "0.23.3",
-    "@resvg/resvg-js": "2.6.2"
+  "keywords": [
+    "pi-package",
+    "pstack",
+    "poteto-mode",
+    "workflow",
+    "principles",
+    "agent-style",
+    "subagents",
+    "unslop",
+    "claude-code",
+    "skills",
+    "tdd",
+    "code-review",
+    "parallel-agents",
+    "codex",
+    "opencode",
+    "gemini-cli",
+    "prime-agent"
+  ],
+  "pi": {
+    "skills": [
+      "./plugins/pstack/skills"
+    ],
+    "extensions": [
+      "./plugins/pstack/pi/index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    }
   }
 }
