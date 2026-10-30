@@ -14,8 +14,8 @@ cd oh-my-stack
 ./oms.ps1
 ```
 
-也可以下载 [1.0.0 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.0.0)，解压后运行脚本。
-当前版本为 1.0.0；[发布与旧版迁移说明](docs/release-1.0.0.md)。
+也可以下载 [1.0.1 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.0.1)，解压后运行脚本。
+当前版本为 1.0.1；[发布与旧版迁移说明](docs/release-1.0.0.md)。
 
 界面默认勾选 pstack 和 AIHero，可切换选项。随后自动检测已有环境，展示计划。
 确认后安装；输入 `c` 可自定义目标环境。T3 Code 与 Codex、Claude Code 并列，
