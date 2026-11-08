@@ -6,8 +6,8 @@
   "marketplace": "pstack-claude",
   "selector": "pstack@pstack-claude",
   "source": "https://github.com/michael-denyer/pstack-claude.git",
-  "revision": "22b5e137e945cb65dd29dac5fc703c13d83a00aa",
+  "revision": "91ab921ab92d9ccfe503c93c3524410277f012e1",
   "branch": "main",
-  "configure": "在宿主中运行 pstack:setup-pstack，选择自己可用的模型。",
+  "configure": "在宿主中运行 pstack:setup-pstack，选择自己可用的模型。Codex/T3 单人配置示例：docs/pstack-configuration.md（https://github.com/williamwue/oh-my-stack/blob/v1.1.1/docs/pstack-configuration.md）。",
   "docs": "https://github.com/michael-denyer/pstack-claude"
 }

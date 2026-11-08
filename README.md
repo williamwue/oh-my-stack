@@ -15,9 +15,9 @@ cd oh-my-stack
 ./oms.ps1
 ```
 
-也可以下载 [1.1.0 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.0)。
-核对 `SHA256SUMS.txt` 后解压 `oms-1.1.0.zip`，Windows 和 macOS 使用同一份源码包。
-当前版本为 1.1.0；[本版发布说明](docs/release-1.1.0.md)、[旧版迁移说明](docs/release-1.0.0.md)。
+也可以下载 [1.1.1 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.1)。
+核对 `SHA256SUMS.txt` 后解压 `oms-1.1.1.zip`，Windows 和 macOS 使用同一份源码包。
+当前版本为 1.1.1；[本版发布说明](docs/release-1.1.1.md)、[旧版迁移说明](docs/release-1.0.0.md)。
 
 界面默认勾选 pstack 和 AIHero，可切换选项。随后自动检测已有环境，展示计划。
 确认后安装；输入 `c` 可自定义目标环境。T3 Code 与 Codex、Claude Code 并列，
@@ -95,6 +95,8 @@ pwsh -NoProfile -File ./tests/run.ps1
 ```
 
 `configure` 提供各工具的原生设置指引，不自动重写个人模型表或项目说明。
+Codex/T3 的模型分工、双候选和推理强度示例见 [pstack 个人配置](docs/pstack-configuration.md)。
+模板为可选参考，使用前在当前宿主核对模型；安装或更新不会自动应用。
 更新先准备新包并应用、检查适配，然后切换注册；失败时尝试恢复原注册，
 保留旧包及管理记录。切换 pstack 的本地市场路径时，先注销受管理的旧插件和市场，再注册新包；
 如果该市场还有其他插件，停止切换。上游入口变化会明确报错，不强行修改。
