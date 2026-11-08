@@ -37,5 +37,6 @@ macOS 可执行 `shasum -a 256 -c SHA256SUMS.txt`。本版校验清单只包含 
 - 真实上游 0.9.133 提交的适配检查与配置模板校验；模型及强度按当前 T3 能力目录核对。
 - 模板角色与本机个人配置一致，已在当前 T3 会话收到更新后的全局指令。
 - 不把配置校验或指令加载等同于实际子代理派发成功。本版未新增真实子代理运行验收。
-- Windows PowerShell 7、macOS 两种架构的回归结果见对应发布提交的 GitHub Actions；
-  本机未安装 PowerShell 7，也未在 macOS 执行本次验收。Claude Code 本版未重新实测。
+- 发布时仓库 GitHub Actions 为禁用状态，本次推送未触发远端 CI；未更改该仓库设置。
+  本机未安装 PowerShell 7，也未在 macOS 执行本次验收，因此这些环境本版未验证。
+  Claude Code 本版未重新实测。
