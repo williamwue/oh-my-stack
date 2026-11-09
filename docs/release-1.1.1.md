@@ -32,6 +32,9 @@ macOS 可执行 `shasum -a 256 -c SHA256SUMS.txt`。本版校验清单只包含 
 
 ## 验证与限制
 
+以下为发布时的验证范围。2026-11-09 的 macOS、Codex/T3 与 CI 补验收
+另见 [1.1.1 后续验收](verification-1.1.1.md)，不回写已发布 ZIP。
+
 - Windows PowerShell 5.1 隔离生命周期回归通过 47 项断言；10 份 PowerShell 文件通过语法及
   非 ASCII 脚本的 UTF-8 BOM 检查。夹具使用假的宿主 CLI，不调用模型。
 - 真实上游 0.9.133 提交的适配检查与配置模板校验；模型及强度按当前 T3 能力目录核对。
