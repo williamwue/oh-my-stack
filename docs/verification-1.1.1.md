@@ -22,7 +22,7 @@ pwsh -NoProfile -File ./tests/run.ps1
 
 发布时未执行的验证见 [1.1.1 发布说明](release-1.1.1.md)。
 2026-11-09 查询时 OMS lifecycle 已为 active，但基线提交没有 workflow run。
-本次用验收文档 PR 触发当前版本矩阵，不改变仓库 Actions 设置。
+本次用验收文档 PR 触发当前版本矩阵；仓库级 Actions 开关的修复见下文。
 
 真实宿主安装、skills 发现和模型实际执行分别记录。隔离配置中的安装结果
 不等于个人宿主已升级；T3 的 `restart-required` 不等于真实会话成功。
