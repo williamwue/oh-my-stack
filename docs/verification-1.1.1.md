@@ -60,6 +60,16 @@ Release 的 `oms-1.1.1.zip` SHA256 为
 `skills/list`（`forceReload: true`）。隔离配置发现 pstack 67 项；日常配置发现
 pstack 67 项、AIHero 27 项，全部 enabled，errors 为空。
 返回的 `pstack:bro`、`pstack:poteto-mode` 路径均位于 0.9.133 缓存。
+隔离配置再次安装复用现有管理记录，退出码为 0。
+
+另启动原生 Codex app-server 的临时只读会话，使用 `thread/start`，随后在
+`turn/start` 中显式传入发现的 `pstack:bro` skill 项。沿用原生 ChatGPT 登录及
+当前宿主模型设置；返回模型为 `gpt-6.1-sol`、reasoning effort 为 `medium`。
+回合状态为 `completed`，error 为 null，实际回答为：
+
+> OMS 插件已注册，技能列表也正常，但还不能说明模型已在各个目标应用中实际运行过。
+
+此结果证明原生 Codex 的代表性 skill 模型回合通过，不代表已运行全部 pstack 工作流。
 
 ## T3 / Codex 真实子会话
 
