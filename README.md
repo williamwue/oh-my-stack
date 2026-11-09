@@ -15,9 +15,9 @@ cd oh-my-stack
 ./oms.ps1
 ```
 
-也可以下载 [1.1.1 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.1)。
-核对 `SHA256SUMS.txt` 后解压 `oms-1.1.1.zip`，Windows 和 macOS 使用同一份源码包。
-当前版本为 1.1.1；[本版发布说明](docs/release-1.1.1.md)、[旧版迁移说明](docs/release-1.0.0.md)。
+也可以下载 [1.1.2 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.2)。
+核对 `SHA256SUMS.txt` 后解压 `oms-1.1.2.zip`，Windows 和 macOS 使用同一份源码包。
+当前版本为 1.1.2；[本版发布说明](docs/release-1.1.2.md)、[旧版迁移说明](docs/release-1.0.0.md)。
 
 界面默认勾选 pstack 和 AIHero，可切换选项。随后自动检测已有环境，展示计划。
 确认后安装；输入 `c` 可自定义目标环境。T3 Code 与 Codex、Claude Code 并列，
