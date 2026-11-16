@@ -67,6 +67,7 @@ bun test tests/
 上游同步和维护边界见 [T3 适配](docs/t3.md#维护与同步)。
 2.0.0 的本地检查见 [验证记录](docs/oms-verification.md)，
 2.0.1 的精简与真实调用见 [T3 验证记录](docs/oms-verification-t3-2.0.1.md)。
+后续日常安装、自动加载及启动 hook 验收见 [安装记录](docs/oms-daily-install-2.0.1.md)。
 <a id="other-harnesses"></a>
 
 ## 其他宿主
