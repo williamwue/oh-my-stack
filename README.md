@@ -3,7 +3,7 @@
 OMS 是 [pstack-claude](https://github.com/michael-denyer/pstack-claude) 的轻量派生版，只增加 T3 Code 工具适配。
 技能、工作流、模型默认值、hooks 和其他宿主支持沿用上游。原作者为 Lauren Tan，移植版作者为 Michael Denyer。
 
-当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.0**。
+当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.1**。
 源码准备完成不代表已经发布；远程安装需要所选远程分支包含新版，发布前可用本地路径验证。
 完整上游说明保留在 [README.upstream.md](README.upstream.md)，OMS 差异见 [T3 适配](docs/t3.md)。
 
@@ -65,7 +65,8 @@ bun test tests/
 
 修改生成源后运行 `bun tools/generate.mjs`。其余检查沿用 [上游贡献说明](CONTRIBUTING.md)。
 上游同步和维护边界见 [T3 适配](docs/t3.md#维护与同步)。
-本次本地检查及未验证范围见 [验证记录](docs/oms-verification.md)。
+2.0.0 的本地检查见 [验证记录](docs/oms-verification.md)，
+2.0.1 的精简与真实调用见 [T3 验证记录](docs/oms-verification-t3-2.0.1.md)。
 <a id="other-harnesses"></a>
 
 ## 其他宿主

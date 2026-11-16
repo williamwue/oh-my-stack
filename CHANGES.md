@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 2.0.1 - T3 mapping defers host policy to T3
+
+Keep only pstack-to-T3 action bindings in t3-tools.md. Dispatch, lifecycle,
+permissions, browser/device, PR linking, and secret-input policy come from the
+host's current instructions and schemas instead of a second copy in the plugin.
+The conditional discovery entries, upstream workflows, models, and hooks are unchanged.
+
 ## 2.0.0 - OMS: pstack-claude with T3 Code adaptation
 
 Based on michael-denyer/pstack-claude 0.9.138 at `a12b04786023e762f12f5de7bb5fafb8c23f8c36`.
