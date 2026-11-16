@@ -1,0 +1,254 @@
+// What the agent tool registers and the child command a call produces.
+import { describe, expect, test } from "bun:test";
+import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { install } from "../../plugins/pstack/pi/index.ts";
+import { chmodDeniesReads } from "../session-hook-sheets.mjs";
+import { agentBody, agentEntry, fakeCtx, fakePi, flag, gitRepo, listAgents, pluginRoot, recordWith, restore, useWorld, waitFor } from "./harness.mjs";
+
+const setup = useWorld();
+
+describe("agent tool", () => {
+  test("a tool's prompt snippet does not repeat the name Pi already prints before it", () => {
+    const { pi } = setup();
+    const snippets = [...pi.tools.values()].filter((t) => t.promptSnippet);
+    expect(snippets.map((t) => t.name)).toContain("agent");
+    for (const t of snippets) expect(t.promptSnippet.toLowerCase().startsWith(`${t.name}:`)).toBe(false);
+  });
+
+  test("every pstack tool is model-only, so Pi declares it to the model in every codemode mode and never defers it", () => {
+    const { pi } = setup();
+    const exposures = Object.fromEntries([...pi.tools.values()].map((t) => [t.name, t.exposure]));
+    expect(exposures).toEqual({
+      agent: "model-only",
+      send_message: "model-only",
+      list_agents: "model-only",
+      stop_agent: "model-only",
+      ask_user_question: "model-only",
+      schedule_wakeup: "model-only",
+    });
+  });
+
+  test("readonly runs the child without the edit and write tools", async () => {
+    const { w, pi, ctx } = setup();
+    await pi.call("agent", { description: "r", prompt: "x", readonly: true }, ctx);
+    await pi.call("agent", { description: "w", prompt: "x" }, ctx);
+    const [ro, rw] = w.invocations();
+    expect(flag(ro, "--exclude-tools")).toBe("edit,write");
+    expect(flag(rw, "--exclude-tools")).toBeNull();
+    expect(pi.tools.get("agent").parameters.properties.readonly.type).toBe("boolean");
+  });
+
+  test("agents nest at most three layers below the main session, as on Claude Code", async () => {
+    const { w } = setup();
+    const excludedAt = async (depth, params = {}) => {
+      const pi = fakePi();
+      install(pi.api, { ...w.settings, depth });
+      await pi.call("agent", { description: "d", prompt: "x", ...params }, fakeCtx({ cwd: w.cwd }));
+      return flag(w.invocations().at(-1), "--exclude-tools");
+    };
+    expect(await excludedAt(0)).toBeNull();
+    expect(await excludedAt(1)).toBeNull();
+    expect(await excludedAt(2)).toBe("agent");
+    expect(await excludedAt(2, { readonly: true })).toBe("edit,write,agent");
+  });
+
+  test("every pstack agent type reaches its child with its own agent file as the system prompt", async () => {
+    const { w, pi, ctx } = setup();
+    const files = {
+      "pstack:poteto-agent": "agents/poteto-agent.md",
+      "pstack:comment-sicko": "agents/comment-sicko.md",
+    };
+    for (const type of Object.keys(files)) await pi.call("agent", { description: type, prompt: "x", subagent_type: type }, ctx);
+    expect(w.invocations().map((inv) => inv.systemPrompt)).toEqual(Object.values(files).map(agentBody));
+  });
+
+  test("unknown subagent_type is an error listing every valid type", async () => {
+    const { w, pi, ctx } = setup();
+    const err = await pi.call("agent", { description: "x", prompt: "x", subagent_type: "poteto-agent" }, ctx).catch((e) => e);
+    expect(err.message).toContain('Unknown subagent_type "poteto-agent"');
+    for (const t of ["general-purpose", "pstack:poteto-agent", "pstack:comment-sicko"]) {
+      expect(err.message).toContain(t);
+    }
+    expect(err.message).not.toContain("effort-");
+    expect(w.invocations()).toEqual([]);
+  });
+
+  test("the subagent_type description lists every type the session starts with and its file's description, the user's agent files included", async () => {
+    const { w } = setup();
+    mkdirSync(join(w.agentDir, "pstack-agents"));
+    writeFileSync(join(w.agentDir, "pstack-agents", "scout.md"), "---\ndescription: Finds files fast.\n---\nScout.\n");
+    writeFileSync(join(w.agentDir, "pstack-agents", "plain.md"), "Plain.\n");
+    const pi = await restore(w, []);
+    const lines = pi.tools.get("agent").parameters.properties.subagent_type.description.split("\n");
+    const pluginLines = readdirSync(join(pluginRoot, "agents"))
+      .filter((f) => f.endsWith(".md"))
+      .map((f) => `- pstack:${f.slice(0, -3)}: ${/^description: (.*)$/m.exec(readFileSync(join(pluginRoot, "agents", f), "utf8"))[1]}`);
+    expect(pluginLines).toContainEqual(expect.stringMatching(/^- pstack:poteto-agent: \S/));
+    expect(lines).toEqual(expect.arrayContaining([expect.stringMatching(/^- general-purpose \(default\): \S/), ...pluginLines, "- scout: Finds files fast.", "- plain"]));
+  });
+
+  test("a description: written as a YAML block scalar reads as its text, and the keys after it still read", async () => {
+    const { w, ctx } = setup();
+    const dir = join(w.agentDir, "pstack-agents");
+    mkdirSync(dir);
+    writeFileSync(join(dir, "literal.md"), "---\nname: literal\ndescription: |\n  Use when X.\n\n  Then Y.\neffort: low\n---\nL.\n");
+    writeFileSync(join(dir, "folded.md"), "---\ndescription: >-\n  Reviews code\n  for bugs.\n\n  Says why.\nmodel: gw/folded\n---\nF.\n");
+    const pi = await restore(w, []);
+    const { description } = pi.tools.get("agent").parameters.properties.subagent_type;
+    expect(description).toContain("\n- folded: Reviews code for bugs.\nSays why.\n");
+    expect(description).toContain("\n- literal: Use when X.\n\nThen Y.\n");
+    await pi.call("agent", { description: "l", prompt: "x", subagent_type: "literal" }, ctx);
+    await pi.call("agent", { description: "f", prompt: "x", subagent_type: "folded" }, ctx);
+    expect(w.invocations().map((inv) => [flag(inv, "--thinking"), flag(inv, "--model")])).toEqual([["low", "anthropic/parent-model"], ["medium", "gw/folded"]]);
+  });
+
+  test("frontmatter reads as Claude Code 2.1.310 reads it: comments and YAML escapes drop out, a repeated key keeps its last value, the retry reads a value holding YAML syntax as text and turns tabs into spaces, and a file that still does not parse is skipped", async () => {
+    const { w, ctx } = setup();
+    const dir = join(w.agentDir, "pstack-agents");
+    mkdirSync(dir);
+    writeFileSync(join(dir, "commented.md"), "---\ndescription: Commented # a comment\nmodel: inherit # the session model\neffort: low # a comment\n---\nC.\n");
+    writeFileSync(join(dir, "escaped.md"), '---\ndescription: "Use for \\"x\\" words"\n---\nE.\n');
+    writeFileSync(join(dir, "colon.md"), "---\ndescription: Use for a: b # not a comment\nmodel: gw/colon\n---\nK.\n");
+    writeFileSync(join(dir, "quoted-word.md"), '---\ndescription: "Sharpen" a prompt: use when asked\r\n---\r\nQ.\r\n');
+    writeFileSync(join(dir, "tabbed.md"), "---\ndescription: Tabbed\ntools:\n\t- Read\n---\nT.\n");
+    writeFileSync(join(dir, "repeated.md"), "---\ndescription: First value\ndescription: Repeated value # a comment\n---\nR.\n");
+    writeFileSync(join(dir, "repeated-block.md"), "---\ndescription: |\n  First\n  block\nmodel: gw/repeated\ndescription: Repeated block\n---\nRB.\n");
+    writeFileSync(join(dir, "repeated-list.md"), "---\ntools:\n- Read\n- Grep\ndescription: Repeated list\ntools: Bash\n---\nRL.\n");
+    writeFileSync(join(dir, "broken.md"), "---\ndescription: |\n Use for a\n  b: c\neffort: [low\n---\nB.\n");
+    const pi = await restore(w, []);
+    const lines = pi.tools.get("agent").parameters.properties.subagent_type.description.split("\n");
+    expect(lines).toEqual(
+      expect.arrayContaining(["- commented: Commented", '- escaped: Use for "x" words', "- colon: Use for a: b # not a comment", '- quoted-word: "Sharpen" a prompt: use when asked', "- tabbed: Tabbed", "- repeated: Repeated value", "- repeated-block: Repeated block", "- repeated-list: Repeated list"]),
+    );
+    expect(lines.filter((line) => line.startsWith("- broken"))).toEqual([]);
+    await pi.call("agent", { description: "c", prompt: "x", subagent_type: "commented" }, ctx);
+    await pi.call("agent", { description: "k", prompt: "x", subagent_type: "colon" }, ctx);
+    await pi.call("agent", { description: "r", prompt: "x", subagent_type: "repeated-block" }, ctx);
+    expect(w.invocations().map((inv) => [flag(inv, "--thinking"), flag(inv, "--model")])).toEqual([["low", "anthropic/parent-model"], ["medium", "gw/colon"], ["medium", "gw/repeated"]]);
+  });
+
+  test("the effort parameter passes --thinking to any agent type, keeps a pstack agent's body as a 0600 system prompt file, and no effort runs at the parent's level", async () => {
+    const { w, pi, ctx } = setup();
+    await pi.call("agent", { description: "e", prompt: "x", subagent_type: "general-purpose", effort: "xhigh" }, ctx);
+    await pi.call("agent", { description: "p", prompt: "x", subagent_type: "pstack:poteto-agent", effort: "high" }, ctx);
+    await pi.call("agent", { description: "g", prompt: "x", subagent_type: "general-purpose" }, ctx);
+    const [effort, poteto, general] = w.invocations();
+
+    expect(flag(effort, "--thinking")).toBe("xhigh");
+    expect(effort.systemPrompt).toBeNull();
+    expect(flag(poteto, "--thinking")).toBe("high");
+    expect(poteto.systemPrompt).toBe(agentBody("agents/poteto-agent.md"));
+    expect(statSync(flag(poteto, "--append-system-prompt")).mode & 0o777).toBe(0o600);
+    expect(flag(general, "--thinking")).toBe("medium");
+    expect(general.systemPrompt).toBeNull();
+  });
+
+  test("an unknown effort is an error naming the valid levels, and no child starts or state is written", async () => {
+    const { w, pi, ctx } = setup();
+    const err = await pi.call("agent", { description: "x", prompt: "x", effort: "turbo" }, ctx).catch((e) => e);
+    expect(err.message).toContain('effort "turbo" is not one of low, medium, high, xhigh, max');
+    expect(w.invocations()).toEqual([]);
+    expect(existsSync(join(w.agentDir, "pstack", "parent-session"))).toBe(false);
+  });
+
+  test("a resume whose system prompt file is gone writes it again, since pi would append the missing path as the prompt text", async () => {
+    const { w, pi, ctx } = setup();
+    await pi.call("agent", { description: "p", prompt: "first", subagent_type: "pstack:poteto-agent" }, ctx);
+    rmSync(join(w.agentDir, "pstack", "parent-session", "prompts"), { recursive: true });
+    await pi.call("send_message", { to: "p", message: "again" }, ctx);
+    await waitFor(() => pi.messages.length === 1);
+    const [first, second] = w.invocations();
+    expect(second.systemPrompt).toBe(agentBody("agents/poteto-agent.md"));
+    expect(flag(second, "--append-system-prompt")).toBe(flag(first, "--append-system-prompt"));
+    expect(statSync(flag(second, "--append-system-prompt")).mode & 0o777).toBe(0o600);
+  });
+
+  test("a resume whose system prompt file is gone and whose type no longer has one fails, no child starts, and the agent keeps its completed record", async () => {
+    const { w, pi, ctx } = setup();
+    await pi.call("agent", { description: "p", prompt: "first", subagent_type: "pstack:poteto-agent" }, ctx);
+    rmSync(join(w.agentDir, "pstack", "parent-session", "prompts"), { recursive: true });
+    const removedType = recordWith(pi.entries.at(-1).data, { agent: { subagentType: "pstack:removed" } });
+
+    const resumed = await restore(w, [agentEntry(removedType)]);
+    const err = await resumed.call("send_message", { to: "p", message: "again" }, ctx).catch((e) => e);
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toContain('its type "pstack:removed" no longer provides one');
+    expect(w.invocations()).toHaveLength(1);
+    expect((await listAgents(resumed, ctx)).map((a) => a.status)).toEqual(["completed"]);
+    expect(resumed.entries).toEqual([]);
+  });
+
+  test("a system prompt file that cannot be written fails a fresh launch, recorded as failed, before a worktree or its branch is made", async () => {
+    const { w, pi, ctx } = setup();
+    const git = gitRepo(w.cwd);
+    const state = join(w.agentDir, "pstack", "parent-session");
+    mkdirSync(state, { recursive: true });
+    writeFileSync(join(state, "prompts"), "a file where the prompts directory belongs");
+
+    const err = await pi.call("agent", { description: "wt", prompt: "x", subagent_type: "pstack:poteto-agent", isolation: "worktree" }, ctx).catch((e) => e);
+    expect(err).toBeInstanceOf(Error);
+    expect((await listAgents(pi, ctx)).map((a) => a.status)).toEqual(["failed"]);
+    expect(pi.entries.map((e) => e.data.status)).toEqual(["failed"]);
+    expect(git("worktree", "list").split("\n")).toHaveLength(1);
+    expect(git("branch", "--list").split("\n")).toHaveLength(1);
+    expect(w.invocations()).toEqual([]);
+  });
+});
+
+describe("model resolution", () => {
+  const modelOf = (inv) => flag(inv, "--model");
+
+  test("alias, sheet override, inherit-parent, auto, pass-through, and no parent model", async () => {
+    const { w, pi, ctx } = setup({ sheet: "default effort: session\npi models: sonnet=openai/sheet-sonnet, haiku=openai/sheet-haiku\n" });
+    for (const model of ["opus", "sonnet", "inherit-parent", "auto", "openai/gpt-x", undefined]) {
+      await pi.call("agent", { description: "m", prompt: "x", model }, ctx);
+    }
+    await pi.call("agent", { description: "m", prompt: "x" }, fakeCtx({ cwd: w.cwd, model: null }));
+    await pi.call("agent", { description: "m", prompt: "x", model: "opus" }, fakeCtx({ cwd: w.cwd, model: null }));
+    expect(w.invocations().map(modelOf)).toEqual([
+      "anthropic/fixture-opus",
+      "openai/sheet-sonnet",
+      "anthropic/parent-model",
+      "anthropic/parent-model",
+      "openai/gpt-x",
+      "anthropic/parent-model",
+      null,
+      "anthropic/fixture-opus",
+    ]);
+  });
+
+  test("a family name resolves in the table of the parent's provider, and in the fallback table on any other", async () => {
+    const { w, pi } = setup({ sheet: "pi models: haiku=anthropic/sheet-haiku\n" });
+    const on = (provider) => fakeCtx({ cwd: w.cwd, model: { provider, id: "parent" } });
+    for (const model of ["opus", "fable", "haiku"]) await pi.call("agent", { description: "m", prompt: "x", model }, on("openai-codex"));
+    await pi.call("agent", { description: "m", prompt: "x", model: "opus" }, on("openrouter"));
+    await pi.call("agent", { description: "m", prompt: "x", model: "opus" }, on("constructor"));
+    expect(w.invocations().map(modelOf)).toEqual([
+      "openai-codex/fixture-opus",
+      "openai-codex/fixture-fable",
+      "anthropic/sheet-haiku",
+      "anthropic/fixture-opus",
+      "anthropic/fixture-opus",
+    ]);
+  });
+
+  test.skipIf(!chmodDeniesReads)("an unreadable sheet leaves the default model until it is readable again", async () => {
+    const { w, pi, ctx } = setup({ sheet: "pi models: sonnet=openai/sheet-sonnet\n" });
+    const sheet = join(w.agentDir, "pstack-models.md");
+    chmodSync(sheet, 0o000);
+    await pi.call("agent", { description: "m", prompt: "x", model: "sonnet" }, ctx);
+    chmodSync(sheet, 0o600);
+    await pi.call("agent", { description: "m", prompt: "x", model: "sonnet" }, ctx);
+    expect(w.invocations().map(modelOf)).toEqual(["anthropic/fixture-sonnet", "openai/sheet-sonnet"]);
+  });
+
+  test("an unknown alias is an error naming the valid values", async () => {
+    const { w, pi, ctx } = setup();
+    const err = await pi.call("agent", { description: "m", prompt: "x", model: "opus @xhigh" }, ctx).catch((e) => e);
+    expect(err.message).toContain('Unknown model "opus @xhigh"');
+    expect(err.message).toContain("opus, fable, sonnet, haiku, inherit-parent, auto");
+    expect(w.invocations()).toEqual([]);
+  });
+});
