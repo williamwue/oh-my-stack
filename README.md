@@ -4,7 +4,7 @@ OMS 是 [pstack-claude](https://github.com/michael-denyer/pstack-claude) 的轻�
 技能、工作流、模型默认值、hooks 和其他宿主支持沿用上游。原作者为 Lauren Tan，移植版作者为 Michael Denyer。
 
 当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.2**。
-源码准备完成不代表已经发布；远程安装需要所选远程分支包含新版，发布前可用本地路径验证。
+固定版本安装与跨电脑迁移见 [2.0.2 发布说明](docs/release-2.0.2.md)和[另一台电脑安装指南](docs/oms-install-another-computer.md)。
 完整上游说明保留在 [README.upstream.md](README.upstream.md)，OMS 差异见 [T3 适配](docs/t3.md)。
 
 <a id="install"></a>
@@ -77,6 +77,7 @@ bun test tests/
 2.0.2 的跨模型配置、原生打包和真实 Claude 到 Codex 调用见 [模型配置验收](docs/oms-t3-models-verification-2.0.2.md)。
 2.0.2 的日常安装、角色配置和 Opus/Sol/Astra 闭环验收见 [日常升级记录](docs/oms-daily-install-2.0.2.md)。
 后续五模型分工及真实调用见 [五模型配置验收](docs/oms-five-model-profile-2026-11-16.md)。
+可选角色表见 [T3 五模型示例](docs/examples/pstack-models-t3.md)，安装不会自动应用该示例。
 <a id="other-harnesses"></a>
 
 ## 其他宿主
