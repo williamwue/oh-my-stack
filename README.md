@@ -68,6 +68,7 @@ bun test tests/
 2.0.0 的本地检查见 [验证记录](docs/oms-verification.md)，
 2.0.1 的精简与真实调用见 [T3 验证记录](docs/oms-verification-t3-2.0.1.md)。
 后续日常安装、自动加载及启动 hook 验收见 [安装记录](docs/oms-daily-install-2.0.1.md)。
+独立工作区的后续通过结果见 [worktree 验证](docs/oms-worktree-verification-2.0.1.md)。
 <a id="other-harnesses"></a>
 
 ## 其他宿主

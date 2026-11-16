@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "omsVersion": "2.0.1",
+  "date": "2026-11-16",
+  "result": "PASS",
+  "baseCommit": "77bc11ab764b0818aaf878caf808a540fadaf59b",
+  "coordinator": {
+    "threadId": "mcp:launch:a4e17526cb7b57363c7dcb6319a3ccc533f19f034de695d9b23bbbd4e95314ca",
+    "link": "[OMS independent worktree acceptance](t3-thread://v2/9e1444f8-a7d4-49b5-9008-4610d2b851a8/mcp:launch:a4e17526cb7b57363c7dcb6319a3ccc533f19f034de695d9b23bbbd4e95314ca)",
+    "runs": [
+      {
+        "runId": "run:thread:mcp%3Alaunch%3Aa4e17526cb7b57363c7dcb6319a3ccc533f19f034de695d9b23bbbd4e95314ca:ordinal:2",
+        "ordinal": 2,
+        "status": "completed",
+        "providerInstanceId": "codex",
+        "model": "gpt-6.1-sol",
+        "executedModel": "gpt-6.1-sol",
+        "requestedAt": "2026-11-16T03:29:24.330Z",
+        "startedAt": "2026-11-16T03:29:24.386Z",
+        "completedAt": "2026-11-16T03:30:19.124Z"
+      },
+      {
+        "runId": "run:thread:mcp%3Alaunch%3Aa4e17526cb7b57363c7dcb6319a3ccc533f19f034de695d9b23bbbd4e95314ca:ordinal:1",
+        "ordinal": 1,
+        "status": "completed",
+        "providerInstanceId": "codex",
+        "model": "gpt-6.1-sol",
+        "executedModel": "gpt-6.1-sol",
+        "requestedAt": "2026-11-16T03:27:18.066Z",
+        "startedAt": "2026-11-16T03:27:18.144Z",
+        "completedAt": "2026-11-16T03:28:20.832Z"
+      }
+    ]
+  },
+  "delegate": {
+    "threadId": "thread:delegated-task:command%3Amcp%3Ab077b04a-7a75-4ef5-bcc0-99479dff2db3%3Adelegate-task%3A499f59df-44de-412f-a542-7e6e91052ccd",
+    "link": "[OMS 独立 worktree 验收 smoke](t3-thread://v2/9e1444f8-a7d4-49b5-9008-4610d2b851a8/thread:delegated-task:command%3Amcp%3Ab077b04a-7a75-4ef5-bcc0-99479dff2db3%3Adelegate-task%3A499f59df-44de-412f-a542-7e6e91052ccd)",
+    "run": {
+      "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ab077b04a-7a75-4ef5-bcc0-99479dff2db3%253Adelegate-task%253A499f59df-44de-412f-a542-7e6e91052ccd:ordinal:1",
+      "ordinal": 1,
+      "status": "completed",
+      "providerInstanceId": "codex",
+      "model": "gpt-6.1-sol",
+      "executedModel": "gpt-6.1-sol",
+      "requestedAt": "2026-11-16T03:28:04.823Z",
+      "startedAt": "2026-11-16T03:28:20.169Z",
+      "completedAt": "2026-11-16T03:29:23.999Z"
+    },
+    "configuration": {
+      "threadId": "thread:delegated-task:command%3Amcp%3Ab077b04a-7a75-4ef5-bcc0-99479dff2db3%3Adelegate-task%3A499f59df-44de-412f-a542-7e6e91052ccd",
+      "modelSelection": {
+        "instanceId": "codex",
+        "model": "gpt-6.1-sol",
+        "options": [
+          {
+            "id": "reasoningEffort",
+            "value": "medium"
+          },
+          {
+            "id": "serviceTier",
+            "value": "default"
+          }
+        ]
+      },
+      "runtimeMode": "full-access",
+      "interactionMode": "default"
+    },
+    "binding": {
+      "attached": true,
+      "worktreePath": "/Users/williamwue/.t3/worktrees/oh-my-stack/t3-a4c2d12a-f5da0908d2312f48",
+      "branch": "t3/verify-t3-worktree-isolation",
+      "projectWorkspaceRoot": "/Users/williamwue/Code/oh-my-stack",
+      "defaultStartFromOrigin": true
+    }
+  },
+  "workspaces": [
+    {
+      "path": "/Users/williamwue/Code/oh-my-stack",
+      "branch": "refactor/pstack-t3-only"
+    },
+    {
+      "path": "/Users/williamwue/.t3/worktrees/oh-my-stack/t3-a4c2d12a-f5da0908d2312f48",
+      "branch": "t3/verify-t3-worktree-isolation"
+    }
+  ],
+  "commonDir": "/Users/williamwue/Code/oh-my-stack/.git",
+  "mappingSha256": "c446723199bba788bf0e7ac767aa711ac34c36037b7f3895e5890d3db89e284c",
+  "marker": {
+    "name": ".oms-worktree-smoke-ee1e367c0bf94eb68b1ae7d95d4a2153",
+    "exclusiveCreated": true,
+    "readMatches": true,
+    "absentFromProjectRoot": true,
+    "deleted": true,
+    "finalBothWorkspacesClean": true,
+    "independentlyCheckedByCoordinatorAndRoot": true
+  },
+  "scope": "T3-managed independent worktree, actual model/options, automatic installed skill discovery, representative bro call, local file isolation and cleanup.",
+  "unchanged": [
+    "tracked runtime files",
+    "daily plugin installation",
+    "personal model sheets",
+    "native logins"
+  ],
+  "retainedWorktree": true
+}
