@@ -29,7 +29,7 @@ codex plugin list
 Claude Code：
 
 ```sh
-claude plugin marketplace add .
+claude plugin marketplace add ./
 claude plugin install pstack@oms
 claude plugin list
 ```
