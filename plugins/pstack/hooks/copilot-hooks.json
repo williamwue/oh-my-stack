@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${COPILOT_PLUGIN_ROOT}/hooks/session-start.sh\" copilot",
+            "powershell": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$env:COPILOT_PLUGIN_ROOT/hooks/session-start.ps1\" copilot"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "view|task|bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${COPILOT_PLUGIN_ROOT}/hooks/pre-tool-use.sh\"",
+            "powershell": "exit 0",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

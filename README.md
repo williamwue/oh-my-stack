@@ -1,138 +1,96 @@
 # Oh My Stack
 
-OMS 是 Windows 和 macOS 开发环境启动包：选择工具，检测本机环境，统一完成安装和管理。
-不需要分别查找仓库、插件市场或手动复制 Skills。
+OMS 是 [pstack-claude](https://github.com/michael-denyer/pstack-claude) 的轻量派生版，只增加 T3 Code 工具适配。
+技能、工作流、模型默认值、hooks 和其他宿主支持沿用上游。原作者为 Lauren Tan，移植版作者为 Michael Denyer。
 
-## 开始使用
+当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.2**。
+固定版本安装与跨电脑迁移见 [2.0.2 发布说明](docs/release-2.0.2.md)和[另一台电脑安装指南](docs/oms-install-another-computer.md)。
+完整上游说明保留在 [README.upstream.md](README.upstream.md)，OMS 差异见 [T3 适配](docs/t3.md)。
 
-Windows 需要 Windows PowerShell 5.1 或 PowerShell 7；macOS 需要 PowerShell 7（`pwsh`）。
-安装 pstack 还需要 Git。Linux 暂不支持；OMS 不安装 WSL 或兼容层。
-对应开发宿主应已安装，账号登录及原生安全授权由用户完成。
+<a id="install"></a>
 
-```powershell
-git clone https://github.com/williamwue/oh-my-stack.git
-cd oh-my-stack
-./oms.ps1
+## 安装
+
+使用已安装并登录的宿主原生插件机制，不需要 PowerShell 或 OMS 安装器。
+已有 OMS 1.x 或其他 pstack 安装时，先阅读 [迁移说明](docs/oms-migration.md)，避免重复加载。
+
+Claude Code：
+
+```text
+/plugin marketplace add williamwue/oh-my-stack
+/plugin install pstack@oms
 ```
 
-也可以下载 [1.1.2 安装包](https://github.com/williamwue/oh-my-stack/releases/tag/v1.1.2)。
-核对 `SHA256SUMS.txt` 后解压 `oms-1.1.2.zip`，Windows 和 macOS 使用同一份源码包。
-当前版本为 1.1.2；[本版发布说明](docs/release-1.1.2.md)、[旧版迁移说明](docs/release-1.0.0.md)。
+<a id="codex"></a>
 
-界面默认勾选 pstack 和 AIHero，可切换选项。随后自动检测已有环境，展示计划。
-确认后安装；输入 `c` 可自定义目标环境。T3 Code 与 Codex、Claude Code 并列，
-选择 T3 不要求额外勾选 Codex。OMS 覆盖本机可用的 Codex/Claude 运行时，
-并与独立选择的环境复用安装，不重复注册共享插件。
-
-明确指定内容，适合自动化：
-
-```powershell
-./oms.ps1 install -Component pstack,aihero -Environment codex,claude,t3 -Yes
-./oms.ps1 install pstack-book -Yes
-./oms.ps1 install pstack-book -DownloadBooks -Yes
-./oms.ps1 install -Custom
-./oms.ps1 list
-./oms.ps1 status
-```
-
-执行策略阻止脚本时，可仅为本次进程指定策略：
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./oms.ps1 list
-```
-
-## macOS 使用
-
-先按 [Microsoft 官方指引](https://learn.microsoft.com/powershell/scripting/install/install-powershell-on-macos)
-安装适合本机架构的 PowerShell 7。OMS 不自动安装 PowerShell 或任何 Agent 宿主。
-在 Terminal 中运行（目录可以包含空格）：
+Codex：
 
 ```sh
-git clone https://github.com/williamwue/oh-my-stack.git
-cd oh-my-stack
-pwsh -NoProfile -File ./oms.ps1 list
-pwsh -NoProfile -File ./oms.ps1
-pwsh -NoProfile -File ./oms.ps1 status -Json
+codex plugin marketplace add williamwue/oh-my-stack
+codex plugin add pstack@oms
 ```
 
-Codex、Claude Code 的 CLI 必须在当前 Terminal 的 PATH 中。T3 同时检测 CLI、
-运行中的进程和 `/Applications`、`~/Applications` 下的 `T3 Code.app`、
-`T3 Code (Nightly).app`、`T3 Code (Customized).app`。检测到 T3 应用不代表
-后端已安装；选择 T3 后仍需可用的 Codex 或 Claude CLI，不额外安装宿主。
+本地验证时，将 marketplace add 的仓库参数替换为此仓库的绝对路径。
+测试安装须使用独立且预先创建的 `CODEX_HOME` 或 `CLAUDE_CONFIG_DIR`，不复用个人宿主目录。
+
+T3 使用其 Codex 或 Claude 后端的同一份原生插件。只在需要的后端安装，无需额外注册 T3 插件。
+原生 hooks 的信任与新会话加载仍按宿主要求完成；安装成功不等于真实会话验证通过。
+
+## 使用与配置
+
+新会话中选择 `pstack:poteto-mode`，模型配置使用 `pstack:setup-pstack`。
+Codex 可输入 `$` 选择技能，Claude Code 使用 `/pstack:poteto-mode`。
+原生模型表和全局指令继续由上游机制加载。
+
+在 T3 中运行 `pstack:setup-pstack`，可为原有角色选择不同 provider 的模型。
+T3 配置保存到项目的 `.agents/pstack-models.t3.md` 或用户的 `~/.t3/pstack-models.md`，
+项目表整体优先。T3 会在派发角色任务前读取配置，Claude 主会话也可使用 Codex 子任务。
+这些配置不覆盖原生 Claude、Codex 模型表或 hook 设置，详见 [T3 模型配置](docs/t3.md#跨模型配置)。
+
+只有会话提供 T3 Code 工具时才读取 T3 映射；其他会话继续使用上游宿主映射。
+T3 的调用方式服从当前宿主工具和权限，插件不会创建额外的调度器。
+
+## 更新与卸载
+
+使用宿主的原生插件与 marketplace 命令。第三方 marketplace 的自动更新设置也由宿主管理。
+Claude Code 可手动运行 `claude plugin update pstack@oms`；Codex 使用其当前版本的原生 marketplace 更新机制。
+不要照抄上游文档中的 `pstack@pstack-claude` 来更新此发行版，本发行版的选择器是 `pstack@oms`。
+
+OMS 不再管理 AIHero、电子书、宿主安装或安装数据库。现有工具、文件和凭据保留原样。
+历史文档与书籍授权见 [归档说明](docs/oms-history/README.md)。
+
+## 开发与同步
 
 ```sh
-pwsh -NoProfile -File ./oms.ps1 install -Component pstack,aihero -Environment codex,t3 -Yes
-pwsh -NoProfile -File ./oms.ps1 install pstack-book -DownloadBooks -Yes
-pwsh -NoProfile -File ./tests/run.ps1
+bun install --frozen-lockfile
+bun install --frozen-lockfile --cwd plugins
+bun tools/generate.mjs --check
+bun test tests/
 ```
 
-上述显式环境示例仅适用于已安装 Codex 和 T3 的机器；交互流程默认选择检测到的环境。
-原生登录、插件与 hook 信任仍在对应宿主中完成。安装后新开会话，分别确认
-`pstack:poteto-mode`、`pstack:bro`、`mattpocock-skills:ask-matt` 等可用名称。
-它们是 skills 集合，不是同名 MCP 工具。
+修改生成源后运行 `bun tools/generate.mjs`。其余检查沿用 [上游贡献说明](CONTRIBUTING.md)。
+上游同步和维护边界见 [T3 适配](docs/t3.md#维护与同步)。
+2.0.0 的本地检查见 [验证记录](docs/oms-verification.md)，
+2.0.1 的精简与真实调用见 [T3 验证记录](docs/oms-verification-t3-2.0.1.md)。
+后续日常安装、自动加载及启动 hook 验收见 [安装记录](docs/oms-daily-install-2.0.1.md)。
+独立工作区的后续通过结果见 [worktree 验证](docs/oms-worktree-verification-2.0.1.md)。
+2.0.2 的跨模型配置、原生打包和真实 Claude 到 Codex 调用见 [模型配置验收](docs/oms-t3-models-verification-2.0.2.md)。
+2.0.2 的日常安装、角色配置和 Opus/Sol/Astra 闭环验收见 [日常升级记录](docs/oms-daily-install-2.0.2.md)。
+后续五模型分工及真实调用见 [五模型配置验收](docs/oms-five-model-profile-2026-11-16.md)。
+可选角色表见 [T3 五模型示例](docs/examples/pstack-models-t3.md)，安装不会自动应用该示例。
+只有 Codex 后端时使用 [T3 纯 Codex 示例](docs/examples/pstack-models-t3-codex-only.md)，无需安装 Claude。
+<a id="other-harnesses"></a>
 
-## 收录工具与环境
+## 其他宿主
 
-- **pstack**：获取 pstack-claude 原版，在 OMS 管理的目录中自动加入 T3 映射及
-  必要读取入口，再使用宿主原生插件机制注册。所有 pstack 安装默认包含适配，
-  只有 T3 会话读取它；没有独立的 T3 仓库、安装开关或额外手动配置。
-- **AIHero**：独立安装 Matt Pocock 官方插件，不裁剪或混入 pstack。
-- **pstack 书籍**：独立安装阅读入口；可选下载中英文 PDF、EPUB 并验证 SHA256。
-  保留原文、译本、授权记录及历史阅读版本说明，不注入代理上下文。
+上游其他宿主支持保留，见 [上游安装说明](README.upstream.md#install)。
+Pi 的最低版本要求沿用上游：Pi 1.5.1 or later。
+在 OMS 中使用本仓库的本地路径；使用 marketplace 时以 `oms` 为名称，避免装到原版来源。
+这些宿主不包含 T3 的独立调度器，也不因保留源码而视为已在 OMS 上验收。
 
-首版环境为 Codex、Claude Code、T3 Code。没有安装宿主的显式选择会报告失败，
-其余独立任务仍继续，不把未完成的环境报告为成功。T3 注册后显示待重启/验证，
-不把插件注册等同于真实代理会话验收。后续环境按各自可验证的安装方式增加。
+<a id="license"></a>
 
-## 日常管理
+## 许可
 
-```powershell
-./oms.ps1 status -Environment codex,t3 -Json
-./oms.ps1 configure pstack
-./oms.ps1 configure pstack-book -Open
-./oms.ps1 update -Yes
-./oms.ps1 uninstall pstack -Environment t3 -Yes
-```
-
-`configure` 提供各工具的原生设置指引，不自动重写个人模型表或项目说明。
-Codex/T3 的模型分工、双候选和推理强度示例见 [pstack 个人配置](docs/pstack-configuration.md)。
-模板为可选参考，使用前在当前宿主核对模型；安装或更新不会自动应用。
-更新先准备新包并应用、检查适配，然后切换注册；失败时尝试恢复原注册，
-保留旧包及管理记录。切换 pstack 的本地市场路径时，先注销受管理的旧插件和市场，再注册新包；
-如果该市场还有其他插件，停止切换。上游入口变化会明确报错，不强行修改。
-
-OMS 不自动接管已有的同名插件；发现冲突时保留原安装并给出处理说明。
-从旧 OMS 聚合插件迁移时，请先检查宿主插件列表，明确处理旧插件，避免重复
-加载同类 Skills。旧插件和旧版管理记录不会自动迁移或删除。
-插件卸载只处理受管理的安装，保留市场注册；Claude 使用 `--keep-data`。
-多个目标共用一份插件时，取消一个目标只移除其管理关联，直到最后一个关联
-被移除才执行原生卸载。共享底层插件仍可能在其他会话中可见。
-
-## 文件与版本
-
-组件目录在 `catalog/tools/`，目标环境在 `catalog/environments/`，T3 文件在
-`integrations/pstack/`。仓库不保存整份第三方源码。pstack 默认安装目录中审核的
-提交，`update` 获取上游 main 的新提交并重新适配；AIHero 遵循宿主原生更新方式。
-
-准备好的包、安装记录、书籍在 Windows 保存在 `%LOCALAPPDATA%/oh-my-stack/`，
-在 macOS 保存在 `~/Library/Application Support/oh-my-stack/`。
-`-StateRoot` 可以改变 OMS 数据位置，但不隔离宿主配置。做真实安装测试还需
-设置宿主原生隔离目录，例如独立且已创建的 `CODEX_HOME` 和 `CLAUDE_CONFIG_DIR`。
-OMS 沿用当前进程的这些变量；未设置时分别使用 `~/.codex` 和 `~/.claude`，
-不自动切到测试目录，也不修改模型设置或凭据。显式配置目录需为绝对路径。
-新管理记录绑定配置目录，`status -Json` 显示 `ConfigRoot` 和管理来源 `Source`；
-目录不一致时阻止安装、更新和卸载，并报告 `host-config-conflict`。旧 1.0.1 记录
-继续使用原有来源校验；如需在另一个宿主配置目录安装，请同时使用独立 `-StateRoot`。
-
-本地适配包通过路径注册，因此由 `oms update` 管理更新。原始许可证与作者
-声明保留在下载的包中；书籍不适用 OMS 自有代码的 MIT 许可证。
-
-## 验证
-
-```powershell
-./tests/run.ps1
-```
-
-测试使用本地 Git 夹具和假的宿主 CLI，不联网、不调用模型、不修改个人配置。
-真实宿主测试单独记录；[macOS 实现与本机验证](docs/macos.md)。
-不支持的环境明确跳过，不安装 WSL 来满足验证。
+[上游许可证](LICENSE)、[作者声明](NOTICE.md)、[OMS 适配许可证](LICENSE-oms)和历史书籍授权分别保留。
+书籍不适用代码的 MIT 许可。

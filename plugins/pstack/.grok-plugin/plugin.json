@@ -1,0 +1,9 @@
+{
+  "name": "pstack",
+  "version": "2.0.2",
+  "description": "pstack workflows and skills for Grok Build",
+  "skills": [
+    "./skills",
+    "./grok/skills"
+  ]
+}

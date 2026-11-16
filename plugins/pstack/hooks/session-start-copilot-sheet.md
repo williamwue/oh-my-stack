@@ -1,0 +1,1 @@
+These are the user's saved pstack model choices from the Copilot model sheet. Each role line is an explicit model instruction for the `task` tool's `model` parameter; `inherit-parent` or `auto` omits `model`. Use these instead of reading the sheet:

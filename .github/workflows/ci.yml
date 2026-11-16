@@ -1,35 +1,453 @@
-name: OMS lifecycle
+name: CI
+
 on:
   pull_request:
   push:
     branches: [main]
+
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lifecycle:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            shell: powershell
-          - os: windows-latest
-            shell: pwsh
-          - os: macos-15
-            shell: pwsh
-          - os: macos-15-intel
-            shell: pwsh
-    runs-on: ${{ matrix.os }}
+  generated:
+    name: Generated files current
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Test Windows PowerShell 5.1
-        if: matrix.shell == 'powershell'
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install the copy of Pi the tests load
+        run: bun install --frozen-lockfile
+        working-directory: plugins
+      - name: Check generated files and plugin invariants
+        run: bun tools/generate.mjs --check
+      - name: Tool and invariant fixture tests
+        run: bun test tests/
+
+  windows-hooks:
+    name: Windows session hooks
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      # The runner's first Windows PowerShell launch takes from 2.5 s to over
+      # 10 s, and the run steps above use pwsh, so without this step that cost
+      # lands in the first test. The first ConvertFrom-Json, which the Muse hook
+      # runs on models.json, took 1.5 s to over 10 s in the first Muse test
+      # with a sheet. Paid here, both leave the 10 s timeout to catch a hook
+      # launch that is slow every time.
+      - name: Warm up Windows PowerShell
         shell: powershell
-        run: ./tests/run.ps1
-      - name: Test PowerShell 7
-        if: matrix.shell == 'pwsh'
-        shell: pwsh
-        run: ./tests/run.ps1
+        run: "'{}' | ConvertFrom-Json | Out-Null"
+      - name: Test Windows session hooks
+        run: bun test --timeout 10000 tests/session-hook-windows.test.mjs
+        env:
+          PSTACK_REQUIRE_WINDOWS_HOOK: "1"
+
+  windows-worktree-audit:
+    name: Windows worktree audit
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install the copy of Pi the tests load
+        run: bun install --frozen-lockfile
+        working-directory: plugins
+      - name: Test the worktree audit
+        run: bun test --timeout 30000 tests/worktree-audit.test.mjs
+
+  forks:
+    name: Fork registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      # A dry-run sync to the SHA already pinned compares the port with
+      # upstream as it stands, and fails on a fork tools/forks.json lacks or
+      # an entry whose path is not forked. bash ignores the exit status of a
+      # process substitution, so jq fills a variable first. Fed straight to
+      # the loop, a jq error runs it zero times and the step passes.
+      - name: Check every fork from upstream is declared
+        run: |
+          set -eo pipefail
+          components=$(jq -r '.components | to_entries[] | "\(.key) \(.value.sha)"' tools/upstream.json)
+          if [ -z "$components" ]; then
+            echo "tools/upstream.json lists no components"
+            exit 1
+          fi
+          failed=0
+          while read -r component sha; do
+            bun tools/sync.mjs "$component" "$sha" --dry-run | tee "$RUNNER_TEMP/sync-$component.txt" || failed=1
+          done <<< "$components"
+          exit "$failed"
+      # Rules are shared by every component, so one run checks them all.
+      - name: Check every substitution rule matches upstream at the pins
+        if: ${{ !cancelled() }}
+        run: bun tools/sync.mjs --check-rules
+      # Annotates rather than fails: generated edits and declared forks are
+      # legitimate, but a reviewer should see every upstream skill file a PR
+      # touches. A port-only file, from the dry runs above, has no upstream.
+      - name: Warn on upstream skill files the pull request changes
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --depth=1 origin "$BASE_SHA"
+          declare -A forks port_only
+          while IFS= read -r path; do forks[$path]=1; done < <(jq -r '.[] | keys[]' tools/forks.json)
+          while IFS= read -r path; do port_only[$path]=1; done < <(
+            awk '/^port-only: / { listed = 1; next } listed && /^  / { print $1; next } { listed = 0 }' "$RUNNER_TEMP"/sync-*.txt
+          )
+          git diff --name-only "$BASE_SHA" HEAD -- plugins/pstack/skills |
+            while IFS= read -r path; do
+              if [[ -v forks[$path] ]]; then
+                echo "::warning file=$path::Declared fork changed. Update its why in tools/forks.json if the edit changes what the fork does."
+              elif [[ ! -v port_only[$path] ]]; then
+                echo "::warning file=$path::Upstream skill file changed. An edit that departs from upstream needs an entry in tools/forks.json."
+              fi
+            done
+
+  skills-only:
+    name: Skills-only install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Installs this checkout rather than the GitHub URL, so the canary proves
+      # the tree in the PR instead of whatever is on main. One agent target is
+      # enough: the CLI copies the same bytes for every agent, and the
+      # generated job already validated the source tree's links and prose.
+      - name: Install the skills tree with the skills CLI
+        run: |
+          npx --yes skills@1.5.23 add ./plugins/pstack/skills \
+            --skill '*' --agent codex --yes --copy
+      - name: Compare the installed skills tree with the source
+        run: diff -qr plugins/pstack/skills .agents/skills
+
+  pi-types:
+    name: Pi extension types
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      # The extension's types and model catalog come from the installed Pi
+      # package, so the checks run against the release users have rather than
+      # a copy in bun.lock. No lockfile: the exact version is pinned, and
+      # --before holds Pi's dependencies to the versions published by that
+      # date, since Pi releases after 1.0.0 ship no npm-shrinkwrap.json. Move
+      # the date with the version. The job has read-only permissions and no
+      # secrets. The copy in plugins/bun.lock, which the tests load the
+      # extension against, is the latest release; this job checks the oldest
+      # one the port supports.
+      - name: Install Pi
+        run: npm install -g --ignore-scripts --before=2026-11-10 @earendil-works/pi-coding-agent@1.5.1 # zizmor: ignore[adhoc-packages]
+      - name: Typecheck the extension against Pi
+        run: bun tools/typecheck-pi.mjs
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+      - name: Install the copy of Pi the tests load
+        run: bun install --frozen-lockfile
+        working-directory: plugins
+      # These checks make no model calls. Missing Pi fails instead of skipping.
+      - name: Check the model catalog, child startup, and slash expansion against Pi
+        run: bun test tests/pi/catalog.test.mjs tests/pi/runtime.test.mjs tests/pi/slash.test.mjs
+        env:
+          PSTACK_PI_REQUIRE_CATALOG: "1"
+          PSTACK_PI_REQUIRE_RUNTIME: "1"
+
+  scripts:
+    name: Vendored bun tooling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: plugins/pstack/skills/poteto-mode/scripts
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Test
+        run: bun test watch-pr check-plan.test.ts
+      # Pinned here, not in package.json, so bun.lock stays identical to
+      # upstream's. 3.6.2 reproduces upstream's watch-pr files byte for byte,
+      # except fakes.test-helper.ts, github.test.ts, and policy.test.ts, which
+      # .prettierignore lists; later releases rewrap types.ts too.
+      - name: Check formatting
+        run: bunx prettier@3.6.2 --check .
+
+  statechart:
+    name: Statechart scripts (${{ matrix.group }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Node runs the tests in one file one at a time and the files in one job
+    # side by side, which slows each file: tlc-out.test.ts took 120 s on its
+    # own runner and 187 s beside the other files. The two slowest files each
+    # get a runner. corpus.test.ts, at 190 s alone, splits across two runners
+    # by test name: names that start with A to L in one, and every other name
+    # in the other, so the two patterns must stay the same. The rest share one
+    # runner, so a new test file lands in the rest.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: corpus, A to L
+            files: corpus
+            select: --test-name-pattern=^[A-L]
+          - group: corpus, other names
+            files: corpus
+            select: --test-skip-pattern=^[A-L]
+          - group: differential
+            files: differential
+          - group: tlc-out
+            files: tlc-out
+          - group: rest
+            files: "!(corpus|differential|tlc-out)"
+    defaults:
+      run:
+        working-directory: plugins/pstack/skills/statechart/scripts
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The Node the suite was measured on. It runs the TypeScript sources
+      # directly, which needs Node 22.18, or 23.6 and later.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24.22.1"
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      # TLC_TOOL in run.ts pins the release and checksum the skill installs
+      # with mise, so the job checks the same jar.
+      - name: Download TLC
+        env:
+          TLA2TOOLS: ${{ runner.temp }}/tla2tools.jar
+        run: |
+          set -eo pipefail
+          pin=$(node -e 'const [, sum, version] = require("fs").readFileSync("run.ts", "utf8").match(/const TLC_TOOL =\s*"[^"]*sha256:([0-9a-f]{64})\]@([^"]+)"/); console.log(version, sum);')
+          read -r version sum <<< "$pin"
+          curl --fail --location --output "$TLA2TOOLS" "https://github.com/tlaplus/tlaplus/releases/download/v$version/tla2tools.jar"
+          echo "$sum  $TLA2TOOLS" | sha256sum --check
+      # The render tests install Pele and Mermaid with npm under XDG_CACHE_HOME.
+      # The watchdog dumps every Node process's stack when a group runs past
+      # 12 minutes, four times the 121 to 180 s each group took in two runs,
+      # and well inside the job limit above.
+      - name: Test
+        env:
+          TLA2TOOLS: ${{ runner.temp }}/tla2tools.jar
+          XDG_CACHE_HOME: ${{ runner.temp }}/xdg
+          WATCHDOG_REPORTS: ${{ runner.temp }}/reports
+          FILES: ${{ matrix.files }}
+          SELECT: ${{ matrix.select }}
+        run: |
+          shopt -s extglob failglob
+          # shellcheck disable=SC2206 # FILES is a glob to expand here
+          files=(test/$FILES.test.ts)
+          JAVA="$(command -v java)" bash "$GITHUB_WORKSPACE/.github/scripts/statechart-watchdog.sh" node --disable-warning=ExperimentalWarning --test ${SELECT:+"$SELECT"} "${files[@]}"
+
+  statechart-windows:
+    name: Statechart on Windows
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+        working-directory: plugins/pstack/skills/statechart/scripts
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24.22.1"
+          package-manager-cache: false
+      - name: Download TLC
+        env:
+          TLA2TOOLS: ${{ runner.temp }}/tla2tools.jar
+        run: |
+          pin=$(node -e 'const [, sum, version] = require("fs").readFileSync("run.ts", "utf8").match(/const TLC_TOOL =\s*"[^"]*sha256:([0-9a-f]{64})\]@([^"]+)"/); console.log(version, sum);')
+          read -r version sum <<< "$pin"
+          curl --fail --location --output "$TLA2TOOLS" "https://github.com/tlaplus/tlaplus/releases/download/v$version/tla2tools.jar"
+          echo "$sum  $TLA2TOOLS" | sha256sum --check
+      # The command spawned /bin/sh and missed TLC's \r\n message ends on
+      # Windows (#345). The checkout has \r\n line ends, so diff ignores them.
+      - name: Chart a spec with a broken rule
+        env:
+          TLA2TOOLS: ${{ runner.temp }}/tla2tools.jar
+          OUT: ${{ runner.temp }}/MediaPlayer
+        run: |
+          corpus=test/corpus/MediaPlayer
+          status=0
+          JAVA="${JAVA_HOME_21_X64:?the runner has no Java 21}/bin/java" node --disable-warning=ExperimentalWarning statechart.ts "$corpus/MediaPlayer.tla" --view "$corpus/view.mjs" --out "$OUT" || status=$?
+          echo "statechart exited $status"
+          test "$status" -eq 1
+          diff --strip-trailing-cr "$corpus/report.md" "$OUT/report.md"
+          diff --strip-trailing-cr "$corpus/chart.mmd" "$OUT/chart.mmd"
+      # The skill's first run finds TLC and Java with mise. Every other job
+      # sets TLA2TOOLS, so only these two steps reach mise, through the named
+      # child environment run.ts gives it. The mise release is pinned with its
+      # checksum, as TLC is above. Expand-Archive unpacks it because the runner
+      # has no unzip.
+      - name: Install mise
+        env:
+          MISE_VERSION: "2026.10.21"
+          MISE_SHA256: 0387d927adb6bee5c69dac077e8c5ae9827463287c17c311bf72dc70b21e566e
+          MISE_ZIP: ${{ runner.temp }}/mise.zip
+          MISE_DEST: ${{ runner.temp }}/mise-dist
+        run: |
+          curl --fail --location --output "$MISE_ZIP" "https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-windows-x64.zip"
+          echo "$MISE_SHA256  $MISE_ZIP" | sha256sum --check
+          # shellcheck disable=SC2016 # PowerShell expands these, not bash
+          powershell -NoProfile -NonInteractive -Command 'Expand-Archive -LiteralPath $env:MISE_ZIP -DestinationPath $env:MISE_DEST -Force'
+          cygpath --windows "$MISE_DEST/mise/bin" >> "$GITHUB_PATH"
+      - name: Chart a spec with TLC and Java from mise
+        env:
+          OUT: ${{ runner.temp }}/MediaPlayer-mise
+        run: |
+          unset TLA2TOOLS JAVA
+          mise --version
+          corpus=test/corpus/MediaPlayer
+          status=0
+          node --disable-warning=ExperimentalWarning statechart.ts "$corpus/MediaPlayer.tla" --view "$corpus/view.mjs" --out "$OUT" || status=$?
+          echo "statechart exited $status"
+          test "$status" -eq 1
+          diff --strip-trailing-cr "$corpus/report.md" "$OUT/report.md"
+          diff --strip-trailing-cr "$corpus/chart.mmd" "$OUT/chart.mmd"
+          mise ls --installed
+
+  shellcheck:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run shellcheck
+        run: |
+          shellcheck --version
+          find . -path ./.git -prune -o -path '*/node_modules' -prune -o -name '*.sh' -print |
+            sed 's#^\./##' | sort | tee /dev/stderr | xargs shellcheck --severity=warning
+
+  actionlint:
+    name: Workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # This job and the two below reach for their tool through docker or npx
+      # because allowed_actions permits only GitHub-owned actions, verified
+      # creators, oven-sh/setup-bun and zizmorcore/zizmor-action.
+      #
+      # The 1.7.12 tag is mutable, so the digest is what actually pins this.
+      # Resolved with: docker buildx imagetools inspect rhysd/actionlint:1.7.12
+      - name: Run actionlint
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo" -w /repo \
+            rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 \
+            -no-color
+
+  markdownlint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Rule selection and the reasoning behind it live in
+      # .markdownlint-cli2.jsonc, which the tool picks up from the repo root.
+      - name: Run markdownlint
+        run: npx --yes markdownlint-cli2@0.18.1 '**/*.md'
+
+  links:
+    name: Markdown links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # --offline resolves relative file and fragment targets and skips every
+      # remote URL, so a contributor's PR never fails on someone else's link
+      # rot. tools/validate-skills.mjs already covers the skills tree; this
+      # reaches the README, CHANGES, CONTRIBUTING and the other top-level docs.
+      #
+      # Resolved with: docker buildx imagetools inspect lycheeverse/lychee:0.24.2
+      - name: Check relative links and fragments
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo" -w /repo \
+            lycheeverse/lychee:0.24.2@sha256:e2d19e57cf6ab037026f20b8e449a1f30d9d7f81eef4194763aab2eab20bd28d \
+            --offline --no-progress --include-fragments \
+            --exclude-path node_modules --exclude-path .git '**/*.md'
+
+  # macOS differs from ubuntu where the audit looks: BSD du pads its sizes and
+  # the temp directory sits behind the /var link.
+  macos-worktree-audit:
+    name: macOS worktree audit
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install the copy of Pi the tests load
+        run: bun install --frozen-lockfile
+        working-directory: plugins
+      - name: Test the worktree audit
+        run: bun test --timeout 30000 tests/worktree-audit.test.mjs

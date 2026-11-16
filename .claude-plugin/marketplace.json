@@ -1,0 +1,16 @@
+{
+  "name": "oms",
+  "owner": {
+    "name": "Michael Denyer",
+    "url": "https://github.com/michael-denyer"
+  },
+  "description": "pstack-claude with T3 Code tool mapping. Upstream workflows and models are unchanged.",
+  "plugins": [
+    {
+      "name": "pstack",
+      "source": "./plugins/pstack",
+      "description": "If you want to go fast, go deep first. pstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence. Original pstack by Lauren Tan (poteto).",
+      "version": "2.0.2"
+    }
+  ]
+}

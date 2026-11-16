@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "omsVersion": "2.0.1",
+  "date": "2026-11-16",
+  "upstream": {
+    "repository": "https://github.com/michael-denyer/pstack-claude",
+    "version": "0.9.138",
+    "commit": "a12b04786023e762f12f5de7bb5fafb8c23f8c36"
+  },
+  "host": {
+    "serverVersion": "0.1.10-nightly.20261116.4761",
+    "environmentId": "9e1444f8-a7d4-49b5-9008-4610d2b851a8"
+  },
+  "mappingSha256": "c446723199bba788bf0e7ac767aa711ac34c36037b7f3895e5890d3db89e284c",
+  "package": {
+    "installation": "isolated CODEX_HOME; personal host configuration unchanged",
+    "selector": "pstack@oms",
+    "discoveredEnabledSkills": 67,
+    "discoveryErrors": []
+  },
+  "nativeSmoke": {
+    "status": "completed",
+    "settings": "inherited; executed model and effort not separately measured",
+    "mappingSha256Matches": true,
+    "scope": "explicit installed poteto-mode and bro consumption"
+  },
+  "delegatedSmoke": {
+    "threadId": "thread:delegated-task:command%3Amcp%3Adb865e04-4940-41b4-adbd-c7575ff9446e%3Adelegate-task%3Aoms-201-live-codex-shared-20261116-1",
+    "link": "[OMS 2.0.1 T3 shared read-only smoke](t3-thread://v2/9e1444f8-a7d4-49b5-9008-4610d2b851a8/thread:delegated-task:command%3Amcp%3Adb865e04-4940-41b4-adbd-c7575ff9446e%3Adelegate-task%3Aoms-201-live-codex-shared-20261116-1)",
+    "run": {
+      "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Adb865e04-4940-41b4-adbd-c7575ff9446e%253Adelegate-task%253Aoms-201-live-codex-shared-20261116-1:ordinal:1",
+      "ordinal": 1,
+      "status": "completed",
+      "providerInstanceId": "codex",
+      "model": "gpt-6.1-sol",
+      "executedModel": "gpt-6.1-sol",
+      "requestedAt": "2026-11-16T02:41:19.727Z",
+      "startedAt": "2026-11-16T02:41:19.802Z",
+      "completedAt": "2026-11-16T02:42:17.658Z"
+    },
+    "hostReportedConfiguration": {
+      "threadId": "thread:delegated-task:command%3Amcp%3Adb865e04-4940-41b4-adbd-c7575ff9446e%3Adelegate-task%3Aoms-201-live-codex-shared-20261116-1",
+      "modelSelection": {
+        "instanceId": "codex",
+        "model": "gpt-6.1-sol",
+        "options": [
+          {
+            "id": "reasoningEffort",
+            "value": "medium"
+          },
+          {
+            "id": "serviceTier",
+            "value": "default"
+          }
+        ]
+      },
+      "runtimeMode": "full-access",
+      "interactionMode": "default"
+    },
+    "observedReadOrder": [
+      "$ /bin/zsh -lc 'cat /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-201-live-s2dco9sy/plugins/cache/oms/pstack/2.0.1/skills/poteto-mode/SKILL.md'",
+      "$ /bin/zsh -lc 'cat /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-201-live-s2dco9sy/plugins/cache/oms/pstack/2.0.1/skills/poteto-mode/references/t3-tools.md'",
+      "$ /bin/zsh -lc 'cat /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-201-live-s2dco9sy/plugins/cache/oms/pstack/2.0.1/skills/poteto-mode/references/codex-tools.md'",
+      "$ /bin/zsh -lc 'cat /private/var/folders/l2/dws8_3gn413gpc15_fjd2h0w0000gn/T/oms-201-live-s2dco9sy/plugins/cache/oms/pstack/2.0.1/skills/bro/SKILL.md'",
+      "$ /bin/zsh -lc 'pwd"
+    ],
+    "scope": "explicit installed skill consumption, T3 dispatch options, model execution and result delivery"
+  },
+  "worktreeAttempt": {
+    "status": "rejected_before_child_creation",
+    "code": "invalid_request",
+    "message": "Unable to resolve the parent checkout commit.",
+    "parentWorkspace": "/Users/williamwue/Code",
+    "parentWorkspaceIsGitRepository": false
+  },
+  "notVerified": [
+    "worktree execution",
+    "automatic plugin loading in a normal T3 session",
+    "cross-provider delegation",
+    "T3 Claude backend",
+    "cancellation",
+    "PR watches",
+    "all pstack workflows"
+  ]
+}

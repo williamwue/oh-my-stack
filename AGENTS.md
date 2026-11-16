@@ -1,15 +1,20 @@
 # OMS
 
-Build a small Windows and macOS developer starter kit. Keep components and target
-environments separate. Codex, Claude Code and T3 Code are peer user-facing
-targets. Shared native installations must not be removed while another target
-uses them.
+OMS tracks michael-denyer/pstack-claude and adds only T3 Code tool adaptation.
+Keep upstream workflows, model defaults, hooks, and runtime support unchanged.
+Do not add a scheduler, role router, installer, configuration store, or component catalog.
 
-All prepared pstack packages include the local T3 mapping. Keep upstream
-workflows/models unchanged; do not add a scheduler or role router. There is no
-separate T3 repository or user-facing T3 patch switch.
+T3 mapping lives in plugins/pstack/skills/poteto-mode/references/t3-tools.md.
+Its conditional entry lines are owned by tools/generate.mjs; regenerate rather than
+editing generated lines. The native marketplaces are named oms; skills remain pstack.
+VERSION is the OMS distribution version; docs/t3.md records the upstream baseline.
 
-Run `./tests/run.ps1`. Report mock, native-host and live-session evidence
-separately. Skip unsupported environments explicitly; do not provision WSL.
-Preserve existing plugins, personal configuration and book authorization.
-Use native login, no credential store or application env-file loading.
+Run bun tools/generate.mjs --check and bun test tests/. Follow upstream's additional
+checks for touched tooling. Report fixture, native-host, and live-session evidence
+separately. Never use a model call or an external write merely to run a fixture test.
+Do not spawn agents unless the task explicitly requests them.
+
+Preserve existing plugins, personal model sheets, AGENTS.md settings, native logins,
+books, author attribution, and authorization records. Historical evidence under
+docs/oms-history/ is archival; preserve its facts and bytes. Source changes do not
+authorize installing, updating, or removing plugins in the user's host configuration.
