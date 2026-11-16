@@ -3,7 +3,7 @@
 OMS 是 [pstack-claude](https://github.com/michael-denyer/pstack-claude) 的轻量派生版，只增加 T3 Code 工具适配。
 技能、工作流、模型默认值、hooks 和其他宿主支持沿用上游。原作者为 Lauren Tan，移植版作者为 Michael Denyer。
 
-当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.1**。
+当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.2**。
 源码准备完成不代表已经发布；远程安装需要所选远程分支包含新版，发布前可用本地路径验证。
 完整上游说明保留在 [README.upstream.md](README.upstream.md)，OMS 差异见 [T3 适配](docs/t3.md)。
 
@@ -40,7 +40,12 @@ T3 使用其 Codex 或 Claude 后端的同一份原生插件。只在需要的�
 
 新会话中选择 `pstack:poteto-mode`，模型配置使用 `pstack:setup-pstack`。
 Codex 可输入 `$` 选择技能，Claude Code 使用 `/pstack:poteto-mode`。
-个人模型表和全局指令继续由上游机制加载，OMS 不写入或覆盖它们。
+原生模型表和全局指令继续由上游机制加载。
+
+在 T3 中运行 `pstack:setup-pstack`，可为原有角色选择不同 provider 的模型。
+T3 配置保存到项目的 `.agents/pstack-models.t3.md` 或用户的 `~/.t3/pstack-models.md`，
+项目表整体优先。T3 会在派发角色任务前读取配置，Claude 主会话也可使用 Codex 子任务。
+这些配置不覆盖原生 Claude、Codex 模型表或 hook 设置，详见 [T3 模型配置](docs/t3.md#跨模型配置)。
 
 只有会话提供 T3 Code 工具时才读取 T3 映射；其他会话继续使用上游宿主映射。
 T3 的调用方式服从当前宿主工具和权限，插件不会创建额外的调度器。
@@ -69,6 +74,7 @@ bun test tests/
 2.0.1 的精简与真实调用见 [T3 验证记录](docs/oms-verification-t3-2.0.1.md)。
 后续日常安装、自动加载及启动 hook 验收见 [安装记录](docs/oms-daily-install-2.0.1.md)。
 独立工作区的后续通过结果见 [worktree 验证](docs/oms-worktree-verification-2.0.1.md)。
+2.0.2 的跨模型配置、原生打包和真实 Claude 到 Codex 调用见 [模型配置验收](docs/oms-t3-models-verification-2.0.2.md)。
 <a id="other-harnesses"></a>
 
 ## 其他宿主

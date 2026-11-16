@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 2.0.2 - T3 cross-provider role configuration
+
+setup-pstack discovers T3 provider instances, full model IDs, and supported
+efforts. T3-only Markdown role sheets preserve the upstream role schema and
+leave native backend sheets and hooks unchanged. The T3 mapping reads the
+saved choices before dispatch and uses the host's cross-provider task tools.
+
 ## 2.0.1 - T3 mapping defers host policy to T3
 
 Keep only pstack-to-T3 action bindings in t3-tools.md. Dispatch, lifecycle,

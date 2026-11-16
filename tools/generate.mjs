@@ -431,11 +431,13 @@ export function regions(models) {
 const PREAMBLE_RUNTIMES = RUNTIMES.filter((runtime) => runtime.preamble);
 const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
 const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "orchestrate", "refactoring", "shipping"];
+const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.";
 const T3_LEADS = new Map([
+  [`${SKILLS}/setup-pstack/SKILL.md`, "When T3 Code tools are available, use [T3 model configuration](references/t3.md) for model discovery, sheet storage, and dispatch validation before applying the backend-specific steps below."],
   [`${SKILLS}/poteto-mode/SKILL.md`, "When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) before using host tools. It takes precedence for tool selection; keep the upstream workflow and model policy."],
   [`${SKILLS}/poteto-mode/references/codex-tools.md`, "When T3 Code tools are available, read [the T3 mapping](t3-tools.md) before using host tools. It takes precedence for T3 tool selection; use this file for the remaining Codex actions."],
 ]);
-const LEAD_LINES = [...PREAMBLE_RUNTIMES.map((runtime) => runtime.preamble), DRIVER_LINE, ...T3_LEADS.values()];
+const LEAD_LINES = [...PREAMBLE_RUNTIMES.map((runtime) => runtime.preamble), DRIVER_LINE, T3_ROLE_LEAD, ...T3_LEADS.values()];
 
 // The skills with a row in a runtime mapping's Per-skill notes table, in row order.
 export function noteSkills(runtime, markdown) {
@@ -464,6 +466,10 @@ export function loadLeadLines(root = repo) {
     }
   }
   for (const playbook of DRIVER_PLAYBOOKS) leads.set(`${SKILLS}/poteto-mode/playbooks/${playbook}.md`, [DRIVER_LINE]);
+  for (const skill of new Set(loadModels(root).roles.map((role) => role.skill))) {
+    const file = `${SKILLS}/${skill}/SKILL.md`;
+    if (!T3_LEADS.has(file)) leads.set(file, [...(leads.get(file) ?? []), T3_ROLE_LEAD]);
+  }
   for (const [file, line] of T3_LEADS) leads.set(file, [...(leads.get(file) ?? []), line]);
   return leads;
 }

@@ -8,6 +8,8 @@ import { changes, loadLeadLines, plan, problems } from "../tools/generate.mjs";
 const repo = fileURLToPath(new URL("..", import.meta.url));
 const mode = "plugins/pstack/skills/poteto-mode/SKILL.md";
 const codex = "plugins/pstack/skills/poteto-mode/references/codex-tools.md";
+const setup = "plugins/pstack/skills/setup-pstack/SKILL.md";
+const setupMapping = "plugins/pstack/skills/setup-pstack/references/t3.md";
 const mapping = "plugins/pstack/skills/poteto-mode/references/t3-tools.md";
 const made = [];
 afterEach(() => {
@@ -25,11 +27,13 @@ function fixture() {
 }
 
 describe("T3 distribution", () => {
-  test("a lost T3 entry is detected and regenerated in both discovery paths", () => {
+  test("lost T3 entries are detected and regenerated for routing and setup", () => {
     const root = fixture();
-    for (const file of [mode, codex]) {
+    const roles = JSON.parse(readFileSync(join(root, "plugins/pstack/models.json"), "utf8")).roles;
+    const entries = new Set([mode, codex, setup, ...roles.map((role) => `plugins/pstack/skills/${role.skill}/SKILL.md`)]);
+    for (const file of entries) {
       const original = readFileSync(join(root, file), "utf8");
-      const lead = loadLeadLines(root).get(file).find((line) => line.includes("the T3 mapping"));
+      const lead = loadLeadLines(root).get(file).find((line) => line.startsWith("When T3 Code tools are available,"));
       expect(lead).toStartWith("When T3 Code tools are available,");
       writeFileSync(join(root, file), original.replace(lead + "\n\n", ""));
       const intended = plan(root);
@@ -42,6 +46,12 @@ describe("T3 distribution", () => {
     const root = fixture();
     rmSync(join(root, mapping));
     expect(problems(root).some((message) => message.includes("t3-tools.md") && message.includes("missing"))).toBe(true);
+  });
+
+  test("a missing T3 setup reference fails packaged link validation", () => {
+    const root = fixture();
+    rmSync(join(root, setupMapping));
+    expect(problems(root).some((message) => message.includes("references/t3.md") && message.includes("missing"))).toBe(true);
   });
 
   test("native marketplaces identify OMS while keeping the upstream skill namespace", () => {
