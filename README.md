@@ -78,6 +78,7 @@ bun test tests/
 2.0.2 的日常安装、角色配置和 Opus/Sol/Astra 闭环验收见 [日常升级记录](docs/oms-daily-install-2.0.2.md)。
 后续五模型分工及真实调用见 [五模型配置验收](docs/oms-five-model-profile-2026-11-16.md)。
 可选角色表见 [T3 五模型示例](docs/examples/pstack-models-t3.md)，安装不会自动应用该示例。
+只有 Codex 后端时使用 [T3 纯 Codex 示例](docs/examples/pstack-models-t3-codex-only.md)，无需安装 Claude。
 <a id="other-harnesses"></a>
 
 ## 其他宿主

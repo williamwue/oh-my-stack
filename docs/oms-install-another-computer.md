@@ -17,6 +17,7 @@ cd oms-2.0.2
 核对 `SHA256SUMS.txt` 后解压。将源码放在长期保留的位置。
 
 在源码根目录选择需要的后端安装。两个都使用时分别执行。
+只有 Codex 的电脑只执行 Codex 安装段，不需要安装 Claude。
 
 Codex：
 
@@ -53,7 +54,14 @@ codex plugin add pstack@oms
 
 插件安装不会自动带上原电脑的角色表或 T3 项目默认模型。
 新电脑的 T3 会话运行 `pstack:setup-pstack`，让它读取当前 catalog，
-参考[五模型示例](examples/pstack-models-t3.md)配置所需角色。
+参考[五模型示例](examples/pstack-models-t3.md)或[纯 Codex 示例](examples/pstack-models-t3-codex-only.md)配置所需角色。
+
+只有 Codex 后端时选择纯 Codex 示例。
+它保留 Sol 常规实现、Astra 疑难诊断与评审，架构候选改为 Sol 与 Astra。
+裁判池按顺序列出 Astra、Sol，并排除父会话同模型家族。
+因此 Astra 主控时通常由 Sol 裁判，Sol 主控时通常由 Astra 裁判。
+Terra 仍为显式专项调用，须先确认目标电脑 catalog 提供该模型。
+不能原样复制含 Opus、Sonnet 的五模型表并期待自动回退；不可用条目须修正。
 
 希望多项目共用时保存到用户表 `~/.t3/pstack-models.md`。
 只想应用到一个项目时，保存到该仓库根目录的 `.agents/pstack-models.t3.md`。
@@ -69,12 +77,16 @@ codex plugin add pstack@oms
 ```text
 请从已经安装的 OMS 2.0.2 读取 setup-pstack 和 T3 映射，
 核对当前 provider catalog，并参考仓库 docs/examples/pstack-models-t3.md，
-将五模型分工配置到用户级 ~/.t3/pstack-models.md。
+如果只有 Codex provider，则改用 docs/examples/pstack-models-t3-codex-only.md。
+将选定分工配置到用户级 ~/.t3/pstack-models.md。
 先检查并备份已有配置，保留其他插件、原生模型表、全局指令、登录和 hook 偏好。
 provider、模型或 effort 不可用时报告，不静默替换。
 我允许按配置启动一个有明确边界的代表性子任务，核对真实执行型号、effort 和结果。
 不要创建顶层线程、修改生产项目、部署或发布。
 ```
+
+以上角色表示例用于 T3。只运行原生 Codex CLI 时，使用该宿主的 setup-pstack 配置机制，
+不要把带 provider 前缀的 T3 表粘贴到原生 Codex 模型表。
 
 ## 检查新会话
 

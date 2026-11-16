@@ -37,6 +37,8 @@ Windows 使用 `Get-FileHash ./oms-2.0.2.zip -Algorithm SHA256` 对照清单，�
 [五模型示例](examples/pstack-models-t3.md)使用 Astra 主控、Opus 与 Astra 架构候选、Sol 常规执行、Sonnet 裁判池首选。
 Terra 保留为显式专项调用，没有新增常驻角色。
 该示例不属于插件默认值，不随安装自动写入。
+只有 Codex 后端时可选择[纯 Codex 示例](examples/pstack-models-t3-codex-only.md)，无需安装 Claude。
+该示例以 Sol 与 Astra 比较架构，并从不同于主会话模型家族的席位选择裁判。
 
 另一台电脑的 provider 实例 ID、可用模型和 effort 可能不同，须由 T3 catalog 验证后再保存。
 角色表不会切换父会话模型，也不会自动增加或排列工作步骤。
