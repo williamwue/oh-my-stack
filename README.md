@@ -75,6 +75,7 @@ bun test tests/
 后续日常安装、自动加载及启动 hook 验收见 [安装记录](docs/oms-daily-install-2.0.1.md)。
 独立工作区的后续通过结果见 [worktree 验证](docs/oms-worktree-verification-2.0.1.md)。
 2.0.2 的跨模型配置、原生打包和真实 Claude 到 Codex 调用见 [模型配置验收](docs/oms-t3-models-verification-2.0.2.md)。
+2.0.2 的日常安装、角色配置和 Opus/Sol/Astra 闭环验收见 [日常升级记录](docs/oms-daily-install-2.0.2.md)。
 <a id="other-harnesses"></a>
 
 ## 其他宿主
