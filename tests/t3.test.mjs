@@ -58,7 +58,7 @@ describe("T3 distribution", () => {
     for (const file of [".claude-plugin/marketplace.json", ".agents/plugins/marketplace.json"]) {
       const marketplace = JSON.parse(readFileSync(join(repo, file), "utf8"));
       expect(marketplace.name).toBe("oms");
-      expect(marketplace.plugins.map((plugin) => plugin.name)).toEqual(["pstack", "t3-pstack"]);
+      expect(marketplace.plugins.map((plugin) => plugin.name)).toEqual(["pstack"]);
       for (const plugin of marketplace.plugins) {
         const dir = typeof plugin.source === "string" ? plugin.source : plugin.source.path;
         const manifestDir = file.startsWith(".agents/") ? ".codex-plugin" : ".claude-plugin";

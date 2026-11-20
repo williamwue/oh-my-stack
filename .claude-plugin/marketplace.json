@@ -4,18 +4,13 @@
     "name": "Michael Denyer",
     "url": "https://github.com/michael-denyer"
   },
-  "description": "OMS distributes pstack for native hosts and t3-pstack for T3 Code.",
+  "description": "OMS: pstack for native hosts and T3 Code in one plugin.",
   "plugins": [
     {
       "name": "pstack",
       "source": "./plugins/pstack",
       "description": "If you want to go fast, go deep first. pstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence. Original pstack by Lauren Tan (poteto).",
       "version": "2.0.2"
-    },
-    {
-      "name": "t3-pstack",
-      "source": "./plugins/t3-pstack",
-      "description": "pstack for T3 Code: rigorous agent workflows whose panels and fan-outs run across model families through T3. Original pstack by Lauren Tan (poteto)."
     }
   ]
 }
