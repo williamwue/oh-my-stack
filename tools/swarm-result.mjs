@@ -1,13 +1,18 @@
-// Adapters supply a terminal report or null for a worker that dropped out.
+import { nextAction } from "../.agents/skills/oms-swarm/scripts/collect.mjs";
+
+// In-process hosts can dispatch through a callback. Chat hosts retain real task
+// IDs and feed the same decision function after each completion notification.
 export async function collectSlice(first, required, retry) {
+  const attempts = [];
   let report = first;
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    if (!report || report.status === "BLOCKED") return { status: "gap", attempt };
-    if (!["PASS", "ISSUES"].includes(report.status)) throw new Error("Unknown worker status");
-    if (required.sha === report.sha && required.method === report.method) {
-      return { status: report.status, attempt, report };
+  for (;;) {
+    if (report && !["PASS", "ISSUES", "BLOCKED"].includes(report.status)) {
+      throw new Error("Unknown worker status");
     }
-    if (attempt === 1) report = await retry();
+    attempts.push({ id: String(attempts.length + 1), text: report ? JSON.stringify(report) : null });
+    const { action, attempt } = nextAction({ required, attempts });
+    if (action === "gap") return { status: action, attempt };
+    if (action !== "retry") return { status: action, attempt, report };
+    report = await retry();
   }
-  return { status: "gap", attempt: 2 };
 }

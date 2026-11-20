@@ -1,5 +1,7 @@
 # 两分片 swarm 首次实机验收
 
+后续开发入口为项目技能 [oms-swarm](../.agents/skills/oms-swarm/SKILL.md)。该入口在收到宿主终态后运行共享收集器，并按它输出的动作驱动下一次派发。缺证据的实机验收见[重派记录](swarm-live-retry.md)。
+
 2026-11-20。T3 Code 和独立 Codex CLI 均完成了一次覆盖型 swarm。执行入口分别是 OMS 分发的 t3-pstack 2.5.2 的 swarm 和独立 Codex 0.171.0 的原生 spawn_agent。本轮验证共同的工作流行为。两个入口仍复用了现有移植的技能文本。
 
 ## 共同输入与完成条件
