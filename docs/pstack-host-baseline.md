@@ -37,7 +37,7 @@
 
 | 原版场景 | 四个宿主分别要证明什么 | 当前判定 |
 |---|---|---|
-| swarm 分片与竞赛 | 先声明覆盖范围或竞赛选择规则，给独立 brief；覆盖分片必须有终态。带 SHA / 测量方法的任务缺证据须重派一次，再缺记 gap；掉线不得计作 PASS。并行写要独立产物。 | T3 → Codex 在现有发行包上有单 worker 成功例；多 worker、竞赛、缺证据与取消路径，以及三个原生宿主均待验。 |
+| swarm 分片与竞赛 | 先声明覆盖范围或竞赛选择规则，给独立 brief；覆盖分片必须有终态。带 SHA / 测量方法的任务缺证据须重派一次，再缺记 gap；掉线不得计作 PASS。并行写要独立产物。 | T3 → Codex、独立 Codex、Claude Code 和 OpenCode 2 均已通过[两分片并行与缺 SHA 自动重派](swarm-live-retry.md)。竞赛、取消与重试耗尽后的宿主行为仍待实测。 |
 | arena | 至少两个候选，隔离实现并按同一 rubric 比较；裁判按原版顺序选与父模型不同厂商的候选。裁判不可用、父厂商未知各有单独披露规则。最后选基底、移植优点并运行验证。 | T3 和具备多模型的 OpenCode 有候选接口；须测实际厂商与写入隔离。Claude/Codex 原生目录受限时可测原版允许的降级；不能把跳过裁判标成完整交叉评审。 |
 | interrogate | 各 reviewer 收到一致的意图、基线与未提交改动。父线程重跑每项发现、排除未复现项、合并同根问题。允许零发现，交付报告后停止。 | 四端均需验证未提交 diff 在隔离工作区可见、复验环境一致；跳过 arena 的交叉裁判、选基底和移植步骤。 |
 | babysit / shipping / autopilot-stack | 区分仅检查、处理评审、持续跟进与合并授权；按当前 head 验证。stack 在验证完成处交接。持久唤醒需要宿主或服务支持。 | 四端均依赖实际 forge、账号和授权；本阶段无真实 PR 操作。 |
@@ -45,6 +45,6 @@
 
 前三行的精确分支见[工作流索引](pstack-workflow-inventory.md)。先前的[新会话实测](t3-thread://v2/1d3f0332-60f4-46fa-bf35-59fe3034cfdb/mcp:launch:b997468d840659e077b87415e737b16db1e9711e3f19b2638b5e3daf4ccbe483)证明 T3 中 Codex 父会话能从发行包发现 swarm、使用角色表并得到 Sol 子任务终态。仓库另有[早期 T3 Claude 父会话的跨 provider 记录](oms-t3-models-verification-2.0.2.md)，使用旧适配；它不是新 OMS 在独立 Claude Code 或 T3 Claude 后端的验收。
 
-## 下一次实现的最小验证
+## 两分片验收进度
 
-在 T3 和独立 Codex 各用同一小仓库、同一提交做两分片 swarm。一名 worker 只读，另一名写入独立产物；用独立夹具模拟缺少指定 SHA 的回报，检查一次重派及最终 gap。证据应含宿主版本、角色行、请求参数、可得的执行模型、基线和产物、每个 worker 的终态与汇总报告。随后在独立 Claude Code、OpenCode 2 及 T3 → Claude 重用该案例。不同宿主可有不同执行机制，必须能从结果判定哪些原版条件实际得到满足。
+T3 → Codex、独立 Codex、独立 Claude Code 和独立 OpenCode 均已用同一提交验证[两分片与独立文件产物](swarm-two-slices.md)，以及[首次缺 SHA 后只重派对应分片](swarm-live-retry.md)。T3 → Claude 的同例运行仍待实测。连续两次缺证据后的 gap 已由收集器测试覆盖，宿主端故障注入尚待验证。
