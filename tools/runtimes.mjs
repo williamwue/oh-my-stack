@@ -370,7 +370,12 @@ export function piModelNamesSection(models) {
 
 export function validateCodexMarketplace(text, { expectedName, pathExists }) {
   const manifest = JSON.parse(text);
-  const plugins = manifest.plugins ?? [];
+  const entries = manifest.plugins ?? [];
+  const t3 = entries.find((entry) => entry.name === "t3-pstack");
+  if (t3 && (t3.source?.path !== "./plugins/t3-pstack" || !pathExists(t3.source.path))) {
+    throw new Error("T3 marketplace source must resolve to ./plugins/t3-pstack");
+  }
+  const plugins = entries.filter((entry) => entry !== t3);
   if (plugins.length !== 1) {
     throw new Error(`.agents/plugins/marketplace.json: expected 1 plugin entry, found ${plugins.length}`);
   }

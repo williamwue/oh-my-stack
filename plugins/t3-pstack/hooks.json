@@ -1,0 +1,10 @@
+{
+  "t3-pstack": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "sh ./hooks/session-start.sh antigravity"
+      }
+    ]
+  }
+}

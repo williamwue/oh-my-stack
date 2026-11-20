@@ -1,12 +1,12 @@
 # OMS
 
-OMS tracks michael-denyer/pstack-claude and adds only T3 Code tool adaptation.
+OMS distributes native pstack and the upstream chhoumann/t3-pstack plugin side by side. For a T3 update, import the pinned upstream plugins/pstack Git tree unchanged at plugins/t3-pstack and update its README source pin.
 Keep upstream workflows, model defaults, hooks, and runtime support unchanged.
 Do not add a scheduler, role router, installer, configuration store, or component catalog.
 
 T3 mapping lives in plugins/pstack/skills/poteto-mode/references/t3-tools.md.
 Its conditional entry lines are owned by tools/generate.mjs; regenerate rather than
-editing generated lines. The native marketplaces are named oms; skills remain pstack.
+editing generated lines. The native marketplaces are named oms; the plugins use their respective upstream skill namespaces.
 VERSION is the OMS distribution version; docs/t3.md records the upstream baseline.
 
 Run bun tools/generate.mjs --check and bun test tests/. Follow upstream's additional

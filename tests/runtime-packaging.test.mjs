@@ -124,7 +124,9 @@ describe("manifests", () => {
     expect(Object.values(shared(claude))).not.toContain(undefined);
     expect(shared(codex)).toEqual(shared(claude));
     expect(claudeMarketplace.owner).toEqual(claude.author);
-    expect(claudeMarketplace.plugins.map(({ name, source }) => [name, source])).toEqual([[claude.name, "./plugins/pstack"]]);
+    expect(claudeMarketplace.plugins.map(({ name, source }) => [name, source])).toEqual([
+      [claude.name, "./plugins/pstack"], ["t3-pstack", "./plugins/t3-pstack"],
+    ]);
     expect(shared(piPackage)).toEqual({ ...shared(claude), keywords: ["pi-package", ...claude.keywords] });
     expect(piPackage.version).toBe(claude.version);
     expect({ ...shared(copilot), keywords: claude.keywords }).toEqual(shared(claude));
@@ -134,9 +136,10 @@ describe("manifests", () => {
     expect(kimi.name).toBe(claude.name);
     expect(kimi.version).toBe(claude.version);
     expect(codexMarketplace.name).toBe(claudeMarketplace.name);
-    expect(codexMarketplace.interface.displayName).toBe(codex.interface.displayName);
+    expect(codexMarketplace.interface.displayName).toBe("OMS");
     expect(codexMarketplace.plugins.map(({ name, source, category }) => [name, source.path, category])).toEqual([
       [codex.name, claudeMarketplace.plugins[0].source, codex.interface.category],
+      ["t3-pstack", "./plugins/t3-pstack", "Developer Tools"],
     ]);
   });
 

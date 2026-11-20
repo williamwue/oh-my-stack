@@ -1,11 +1,7 @@
 # Oh My Stack
 
-OMS 是 [pstack-claude](https://github.com/michael-denyer/pstack-claude) 的轻量派生版，只增加 T3 Code 工具适配。
-技能、工作流、模型默认值、hooks 和其他宿主支持沿用上游。原作者为 Lauren Tan，移植版作者为 Michael Denyer。
-
-当前源码基线为 pstack-claude **0.9.138**，OMS 插件版本为 **2.0.2**。
-固定版本安装与跨电脑迁移见 [2.0.2 发布说明](docs/release-2.0.2.md)和[另一台电脑安装指南](docs/oms-install-another-computer.md)。
-完整上游说明保留在 [README.upstream.md](README.upstream.md)，OMS 差异见 [T3 适配](docs/t3.md)。
+OMS 为独立 Claude Code 和 Codex 分发 `pstack@oms`，为 T3 Code 分发 `t3-pstack@oms`。
+T3 插件直接取自 [chhoumann/t3-pstack 2.5.2](https://github.com/chhoumann/t3-pstack/tree/6584ddba12e03b5ccd8453c7940dbe1a3b5c07d3)，保留其技能、角色集合和启动 hook。独立宿主继续使用基于 pstack-claude 0.9.138 的插件。
 
 <a id="install"></a>
 
@@ -33,28 +29,19 @@ codex plugin add pstack@oms
 本地验证时，将 marketplace add 的仓库参数替换为此仓库的绝对路径。
 测试安装须使用独立且预先创建的 `CODEX_HOME` 或 `CLAUDE_CONFIG_DIR`，不复用个人宿主目录。
 
-T3 使用其 Codex 或 Claude 后端的同一份原生插件。只在需要的后端安装，无需额外注册 T3 插件。
-原生 hooks 的信任与新会话加载仍按宿主要求完成；安装成功不等于真实会话验证通过。
+### T3 Code
 
-## 使用与配置
+在 T3 实际使用的后端配置目录注册同一个 OMS marketplace，选择 `t3-pstack@oms`。Codex 使用 `codex plugin add t3-pstack@oms`，Claude Code 使用 `/plugin install t3-pstack@oms`。若同一配置目录已经启用 `pstack@oms`，切换时先停用旧插件，避免两个启动 hook 竞争。需要分别使用两种插件时，为 T3 配置独立的 provider 配置目录。
 
-新会话中选择 `pstack:poteto-mode`，模型配置使用 `pstack:setup-pstack`。
-Codex 可输入 `$` 选择技能，Claude Code 使用 `/pstack:poteto-mode`。
-原生模型表和全局指令继续由上游机制加载。
+在新 T3 会话中运行 `t3-pstack:setup-pstack`。角色表位于 `~/.config/t3-pstack/models.md`（可通过 `XDG_CONFIG_HOME` 覆盖），角色名、provider 选项、默认值和 panel 席位由[随包 setup 技能](plugins/t3-pstack/skills/setup-pstack/SKILL.md)定义。旧 OMS 角色表不会自动迁入。需要自动路由时启用 session hook，并在宿主中信任该插件的 hook。
 
-在 T3 中运行 `pstack:setup-pstack`，可为原有角色选择不同 provider 的模型。
-T3 配置保存到项目的 `.agents/pstack-models.t3.md` 或用户的 `~/.t3/pstack-models.md`，
-项目表整体优先。T3 会在派发角色任务前读取配置，Claude 主会话也可使用 Codex 子任务。
-这些配置不覆盖原生 Claude、Codex 模型表或 hook 设置，详见 [T3 模型配置](docs/t3.md#跨模型配置)。
-
-只有会话提供 T3 Code 工具时才读取 T3 映射；其他会话继续使用上游宿主映射。
-T3 的调用方式服从当前宿主工具和权限，插件不会创建额外的调度器。
+独立宿主使用 `pstack:setup-pstack`。早期 OMS 的 T3 映射与验证记录见[历史方案](docs/t3.md)。
 
 ## 更新与卸载
 
 使用宿主的原生插件与 marketplace 命令。第三方 marketplace 的自动更新设置也由宿主管理。
 Claude Code 可手动运行 `claude plugin update pstack@oms`；Codex 使用其当前版本的原生 marketplace 更新机制。
-不要照抄上游文档中的 `pstack@pstack-claude` 来更新此发行版，本发行版的选择器是 `pstack@oms`。
+不要照抄上游文档中的 `pstack@pstack-claude` 来更新此发行版，按宿主选择 `pstack@oms` 或 `t3-pstack@oms`。
 
 OMS 不再管理 AIHero、电子书、宿主安装或安装数据库。现有工具、文件和凭据保留原样。
 历史文档与书籍授权见 [归档说明](docs/oms-history/README.md)。

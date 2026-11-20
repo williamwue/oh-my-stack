@@ -1,7 +1,7 @@
 {
   "name": "oms",
   "interface": {
-    "displayName": "pstack"
+    "displayName": "OMS"
   },
   "plugins": [
     {
@@ -9,6 +9,21 @@
       "source": {
         "source": "local",
         "path": "./plugins/pstack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "t3-pstack",
+      "source": {
+        "source": "local",
+        "path": "./plugins/t3-pstack"
       },
       "policy": {
         "installation": "AVAILABLE",

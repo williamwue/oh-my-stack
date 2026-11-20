@@ -1,0 +1,13 @@
+{
+  "name": "t3-pstack",
+  "displayName": "t3-pstack (pstack for T3 Code)",
+  "version": "2.5.2",
+  "description": "pstack for T3 Code on an Antigravity host: Lauren Tan's pstack with its Cursor mechanics rewritten in place for T3, so subagents, panels, schedules, and PR watches dispatch through T3's orchestration.",
+  "author": {
+    "name": "Christian Bager Bach Houmann",
+    "url": "https://github.com/chhoumann"
+  },
+  "homepage": "https://github.com/chhoumann/t3-pstack",
+  "repository": "https://github.com/chhoumann/t3-pstack",
+  "logo": "assets/pstack-icon.png"
+}
