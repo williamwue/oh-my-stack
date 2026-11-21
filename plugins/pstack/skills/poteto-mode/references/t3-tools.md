@@ -73,7 +73,7 @@ These rules take the place of poteto-mode's Subagents section on T3. Where a ski
 | `no-comments` | One `role: "review"` child on `no-comments reviewer`, briefed with the `comment-sicko` persona per Briefs and personas, with no worktree, because a worktree lacks the scope's uncommitted changes. |
 | `how`, `why`, `reflect` | Research children take `role: "research"` and omit `target` unless a role names one. `reflect` reads this thread with `t3_thread_read` (`view: "activity"`, `afterPosition: -1`, then each `nextPosition`). |
 | `recall` | Chat history is this project's T3 threads, ordered by `updatedAt`, cited by thread ID. Shared-record investigators are `delegate_task` children with full tool access. |
-| `show-me-your-work`, `session-pickup`, `eval` | Read the run's own thread and each child's `childThreadId` with `t3_thread_read`. Never read another project's threads. |
+| `show-me-your-work`, and the Session pickup and Eval playbooks | Read the run's own thread and each child's `childThreadId` with `t3_thread_read`. Never read another project's threads. |
 | `ketchup` | Check each child with `task_status` and this thread's PRs with `list_thread_pull_requests`. |
 | Autopilot-full, Shipping | Each owner or verifier is a `delegate_task` child with `isolation: "worktree"` from the commit it serves. An owner's brief names this thread's ID so it reports with `t3_thread_send`, and says it is not a leaf. Verifiers round-robin over `interrogate reviewers` so the lanes span families. The decision trail lives under `${XDG_STATE_HOME:-~/.local/state}/oms/`. |
 | Opening a PR | Before you commit, merge, or deploy from a worktree, `task_cancel` every live child that holds it and confirm each stop with `task_status`. |

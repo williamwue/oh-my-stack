@@ -1630,12 +1630,13 @@ describe("sync CLI", () => {
     const newSha = commit(newText);
 
     const port = join(root, "port");
-    for (const file of ["sync.mjs", "generate.mjs", "plugin.mjs", "runtimes.mjs", "validate-skills.mjs", "substitutions.json"]) {
+    for (const file of ["sync.mjs", "generate.mjs", "plugin.mjs", "runtimes.mjs", "validate-skills.mjs", "substitutions.json", "install/common.mjs"]) {
       cpSync(join(import.meta.dir, "../tools", file), join(port, "tools", file));
     }
+    cpSync(join(import.meta.dir, "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs"), join(port, "plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs"));
     symlinkSync(join(import.meta.dir, "../node_modules"), join(port, "node_modules"));
     cpSync(join(import.meta.dir, "../plugins/pstack/models.json"), join(port, "plugins/pstack/models.json"));
-    mkdirSync(join(port, "plugins/pstack/skills"));
+    mkdirSync(join(port, "plugins/pstack/skills"), { recursive: true });
     writeFileSync(join(port, "plugins/pstack/skills/s.md"), localText);
     for (const runtime of RUNTIMES) {
       mkdirSync(join(port, runtime.tools, ".."), { recursive: true });
@@ -1739,6 +1740,7 @@ describe("sync CLI", () => {
     const portOnly = [
       ...roleSkills.map((skill) => `${skill}/SKILL.md`),
       ...RUNTIMES.map((runtime) => runtime.tools.replace("plugins/pstack/skills/", "")),
+      "setup-pstack/scripts/t3-sheet.mjs",
     ];
     expect(result.stdout).toContain(`\nport-only: ${portOnly.length} files\n`);
     for (const rel of portOnly) expect(result.stdout).toContain(`\n  plugins/pstack/skills/${rel}\n`);
