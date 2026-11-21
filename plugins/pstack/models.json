@@ -51,6 +51,46 @@
       }
     }
   },
+  "t3": {
+    "tiers": {
+      "default": "claudeAgent/claude-opus-5-5 effort=xhigh",
+      "fast": "claudeAgent/claude-opus-5-5 effort=high",
+      "strongest": "claudeAgent/claude-fable-5-2 effort=high",
+      "panel": [
+        "claudeAgent/claude-fable-5-2 effort=high",
+        "claudeAgent/claude-opus-5-5 effort=high",
+        "antigravity/gemini-4-neon thought_level=xhigh"
+      ],
+      "judges": [
+        "claudeAgent/claude-opus-5-5 effort=high",
+        "antigravity/gemini-4-neon thought_level=xhigh"
+      ]
+    },
+    "roles": {
+      "feature, refactoring": "default",
+      "bug-fix": "default",
+      "perf-issue": "default",
+      "hillclimb": "default",
+      "judgment and prose": "default",
+      "strongest judgment": "strongest",
+      "arena runners": "panel",
+      "arena cross-judge pool": "judges",
+      "swarm workers": "fast",
+      "interrogate reviewers": "panel",
+      "thermos reviewers": "panel",
+      "no-comments reviewer": "default"
+    },
+    "retired": [
+      "how explorer",
+      "how explainer",
+      "why investigators",
+      "why synthesizer",
+      "hardest tasks",
+      "reflect tooling",
+      "reflect judgment, divergent, synthesizer",
+      "architect runners"
+    ]
+  },
   "muse": {
     "default": "muse-wonder-1.0",
     "strongest": "muse-wonder-full-1.0",

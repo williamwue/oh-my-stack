@@ -1,3 +1,4 @@
+import type * as S from "./settle.ts";
 import type { LandingRevision } from "./landing.ts";
 declare const prNumberBrand: unique symbol;
 export type PrNumber = number & { readonly [prNumberBrand]: "PrNumber" };
@@ -198,6 +199,7 @@ export type PrSnapshot =
       readonly threads: readonly ReviewThread[];
       readonly ci: CiState;
       readonly reviewAutomationRunning: boolean;
+      readonly settle: S.ReviewSettle;
     };
 export interface ReadyPr {
   readonly kind: "ready-pr";
@@ -290,6 +292,7 @@ export type QueryFailure =
       readonly rawValue: string;
     };
 export type WaitReason =
+  | S.SettleWait
   | {
       readonly kind: "pending-checks";
       readonly pending: NonEmpty<PendingCheck>;
@@ -474,6 +477,7 @@ export interface GitHubReader {
     head: string,
     checksRead: CheckRead["kind"]
   ): Promise<readonly SuiteCheck[]>;
+  reviewActivity(pr: PrContext, oid: string | null): Promise<S.ReviewActivity>;
 }
 export interface PollingOptions {
   readonly interval: number;
@@ -481,4 +485,5 @@ export interface PollingOptions {
   readonly timeout: number;
   readonly maxQueryErrors: number;
   readonly allowDraft: boolean;
+  readonly settle: number;
 }

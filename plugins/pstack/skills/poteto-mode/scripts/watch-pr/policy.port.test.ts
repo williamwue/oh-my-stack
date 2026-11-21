@@ -26,6 +26,7 @@ const context = (number: number): PrContext => ({
 const options = {
   interval: 10,
   sweepInterval: 300,
+  settle: 0,
   timeout: 0,
   maxQueryErrors: 5,
   allowDraft: false,

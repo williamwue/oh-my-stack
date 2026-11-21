@@ -1,3 +1,4 @@
+import { settleCell, settleText } from "./settle.ts";
 import type * as T from "./types.ts";
 export const renderJson = (verdict: T.WatcherVerdict): string =>
   `${JSON.stringify(verdict)}\n`;
@@ -60,7 +61,7 @@ export function renderStatusTable(rows: T.NonEmpty<T.PrSnapshot>): string {
   for (const row of rows) {
     const url = `https://github.com/${row.context.owner}/${row.context.repo}/pull/${row.context.number}`;
     lines.push(
-      `| [#${row.context.number}](${url}) | ${ciCell(row)} | ${reviewCell(row)} | ${mergeCell(row)} |`
+      `| [#${row.context.number}](${url}) | ${ciCell(row)} | ${reviewCell(row)}${settleCell(row)} | ${mergeCell(row)} |`
     );
   }
   return `${lines.join("\n")}\n`;
@@ -162,6 +163,8 @@ export function renderPretty(verdict: T.WatcherVerdict): string {
     case "STATUS":
       return renderStatusTable(verdict.rows);
     case "WAITING":
+      if (verdict.reason.kind === "review-settling")
+        return `WAITING: frontier=#${verdict.frontier.number}; ${settleText(verdict.reason, verdict.observedAt)}\n`;
       if (verdict.reason.kind === "checks-unreported")
         return `WAITING: frontier=#${verdict.frontier.number}; no checks have reported on the head commit yet\n`;
       if (verdict.reason.kind === "mergeability-unknown")
@@ -193,6 +196,8 @@ export function renderPretty(verdict: T.WatcherVerdict): string {
         return "TIMEOUT: GitHub has not computed mergeability yet\n";
       if (verdict.reason.kind === "status-unavailable")
         return "TIMEOUT: GitHub status remained unavailable\n";
+      if (verdict.reason.kind === "review-settling")
+        return `TIMEOUT: ${settleText(verdict.reason, verdict.observedAt)}\n`;
       return `TIMEOUT: queued stack still has ${verdict.reason.unmergedCount} PR${verdict.reason.unmergedCount === 1 ? "" : "s"} unmerged; frontier=#${verdict.reason.frontier.number}\n`;
     default: {
       const exhaustive: never = verdict;

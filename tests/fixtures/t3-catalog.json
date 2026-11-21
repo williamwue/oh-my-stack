@@ -1,0 +1,92 @@
+{
+  "inheritedProviderInstanceId": "claudeAgent",
+  "inheritedModel": "claude-opus-5-5",
+  "providers": [
+    {
+      "providerInstanceId": "codex",
+      "driverKind": "codex",
+      "models": [
+        {
+          "id": "gpt-6.1-sol",
+          "options": [
+            { "id": "reasoningEffort", "type": "select", "options": [{ "id": "low" }, { "id": "medium" }, { "id": "high" }, { "id": "xhigh" }, { "id": "max" }, { "id": "ultra" }] },
+            { "id": "serviceTier", "type": "select", "options": [{ "id": "default" }, { "id": "priority" }] }
+          ]
+        }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "codex_pool",
+      "driverKind": "codex",
+      "models": [
+        {
+          "id": "claude-opus-5-5",
+          "options": [{ "id": "reasoningEffort", "type": "select", "options": [{ "id": "low" }, { "id": "medium" }, { "id": "high" }, { "id": "xhigh" }, { "id": "max" }] }]
+        }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "claudeAgent",
+      "driverKind": "claudeAgent",
+      "models": [
+        {
+          "id": "claude-opus-5-5",
+          "options": [
+            { "id": "effort", "type": "select", "options": [{ "id": "low" }, { "id": "medium" }, { "id": "high" }, { "id": "xhigh" }, { "id": "max" }] },
+            { "id": "fastMode", "type": "boolean" }
+          ]
+        },
+        {
+          "id": "claude-fable-5-2",
+          "options": [{ "id": "effort", "values": ["low", "medium", "high", "xhigh", "max", "ultrathink"] }]
+        },
+        {
+          "id": "claude-fable-5-1",
+          "options": [{ "id": "effort", "type": "select", "options": [{ "id": "low" }, { "id": "medium" }, { "id": "high" }, { "id": "xhigh" }, { "id": "max" }] }]
+        },
+        { "id": "claude-haiku-4-5", "options": [{ "id": "thinking", "type": "boolean" }] }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "antigravity",
+      "driverKind": "antigravity",
+      "models": [
+        { "id": "gemini-4-neon", "options": [{ "id": "thought_level", "values": ["low", "medium", "high", "xhigh"] }] },
+        { "id": "gemini-4-carbon", "options": [{ "id": "thought_level", "values": ["low", "medium", "high", "xhigh"] }] }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "cursor",
+      "driverKind": "cursor",
+      "models": [{ "id": "grok-4.7", "options": [] }],
+      "canRunChildTask": false,
+      "canRunCrossProviderChildTask": false,
+      "constraints": ["Provider is not authenticated."]
+    },
+    {
+      "providerInstanceId": "grok",
+      "driverKind": "grok",
+      "models": [
+        {
+          "id": "grok-4.7",
+          "options": [{ "id": "reasoningEffort", "type": "select", "options": [{ "id": "xhigh" }, { "id": "high" }, { "id": "medium" }, { "id": "low" }] }]
+        }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    }
+  ]
+}

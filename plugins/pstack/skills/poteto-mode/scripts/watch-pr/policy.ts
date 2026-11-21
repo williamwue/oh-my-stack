@@ -6,6 +6,7 @@ import {
   resolveReviewThreads,
 } from "./github.ts";
 import { DeadlineExceeded, type WatchDeadline } from "./deadline.ts";
+import { reviewSettler, type ReviewSettler } from "./settle.ts";
 import type * as T from "./types.ts";
 import { nonEmpty } from "./types.ts";
 export function assessGitHubMerge(args: {
@@ -149,6 +150,7 @@ export async function readSnapshot(args: {
   readonly pendingHistory: "include" | "omit";
   readonly allowDraft: boolean;
   readonly confirmNoChecks?: NoChecksConfirmer;
+  readonly settler?: ReviewSettler;
 }): Promise<T.PrSnapshot> {
   const facts = await args.reader.pullRequest(args.context);
   if (facts.state === "MERGED" || facts.mergedAt !== null)
@@ -240,6 +242,7 @@ export async function readSnapshot(args: {
           check.name.toLowerCase().includes(token)
         )
     ),
+    settle: (await args.settler?.(facts)) ?? { kind: "off" },
   };
 }
 const conflictBlocker = (row: T.PrSnapshot): T.MergeBlocker | null =>
@@ -284,6 +287,12 @@ function waitReason(row: T.PrSnapshot): T.WaitReason | null {
   if (row.ci.kind === "ci-pending")
     return { kind: "pending-checks", pending: row.ci.pending };
   if (row.ci.kind === "ci-unreported") return { kind: "checks-unreported" };
+  if (row.settle.kind === "settling")
+    return {
+      kind: "review-settling",
+      endsAt: row.settle.endsAt,
+      heldBy: row.settle.heldBy,
+    };
   return mergeabilityUnknown(row.facts)
     ? { kind: "mergeability-unknown" }
     : null;
@@ -567,6 +576,7 @@ export async function runSimple(args: {
 }): Promise<T.TerminalVerdict> {
   const stamp = verdictFactory(args.dependencies.clock, args.mode);
   const confirmNoChecks = noChecksConfirmer(args.dependencies.clock);
+  const settler = reviewSettler(args);
   const step = async (): Promise<StepResult<T.TerminalVerdict>> => {
     const rows: T.PrSnapshot[] = [];
     for (const context of args.contexts)
@@ -577,6 +587,7 @@ export async function runSimple(args: {
           pendingHistory: "include",
           allowDraft: args.options.allowDraft,
           confirmNoChecks,
+          settler,
         })
       );
     const complete = nonEmpty(rows);

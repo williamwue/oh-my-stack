@@ -3,7 +3,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:f
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { changes, loadLeadLines, plan, problems } from "../tools/generate.mjs";
+import { changes, loadLeadLines, parseModels, plan, problems } from "../tools/generate.mjs";
 
 const repo = fileURLToPath(new URL("..", import.meta.url));
 const mode = "plugins/pstack/skills/poteto-mode/SKILL.md";
@@ -66,5 +66,41 @@ describe("T3 distribution", () => {
         expect(manifest.name).toBe(plugin.name);
       }
     }
+  });
+});
+
+describe("T3 role defaults in models.json", () => {
+  const raw = () => JSON.parse(readFileSync(join(repo, "plugins/pstack/models.json"), "utf8"));
+  const parse = (models) => () => parseModels(models, () => true);
+
+  test("every native role has a T3 default", () => {
+    const models = raw();
+    delete models.t3.roles["swarm workers"];
+    expect(parse(models)).toThrow('t3 roles has no "swarm workers"');
+  });
+
+  test("a default panel must span two model families", () => {
+    const models = raw();
+    models.t3.tiers.panel = ["claudeAgent/claude-opus-5-5 effort=high", "claudeAgent/claude-sonnet-5-5 effort=high"];
+    expect(parse(models)).toThrow('t3 tier "panel" spans fewer than two model families');
+  });
+
+  test("a T3 entry must be a delegate_task target", () => {
+    const models = raw();
+    models.t3.tiers.default = "opus";
+    expect(parse(models)).toThrow('t3 tier "default"');
+  });
+
+  test("the T3 defaults and the setup sheet are regenerated from models.json", () => {
+    const root = fixture();
+    const file = join(root, "plugins/pstack/models.json");
+    const models = JSON.parse(readFileSync(file, "utf8"));
+    models.t3.tiers.fast = "codex/gpt-6.2-sol reasoningEffort=high";
+    writeFileSync(file, JSON.stringify(models, null, 2) + "\n");
+    const intended = plan(root);
+    expect(changes(root, intended)).toContainEqual({ kind: "write", path: mapping });
+    expect(changes(root, intended)).toContainEqual({ kind: "write", path: setupMapping });
+    expect(intended.files[mapping]).toContain("- swarm workers: `codex/gpt-6.2-sol reasoningEffort=high`");
+    expect(intended.files[setupMapping]).toContain("swarm workers: codex/gpt-6.2-sol reasoningEffort=high");
   });
 });

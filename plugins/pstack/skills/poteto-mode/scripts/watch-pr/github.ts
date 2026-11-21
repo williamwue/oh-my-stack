@@ -2,6 +2,7 @@ import { classifySuite } from "./check-suites.ts";
 import { baseRefTargetOid, text } from "./landing.ts";
 import { spawn } from "node:child_process";
 import { DeadlineExceeded, type WatchDeadline } from "./deadline.ts";
+import { readReviewActivity } from "./settle.ts";
 import type * as T from "./types.ts";
 import { nonEmpty, parsePrNumber } from "./types.ts";
 export const REVIEW_THREADS_QUERY =
@@ -714,6 +715,13 @@ export class GhGitHubReader implements T.GitHubReader {
     const argv = graphqlArgs(REVIEW_THREADS_QUERY, context);
     if (after !== null) argv.push("-f", `after=${after}`);
     return parseReviewThreadPage(await this.runJson(argv));
+  }
+  reviewActivity(context: T.PrContext, headRefOid: string | null) {
+    return readReviewActivity(
+      (argv) => this.runJson(argv),
+      context,
+      headRefOid
+    );
   }
   async commitRollups(
     context: T.PrContext

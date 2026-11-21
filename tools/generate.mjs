@@ -54,6 +54,7 @@ import { Type } from "typebox";
 import { Value } from "typebox/value";
 
 import { code, codeList, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
+import { panelFamilies, parseEntry } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
 import { PLATFORM_ADAPTATION_OPEN, platformAdaptation, RUNTIMES, roleSkills } from "./runtimes.mjs";
 import { markdownFiles, pathIsInside, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
 
@@ -390,6 +391,18 @@ export function regions(models) {
       render: () => [overrideSheetBlock(models)],
     },
     {
+      file: "plugins/pstack/skills/poteto-mode/references/t3-tools.md",
+      name: "T3 role defaults",
+      locate: section("Role defaults"),
+      render: () => blankPadded(t3DefaultsSection(models)),
+    },
+    {
+      file: "plugins/pstack/skills/setup-pstack/references/t3.md",
+      name: "T3 sheet",
+      locate: fenceUnder("Write the sheet", "markdown"),
+      render: () => [t3SheetBlock(models)],
+    },
+    {
       file: skillFile("poteto-mode"),
       name: "Platform Adaptation sentence",
       locate: lineStartingWith(PLATFORM_ADAPTATION_OPEN),
@@ -595,7 +608,62 @@ export function parseModels(raw, skillExists) {
     fail(`defaultEffort "${raw.defaultEffort}" is not an effort level or "session"`);
   }
   for (const runtime of RUNTIMES) runtime.checkModels?.(raw[runtime.key], { raw, fail, unique, isObject });
+  checkT3(raw, fail);
   return resolveModels(raw);
+}
+
+// models.json's `t3` section: T3 targets in setup-pstack's t3-sheet.mjs
+// grammar, one tier per native role, and list tiers that span two model
+// families, so a default panel or judge pool is cross-family on any machine.
+const T3_LIST_TIERS = ["panel", "judges"];
+function checkT3(raw, fail) {
+  const t3 = raw.t3;
+  if (!isObject(t3) || !isObject(t3.tiers) || !isObject(t3.roles)) fail('"t3" must hold "tiers" and "roles" objects');
+  for (const [tier, value] of Object.entries(t3.tiers)) {
+    const isList = T3_LIST_TIERS.includes(tier);
+    if (isList !== Array.isArray(value)) fail(`t3 tier "${tier}" must be ${isList ? "a list" : "one entry"}`);
+    const parsed = [value].flat().map((entry) => {
+      try {
+        const target = parseEntry(entry);
+        if (!target) fail(`t3 tier "${tier}" uses an inherit alias, which names no default`);
+        return target;
+      } catch (err) {
+        fail(`t3 tier "${tier}": ${err.message}`);
+      }
+    });
+    if (isList && panelFamilies(parsed).size < 2) fail(`t3 tier "${tier}" spans fewer than two model families`);
+  }
+  const native = raw.roles.map((role) => role.role);
+  const covered = Object.keys(t3.roles);
+  for (const role of native) if (!covered.includes(role)) fail(`t3 roles has no "${role}"`);
+  for (const [role, tier] of Object.entries(t3.roles)) {
+    if (!native.includes(role)) fail(`t3 roles names "${role}", which is not a role`);
+    if (!Object.hasOwn(t3.tiers, tier)) fail(`t3 role "${role}" names tier "${tier}", which t3 tiers lacks`);
+  }
+  for (const role of t3.retired ?? []) if (native.includes(role)) fail(`t3 retired names "${role}", which is a live role`);
+}
+
+// Each T3 role's default entries, in models.json role order.
+function t3Defaults(models) {
+  return models.roles.map(({ role }) => [role, [models.t3.tiers[models.t3.roles[role]]].flat()]);
+}
+
+function t3DefaultsSection(models) {
+  return (
+    "Stamped from `plugins/pstack/models.json`'s `t3` section (edit there, rerun `tools/generate.mjs`). A role line in the T3 model sheet overrides each one.\n\n" +
+    t3Defaults(models).map(([role, entries]) => `- ${role}: ${codeList(entries)}`).join("\n")
+  );
+}
+
+function t3SheetBlock(models) {
+  return [
+    "# pstack model configuration (T3). One line per role. Delete a line to fall back to the skill default.",
+    "# `inherit-parent` or `auto` as a value: the role runs on the parent chat's model (`delegate_task` omits `target`). Alias entries in a panel list still count toward its fan-out.",
+    "# defaults: 3",
+    "# budget: large (xhigh)",
+    ...t3Defaults(models).map(([role, entries]) => `${role}: ${entries.join(", ")}`),
+    "session hook: on",
+  ].join("\n");
 }
 
 export function loadModels(root = repo) {
