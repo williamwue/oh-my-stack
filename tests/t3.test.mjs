@@ -8,6 +8,7 @@ import { changes, loadLeadLines, plan, problems } from "../tools/generate.mjs";
 const repo = fileURLToPath(new URL("..", import.meta.url));
 const mode = "plugins/pstack/skills/poteto-mode/SKILL.md";
 const codex = "plugins/pstack/skills/poteto-mode/references/codex-tools.md";
+const bugFix = "plugins/pstack/skills/poteto-mode/playbooks/bug-fix.md";
 const setup = "plugins/pstack/skills/setup-pstack/SKILL.md";
 const setupMapping = "plugins/pstack/skills/setup-pstack/references/t3.md";
 const mapping = "plugins/pstack/skills/poteto-mode/references/t3-tools.md";
@@ -30,7 +31,7 @@ describe("T3 distribution", () => {
   test("lost T3 entries are detected and regenerated for routing and setup", () => {
     const root = fixture();
     const roles = JSON.parse(readFileSync(join(root, "plugins/pstack/models.json"), "utf8")).roles;
-    const entries = new Set([mode, codex, setup, ...roles.map((role) => `plugins/pstack/skills/${role.skill}/SKILL.md`)]);
+    const entries = new Set([mode, codex, bugFix, setup, ...roles.map((role) => `plugins/pstack/skills/${role.skill}/SKILL.md`)]);
     for (const file of entries) {
       const original = readFileSync(join(root, file), "utf8");
       const lead = loadLeadLines(root).get(file).find((line) => line.startsWith("When T3 Code tools are available,"));
@@ -44,7 +45,7 @@ describe("T3 distribution", () => {
 
   test("every T3 dispatch entry names the tool for same-provider work and inherited seats", () => {
     const roles = JSON.parse(readFileSync(join(repo, "plugins/pstack/models.json"), "utf8")).roles;
-    const files = new Set([mode, codex, ...roles.map(({ skill }) => `plugins/pstack/skills/${skill}/SKILL.md`)]);
+    const files = new Set([mode, codex, bugFix, ...roles.map(({ skill }) => `plugins/pstack/skills/${skill}/SKILL.md`)]);
     for (const file of files) {
       const entry = readFileSync(join(repo, file), "utf8").split(/^## /m)[0];
       expect(entry, file).toContain("`delegate_task` by name, including same-provider work");
