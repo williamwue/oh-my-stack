@@ -434,12 +434,15 @@ const PREAMBLE_RUNTIMES = RUNTIMES.filter((runtime) => runtime.preamble);
 const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
 const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "refactoring", "shipping"];
 const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.";
+// Name the requested T3 tool at the decision point, including for same-provider work.
+const T3_DISPATCH = "On T3, every OMS playbook step that delegates explicitly requests `delegate_task` by name, including same-provider work. Read the machine model sheet before dispatch. Use async mode and pass the role’s provider, model, and options as the target. For `inherit-parent` or `auto`, use the same tool and omit the target. Native subagent instructions below apply outside T3. Include this handoff in the worker brief: “End your result by reminding the parent to include its dispatch ledger in the final user reply.” Keep the returned task ID with the role and requested seat. On the completion wake, recover those fields from the original tool receipt. End the final user reply with one ledger row per child: role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome. An earlier progress update does not close this step. Mark a required dispatch without a receipt as unverified.";
 const T3_LEADS = new Map([
+  [`${SKILLS}/poteto-mode/playbooks/bug-fix.md`, "When T3 Code tools are available, the owner reproduces the failure, then calls `delegate_task` for the implementation before editing the affected files. Use the machine sheet’s `bug-fix` entry. The focused-fix path uses one implementation child. After the child returns, verify its changes and append the dispatch ledger to the final answer."],
   [`${SKILLS}/setup-pstack/SKILL.md`, "When T3 Code tools are available, use [T3 model configuration](references/t3.md) for model discovery, sheet storage, and dispatch validation before applying the backend-specific steps below."],
   [`${SKILLS}/poteto-mode/SKILL.md`, "When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) before using host tools. It takes precedence for tool selection; keep the upstream workflow and model policy."],
   [`${SKILLS}/poteto-mode/references/codex-tools.md`, "When T3 Code tools are available, read [the T3 mapping](t3-tools.md) before using host tools. It takes precedence for T3 tool selection; use this file for the remaining Codex actions."],
 ]);
-const LEAD_LINES = [...PREAMBLE_RUNTIMES.map((runtime) => runtime.preamble), DRIVER_LINE, T3_ROLE_LEAD, ...T3_LEADS.values()];
+const LEAD_LINES = [...PREAMBLE_RUNTIMES.map((runtime) => runtime.preamble), DRIVER_LINE, T3_ROLE_LEAD, T3_DISPATCH, ...T3_LEADS.values()];
 
 // The skills with a row in a runtime mapping's Per-skill notes table, in row order.
 export function noteSkills(runtime, markdown) {
@@ -470,9 +473,13 @@ export function loadLeadLines(root = repo) {
   for (const playbook of DRIVER_PLAYBOOKS) leads.set(`${SKILLS}/poteto-mode/playbooks/${playbook}.md`, [DRIVER_LINE]);
   for (const skill of new Set(loadModels(root).roles.map((role) => role.skill))) {
     const file = `${SKILLS}/${skill}/SKILL.md`;
-    if (!T3_LEADS.has(file)) leads.set(file, [...(leads.get(file) ?? []), T3_ROLE_LEAD]);
+    if (!T3_LEADS.has(file)) leads.set(file, [...(leads.get(file) ?? []), T3_ROLE_LEAD, T3_DISPATCH]);
   }
-  for (const [file, line] of T3_LEADS) leads.set(file, [...(leads.get(file) ?? []), line]);
+  for (const [file, line] of T3_LEADS) {
+    const lines = [...(leads.get(file) ?? []), line];
+    if (file !== `${SKILLS}/setup-pstack/SKILL.md`) lines.push(T3_DISPATCH);
+    leads.set(file, lines);
+  }
   return leads;
 }
 
