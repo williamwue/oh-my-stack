@@ -63,7 +63,7 @@ const repoRelative = (root, file) => relative(root, file).split(sep).join("/");
 const VERSIONED_MANIFESTS = [
   ".claude-plugin/marketplace.json",
   `${PLUGIN}/.claude-plugin/plugin.json`,
-  ...RUNTIMES.map((runtime) => runtime.manifest),
+  ...RUNTIMES.filter((runtime) => runtime.manifest).map((runtime) => runtime.manifest),
 ];
 
 export const PORTABLE_ASSETS = [
@@ -430,7 +430,7 @@ export function regions(models) {
 
 const PREAMBLE_RUNTIMES = RUNTIMES.filter((runtime) => runtime.preamble);
 const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
-const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "orchestrate", "refactoring", "shipping"];
+const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "refactoring", "shipping"];
 const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.";
 const T3_LEADS = new Map([
   [`${SKILLS}/setup-pstack/SKILL.md`, "When T3 Code tools are available, use [T3 model configuration](references/t3.md) for model discovery, sheet storage, and dispatch validation before applying the backend-specific steps below."],
@@ -980,7 +980,7 @@ export function problems(root, models) {
   const skillsDir = join(root, SKILLS);
   const read = (rel) => readFileSync(join(root, rel), "utf8");
   const pathExists = (rel) => existsSync(join(root, rel));
-  const packages = RUNTIMES.map((runtime) =>
+  const packages = RUNTIMES.filter((runtime) => runtime.manifest).map((runtime) =>
     attempt(() => {
       const text = read(runtime.manifest);
       let manifest;
