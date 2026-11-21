@@ -81,6 +81,7 @@ export const PORTABLE_ASSETS = [
   { source: "LICENSE-thermos", target: "poteto-mode/references/licenses/LICENSE-thermos" },
   { source: "NOTICE-skills.md", target: "poteto-mode/references/licenses/NOTICE.md" },
   { source: "LICENSE-oms", target: "poteto-mode/references/licenses/LICENSE-oms" },
+  { source: "LICENSE-t3-pstack", target: "poteto-mode/references/licenses/LICENSE-t3-pstack" },
 ];
 
 // The generator removes every entry of these directories that no planned path

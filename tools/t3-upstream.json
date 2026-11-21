@@ -1,0 +1,32 @@
+{
+  "remote": "https://github.com/chhoumann/t3-pstack",
+  "version": "2.5.3",
+  "sha": "a9cd5ab33d370fa152dbdf5df6c04448f5ad90bc",
+  "paths": [
+    "plugins/pstack/models.json",
+    "plugins/pstack/skills/poteto-mode/SKILL.md",
+    "plugins/pstack/skills/poteto-mode/worker.md",
+    "plugins/pstack/skills/poteto-mode/playbooks",
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/settle.ts",
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/settle.test.ts",
+    "plugins/pstack/skills/setup-pstack",
+    "plugins/pstack/skills/arena/SKILL.md",
+    "plugins/pstack/skills/swarm/SKILL.md",
+    "plugins/pstack/skills/interrogate/SKILL.md",
+    "plugins/pstack/skills/thermos/SKILL.md",
+    "plugins/pstack/skills/no-comments/SKILL.md",
+    "plugins/pstack/skills/how/SKILL.md",
+    "plugins/pstack/skills/recall/SKILL.md",
+    "plugins/pstack/skills/reflect/SKILL.md",
+    "plugins/pstack/skills/ketchup/SKILL.md",
+    "plugins/pstack/skills/show-me-your-work/SKILL.md",
+    "plugins/pstack/agents",
+    "tools/install.mjs",
+    "tools/install",
+    "tests/install.test.mjs",
+    "tests/install-cli.test.mjs",
+    "tests/install-e2e.test.mjs",
+    "tests/t3-sheet.test.mjs",
+    "tests/fixtures"
+  ]
+}

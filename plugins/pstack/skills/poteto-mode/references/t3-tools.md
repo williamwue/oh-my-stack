@@ -78,4 +78,4 @@ These rules take the place of poteto-mode's Subagents section on T3. Where a ski
 | Autopilot-full, Shipping | Each owner or verifier is a `delegate_task` child with `isolation: "worktree"` from the commit it serves. An owner's brief names this thread's ID so it reports with `t3_thread_send`, and says it is not a leaf. Verifiers round-robin over `interrogate reviewers` so the lanes span families. The decision trail lives under `${XDG_STATE_HOME:-~/.local/state}/oms/`. |
 | Opening a PR | Before you commit, merge, or deploy from a worktree, `task_cancel` every live child that holds it and confirm each stop with `task_status`. |
 
-Adapted from [t3-pstack](https://github.com/chhoumann/t3-pstack) by Christian Bager Bach Houmann, under the [MIT license](licenses/LICENSE-oms).
+Adapted from [t3-pstack](https://github.com/chhoumann/t3-pstack) by Christian Bager Bach Houmann, under the [MIT license](licenses/LICENSE-t3-pstack).
