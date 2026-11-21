@@ -36,6 +36,7 @@
 // user-invocable: false); a skill without a row or a row without a skill
 // fails by name.
 
+import { execFileSync } from "node:child_process";
 import {
   existsSync,
   lstatSync,
@@ -53,11 +54,9 @@ import { fileURLToPath } from "node:url";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
 
-import { code, codeList, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
-import { panelFamilies, parseEntry } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
-import { HOOK_PIN, hookDigest } from "./install/common.mjs";
+import { code, codeList, FROZEN_HOOKS, hookDigest, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
 import { PLATFORM_ADAPTATION_OPEN, platformAdaptation, RUNTIMES, roleSkills } from "./runtimes.mjs";
-import { markdownFiles, pathIsInside, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
+import { markdownFiles, pathIsInside, T3_QUOTED, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repoRelative = (root, file) => relative(root, file).split(sep).join("/");
@@ -393,18 +392,6 @@ export function regions(models) {
       render: () => [overrideSheetBlock(models)],
     },
     {
-      file: "plugins/pstack/skills/poteto-mode/references/t3-tools.md",
-      name: "T3 role defaults",
-      locate: section("Role defaults"),
-      render: () => blankPadded(t3DefaultsSection(models)),
-    },
-    {
-      file: "plugins/pstack/skills/setup-pstack/references/t3.md",
-      name: "T3 sheet",
-      locate: fenceUnder("Write the sheet", "markdown"),
-      render: () => [t3SheetBlock(models)],
-    },
-    {
       file: skillFile("poteto-mode"),
       name: "Platform Adaptation sentence",
       locate: lineStartingWith(PLATFORM_ADAPTATION_OPEN),
@@ -610,62 +597,7 @@ export function parseModels(raw, skillExists) {
     fail(`defaultEffort "${raw.defaultEffort}" is not an effort level or "session"`);
   }
   for (const runtime of RUNTIMES) runtime.checkModels?.(raw[runtime.key], { raw, fail, unique, isObject });
-  checkT3(raw, fail);
   return resolveModels(raw);
-}
-
-// models.json's `t3` section: T3 targets in setup-pstack's t3-sheet.mjs
-// grammar, one tier per native role, and list tiers that span two model
-// families, so a default panel or judge pool is cross-family on any machine.
-const T3_LIST_TIERS = ["panel", "judges"];
-function checkT3(raw, fail) {
-  const t3 = raw.t3;
-  if (!isObject(t3) || !isObject(t3.tiers) || !isObject(t3.roles)) fail('"t3" must hold "tiers" and "roles" objects');
-  for (const [tier, value] of Object.entries(t3.tiers)) {
-    const isList = T3_LIST_TIERS.includes(tier);
-    if (isList !== Array.isArray(value)) fail(`t3 tier "${tier}" must be ${isList ? "a list" : "one entry"}`);
-    const parsed = [value].flat().map((entry) => {
-      try {
-        const target = parseEntry(entry);
-        if (!target) fail(`t3 tier "${tier}" uses an inherit alias, which names no default`);
-        return target;
-      } catch (err) {
-        fail(`t3 tier "${tier}": ${err.message}`);
-      }
-    });
-    if (isList && panelFamilies(parsed).size < 2) fail(`t3 tier "${tier}" spans fewer than two model families`);
-  }
-  const native = raw.roles.map((role) => role.role);
-  const covered = Object.keys(t3.roles);
-  for (const role of native) if (!covered.includes(role)) fail(`t3 roles has no "${role}"`);
-  for (const [role, tier] of Object.entries(t3.roles)) {
-    if (!native.includes(role)) fail(`t3 roles names "${role}", which is not a role`);
-    if (!Object.hasOwn(t3.tiers, tier)) fail(`t3 role "${role}" names tier "${tier}", which t3 tiers lacks`);
-  }
-  for (const role of t3.retired ?? []) if (native.includes(role)) fail(`t3 retired names "${role}", which is a live role`);
-}
-
-// Each T3 role's default entries, in models.json role order.
-function t3Defaults(models) {
-  return models.roles.map(({ role }) => [role, [models.t3.tiers[models.t3.roles[role]]].flat()]);
-}
-
-function t3DefaultsSection(models) {
-  return (
-    "Stamped from `plugins/pstack/models.json`'s `t3` section (edit there, rerun `tools/generate.mjs`). A role line in the T3 model sheet overrides each one.\n\n" +
-    t3Defaults(models).map(([role, entries]) => `- ${role}: ${codeList(entries)}`).join("\n")
-  );
-}
-
-function t3SheetBlock(models) {
-  return [
-    "# pstack model configuration (T3). One line per role. Delete a line to fall back to the skill default.",
-    "# `inherit-parent` or `auto` as a value: the role runs on the parent chat's model (`delegate_task` omits `target`). Alias entries in a panel list still count toward its fan-out.",
-    "# defaults: 3",
-    "# budget: large (xhigh)",
-    ...t3Defaults(models).map(([role, entries]) => `${role}: ${entries.join(", ")}`),
-    "session hook: on",
-  ].join("\n");
 }
 
 export function loadModels(root = repo) {
@@ -810,6 +742,7 @@ function overrideSheetBlock(models) {
 // no model: a full claude-* ID is rejected by the Agent tool, and a backticked
 // family name hard-codes a default that belongs in models.json.
 export function strayModelSlugs(file, text, models) {
+  if (T3_QUOTED.some((quoted) => file === `${SKILLS}/${quoted}`)) return [];
   const families = models.available.join("|");
   // Version numbers may sit between claude- and the family (claude-3-opus,
   // claude-3.7-sonnet). An unlisted family is not guessed at: claude-mythos-1
@@ -929,6 +862,60 @@ export function validateHooks(hooksJson, { statOf, file = "hooks/hooks.json", ro
     }
   }
   if (faults.length) throw new Error(`${file}:\n  ${faults.join("\n  ")}`);
+}
+
+// Codex trusts a plugin hook by a hash of its entry, and a Git marketplace
+// delivers a new entry at the next app-server start, so a changed hooks file
+// silently stops the hook in every home until the installer trusts it again.
+// Each hooks file is pinned with the release that last changed it, and that
+// release's CHANGES entry must tell users to rerun the installer. `shipped`
+// holds VERSION and the hooks files as origin/main has them, since main is
+// what the marketplaces deliver: a file that differs from main's changes in
+// this release, so its pin must name this release, and VERSION must be newer
+// than main's.
+export function frozenHookFaults({ pins, files, version, changelog, shipped }) {
+  const faults = Object.keys(files)
+    .filter((path) => !Object.hasOwn(pins, path))
+    .map((path) => `${path} has no pin in ${FROZEN_HOOKS}`);
+  const entry = changelog.split(/^## /m).find((section) => section.startsWith(`${version} `)) ?? "";
+  for (const [path, pin] of Object.entries(pins)) {
+    if (!Object.hasOwn(files, path)) {
+      faults.push(`${FROZEN_HOOKS} pins ${path}, which no manifest names`);
+      continue;
+    }
+    const digest = hookDigest(files[path]);
+    const changed = shipped.files[path] === undefined || hookDigest(shipped.files[path]) !== digest;
+    if (digest !== pin.sha256) {
+      faults.push(
+        `${path} changed, which stops its hook in every Codex home until the installer reruns. ` +
+          `Pin "sha256": "${digest}" and "changedIn": "${version}" in ${FROZEN_HOOKS}, ` +
+          `and tell users to rerun the installer in CHANGES.md's ${version} entry.`,
+      );
+    } else if (changed && Bun.semver.order(version, shipped.version) <= 0) {
+      faults.push(`${path} differs from origin/main, which ships ${shipped.version}, so this change needs a VERSION newer than that, not ${version}`);
+    } else if (changed && pin.changedIn !== version) {
+      faults.push(`${path} differs from origin/main, so its pin's "changedIn" must be ${version}, not ${pin.changedIn}`);
+    } else if (pin.changedIn === version && !/rerun the installer/i.test(entry)) {
+      faults.push(`${path} changes in ${version}, but CHANGES.md's ${version} entry does not tell users to rerun the installer`);
+    }
+  }
+  return faults;
+}
+
+// VERSION and `paths` as origin/main has them now, with undefined for a path
+// main lacks. It fetches main first, so a branch cut before main's latest
+// release is compared with that release and not with the merge-base.
+function shippedOnMain(root, paths) {
+  const git = (...args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  const main = "refs/remotes/origin/main";
+  try {
+    git("fetch", "--quiet", "--no-tags", "origin", `+refs/heads/main:${main}`);
+  } catch (err) {
+    throw new Error(`${FROZEN_HOOKS}: cannot fetch origin/main to compare the hooks files with: ${(err.stderr || err.message).trim()}`);
+  }
+  const listed = new Set(git("ls-tree", "-r", "--name-only", main, "--", "VERSION", ...paths).split("\n"));
+  const show = (path) => (listed.has(path) ? git("show", `${main}:${path}`) : undefined);
+  return { version: show("VERSION")?.trim(), files: Object.fromEntries(paths.map((path) => [path, show(path)])) };
 }
 
 // Every file the generator writes, as exact text by repo-relative path,
@@ -1064,13 +1051,6 @@ export function problems(root, models) {
     }),
   ).filter(Boolean);
   models ??= attempt(() => loadModels(root));
-  attempt(() => {
-    for (const [path, digest] of Object.entries(JSON.parse(read(HOOK_PIN)))) {
-      const actual = hookDigest(read(path));
-      if (actual !== digest)
-        throw new Error(`${path} changed: review the hook command, then pin "${actual}" in ${HOOK_PIN} so the T3 installer trusts it`);
-    }
-  });
   const statOf = (rel) => {
     const full = join(pluginRoot, rel);
     if (!existsSync(full) || !pathIsInside(realpathSync(pluginRoot), realpathSync(full))) return null;
@@ -1124,6 +1104,18 @@ export function problems(root, models) {
   for (const { file, root } of hooksFiles) {
     attempt(() => validateHooks(readFileSync(join(pluginRoot, file), "utf8"), { statOf, file, root, checkExecutable }));
   }
+  // The Codex hooks file the T3 installer trusts, pinned as chhoumann/t3-pstack pins it.
+  attempt(() => {
+    const paths = [`${PLUGIN}/hooks/codex-hooks.json`];
+    const faults = frozenHookFaults({
+      pins: JSON.parse(read(FROZEN_HOOKS)),
+      files: Object.fromEntries(paths.map((path) => [path, read(path)])),
+      version: read("VERSION").trim(),
+      changelog: read("CHANGES.md"),
+      shipped: shippedOnMain(root, paths),
+    });
+    if (faults.length) throw new Error(faults.join("\n"));
+  });
   return failures;
 }
 

@@ -4,7 +4,7 @@
 // `<providerInstanceId>/<modelId>` plus `<optionId>=<value>` pairs, or
 // `inherit-parent` (alias `auto`). An entry maps one to one onto a
 // `delegate_task` target, so this file is the only place the grammar lives:
-// the generator checks models.json's `t3` tiers with it, and setup-pstack checks
+// the generator checks the models.json tiers with it, and setup-pstack checks
 // a sheet against the live `orchestrator_capabilities` catalog with it.
 //
 //   node t3-sheet.mjs <sheet.md> <catalog.json>
@@ -65,14 +65,6 @@ export function parseSheet(markdown) {
       const match = line.match(/^([a-z][a-z ,-]*[a-z]): (\S(?:.*\S)?)$/);
       return [{ line: i + 1, key: match?.[1], value: match?.[2] }];
     });
-}
-
-// The T3 role vocabulary from models.json's `t3` section: each role with its
-// T3 tier, the tier defaults, and the retired role names a released sheet may
-// still carry.
-export function t3Vocabulary(models) {
-  const { tiers, roles, retired = [] } = models.t3;
-  return { roles: Object.entries(roles).map(([role, tier]) => ({ role, tier })), defaults: tiers, retired };
 }
 
 // Problems with a parsed sheet, for the role vocabulary of models.json (each
@@ -184,10 +176,12 @@ if (invoked === fileURLToPath(import.meta.url)) {
     console.error("usage: t3-sheet.mjs <sheet.md> <catalog.json>");
     process.exit(2);
   }
-  const vocabulary = t3Vocabulary(JSON.parse(readFileSync(new URL("../../../models.json", import.meta.url), "utf8")));
+  const { roles, tiers, retired } = JSON.parse(readFileSync(new URL("../../../models.t3.json", import.meta.url), "utf8"));
   const problems = checkSheet(parseSheet(readFileSync(sheetPath, "utf8")), {
-    ...vocabulary,
+    roles,
+    defaults: tiers,
     catalog: JSON.parse(readFileSync(catalogPath, "utf8")),
+    retired,
   });
   for (const problem of problems) console.log(problem);
   if (problems.length) process.exit(1);

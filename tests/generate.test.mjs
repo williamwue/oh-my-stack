@@ -537,10 +537,22 @@ describe("plan, changes, apply", () => {
     made.push(dir);
     return dir;
   };
+  // A copy committed as its own origin/main, which the hooks check compares with.
+  const git = (dir, ...args) => {
+    const r = spawnSync("git", ["-C", dir, "-c", "user.name=t", "-c", "user.email=t@t", ...args], { encoding: "utf8" });
+    expect(r.status, r.stderr).toBe(0);
+  };
   const repoCopy = () => {
     const dir = scratch("pstack-generate-");
     cpSync(repoRoot, dir, { recursive: true, filter: (src) => ![".git", "node_modules"].includes(basename(src)) });
     symlinkSync(join(repoRoot, "node_modules"), join(dir, "node_modules"));
+    git(dir, "init", "-q");
+    git(dir, "add", "-A");
+    git(dir, "commit", "-qm", "main");
+    const origin = scratch("pstack-origin-");
+    git(origin, "init", "-q", "--bare");
+    git(dir, "remote", "add", "origin", origin);
+    git(dir, "push", "-q", "origin", "HEAD:refs/heads/main");
     return dir;
   };
   const snapshot = (dir) => Object.fromEntries(walk(dir).map((path) => [path, readFileSync(path, "utf8")]));

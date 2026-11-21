@@ -30,10 +30,9 @@ import { AppServer, pinCheck } from "../tools/install/codex.mjs";
 import { npxOrigin, parseSource, writeAtomic } from "../tools/install/common.mjs";
 import { antigravityProfile, discoverHomes } from "../tools/install/homes.mjs";
 import { doctorSheet, moveSheet } from "../tools/install/sheet.mjs";
-import { t3Vocabulary } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const { roles, defaults, retired } = t3Vocabulary(JSON.parse(readFileSync(join(repoRoot, "plugins/pstack/models.json"), "utf8")));
+const { roles, tiers, retired } = JSON.parse(readFileSync(join(repoRoot, "plugins/pstack/models.t3.json"), "utf8"));
 const FIX = "rerun `npx -y github:williamwue/oh-my-stack install`";
 
 const scratch = [];
@@ -493,7 +492,7 @@ describe("the model sheet", () => {
     expect(existsSync(join(root, ".claude-never-run"))).toBe(false);
 
     expect(moveSheet(sheet, homes)).toEqual([]);
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, hint: FIX })).toEqual([
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })).toEqual([
       { name: "machine sheet valid", ok: true, detail: "every line parses (pass --catalog to check targets)" },
       { name: "home sheets", ok: true, detail: "none differ from it" },
     ]);
@@ -551,7 +550,7 @@ describe("the model sheet", () => {
 
     expect(moveSheet(sheet, homes)).toEqual([]);
     expect(existsSync(sheet)).toBe(false);
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, hint: FIX })).toEqual([
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })).toEqual([
       {
         name: "machine sheet",
         ok: false,
@@ -573,7 +572,7 @@ describe("the model sheet", () => {
       `linked ${join(root, ".codex-pool/t3-pstack-models.md")} to it`,
     ]);
     expect(lstatSync(join(root, ".codex/t3-pstack-models.md")).isSymbolicLink()).toBe(false);
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, hint: FIX })[1]).toEqual({
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })[1]).toEqual({
       name: "home sheets",
       ok: false,
       detail: `${join(root, ".codex/t3-pstack-models.md")} differ from the machine sheet`,
@@ -583,22 +582,22 @@ describe("the model sheet", () => {
 
   test("doctor warns without a sheet and fails on a malformed one", () => {
     const { homes, sheet } = machine();
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, hint: FIX })).toEqual([
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })).toEqual([
       {
         name: "machine sheet",
         ok: false,
         detail: "none, so every role runs on its skill's defaults",
-        fix: "run /pstack:setup-pstack in a T3 thread",
+        fix: "run /t3-pstack:setup-pstack in a T3 thread",
         warn: true,
       },
     ]);
     mkdirSync(join(sheet, ".."), { recursive: true });
     writeFileSync(sheet, "bug-fix: claude-opus\nhow critics: inherit-parent\n");
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, hint: FIX })[0]).toEqual({
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })[0]).toEqual({
       name: "machine sheet valid",
       ok: false,
       detail: 'bug-fix: "claude-opus" does not start with <providerInstanceId>/<modelId>; "how critics" is not a pstack role',
-      fix: "run /pstack:setup-pstack in a T3 thread",
+      fix: "run /t3-pstack:setup-pstack in a T3 thread",
     });
   });
 
@@ -612,14 +611,14 @@ describe("the model sheet", () => {
       "reflect tooling: claudeAgent/claude-opus-5-5 effort=high fastMode=true",
     ];
     writeFileSync(sheet, `${released.join("\n")}\n`);
-    expect(doctorSheet(sheet, homes, { catalog: null, roles, defaults, retired, hint: FIX })).toEqual([
+    expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, retired, hint: FIX })).toEqual([
       { name: "machine sheet valid", ok: true, detail: "every line parses (pass --catalog to check targets)" },
       { name: "home sheets", ok: true, detail: "none differ from it" },
       {
         name: "retired roles",
         ok: false,
         detail: 'no skill reads "how explorer", "hardest tasks", "reflect tooling"',
-        fix: "run /pstack:setup-pstack in a T3 thread, which drops them",
+        fix: "run /t3-pstack:setup-pstack in a T3 thread, which drops them",
         warn: true,
       },
     ]);
@@ -636,7 +635,7 @@ function antigravityHome() {
 const pluginRoot = join(repoRoot, "plugins/pstack");
 const shipped = JSON.parse(readFileSync(join(pluginRoot, ".antigravity-plugin/plugin.json"), "utf8")).version;
 const agy = { pluginRoot, version: shipped, skills, hint: FIX };
-const installedAt = (home) => join(home.dir, "config/plugins/oms-pstack");
+const installedAt = (home) => join(home.dir, "config/plugins/t3-pstack");
 
 describe("Antigravity", () => {
   test("copies the plugin into the profile, where agy discovers it, and a second run changes nothing", () => {
@@ -646,7 +645,7 @@ describe("Antigravity", () => {
       expect(readFileSync(join(installedAt(home), file))).toEqual(readFileSync(join(pluginRoot, file)));
     }
     expect(installAntigravity(home, agy)).toEqual([]);
-    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["oms-pstack"]);
+    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["t3-pstack"]);
     expect(doctorAntigravity(home, agy)).toEqual([
       { name: "installed", ok: true, detail: shipped },
       { name: "enabled", ok: true, detail: "yes" },
@@ -661,7 +660,7 @@ describe("Antigravity", () => {
     expect(doctorAntigravity(home, agy)[0]).toEqual({ name: "installed", ok: false, detail: `2.3.0, expected ${shipped}`, fix: FIX });
     expect(installAntigravity(home, agy)).toEqual([`updated 2.3.0 to ${shipped}`]);
     expect(existsSync(join(installedAt(home), "dropped.md"))).toBe(false);
-    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["oms-pstack"]);
+    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["t3-pstack"]);
   });
 
   test("reinstalls a copy whose skills are missing", () => {
@@ -702,14 +701,14 @@ describe("Antigravity", () => {
     const home = antigravityHome();
     installAntigravity(home, agy);
     const config = join(home.dir, "config/config.json");
-    writeJson(config, { plugins: { "oms-pstack": { enabled: false } } });
+    writeJson(config, { plugins: { "t3-pstack": { enabled: false } } });
     expect(installAntigravity(home, agy)).toEqual([]);
-    expect(JSON.parse(readFileSync(config, "utf8"))).toEqual({ plugins: { "oms-pstack": { enabled: false } } });
+    expect(JSON.parse(readFileSync(config, "utf8"))).toEqual({ plugins: { "t3-pstack": { enabled: false } } });
     expect(doctorAntigravity(home, agy)[1]).toEqual({
       name: "enabled",
       ok: false,
       detail: `no, ${config} turns it off`,
-      fix: 'turn oms-pstack on in that file\'s "plugins" map',
+      fix: 'turn t3-pstack on in that file\'s "plugins" map',
     });
   });
 

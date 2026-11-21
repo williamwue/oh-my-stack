@@ -4,29 +4,23 @@ This file is the release changelog, with one `## <version> - <title>` entry per 
 
 ## 3.0.0 - One plugin for native hosts and T3 Code
 
-OMS is now one plugin, `pstack@oms`, recombined from michael-denyer/pstack-claude
-v0.9.145 (upstream cursor/plugins `0b46ec3`) and chhoumann/t3-pstack 2.5.3. The
-separate `t3-pstack@oms` plugin is removed: install `pstack@oms` on every backend,
-T3's included. Without T3's orchestration tools every skill behaves as in
-pstack-claude.
+OMS is now one plugin, `pstack@oms`: michael-denyer/pstack-claude v0.9.145
+(upstream cursor/plugins `0b46ec3`) with chhoumann/t3-pstack 2.5.3's T3 adaptation
+carried in its own words. The separate `t3-pstack@oms` plugin is removed. Without
+T3's orchestration tools every skill behaves as in pstack-claude.
 
-- On T3, poteto-mode and every role skill read the T3 mapping, which now carries
-  t3-pstack's dispatch rules: `delegate_task` defaults, worktree isolation, personas
-  briefed by path, model families, the independent-review gate, and per-skill notes.
-- T3 role defaults live in the `t3` section of `models.json`, and the generator stamps
-  them into the mapping and the setup sheet. The T3 sheet moves to t3-pstack's path,
-  `~/.config/t3-pstack/models.md`, with `<provider>/<model> <option>=<value>` entries.
-  setup-pstack reads an OMS 2.x `~/.t3/pstack-models.md` sheet as the user's choices
-  and rewrites it in the new form.
-- `worker.md` tells a T3 child it is a leaf.
-- watch-pr gains `--settle` (default 300 seconds): READY waits until other accounts'
-  review activity has been quiet since the latest push, opening, or ready for review.
-- `npx -y github:williamwue/oh-my-stack install|update|doctor` installs the plugin into
-  every Claude Code, Codex, and Antigravity home T3 runs, pins Codex homes to the
-  release tag, and trusts the Codex session-start hook only at the digest in
-  `tools/install/hook-pin.json`.
-- `tools/t3-upstream.mjs` lists the T3 files t3-pstack changed since the commit in
-  `tools/t3-upstream.json`.
+- On T3, poteto-mode and every role skill read `poteto-mode/references/t3-tools.md`,
+  which quotes t3-pstack's Subagents and Models sections and its T3 passages for each
+  skill and playbook. setup-pstack's T3 reference is t3-pstack's setup-pstack.
+- `plugins/pstack/models.t3.json` is t3-pstack's `models.json`, unchanged, and
+  `t3-sheet.mjs` checks the sheet at `~/.config/t3-pstack/models.md` against it.
+- `worker.md` carries t3-pstack's rule that a T3 child is a leaf.
+- watch-pr carries t3-pstack's `--settle` review window (default 300 seconds).
+- `npx -y github:williamwue/oh-my-stack install|update|doctor` is t3-pstack's
+  installer, installing `pstack@oms`. Rerun the installer after every update, so
+  each Codex home trusts the session-start hook again; `tools/frozen-hooks.json`
+  pins the hooks files it trusts.
+- An OMS 2.x sheet at `~/.t3/pstack-models.md` is no longer read; see the migration guide.
 - The OMS swarm collector, retry docs, and 2.0.x verification records are removed.
 
 ## 2.0.2 - T3 cross-provider role configuration

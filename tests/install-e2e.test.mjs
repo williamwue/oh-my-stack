@@ -25,11 +25,11 @@ import { fileURLToPath } from "node:url";
 
 import { AppServer } from "../tools/install/codex.mjs";
 import { HOME_REPO, PLUGIN_ID, resolveCli } from "../tools/install/common.mjs";
-import { hookDigest } from "../tools/install/common.mjs";
+import { hookDigest } from "../tools/plugin.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const version = JSON.parse(readFileSync(join(repoRoot, "plugins/pstack/.claude-plugin/plugin.json"), "utf8")).version;
-const ROUTING = "You have pstack.";
+const ROUTING = "You have t3-pstack, pstack for T3 Code.";
 const SHEET = "# budget: large (xhigh)\nbug-fix: inherit-parent\nsession hook: on\n";
 
 let root;
@@ -59,7 +59,7 @@ const HOOK = "pstack@oms:hooks/codex-hooks.json:session_start:0:0";
 
 // The plugin as a marketplace of its own, outside this checkout.
 function pluginCopy(dir) {
-  for (const path of [".claude-plugin", ".agents", "plugins", "tools/install/hook-pin.json"]) {
+  for (const path of [".claude-plugin", ".agents", "plugins", "tools/frozen-hooks.json"]) {
     cpSync(join(repoRoot, path), join(dir, path), { recursive: true, filter: (src) => !src.includes("node_modules") });
   }
   return dir;
@@ -119,7 +119,7 @@ function snapshot() {
   return out;
 }
 
-const enabled = process.env.OMS_E2E === "1";
+const enabled = process.env.T3_PSTACK_E2E === "1";
 
 // A fresh HOME per suite, with T3's settings listing `providerInstances`.
 function isolate(providerInstances) {
@@ -274,7 +274,7 @@ describe.skipIf(!enabled)("the installer, end to end", () => {
     expect(failing(row(doctor, ".claude-pool").checks)).toEqual([
       `installed: ${version}, but its files at ${poolRecord.installPath} are missing`,
     ]);
-    expect(failing(row(doctor, ".codex-work").checks)).toEqual(["enabled: no", "session-start hook trusted: no pstack hook listed"]);
+    expect(failing(row(doctor, ".codex-work").checks)).toEqual(["enabled: no", "session-start hook trusted: no t3-pstack hook listed"]);
 
     const { status, report } = installer("install");
     expect(row(report, ".codex").steps).toEqual([`reinstalled ${version}, whose files were missing`]);
@@ -311,7 +311,7 @@ describe.skipIf(!enabled)("the installer, end to end", () => {
   }, 300_000);
 });
 
-describe.skipIf(!enabled)("the installer, on an oms marketplace from another source", () => {
+describe.skipIf(!enabled)("the installer, on a t3-pstack marketplace from another source", () => {
   isolate({
     claudeAgent: { driver: "claudeAgent", enabled: true, config: { binaryPath: "claude", homePath: "" } },
     codex: { driver: "codex", enabled: true, config: { binaryPath: "codex", homePath: "" } },
@@ -319,7 +319,7 @@ describe.skipIf(!enabled)("the installer, on an oms marketplace from another sou
   });
 
   test("installs nothing from it, trusts none of its hooks, and doctor names the source", async () => {
-    // A marketplace that calls itself oms, with a hook that leaves a mark.
+    // A marketplace that calls itself t3-pstack, with a hook that leaves a mark.
     const counterfeit = pluginCopy(join(root, "counterfeit"));
     const marked = join(root, "hook-ran");
     edit(join(counterfeit, "plugins/pstack/hooks/codex-hooks.json"), /"command": "[^\n]*",\n/, `"command": "touch ${marked}",\n`);
@@ -382,9 +382,9 @@ describe.skipIf(!enabled)("the installer, on a release that changes the hook ent
       `session-start hook trusted: ${HOOK} modified, not from the hooks/codex-hooks.json this release pins`,
     ]);
 
-    const pins = join(source, "tools/install/hook-pin.json");
+    const pins = join(source, "tools/frozen-hooks.json");
     const pinned = JSON.parse(readFileSync(pins, "utf8"));
-    pinned["plugins/pstack/hooks/codex-hooks.json"] = hookDigest(readFileSync(hooks, "utf8"));
+    pinned["plugins/pstack/hooks/codex-hooks.json"] = { sha256: hookDigest(readFileSync(hooks, "utf8")), changedIn: next };
     writeFileSync(pins, JSON.stringify(pinned, null, 2) + "\n");
     const { status, report } = installer("update", source);
     console.log("release:", JSON.stringify(report.homes.map(({ dir, steps }) => ({ dir: relative(home, dir), steps }))));
@@ -635,7 +635,7 @@ describe.skipIf(!enabled)("the installer, on a Codex home that changes while it 
     expect(status).toBe(1);
     expect(row(report, ".codex").steps).toEqual([]);
     expect(failing(row(report, ".codex").checks)).toEqual([
-      `session-start hook trusted: no pstack hook listed; Codex: skipping plugin hook in ${hooksFile()}: ` +
+      `session-start hook trusted: no t3-pstack hook listed; Codex: skipping plugin hook in ${hooksFile()}: ` +
         `failed to fingerprint plugin contents: unsupported plugin entry type: ${hooksFile()}`,
     ]);
     expect(await trustState()).toBe(null);

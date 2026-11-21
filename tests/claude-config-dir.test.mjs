@@ -22,7 +22,14 @@ const CLAUDE_DIR = new RegExp(
     .join("|"),
 );
 const SLASH_ONLY_ENCODING = /`\/` → `-`|leading slash dropped/;
-const HISTORY = new Set(["CHANGES.md"]);
+// chhoumann/t3-pstack's text and installer, kept as written. The installer's
+// ~/.claude/settings.json is the home folder's project settings, not a config home.
+const HISTORY = new Set([
+  "CHANGES.md",
+  "tools/install/claude.mjs",
+  "plugins/pstack/skills/poteto-mode/references/t3-tools.md",
+  "plugins/pstack/skills/setup-pstack/references/t3.md",
+]);
 
 function linesMatching(pattern, root = repoRoot) {
   const hits = [];

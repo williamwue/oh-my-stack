@@ -6,7 +6,11 @@ import {
   resolveReviewThreads,
 } from "./github.ts";
 import { DeadlineExceeded, type WatchDeadline } from "./deadline.ts";
-import { reviewSettler, type ReviewSettler } from "./settle.ts";
+import {
+  reviewSettler,
+  waitReason as settleReason,
+  type ReviewSettler,
+} from "./settle.ts";
 import type * as T from "./types.ts";
 import { nonEmpty } from "./types.ts";
 export function assessGitHubMerge(args: {
@@ -287,12 +291,6 @@ function waitReason(row: T.PrSnapshot): T.WaitReason | null {
   if (row.ci.kind === "ci-pending")
     return { kind: "pending-checks", pending: row.ci.pending };
   if (row.ci.kind === "ci-unreported") return { kind: "checks-unreported" };
-  if (row.settle.kind === "settling")
-    return {
-      kind: "review-settling",
-      endsAt: row.settle.endsAt,
-      heldBy: row.settle.heldBy,
-    };
   return mergeabilityUnknown(row.facts)
     ? { kind: "mergeability-unknown" }
     : null;
@@ -308,7 +306,9 @@ function gateBlocker(
 ): T.MergeBlocker | null {
   const reason = gateReason(row, allowDraft);
   return reason === null ||
-    (DEFERRED_WHILE_WAITING.has(reason) && waitReason(row) !== null)
+    (DEFERRED_WHILE_WAITING.has(reason) &&
+      (waitReason(row) !== null ||
+        (row.kind === "open" && row.settle.kind === "settling")))
     ? null
     : { kind: "merge-gate", pr: row.context, reason };
 }
@@ -370,6 +370,8 @@ export function classifyPr(
   const wait = waitReason(row);
   if (wait !== null)
     return { kind: "waiting", frontier: row.context, reason: wait };
+  if (row.kind === "open" && row.settle.kind === "settling")
+    return { kind: "settling", frontier: row.context, settle: row.settle };
   const ready = readyContribution(row, allowDraft);
   if (ready === null) throw new Error("snapshot has no classified decision");
   return ready.kind === "merged-pr"
@@ -393,6 +395,8 @@ export function selectTierMajorStackDecision(
     const wait = waitReason(row);
     if (wait !== null)
       return { kind: "waiting", frontier: row.context, reason: wait };
+    else if (row.kind === "open" && row.settle.kind === "settling")
+      return { kind: "settling", frontier: row.context, settle: row.settle };
   }
   const prs = nonEmpty(
     rows
@@ -647,12 +651,13 @@ export async function runSimple(args: {
           args.mode
         ),
       };
+    const reason = settleReason(decision);
     args.dependencies.emit(
       stamp({
         kind: "WAITING",
         terminal: false,
         frontier: decision.frontier,
-        reason: decision.reason,
+        reason,
       })
     );
     return {
@@ -663,7 +668,7 @@ export async function runSimple(args: {
           kind: "TIMEOUT",
           terminal: true,
           exitCode: 5,
-          reason: decision.reason,
+          reason,
         }),
     };
   };

@@ -2,7 +2,7 @@
 // ids, the marketplace sources it trusts, the CLI runner, file writes, and the
 // shape of a doctor check.
 import { execFileSync } from "node:child_process";
-import { createHash, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { chmodSync, chownSync, existsSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, delimiter, dirname, extname, join, resolve } from "node:path";
@@ -10,12 +10,6 @@ import { basename, delimiter, dirname, extname, join, resolve } from "node:path"
 export const PLUGIN_ID = "pstack@oms";
 export const MARKETPLACE = "oms";
 export const HOME_REPO = "williamwue/oh-my-stack";
-
-// The installer trusts a Codex hook only when its hooks file has the digest
-// a release commits here, so a change to the hook command is a reviewed change
-// to this file. The generator fails when the shipped file has another digest.
-export const HOOK_PIN = "tools/install/hook-pin.json";
-export const hookDigest = (text) => createHash("sha256").update(JSON.stringify(JSON.parse(text))).digest("hex");
 
 // `~`, `~/` and `~\` expand as T3 expands them (provider-core
 // pathExpansion.ts). `~user` does not.
@@ -39,9 +33,9 @@ const gitUrl = (url) => (GITHUB_URL.test(url) ? { ...github(url.match(GITHUB_URL
 const directory = (path) => ({ key: `local:${existsSync(path) ? realpathSync(path) : resolve(path)}`, label: path });
 
 // The GitHub repository npx fetched this installer from, so a fork's own
-// `npx -y github:<owner>/oh-my-stack` installs from that fork with no --source.
+// `npx -y github:<owner>/t3-pstack` installs from that fork with no --source.
 // npx writes the spec it was given to the package.json two levels above the
-// package, at <npm cache>/_npx/<hash>/node_modules/pstack.
+// package, at <npm cache>/_npx/<hash>/node_modules/t3-pstack.
 const GITHUB_SPEC = /^(?:github:)?([A-Za-z0-9][A-Za-z0-9-]*\/[A-Za-z0-9._-]+?)(?:\.git)?(?:#.*)?$/;
 export function npxOrigin(packageRoot) {
   const root = resolve(packageRoot);
@@ -90,9 +84,9 @@ export function codexSource(entry) {
 // A home installs only from a marketplace whose every source is trusted.
 export const trustedOnly = (sources, trusted) => sources.length > 0 && sources.every((s) => trusted.has(s.key));
 
-// The marketplace check both doctors run. A marketplace named oms from
+// The marketplace check both doctors run. A marketplace named t3-pstack from
 // any source but the trusted ones is not installed from, nor its hook trusted.
-// One from williamwue/oh-my-stack, on a run whose --source names another, is
+// One from chhoumann/t3-pstack, on a run whose --source names another, is
 // still installed from, and the check warns that the run did not switch it.
 export function marketplaceCheck(sources, { source, trusted }, remove) {
   const hint = installHint(source);
@@ -134,7 +128,7 @@ export const pluginIntact = (root, manifest, skills) =>
 let neutral;
 export function neutralCwd() {
   if (!neutral) {
-    neutral = mkdtempSync(join(tmpdir(), "oms-"));
+    neutral = mkdtempSync(join(tmpdir(), "t3-pstack-"));
     process.on("exit", () => rmSync(neutral, { recursive: true, force: true }));
   }
   return neutral;
@@ -199,7 +193,7 @@ export function runCli(bin, args, env) {
 
 // A path beside `path` that nothing holds. Creating it with the `wx` flag or
 // symlinkSync fails rather than replace a file someone else put there.
-export const tempBeside = (path) => join(dirname(path), `.${basename(path)}.${randomUUID()}.oms.tmp`);
+export const tempBeside = (path) => join(dirname(path), `.${basename(path)}.${randomUUID()}.t3-pstack.tmp`);
 
 // A crash between the write and the rename leaves the old file whole. The
 // rename lands on the symlink's target, so a settings file one home links

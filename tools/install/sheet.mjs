@@ -10,7 +10,7 @@ import { checkSheet, parseSheet } from "../../plugins/pstack/skills/setup-pstack
 import { check, tempBeside, writeAtomic } from "./common.mjs";
 
 export const HOME_SHEET = "t3-pstack-models.md";
-const SETUP_HINT = "run /pstack:setup-pstack in a T3 thread";
+const SETUP_HINT = "run /t3-pstack:setup-pstack in a T3 thread";
 
 export const sheetPath = (env, home) =>
   join(env.XDG_CONFIG_HOME?.trim() ? resolve(env.XDG_CONFIG_HOME.trim()) : join(home, ".config"), "t3-pstack", "models.md");
@@ -63,7 +63,7 @@ export function moveSheet(sheet, homes) {
   return steps;
 }
 
-export function doctorSheet(sheet, homes, { catalog, roles, defaults, retired = [], hint }) {
+export function doctorSheet(sheet, homes, { catalog, roles, tiers, retired = [], hint }) {
   const old = homeSheets(homes).filter(isFile);
   if (!isFile(sheet)) {
     const differ = new Set(old.map((path) => readFileSync(path, "utf8"))).size > 1;
@@ -80,7 +80,7 @@ export function doctorSheet(sheet, homes, { catalog, roles, defaults, retired = 
     return [check("machine sheet", false, "none, so every role runs on its skill's defaults", SETUP_HINT, true)];
   }
   const lines = parseSheet(readFileSync(sheet, "utf8"));
-  const problems = checkSheet(lines, { roles, defaults, catalog, retired });
+  const problems = checkSheet(lines, { roles, defaults: tiers, catalog, retired });
   // A retired line passes, so a released sheet keeps working, and setup-pstack
   // drops it on its next run.
   const stale = [...new Set(lines.map(({ key }) => key).filter((key) => retired.includes(key)))];

@@ -10,14 +10,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { loadModels } from "../tools/generate.mjs";
-import { checkSheet, family, parseEntry, parseSheet, t3Vocabulary } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
+import { checkSheet, family, parseEntry, parseSheet } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const script = join(root, "plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs");
 const catalogPath = join(root, "tests/fixtures/t3-catalog.json");
 const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
-const { roles, defaults, retired } = t3Vocabulary(loadModels());
+const { roles, tiers: defaults, retired } = JSON.parse(readFileSync(join(root, "plugins/pstack/models.t3.json"), "utf8"));
 const check = (text, over = catalog) => checkSheet(parseSheet(text), { roles, defaults, catalog: over, retired });
 const PANEL = "interrogate reviewers";
 
@@ -282,7 +281,7 @@ describe("checkSheet against a catalog", () => {
     expect(check(released.join("\n"))).toEqual([
       'arena cross-judge pool: antigravity/gemini-4-carbon: no option "thinking_level" (has thought_level)',
     ]);
-    expect(check("hardest tasks: provider-gone/model-gone\narchitect runners: provider-gone/model-gone")).toEqual([]);
+    expect(check("strongest judgment: provider-gone/model-gone\narchitect runners: provider-gone/model-gone")).toEqual([]);
   });
 
   test("default effort, an unknown role, and a bad hook value fail; headings and blank lines pass", () => {

@@ -2,7 +2,7 @@ import { WatcherQueryError } from "./github.ts";
 import type { WatchClock } from "./policy.ts";
 import type * as T from "./types.ts";
 
-// The review settle window, carried from chhoumann/t3-pstack. Review bots post minutes after CI turns
+// t3-pstack's review settle window. Review bots post minutes after CI turns
 // green, so READY waits until no account other than the PR author and the gh
 // viewer has commented, reviewed, or reacted for the settle window since the
 // review was triggered: the push, the PR opening, or its last ready for review.
@@ -49,6 +49,11 @@ export type SettleWait = { readonly kind: "review-settling" } & Pick<
   Settling,
   "endsAt" | "heldBy"
 >;
+export interface SettleDecision {
+  readonly kind: "settling";
+  readonly frontier: T.PrContext;
+  readonly settle: Settling;
+}
 
 const seconds = (iso: string): number => Date.parse(iso) / 1_000;
 const iso = (at: number): string => new Date(at * 1_000).toISOString();
@@ -379,6 +384,15 @@ export function reviewSettler(args: {
     });
   };
 }
+
+export const waitReason = (decision: T.WaitingDecision | SettleDecision) =>
+  decision.kind === "waiting"
+    ? decision.reason
+    : ({
+        kind: "review-settling",
+        endsAt: decision.settle.endsAt,
+        heldBy: decision.settle.heldBy,
+      } satisfies SettleWait);
 
 const left = (secondsLeft: number): string =>
   secondsLeft < 60 ? `${secondsLeft}s` : `${Math.ceil(secondsLeft / 60)}m`;

@@ -6,13 +6,13 @@
 // plugin tree into each profile itself. The older ACP runtime (1.4.x) that
 // earlier T3 releases installed loads no plugins or session-start hooks.
 import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync } from "node:fs";
-import { basename, dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 
 import { check, pluginIntact, readJson, tempBeside } from "./common.mjs";
 
 export const ANTIGRAVITY_MANIFEST = ".antigravity-plugin/plugin.json";
 // The install directory, which keys Antigravity's enabled state in config.json.
-const DIR = "oms-pstack";
+const DIR = "t3-pstack";
 
 const installPath = (home) => join(home.dir, "config", "plugins", DIR);
 const installedVersion = (path) => (existsSync(join(path, ANTIGRAVITY_MANIFEST)) ? readJson(join(path, ANTIGRAVITY_MANIFEST)).version : undefined);
@@ -40,9 +40,7 @@ export function installAntigravity(home, { pluginRoot, version, skills }) {
   // A whole tree swapped in by rename, so a session never loads half a plugin
   // and files a release dropped do not linger.
   const fresh = tempBeside(path);
-  // A checkout's script dependencies are not part of the plugin: the scripts
-  // install their own into a per-user cache.
-  cpSync(pluginRoot, fresh, { recursive: true, filter: (source) => basename(source) !== "node_modules" });
+  cpSync(pluginRoot, fresh, { recursive: true });
   const old = existsSync(path) ? tempBeside(path) : undefined;
   if (old) renameSync(path, old);
   renameSync(fresh, path);
@@ -62,6 +60,6 @@ export function doctorAntigravity(home, { pluginRoot, version, skills, hint }) {
       !installed ? "not installed" : installed !== version ? `${installed}, expected ${version}` : whole ? installed : `${installed}, but its files at ${path} are missing or changed`,
       hint,
     ),
-    check("enabled", on, on ? "yes" : `no, ${join(home.dir, "config", "config.json")} turns it off`, `turn oms-pstack on in that file's "plugins" map`),
+    check("enabled", on, on ? "yes" : `no, ${join(home.dir, "config", "config.json")} turns it off`, `turn t3-pstack on in that file's "plugins" map`),
   ];
 }

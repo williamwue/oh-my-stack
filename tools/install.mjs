@@ -1,19 +1,19 @@
 #!/usr/bin/env node
-// OMS's T3 installer, carried from chhoumann/t3-pstack. `install`, or `update`, the same command, brings
+// t3-pstack's installer. `install`, or `update`, the same command, brings
 // every Claude Code and Codex home T3 can run, and the profile of each
-// Antigravity instance T3 runs, to this package's version of pstack@oms, pins each Codex home's marketplace to that version's tag, trusts
+// Antigravity instance T3 runs, to this package's version of t3-pstack, pins each Codex home's marketplace to that version's tag, trusts
 // the Codex session-start hook, and moves the model sheet to its one path per
 // machine. Each step converges, so a second run changes nothing. `doctor`
 // checks the same homes and writes nothing itself, though the Codex app-server
 // it starts refreshes a Git marketplace, as any T3 Codex thread does. Both
 // exit 1 when a check fails.
 //
-// Each home's oms marketplace must come from williamwue/oh-my-stack or
+// Each home's t3-pstack marketplace must come from chhoumann/t3-pstack or
 // from this run's --source, which defaults to the repository npx fetched this
 // installer from. A home whose marketplace has another source, such as a
 // local --source from an earlier run, gets nothing installed and no hook
 // trusted, and doctor fails it with that source. A run never switches a
-// home's source: one from williamwue/oh-my-stack stays on it under another
+// home's source: one from chhoumann/t3-pstack stays on it under another
 // --source, and doctor warns with the commands that switch it.
 //
 // The pin is the `ref` of a Codex home's Git marketplace, the tag v<version>.
@@ -24,8 +24,8 @@
 // from their marketplace's default branch. An Antigravity profile gets a copy
 // of the plugin this run installs, so it too changes only when `update` runs.
 //
-//   npx -y github:williamwue/oh-my-stack <install|update|doctor>
-//     --source <owner/repo|git URL|dir>   marketplace source, default the repo npx ran, else williamwue/oh-my-stack
+//   npx -y github:chhoumann/t3-pstack <install|update|doctor>
+//     --source <owner/repo|git URL|dir>   marketplace source, default the repo npx ran, else chhoumann/t3-pstack
 //     --claude-home <dir>, --codex-home <dir>   more homes, repeatable
 //     --catalog <file>   an orchestrator_capabilities dump to check the sheet's targets against
 //     --json
@@ -39,10 +39,10 @@ import { parseArgs } from "node:util";
 import { doctorAntigravity, installAntigravity } from "./install/antigravity.mjs";
 import { doctorClaude, installClaude } from "./install/claude.mjs";
 import { doctorCodex, installCodex } from "./install/codex.mjs";
-import { check, hasCli, HOME_REPO, HOOK_PIN, installHint, npxOrigin, parseSource, readJson } from "./install/common.mjs";
+import { check, hasCli, HOME_REPO, installHint, npxOrigin, parseSource, readJson } from "./install/common.mjs";
 import { discoverHomes } from "./install/homes.mjs";
 import { doctorSheet, moveSheet, sheetPath } from "./install/sheet.mjs";
-import { t3Vocabulary } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
+import { FROZEN_HOOKS } from "./plugin.mjs";
 
 const HARNESSES = {
   claude: { name: "Claude Code", install: installClaude, doctor: doctorClaude },
@@ -53,25 +53,25 @@ const HARNESSES = {
 const SHEET_HARNESSES = new Set(["claude", "codex"]);
 
 const USAGE =
-  "usage: oms <install|update|doctor> [--source <owner/repo|git URL|dir>] " +
+  "usage: t3-pstack <install|update|doctor> [--source <owner/repo|git URL|dir>] " +
   "[--claude-home <dir>]... [--codex-home <dir>]... [--catalog <file>] [--json]";
 
 // What to converge on comes from the plugin this run installs: the local
 // source, or else this package, which is the marketplace's own repo. `skills`
 // maps each skill to its SKILL.md, and `codexHook` is the hooks file the
-// Codex manifest names, with the digest its release pins in HOOK_PIN.
+// Codex manifest names, with its pinned digest.
 function pluginFacts(root) {
   const plugin = join(root, "plugins/pstack");
-  const { roles, defaults, retired } = t3Vocabulary(readJson(join(plugin, "models.json")));
+  const { roles, tiers, retired } = readJson(join(plugin, "models.t3.json"));
   const hooks = readJson(join(plugin, ".codex-plugin/plugin.json")).hooks.replace(/^\.\//, "");
   const skills = readdirSync(join(plugin, "skills"), { withFileTypes: true }).filter((entry) => entry.isDirectory());
   return {
     pluginRoot: plugin,
     version: readJson(join(plugin, ".claude-plugin/plugin.json")).version,
     skills: new Map(skills.map(({ name }) => [name, readFileSync(join(plugin, "skills", name, "SKILL.md"), "utf8")])),
-    codexHook: { path: hooks, sha256: readJson(join(root, HOOK_PIN))[`plugins/pstack/${hooks}`] },
+    codexHook: { path: hooks, sha256: readJson(join(root, FROZEN_HOOKS))[`plugins/pstack/${hooks}`].sha256 },
     roles,
-    defaults,
+    tiers,
     retired,
   };
 }
@@ -134,7 +134,7 @@ async function run(argv, env, home) {
   } catch (err) {
     report.sheet.checks.push(check("move", false, err.message, hint));
   }
-  report.sheet.checks.push(...doctorSheet(sheet, sheetHomes, { catalog, roles: facts.roles, defaults: facts.defaults, retired: facts.retired, hint }));
+  report.sheet.checks.push(...doctorSheet(sheet, sheetHomes, { catalog, roles: facts.roles, tiers: facts.tiers, retired: facts.retired, hint }));
   const all = [...report.homes.flatMap((row) => row.checks), ...report.sheet.checks];
   report.failed = all.filter((c) => !c.ok && !c.warn).length;
   report.warnings = all.filter((c) => !c.ok && c.warn).length;
@@ -142,7 +142,7 @@ async function run(argv, env, home) {
 }
 
 function render({ command, version, source, settings, homes, sheet, failed, warnings }, home) {
-  const lines = [`pstack@oms ${version} from ${source}`];
+  const lines = [`t3-pstack ${version} from ${source}`];
   lines.push(`T3 settings: ${settings.path}${settings.error ? ` (${settings.error})` : `, ${settings.instances} Claude Code, Codex, or Antigravity instances`}`);
   const section = (title, steps, checks) => {
     lines.push("", title);
@@ -176,6 +176,6 @@ try {
     process.exitCode = report.failed ? 1 : 0;
   }
 } catch (err) {
-  console.error(`oms: ${err.message}`);
+  console.error(`t3-pstack: ${err.message}`);
   process.exitCode = 2;
 }

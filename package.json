@@ -11,7 +11,7 @@
   "repository": "https://github.com/michael-denyer/pstack-claude",
   "license": "MIT",
   "bin": {
-    "oms": "tools/install.mjs"
+    "t3-pstack": "tools/install.mjs"
   },
   "keywords": [
     "pi-package",

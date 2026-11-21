@@ -7,7 +7,7 @@ OMS 3.0 只有一个插件 `pstack@oms`，T3 和原生宿主都安装它。`t3-p
 1. 在 T3 使用的每个后端列出插件，记下 `pstack@oms` 和 `t3-pstack@oms` 的启用状态、作用域和配置目录。
 2. 用宿主的原生命令停用 `t3-pstack@oms`。两个插件不要同时启用，否则两个 session-start hook 都会触发，同名技能也会冲突。
 3. 运行 `npx -y github:williamwue/oh-my-stack install`，然后运行 `doctor`，确认每个后端都显示 3.0.0 且所有检查通过。
-4. 在新的 T3 会话中运行 `pstack:setup-pstack`。如果存在 `~/.t3/pstack-models.md` 或项目内的 `.agents/pstack-models.t3.md`，它会把其中的行当作你的选择，改写成新格式，写入 `~/.config/t3-pstack/models.md`。旧文件保留，不会被删除。
+4. 在新的 T3 会话中运行 `pstack:setup-pstack`，写入 `~/.config/t3-pstack/models.md`。OMS 2.x 的 `~/.t3/pstack-models.md` 和项目内的 `.agents/pstack-models.t3.md` 不再读取，也不会被删除。要沿用其中的选择，在 setup 询问时按新格式填写：`<provider>/<model> @<effort>` 改为 `<provider>/<model> <选项>=<值>`，选项名以 `orchestrator_capabilities` 列出的为准，例如 Claude 用 `effort`，Codex 用 `reasoningEffort`。
 5. 在新会话中跑一个有明确范围的任务，核对子任务实际使用的 provider、模型和 effort。确认无误后，再用宿主命令卸载 `t3-pstack@oms`。
 
 如果出现问题，停用 `pstack@oms`，重新启用 `t3-pstack@oms`。

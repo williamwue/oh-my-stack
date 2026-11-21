@@ -89,11 +89,11 @@ export function installClaude(home, { source, trusted, version, skills }) {
   return steps;
 }
 
-// Claude Code reads the home folder's .claude/settings.json as that folder's
-// project settings, so a session started there under another config home adds
-// a project-scope record, and that record keeps the version it found.
-// `claude plugin uninstall --scope project` would edit that same file, which
-// belongs to the main home. So the record is brought to the user-scope
+// Claude Code reads ~/.claude/settings.json as the project settings of the
+// home folder, so a session started there under another config home adds a
+// project-scope record, and that record keeps the version it found.
+// `claude plugin uninstall --scope project` would edit ~/.claude/settings.json,
+// which belongs to the main home. So the record is brought to the user-scope
 // install in place, after a backup.
 export function syncScopedRecords(dir) {
   const path = join(dir, RECORDS);
