@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.0.1 - T3 role dispatch and completion receipts
+
+T3 playbooks now request async `delegate_task` for same-provider workers and
+resolve the target from the machine model sheet. Inherited seats omit the target.
+After a child completes, the parent carries its dispatch receipt into the final
+reply, including the requested seat, confirmed or unknown executed model, and outcome.
+
 ## 3.0.0 - One plugin for native hosts and T3 Code
 
 OMS is now one plugin, `pstack@oms`: michael-denyer/pstack-claude v0.9.145

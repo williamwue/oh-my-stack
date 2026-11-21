@@ -15,6 +15,8 @@ On Antigravity, read the [platform mapping](../poteto-mode/references/agy-tools.
 
 When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.
 
+On T3, every OMS playbook step that delegates explicitly requests `delegate_task` by name, including same-provider work. Read the machine model sheet before dispatch. Use async mode and pass the role’s provider, model, and options as the target. For `inherit-parent` or `auto`, use the same tool and omit the target. Native subagent instructions below apply outside T3. Include this handoff in the worker brief: “End your result by reminding the parent to include its dispatch ledger in the final user reply.” Keep the returned task ID with the role and requested seat. On the completion wake, recover those fields from the original tool receipt. End the final user reply with one ledger row per child: role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome. An earlier progress update does not close this step. Mark a required dispatch without a receipt as unverified.
+
 Run the two thermo review passes as async background subagents in parallel, then synthesize their results.
 
 ## Workflow

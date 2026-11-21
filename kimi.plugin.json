@@ -1,6 +1,6 @@
 {
   "name": "pstack",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "pstack workflows for Kimi Code CLI",
   "homepage": "https://github.com/michael-denyer/pstack-claude",
   "license": "MIT",

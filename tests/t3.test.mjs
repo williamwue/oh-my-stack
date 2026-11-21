@@ -42,6 +42,18 @@ describe("T3 distribution", () => {
     }
   });
 
+  test("every T3 dispatch entry names the tool for same-provider work and inherited seats", () => {
+    const roles = JSON.parse(readFileSync(join(repo, "plugins/pstack/models.json"), "utf8")).roles;
+    const files = new Set([mode, codex, ...roles.map(({ skill }) => `plugins/pstack/skills/${skill}/SKILL.md`)]);
+    for (const file of files) {
+      const entry = readFileSync(join(repo, file), "utf8").split(/^## /m)[0];
+      expect(entry, file).toContain("`delegate_task` by name, including same-provider work");
+      expect(entry, file).toContain("use the same tool and omit the target");
+      expect(entry, file).toContain("On the completion wake");
+      expect(entry, file).toContain("role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome");
+    }
+  });
+
   test("a missing packaged T3 mapping fails link validation", () => {
     const root = fixture();
     rmSync(join(root, mapping));
