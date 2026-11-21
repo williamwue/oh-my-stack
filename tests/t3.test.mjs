@@ -104,3 +104,12 @@ describe("T3 role defaults in models.json", () => {
     expect(intended.files[setupMapping]).toContain("swarm workers: codex/gpt-6.2-sol reasoningEffort=high");
   });
 });
+
+describe("the installer's Codex hook pin", () => {
+  test("a changed Codex hooks file fails the generator until its digest is pinned", () => {
+    const root = fixture();
+    const hooks = join(root, "plugins/pstack/hooks/codex-hooks.json");
+    writeFileSync(hooks, readFileSync(hooks, "utf8").replace("startup|resume|clear|compact", "startup|resume|compact|clear"));
+    expect(problems(root).some((message) => message.includes("codex-hooks.json changed") && message.includes("hook-pin.json"))).toBe(true);
+  });
+});

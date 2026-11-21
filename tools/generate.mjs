@@ -55,6 +55,7 @@ import { Value } from "typebox/value";
 
 import { code, codeList, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
 import { panelFamilies, parseEntry } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
+import { HOOK_PIN, hookDigest } from "./install/common.mjs";
 import { PLATFORM_ADAPTATION_OPEN, platformAdaptation, RUNTIMES, roleSkills } from "./runtimes.mjs";
 import { markdownFiles, pathIsInside, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
 
@@ -1062,6 +1063,13 @@ export function problems(root, models) {
     }),
   ).filter(Boolean);
   models ??= attempt(() => loadModels(root));
+  attempt(() => {
+    for (const [path, digest] of Object.entries(JSON.parse(read(HOOK_PIN)))) {
+      const actual = hookDigest(read(path));
+      if (actual !== digest)
+        throw new Error(`${path} changed: review the hook command, then pin "${actual}" in ${HOOK_PIN} so the T3 installer trusts it`);
+    }
+  });
   const statOf = (rel) => {
     const full = join(pluginRoot, rel);
     if (!existsSync(full) || !pathIsInside(realpathSync(pluginRoot), realpathSync(full))) return null;
