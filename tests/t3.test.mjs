@@ -59,6 +59,27 @@ describe("T3 distribution", () => {
       const marketplace = JSON.parse(readFileSync(join(repo, file), "utf8"));
       expect(marketplace.name).toBe("oms");
       expect(marketplace.plugins.map((plugin) => plugin.name)).toEqual(["pstack"]);
+      for (const plugin of marketplace.plugins) {
+        const dir = typeof plugin.source === "string" ? plugin.source : plugin.source.path;
+        const manifestDir = file.startsWith(".agents/") ? ".codex-plugin" : ".claude-plugin";
+        const manifest = JSON.parse(readFileSync(join(repo, dir, manifestDir, "plugin.json"), "utf8"));
+        expect(manifest.name).toBe(plugin.name);
+      }
     }
+  });
+});
+
+describe("the T3 mapping quotes t3-pstack's model defaults", () => {
+  test("every default entry it lists is the one models.t3.json gives that role", () => {
+    const models = JSON.parse(readFileSync(join(repo, "plugins/pstack/models.t3.json"), "utf8"));
+    const text = readFileSync(join(repo, mapping), "utf8");
+    const listed = [...text.matchAll(/^- ([a-z][a-z ,-]*): (`.+`)$/gm)].map((m) => [m[1], [...m[2].matchAll(/`([^`]+)`/g)].map((e) => e[1])]);
+    expect(listed.length).toBeGreaterThan(0);
+    for (const [role, entries] of listed) {
+      const tier = models.roles.find((r) => r.role === role)?.tier;
+      expect(tier, role).toBeDefined();
+      expect(entries, role).toEqual([models.tiers[tier]].flat());
+    }
+    for (const { role } of models.roles) expect(listed.map(([r]) => r)).toContain(role);
   });
 });

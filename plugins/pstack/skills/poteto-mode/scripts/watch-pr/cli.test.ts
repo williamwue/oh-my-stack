@@ -47,6 +47,7 @@ describe("parseArgs", () => {
       polling: {
         interval: 60,
         sweepInterval: 300,
+        settle: 300,
         timeout: 0,
         maxQueryErrors: 5,
         allowDraft: false,
@@ -78,6 +79,7 @@ describe("parseArgs", () => {
     expect(parsed.polling).toEqual({
       interval: 2.5,
       sweepInterval: 30,
+      settle: 300,
       timeout: 0,
       maxQueryErrors: 3,
       allowDraft: true,

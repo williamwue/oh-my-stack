@@ -30,6 +30,7 @@ const context = { owner: "owner", repo: "repo", number: parsePrNumber(1) };
 const options = {
   interval: 60,
   sweepInterval: 300,
+  settle: 0,
   timeout: 1,
   maxQueryErrors: 5,
   allowDraft: false,

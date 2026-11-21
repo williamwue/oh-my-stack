@@ -73,7 +73,7 @@ import { fileURLToPath } from "node:url";
 
 import { deriveSkill, isObject, loadLeadLines, loadModels } from "./generate.mjs";
 import { isMain } from "./plugin.mjs";
-import { walk } from "./validate-skills.mjs";
+import { T3_QUOTED, walk } from "./validate-skills.mjs";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -536,7 +536,8 @@ export function syncComponent({
 
   for (const { rel, kind, write, kept, counts, changed, hunks } of outcomes) {
     const scanned = write?.bytes ?? kept;
-    if (scanned && !isBinary(rel, scanned)) report.hits.push(...denylistHits(rel, scanned.toString("utf8"), denylist));
+    const quotedT3 = T3_QUOTED.some((quoted) => rel.split("\\").join("/") === `skills/${quoted}`);
+    if (scanned && !isBinary(rel, scanned) && !quotedT3) report.hits.push(...denylistHits(rel, scanned.toString("utf8"), denylist));
     if (write) {
       report.written.push({ kind, rel });
       counts.forEach((n, p) => report.counts.set(p, (report.counts.get(p) ?? 0) + n));

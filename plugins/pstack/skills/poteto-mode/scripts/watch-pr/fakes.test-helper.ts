@@ -1,5 +1,6 @@
 import type {
   Check,
+  SuiteCheck,
   ChecksFastPath,
   CommitRollup,
   GitHubReader,
@@ -14,6 +15,7 @@ import type {
 } from "./types.ts";
 import { parsePullRequest } from "./github.ts";
 import { parsePrNumber } from "./types.ts";
+import type { ReviewActivity } from "./settle.ts";
 
 export interface FakeReaderOptions {
   readonly facts?: Partial<Omit<PullRequestFacts, "context">>;
@@ -23,6 +25,8 @@ export interface FakeReaderOptions {
   readonly threads?: readonly ReviewThread[];
   readonly threadPages?: readonly ReviewThreadPage[];
   readonly commitRollups?: readonly CommitRollup[];
+  readonly reviewActivity?: ReviewActivity;
+  readonly unsettledSuites?: readonly SuiteCheck[];
   readonly openPullRequests?: readonly OpenPullRequest[];
   readonly defaultBranch?: string;
   readonly origin?: Repository | null;
@@ -149,9 +153,24 @@ export function fakeReader(
         endCursor: null,
       };
     },
+    async reviewActivity() {
+      calls.push("reviewActivity");
+      return options.reviewActivity ?? {
+        authorLogin: "author",
+        viewerLogin: "viewer",
+        openedAt: "2026-01-01T00:00:00Z",
+        readyAt: null,
+        headPushedAt: "2026-01-01T00:00:00Z",
+        items: [],
+      };
+    },
     async commitRollups() {
       calls.push("commitRollups");
       return options.commitRollups ?? [{ oid: "head", state: "SUCCESS" }];
+    },
+    async unsettledSuites(_requested, head, checksRead) {
+      calls.push(`unsettledSuites:${head}:${checksRead}`);
+      return options.unsettledSuites ?? [];
     },
   };
 }

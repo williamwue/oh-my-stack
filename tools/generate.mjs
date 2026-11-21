@@ -36,6 +36,7 @@
 // user-invocable: false); a skill without a row or a row without a skill
 // fails by name.
 
+import { execFileSync } from "node:child_process";
 import {
   existsSync,
   lstatSync,
@@ -53,9 +54,9 @@ import { fileURLToPath } from "node:url";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
 
-import { code, codeList, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
+import { code, codeList, FROZEN_HOOKS, hookDigest, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
 import { PLATFORM_ADAPTATION_OPEN, platformAdaptation, RUNTIMES, roleSkills } from "./runtimes.mjs";
-import { markdownFiles, pathIsInside, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
+import { markdownFiles, pathIsInside, T3_QUOTED, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repoRelative = (root, file) => relative(root, file).split(sep).join("/");
@@ -63,7 +64,7 @@ const repoRelative = (root, file) => relative(root, file).split(sep).join("/");
 const VERSIONED_MANIFESTS = [
   ".claude-plugin/marketplace.json",
   `${PLUGIN}/.claude-plugin/plugin.json`,
-  ...RUNTIMES.map((runtime) => runtime.manifest),
+  ...RUNTIMES.filter((runtime) => runtime.manifest).map((runtime) => runtime.manifest),
 ];
 
 export const PORTABLE_ASSETS = [
@@ -79,6 +80,7 @@ export const PORTABLE_ASSETS = [
   { source: "LICENSE-thermos", target: "poteto-mode/references/licenses/LICENSE-thermos" },
   { source: "NOTICE-skills.md", target: "poteto-mode/references/licenses/NOTICE.md" },
   { source: "LICENSE-oms", target: "poteto-mode/references/licenses/LICENSE-oms" },
+  { source: "LICENSE-t3-pstack", target: "poteto-mode/references/licenses/LICENSE-t3-pstack" },
 ];
 
 // The generator removes every entry of these directories that no planned path
@@ -430,7 +432,7 @@ export function regions(models) {
 
 const PREAMBLE_RUNTIMES = RUNTIMES.filter((runtime) => runtime.preamble);
 const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
-const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "orchestrate", "refactoring", "shipping"];
+const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "refactoring", "shipping"];
 const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.";
 const T3_LEADS = new Map([
   [`${SKILLS}/setup-pstack/SKILL.md`, "When T3 Code tools are available, use [T3 model configuration](references/t3.md) for model discovery, sheet storage, and dispatch validation before applying the backend-specific steps below."],
@@ -740,6 +742,7 @@ function overrideSheetBlock(models) {
 // no model: a full claude-* ID is rejected by the Agent tool, and a backticked
 // family name hard-codes a default that belongs in models.json.
 export function strayModelSlugs(file, text, models) {
+  if (T3_QUOTED.some((quoted) => file === `${SKILLS}/${quoted}`)) return [];
   const families = models.available.join("|");
   // Version numbers may sit between claude- and the family (claude-3-opus,
   // claude-3.7-sonnet). An unlisted family is not guessed at: claude-mythos-1
@@ -861,6 +864,60 @@ export function validateHooks(hooksJson, { statOf, file = "hooks/hooks.json", ro
   if (faults.length) throw new Error(`${file}:\n  ${faults.join("\n  ")}`);
 }
 
+// Codex trusts a plugin hook by a hash of its entry, and a Git marketplace
+// delivers a new entry at the next app-server start, so a changed hooks file
+// silently stops the hook in every home until the installer trusts it again.
+// Each hooks file is pinned with the release that last changed it, and that
+// release's CHANGES entry must tell users to rerun the installer. `shipped`
+// holds VERSION and the hooks files as origin/main has them, since main is
+// what the marketplaces deliver: a file that differs from main's changes in
+// this release, so its pin must name this release, and VERSION must be newer
+// than main's.
+export function frozenHookFaults({ pins, files, version, changelog, shipped }) {
+  const faults = Object.keys(files)
+    .filter((path) => !Object.hasOwn(pins, path))
+    .map((path) => `${path} has no pin in ${FROZEN_HOOKS}`);
+  const entry = changelog.split(/^## /m).find((section) => section.startsWith(`${version} `)) ?? "";
+  for (const [path, pin] of Object.entries(pins)) {
+    if (!Object.hasOwn(files, path)) {
+      faults.push(`${FROZEN_HOOKS} pins ${path}, which no manifest names`);
+      continue;
+    }
+    const digest = hookDigest(files[path]);
+    const changed = shipped.files[path] === undefined || hookDigest(shipped.files[path]) !== digest;
+    if (digest !== pin.sha256) {
+      faults.push(
+        `${path} changed, which stops its hook in every Codex home until the installer reruns. ` +
+          `Pin "sha256": "${digest}" and "changedIn": "${version}" in ${FROZEN_HOOKS}, ` +
+          `and tell users to rerun the installer in CHANGES.md's ${version} entry.`,
+      );
+    } else if (changed && Bun.semver.order(version, shipped.version) <= 0) {
+      faults.push(`${path} differs from origin/main, which ships ${shipped.version}, so this change needs a VERSION newer than that, not ${version}`);
+    } else if (changed && pin.changedIn !== version) {
+      faults.push(`${path} differs from origin/main, so its pin's "changedIn" must be ${version}, not ${pin.changedIn}`);
+    } else if (pin.changedIn === version && !/rerun the installer/i.test(entry)) {
+      faults.push(`${path} changes in ${version}, but CHANGES.md's ${version} entry does not tell users to rerun the installer`);
+    }
+  }
+  return faults;
+}
+
+// VERSION and `paths` as origin/main has them now, with undefined for a path
+// main lacks. It fetches main first, so a branch cut before main's latest
+// release is compared with that release and not with the merge-base.
+function shippedOnMain(root, paths) {
+  const git = (...args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  const main = "refs/remotes/origin/main";
+  try {
+    git("fetch", "--quiet", "--no-tags", "origin", `+refs/heads/main:${main}`);
+  } catch (err) {
+    throw new Error(`${FROZEN_HOOKS}: cannot fetch origin/main to compare the hooks files with: ${(err.stderr || err.message).trim()}`);
+  }
+  const listed = new Set(git("ls-tree", "-r", "--name-only", main, "--", "VERSION", ...paths).split("\n"));
+  const show = (path) => (listed.has(path) ? git("show", `${main}:${path}`) : undefined);
+  return { version: show("VERSION")?.trim(), files: Object.fromEntries(paths.map((path) => [path, show(path)])) };
+}
+
 // Every file the generator writes, as exact text by repo-relative path,
 // computed from the sources under `root` without writing. Any other entry in
 // an owned directory is an orphan. Throws when a source cannot be planned.
@@ -980,7 +1037,7 @@ export function problems(root, models) {
   const skillsDir = join(root, SKILLS);
   const read = (rel) => readFileSync(join(root, rel), "utf8");
   const pathExists = (rel) => existsSync(join(root, rel));
-  const packages = RUNTIMES.map((runtime) =>
+  const packages = RUNTIMES.filter((runtime) => runtime.manifest).map((runtime) =>
     attempt(() => {
       const text = read(runtime.manifest);
       let manifest;
@@ -1047,6 +1104,18 @@ export function problems(root, models) {
   for (const { file, root } of hooksFiles) {
     attempt(() => validateHooks(readFileSync(join(pluginRoot, file), "utf8"), { statOf, file, root, checkExecutable }));
   }
+  // The Codex hooks file the T3 installer trusts, pinned as chhoumann/t3-pstack pins it.
+  attempt(() => {
+    const paths = [`${PLUGIN}/hooks/codex-hooks.json`];
+    const faults = frozenHookFaults({
+      pins: JSON.parse(read(FROZEN_HOOKS)),
+      files: Object.fromEntries(paths.map((path) => [path, read(path)])),
+      version: read("VERSION").trim(),
+      changelog: read("CHANGES.md"),
+      shipped: shippedOnMain(root, paths),
+    });
+    if (faults.length) throw new Error(faults.join("\n"));
+  });
   return failures;
 }
 

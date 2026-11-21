@@ -1,7 +1,7 @@
 {
   "name": "oms",
   "interface": {
-    "displayName": "pstack"
+    "displayName": "OMS"
   },
   "plugins": [
     {

@@ -134,7 +134,7 @@ describe("manifests", () => {
     expect(kimi.name).toBe(claude.name);
     expect(kimi.version).toBe(claude.version);
     expect(codexMarketplace.name).toBe(claudeMarketplace.name);
-    expect(codexMarketplace.interface.displayName).toBe(codex.interface.displayName);
+    expect(codexMarketplace.interface.displayName).toBe("OMS");
     expect(codexMarketplace.plugins.map(({ name, source, category }) => [name, source.path, category])).toEqual([
       [codex.name, claudeMarketplace.plugins[0].source, codex.interface.category],
     ]);

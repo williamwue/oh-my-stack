@@ -1,11 +1,16 @@
+import { resolveHeadChecks } from "./head-checks.ts";
 import { landingRevision } from "./landing.ts";
 import {
   ChecksUnavailable,
   WatcherQueryError,
-  resolveChecks,
   resolveReviewThreads,
 } from "./github.ts";
 import { DeadlineExceeded, type WatchDeadline } from "./deadline.ts";
+import {
+  reviewSettler,
+  waitReason as settleReason,
+  type ReviewSettler,
+} from "./settle.ts";
 import type * as T from "./types.ts";
 import { nonEmpty } from "./types.ts";
 export function assessGitHubMerge(args: {
@@ -149,6 +154,7 @@ export async function readSnapshot(args: {
   readonly pendingHistory: "include" | "omit";
   readonly allowDraft: boolean;
   readonly confirmNoChecks?: NoChecksConfirmer;
+  readonly settler?: ReviewSettler;
 }): Promise<T.PrSnapshot> {
   const facts = await args.reader.pullRequest(args.context);
   if (facts.state === "MERGED" || facts.mergedAt !== null)
@@ -157,7 +163,7 @@ export async function readSnapshot(args: {
     return { kind: "closed", context: args.context, facts };
   const [threads, checks] = await Promise.all([
     resolveReviewThreads(args.reader, args.context),
-    resolveChecks(args.reader, args.context),
+    resolveHeadChecks(args.reader, facts),
   ]);
   const failed = nonEmpty(
     checks.checks.filter(
@@ -240,6 +246,7 @@ export async function readSnapshot(args: {
           check.name.toLowerCase().includes(token)
         )
     ),
+    settle: (await args.settler?.(facts)) ?? { kind: "off" },
   };
 }
 const conflictBlocker = (row: T.PrSnapshot): T.MergeBlocker | null =>
@@ -299,7 +306,9 @@ function gateBlocker(
 ): T.MergeBlocker | null {
   const reason = gateReason(row, allowDraft);
   return reason === null ||
-    (DEFERRED_WHILE_WAITING.has(reason) && waitReason(row) !== null)
+    (DEFERRED_WHILE_WAITING.has(reason) &&
+      (waitReason(row) !== null ||
+        (row.kind === "open" && row.settle.kind === "settling")))
     ? null
     : { kind: "merge-gate", pr: row.context, reason };
 }
@@ -361,6 +370,8 @@ export function classifyPr(
   const wait = waitReason(row);
   if (wait !== null)
     return { kind: "waiting", frontier: row.context, reason: wait };
+  if (row.kind === "open" && row.settle.kind === "settling")
+    return { kind: "settling", frontier: row.context, settle: row.settle };
   const ready = readyContribution(row, allowDraft);
   if (ready === null) throw new Error("snapshot has no classified decision");
   return ready.kind === "merged-pr"
@@ -384,6 +395,8 @@ export function selectTierMajorStackDecision(
     const wait = waitReason(row);
     if (wait !== null)
       return { kind: "waiting", frontier: row.context, reason: wait };
+    else if (row.kind === "open" && row.settle.kind === "settling")
+      return { kind: "settling", frontier: row.context, settle: row.settle };
   }
   const prs = nonEmpty(
     rows
@@ -567,6 +580,7 @@ export async function runSimple(args: {
 }): Promise<T.TerminalVerdict> {
   const stamp = verdictFactory(args.dependencies.clock, args.mode);
   const confirmNoChecks = noChecksConfirmer(args.dependencies.clock);
+  const settler = reviewSettler(args);
   const step = async (): Promise<StepResult<T.TerminalVerdict>> => {
     const rows: T.PrSnapshot[] = [];
     for (const context of args.contexts)
@@ -577,6 +591,7 @@ export async function runSimple(args: {
           pendingHistory: "include",
           allowDraft: args.options.allowDraft,
           confirmNoChecks,
+          settler,
         })
       );
     const complete = nonEmpty(rows);
@@ -636,12 +651,13 @@ export async function runSimple(args: {
           args.mode
         ),
       };
+    const reason = settleReason(decision);
     args.dependencies.emit(
       stamp({
         kind: "WAITING",
         terminal: false,
         frontier: decision.frontier,
-        reason: decision.reason,
+        reason,
       })
     );
     return {
@@ -652,7 +668,7 @@ export async function runSimple(args: {
           kind: "TIMEOUT",
           terminal: true,
           exitCode: 5,
-          reason: decision.reason,
+          reason,
         }),
     };
   };

@@ -110,10 +110,15 @@ function prosePathProblems(text, file, root) {
   return problems;
 }
 
+// chhoumann/t3-pstack's text, quoted verbatim for T3 sessions. T3 always runs
+// from a plugin install, which has agents/ and the manifests beside skills/,
+// and its model names are T3 targets, not Claude slugs.
+export const T3_QUOTED = ["poteto-mode/references/t3-tools.md", "setup-pstack/references/t3.md"];
+
 export function validateProsePaths(skillsDir) {
   const root = resolve(skillsDir);
   const problems = [];
-  for (const file of markdownFiles(root)) {
+  for (const file of markdownFiles(root).filter((file) => !T3_QUOTED.includes(relative(root, file).split(sep).join("/")))) {
     problems.push(...prosePathProblems(readFileSync(file, "utf8"), file, root));
   }
   if (problems.length) {

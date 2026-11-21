@@ -24,6 +24,12 @@ test("an autocrlf checkout keeps generator inputs current and binary assets inta
     git("add", "--all");
     for (const file of git("ls-files", "-z").stdout.split("\0").filter(Boolean)) rmSync(join(root, file));
     git("checkout-index", "--all", "--force");
+    // The hooks pin check compares with origin/main, as in generate.test.mjs.
+    git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "main");
+    const origin = mkdtempSync(join(tmpdir(), "pstack-generate-origin-"));
+    spawnSync("git", ["-C", origin, "init", "-q", "--bare"]);
+    git("remote", "add", "origin", origin);
+    git("push", "-q", "origin", "HEAD:refs/heads/main");
 
     expect(readFileSync(join(root, "plugins/pstack/skills/poteto-mode/SKILL.md"), "utf8").includes("\r\n")).toBe(false);
     expect(readFileSync(join(root, "plugins/pstack/hooks/session-start.sh"), "utf8").includes("\r\n")).toBe(false);

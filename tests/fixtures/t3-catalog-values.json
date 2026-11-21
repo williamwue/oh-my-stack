@@ -1,0 +1,81 @@
+{
+  "inheritedProviderInstanceId": "claudeAgent",
+  "inheritedModel": "claude-opus-5-5",
+  "providers": [
+    {
+      "providerInstanceId": "codex",
+      "driverKind": "codex",
+      "displayName": "Codex",
+      "models": [
+        {
+          "id": "gpt-6.1-sol",
+          "options": [
+            { "id": "reasoningEffort", "values": ["low", "medium", "high", "xhigh", "max", "ultra"], "default": "low" },
+            { "id": "serviceTier", "values": ["default", "priority"], "default": "default" }
+          ]
+        }
+      ],
+      "omittedModels": 4,
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "claudeAgent",
+      "driverKind": "claudeAgent",
+      "displayName": "Claude",
+      "models": [
+        {
+          "id": "claude-opus-5-5",
+          "label": "Claude Opus 5.5",
+          "options": [
+            { "id": "effort", "values": ["low", "medium", "high", "xhigh", "max", "ultracode", "ultrathink"], "default": "medium" },
+            { "id": "fastMode", "values": [false, true] }
+          ]
+        },
+        {
+          "id": "claude-fable-5-1",
+          "label": "Claude Fable 5.1",
+          "options": [{ "id": "effort", "values": ["low", "medium", "high", "xhigh", "max", "ultracode", "ultrathink"], "default": "medium" }]
+        }
+      ],
+      "omittedModels": 9,
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "cursor",
+      "driverKind": "cursor",
+      "displayName": "Cursor",
+      "models": [
+        { "id": "default", "label": "Auto" },
+        {
+          "id": "grok-4.7",
+          "label": "Grok 4.7",
+          "options": [
+            { "id": "contextWindow", "values": ["256k", "500k"], "default": "500k" },
+            { "id": "fastMode", "values": [false, true], "default": true },
+            { "id": "reasoning_effort", "values": ["low", "medium", "high", "xhigh"], "default": "high" }
+          ]
+        }
+      ],
+      "omittedModels": 41,
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "grok",
+      "driverKind": "grok",
+      "displayName": "Grok",
+      "models": [
+        { "id": "grok-4.7", "label": "Grok 4.7", "options": [{ "id": "reasoningEffort", "values": ["low", "medium", "high", "xhigh"], "default": "high" }] }
+      ],
+      "runtimeModes": ["approval-required", "auto", "full-access"],
+      "canRunChildTask": false,
+      "canRunCrossProviderChildTask": false,
+      "constraints": ["Provider instance is disabled."]
+    }
+  ]
+}

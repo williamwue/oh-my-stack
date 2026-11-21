@@ -89,6 +89,7 @@ interface RawOptions {
   readonly maxQueryErrors: number;
   readonly statusOnly: boolean;
   readonly allowDraft: boolean;
+  readonly settle: number;
   readonly pretty: boolean;
 }
 export function parseArgs(
@@ -149,6 +150,12 @@ export function parseArgs(
       false
     )
     .option("--allow-draft", "do not treat a draft as a merge gate", false)
+    .option(
+      "--settle <seconds>",
+      "hold READY until other accounts' review activity has been quiet this long since the latest push, opening, or ready for review; 0 disables it",
+      nonNegativeNumber,
+      300
+    )
     .option("--pretty", "render human text instead of JSON", false);
   program.parse(argv, { from: "user" });
   const raw = program.opts<RawOptions>();
@@ -168,6 +175,7 @@ export function parseArgs(
       timeout: raw.timeout,
       maxQueryErrors: raw.maxQueryErrors,
       allowDraft: raw.allowDraft,
+      settle: raw.settle,
     },
   };
 }
