@@ -7,6 +7,7 @@ import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 export const PLUGIN = "plugins/pstack";
+export const INSTALL_RECORD = ".oms-pstack-install.json";
 export const SKILLS = `${PLUGIN}/skills`;
 
 // Each hooks file's digest and the release that last changed it. A hooks

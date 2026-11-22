@@ -38,6 +38,10 @@ case "$runtime" in
     : "${CLAUDE_PLUGIN_ROOT:=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)}"
     reader="${CLAUDE_PLUGIN_ROOT}/skills/setup-pstack/scripts/read-sheet.sh"
     ;;
+  kiro)
+    sheet="${XDG_CONFIG_HOME:-$HOME/.config}/t3-pstack/models.md"
+    reader="$2/skills/setup-pstack/scripts/read-sheet.sh"
+    ;;
   copilot)
     sheet="${COPILOT_HOME:-$HOME/.copilot}/pstack-models.md"
     reader="${COPILOT_PLUGIN_ROOT}/skills/setup-pstack/scripts/read-sheet.sh"
@@ -53,7 +57,7 @@ case "$runtime" in
     reader="${MUSE_PLUGIN_ROOT}/skills/setup-pstack/scripts/read-sheet.sh"
     ;;
   *)
-    echo "session-start.sh: unknown runtime '${1:-}' (expected agy, claude, codex, copilot, or muse)" >&2
+    echo "session-start.sh: unknown runtime '${1:-}' (expected agy, claude, codex, copilot, kiro, or muse)" >&2
     exit 2
     ;;
 esac
@@ -101,6 +105,15 @@ fi
 
 if [ "$runtime" = minimax ]; then
   cat "${MINIMAX_PLUGIN_ROOT}/hooks/session-start-minimax.md"
+  exit 0
+fi
+
+if [ "$runtime" = kiro ]; then
+  cat "$2/hooks/session-start-context.md"
+    printf '\n%s%s%s\n' \
+      "On Kiro, pstack's skills have bare names. \`pstack:<name>\` is the \`<name>\` skill, and \`/pstack:<name>\` is \`/<name>\`. \`<plugin root>\` is \`" \
+      "$2" \
+      "\`. Kiro reaches each skill through a link, so a skill's path does not lead there. T3's tools come from the \`t3-code\` MCP server, and Kiro can defer MCP tools. Load \`delegate_task\` and each other T3 tool with the tool-loading tool before its first call."
   exit 0
 fi
 

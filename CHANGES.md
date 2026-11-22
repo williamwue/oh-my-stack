@@ -56,6 +56,7 @@ removed. Use the host's native plugin commands and upstream setup-pstack. Existi
 installations, personal configuration, downloaded books, and credentials are not
 migrated or deleted by this source change. See [migration](docs/oms-migration.md).
 Historical OMS documents and book authorization remain in `docs/oms-history/`.
+
 ## 0.9.146 - watch-pr --expect-app and cloud-session fixes, PSTACK_SESSION_HOOK, reflect on OMP
 
 `watch-pr --expect-app <slug>` names a GitHub App that runs the repository's CI. The watcher used to skip any check suite that an app other than Actions had queued with no runs, because apps such as Claude queue one on every push and never run it. A CI app that starts late left the same shape: on `microsoft/react-native-windows`, Azure Pipelines kept its suite queued with no runs for 13 minutes to 4.2 hours while a CLA check passed, and the watcher read that as clean CI. A named app's queued suite with no runs now counts as a pending check, beside reported checks and on a head with none. The flag waits only on a suite the app has already created, and an app that never runs waits until `--timeout`. The ready proof and status rows list each suite the watcher did not count as `queuedWithoutRuns`, and when that list is not empty the pretty READY verdict names the flag ([#492](https://github.com/michael-denyer/pstack-claude/pull/492), for [#472](https://github.com/michael-denyer/pstack-claude/issues/472)).
