@@ -101,6 +101,15 @@ export type PendingCheck = Extract<Check, { readonly kind: "pending" }>;
 export type SuiteCheck = (FailedCheck | PendingCheck) & {
   readonly source: "check-suites";
 };
+export interface SuiteApp {
+  readonly name: string;
+  readonly slug: string | null;
+}
+export interface SuiteRead {
+  readonly checks: readonly SuiteCheck[];
+  /** Apps other than Actions whose unfinished suite has no runs and was not counted. */
+  readonly queuedWithoutRuns: readonly SuiteApp[];
+}
 export interface ReportedChecks {
   readonly kind: "reported";
   readonly source: "gh-pr-checks" | "graphql-rollup" | "check-suites";
@@ -165,6 +174,7 @@ export type CiClean = CiBase & {
   readonly failed: readonly [];
   readonly pending: readonly [];
   readonly github: GitHubMergeAllowed;
+  readonly queuedWithoutRuns: readonly SuiteApp[];
 };
 export interface CiNone {
   readonly kind: "ci-none";
@@ -172,6 +182,7 @@ export interface CiNone {
   readonly pending: readonly [];
   readonly hadPreviousPassingCi: false;
   readonly github: GitHubMergeAllowed;
+  readonly queuedWithoutRuns: readonly SuiteApp[];
 }
 export interface CiUnreported {
   readonly kind: "ci-unreported";
@@ -254,7 +265,11 @@ export type MergeBlocker =
     };
 export type QueryFailure =
   | {
-      readonly kind: "deadline" | "spawn-failed" | "unsupported-gh";
+      readonly kind:
+        | "deadline"
+        | "spawn-failed"
+        | "unsupported-gh"
+        | "graphql-refused";
       readonly retryable: false;
       readonly detail: string;
     }
@@ -478,8 +493,9 @@ export interface GitHubReader {
   unsettledSuites(
     context: PrContext,
     head: string,
-    checksRead: CheckRead["kind"]
-  ): Promise<readonly SuiteCheck[]>;
+    checksRead: CheckRead["kind"],
+    expectedApps: readonly string[]
+  ): Promise<SuiteRead>;
   reviewActivity(pr: PrContext, oid: string | null): Promise<S.ReviewActivity>;
 }
 export interface PollingOptions {
@@ -489,4 +505,6 @@ export interface PollingOptions {
   readonly maxQueryErrors: number;
   readonly allowDraft: boolean;
   readonly settle: number;
+  /** App slugs from --expect-app, whose queued suite with no runs counts as pending. */
+  readonly expectedApps?: readonly string[];
 }
