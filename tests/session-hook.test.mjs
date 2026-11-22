@@ -158,7 +158,7 @@ describe("SessionStart hook", () => {
       const r = runHook("claude", null, `"\${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh" ${arg}`);
       expect(r.status).not.toBe(0);
       expect(r.out).toBe("");
-      expect(r.err.trimEnd().split("\n")).toEqual([`session-start.sh: unknown runtime '${arg}' (expected agy, claude, codex, copilot, or muse)`]);
+      expect(r.err.trimEnd().split("\n")).toEqual([`session-start.sh: unknown runtime '${arg}' (expected agy, claude, codex, copilot, kiro, or muse)`]);
     });
   }
 
