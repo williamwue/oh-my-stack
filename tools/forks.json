@@ -174,6 +174,12 @@
       "since": "0.9.43",
       "upstream": "not-proposed"
     },
+    "plugins/pstack/skills/poteto-mode/scripts/watch-pr/transport.test.ts": {
+      "kind": "policy",
+      "why": "The transport fixture answers the T3 review-settle reads with an old push and no reviews.",
+      "since": "3.0.2",
+      "upstream": "not-proposed"
+    },
     "plugins/pstack/skills/poteto-mode/scripts/watch-pr/types.compile.ts": {
       "kind": "policy",
       "why": "Adds the landing revision to the compile-time type fixture and pins that a first sighting of no checks is not readiness proof. Gives the clean CI fixture its list of uncounted apps.",

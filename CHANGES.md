@@ -2,6 +2,10 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.0.2 - T3 Feature implementation handoff
+
+Sync pstack-claude v0.9.146 and t3-pstack v2.6.1, including Kiro installation and T3 PR watching. On T3, Feature now calls the configured implementation seat before the parent writes source or tests. The parent verifies the child’s diff. Rerun the installer to update local plugin copies.
+
 ## 3.0.1 - T3 role dispatch and completion receipts
 
 T3 playbooks now request async `delegate_task` for same-provider workers and

@@ -41,6 +41,15 @@ if (scenario === 'graphql-refused' && args[0] === 'api' && args[1] === 'graphql'
   fail('gh: GitHub GraphQL is not available from Claude Code sessions; use the REST API (gh api repos/{owner}/{repo}/...). (HTTP 403)');
 } else if (scenario === 'graphql-rate-limited' && args[0] === 'api' && args[1] === 'graphql') {
   fail('gh: You have exceeded a secondary rate limit. Please wait a few minutes before you try again. (HTTP 403)');
+} else if (args.some(a => a.includes('query ReviewActivity'))) {
+  const empty = { nodes: [] };
+  value = { data: { viewer: { login: 'watcher' }, repository: { pullRequest: {
+    author: { login: 'author' }, createdAt: '2020-01-01T00:00:00Z',
+    headRepository: { owner: { login: 'owner' }, name: 'repo' }, headRefName: 'feature',
+    comments: empty, reviews: empty, reviewThreads: empty, reactions: empty, timelineItems: empty,
+  } } } };
+} else if (args.includes('repos/owner/repo/activity')) {
+  value = [{ after: 'head', timestamp: '2020-01-02T00:00:00Z' }];
 } else if (args.some(a => a.includes('query PullRequestFacts'))) {
   value = { data: { repository: { pullRequest: { headRefOid: 'head', baseRef: { target: { oid: 'base' } }, mergeable: 'MERGEABLE', mergeStateStatus: scenario === 'no-ci-blocked' ? 'BLOCKED' : 'CLEAN', reviewDecision: noCi ? null : 'APPROVED', headRefName: 'feature', baseRefName: 'main', state: 'OPEN', mergedAt: null, isDraft: false } } } };
 } else if (args[0] === 'pr' && args[1] === 'checks') {
