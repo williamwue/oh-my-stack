@@ -76,6 +76,16 @@ function stackPrList(value: string): T.NonEmpty<T.PrNumber> {
   if (parsed === null) throw new InvalidArgumentError("cannot be empty");
   return parsed;
 }
+function appSlugs(
+  value: string,
+  previous: readonly string[] | undefined
+): readonly string[] {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value))
+    throw new InvalidArgumentError(
+      "must be a GitHub App slug, such as azure-pipelines"
+    );
+  return [...(previous ?? []), value];
+}
 interface RawOptions {
   readonly owner?: string;
   readonly repo?: string;
@@ -90,6 +100,7 @@ interface RawOptions {
   readonly statusOnly: boolean;
   readonly allowDraft: boolean;
   readonly settle: number;
+  readonly expectApp?: readonly string[];
   readonly pretty: boolean;
 }
 export function parseArgs(
@@ -156,6 +167,11 @@ export function parseArgs(
       nonNegativeNumber,
       300
     )
+    .option(
+      "--expect-app <slug>",
+      "a GitHub App that runs CI here; a suite it has queued on the head with no runs counts as pending, and an app that never runs waits until --timeout, which is off by default (repeatable)",
+      appSlugs
+    )
     .option("--pretty", "render human text instead of JSON", false);
   program.parse(argv, { from: "user" });
   const raw = program.opts<RawOptions>();
@@ -176,6 +192,7 @@ export function parseArgs(
       maxQueryErrors: raw.maxQueryErrors,
       allowDraft: raw.allowDraft,
       settle: raw.settle,
+      expectedApps: raw.expectApp,
     },
   };
 }

@@ -87,7 +87,7 @@ The Claude Code, Codex, and GitHub Copilot plugins load the same short [routing 
 
 Smaller tasks proceed directly. The full skill loads when invoked, and explicit user instructions take precedence.
 
-To disable routing on runtimes that support the session hook setting, run `setup-pstack` and turn it off, or write `session hook: off` in the runtime's sheet at the path in [setup-pstack's runtime table](../plugins/pstack/skills/setup-pstack/references/runtimes.md). In Claude Code, use `/pstack:setup-pstack`. On Claude Code, a project's committed `.claude/pstack-models.md` replaces the user's sheet in that project, so `session hook: off` there turns routing off for that project alone. Without the setting, routing stays on. On OMP this setting applies across profiles. On Kimi, disable the plugin to stop its routing instruction. Grok's routing hint is not controlled by the session hook setting.
+To disable routing on runtimes that support the session hook setting, run `setup-pstack` and turn it off, or write `session hook: off` in the runtime's sheet at the path in [setup-pstack's runtime table](../plugins/pstack/skills/setup-pstack/references/runtimes.md). In Claude Code, use `/pstack:setup-pstack`. On Claude Code, a project's committed `.claude/pstack-models.md` replaces the user's sheet in that project, so `session hook: off` there turns routing off for that project alone. A Claude Code cloud session starts with an empty home, so the user's sheet does not reach it. Set the environment variable `PSTACK_SESSION_HOOK=off` in the cloud environment instead. The session hook checks that variable before the sheet on Claude Code, and on Codex, GitHub Copilot, Muse, and Antigravity when the runtime passes the variable to its hooks. MiniMax Code passes its hooks a fixed set of variables, so use the sheet there. The OMP, OpenCode, and Pi plugins read only the sheet. Without the setting, routing stays on. On OMP this setting applies across profiles. On Kimi, disable the plugin to stop its routing instruction. Grok's routing hint is not controlled by the session hook setting.
 
 Skills-only installs and other runtimes do not include these integrations. Request `poteto-mode` explicitly, or add a standing instruction to the runtime's instruction file.
 
@@ -176,7 +176,7 @@ Install dependencies for the workflows you use:
 
 | Dependency | When you need it |
 | --- | --- |
-| GitHub CLI, `gh` | PR monitoring and shipping. The bundled `watch-pr` requires GitHub CLI 2.48 or later to read all pages of check suites. Authenticate with `gh auth login`. The playbooks use Origin's CLI, `origin`, instead when it can resolve the repository. |
+| GitHub CLI, `gh` | PR monitoring and shipping. The bundled `watch-pr` requires GitHub CLI 2.48 or later to read all pages of check suites. `watch-pr` and `ship-pr` read pull requests through GitHub GraphQL, which a Claude Code cloud session refuses. There `watch-pr` stops with exit 7 on its first read, and an agent can read the PR over REST with `gh api repos/<owner>/<repo>/pulls/<number>`. Authenticate with `gh auth login`. The playbooks use Origin's CLI, `origin`, instead when it can resolve the repository. |
 | Bun | The bundled `watch-pr` scripts. Their bootstrap installs script dependencies on first run. |
 | `plugin-dev` | Claude Code skill-authoring guidance used by `automate-me`, `reflect`, and `poteto-mode`. |
 

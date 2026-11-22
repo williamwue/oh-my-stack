@@ -4,6 +4,7 @@
 // CLIs.
 import { afterEach, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
   chmodSync,
   cpSync,
@@ -29,6 +30,7 @@ import { doctorClaude, installClaude, syncScopedRecords } from "../tools/install
 import { AppServer, pinCheck } from "../tools/install/codex.mjs";
 import { npxOrigin, parseSource, writeAtomic } from "../tools/install/common.mjs";
 import { antigravityProfile, discoverHomes } from "../tools/install/homes.mjs";
+import { doctorKiro, installKiro } from "../tools/install/kiro.mjs";
 import { doctorSheet, moveSheet } from "../tools/install/sheet.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -96,7 +98,7 @@ describe("discoverHomes", () => {
         { harness: "claude", dir: "/srv/claude", from: ["CLAUDE_CONFIG_DIR"], bin: "claude" },
         { harness: "codex", dir: "/data/codex", from: ["--codex-home"], bin: "codex" },
       ],
-      settings: { path: join(t3, "userdata/settings.json"), instances: 6, error: undefined },
+      settings: { path: join(t3, "userdata/settings.json"), instances: 6, error: undefined, secrets: [] },
     });
   });
 
@@ -123,6 +125,58 @@ describe("discoverHomes", () => {
     expect(found.settings.instances).toBe(2);
   });
 
+  test("finds each kiro instance's home in its KIRO_HOME, else ~/.kiro, and its CLI, else kiro-cli", () => {
+    const t3 = tmp();
+    writeJson(join(t3, "userdata/settings.json"), {
+      providerInstances: {
+        // Kiro settings have no home path, so T3 ignores a homePath there.
+        kiro: { driver: "kiro", enabled: false, config: { homePath: "/srv/ignored" } },
+        kiro_work: {
+          driver: "kiro",
+          environment: [{ name: "KIRO_HOME", value: "/home/u/.kiro-work" }],
+          config: { binaryPath: "~/bin/kiro-cli", homePath: "/srv/ignored" },
+        },
+      },
+      // The configured kiro instance is the one this override turns on.
+      projectSettingsOverrides: { web: { providerInstances: { kiro: { enabled: true } } } },
+    });
+    const found = discoverHomes({ env: { T3CODE_HOME: t3 }, home: "/home/u" });
+    expect(found.homes.slice(2)).toEqual([
+      { harness: "kiro", dir: "/home/u/.kiro", from: ["T3 instance kiro (disabled)"], bin: "kiro-cli" },
+      { harness: "kiro", dir: "/home/u/.kiro-work", from: ["T3 instance kiro_work"], bin: "/home/u/bin/kiro-cli" },
+    ]);
+    expect(found.settings.instances).toBe(2);
+  });
+
+  test("finds T3's unconfigured kiro instance only where a project turns it on", () => {
+    const t3 = tmp();
+    const kiroHomes = (projectSettingsOverrides) => {
+      writeJson(join(t3, "userdata/settings.json"), { providerInstances: {}, projectSettingsOverrides });
+      return discoverHomes({ env: { T3CODE_HOME: t3 }, home: "/home/u" }).homes.filter((h) => h.harness === "kiro");
+    };
+    expect(kiroHomes({ web: { providerInstances: { kiro: { enabled: false }, codex: { enabled: true } } } })).toEqual([]);
+    expect(kiroHomes({ web: {}, api: { providerInstances: { kiro: { enabled: true } } } })).toEqual([
+      { harness: "kiro", dir: "/home/u/.kiro", from: ["T3 instance kiro (on in a project)"], bin: "kiro-cli" },
+    ]);
+  });
+
+  test("finds the shell's KIRO_HOME and each --kiro-home", () => {
+    const found = discoverHomes({ env: { T3CODE_HOME: tmp(), KIRO_HOME: "/srv/kiro" }, home: "/home/u", kiroHomes: ["~/.kiro-alt", "/srv/kiro"] });
+    expect(found.homes.slice(2)).toEqual([
+      { harness: "kiro", dir: "/srv/kiro", from: ["KIRO_HOME", "--kiro-home"], bin: "kiro-cli" },
+      { harness: "kiro", dir: "/home/u/.kiro-alt", from: ["--kiro-home"], bin: "kiro-cli" },
+    ]);
+  });
+
+  test("collapses `..` in a KIRO_HOME before it resolves symlinks, as kiro-cli does", () => {
+    const root = tmp();
+    mkdirSync(join(root, "x/y"), { recursive: true });
+    mkdirSync(join(root, "x/c"));
+    symlinkSync(join(root, "x/y"), join(root, "link-b"));
+    const found = discoverHomes({ env: { T3CODE_HOME: tmp(), KIRO_HOME: `${root}/link-b/../c` }, home: "/home/u" });
+    expect(found.homes.slice(2)).toEqual([{ harness: "kiro", dir: join(root, "c"), from: ["KIRO_HOME"], bin: "kiro-cli" }]);
+  });
+
   test("expands a leading ~ in an instance's home variable and binary as T3 does", () => {
     const t3 = tmp();
     writeJson(join(t3, "userdata/settings.json"), {
@@ -146,6 +200,7 @@ describe("discoverHomes", () => {
       path: join(t3, "userdata/settings.json"),
       instances: 0,
       error: "invalid JSON",
+      secrets: [],
     });
   });
 
@@ -156,7 +211,7 @@ describe("discoverHomes", () => {
         { harness: "claude", dir: "/home/u/.claude", from: ["default"], bin: "claude" },
         { harness: "codex", dir: "/home/u/.codex", from: ["default"], bin: "codex" },
       ],
-      settings: { path: join(t3, "userdata/settings.json"), instances: 0, error: "not found" },
+      settings: { path: join(t3, "userdata/settings.json"), instances: 0, error: "not found", secrets: [] },
     });
   });
 });
@@ -735,6 +790,394 @@ describe("Antigravity", () => {
     expect(row(run("update")).steps).toEqual([]);
     expect(row(run("doctor")).checks.map((c) => c.name)).toEqual(["installed", "enabled"]);
     expect(existsSync(join(profile, "t3-pstack-models.md"))).toBe(false);
+  });
+
+  test("reinstalls a copy whose manifest is missing", () => {
+    const home = antigravityHome();
+    installAntigravity(home, agy);
+    rmSync(join(installedAt(home), ".antigravity-plugin/plugin.json"));
+    expect(doctorAntigravity(home, agy)[0]).toEqual({ name: "installed", ok: false, detail: "not installed", fix: FIX });
+    expect(installAntigravity(home, agy)).toEqual([`installed ${shipped}`]);
+    expect(existsSync(join(installedAt(home), ".antigravity-plugin/plugin.json"))).toBe(true);
+    expect(doctorAntigravity(home, agy)[0]).toEqual({ name: "installed", ok: true, detail: shipped });
+  });
+});
+
+const kiroHome = (dir = join(tmp(), ".kiro")) => ({ harness: "kiro", dir, from: ["--kiro-home"], bin: "kiro-cli" });
+const kiro = { pluginRoot, version: shipped, skills, hint: FIX };
+const routing = readFileSync(join(pluginRoot, "hooks/session-start-context.md"), "utf8");
+const entryState = (path) =>
+  lstatSync(path).isSymbolicLink()
+    ? { link: readlinkSync(path) }
+    : Object.fromEntries(readdirSync(path, { recursive: true }).map((file) => [file, readFileSync(join(path, file), "utf8")]));
+const treeState = (dir) =>
+  Object.fromEntries(
+    readdirSync(dir, { recursive: true, withFileTypes: true })
+      .filter((entry) => entry.isFile() || entry.isSymbolicLink())
+      .map((entry) => {
+        const path = join(entry.parentPath, entry.name);
+        return [path, entry.isSymbolicLink() ? { link: readlinkSync(path) } : readFileSync(path)];
+      }),
+  );
+const sha256 = (text) => createHash("sha256").update(text).digest("hex");
+const RECORD = ".oms-pstack-install.json";
+
+function kiroInstaller(user, providerInstances, env = {}) {
+  const bin = join(user, "bin");
+  mkdirSync(bin);
+  symlinkSync(spawnSync("node", ["-p", "process.execPath"], { encoding: "utf8" }).stdout.trim(), join(bin, "node"));
+  writeFileSync(join(bin, "kiro-cli"), "#!/bin/sh\n", { mode: 0o755 });
+  writeJson(join(user, ".t3/userdata/settings.json"), { providerInstances });
+  return (command) => {
+    const r = spawnSync(join(bin, "node"), [join(repoRoot, "tools/install.mjs"), command, "--source", repoRoot, "--json"], {
+      cwd: user,
+      env: { PATH: `${bin}:/usr/bin:/bin`, HOME: user, ...env },
+      encoding: "utf8",
+    });
+    return { status: r.status, report: JSON.parse(r.stdout) };
+  };
+}
+const localHint = `rerun \`npx -y github:williamwue/oh-my-stack install --source ${resolve(repoRoot)}\``;
+
+describe("Kiro", () => {
+  test("copies the plugin into the home, links each skill into the copy, writes the hook file, and a second run changes nothing", () => {
+    const home = kiroHome();
+    const root = join(home.dir, "oms-pstack");
+    const hooks = join(home.dir, "hooks/oms-pstack.json");
+    expect(installKiro(home, kiro)).toEqual([`installed ${shipped}`, "linked 2 skills", `wrote ${hooks}`]);
+    expect(mode(home.dir)).toBe(0o700);
+    for (const name of skills.keys()) {
+      expect(readlinkSync(join(home.dir, "skills", name))).toBe(join(root, "skills", name));
+      expect(readFileSync(join(home.dir, "skills", name, "SKILL.md"), "utf8")).toBe(SKILL(name));
+    }
+    const command = `sh '${root}/hooks/session-start.sh' kiro '${root}'`;
+    expect(JSON.parse(readFileSync(hooks, "utf8"))).toEqual({
+      version: "v1",
+      hooks: ["SessionStart", "PostCompact"].map((trigger) => ({ name: "oms-pstack", trigger, timeout: 10, action: { type: "command", command } })),
+    });
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(doctorKiro(home, kiro)).toEqual([
+      { name: "installed", ok: true, detail: shipped },
+      { name: "skills", ok: true, detail: "2 linked" },
+      { name: "hook", ok: true, detail: hooks },
+    ]);
+  });
+
+  test("leaves each entry of a skill's name it did not make as it was, links the other skills, and doctor fails it with its kind and fix", () => {
+    const other = join(tmp(), "checkout/plugins/pstack/skills/how");
+    cpSync(join(pluginRoot, "skills/how"), other, { recursive: true });
+    const own = (path) => {
+      mkdirSync(path);
+      writeFileSync(join(path, "SKILL.md"), "---\nname: how\ndescription: My own notes on how things work.\n---\n");
+    };
+    for (const [make, kind, fix] of [
+      [own, "your own skill", "rename your skill"],
+      [(path) => cpSync(join(pluginRoot, "skills/how"), path, { recursive: true }), "a plain copy of oms-pstack's skill", "delete the copy"],
+      [(path) => symlinkSync(other, path), `a link into another checkout, ${other}`, "remove the link"],
+    ]) {
+      const home = kiroHome();
+      const path = join(home.dir, "skills/how");
+      mkdirSync(join(home.dir, "skills"), { recursive: true });
+      make(path);
+      const before = entryState(path);
+      expect(installKiro(home, kiro)).toContain("linked 1 skill");
+      expect(entryState(path)).toEqual(before);
+      expect(readlinkSync(join(home.dir, "skills/why"))).toBe(join(home.dir, "oms-pstack/skills/why"));
+      expect(doctorKiro(home, kiro).filter((c) => !c.ok)).toEqual([
+        { name: "skill how", ok: false, detail: `${path} is ${kind}, so oms-pstack's how cannot load`, fix: `${fix}, then ${FIX}` },
+      ]);
+    }
+  });
+
+  test("unlinks a skill the release dropped, and repoints a link at the wrong target", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const root = join(home.dir, "oms-pstack/skills");
+    symlinkSync(join(root, "retired"), join(home.dir, "skills/retired"));
+    rmSync(join(home.dir, "skills/how"));
+    symlinkSync(join(root, "why"), join(home.dir, "skills/how"));
+    expect(doctorKiro(home, kiro)[1]).toEqual({
+      name: "skills",
+      ok: false,
+      detail: "linked to the wrong target: how; linked but dropped from this release: retired",
+      fix: FIX,
+    });
+    expect(installKiro(home, kiro)).toEqual(["repointed how at the copy", "unlinked retired, which this release dropped"]);
+    expect(readdirSync(join(home.dir, "skills")).sort()).toEqual(["how", "why"]);
+    expect(readlinkSync(join(home.dir, "skills/how"))).toBe(join(root, "how"));
+    expect(doctorKiro(home, kiro).every((c) => c.ok)).toBe(true);
+  });
+
+  test("installs the same links and hooks file into a home reached through a symlink as through its real path", () => {
+    const real = kiroHome();
+    mkdirSync(real.dir);
+    const alias = kiroHome(join(tmp(), "kiro-alias"));
+    symlinkSync(real.dir, alias.dir);
+    installKiro(alias, kiro);
+    expect(installKiro(real, kiro)).toEqual([]);
+    for (const home of [alias, real]) expect(doctorKiro(home, kiro).every((c) => c.ok)).toBe(true);
+  });
+
+  test("leaves a hand-written hooks file that differs, and doctor fails it as not the installer's", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const path = join(home.dir, "hooks/oms-pstack.json");
+    const mine = readFileSync(path, "utf8").replace("PostCompact", "SessionEnd");
+    writeFileSync(path, mine);
+    expect(doctorKiro(home, kiro).at(-1)).toEqual({ name: "hook", ok: false, detail: `${path} is not a file the installer wrote`, fix: `move or delete it, then ${FIX}` });
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(readFileSync(path, "utf8")).toBe(mine);
+  });
+
+  test("leaves a hooks file that links to a file of the user's, and doctor fails it as not the installer's", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const target = join(tmp(), "mine.json");
+    writeFileSync(target, '{"mine":true}\n');
+    const path = join(home.dir, "hooks/oms-pstack.json");
+    rmSync(path);
+    symlinkSync(target, path);
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(readlinkSync(path)).toBe(target);
+    expect(readFileSync(target)).toEqual(Buffer.from('{"mine":true}\n'));
+    expect(doctorKiro(home, kiro).at(-1)).toEqual({ name: "hook", ok: false, detail: `${path} is not a file the installer wrote`, fix: `move or delete it, then ${FIX}` });
+  });
+
+  test("rewrites the hooks file an earlier release wrote, which that release's record names", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const path = join(home.dir, "hooks/oms-pstack.json");
+    const current = readFileSync(path, "utf8");
+    const older = current.replace("PostCompact", "SessionEnd");
+    writeFileSync(path, older);
+    const record = join(home.dir, "oms-pstack", RECORD);
+    writeJson(record, { ...JSON.parse(readFileSync(record, "utf8")), version: "2.6.0-rc.1", hooks: sha256(older) });
+    expect(installKiro(home, kiro)).toEqual([`updated 2.6.0-rc.1 to ${shipped}`, `rewrote ${path}, which had changed`]);
+    expect(readFileSync(path, "utf8")).toBe(current);
+    expect(doctorKiro(home, kiro).every((c) => c.ok)).toBe(true);
+  });
+
+  test("leaves a clone at the copy's path whole, links and hooks nothing into it, and doctor fails it by name", () => {
+    const home = kiroHome();
+    const clone = join(home.dir, "oms-pstack");
+    mkdirSync(join(clone, ".git"), { recursive: true });
+    writeFileSync(join(clone, ".git/HEAD"), "ref: refs/heads/main\n");
+    writeFileSync(join(clone, "README.md"), "# my oms-pstack checkout\n");
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(readFileSync(join(clone, ".git/HEAD"), "utf8")).toBe("ref: refs/heads/main\n");
+    expect(readFileSync(join(clone, "README.md"), "utf8")).toBe("# my oms-pstack checkout\n");
+    expect(readdirSync(home.dir)).toEqual(["oms-pstack"]);
+    expect(doctorKiro(home, kiro)).toEqual([
+      {
+        name: "installed",
+        ok: false,
+        detail: `${clone} is not oms-pstack's copy, since it has no ${RECORD} from the installer`,
+        fix: `move ${clone} out of the way, then ${FIX}`,
+      },
+    ]);
+  });
+
+  test("leaves a hand copy of an earlier release whole, its personal file included, and doctor fails it by name", () => {
+    const home = kiroHome();
+    const copy = join(home.dir, "oms-pstack");
+    cpSync(pluginRoot, copy, { recursive: true });
+    writeJson(join(copy, ".claude-plugin/plugin.json"), { name: "oms-pstack", version: "2.4.0" });
+    writeFileSync(join(copy, "my-notes.md"), "personal\n");
+    const before = treeState(copy);
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(treeState(copy)).toEqual(before);
+    expect(readdirSync(home.dir)).toEqual(["oms-pstack"]);
+    expect(doctorKiro(home, kiro)).toEqual([
+      {
+        name: "installed",
+        ok: false,
+        detail: `${copy} is not oms-pstack's copy, since it has no ${RECORD} from the installer`,
+        fix: `move ${copy} out of the way, then ${FIX}`,
+      },
+    ]);
+  });
+
+  test("leaves its own copy of an earlier release that holds a file it did not put there, and doctor names the file", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const copy = join(home.dir, "oms-pstack");
+    for (const file of [RECORD, ".claude-plugin/plugin.json"]) {
+      writeJson(join(copy, file), { ...JSON.parse(readFileSync(join(copy, file), "utf8")), version: "2.6.0-rc.1" });
+    }
+    writeFileSync(join(copy, "my-notes.md"), "personal\n");
+    const before = treeState(copy);
+    expect(installKiro(home, kiro)).toEqual([]);
+    expect(treeState(copy)).toEqual(before);
+    expect(doctorKiro(home, kiro)).toEqual([
+      {
+        name: "installed",
+        ok: false,
+        detail: `${copy} holds files the installer did not put there: my-notes.md`,
+        fix: `move or delete them, then ${FIX}`,
+      },
+    ]);
+  });
+
+  test("reinstalls its own copy that lost its manifest, and doctor fails it until then", () => {
+    const home = kiroHome();
+    installKiro(home, kiro);
+    const copy = join(home.dir, "oms-pstack");
+    rmSync(join(copy, ".claude-plugin/plugin.json"));
+    expect(doctorKiro(home, kiro)[0]).toEqual({ name: "installed", ok: false, detail: `${shipped}, but its files at ${copy} are missing or changed`, fix: FIX });
+    expect(installKiro(home, kiro)).toEqual([`reinstalled ${shipped}, whose files were missing or changed`]);
+    expect(existsSync(join(copy, ".claude-plugin/plugin.json"))).toBe(true);
+    expect(doctorKiro(home, kiro).every((c) => c.ok)).toBe(true);
+  });
+
+  test("the hook file's commands route from a home whose path holds a space and a quote", () => {
+    const home = kiroHome(join(tmp(), "it's a home"));
+    installKiro(home, kiro);
+    const { hooks } = JSON.parse(readFileSync(join(home.dir, "hooks/oms-pstack.json"), "utf8"));
+    for (const { action } of hooks) {
+      const r = spawnSync("sh", ["-c", action.command], { cwd: tmp(), env: { PATH: process.env.PATH, HOME: tmp() }, encoding: "utf8" });
+      expect({ status: r.status, stderr: r.stderr, routed: r.stdout.startsWith(routing) }).toEqual({ status: 0, stderr: "", routed: true });
+      expect(r.stdout).toContain(`\`<plugin root>\` is \`${join(home.dir, "oms-pstack")}\``);
+    }
+  });
+
+  test("the installer CLI installs into each Kiro home it is named, and a second run changes nothing", () => {
+    const user = tmp();
+    const bin = join(user, "bin");
+    mkdirSync(bin);
+    symlinkSync(spawnSync("node", ["-p", "process.execPath"], { encoding: "utf8" }).stdout.trim(), join(bin, "node"));
+    writeFileSync(join(bin, "kiro-cli"), "#!/bin/sh\n", { mode: 0o755 });
+    const run = (command) => {
+      const r = spawnSync(join(bin, "node"), [join(repoRoot, "tools/install.mjs"), command, "--source", repoRoot, "--kiro-home", "~/kiro", "--json"], {
+        cwd: user,
+        env: { PATH: `${bin}:/usr/bin:/bin`, HOME: user },
+        encoding: "utf8",
+      });
+      return JSON.parse(r.stdout).homes.find((h) => h.harness === "kiro");
+    };
+    const shippedSkills = readdirSync(join(pluginRoot, "skills")).length;
+    const first = run("install");
+    expect(first).toMatchObject({
+      dir: join(user, "kiro"),
+      from: ["--kiro-home"],
+      steps: [`installed ${shipped}`, `linked ${shippedSkills} skills`, `wrote ${join(user, "kiro/hooks/oms-pstack.json")}`],
+    });
+    expect(first.checks.every((c) => c.ok)).toBe(true);
+    expect(run("update").steps).toEqual([]);
+    expect(run("doctor").checks).toEqual([
+      { name: "installed", ok: true, detail: shipped },
+      { name: "skills", ok: true, detail: `${shippedSkills} linked` },
+      { name: "hook", ok: true, detail: join(user, "kiro/hooks/oms-pstack.json") },
+    ]);
+  });
+
+  test("the installer CLI installs from a --source whose plugin is a link without writing into that source, and a second run changes nothing", () => {
+    const user = tmp();
+    const bin = join(user, "bin");
+    mkdirSync(bin);
+    symlinkSync(spawnSync("node", ["-p", "process.execPath"], { encoding: "utf8" }).stdout.trim(), join(bin, "node"));
+    writeFileSync(join(bin, "kiro-cli"), "#!/bin/sh\n", { mode: 0o755 });
+    const plugin = join(tmp(), "pstack");
+    cpSync(pluginRoot, plugin, { recursive: true });
+    const source = join(tmp(), "source");
+    cpSync(join(repoRoot, "tools/frozen-hooks.json"), join(source, "tools/frozen-hooks.json"));
+    mkdirSync(join(source, "plugins"));
+    symlinkSync(plugin, join(source, "plugins/pstack"));
+    const sourceState = () => ({ ...treeState(source), ...treeState(plugin) });
+    const before = sourceState();
+    const install = () => {
+      const r = spawnSync(join(bin, "node"), [join(repoRoot, "tools/install.mjs"), "install", "--source", source, "--kiro-home", "~/kiro", "--json"], {
+        cwd: user,
+        env: { PATH: `${bin}:/usr/bin:/bin`, HOME: user },
+        encoding: "utf8",
+      });
+      return JSON.parse(r.stdout).homes.find((h) => h.harness === "kiro").steps;
+    };
+    expect(install()).toContain(`installed ${shipped}`);
+    expect(sourceState()).toEqual(before);
+    expect(install()).toEqual([]);
+    expect(sourceState()).toEqual(before);
+  });
+
+  test("the installer CLI rewrites an earlier release's hooks file after an update that stopped before rewriting it", () => {
+    const user = tmp();
+    const bin = join(user, "bin");
+    mkdirSync(bin);
+    symlinkSync(spawnSync("node", ["-p", "process.execPath"], { encoding: "utf8" }).stdout.trim(), join(bin, "node"));
+    writeFileSync(join(bin, "kiro-cli"), "#!/bin/sh\n", { mode: 0o755 });
+    // An earlier release: its own installer, whose hooks file differs, at an earlier version.
+    const earlier = tmp();
+    for (const path of ["tools", "plugins"]) cpSync(join(repoRoot, path), join(earlier, path), { recursive: true, filter: (src) => !src.includes("node_modules") });
+    const edit = (file, from, to) => writeFileSync(join(earlier, file), readFileSync(join(earlier, file), "utf8").replace(from, to));
+    edit("tools/install/kiro.mjs", "timeout: 10,", "timeout: 5,");
+    edit("plugins/pstack/.claude-plugin/plugin.json", `"version": "${shipped}"`, '"version": "2.6.0-rc.1"');
+    const install = (root) => {
+      const r = spawnSync(join(bin, "node"), [join(root, "tools/install.mjs"), "install", "--source", root, "--kiro-home", "~/kiro", "--json"], {
+        cwd: user,
+        env: { PATH: `${bin}:/usr/bin:/bin`, HOME: user },
+        encoding: "utf8",
+      });
+      return JSON.parse(r.stdout).homes.find((h) => h.harness === "kiro").steps;
+    };
+    const hooks = join(user, "kiro/hooks/oms-pstack.json");
+    expect(install(earlier)).toContain("installed 2.6.0-rc.1");
+    const older = readFileSync(hooks, "utf8");
+    expect(install(repoRoot)).toEqual([`updated 2.6.0-rc.1 to ${shipped}`, `rewrote ${hooks}, which had changed`]);
+    const current = readFileSync(hooks, "utf8");
+    writeFileSync(hooks, older);
+    expect(install(repoRoot)).toEqual([`rewrote ${hooks}, which had changed`]);
+    expect(readFileSync(hooks, "utf8")).toBe(current);
+  });
+
+  test("the installer CLI fills ~/.kiro in place of each KIRO_HOME that Kiro ignores, and warns with each value", () => {
+    const user = tmp();
+    const kiroWork = { driver: "kiro", environment: [{ name: "KIRO_HOME", value: "~/.kiro-work" }] };
+    const { status, report } = kiroInstaller(user, { kiro_work: kiroWork }, { KIRO_HOME: user })("install");
+    expect(status).toBe(0);
+    const rows = report.homes.filter((h) => h.harness === "kiro");
+    expect(rows.map(({ dir, from }) => ({ dir, from }))).toEqual([{ dir: join(user, ".kiro"), from: ["T3 instance kiro_work", "KIRO_HOME"] }]);
+    expect(rows[0].checks.filter((c) => !c.ok)).toEqual([
+      {
+        name: "KIRO_HOME",
+        ok: false,
+        warn: true,
+        detail: `Kiro reads this home, since it ignores "~/.kiro-work" from T3 instance kiro_work, "${user}" from KIRO_HOME`,
+        fix: `make KIRO_HOME an absolute path that does not hold your home folder, or unset it, then ${localHint}`,
+      },
+    ]);
+    expect(existsSync(join(user, ".kiro-work"))).toBe(false);
+    expect(readdirSync(user).filter((name) => ["oms-pstack", "skills", "hooks"].includes(name))).toEqual([]);
+  });
+
+  test("the installer CLI gives a kiro instance with no KIRO_HOME of its own the one it inherits from the installer", () => {
+    const user = tmp();
+    const shell = join(user, "kiro-shell");
+    const { status, report } = kiroInstaller(user, { kiro_work: { driver: "kiro" } }, { KIRO_HOME: shell })("install");
+    expect(status).toBe(0);
+    const rows = report.homes.filter((h) => h.harness === "kiro");
+    expect(rows.map(({ dir, from }) => ({ dir, from }))).toEqual([{ dir: shell, from: ["T3 instance kiro_work", "KIRO_HOME"] }]);
+    expect(rows[0].checks.every((c) => c.ok)).toBe(true);
+    expect(existsSync(join(user, ".kiro"))).toBe(false);
+  });
+
+  test("the installer CLI skips each kiro instance whose KIRO_HOME is a T3 secret, and warns with the --kiro-home fix", () => {
+    const user = tmp();
+    const secret = (variable) => ({ driver: "kiro", environment: [{ name: "KIRO_HOME", value: "", sensitive: true, ...variable }] });
+    const { status, report } = kiroInstaller(user, {
+      kiro_ref: secret({ secret: { provider: "onepassword", reference: "op://vault/kiro/home" } }),
+      kiro_stored: { ...secret({ valueRedacted: true }), enabled: false },
+    })("install");
+    expect(status).toBe(0);
+    expect(report.homes.filter((h) => h.harness === "kiro")).toEqual([]);
+    expect(report.settings.checks).toEqual(
+      ["T3 instance kiro_ref", "T3 instance kiro_stored (disabled)"].map((name) => ({
+        name,
+        ok: false,
+        warn: true,
+        detail: "its KIRO_HOME is a secret, which the installer cannot read, so it skipped that instance",
+        fix: `${localHint} with \`--kiro-home <dir>\`, naming the directory that KIRO_HOME holds`,
+      })),
+    );
+    expect(existsSync(join(user, ".kiro"))).toBe(false);
   });
 });
 
