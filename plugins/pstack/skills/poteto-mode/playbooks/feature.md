@@ -1,9 +1,5 @@
 ### Feature
 
-When T3 Code tools are available, step 4 explicitly requests `delegate_task` for implementation before the parent writes any product source or tests. Dispatch the machine sheet’s `feature, refactoring` seat in its own worktree, or use the arena runners when step 4 calls for Arena. The implementation child owns the diff. Keep its task ID and verify the returned changes; if dispatch fails, report the failure before proceeding with implementation.
-
-On T3, every OMS playbook step that delegates explicitly requests `delegate_task` by name, including same-provider work. Read the machine model sheet before dispatch. Use async mode and pass the role’s provider, model, and options as the target. For `inherit-parent` or `auto`, use the same tool and omit the target. Native subagent instructions below apply outside T3. Include this handoff in the worker brief: “End your result by reminding the parent to include its dispatch ledger in the final user reply.” Keep the returned task ID with the role and requested seat. On the completion wake, recover those fields from the original tool receipt. End the final user reply with one ledger row per child: role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome. An earlier progress update does not close this step. Mark a required dispatch without a receipt as unverified.
-
 **You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
 1. Trace the affected subsystem.

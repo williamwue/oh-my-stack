@@ -1,6 +1,6 @@
 # T3 Code mapping
 
-Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It holds chhoumann/t3-pstack 2.6.1's T3 rules in t3-pstack's own words. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the Subagents section means poteto-mode's `SKILL.md` and its folder.
+Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It holds chhoumann/t3-pstack 2.6.1's T3 rules in t3-pstack's own words. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the quoted poteto-mode passages means poteto-mode's `SKILL.md` and its folder.
 
 ## Subagents
 
@@ -113,6 +113,10 @@ Each quoted passage is t3-pstack's text for the step or paragraph of the same nu
 
 > 1. Dispatch one `delegate_task` child (`mode: "async"`, `role: "review"`) whose brief opens with "Read `<plugin root>/agents/comment-sicko.md` in full and act as it says" (`<plugin root>` is the directory that holds this plugin's `skills/`). Pass the scope, and no worktree, because a worktree lacks the scope's uncommitted changes. Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill. Do not restate its rules.
 
+### `poteto-mode/SKILL.md`
+
+> Match the task to a playbook and open its steps at `playbooks/<title>.md` from this file (`skills/poteto-mode/playbooks/<title>.md`), with the title in kebab case. Copy its steps into the todolist tool first. Keep the todolist in the session's task tool when it has one, such as `update_plan` on Codex. Without one, keep it as an uncommitted Markdown checklist at `.audit/<task-slug>.todo.md` in the work dir, beside the decision trail, so sessions that share a checkout never write one file. Large, cross-cutting, or unattended work, or a task no playbook fits, routes to the **figure-it-out** skill.
+
 ### `poteto-mode/playbooks/autonomous-run.md`
 
 > 2. Pick the wake mechanism with T3's `schedule_task`, bound to this thread with a `title` that names the run, and `delete_scheduled_task` it when the run ends. An event to watch (CI, a merge, a ref advancing) gets a watcher subagent that wakes you on the event, with a long time-based heartbeat as fallback. No event gets a fixed-interval heartbeat sized to when the result is worth re-checking. Pick each subagent's reasoning level for the job, per the Subagents section.
@@ -142,6 +146,10 @@ Each quoted passage is t3-pstack's text for the step or paragraph of the same nu
 ### `poteto-mode/playbooks/eval.md`
 
 > 6. **Verify the chain from transcripts, not self-report.** Read each candidate's T3 thread with `t3_thread_read` (`view: "activity"`), by the thread or `childThreadId` it ran as. Do not read other projects' threads. That crosses workspace boundaries and reads private chats from unrelated projects. Look at which files each candidate actually opened. Grade chain-following from the files it really read plus the shape of the code, never from the candidate's own claims.
+
+### `poteto-mode/playbooks/feature.md`
+
+> 4. Delegate code-writing to a subagent using your configured feature model (default in poteto-mode's [Models](#models)) with a specific scope (file paths, named data shape and its organizing structure per **principle-model-the-domain**, a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions, chosen before the delegate writes logic, and success criteria). Pick each subagent's reasoning level for the job, per the Subagents section. When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the runners surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. **A file-writing delegate works in your checkout while you write nothing, or in its own worktree from `HEAD`, per poteto-mode's [Subagents](#subagents) section.** Commit what it builds on first, and name that base commit in the brief. Do not write files or run a suite in a worktree a delegate still holds. Fencing a file in the brief's prose is not a lock (**principle-separate-before-serializing-shared-state**). Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
 
 ### `poteto-mode/playbooks/opening-a-pr.md`
 

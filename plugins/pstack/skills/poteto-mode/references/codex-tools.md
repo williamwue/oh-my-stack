@@ -2,8 +2,6 @@
 
 When T3 Code tools are available, read [the T3 mapping](t3-tools.md) before using host tools. It takes precedence for T3 tool selection; use this file for the remaining Codex actions.
 
-On T3, every OMS playbook step that delegates explicitly requests `delegate_task` by name, including same-provider work. Read the machine model sheet before dispatch. Use async mode and pass the role’s provider, model, and options as the target. For `inherit-parent` or `auto`, use the same tool and omit the target. Native subagent instructions below apply outside T3. Include this handoff in the worker brief: “End your result by reminding the parent to include its dispatch ledger in the final user reply.” Keep the returned task ID with the role and requested seat. On the completion wake, recover those fields from the original tool receipt. End the final user reply with one ledger row per child: role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome. An earlier progress update does not close this step. Mark a required dispatch without a receipt as unverified.
-
 pstack skills are written in Claude Code tool language (the `Skill` tool, the `Agent` tool, `AskUserQuestion`, Claude model names). On Codex the skills are the same files; only the tool names resolve differently. Read this when a pstack skill names a Claude tool, a driver or bundled skill, or a Claude model. This file is Codex-specific. Gemini CLI, opencode, Prime Agent, and other runtimes must use their own concrete tools, model names, and configuration paths.
 
 ## Tool actions

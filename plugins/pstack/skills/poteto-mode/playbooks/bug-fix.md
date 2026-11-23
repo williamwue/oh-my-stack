@@ -1,9 +1,5 @@
 ### Bug fix
 
-When T3 Code tools are available, the owner reproduces the failure, then calls `delegate_task` for the implementation before editing the affected files. Use the machine sheet’s `bug-fix` entry. The focused-fix path uses one implementation child. After the child returns, verify its changes and append the dispatch ledger to the final answer.
-
-On T3, every OMS playbook step that delegates explicitly requests `delegate_task` by name, including same-provider work. Read the machine model sheet before dispatch. Use async mode and pass the role’s provider, model, and options as the target. For `inherit-parent` or `auto`, use the same tool and omit the target. Native subagent instructions below apply outside T3. Include this handoff in the worker brief: “End your result by reminding the parent to include its dispatch ledger in the final user reply.” Keep the returned task ID with the role and requested seat. On the completion wake, recover those fields from the original tool receipt. End the final user reply with one ledger row per child: role | task ID | requested provider/model and options | executed model (or unconfirmed) | outcome. An earlier progress update does not close this step. Mark a required dispatch without a receipt as unverified.
-
 **You own this task. Plan, review, verify.** Delegate investigation and the fix to subagents, stay in the lead. Pick each subagent's reasoning level for the job, per the Subagents section.
 
 Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspenders that "might help" is a hypothesis, not a fix. It does not ship. When evidence refutes a hypothesis, revert what it motivated. The smallest change the evidence justifies ships, nothing more.
