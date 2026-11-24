@@ -2,7 +2,7 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
-## Unreleased
+## 3.0.4 - Built-in T3 medium model profile
 
 T3 uses the OMS medium profile when a model sheet or role line is absent.
 Sol handles general work, DeepSeek Flash handles Swarm, and Astra, Opus, and
