@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.0.3 - Upstream playbooks and T3 dispatch
+
+All 22 bundled playbooks match pstack-claude v0.9.146. On T3, role selection,
+dispatch receipts, and workspace isolation follow the t3-pstack v2.6.1 mapping.
+This removes repeated OMS instructions from Feature, Bug fix, and the role skills.
+Rerun the installer to update local plugin copies.
+
 ## 3.0.2 - T3 Feature implementation handoff
 
 Sync pstack-claude v0.9.146 and t3-pstack v2.6.1, including Kiro installation and T3 PR watching. On T3, Feature now calls the configured implementation seat before the parent writes source or tests. The parent verifies the child’s diff. Rerun the installer to update local plugin copies.
