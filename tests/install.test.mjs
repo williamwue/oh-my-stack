@@ -635,15 +635,13 @@ describe("the model sheet", () => {
     });
   });
 
-  test("doctor warns without a sheet and fails on a malformed one", () => {
+  test("doctor uses defaults without a sheet and fails on a malformed one", () => {
     const { homes, sheet } = machine();
     expect(doctorSheet(sheet, homes, { catalog: null, roles, tiers, hint: FIX })).toEqual([
       {
-        name: "machine sheet",
-        ok: false,
-        detail: "none, so every role runs on its skill's defaults",
-        fix: "run /t3-pstack:setup-pstack in a T3 thread",
-        warn: true,
+        name: "model defaults",
+        ok: true,
+        detail: "built-in medium profile (pass --catalog to check targets)",
       },
     ]);
     mkdirSync(join(sheet, ".."), { recursive: true });
@@ -652,7 +650,43 @@ describe("the model sheet", () => {
       name: "machine sheet valid",
       ok: false,
       detail: 'bug-fix: "claude-opus" does not start with <providerInstanceId>/<modelId>; "how critics" is not a pstack role',
-      fix: "run /t3-pstack:setup-pstack in a T3 thread",
+      fix: "run /pstack:setup-pstack in a T3 thread",
+    });
+  });
+
+  test("doctor --catalog validates the effective roles with missing and partial sheets without writing", () => {
+    const { root, sheet } = machine();
+    const node = spawnSync("node", ["-p", "process.execPath"], { encoding: "utf8" }).stdout.trim();
+    const catalog = join(root, "catalog.json");
+    const fixture = readFileSync(join(repoRoot, "tests/fixtures/t3-catalog.json"), "utf8");
+    const run = () => {
+      const before = treeState(root);
+      const r = spawnSync(node, [join(repoRoot, "tools/install.mjs"), "doctor", "--catalog", catalog, "--json"], {
+        env: { HOME: root, PATH: root },
+        encoding: "utf8",
+      });
+      expect(r.stderr).toBe("");
+      expect(treeState(root)).toEqual(before);
+      return { status: r.status, checks: JSON.parse(r.stdout).sheet.checks };
+    };
+
+    writeFileSync(catalog, fixture);
+    expect(run()).toEqual({ status: 0, checks: [{ name: "model defaults", ok: true, detail: "built-in medium profile matches the catalog" }] });
+    const missingFlash = JSON.parse(fixture);
+    missingFlash.providers.find((p) => p.providerInstanceId === "opencode").models = [];
+    writeFileSync(catalog, JSON.stringify(missingFlash));
+    const unavailable = 'swarm workers (no line, tier default): opencode/opencode-go/deepseek-v4.1-flash: "opencode" does not list model "opencode-go/deepseek-v4.1-flash"';
+    expect(run()).toMatchObject({ status: 1, checks: [{ name: "model defaults", ok: false, detail: unavailable }] });
+    expect(existsSync(sheet)).toBe(false);
+
+    mkdirSync(join(sheet, ".."), { recursive: true });
+    writeFileSync(sheet, "bug-fix: auto\n");
+    expect(run()).toMatchObject({ status: 1, checks: [{ name: "machine sheet valid", ok: false, detail: unavailable }, { name: "home sheets", ok: true }] });
+    writeFileSync(sheet, "bug-fix: auto\nswarm workers: inherit-parent\n");
+    expect(run()).toMatchObject({ status: 0, checks: [{ name: "machine sheet valid", ok: true }, { name: "home sheets", ok: true }] });
+    writeFileSync(sheet, "swarm workers: grok/grok-9\n");
+    expect(run()).toMatchObject({
+      status: 1, checks: [{ name: "machine sheet valid", ok: false, detail: 'swarm workers: grok/grok-9: "grok" does not list model "grok-9"' }, { name: "home sheets", ok: true }],
     });
   });
 
@@ -673,7 +707,7 @@ describe("the model sheet", () => {
         name: "retired roles",
         ok: false,
         detail: 'no skill reads "how explorer", "hardest tasks", "reflect tooling"',
-        fix: "run /t3-pstack:setup-pstack in a T3 thread, which drops them",
+        fix: "run /pstack:setup-pstack in a T3 thread, which drops them",
         warn: true,
       },
     ]);
@@ -1093,6 +1127,8 @@ describe("Kiro", () => {
       return JSON.parse(r.stdout).homes.find((h) => h.harness === "kiro").steps;
     };
     expect(install()).toContain(`installed ${shipped}`);
+    expect(existsSync(join(user, ".config/t3-pstack/models.md"))).toBe(false);
+    expect(existsSync(join(user, ".codex/t3-pstack-models.md"))).toBe(false);
     expect(sourceState()).toEqual(before);
     expect(install()).toEqual([]);
     expect(sourceState()).toEqual(before);

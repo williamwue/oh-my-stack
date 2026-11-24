@@ -54,6 +54,7 @@ import { fileURLToPath } from "node:url";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
 
+import { candidateSheet, checkSheet, parseSheet } from "../plugins/pstack/skills/setup-pstack/scripts/t3-sheet.mjs";
 import { code, codeList, FROZEN_HOOKS, hookDigest, isMain, PLUGIN, SKILLS } from "./plugin.mjs";
 import { PLATFORM_ADAPTATION_OPEN, platformAdaptation, RUNTIMES, roleSkills } from "./runtimes.mjs";
 import { markdownFiles, pathIsInside, T3_QUOTED, validateProsePaths, validateSkillsTree, walk } from "./validate-skills.mjs";
@@ -718,6 +719,29 @@ function setupModelsSection(models) {
   );
 }
 
+function t3Regions(models) {
+  const setup = candidateSheet(models).trimEnd();
+  const problems = checkSheet(parseSheet(setup), { ...models, defaults: models.tiers });
+  if (problems.length) throw new Error(`models.t3.json: ${problems.join("\n")}`);
+  const rows = new Map();
+  for (const { role, tier, skill } of models.roles) {
+    if (!rows.has(skill)) rows.set(skill, []);
+    rows.get(skill).push(`- ${role}: ${codeList([models.tiers[tier]].flat())}`);
+  }
+  return [
+    {
+      file: `${SKILLS}/poteto-mode/references/t3-tools.md`,
+      locate: between("<!-- Begin generated T3 roles -->", "<!-- End generated T3 roles -->"),
+      render: [...rows].map(([skill, entries]) => skill === "poteto-mode" ? entries.join("\n") : `${skill}:\n\n${entries.join("\n")}`).join("\n\n"),
+    },
+    {
+      file: `${SKILLS}/setup-pstack/references/t3.md`,
+      locate: fenceUnder("Write the sheet", "markdown"),
+      render: setup,
+    },
+  ];
+}
+
 // The override sheet the setup skill writes for users. The preamble is fixed;
 // the role rows come from models.json.
 function overrideSheetBlock(models) {
@@ -943,6 +967,15 @@ export function plan(root, models) {
   };
   for (const file of VERSIONED_MANIFESTS) stamp(file, (text) => stampVersion(text, version, file));
   for (const file of new Set(regions(models).map((r) => r.file))) stamp(file, (text) => applyRegions(file, text, models));
+  for (const { file, locate, render } of t3Regions(JSON.parse(read(`${PLUGIN}/models.t3.json`)))) {
+    stamp(file, (text) => {
+      const lines = text.split("\n");
+      const span = locate(lines);
+      if (!span) throw new Error(`${file}: missing generated T3 model table`);
+      lines.splice(span[0], span[1] - span[0], render);
+      return lines.join("\n");
+    });
+  }
   for (const [file, line] of loadLeadLines(root)) {
     stamp(file, (text) => {
       const stamped = stampLeadLine(text, line);

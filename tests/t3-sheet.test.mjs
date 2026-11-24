@@ -113,27 +113,21 @@ describe("checkSheet against a catalog", () => {
   });
 
   test("a catalog that lists each option's values as a plain array, as orchestrator_capabilities returns, checks values", () => {
-    // A copy of a live orchestrator_capabilities result, trimmed to four
-    // providers. It lists no Fable 5.2 and no antigravity instance, so only the
-    // tier defaults that name those fail; the Opus defaults pass.
+    // This historical catalog omits the new defaults, but its explicit targets still validate.
     const values = JSON.parse(readFileSync(join(root, "tests/fixtures/t3-catalog-values.json"), "utf8"));
-    const problems = (lines) => check(lines.join("\n"), values);
-    const missingDefault = (p) =>
-      p.includes('(no line, tier default): claudeAgent/claude-fable-5-2: "claudeAgent" does not list model "claude-fable-5-2"') ||
-      p.includes('(no line, tier default): antigravity/gemini-4-neon: no provider instance "antigravity" in this T3');
+    const problems = (lines) => check(lines.join("\n"), values).filter((p) => !p.includes("(no line, tier default)"));
     const valid = [
       "bug-fix: claudeAgent/claude-opus-5-5 effort=high fastMode=true",
       "feature, refactoring: codex/gpt-6.1-sol reasoningEffort=xhigh serviceTier=priority",
       "perf-issue: cursor/grok-4.7 reasoning_effort=high fastMode=false contextWindow=256k",
     ];
-    expect(problems(valid).filter((p) => !missingDefault(p))).toEqual([]);
-    expect(problems(valid).some(missingDefault)).toBe(true);
+    expect(problems(valid)).toEqual([]);
     const invalid = [
       "bug-fix: claudeAgent/claude-opus-5-5 effort=extreme",
       "hillclimb: claudeAgent/claude-opus-5-5 fastMode=yes",
       "judgment and prose: grok/grok-4.7 reasoningEffort=high",
     ];
-    expect(problems(invalid).filter((p) => !missingDefault(p))).toEqual([
+    expect(problems(invalid)).toEqual([
       "bug-fix: claudeAgent/claude-opus-5-5: effort=extreme is not one of low, medium, high, xhigh, max, ultracode, ultrathink",
       "hillclimb: claudeAgent/claude-opus-5-5: fastMode=yes is not one of false, true",
       'judgment and prose: grok/grok-4.7: "grok" cannot run child tasks (Provider instance is disabled.)',
@@ -299,6 +293,15 @@ const CLI_TIMEOUT = 30_000;
 
 describe("t3-sheet.mjs CLI", () => {
   const dir = mkdtempSync(join(tmpdir(), "t3-sheet-"));
+  const current = join(dir, "current.md");
+  const candidate = (budget, sheet) => {
+    if (sheet !== undefined) writeFileSync(current, sheet);
+    const args = [script, "--candidate", budget, catalogPath, ...(sheet === undefined ? [] : [current])];
+    const result = spawnSync("node", args, { encoding: "utf8" });
+    expect(result.status, result.stderr).toBe(0);
+    if (sheet !== undefined) expect(readFileSync(current, "utf8")).toBe(sheet);
+    return result;
+  };
   const run = (path, sheet) => {
     writeFileSync(join(dir, "sheet.md"), sheet);
     return spawnSync("node", [path, join(dir, "sheet.md"), catalogPath], { encoding: "utf8" });
@@ -317,5 +320,95 @@ describe("t3-sheet.mjs CLI", () => {
 
   test("exits 0 on a sheet that dispatches", () => {
     expect(run(script, "bug-fix: grok/grok-4.7 reasoningEffort=xhigh\n").status).toBe(0);
+  }, CLI_TIMEOUT);
+
+  test("fresh medium produces the documented seats and repeating it preserves every option", () => {
+    const { stdout, stderr } = candidate("medium");
+    const sol = "codex/gpt-6.2-sol reasoningEffort=high";
+    const opus = "claudeAgent/claude-opus-5-5 effort=medium";
+    const neon = "antigravity/gemini-4-neon thought_level=high";
+    const panel = `codex/gpt-6.2-astra reasoningEffort=medium, ${opus}, ${neon}`;
+    expect(stderr).toBe("");
+    expect(parseSheet(stdout).map(({ key, value }) => [key, value])).toEqual([
+      ["feature, refactoring", sol],
+      ["bug-fix", sol],
+      ["perf-issue", sol],
+      ["hillclimb", sol],
+      ["judgment and prose", sol],
+      ["arena runners", panel],
+      ["arena cross-judge pool", `${opus}, ${neon}`],
+      ["swarm workers", "opencode/opencode-go/deepseek-v4.1-flash variant=high"],
+      ["interrogate reviewers", panel],
+      ["session hook", "on"],
+    ]);
+    expect(candidate("medium", stdout)).toMatchObject({ stdout, stderr: "" });
+  }, CLI_TIMEOUT);
+
+  test("large and small adjust preset effort and preserve explicit targets and hook settings", () => {
+    const medium = candidate("medium").stdout
+      .replace(/^bug-fix: .+$/m, "bug-fix: auto")
+      .replace(/^hillclimb: .+$/m, "hillclimb: inherit-parent")
+      .replace(/^perf-issue: .+$/m, "perf-issue: codex/gpt-6.2-sol reasoningEffort=medium")
+      .replace("session hook: on", "session hook: off");
+    const large = candidate("large", medium).stdout;
+    expect(large).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=xhigh");
+    expect(large).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=high, claudeAgent/claude-opus-5-5 effort=high, antigravity/gemini-4-neon thought_level=xhigh");
+    const small = candidate("small", large).stdout;
+    expect(small).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=medium");
+    expect(small).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=low, claudeAgent/claude-opus-5-5 effort=low, antigravity/gemini-4-neon thought_level=medium");
+    for (const sheet of [large, small]) {
+      expect(sheet).toContain("swarm workers: opencode/opencode-go/deepseek-v4.1-flash variant=high");
+      expect(sheet).toContain("bug-fix: auto");
+      expect(sheet).toContain("perf-issue: codex/gpt-6.2-sol reasoningEffort=medium");
+      expect(sheet).toContain("hillclimb: inherit-parent");
+      expect(sheet).toContain("session hook: off");
+    }
+    expect(candidate("medium", small).stdout).toBe(medium);
+  }, CLI_TIMEOUT);
+
+  test("large uses an available lower effort while medium requires its exact built-in option", () => {
+    const limited = structuredClone(catalog);
+    const sol = limited.providers.find((p) => p.providerInstanceId === "codex").models.find((m) => m.id === "gpt-6.2-sol");
+    sol.options[0].values = ["low", "medium", "high"];
+    const path = join(dir, "limited.json");
+    writeFileSync(path, JSON.stringify(limited));
+    const runCandidate = (budget) => spawnSync("node", [script, "--candidate", budget, path], { encoding: "utf8" });
+    const large = runCandidate("large");
+    expect(large.status, large.stderr).toBe(0);
+    expect(large.stdout).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=high");
+    sol.options[0].values = ["low", "medium"];
+    writeFileSync(path, JSON.stringify(limited));
+    const medium = runCandidate("medium");
+    expect(medium.status).toBe(1);
+    expect(medium.stderr).toContain("reasoningEffort=high is not one of low, medium");
+    expect(medium.stdout).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=high");
+  }, CLI_TIMEOUT);
+
+  test("migrates released default signatures and preserves current Neon high and explicit options", () => {
+    const old = [
+      "# budget: unlimited",
+      "bug-fix: claudeAgent/claude-fable-5-1 effort=xhigh",
+      "swarm workers: claudeAgent/claude-opus-5-5 effort=high",
+      "arena runners: codex/gpt-6.1-sol, claudeAgent/claude-opus-5-5, grok/grok-4.7",
+      "arena cross-judge pool: claudeAgent/claude-fable-5-2, claudeAgent/claude-opus-5-5, antigravity/gemini-4-carbon thinking_level=high",
+      "interrogate reviewers: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-carbon thinking_level=high",
+      "how explorer: auto",
+    ].join("\n");
+    const { stdout, stderr } = candidate("medium", old);
+    expect(stdout).toContain("bug-fix: codex/gpt-6.2-sol reasoningEffort=high");
+    expect(stdout).toContain("swarm workers: opencode/opencode-go/deepseek-v4.1-flash variant=high");
+    expect(stdout).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=medium");
+    expect(stdout).toContain("arena cross-judge pool: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=high");
+    expect(stdout).toContain("interrogate reviewers: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=high");
+    expect(stderr).toContain("Dropped line 7 (how explorer)");
+
+    const panel = "interrogate reviewers: claudeAgent/claude-opus-5-5 effort=high fastMode=true, antigravity/gemini-4-neon thought_level=high";
+    const released = `# defaults: 3\n# budget: medium (high)\n${panel}\n`;
+    expect(candidate("medium", released).stdout).toContain(panel);
+    const renamed = candidate("medium", released.replace("thought_level=high", "thinking_level=high"));
+    expect(renamed.stdout).toContain(panel);
+    expect(renamed.stderr).toContain("Migrated interrogate reviewers");
+    const handwritten = "swarm workers: claudeAgent/claude-opus-5-5 effort=high\n";
+    expect(candidate("medium", handwritten).stdout).toContain(handwritten);
   }, CLI_TIMEOUT);
 });

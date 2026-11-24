@@ -7,15 +7,17 @@
 // the generator checks the models.json tiers with it, and setup-pstack checks
 // a sheet against the live `orchestrator_capabilities` catalog with it.
 //
-//   node t3-sheet.mjs <sheet.md> <catalog.json>
-//
-// prints one line per problem and exits 1 when there is any.
+// Validate a sheet with <sheet.md> <catalog.json>, or preview one with
+// --candidate <budget> <catalog.json> [current.md]. Both modes are read-only.
 
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const INHERIT = ["inherit-parent", "auto"];
 const HOOK_VALUES = ["on", "off"];
+const SHEET_DEFAULTS = 4;
+const LEVELS = ["low", "medium", "high", "xhigh"];
+const BUDGETS = { large: { offset: 1, label: "xhigh" }, medium: { offset: 0, label: "high" }, small: { offset: -1, label: "medium" } };
 
 // Throws on a malformed entry; returns null for an inherit alias.
 export function parseEntry(text) {
@@ -169,21 +171,150 @@ function allowedValues(option) {
   return (option?.options ?? []).map((o) => o.id);
 }
 
+function budgetEntry(text, budget, defaultBudget, catalog) {
+  const offset = BUDGETS[budget].offset - BUDGETS[defaultBudget].offset;
+  if (offset === 0) return text;
+  const entry = parseEntry(text);
+  if (!entry) return text;
+  const provider = catalog?.providers.find((p) => p.providerInstanceId === entry.providerInstanceId);
+  const model = provider?.models.find((m) => m.id === entry.model);
+  // A provider's model variant is a separate setting, not an effort level.
+  return text.replace(/\b(effort|reasoningEffort|thought_level)=(low|medium|high|xhigh)\b/g, (_, option, level) => {
+    const index = Math.max(0, Math.min(LEVELS.indexOf(level) + offset, LEVELS.length - 1));
+    const allowed = allowedValues(model?.options?.find((o) => o.id === option));
+    const available = LEVELS.slice(0, index + 1).findLast((value) => allowed.includes(value));
+    return `${option}=${available ?? LEVELS[index]}`;
+  });
+}
+
+function releasedDefault(texts, role, version) {
+  const ids = texts.map((text) => text.trim().split(/\s+/)[0]);
+  const models = ids.map((id) => id.split("/").at(-1));
+  if (version >= 3) return false;
+  if (role === "arena cross-judge pool" && models.length === 3 &&
+    ["claude-fable-", "claude-opus-", "gemini-"].every((prefix) => models.some((model) => model.startsWith(prefix)))) return true;
+  if (version >= 2) return false;
+  if (["bug-fix", "perf-issue", "hillclimb"].includes(role) && ids.join() === "claudeAgent/claude-fable-5-1") return true;
+  if (role === "swarm workers" && ids.join() === "claudeAgent/claude-opus-5-5") return true;
+  return ["arena runners", "arena cross-judge pool", "interrogate reviewers"].includes(role) &&
+    ids.sort().join() === "claudeAgent/claude-opus-5-5,codex/gpt-6.1-sol,grok/grok-4.7";
+}
+
+function migrateEntry(text, { panel, version, oldBudget, neon, catalog }) {
+  const entry = parseEntry(text);
+  if (!entry || !catalog) return text;
+  const { providerInstanceId, model, options } = entry;
+  const provider = catalog.providers.find((p) => p.providerInstanceId === providerInstanceId);
+  if (!provider || (provider.driverKind ?? providerInstanceId) !== "antigravity") return text;
+
+  const level = options.thought_level ?? options.thinking_level;
+  const releasedNeon = model === "gemini-4-neon" && level === "high" && ["large", "unlimited"].includes(oldBudget);
+  if (neon && panel && version < 3 && (model === "gemini-4-carbon" || releasedNeon)) {
+    const target = { ...parseEntry(neon), providerInstanceId };
+    if (checkTarget(target, catalog).length === 0) {
+      const [option, value] = Object.entries(target.options)[0];
+      return `${providerInstanceId}/${target.model} ${option}=${value}`;
+    }
+  }
+  const listed = provider.models.find((m) => m.id === model)?.options ?? [];
+  if (options.thinking_level && !options.thought_level &&
+    allowedValues(listed.find((o) => o.id === "thought_level")).includes(options.thinking_level) &&
+    !listed.some((o) => o.id === "thinking_level")) {
+    return text.replace(/\bthinking_level=/, "thought_level=");
+  }
+  return text;
+}
+
+// Compute a candidate. The setup skill previews it and owns any file write.
+export function candidateSheet({ roles, tiers, defaultBudget, sessionHook }, {
+  budget = defaultBudget, current = "", catalog, report = () => {},
+} = {}) {
+  if (!Object.hasOwn(BUDGETS, budget)) throw new Error(`unknown T3 budget "${budget}"`);
+  if (!Object.hasOwn(BUDGETS, defaultBudget)) throw new Error(`unknown built-in T3 budget "${defaultBudget}"`);
+  const text = current.replace(/^\uFEFF/, "");
+  const oldBudget = text.match(/^# budget: ([a-z]+)/m)?.[1];
+  const generated = oldBudget || /^# pstack model configuration \(T3\)(?:\.|\r?$)/m.test(text);
+  const version = Number(text.match(/^# defaults: (\d+)\r?$/m)?.[1] ?? (generated ? 0 : SHEET_DEFAULTS));
+  const overrides = new Set([...text.matchAll(/^# override: (.+)\r?$/gm)].map((match) => match[1]));
+  const byRole = new Map(roles.map(({ role }) => [role, null]));
+  byRole.set("session hook", null);
+  for (const { line, key, value } of parseSheet(current)) {
+    if (!byRole.has(key)) {
+      report(`Dropped line ${line}${key ? ` (${key})` : ""}`);
+      continue;
+    }
+    if (byRole.get(key) !== null) throw new Error(`"${key}" appears twice; resolve it before setup`);
+    byRole.set(key, value);
+  }
+
+  const lines = [
+    "# pstack model configuration (T3). One line per role. Delete a line to fall back to the skill default.",
+    "# `inherit-parent` or `auto` as a value: the role runs on the parent chat's model (`delegate_task` omits `target`). Alias entries in a panel list still count toward its fan-out.",
+    `# defaults: ${SHEET_DEFAULTS}`,
+    `# budget: ${budget} (${BUDGETS[budget].label})`,
+  ];
+  const neon = tiers.panel?.find((text) => parseEntry(text)?.model === "gemini-4-neon");
+  for (const { role, tier } of roles) {
+    const defaults = [tiers[tier]].flat();
+    const preset = (size) => defaults.map((text) => budgetEntry(text, size, defaultBudget, catalog)).join(", ");
+    let value = byRole.get(role);
+    const oldPreset = version === SHEET_DEFAULTS && Object.hasOwn(BUDGETS, oldBudget) && !overrides.has(role)
+      ? preset(oldBudget)
+      : null;
+    if (value && value !== oldPreset) {
+      try {
+        const texts = value.split(",").map((text) => text.trim());
+        if (releasedDefault(texts, role, version)) {
+          report(`Replaced the released default for ${role}`);
+          value = null;
+        } else {
+          const updated = texts.map((text) => migrateEntry(text, {
+            panel: Array.isArray(tiers[tier]), version, oldBudget, neon: neon && budgetEntry(neon, budget, defaultBudget, catalog), catalog,
+          }));
+          if (updated.some((text, i) => text !== texts[i])) {
+            report(`Migrated ${role} to ${updated.join(", ")}`);
+            value = updated.join(", ");
+          }
+        }
+      } catch (err) {
+        if (version >= SHEET_DEFAULTS) throw err;
+        report(`Dropped the old entry for ${role}: ${err.message}`);
+        value = null;
+      }
+    } else {
+      value = null;
+    }
+    const nextPreset = preset(budget);
+    if (value === nextPreset) lines.push(`# override: ${role}`);
+    lines.push(`${role}: ${value ?? nextPreset}`);
+  }
+  lines.push(`session hook: ${byRole.get("session hook") ?? sessionHook}`);
+  return lines.join("\n") + "\n";
+}
+
 const invoked = process.argv[1] && existsSync(process.argv[1]) ? realpathSync(process.argv[1]) : null;
 if (invoked === fileURLToPath(import.meta.url)) {
-  const [sheetPath, catalogPath] = process.argv.slice(2);
-  if (!sheetPath || !catalogPath) {
-    console.error("usage: t3-sheet.mjs <sheet.md> <catalog.json>");
+  const args = process.argv.slice(2);
+  const candidate = args[0] === "--candidate";
+  const [, budget, candidateCatalog, currentPath] = args;
+  const [sheetPath, catalogPath] = args;
+  if (candidate ? !Object.hasOwn(BUDGETS, budget) || !candidateCatalog || args.length > 4 : args.length !== 2) {
+    console.error("usage: t3-sheet.mjs <sheet.md> <catalog.json> | --candidate <large|medium|small> <catalog.json> [current.md]");
     process.exit(2);
   }
-  const { roles, tiers, retired } = JSON.parse(readFileSync(new URL("../../../models.t3.json", import.meta.url), "utf8"));
-  const problems = checkSheet(parseSheet(readFileSync(sheetPath, "utf8")), {
-    roles,
-    defaults: tiers,
-    catalog: JSON.parse(readFileSync(catalogPath, "utf8")),
-    retired,
-  });
-  for (const problem of problems) console.log(problem);
-  if (problems.length) process.exit(1);
-  console.log("ok: every role line parses and dispatches on this T3");
+  try {
+    const models = JSON.parse(readFileSync(new URL("../../../models.t3.json", import.meta.url), "utf8"));
+    const catalog = JSON.parse(readFileSync(candidate ? candidateCatalog : catalogPath, "utf8"));
+    const sheet = candidate
+      ? candidateSheet(models, { budget, catalog, current: currentPath ? readFileSync(currentPath, "utf8") : "", report: console.error })
+      : readFileSync(sheetPath, "utf8");
+    const problems = checkSheet(parseSheet(sheet), { ...models, defaults: models.tiers, catalog });
+    if (candidate) process.stdout.write(sheet);
+    for (const problem of problems) (candidate ? console.error : console.log)(problem);
+    if (problems.length) process.exit(1);
+    if (!candidate) console.log("ok: every effective role dispatches on this T3");
+  } catch (err) {
+    console.error(err.message);
+    process.exit(2);
+  }
 }

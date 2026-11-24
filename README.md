@@ -3,7 +3,7 @@
 OMS 只发布一个插件 `pstack@oms`。它由两个开源项目重新组合而成：
 
 - [pstack-claude v0.9.146](https://github.com/michael-denyer/pstack-claude/tree/v0.9.146)：负责 Claude Code、Codex、OpenCode、Pi 等原生宿主的 pstack，基于上游 cursor/plugins `0b46ec3`。
-- [t3-pstack 2.6.1](https://github.com/chhoumann/t3-pstack/tree/v2.6.1)：负责 T3 Code 的 `delegate_task` 跨模型派发、T3 模型表、PR 评审静默窗口和安装器。这部分按 t3-pstack 原文和原代码搬入，见 [T3 适配](docs/t3.md)。
+- [t3-pstack 2.6.1](https://github.com/chhoumann/t3-pstack/tree/v2.6.1)：负责 T3 Code 的 `delegate_task` 跨模型派发、T3 模型表、PR 评审静默窗口和安装器。OMS 沿用其派发流程和安装器，模型档位由 OMS 维护，见 [T3 适配](docs/t3.md)。
 
 同一套技能在原生宿主上使用宿主自带的子代理派发；在提供 T3 编排工具的会话中，先读取 [T3 映射](plugins/pstack/skills/poteto-mode/references/t3-tools.md)，改用 `delegate_task`，panel 可以混用 Claude、GPT、Gemini 和 Grok。没有 T3 工具时，行为与 pstack-claude 一致。
 
@@ -23,7 +23,7 @@ npx -y github:williamwue/oh-my-stack install
 
 安装器会找出 T3 管理的每个 Claude Code、Codex 和 Antigravity 实例，把 `pstack@oms` 装进去。它还会把 Codex marketplace 固定到当前发布 tag，信任 Codex 的 session-start hook，并把模型表迁移到 `~/.config/t3-pstack/models.md`。重复运行不会产生额外改动。`update` 与 `install` 相同，`doctor` 只做检查、不写入。用 `--source <目录>` 可以从本地检出安装。
 
-装好后，在新的 T3 会话中运行 `pstack:setup-pstack`，按当前 provider catalog 为各角色选择模型。默认角色和 panel 席位见 [T3 映射的 Models 段](plugins/pstack/skills/poteto-mode/references/t3-tools.md#models)。
+装好后，T3 会在缺少模型表或角色行时使用内置 medium 档。要改用其他档位或设置角色覆盖，在新的 T3 会话中运行 `pstack:setup-pstack`。用 `doctor --catalog <file>` 校验有效角色。默认角色和 panel 席位见 [T3 映射的 Models 段](plugins/pstack/skills/poteto-mode/references/t3-tools.md#models)。
 
 <a id="codex"></a>
 

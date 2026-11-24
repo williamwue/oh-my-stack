@@ -2,6 +2,14 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## Unreleased
+
+T3 uses the OMS medium profile when a model sheet or role line is absent.
+Sol handles general work, DeepSeek Flash handles Swarm, and Astra, Opus, and
+Neon fill the panel seats. Setup uses the same profile for medium and keeps
+existing overrides. `doctor --catalog` validates the effective roles even
+when no sheet exists. A fresh install uses built-ins until you configure overrides.
+
 ## 3.0.3 - Upstream playbooks and T3 dispatch
 
 All 22 bundled playbooks match pstack-claude v0.9.146. On T3, role selection,

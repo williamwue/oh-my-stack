@@ -564,6 +564,20 @@ describe("plan, changes, apply", () => {
     expect(changes(repoRoot, plan(repoRoot))).toEqual([]);
   });
 
+  test("a T3 profile edit makes both generated tables stale and leaves native defaults current", () => {
+    const root = repoCopy();
+    const source = join(root, "plugins/pstack/models.t3.json");
+    const profile = JSON.parse(readFileSync(source, "utf8"));
+    profile.tiers.fast = "opencode/opencode-go/deepseek-v4.1-flash variant=medium";
+    writeFileSync(source, JSON.stringify(profile));
+    const intended = plan(root);
+    const routing = "plugins/pstack/skills/poteto-mode/references/t3-tools.md";
+    const setup = "plugins/pstack/skills/setup-pstack/references/t3.md";
+    expect(changes(root, intended)).toEqual([{ kind: "write", path: routing }, { kind: "write", path: setup }]);
+    expect(intended.files[routing]).toContain(`- swarm workers: \`${profile.tiers.fast}\``);
+    expect(intended.files[setup]).toContain(`swarm workers: ${profile.tiers.fast}`);
+  });
+
   test("a manifestless DSH runtime still gets mapping regions while both manifest loops skip it", () => {
     const runtime = RUNTIMES.find((row) => row.name === "DeepSeek Harness");
     expect(runtime.manifest).toBeUndefined();

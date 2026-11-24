@@ -1,6 +1,6 @@
 # T3 Code mapping
 
-Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It holds chhoumann/t3-pstack 2.6.1's T3 rules in t3-pstack's own words. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the quoted poteto-mode passages means poteto-mode's `SKILL.md` and its folder.
+Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It carries chhoumann/t3-pstack 2.6.1's T3 rules and the OMS model defaults. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the quoted poteto-mode passages means poteto-mode's `SKILL.md` and its folder.
 
 ## Subagents
 
@@ -8,15 +8,13 @@ From t3-pstack's `poteto-mode` Subagents section.
 
 **Brief any subagent you spawn directly inside a playbook step as a `poteto-agent`.** The chat that receives `/poteto-mode` runs the playbook itself. Routed workflow skills (`interrogate`, `swarm`) set their own brief and role. Respect them.
 
-**Defaults for every `delegate_task` call.** `mode: "async"`, full tool access (a read-only child gets "inspect only, change no file" in its brief), file pointers not inlined context, and an explicit `target` per role. `/setup-pstack` writes the model sheet, whose per-role lines override the defaults below and the role models in the routed skills (`arena`, `swarm`, `interrogate`). A role with no line keeps its default. A line of `inherit-parent` or `auto` runs the role on the parent model, so omit `target`. Each code playbook reads its own line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), prose and judgment read `judgment and prose`, and trivial mechanical edits read `swarm workers`. If the model sheet has no `# defaults: 3` line, an older setup wrote it. Keep honoring its lines, and tell the user once per session to rerun `/setup-pstack`.
+**Defaults for every `delegate_task` call.** `mode: "async"`, full tool access (a read-only child gets "inspect only, change no file" in its brief), file pointers not inlined context, and an explicit `target` per role. `/setup-pstack` writes the model sheet, whose per-role lines override the defaults below and the role models in the routed skills (`arena`, `swarm`, `interrogate`). A role with no line keeps its default. A line of `inherit-parent` or `auto` runs the role on the parent model, so omit `target`. Each code playbook reads its own line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), prose and judgment read `judgment and prose`, and trivial mechanical edits read `swarm workers`. Honor existing role lines. A missing sheet or role line uses the built-in medium profile.
 
-- Code, prose, and judgment: each role's entry in [Models](#models).
-- Trivial mechanical edits: the `swarm workers` entry in the **swarm** skill's Models section.
-- Diverse review and design panels: one runner each on the panel entries in the **arena** skill's Models section.
+- Code, prose, and judgment use their role entries in [T3 Models](#models).
+- Trivial mechanical edits use `swarm workers` in [T3 Models](#models).
+- Review and design panels use the lists in [T3 Models](#models), with one runner per entry.
 
-**Fable 5.2 is an exception.** It runs outside a panel only when the user named it for this task or two Opus 5.5 xhigh runs of the same brief failed its check. Say which. Difficulty alone never qualifies.
-
-**Match the model to the job.** Start from the role's line or default, keep its family, and set the level the job needs with the entry's reasoning option (`effort` on Claude, `reasoningEffort` on Codex and Grok, `thought_level` on Antigravity). The `/setup-pstack` budget sets each role's starting level. Panel seats keep their listed level. Raise any other role one step, up to xhigh, for the hardest or subtlest work, lower it one step for judgment, and two or more steps for routine work. No role runs above xhigh. Opus 5.5 runs at standard speed, so leave out `fastMode`, which on T3 is a priced fast mode. Verification always runs on the `swarm workers` entry (default in the **swarm** skill's Models section). A Gemini seat runs at an `xhigh` reasoning level unless its line names another level. If `delegate_task` rejects an entry, never pass it again. Fall back to the role's line or default, then the calling skill's fallback, then another target of the same family from `orchestrator_capabilities`, then omit `target`. Say so.
+**Match the model to the job.** Use the role's entry, including its provider options. Panel seats keep their listed options. For other roles, adjust reasoning only when the task calls for it and the provider lists the option and value. The primary reasoning options are `effort` on Claude, `reasoningEffort` on Codex and Grok, and `thought_level` on Antigravity. OpenCode's `variant` selects a provider preset. Verification uses the `swarm workers` entry. If T3 rejects the target, report the rejection and follow the host's retry policy.
 
 You own every subagent's work. Review the diff and write your own summary. A second opinion is the same prompt on another vendor's model.
 
@@ -32,28 +30,28 @@ End every reply that ran a playbook with a dispatch ledger: one line per delegat
 
 ## Models
 
-From t3-pstack's `poteto-mode` Models section, and the Models sections of its `arena`, `interrogate`, and `swarm` skills. `plugins/pstack/models.json` in this text is `plugins/pstack/models.t3.json` here. A pstack role this list does not name runs as the skill passages below say.
+The built-in medium profile is generated from `plugins/pstack/models.t3.json`. A role line in the model sheet overrides each one. The sheet is `~/.config/t3-pstack/models.md` (`$XDG_CONFIG_HOME/t3-pstack/models.md` when that is set), one per machine, and `/setup-pstack` writes it. When it is missing, read `t3-pstack-models.md` in the host's config directory (`$CLAUDE_CONFIG_DIR` or `~/.claude` on Claude Code, `$CODEX_HOME` or `~/.codex` on Codex). An entry is `<providerInstanceId>/<modelId>` plus `<optionId>=<value>` pairs, and it maps onto `delegate_task`'s `target`, with the provider instance as `providerInstanceId`, the model as `model`, and the pairs as `options`. It splits at its first `/`, so a model ID with its own `/`, such as OpenCode's `<provider>/<model>`, is written whole after it. Option IDs differ per provider, so take them from `orchestrator_capabilities`. `inherit-parent` or `auto` omits `target`.
 
-Role defaults on T3, stamped from `plugins/pstack/models.json`. A role line in the model sheet overrides each one. The sheet is `~/.config/t3-pstack/models.md` (`$XDG_CONFIG_HOME/t3-pstack/models.md` when that is set), one per machine, and `/setup-pstack` writes it. When it is missing, read `t3-pstack-models.md` in the host's config directory (`$CLAUDE_CONFIG_DIR` or `~/.claude` on Claude Code, `$CODEX_HOME` or `~/.codex` on Codex). An entry is `<providerInstanceId>/<modelId>` plus `<optionId>=<value>` pairs, and it maps onto `delegate_task`'s `target`, with the provider instance as `providerInstanceId`, the model as `model`, and the pairs as `options`. It splits at its first `/`, so a model ID with its own `/`, such as OpenCode's `<provider>/<model>`, is written whole after it. Option IDs differ per provider, so take them from `orchestrator_capabilities`. `inherit-parent` or `auto` omits `target`.
-
-- feature, refactoring: `claudeAgent/claude-opus-5-5 effort=xhigh`
-- bug-fix: `claudeAgent/claude-opus-5-5 effort=xhigh`
-- perf-issue: `claudeAgent/claude-opus-5-5 effort=xhigh`
-- hillclimb: `claudeAgent/claude-opus-5-5 effort=xhigh`
-- judgment and prose: `claudeAgent/claude-opus-5-5 effort=xhigh`
+<!-- Begin generated T3 roles -->
+- feature, refactoring: `codex/gpt-6.2-sol reasoningEffort=high`
+- bug-fix: `codex/gpt-6.2-sol reasoningEffort=high`
+- perf-issue: `codex/gpt-6.2-sol reasoningEffort=high`
+- hillclimb: `codex/gpt-6.2-sol reasoningEffort=high`
+- judgment and prose: `codex/gpt-6.2-sol reasoningEffort=high`
 
 arena:
 
-- arena runners: `claudeAgent/claude-fable-5-2 effort=high`, `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
-- arena cross-judge pool: `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
-
-interrogate:
-
-- interrogate reviewers: `claudeAgent/claude-fable-5-2 effort=high`, `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
+- arena runners: `codex/gpt-6.2-astra reasoningEffort=medium`, `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
+- arena cross-judge pool: `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
 
 swarm:
 
-- swarm workers: `claudeAgent/claude-opus-5-5 effort=high`
+- swarm workers: `opencode/opencode-go/deepseek-v4.1-flash variant=high`
+
+interrogate:
+
+- interrogate reviewers: `codex/gpt-6.2-astra reasoningEffort=medium`, `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
+<!-- End generated T3 roles -->
 
 ## Skill and playbook passages
 

@@ -7,6 +7,14 @@
       "driverKind": "codex",
       "models": [
         {
+          "id": "gpt-6.2-sol",
+          "options": [{ "id": "reasoningEffort", "values": ["low", "medium", "high", "xhigh"] }]
+        },
+        {
+          "id": "gpt-6.2-astra",
+          "options": [{ "id": "reasoningEffort", "values": ["low", "medium", "high", "xhigh"] }]
+        },
+        {
           "id": "gpt-6.1-sol",
           "options": [
             { "id": "reasoningEffort", "type": "select", "options": [{ "id": "low" }, { "id": "medium" }, { "id": "high" }, { "id": "xhigh" }, { "id": "max" }, { "id": "ultra" }] },
@@ -62,6 +70,16 @@
       "models": [
         { "id": "gemini-4-neon", "options": [{ "id": "thought_level", "values": ["low", "medium", "high", "xhigh"] }] },
         { "id": "gemini-4-carbon", "options": [{ "id": "thought_level", "values": ["low", "medium", "high", "xhigh"] }] }
+      ],
+      "canRunChildTask": true,
+      "canRunCrossProviderChildTask": true,
+      "constraints": []
+    },
+    {
+      "providerInstanceId": "opencode",
+      "driverKind": "opencode",
+      "models": [
+        { "id": "opencode-go/deepseek-v4.1-flash", "options": [{ "id": "variant", "values": ["high"] }] }
       ],
       "canRunChildTask": true,
       "canRunCrossProviderChildTask": true,

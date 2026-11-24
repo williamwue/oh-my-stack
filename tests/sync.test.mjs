@@ -1610,6 +1610,7 @@ describe("syncComponent", () => {
 });
 
 describe("sync CLI", () => {
+  const sheetScript = "setup-pstack/scripts/t3-sheet.mjs";
   const declareS = (kind) => ({
     "plugins/pstack/skills/s.md": { kind, why: "Fixture fork.", since: "0.9.48", upstream: "not-proposed" },
   });
@@ -1636,6 +1637,8 @@ describe("sync CLI", () => {
     symlinkSync(join(import.meta.dir, "../node_modules"), join(port, "node_modules"));
     cpSync(join(import.meta.dir, "../plugins/pstack/models.json"), join(port, "plugins/pstack/models.json"));
     mkdirSync(join(port, "plugins/pstack/skills"));
+    const parser = `plugins/pstack/skills/${sheetScript}`;
+    cpSync(join(import.meta.dir, "..", parser), join(port, parser));
     writeFileSync(join(port, "plugins/pstack/skills/s.md"), localText);
     for (const runtime of RUNTIMES) {
       mkdirSync(join(port, runtime.tools, ".."), { recursive: true });
@@ -1739,6 +1742,7 @@ describe("sync CLI", () => {
     const portOnly = [
       ...roleSkills.map((skill) => `${skill}/SKILL.md`),
       ...RUNTIMES.map((runtime) => runtime.tools.replace("plugins/pstack/skills/", "")),
+      sheetScript,
     ];
     expect(result.stdout).toContain(`\nport-only: ${portOnly.length} files\n`);
     for (const rel of portOnly) expect(result.stdout).toContain(`\n  plugins/pstack/skills/${rel}\n`);

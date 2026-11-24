@@ -10,7 +10,7 @@ import { checkSheet, parseSheet } from "../../plugins/pstack/skills/setup-pstack
 import { check, tempBeside, writeAtomic } from "./common.mjs";
 
 export const HOME_SHEET = "t3-pstack-models.md";
-const SETUP_HINT = "run /t3-pstack:setup-pstack in a T3 thread";
+const SETUP_HINT = "run /pstack:setup-pstack in a T3 thread";
 
 export const sheetPath = (env, home) =>
   join(env.XDG_CONFIG_HOME?.trim() ? resolve(env.XDG_CONFIG_HOME.trim()) : join(home, ".config"), "t3-pstack", "models.md");
@@ -64,23 +64,37 @@ export function moveSheet(sheet, homes) {
 }
 
 export function doctorSheet(sheet, homes, { catalog, roles, tiers, retired = [], hint }) {
-  const old = homeSheets(homes).filter(isFile);
+  const paths = homeSheets(homes);
+  const old = paths.filter(isFile);
+  const validate = (lines) => checkSheet(lines, { roles, defaults: tiers, catalog, retired });
   if (!isFile(sheet)) {
     const differ = new Set(old.map((path) => readFileSync(path, "utf8"))).size > 1;
+    const checks = [];
     if (old.length) {
-      return [
+      checks.push(
         check(
           "machine sheet",
           false,
           `missing; ${old.join(", ")} ${differ ? "differ, so the installer leaves them" : "not moved yet"}`,
           differ ? `keep one, then ${hint}` : hint,
         ),
-      ];
+      );
     }
-    return [check("machine sheet", false, "none, so every role runs on its skill's defaults", SETUP_HINT, true)];
+    if (!catalog) {
+      return old.length ? checks : [check("model defaults", true, "built-in medium profile (pass --catalog to check targets)")];
+    }
+    for (const path of old) {
+      const problems = validate(parseSheet(readFileSync(path, "utf8")));
+      checks.push(check("legacy sheet targets", problems.length === 0, `${path}: ${problems.join("; ") || "effective roles match the catalog"}`, SETUP_HINT));
+    }
+    if (!old.length || old.length < paths.length) {
+      const problems = validate([]);
+      checks.push(check("model defaults", problems.length === 0, problems.join("; ") || "built-in medium profile matches the catalog", SETUP_HINT));
+    }
+    return checks;
   }
   const lines = parseSheet(readFileSync(sheet, "utf8"));
-  const problems = checkSheet(lines, { roles, defaults: tiers, catalog, retired });
+  const problems = validate(lines);
   // A retired line passes, so a released sheet keeps working, and setup-pstack
   // drops it on its next run.
   const stale = [...new Set(lines.map(({ key }) => key).filter((key) => retired.includes(key)))];
@@ -92,7 +106,7 @@ export function doctorSheet(sheet, homes, { catalog, roles, tiers, retired = [],
       problems.length
         ? problems.join("; ")
         : catalog
-          ? "every line parses and dispatches on the catalog"
+          ? "all effective roles match the catalog"
           : "every line parses (pass --catalog to check targets)",
       SETUP_HINT,
     ),

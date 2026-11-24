@@ -1,15 +1,17 @@
 {
+  "defaultBudget": "medium",
+  "sessionHook": "on",
   "tiers": {
-    "default": "claudeAgent/claude-opus-5-5 effort=xhigh",
-    "fast": "claudeAgent/claude-opus-5-5 effort=high",
+    "default": "codex/gpt-6.2-sol reasoningEffort=high",
+    "fast": "opencode/opencode-go/deepseek-v4.1-flash variant=high",
     "panel": [
-      "claudeAgent/claude-fable-5-2 effort=high",
-      "claudeAgent/claude-opus-5-5 effort=high",
-      "antigravity/gemini-4-neon thought_level=xhigh"
+      "codex/gpt-6.2-astra reasoningEffort=medium",
+      "claudeAgent/claude-opus-5-5 effort=medium",
+      "antigravity/gemini-4-neon thought_level=high"
     ],
     "judges": [
-      "claudeAgent/claude-opus-5-5 effort=high",
-      "antigravity/gemini-4-neon thought_level=xhigh"
+      "claudeAgent/claude-opus-5-5 effort=medium",
+      "antigravity/gemini-4-neon thought_level=high"
     ]
   },
   "roles": [
