@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { changes, loadLeadLines, plan, problems } from "../tools/generate.mjs";
 
@@ -40,6 +40,21 @@ describe("T3 distribution", () => {
       expect(changes(root, intended)).toContainEqual({ kind: "write", path: file });
       expect(intended.files[file]).toBe(original);
     }
+  });
+
+  test("the packaged Feature entry leads to the implementation playbook and T3 dispatch", () => {
+    const entry = readFileSync(join(repo, mode), "utf8");
+    expect(entry).toMatch(/playbooks\/<title>\.md/);
+    expect(entry).toMatch(/, Feature, /);
+    const [, reference] = entry.match(/\[the T3 mapping\]\(([^)]+)\)/) ?? [];
+    expect(reference).toBeDefined();
+    const host = readFileSync(join(repo, dirname(mode), reference), "utf8");
+    expect(host).toMatch(/Every subagent is a `delegate_task` call/);
+    const feature = "poteto-mode/playbooks/feature.md";
+    const section = host.split(`### \`${feature}\`\n`)[1]?.split(/^### /m)[0];
+    const implementation = /Delegate code-writing to a subagent using your configured feature model/;
+    expect(section).toMatch(implementation);
+    expect(readFileSync(join(repo, dirname(dirname(mode)), feature), "utf8")).toMatch(implementation);
   });
 
   test("Feature and Bug fix keep their T3 steps in the host mapping", () => {
