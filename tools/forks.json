@@ -74,7 +74,7 @@
     },
     "plugins/pstack/skills/poteto-mode/playbooks/feature.md": {
       "kind": "policy",
-      "why": "Gives every file-writing delegate its own worktree, based on the branch's HEAD when it builds on unmerged commits, and forbids writing in a worktree a delegate still holds. On T3 the Feature entry names the implementation dispatch and its receipt.",
+      "why": "Gives every file-writing delegate its own worktree, based on the branch's HEAD when it builds on unmerged commits, and forbids writing in a worktree a delegate still holds.",
       "since": "0.9.39",
       "upstream": "not-proposed"
     },
