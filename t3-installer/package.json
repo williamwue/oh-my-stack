@@ -1,0 +1,33 @@
+{
+  "name": "oh-my-stack",
+  "version": "3.0.5",
+  "description": "Install OMS, pstack@oms, into the Claude Code, Codex, Antigravity, and Kiro instances that T3 Code runs.",
+  "type": "module",
+  "bin": {
+    "oh-my-stack": "tools/install.mjs"
+  },
+  "files": [
+    "tools",
+    "plugins",
+    "LICENSE",
+    "LICENSE-cursor-team-kit",
+    "LICENSE-thermos",
+    "LICENSE-oms",
+    "LICENSE-t3-pstack",
+    "NOTICE.md",
+    "NOTICE-skills.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/williamwue/oh-my-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamwue/oh-my-stack.git",
+    "directory": "t3-installer"
+  },
+  "scripts": {
+    "prepack": "node scripts/stage.mjs"
+  }
+}

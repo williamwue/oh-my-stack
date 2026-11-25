@@ -40,3 +40,9 @@ plugins/pstack/skills/statechart/scripts/node_modules/
 /.tmp/
 /output/
 *.partial
+# staged by t3-installer/scripts/stage.mjs on prepack
+t3-installer/tools/
+t3-installer/plugins/
+t3-installer/LICENSE*
+t3-installer/NOTICE*.md
+t3-installer/*.tgz

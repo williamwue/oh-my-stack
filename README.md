@@ -18,8 +18,10 @@ OMS 只发布一个插件 `pstack@oms`。它由两个开源项目重新组合而
 先安装并登录 T3 要使用的 Claude Code、Codex 或 Antigravity 后端，再运行：
 
 ```sh
-npx -y github:williamwue/oh-my-stack install
+npx -y oh-my-stack@latest install
 ```
+
+安装器以 npm 包 `oh-my-stack` 发布，需要 Node 20 或更高版本。带上 `@latest`，npx 才不会复用缓存里的旧版本。要运行某个版本的安装器，写出版本号，例如 `npx -y oh-my-stack@3.0.6 doctor`。旧命令 `npx -y github:williamwue/oh-my-stack` 在 npm 12 下需要加 `--allow-git=all`。
 
 安装器会找出 T3 管理的每个 Claude Code、Codex 和 Antigravity 实例，把 `pstack@oms` 装进去。它还会把 Codex marketplace 固定到当前发布 tag，信任 Codex 的 session-start hook，并把模型表迁移到 `~/.config/t3-pstack/models.md`。重复运行不会产生额外改动。`update` 与 `install` 相同，`doctor` 只做检查、不写入。用 `--source <目录>` 可以从本地检出安装。
 
@@ -49,7 +51,7 @@ codex plugin add pstack@oms
 
 ## 更新与卸载
 
-T3 后端运行 `npx -y github:williamwue/oh-my-stack update`。独立宿主使用原生命令，例如 `claude plugin update pstack@oms`。不要照抄上游文档中的 `pstack@pstack-claude`。
+T3 后端运行 `npx -y oh-my-stack@latest update`。独立宿主使用原生命令，例如 `claude plugin update pstack@oms`。不要照抄上游文档中的 `pstack@pstack-claude`。
 
 OMS 不管理 AIHero、电子书或安装数据库，现有工具、文件和凭据保持原样。历史文档与书籍授权见[归档说明](docs/oms-history/README.md)。
 
