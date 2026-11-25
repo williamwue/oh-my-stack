@@ -1,6 +1,6 @@
 # T3 Code mapping
 
-Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It carries chhoumann/t3-pstack 2.6.1's T3 rules and the OMS model defaults. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the quoted poteto-mode passages means poteto-mode's `SKILL.md` and its folder.
+Read this when the session exposes T3 Code's orchestration tools (`delegate_task`, `orchestrator_capabilities`, `task_status`). It carries chhoumann/t3-pstack 2.7.1's T3 rules and the OMS model defaults. On T3 they take precedence over the dispatch, model, and tool rules of the pstack skill you are running, and that skill's other steps stand. In this text, "t3-pstack" means this plugin, `pstack@oms`; `<plugin root>` is the directory that holds its `skills/` and `agents/`; and "this file" or "this skill's folder" in the quoted poteto-mode passages means poteto-mode's `SKILL.md` and its folder.
 
 ## Subagents
 

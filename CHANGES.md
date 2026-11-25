@@ -2,6 +2,12 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.0.5 - Sync upstream skills and native hosts
+
+Sync pstack-claude v0.9.155 and t3-pstack v2.7.1, including /reframe,
+the native installer, and the cloud-session PR reader. Rerun the installer
+to trust the updated Codex session hook.
+
 ## 3.0.4 - Built-in T3 medium model profile
 
 T3 uses the OMS medium profile when a model sheet or role line is absent.
