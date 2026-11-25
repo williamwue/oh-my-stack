@@ -25,7 +25,7 @@
 // home get a copy of the plugin this run installs, so they too change only
 // when `update` runs.
 //
-//   npx -y github:chhoumann/t3-pstack <install|update|doctor>
+//   npx -y oh-my-stack@latest <install|update|doctor>
 //     --source <owner/repo|git URL|dir>   marketplace source, default the repo npx ran, else chhoumann/t3-pstack
 //     --claude-home <dir>, --codex-home <dir>, --kiro-home <dir>   more homes, repeatable
 //     --catalog <file>   an orchestrator_capabilities dump to check the sheet's targets against

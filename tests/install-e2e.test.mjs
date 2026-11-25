@@ -471,7 +471,7 @@ describe.skipIf(!enabled)("the installer, on Git marketplaces", () => {
       `installed: 0.0.1, expected ${version}`,
       `session-start hook trusted: ${HOOK} untrusted`,
     ]);
-    expect(pin(report, ".codex-unpinned").fix).toBe("rerun `npx -y github:williamwue/oh-my-stack install`");
+    expect(pin(report, ".codex-unpinned").fix).toBe("rerun `npx -y oh-my-stack@latest install`");
   }, 300_000);
 
   test("install pins every Codex home to the release tag, and the hook routes", async () => {

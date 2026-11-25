@@ -35,7 +35,7 @@ import { doctorSheet, moveSheet } from "../tools/install/sheet.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const { roles, tiers, retired } = JSON.parse(readFileSync(join(repoRoot, "plugins/pstack/models.t3.json"), "utf8"));
-const FIX = "rerun `npx -y github:williamwue/oh-my-stack install`";
+const FIX = "rerun `npx -y oh-my-stack@latest install`";
 
 const scratch = [];
 function tmp() {
@@ -446,18 +446,18 @@ describe("--source", () => {
         name: "installed",
         ok: false,
         detail: "the home does not exist",
-        fix: "rerun `npx -y github:someone/t3-pstack install --source someone/t3-pstack`",
+        fix: "rerun `npx -y oh-my-stack@latest install --source someone/t3-pstack`",
       },
     ]);
     const local = resolve(repoRoot);
-    expect(doctor(local)[0].fix).toBe(`rerun \`npx -y github:williamwue/oh-my-stack install --source ${local}\``);
+    expect(doctor(local)[0].fix).toBe(`rerun \`npx -y oh-my-stack@latest install --source ${local}\``);
 
     const fork = parseSource("someone/t3-pstack", "/home/u");
     const home = { harness: "claude", dir: tmp(), from: ["default"], bin: "claude" };
     const fixes = doctorClaude(home, { ...context, source: fork, trusted: new Set([github.key, fork.key]) })
       .filter((c) => !c.ok)
       .map((c) => c.fix);
-    expect(fixes).toEqual(Array(4).fill("rerun `npx -y github:someone/t3-pstack install --source someone/t3-pstack`"));
+    expect(fixes).toEqual(Array(4).fill("rerun `npx -y oh-my-stack@latest install --source someone/t3-pstack`"));
   });
 
   test("leaves a home on williamwue/oh-my-stack where it is, and doctor warns with the commands that switch it", () => {
@@ -475,7 +475,7 @@ describe("--source", () => {
       detail: "williamwue/oh-my-stack, not --source someone/t3-pstack",
       fix:
         `to install from someone/t3-pstack, remove it with \`CLAUDE_CONFIG_DIR=${dir} claude plugin marketplace remove oms\`, ` +
-        "then rerun `npx -y github:someone/t3-pstack install --source someone/t3-pstack`",
+        "then rerun `npx -y oh-my-stack@latest install --source someone/t3-pstack`",
     });
   });
 });
@@ -871,7 +871,7 @@ function kiroInstaller(user, providerInstances, env = {}) {
     return { status: r.status, report: JSON.parse(r.stdout) };
   };
 }
-const localHint = `rerun \`npx -y github:williamwue/oh-my-stack install --source ${resolve(repoRoot)}\``;
+const localHint = `rerun \`npx -y oh-my-stack@latest install --source ${resolve(repoRoot)}\``;
 
 describe("Kiro", () => {
   test("copies the plugin into the home, links each skill into the copy, writes the hook file, and a second run changes nothing", () => {

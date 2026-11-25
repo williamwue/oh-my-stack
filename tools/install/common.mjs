@@ -59,11 +59,11 @@ export function parseSource(text, home) {
   return { ...directory(path), arg: path, local: path };
 }
 
-// The command that reruns this install from `source`. A GitHub source is a
-// copy of this repository, so its own installer converges on its version.
+// The command that reruns this install from `source`. It runs the installer
+// from npm, since npm 12 refuses `npx github:` unless --allow-git is set.
 export function installHint(source) {
-  if (source.key === github(HOME_REPO).key) return `rerun \`npx -y github:${HOME_REPO} install\``;
-  return `rerun \`npx -y github:${source.repo ?? HOME_REPO} install --source ${source.arg}\``;
+  if (source.key === github(HOME_REPO).key) return "rerun `npx -y oh-my-stack@latest install`";
+  return `rerun \`npx -y oh-my-stack@latest install --source ${source.arg}\``;
 }
 
 // The sources a Claude Code home or a Codex home records for a marketplace.
