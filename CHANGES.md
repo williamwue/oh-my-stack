@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.0.6 - Install from npm
+
+The T3 installer is now the npm package `oh-my-stack`. Run
+`npx -y oh-my-stack@latest install|update|doctor`. npm 12 refuses
+`npx -y github:williamwue/oh-my-stack` unless you add `--allow-git=all`.
+The installer's fix hints print the npm command.
+
 ## 3.0.5 - Sync upstream skills and native hosts
 
 Sync pstack-claude v0.9.155 and t3-pstack v2.7.1, including /reframe,
