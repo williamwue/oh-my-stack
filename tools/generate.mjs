@@ -441,11 +441,11 @@ export function regions(models) {
 const PREAMBLE_RUNTIMES = RUNTIMES.filter((runtime) => runtime.preamble);
 const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
 const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "refactoring", "shipping"];
-const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.";
+const T3_ROLE_LEAD = "When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) in full before applying role models or dispatching workers. Follow T3's orchestration rules with these role targets.";
 const T3_LEADS = new Map([
   [`${SKILLS}/setup-pstack/SKILL.md`, "When T3 Code tools are available, use [T3 model configuration](references/t3.md) for model discovery, sheet storage, and dispatch validation before applying the backend-specific steps below."],
-  [`${SKILLS}/poteto-mode/SKILL.md`, "When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) before using host tools. It takes precedence for tool selection; keep the upstream workflow and model policy."],
-  [`${SKILLS}/poteto-mode/references/codex-tools.md`, "When T3 Code tools are available, read [the T3 mapping](t3-tools.md) before using host tools. It takes precedence for T3 tool selection; use this file for the remaining Codex actions."],
+  [`${SKILLS}/poteto-mode/SKILL.md`, "When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) in full before dispatching subagents. Follow T3's orchestration rules and keep the upstream playbooks."],
+  [`${SKILLS}/poteto-mode/references/codex-tools.md`, "When T3 Code tools are available, read [the T3 mapping](t3-tools.md) in full before dispatching subagents. Follow T3's orchestration rules; use this file for the remaining Codex actions."],
 ]);
 const LEAD_LINES = [...PREAMBLE_RUNTIMES.map((runtime) => runtime.preamble), DRIVER_LINE, T3_ROLE_LEAD, ...T3_LEADS.values()];
 

@@ -76,8 +76,24 @@ if [ "${PSTACK_SESSION_HOOK:-}" = off ] || printf '%s\n' "$normalized" | grep -q
   exit 0
 fi
 
+t3_sheet="${XDG_CONFIG_HOME:-$HOME/.config}/t3-pstack/models.md"
+
+print_t3_models() {
+  [ -f "$t3_sheet" ] && [ -r "$t3_sheet" ] || return 0
+  t3_norm=$(sh "$reader" "$t3_sheet" 2>/dev/null) || return 0
+  if printf '%s\n' "$t3_norm" | grep -qx 'session hook: off'; then
+    return 0
+  fi
+  t3_roles=$(printf '%s\n' "$t3_norm" | grep -E '^[a-z][a-z ,-]*: ' | grep -v '^session hook: ' || true)
+  [ -n "$t3_roles" ] || return 0
+  printf '\n<T3_PSTACK_MODELS path="%s">\n' "$t3_sheet"
+  printf '%s\n' "When T3 Code orchestration tools (\`delegate_task\`) are available, follow T3's orchestration rules using these role targets (read \`references/t3-tools.md\` in full, never truncate skills or references with \`head\`/\`tail\`). For native \`spawn_agent\`/\`Agent\`, always pass an explicit \`model\` and reasoning effort; never omit \`model\` and silently inherit a heavier parent model:"
+  printf '%s\n' "$t3_roles"
+  printf '%s\n' "</T3_PSTACK_MODELS>"
+}
+
 if [ "$runtime" = agy ]; then
-  LC_ALL=C awk -f ./hooks/json.awk -f ./hooks/agy-context.awk ./hooks/session-start-agy.md
+  { cat ./hooks/session-start-agy.md; print_t3_models; } | LC_ALL=C awk -f ./hooks/json.awk -f ./hooks/agy-context.awk
   exit 0
 fi
 
@@ -118,3 +134,4 @@ if [ "$runtime" = kiro ]; then
 fi
 
 cat "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-context.md"
+print_t3_models

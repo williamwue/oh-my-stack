@@ -12,6 +12,19 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(.*[:._/])?spawn_agent$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/codex-pre-tool-use.sh\"",
+            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/hooks/codex-pre-tool-use.ps1\"",
+            "statusMessage": "Checking pstack subagent model"
+          }
+        ]
+      }
     ]
   }
 }

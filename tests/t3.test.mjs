@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -42,28 +43,27 @@ describe("T3 distribution", () => {
     }
   });
 
-  test("the packaged Feature entry leads to the implementation playbook and T3 dispatch", () => {
+  test("the packaged Feature entry leads to the implementation playbook and thin T3 adapter", () => {
     const entry = readFileSync(join(repo, mode), "utf8");
     expect(entry).toMatch(/playbooks\/<title>\.md/);
     expect(entry).toMatch(/, Feature, /);
     const [, reference] = entry.match(/\[the T3 mapping\]\(([^)]+)\)/) ?? [];
     expect(reference).toBeDefined();
     const host = readFileSync(join(repo, dirname(mode), reference), "utf8");
-    expect(host).toMatch(/Every subagent is a `delegate_task` call/);
+    expect(host).toMatch(/follow T3 Code's own orchestration rules/i);
+    expect(host).toMatch(/never omit `model`/i);
     const feature = "poteto-mode/playbooks/feature.md";
-    const section = host.split(`### \`${feature}\`\n`)[1]?.split(/^### /m)[0];
     const implementation = /Delegate code-writing to a subagent using your configured feature model/;
-    expect(section).toMatch(implementation);
     expect(readFileSync(join(repo, dirname(dirname(mode)), feature), "utf8")).toMatch(implementation);
   });
 
-  test("Feature and Bug fix keep their T3 steps in the host mapping", () => {
+  test("Feature and Bug fix stay upstream without per-playbook T3 overrides", () => {
     const leads = loadLeadLines(repo);
     const text = readFileSync(join(repo, mapping), "utf8");
     for (const name of ["feature", "bug-fix"]) {
       const playbook = `poteto-mode/playbooks/${name}.md`;
       expect(leads.has(`plugins/pstack/skills/${playbook}`)).toBe(false);
-      expect(text).toContain(`### \`${playbook}\`\n\n> `);
+      expect(text).not.toContain(`### \`${playbook}\``);
     }
   });
 
@@ -106,5 +106,90 @@ describe("the T3 mapping quotes t3-pstack's model defaults", () => {
       expect(entries, role).toEqual([models.tiers[tier]].flat());
     }
     for (const { role } of models.roles) expect(listed.map(([r]) => r)).toContain(role);
+  });
+});
+
+describe("T3 SessionStart model injection and Codex PreToolUse guard", () => {
+  const pluginRoot = join(repo, "plugins/pstack");
+  const sessionStartSh = join(pluginRoot, "hooks/session-start.sh");
+  const preToolUseSh = join(pluginRoot, "hooks/codex-pre-tool-use.sh");
+
+  function tempHome() {
+    const dir = mkdtempSync(join(tmpdir(), "oms-t3-hook-"));
+    made.push(dir);
+    return dir;
+  }
+
+  test("session-start.sh injects active T3 model roles when ~/.config/t3-pstack/models.md exists", () => {
+    const home = tempHome();
+    const sheetDir = join(home, ".config/t3-pstack");
+    mkdirSync(sheetDir, { recursive: true });
+    writeFileSync(
+      join(sheetDir, "models.md"),
+      "# comment\nbug-fix: codex/gpt-6.2-sol reasoningEffort=high\njudgment and prose: antigravity/gemini-4-neon thought_level=high\nsession hook: on\n",
+    );
+    for (const runtime of ["codex", "claude"]) {
+      const r = spawnSync("sh", [sessionStartSh, runtime], {
+        env: { PATH: process.env.PATH, HOME: home, CLAUDE_PLUGIN_ROOT: pluginRoot },
+        encoding: "utf8",
+      });
+      expect(r.status).toBe(0);
+      expect(r.stdout).toContain("<T3_PSTACK_MODELS");
+      expect(r.stdout).toContain("bug-fix: codex/gpt-6.2-sol reasoningEffort=high");
+      expect(r.stdout).toContain("judgment and prose: antigravity/gemini-4-neon thought_level=high");
+      expect(r.stdout).not.toContain("session hook: on");
+    }
+    const agy = spawnSync("sh", [sessionStartSh, "agy"], {
+      cwd: pluginRoot,
+      env: { PATH: process.env.PATH, HOME: home },
+      encoding: "utf8",
+    });
+    expect(agy.status).toBe(0);
+    const parsed = JSON.parse(agy.stdout);
+    expect(parsed.injectSteps[0].systemMessage.systemMessage).toContain("<T3_PSTACK_MODELS");
+    expect(parsed.injectSteps[0].systemMessage.systemMessage).toContain("bug-fix: codex/gpt-6.2-sol reasoningEffort=high");
+  });
+
+  test("codex-pre-tool-use.sh denies spawn_agent without model when a model sheet exists", () => {
+    const home = tempHome();
+    mkdirSync(join(home, ".config/t3-pstack"), { recursive: true });
+    writeFileSync(join(home, ".config/t3-pstack/models.md"), "bug-fix: codex/gpt-6.2-sol reasoningEffort=high\n");
+
+    const denied = spawnSync("sh", [preToolUseSh], {
+      input: JSON.stringify({ tool_name: "collaboration:spawn_agent", tool_input: { task_name: "fix", message: "do work" } }),
+      env: { PATH: process.env.PATH, HOME: home, CLAUDE_PLUGIN_ROOT: pluginRoot },
+      encoding: "utf8",
+    });
+    expect(denied.status).toBe(0);
+    const decision = JSON.parse(denied.stdout);
+    expect(decision.hookSpecificOutput.permissionDecision).toBe("deny");
+    expect(decision.hookSpecificOutput.permissionDecisionReason).toContain("omitted `model`");
+
+    const allowed = spawnSync("sh", [preToolUseSh], {
+      input: JSON.stringify({ tool_name: "spawn_agent", tool_input: { task_name: "fix", model: "gpt-6.2-sol", message: "do work" } }),
+      env: { PATH: process.env.PATH, HOME: home, CLAUDE_PLUGIN_ROOT: pluginRoot },
+      encoding: "utf8",
+    });
+    expect(allowed.status).toBe(0);
+    expect(allowed.stdout.trim()).toBe("");
+
+    const otherTool = spawnSync("sh", [preToolUseSh], {
+      input: JSON.stringify({ tool_name: "exec", tool_input: { cmd: "ls" } }),
+      env: { PATH: process.env.PATH, HOME: home, CLAUDE_PLUGIN_ROOT: pluginRoot },
+      encoding: "utf8",
+    });
+    expect(otherTool.status).toBe(0);
+    expect(otherTool.stdout.trim()).toBe("");
+  });
+
+  test("codex-pre-tool-use.sh fails open when no model sheet exists", () => {
+    const home = tempHome();
+    const r = spawnSync("sh", [preToolUseSh], {
+      input: JSON.stringify({ tool_name: "spawn_agent", tool_input: { task_name: "fix", message: "do work" } }),
+      env: { PATH: process.env.PATH, HOME: home, CLAUDE_PLUGIN_ROOT: pluginRoot },
+      encoding: "utf8",
+    });
+    expect(r.status).toBe(0);
+    expect(r.stdout.trim()).toBe("");
   });
 });

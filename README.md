@@ -3,9 +3,9 @@
 OMS 只发布一个插件 `pstack@oms`。它由两个开源项目重新组合而成：
 
 - [pstack-claude v0.9.155](https://github.com/michael-denyer/pstack-claude/tree/v0.9.155)：负责 Claude Code、Codex、OpenCode、Pi 等原生宿主的 pstack，基于上游 cursor/plugins `ca782ed`。
-- [t3-pstack 2.7.1](https://github.com/chhoumann/t3-pstack/tree/v2.7.1)：负责 T3 Code 的 `delegate_task` 跨模型派发、T3 模型表、PR 评审静默窗口和安装器。OMS 沿用其派发流程和安装器，模型档位由 OMS 维护，见 [T3 适配](docs/t3.md)。
+- [t3-pstack 2.7.1](https://github.com/chhoumann/t3-pstack/tree/v2.7.1) 的安装器、T3 模型表与 PR 评审静默窗口；派发层已精简为顺应 T3 Code 原生编排规则的薄适配，配合 `SessionStart` 模型表直注与 Codex `PreToolUse` 守卫，见 [T3 适配](docs/t3.md)。
 
-同一套技能在原生宿主上使用宿主自带的子代理派发；在提供 T3 编排工具的会话中，先读取 [T3 映射](plugins/pstack/skills/poteto-mode/references/t3-tools.md)，改用 `delegate_task`，panel 可以混用 Claude、GPT、Gemini 和 Grok。没有 T3 工具时，行为与 pstack-claude 一致。
+同一套技能在原生宿主上使用宿主自带的子代理派发；在提供 T3 编排工具的会话中，启动钩子会自动注入 `~/.config/t3-pstack/models.md`（若存在），并按 [T3 映射](plugins/pstack/skills/poteto-mode/references/t3-tools.md) 顺应 T3 编排规则使用 `delegate_task` 或显式 `model` 的原生子代理。没有 T3 工具时，行为与 pstack-claude 一致。
 
 <a id="install"></a>
 

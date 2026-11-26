@@ -2,6 +2,17 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.1.0 - Thin T3 adapter, SessionStart model injection, and Codex spawn_agent guard
+
+Replace the 224-line per-playbook `t3-tools.md` override with a thin T3 adapter
+aligned with T3 Code's native orchestration rules on top of upstream
+`pstack-claude`. `session-start.sh` now injects active role entries from
+`~/.config/t3-pstack/models.md` directly into first-turn context when present,
+and `codex-hooks.json` adds a `PreToolUse` guard (`codex-pre-tool-use.sh`) that
+blocks native `spawn_agent` calls omitting `model` when a pstack model sheet
+exists. Rerun the installer (`npx -y oh-my-stack@latest install`) to trust the
+updated Codex hooks.
+
 ## 3.0.6 - Install from npm
 
 The T3 installer is now the npm package `oh-my-stack`. Run

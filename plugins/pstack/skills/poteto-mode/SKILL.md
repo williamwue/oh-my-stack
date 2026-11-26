@@ -5,7 +5,7 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 
 # Poteto mode
 
-When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) before using host tools. It takes precedence for tool selection; keep the upstream workflow and model policy.
+When T3 Code tools are available, read [the T3 mapping](references/t3-tools.md) in full before dispatching subagents. Follow T3's orchestration rules and keep the upstream playbooks.
 
 Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.
 

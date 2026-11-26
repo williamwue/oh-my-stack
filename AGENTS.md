@@ -1,9 +1,9 @@
 # OMS
 
-OMS ships one plugin, `pstack@oms`: michael-denyer/pstack-claude with chhoumann/t3-pstack's T3 adaptation. Keep both as close to their originals as possible and add only the joins.
+OMS ships one plugin, `pstack@oms`: michael-denyer/pstack-claude with a thin T3 Code adapter aligned with T3's native orchestration rules. Keep pstack-claude as close to upstream as possible and add only the joins.
 
 - pstack-claude is the base for every native host. Take its tagged releases with `git merge`; its `tools/sync.mjs` follows cursor/plugins. Do not reword its skills.
-- For a t3-pstack sync, read [docs/t3.md](docs/t3.md) for the pinned commit, file map, and OMS adaptations to retain. Carry over upstream dispatch and installation changes in their original wording and code.
+- For the T3 adapter, read [docs/t3.md](docs/t3.md). Keep `t3-tools.md` thin and aligned with T3's own orchestration rules (no per-playbook rewrites), inject `~/.config/t3-pstack/models.md` at `SessionStart` when present, and guard Codex `spawn_agent` calls with `PreToolUse`.
 - The joins are: the generator's T3 lead lines, the T3 files' exemption from pstack-claude's slug, prose-path, and denylist scans (`T3_QUOTED`), the installer's three names and models path, settle's wiring into pstack-claude's watch-pr, and the distribution layer (marketplace name `oms`, VERSION, docs, attribution).
 
 `tools/generate.mjs` owns the lead lines and Models sections. Edit `plugins/pstack/models.t3.json` for OMS T3 defaults, then regenerate the T3 routing and setup tables. A file OMS changes from pstack-claude's upstream gets an entry in `tools/forks.json`. A change to a hooks file needs a new pin in `tools/frozen-hooks.json` and a CHANGES entry telling users to rerun the installer.

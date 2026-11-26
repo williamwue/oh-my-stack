@@ -13,7 +13,7 @@ On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), i
 
 On Antigravity, read the [platform mapping](../poteto-mode/references/agy-tools.md), including its per-skill notes, before following this skill.
 
-When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) before applying role models or dispatching workers. It takes precedence for T3 configuration and tool selection.
+When T3 Code tools are available, read [the T3 mapping](../poteto-mode/references/t3-tools.md) in full before applying role models or dispatching workers. Follow T3's orchestration rules with these role targets.
 
 Run the two thermo review passes as async background subagents in parallel, then synthesize their results.
 
