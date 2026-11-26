@@ -672,22 +672,39 @@ describe("the model sheet", () => {
 
     writeFileSync(catalog, fixture);
     expect(run()).toEqual({ status: 0, checks: [{ name: "model defaults", ok: true, detail: "built-in medium profile matches the catalog" }] });
-    const missingFlash = JSON.parse(fixture);
-    missingFlash.providers.find((p) => p.providerInstanceId === "opencode").models = [];
-    writeFileSync(catalog, JSON.stringify(missingFlash));
-    const unavailable = 'swarm workers (no line, tier default): opencode/opencode-go/deepseek-v4.1-flash: "opencode" does not list model "opencode-go/deepseek-v4.1-flash"';
-    expect(run()).toMatchObject({ status: 1, checks: [{ name: "model defaults", ok: false, detail: unavailable }] });
+    const missingAstra = JSON.parse(fixture);
+    const codexModels = missingAstra.providers.find((p) => p.providerInstanceId === "codex").models;
+    missingAstra.providers.find((p) => p.providerInstanceId === "codex").models = codexModels.filter((m) => m.id !== "gpt-6.2-astra");
+    writeFileSync(catalog, JSON.stringify(missingAstra));
+    const unavailable = 'strongest judgment (no line, tier default): codex/gpt-6.2-astra: "codex" does not list model "gpt-6.2-astra"';
+    const rMissing = run();
+    expect(rMissing.status).toBe(1);
+    expect(rMissing.checks[0].name).toBe("model defaults");
+    expect(rMissing.checks[0].ok).toBe(false);
+    expect(rMissing.checks[0].detail).toContain(unavailable);
     expect(existsSync(sheet)).toBe(false);
 
     mkdirSync(join(sheet, ".."), { recursive: true });
     writeFileSync(sheet, "bug-fix: auto\n");
-    expect(run()).toMatchObject({ status: 1, checks: [{ name: "machine sheet valid", ok: false, detail: unavailable }, { name: "home sheets", ok: true }] });
-    writeFileSync(sheet, "bug-fix: auto\nswarm workers: inherit-parent\n");
+    const rPartial = run();
+    expect(rPartial.status).toBe(1);
+    expect(rPartial.checks[0].ok).toBe(false);
+    expect(rPartial.checks[0].detail).toContain(unavailable);
+    expect(rPartial.checks[1]).toMatchObject({ name: "home sheets", ok: true });
+    writeFileSync(
+      sheet,
+      [
+        "bug-fix: auto",
+        "strongest judgment: inherit-parent",
+        "arena runners: claudeAgent/claude-opus-5-5 effort=high, antigravity/gemini-4-neon thought_level=xhigh",
+        "interrogate reviewers: claudeAgent/claude-opus-5-5 effort=high, antigravity/gemini-4-neon thought_level=xhigh",
+      ].join("\n") + "\n",
+    );
     expect(run()).toMatchObject({ status: 0, checks: [{ name: "machine sheet valid", ok: true }, { name: "home sheets", ok: true }] });
     writeFileSync(sheet, "swarm workers: grok/grok-9\n");
-    expect(run()).toMatchObject({
-      status: 1, checks: [{ name: "machine sheet valid", ok: false, detail: 'swarm workers: grok/grok-9: "grok" does not list model "grok-9"' }, { name: "home sheets", ok: true }],
-    });
+    const rBad = run();
+    expect(rBad.status).toBe(1);
+    expect(rBad.checks[0].detail).toContain('swarm workers: grok/grok-9: "grok" does not list model "grok-9"');
   });
 
   test("doctor passes a sheet that still carries retired lines, and warns that setup-pstack drops them", () => {

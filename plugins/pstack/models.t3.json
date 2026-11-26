@@ -4,15 +4,16 @@
   "tiers": {
     "default": "codex/gpt-6.2-sol reasoningEffort=high",
     "strongest": "codex/gpt-6.2-astra reasoningEffort=high",
-    "fast": "opencode/opencode-go/deepseek-v4.1-flash variant=high",
+    "review": "claudeAgent/claude-opus-5-5 effort=high",
+    "fast": "antigravity/gemini-4-neon thought_level=medium",
     "panel": [
-      "codex/gpt-6.2-astra reasoningEffort=medium",
-      "claudeAgent/claude-opus-5-5 effort=medium",
-      "antigravity/gemini-4-neon thought_level=high"
+      "codex/gpt-6.2-astra reasoningEffort=high",
+      "claudeAgent/claude-opus-5-5 effort=high",
+      "antigravity/gemini-4-neon thought_level=xhigh"
     ],
     "judges": [
-      "claudeAgent/claude-opus-5-5 effort=medium",
-      "antigravity/gemini-4-neon thought_level=high"
+      "claudeAgent/claude-opus-5-5 effort=high",
+      "antigravity/gemini-4-neon thought_level=xhigh"
     ]
   },
   "roles": [
@@ -20,14 +21,14 @@
     { "role": "bug-fix", "tier": "default", "skill": "poteto-mode" },
     { "role": "perf-issue", "tier": "default", "skill": "poteto-mode" },
     { "role": "hillclimb", "tier": "default", "skill": "poteto-mode" },
-    { "role": "judgment and prose", "tier": "default", "skill": "poteto-mode" },
+    { "role": "judgment and prose", "tier": "fast", "skill": "poteto-mode" },
     { "role": "strongest judgment", "tier": "strongest", "skill": "poteto-mode" },
     { "role": "arena runners", "tier": "panel", "skill": "arena" },
     { "role": "arena cross-judge pool", "tier": "judges", "skill": "arena" },
     { "role": "swarm workers", "tier": "fast", "skill": "swarm" },
     { "role": "interrogate reviewers", "tier": "panel", "skill": "interrogate" },
-    { "role": "thermos reviewers", "tier": "default", "skill": "thermos" },
-    { "role": "no-comments reviewer", "tier": "default", "skill": "no-comments" }
+    { "role": "thermos reviewers", "tier": "review", "skill": "thermos" },
+    { "role": "no-comments reviewer", "tier": "fast", "skill": "no-comments" }
   ],
   "retired": [
     "how explorer",

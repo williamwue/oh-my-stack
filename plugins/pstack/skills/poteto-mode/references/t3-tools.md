@@ -33,27 +33,27 @@ Built-in medium profile generated from `plugins/pstack/models.t3.json`. A role l
 - bug-fix: `codex/gpt-6.2-sol reasoningEffort=high`
 - perf-issue: `codex/gpt-6.2-sol reasoningEffort=high`
 - hillclimb: `codex/gpt-6.2-sol reasoningEffort=high`
-- judgment and prose: `codex/gpt-6.2-sol reasoningEffort=high`
+- judgment and prose: `antigravity/gemini-4-neon thought_level=medium`
 - strongest judgment: `codex/gpt-6.2-astra reasoningEffort=high`
 
 arena:
 
-- arena runners: `codex/gpt-6.2-astra reasoningEffort=medium`, `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
-- arena cross-judge pool: `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
+- arena runners: `codex/gpt-6.2-astra reasoningEffort=high`, `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
+- arena cross-judge pool: `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
 
 swarm:
 
-- swarm workers: `opencode/opencode-go/deepseek-v4.1-flash variant=high`
+- swarm workers: `antigravity/gemini-4-neon thought_level=medium`
 
 interrogate:
 
-- interrogate reviewers: `codex/gpt-6.2-astra reasoningEffort=medium`, `claudeAgent/claude-opus-5-5 effort=medium`, `antigravity/gemini-4-neon thought_level=high`
+- interrogate reviewers: `codex/gpt-6.2-astra reasoningEffort=high`, `claudeAgent/claude-opus-5-5 effort=high`, `antigravity/gemini-4-neon thought_level=xhigh`
 
 thermos:
 
-- thermos reviewers: `codex/gpt-6.2-sol reasoningEffort=high`
+- thermos reviewers: `claudeAgent/claude-opus-5-5 effort=high`
 
 no-comments:
 
-- no-comments reviewer: `codex/gpt-6.2-sol reasoningEffort=high`
+- no-comments reviewer: `antigravity/gemini-4-neon thought_level=medium`
 <!-- End generated T3 roles -->

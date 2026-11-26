@@ -147,13 +147,19 @@ describe("checkSheet against a catalog", () => {
   test("a role with no line is checked on its tier default, as on a machine without Antigravity", () => {
     const noGemini = structuredClone(catalog);
     noGemini.providers = noGemini.providers.filter((p) => p.providerInstanceId !== "antigravity");
-    const panelRoles = roles.filter((r) => Array.isArray(defaults[r.tier])).map((r) => r.role);
+    const agyRoles = roles.filter((r) => [defaults[r.tier]].flat().some((e) => e.startsWith("antigravity/")));
     expect(check("session hook: on", noGemini)).toEqual(
-      panelRoles.map(
-        (role) => `${role} (no line, tier default): antigravity/gemini-4-neon: no provider instance "antigravity" in this T3`,
+      agyRoles.map(
+        ({ role }) => `${role} (no line, tier default): antigravity/gemini-4-neon: no provider instance "antigravity" in this T3`,
       ),
     );
-    const lines = panelRoles.map((role) => `${role}: claudeAgent/claude-opus-5-5, codex/gpt-6.1-sol`).join("\n");
+    const lines = agyRoles
+      .map(({ role, tier }) =>
+        Array.isArray(defaults[tier])
+          ? `${role}: claudeAgent/claude-opus-5-5, codex/gpt-6.1-sol`
+          : `${role}: codex/gpt-6.2-sol reasoningEffort=medium`,
+      )
+      .join("\n");
     expect(check(lines, noGemini)).toEqual([]);
   });
 
@@ -275,7 +281,7 @@ describe("checkSheet against a catalog", () => {
     expect(check(released.join("\n"))).toEqual([
       'arena cross-judge pool: antigravity/gemini-4-carbon: no option "thinking_level" (has thought_level)',
     ]);
-    expect(check("strongest judgment: provider-gone/model-gone\narchitect runners: provider-gone/model-gone")).toEqual([]);
+    expect(check("hardest tasks: provider-gone/model-gone\narchitect runners: provider-gone/model-gone")).toEqual([]);
   });
 
   test("default effort, an unknown role, and a bad hook value fail; headings and blank lines pass", () => {
@@ -325,20 +331,25 @@ describe("t3-sheet.mjs CLI", () => {
   test("fresh medium produces the documented seats and repeating it preserves every option", () => {
     const { stdout, stderr } = candidate("medium");
     const sol = "codex/gpt-6.2-sol reasoningEffort=high";
-    const opus = "claudeAgent/claude-opus-5-5 effort=medium";
-    const neon = "antigravity/gemini-4-neon thought_level=high";
-    const panel = `codex/gpt-6.2-astra reasoningEffort=medium, ${opus}, ${neon}`;
+    const astra = "codex/gpt-6.2-astra reasoningEffort=high";
+    const opus = "claudeAgent/claude-opus-5-5 effort=high";
+    const neonFast = "antigravity/gemini-4-neon thought_level=medium";
+    const neonPanel = "antigravity/gemini-4-neon thought_level=xhigh";
+    const panel = `${astra}, ${opus}, ${neonPanel}`;
     expect(stderr).toBe("");
     expect(parseSheet(stdout).map(({ key, value }) => [key, value])).toEqual([
       ["feature, refactoring", sol],
       ["bug-fix", sol],
       ["perf-issue", sol],
       ["hillclimb", sol],
-      ["judgment and prose", sol],
+      ["judgment and prose", neonFast],
+      ["strongest judgment", astra],
       ["arena runners", panel],
-      ["arena cross-judge pool", `${opus}, ${neon}`],
-      ["swarm workers", "opencode/opencode-go/deepseek-v4.1-flash variant=high"],
+      ["arena cross-judge pool", `${opus}, ${neonPanel}`],
+      ["swarm workers", neonFast],
       ["interrogate reviewers", panel],
+      ["thermos reviewers", opus],
+      ["no-comments reviewer", neonFast],
       ["session hook", "on"],
     ]);
     expect(candidate("medium", stdout)).toMatchObject({ stdout, stderr: "" });
@@ -352,12 +363,13 @@ describe("t3-sheet.mjs CLI", () => {
       .replace("session hook: on", "session hook: off");
     const large = candidate("large", medium).stdout;
     expect(large).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=xhigh");
-    expect(large).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=high, claudeAgent/claude-opus-5-5 effort=high, antigravity/gemini-4-neon thought_level=xhigh");
+    expect(large).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=xhigh, claudeAgent/claude-opus-5-5 effort=xhigh, antigravity/gemini-4-neon thought_level=xhigh");
+    expect(large).toContain("swarm workers: antigravity/gemini-4-neon thought_level=high");
     const small = candidate("small", large).stdout;
     expect(small).toContain("feature, refactoring: codex/gpt-6.2-sol reasoningEffort=medium");
-    expect(small).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=low, claudeAgent/claude-opus-5-5 effort=low, antigravity/gemini-4-neon thought_level=medium");
+    expect(small).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=medium, claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=high");
+    expect(small).toContain("swarm workers: antigravity/gemini-4-neon thought_level=low");
     for (const sheet of [large, small]) {
-      expect(sheet).toContain("swarm workers: opencode/opencode-go/deepseek-v4.1-flash variant=high");
       expect(sheet).toContain("bug-fix: auto");
       expect(sheet).toContain("perf-issue: codex/gpt-6.2-sol reasoningEffort=medium");
       expect(sheet).toContain("hillclimb: inherit-parent");
@@ -396,10 +408,10 @@ describe("t3-sheet.mjs CLI", () => {
     ].join("\n");
     const { stdout, stderr } = candidate("medium", old);
     expect(stdout).toContain("bug-fix: codex/gpt-6.2-sol reasoningEffort=high");
-    expect(stdout).toContain("swarm workers: opencode/opencode-go/deepseek-v4.1-flash variant=high");
-    expect(stdout).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=medium");
-    expect(stdout).toContain("arena cross-judge pool: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=high");
-    expect(stdout).toContain("interrogate reviewers: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=high");
+    expect(stdout).toContain("swarm workers: antigravity/gemini-4-neon thought_level=medium");
+    expect(stdout).toContain("arena runners: codex/gpt-6.2-astra reasoningEffort=high");
+    expect(stdout).toContain("arena cross-judge pool: claudeAgent/claude-opus-5-5 effort=high, antigravity/gemini-4-neon thought_level=xhigh");
+    expect(stdout).toContain("interrogate reviewers: claudeAgent/claude-opus-5-5 effort=medium, antigravity/gemini-4-neon thought_level=xhigh");
     expect(stderr).toContain("Dropped line 7 (how explorer)");
 
     const panel = "interrogate reviewers: claudeAgent/claude-opus-5-5 effort=high fastMode=true, antigravity/gemini-4-neon thought_level=high";

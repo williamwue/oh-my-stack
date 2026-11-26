@@ -2,6 +2,16 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.1.2 - Update OMS default T3 model allocation
+
+Update `plugins/pstack/models.t3.json` built-in defaults: `codex/gpt-6.2-sol
+reasoningEffort=high` for core coding playbooks, `antigravity/gemini-4-neon
+thought_level=medium` for `judgment and prose`, `swarm workers`, and
+`no-comments reviewer`, `claudeAgent/claude-opus-5-5 effort=high` for
+`thermos reviewers`, `codex/gpt-6.2-astra reasoningEffort=high` for
+`strongest judgment`, and `astra high` / `opus high` / `neon xhigh` for panels
+and cross-judging.
+
 ## 3.1.1 - Add strongest judgment, thermos reviewers, and no-comments reviewer to T3 roles
 
 Register `strongest judgment`, `thermos reviewers`, and `no-comments reviewer`
