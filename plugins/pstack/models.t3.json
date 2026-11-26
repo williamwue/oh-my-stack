@@ -3,6 +3,7 @@
   "sessionHook": "on",
   "tiers": {
     "default": "codex/gpt-6.2-sol reasoningEffort=high",
+    "strongest": "codex/gpt-6.2-astra reasoningEffort=high",
     "fast": "opencode/opencode-go/deepseek-v4.1-flash variant=high",
     "panel": [
       "codex/gpt-6.2-astra reasoningEffort=medium",
@@ -20,10 +21,13 @@
     { "role": "perf-issue", "tier": "default", "skill": "poteto-mode" },
     { "role": "hillclimb", "tier": "default", "skill": "poteto-mode" },
     { "role": "judgment and prose", "tier": "default", "skill": "poteto-mode" },
+    { "role": "strongest judgment", "tier": "strongest", "skill": "poteto-mode" },
     { "role": "arena runners", "tier": "panel", "skill": "arena" },
     { "role": "arena cross-judge pool", "tier": "judges", "skill": "arena" },
     { "role": "swarm workers", "tier": "fast", "skill": "swarm" },
-    { "role": "interrogate reviewers", "tier": "panel", "skill": "interrogate" }
+    { "role": "interrogate reviewers", "tier": "panel", "skill": "interrogate" },
+    { "role": "thermos reviewers", "tier": "default", "skill": "thermos" },
+    { "role": "no-comments reviewer", "tier": "default", "skill": "no-comments" }
   ],
   "retired": [
     "how explorer",
@@ -31,7 +35,6 @@
     "why investigators",
     "why synthesizer",
     "hardest tasks",
-    "strongest judgment",
     "reflect tooling",
     "reflect judgment, divergent, synthesizer",
     "architect runners"

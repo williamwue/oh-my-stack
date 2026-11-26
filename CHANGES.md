@@ -2,6 +2,12 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.1.1 - Add strongest judgment, thermos reviewers, and no-comments reviewer to T3 roles
+
+Register `strongest judgment`, `thermos reviewers`, and `no-comments reviewer`
+in `plugins/pstack/models.t3.json` so T3 model sheets match upstream
+`pstack-claude` role lines without `doctor` errors or retired-role warnings.
+
 ## 3.1.0 - Thin T3 adapter, SessionStart model injection, and Codex spawn_agent guard
 
 Replace the 224-line per-playbook `t3-tools.md` override with a thin T3 adapter
