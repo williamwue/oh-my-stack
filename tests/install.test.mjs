@@ -741,7 +741,7 @@ function antigravityHome() {
 const pluginRoot = join(repoRoot, "plugins/pstack");
 const shipped = JSON.parse(readFileSync(join(pluginRoot, ".antigravity-plugin/plugin.json"), "utf8")).version;
 const agy = { pluginRoot, version: shipped, skills, hint: FIX };
-const installedAt = (home) => join(home.dir, "config/plugins/t3-pstack");
+const installedAt = (home) => join(home.dir, "config/plugins/pstack");
 
 describe("Antigravity", () => {
   test("copies the plugin into the profile, where agy discovers it, and a second run changes nothing", () => {
@@ -751,7 +751,7 @@ describe("Antigravity", () => {
       expect(readFileSync(join(installedAt(home), file))).toEqual(readFileSync(join(pluginRoot, file)));
     }
     expect(installAntigravity(home, agy)).toEqual([]);
-    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["t3-pstack"]);
+    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["pstack"]);
     expect(doctorAntigravity(home, agy)).toEqual([
       { name: "installed", ok: true, detail: shipped },
       { name: "enabled", ok: true, detail: "yes" },
@@ -766,7 +766,26 @@ describe("Antigravity", () => {
     expect(doctorAntigravity(home, agy)[0]).toEqual({ name: "installed", ok: false, detail: `2.3.0, expected ${shipped}`, fix: FIX });
     expect(installAntigravity(home, agy)).toEqual([`updated 2.3.0 to ${shipped}`]);
     expect(existsSync(join(installedAt(home), "dropped.md"))).toBe(false);
-    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["t3-pstack"]);
+    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["pstack"]);
+  });
+
+  test("migrates a legacy t3-pstack directory to pstack and flags it in doctor until removed", () => {
+    const home = antigravityHome();
+    const legacy = join(home.dir, "config/plugins/t3-pstack");
+    writeJson(join(legacy, ".antigravity-plugin/plugin.json"), { name: "pstack", version: shipped });
+    expect(doctorAntigravity(home, agy)).toEqual([
+      { name: "installed", ok: false, detail: "not installed", fix: FIX },
+      { name: "enabled", ok: true, detail: "yes" },
+      { name: "legacy", ok: false, detail: `legacy plugin directory still exists at ${legacy}`, fix: FIX },
+    ]);
+    expect(installAntigravity(home, agy)).toEqual([`installed ${shipped}`, "removed legacy t3-pstack"]);
+    expect(existsSync(legacy)).toBe(false);
+    expect(readdirSync(join(home.dir, "config/plugins"))).toEqual(["pstack"]);
+    expect(installAntigravity(home, agy)).toEqual([]);
+    expect(doctorAntigravity(home, agy)).toEqual([
+      { name: "installed", ok: true, detail: shipped },
+      { name: "enabled", ok: true, detail: "yes" },
+    ]);
   });
 
   test("reinstalls a copy whose skills are missing", () => {
@@ -807,14 +826,14 @@ describe("Antigravity", () => {
     const home = antigravityHome();
     installAntigravity(home, agy);
     const config = join(home.dir, "config/config.json");
-    writeJson(config, { plugins: { "t3-pstack": { enabled: false } } });
+    writeJson(config, { plugins: { pstack: { enabled: false } } });
     expect(installAntigravity(home, agy)).toEqual([]);
-    expect(JSON.parse(readFileSync(config, "utf8"))).toEqual({ plugins: { "t3-pstack": { enabled: false } } });
+    expect(JSON.parse(readFileSync(config, "utf8"))).toEqual({ plugins: { pstack: { enabled: false } } });
     expect(doctorAntigravity(home, agy)[1]).toEqual({
       name: "enabled",
       ok: false,
       detail: `no, ${config} turns it off`,
-      fix: 'turn t3-pstack on in that file\'s "plugins" map',
+      fix: 'turn pstack on in that file\'s "plugins" map',
     });
   });
 

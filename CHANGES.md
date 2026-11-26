@@ -2,6 +2,13 @@
 
 This file is the release changelog, with one `## <version> - <title>` entry per release, newest first. The Cursor-to-Claude rewrite rules live in [`tools/substitutions.json`](tools/substitutions.json), and the [sync boundary](CONTRIBUTING.md#the-sync-boundary) in `CONTRIBUTING.md` defines how a change to upstream's skill content is declared.
 
+## 3.1.3 - Install Antigravity plugin under pstack directory
+
+Install the Antigravity plugin into `config/plugins/pstack` instead of
+`config/plugins/t3-pstack` so Antigravity skill prefixes match Claude Code and
+Codex (`pstack`). Existing `config/plugins/t3-pstack` directories are flagged by
+`doctor` and removed automatically on `install` / `update`.
+
 ## 3.1.2 - Update OMS default T3 model allocation
 
 Update `plugins/pstack/models.t3.json` built-in defaults: `codex/gpt-6.2-sol
